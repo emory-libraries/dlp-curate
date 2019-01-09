@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-ruby '2.4.2'
+
+ruby '>=2.4.2', '<=2.5.99'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
@@ -39,6 +40,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+gem 'mysql2'
+gem 'dotenv-rails'
+gem 'sidekiq'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -64,6 +68,17 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'
+end
+
+group :development do
+ # Use Capistrano for deployment automation
+  gem "capistrano", "~> 3.11", require: false
+  gem 'capistrano-bundler', '~> 1.3'
+  gem 'capistrano-ext'
+  gem 'capistrano-passenger'
+  gem 'capistrano-rails'
+  gem 'capistrano-rails-collection'
+  gem 'capistrano-sidekiq', '~> 0.20.0'
 end
 
 group :development, :test do
