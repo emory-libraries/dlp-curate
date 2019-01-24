@@ -9,7 +9,17 @@ Rails.application.routes.draw do
     concerns :searchable
   end
 
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: "omniauth_callbacks" }
+
+  # Disable these routes if you are using Devise's
+  # database_authenticatable in your development environment.
+  unless AuthConfig.use_database_auth?
+    devise_scope :user do
+      get 'sign_in', to: 'omniauth#new', as: :new_user_session
+      post 'sign_in', to: 'omniauth_callbacks#shibboleth', as: :new_session
+      get 'sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
+    end
+  end
   mount Qa::Engine => '/authorities'
   mount Hyrax::Engine, at: '/'
   resources :welcome, only: 'index'
