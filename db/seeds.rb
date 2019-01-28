@@ -5,3 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+require 'admin_setup'
+# Initialize AdminSetup class
+a = AdminSetup.new
+# Setup admins
+a.setup
