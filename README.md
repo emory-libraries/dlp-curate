@@ -1,5 +1,20 @@
 # DLP-Curate
 
+<table width="100%">
+<tr><td>
+<img src="https://cdn.vectorlogosupply.com/logos/large/2x/emory-university-png-transparent-logo.png" width="200">
+</td><td>
+A repository application for digital curators (preservation, rights and metadata management, collection management). Find more about the project on our
+<a href="https://wiki.service.emory.edu/display/DLPP"><em>DLP Wiki</em></a>
+<br/><br/>
+
+[![CircleCI](https://circleci.com/gh/emory-libraries/dlp-curate.svg?style=svg)](https://circleci.com/gh/emory-libraries/dlp-curate)
+[![Coverage Status](https://coveralls.io/repos/github/emory-libraries/dlp-curate/badge.svg?branch=master)](https://coveralls.io/github/emory-libraries/dlp-curate?branch=master)
+[![User Stories](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://app.zenhub.com/workspaces/dlp-curate-5bf484ae4b5806bc2bf6875b)
+
+</td></tr>
+</table>
+
 # Database Authentication
 
 In a production environment, we will use Shibboleth for authentication. However, in a development environment we will be using a local database.
