@@ -20,6 +20,16 @@ FactoryBot.define do
       ::RSpec::Mocks.allow_message(user.class.group_service, :fetch_groups).with(user: user).and_return(Array.wrap(evaluator.groups))
     end
 
+    factory :admin do
+      groups { ['admin'] }
+
+      after(:create) do |user|
+        role = Role.find_or_create_by(name: 'admin')
+        role.users << user
+        role.save
+      end
+    end
+
     trait :guest do
       guest true
     end
