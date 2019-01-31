@@ -18,6 +18,8 @@ Rails.application.routes.draw do
       get 'sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
     end
   end
+  
+  mount Hydra::RoleManagement::Engine => '/'
   mount Qa::Engine => '/authorities'
   mount Hyrax::Engine, at: '/'
   resources :welcome, only: 'index'
