@@ -9,16 +9,16 @@ Devise.setup do |config|
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
   # config.secret_key = 'a751fadb0aa36ecbcd23902ef36f5d76b371890ffe751cba23f5686e1b2a8e82cc4e7d4763f1eaa23d42eea4f8babfb9f0a434050c74f0d318e590bdb6d756a6'
-  
+
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'
   config.authentication_keys = [:uid]
   config.omniauth :shibboleth,
-              uid_field: 'uid',
-              info_fields: { display_name: 'displayName', uid: 'uid', mail: 'mail' },
-              callback_url: '/users/auth/shibboleth/callback',
-              strategy_class: OmniAuth::Strategies::Shibboleth
+                  uid_field: 'uid',
+                  info_fields: { display_name: 'displayName', uid: 'uid', mail: 'mail' },
+                  callback_url: '/users/auth/shibboleth/callback',
+                  strategy_class: OmniAuth::Strategies::Shibboleth
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class

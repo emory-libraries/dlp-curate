@@ -63,6 +63,7 @@ GEM
     almond-rails (0.1.0)
       rails (>= 4.2, < 6)
     arel (8.0.0)
+    ast (2.4.0)
     autoprefixer-rails (9.4.4)
       execjs
     awesome_nested_set (3.1.4)
@@ -90,6 +91,9 @@ GEM
       i18n
     bcrypt (3.1.12)
     bindex (0.5.0)
+    bixby (1.0.0)
+      rubocop (~> 0.50, <= 0.52.1)
+      rubocop-rspec (~> 1.22, <= 1.22.2)
     blacklight (6.19.1)
       bootstrap-sass (~> 3.2)
       deprecation
@@ -521,8 +525,12 @@ GEM
       rails (> 3.2.0)
     orm_adapter (0.5.0)
     os (1.0.0)
+    parallel (1.13.0)
+    parser (2.6.0.0)
+      ast (~> 2.4.0)
     posix-spawn (0.3.13)
     power_converter (0.1.2)
+    powerpack (0.1.2)
     public_suffix (3.0.3)
     pul_uv_rails (2.0.1)
     puma (3.12.0)
@@ -561,6 +569,7 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
+    rainbow (3.0.0)
     rake (12.3.2)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
@@ -657,6 +666,15 @@ GEM
       rspec-mocks (~> 3.8.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
+    rubocop (0.52.1)
+      parallel (~> 1.10)
+      parser (>= 2.4.0.2, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
+    rubocop-rspec (1.22.2)
+      rubocop (>= 0.52.1)
     ruby-box (1.15.0)
       addressable
       json
@@ -763,6 +781,7 @@ GEM
     uber (0.1.0)
     uglifier (4.1.20)
       execjs (>= 0.3.0, < 3)
+    unicode-display_width (1.4.1)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (3.7.0)
@@ -781,6 +800,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bixby
   bootstrap-sass (~> 3.0)
   byebug
   capybara (~> 2.13)

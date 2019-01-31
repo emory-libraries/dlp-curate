@@ -10,6 +10,5 @@ class ApplicationController < ActionController::Base
   include Hyrax::ThemedLayoutController
   with_themed_layout '1_column'
 
-
   protect_from_forgery with: :exception
 end
