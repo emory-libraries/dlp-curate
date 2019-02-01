@@ -11,9 +11,9 @@ class Ability
     #   can [:destroy], ActiveFedora::Base
     # end
 
-    if current_user.admin?
-      can [:create, :show, :add_user, :remove_user, :index, :edit, :update, :destroy], Role
-    end
+    return unless current_user.admin?
+
+    can [:create, :show, :add_user, :remove_user, :index, :edit, :update, :destroy], Role
 
     # Limits creating new objects to a specific group
     #

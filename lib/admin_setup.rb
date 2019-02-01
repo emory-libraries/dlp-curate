@@ -9,7 +9,7 @@ class AdminSetup
   # Set up the parameters for
   # @param [String] admins_config a file containing the email addresses of the application's admin users
   def initialize(admins_config = DEFAULT_ADMIN_CONFIG, log_location = STDOUT)
-	raise "File #{admins_config} does not exist" unless File.exist?(admins_config)
+    raise "File #{admins_config} does not exist" unless File.exist?(admins_config)
     @admins_config = YAML.safe_load(File.read(admins_config))
     @logger = Logger.new(log_location)
     @logger.level = Logger::DEBUG
