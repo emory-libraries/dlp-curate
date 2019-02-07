@@ -1,0 +1,7 @@
+database:
+  admin:
+    - adminuser001
+
+shibboleth:
+  admin:
+    - adminuser002

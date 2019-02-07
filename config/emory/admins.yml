@@ -1,0 +1,8 @@
+database:
+  admin:
+    - dev-admin
+
+# TODO:
+# shibboleth:
+#   admin:
+#     - admin-username
