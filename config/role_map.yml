@@ -6,5 +6,8 @@ test:
   admin:
     - test-admin
 
-# production:
-  # Add roles for users here.
+production:
+  archivist:
+    - archivist1@example.com
+
+# Add roles for users here.
