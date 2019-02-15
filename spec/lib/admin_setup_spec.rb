@@ -5,7 +5,7 @@ RSpec.describe AdminSetup, :clean do
   before(:context) { DatabaseCleaner.clean_with(:truncation) }
 
   # Change STDOUT to "/dev/null" to block all logging output
-  let(:w) { described_class.new("#{fixture_path}/config/role_map.yml", STDOUT) }
+  let(:w) { described_class.new("#{fixture_path}/config/emory/admins.yml", STDOUT) }
   let(:admin_user_uid) { "adminuser001" }
   it "makes an admin Role" do
   	admin = w.admin_role
