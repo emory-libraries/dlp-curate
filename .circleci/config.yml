@@ -1,0 +1,80 @@
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+    - image: circleci/ruby:2.5.3-node-browsers-legacy
+    - image: circleci/redis:4
+    - image: ualbertalib/docker-fcrepo4:4.7
+      environment:
+        CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
+
+
+    working_directory: ~/repo
+    parallelism: 2
+
+    environment:
+      RAILS_ENV: test
+      RACK_ENV: test
+      FCREPO_TEST_PORT: 8080/fcrepo
+      BUNDLE_JOBS: 4
+      BUNDLE_RETRY: 3
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+      COVERALLS_PARALLEL: true
+
+    steps:
+    - attach_workspace:
+        at: ~/
+
+
+    - restore_cache:
+        keys:
+        - source-v1-{{ .Branch }}-{{ .Revision }}
+        - source-v1-{{ .Branch }}-
+        - source-v1-
+
+    - checkout
+
+    - save_cache:
+        key: source-v1-{{ .Branch }}-{{ .Revision }}
+        paths:
+        - ".git"
+
+    - run:
+        name: Extra environment setup
+        command: |
+          echo 'unset BUNDLE_PATH' >> $BASH_ENV
+
+    - run:
+        name: Install dependencies
+        command: |
+          gem update --system
+          gem update bundler
+          bundle config path $CIRCLE_WORKING_DIRECTORY/vendor/bundle
+          bundle install
+
+    - run:
+        name: Start headless Chrome
+        command: google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost
+        background: true
+
+    - run:
+        name: Run rspec in parallel
+        command: |
+          mkdir /tmp/test-results
+          bundle exec rake ci
+    
+    - run:
+        name: Clean dependencies
+        command: bundle clean
+
+    # collect all reports
+    - store_test_results:
+        path: /tmp/test-results
+
+    - store_artifacts:
+        path: /tmp/test-results
+        destination: test-results

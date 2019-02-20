@@ -4,7 +4,6 @@ class User < ApplicationRecord
   # Connects this user object to Role-management behaviors.
   include Hydra::RoleManagement::UserRoles
 
-
   # Connects this user object to Hyrax behaviors.
   include Hyrax::User
   include Hyrax::UserUsageStats
@@ -18,9 +17,8 @@ class User < ApplicationRecord
     end
   end
 
-  if Blacklight::Utils.needs_attr_accessible?
-    attr_accessible :email, :password, :password_confirmation
-  end
+  attr_accessible :email, :password, :password_confirmation if Blacklight::Utils.needs_attr_accessible?
+
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
   # Include devise modules. Others available are:
@@ -60,15 +58,14 @@ end
 # Since in production we're using shibboleth, and this removes the password
 # methods from the User model, we need to override it.
 module Hyrax::User
-module ClassMethods
-  def find_or_create_system_user(user_key)
-    u = ::User.find_or_create_by(uid: user_key)
-    u.display_name = user_key
-    u.email = "#{user_key}@example.com"
-    u.password = ('a'..'z').to_a.shuffle(random: Random.new).join if AuthConfig.use_database_auth?
-    u.save
-    u
+  module ClassMethods
+    def find_or_create_system_user(user_key)
+      u = ::User.find_or_create_by(uid: user_key)
+      u.display_name = user_key
+      u.email = "#{user_key}@example.com"
+      u.password = ('a'..'z').to_a.shuffle(random: Random.new).join if AuthConfig.use_database_auth?
+      u.save
+      u
+    end
   end
 end
-end
-

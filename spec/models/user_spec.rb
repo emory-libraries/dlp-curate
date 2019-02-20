@@ -35,6 +35,14 @@ RSpec.describe User, :clean do
         }
       )
     end
+    it "updates ppid and display_name with values from shibboleth" do
+      expect(user.uid).to eq "fake"
+      expect(user.display_name).to eq nil
+      described_class.from_omniauth(fake_auth_hash)
+      changed_user = described_class.where(uid: "fake").first
+      expect(changed_user.ppid).to eq fake_auth_hash.uid
+      expect(changed_user.display_name).to eq fake_auth_hash.info.display_name
+    end
   end
   context "signing in twice" do
     it "finds the original account instead of trying to make a new one" do
