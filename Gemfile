@@ -17,6 +17,7 @@ gem 'factory_bot_rails', '~> 4.11.1'
 gem 'ffaker'
 gem 'hydra-role-management'
 gem 'hyrax', '3.0.0-beta1'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
