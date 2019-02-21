@@ -17,12 +17,4 @@ unless Rails.env.production?
       Rake::Task['integration'].invoke
     end
   end
-
-  RSpec::Core::RakeTask.new(:integration) do |t|
-    t.rspec_opts = "--tag integration --profile"
-  end
-
-  RSpec::Core::RakeTask.new(:unit) do |t|
-    t.rspec_opts = "--tag ~integration --profile"
-  end
 end
