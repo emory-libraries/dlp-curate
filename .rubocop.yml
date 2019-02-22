@@ -6,3 +6,6 @@ Metrics/AbcSize:
 
 Metrics/BlockLength:
   Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false

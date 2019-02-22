@@ -2,15 +2,15 @@
 lock "~> 3.11.0"
 
 set :application, "dlp-curate"
-set :repo_url, "https://github.com/emory-libraries/dlp-curate.git" 
+set :repo_url, "https://github.com/emory-libraries/dlp-curate.git"
 set :deploy_to, '/opt/dlp-curate'
 set :rails_env, 'production'
 set :default_env, 'PASSENGER_INSTANCE_REGISTRY_DIR' => '/var/run'
 set :assets_prefix, "#{shared_path}/public/assets"
 
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
-#SSHKit.config.command_map[:sidekiq] = "bundle exec /opt/rh/rh-ruby25/root/usr/bin/sidekiq"
-#set :sidekiq, "bundle exec /opt/rh/rh-ruby25/root/usr/bin/sidekiq"
+# SSHKit.config.command_map[:sidekiq] = "bundle exec /opt/rh/rh-ruby25/root/usr/bin/sidekiq"
+# set :sidekiq, "bundle exec /opt/rh/rh-ruby25/root/usr/bin/sidekiq"
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
 
 append :linked_dirs, "log"
@@ -22,10 +22,10 @@ append :linked_dirs, "tmp/sockets"
 append :linked_files, ".env.production"
 append :linked_files, "config/secrets.yml"
 
-#Rake::Task["sidekiq:stop"].clear_actions
-#Rake::Task["sidekiq:start"].clear_actions
-#Rake::Task["sidekiq:restart"].clear_actions
-#namespace :sidekiq do
+# Rake::Task["sidekiq:stop"].clear_actions
+# Rake::Task["sidekiq:start"].clear_actions
+# Rake::Task["sidekiq:restart"].clear_actions
+# namespace :sidekiq do
 #  task :stop do
 #    on roles(:app) do
 #      execute :sudo, :systemctl, :stop, :sidekiq
@@ -41,7 +41,7 @@ append :linked_files, "config/secrets.yml"
 #      execute :sudo, :systemctl, :restart, :sidekiq
 #    end
 #  end
-#end
+# end
 
 namespace :deploy do
   after :finishing, :restart_apache do
@@ -53,9 +53,6 @@ end
 
 namespace :deploy do
   Rake::Task["migrate"].clear_actions
-  task :migrate do
-    puts "no migration"
-  end
 end
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp

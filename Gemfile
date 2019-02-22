@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 ruby '>=2.4.2', '<=2.5.99'
 
 git_source(:github) do |repo_name|
@@ -13,10 +12,12 @@ gem 'bootstrap-sass', '~> 3.0'
 gem 'coffee-rails', '~> 4.2'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
-gem 'factory_bot_rails'
+gem 'dotenv-rails'
+gem 'factory_bot_rails', '~> 4.11.1'
 gem 'ffaker'
-gem 'hyrax', '3.0.0-beta1'
 gem 'hydra-role-management'
+gem 'hyrax', '3.0.0-beta1'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
@@ -27,10 +28,11 @@ gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.6'
 gem 'riiif', '~> 2.0'
 gem 'rsolr', '>= 1.0'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
+# Use sqlite3 as the database for Active Record
+gem 'sqlite3', '~> 1.3.7'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
@@ -41,7 +43,6 @@ gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 gem 'mysql2'
-gem 'dotenv-rails'
 gem 'sidekiq'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
@@ -57,8 +58,9 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
-  gem 'selenium-webdriver'
+  gem 'coveralls', require: false
   gem 'database_cleaner'
+  gem 'selenium-webdriver'
 end
 
 group :development do
@@ -71,7 +73,6 @@ group :development do
 end
 
 group :development do
- # Use Capistrano for deployment automation
   gem "capistrano", "~> 3.11", require: false
   gem 'capistrano-bundler', '~> 1.3'
   gem 'capistrano-ext'
