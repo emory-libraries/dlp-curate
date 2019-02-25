@@ -1,0 +1,8 @@
+en:
+  hyrax:
+    icons:
+      curate_generic_work:     'fa fa-file-text-o'
+    select_type:
+      curate_generic_work:
+        description:        "Curate generic work works"
+        name:               "Curate Generic Work"
