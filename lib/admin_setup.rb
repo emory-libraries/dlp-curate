@@ -19,6 +19,7 @@ class AdminSetup
   # Load the admins
   def setup
     load_admins
+    everyone_can_deposit_everywhere
   end
 
   # Create the admin role, or find it if it exists already
@@ -52,6 +53,22 @@ class AdminSetup
     admin_role.users << admin_user
     admin_role.save
     admin_user
+  end
+
+  def everyone_can_deposit_everywhere
+    AdminSet.all.each do |admin_set|
+      next if Hyrax::PermissionTemplateAccess
+              .find_by(permission_template_id: admin_set.permission_template.id,
+                       agent_id:   'registered',
+                       access:     'deposit',
+                       agent_type: 'group')
+
+      admin_set.permission_template.access_grants.create(agent_type: 'group', agent_id: 'registered', access: 'deposit')
+      deposit = Sipity::Role.find_by!(name: 'depositing')
+      admin_set.permission_template.available_workflows.each do |workflow|
+        workflow.update_responsibilities(role: deposit, agents: Hyrax::Group.new('registered'))
+      end
+    end
   end
 
   # Don't set default passwords in production mode

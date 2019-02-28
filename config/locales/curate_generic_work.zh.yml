@@ -1,0 +1,10 @@
+zh:
+  hyrax:
+    icons:
+      curate_generic_work:     'fa fa-file-text-o'
+    select_type:
+      curate_generic_work:
+        # TODO: translate `human_name` into Chinese
+        description:        "Curate generic work 作品"
+        name:               "Curate Generic Work"
+        # TODO: translate `human_name` into Chinese

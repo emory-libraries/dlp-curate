@@ -8,17 +8,13 @@ unless Rails.env.production?
   # Bundle integration with style checking and javascript tests (both relatively
   # quick) to create a balanced job
 
-  desc "Run integration CI"
+  desc "Run CI"
   task :ci do
     with_server 'test' do
       Rake::Task['db:create'].invoke
       Rake::Task['db:migrate'].invoke
       Rake::Task['rubocop'].invoke
-      Rake::Task['integration'].invoke
+      Rake::Task['spec'].invoke
     end
-  end
-
-  RSpec::Core::RakeTask.new(:integration) do |t|
-    t.rspec_opts = "--tag integration --profile"
   end
 end
