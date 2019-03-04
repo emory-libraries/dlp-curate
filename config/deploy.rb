@@ -9,18 +9,10 @@ set :default_env, 'PASSENGER_INSTANCE_REGISTRY_DIR' => '/var/run'
 set :assets_prefix, "#{shared_path}/public/assets"
 
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
-# SSHKit.config.command_map[:sidekiq] = "bundle exec /opt/rh/rh-ruby25/root/usr/bin/sidekiq"
-# set :sidekiq, "bundle exec /opt/rh/rh-ruby25/root/usr/bin/sidekiq"
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
 
-append :linked_dirs, "log"
-append :linked_dirs, "public/assets"
-append :linked_dirs, "tmp/pids"
-append :linked_dirs, "tmp/cache"
-append :linked_dirs, "tmp/sockets"
-
-append :linked_files, ".env.production"
-append :linked_files, "config/secrets.yml"
+append :linked_dirs, "log", "public/assets", "tmp/pids", "tmp/cache", "tmp/sockets", "config/emory"
+append :linked_files, ".env.production", "config/secrets.yml"
 
 # Rake::Task["sidekiq:stop"].clear_actions
 # Rake::Task["sidekiq:start"].clear_actions
