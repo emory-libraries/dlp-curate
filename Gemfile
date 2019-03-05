@@ -88,5 +88,6 @@ end
 
 group :development, :test do
   gem 'fcrepo_wrapper'
+  gem 'rspec-its'
   gem 'rspec-rails'
 end
