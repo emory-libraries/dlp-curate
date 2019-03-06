@@ -182,4 +182,148 @@ RSpec.describe CurateGenericWork do
       its(:primary_language) { is_expected.to eq 'English' }
     end
   end
+
+  describe "#subject_topics" do
+    subject { described_class.new }
+    let(:subject_topics) { ['Religion'] }
+
+    context "with new CurateGenericWork work" do
+      its(:subject_topics) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a subject_topics" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.subject_topics = subject_topics
+        end
+      end
+      its(:subject_topics) { is_expected.to eq(['Religion']) }
+    end
+  end
+
+  describe "#subject_names" do
+    subject { described_class.new }
+    let(:subject_names) { ['Example Name'] }
+
+    context "with new CurateGenericWork work" do
+      its(:subject_names) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a subject_names" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.subject_names = subject_names
+        end
+      end
+      its(:subject_names) { is_expected.to eq(['Example Name']) }
+    end
+  end
+
+  describe "#subject_geo" do
+    subject { described_class.new }
+    let(:subject_geo) { ['United States'] }
+
+    context "with new CurateGenericWork work" do
+      its(:subject_geo) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a subject_geo" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.subject_geo = subject_geo
+        end
+      end
+      its(:subject_geo) { is_expected.to eq(['United States']) }
+    end
+  end
+
+  describe "#subject_time_periods" do
+    subject { described_class.new }
+    let(:subject_time_periods) { ['Byzantine era (330–1453)'] }
+
+    context "with new CurateGenericWork work" do
+      its(:subject_time_periods) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a subject_time_periods" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.subject_time_periods = subject_time_periods
+        end
+      end
+      its(:subject_time_periods) { is_expected.to eq(['Byzantine era (330–1453)']) }
+    end
+  end
+
+  describe "#conference_name" do
+    subject { described_class.new }
+    let(:conference_name) { 'Samvera Connect' }
+
+    context "with new CurateGenericWork work" do
+      its(:conference_name) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a conference_name" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.conference_name = conference_name
+        end
+      end
+      its(:conference_name) { is_expected.to include 'Samvera' }
+    end
+  end
+
+  describe "#uniform_title" do
+    subject { described_class.new }
+    let(:uniform_title) { 'Shakespeare, William ... Othello' }
+
+    context "with new CurateGenericWork work" do
+      its(:uniform_title) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a uniform_title" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.uniform_title = uniform_title
+        end
+      end
+      its(:uniform_title) { is_expected.to include 'Shakespeare' }
+    end
+  end
+
+  describe "#series_title" do
+    subject { described_class.new }
+    let(:series_title) { 'Star Wars' }
+
+    context "with new CurateGenericWork work" do
+      its(:series_title) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a series_title" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.series_title = series_title
+        end
+      end
+      its(:series_title) { is_expected.to eq 'Star Wars' }
+    end
+  end
+
+  describe "#parent_title" do
+    subject { described_class.new }
+    let(:parent_title) { 'Nature' }
+
+    context "with new CurateGenericWork work" do
+      its(:parent_title) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a parent_title" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.parent_title = parent_title
+        end
+      end
+      its(:parent_title) { is_expected.to eq 'Nature' }
+    end
+  end
 end
