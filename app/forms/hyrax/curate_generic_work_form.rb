@@ -4,6 +4,6 @@ module Hyrax
   # Generated form for CurateGenericWork
   class CurateGenericWorkForm < Hyrax::Forms::WorkForm
     self.model_class = ::CurateGenericWork
-    self.terms += [:resource_type]
+    self.terms = [:publisher, :date_created]
   end
 end
