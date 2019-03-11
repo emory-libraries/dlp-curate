@@ -630,6 +630,8 @@ RSpec.describe CurateGenericWork do
         end
       end
       its(:related_datasets) { is_expected.to eq(['Image Processing Dataset']) }
+    end
+  end
 
   describe "#extent" do
     subject { described_class.new }
