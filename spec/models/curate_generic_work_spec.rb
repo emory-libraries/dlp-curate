@@ -326,4 +326,310 @@ RSpec.describe CurateGenericWork do
       its(:parent_title) { is_expected.to eq 'Nature' }
     end
   end
+
+  describe "#contact_information" do
+    subject { described_class.new }
+    let(:contact_information) { 'Contact me at this email: example@example.com' }
+
+    context "with new CurateGenericWork work" do
+      its(:contact_information) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a contact_information" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.contact_information = contact_information
+        end
+      end
+      its(:contact_information) { is_expected.to include 'Contact' }
+    end
+  end
+
+  describe "#publisher_version" do
+    subject { described_class.new }
+    let(:publisher_version) { 'Final Version' }
+
+    context "with new CurateGenericWork work" do
+      its(:publisher_version) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a publisher_version" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.publisher_version = publisher_version
+        end
+      end
+      its(:publisher_version) { is_expected.to include 'Version' }
+    end
+  end
+
+  describe "#creator" do
+    subject { described_class.new }
+    let(:creator) { ['William Shakespeare'] }
+
+    context "with new CurateGenericWork work" do
+      its(:creator) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a creator" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.creator = creator
+        end
+      end
+      its(:creator) { is_expected.to eq(['William Shakespeare']) }
+    end
+  end
+
+  describe "#contributor" do
+    subject { described_class.new }
+    let(:contributor) { ['Leo Tolstoy'] }
+
+    context "with new CurateGenericWork work" do
+      its(:contributor) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a contributor" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.contributor = contributor
+        end
+      end
+      its(:contributor) { is_expected.to eq(['Leo Tolstoy']) }
+    end
+  end
+
+  describe "#sponsor" do
+    subject { described_class.new }
+    let(:sponsor) { 'Coca-Cola' }
+
+    context "with new CurateGenericWork work" do
+      its(:sponsor) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a sponsor" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.sponsor = sponsor
+        end
+      end
+      its(:sponsor) { is_expected.to include 'Coca-Cola' }
+    end
+  end
+
+  describe "#data_producer" do
+    subject { described_class.new }
+    let(:data_producer) { ['Emory University'] }
+
+    context "with new CurateGenericWork work" do
+      its(:data_producer) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a data_producer" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.data_producer = data_producer
+        end
+      end
+      its(:data_producer) { is_expected.to eq(['Emory University']) }
+    end
+  end
+
+  describe "#grant" do
+    subject { described_class.new }
+    let(:grant) { ['NIH'] }
+
+    context "with new CurateGenericWork work" do
+      its(:grant) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a grant" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.grant = grant
+        end
+      end
+      its(:grant) { is_expected.to eq(['NIH']) }
+    end
+  end
+
+  describe "#grant_information" do
+    subject { described_class.new }
+    let(:grant_information) { ['This grant was provided in 2011'] }
+
+    context "with new CurateGenericWork work" do
+      its(:grant_information) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a grant_information" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.grant_information = grant_information
+        end
+      end
+      its(:grant_information) { is_expected.to eq(['This grant was provided in 2011']) }
+    end
+  end
+
+  describe "#author_notes" do
+    subject { described_class.new }
+    let(:author_notes) { 'She was born in 1923' }
+
+    context "with new CurateGenericWork work" do
+      its(:author_notes) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a author_notes" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.author_notes = author_notes
+        end
+      end
+      its(:author_notes) { is_expected.to include '1923' }
+    end
+  end
+
+  describe "#note" do
+    subject { described_class.new }
+    let(:note) { ['general note'] }
+
+    context "with new CurateGenericWork work" do
+      its(:note) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a note" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.note = note
+        end
+      end
+      its(:note) { is_expected.to eq(['general note']) }
+    end
+  end
+
+  describe "#data_source_note" do
+    subject { described_class.new }
+    let(:data_source_note) { ['general data source note'] }
+
+    context "with new CurateGenericWork work" do
+      its(:data_source_note) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a data_source_note" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.data_source_note = data_source_note
+        end
+      end
+      its(:data_source_note) { is_expected.to eq(['general data source note']) }
+    end
+  end
+
+  describe "#geographic_unit" do
+    subject { described_class.new }
+    let(:geographic_unit) { 'Vayaha Village' }
+
+    context "with new CurateGenericWork work" do
+      its(:geographic_unit) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a geographic_unit" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.geographic_unit = geographic_unit
+        end
+      end
+      its(:geographic_unit) { is_expected.to include 'Vayaha' }
+    end
+  end
+
+  describe "#technical_note" do
+    subject { described_class.new }
+    let(:technical_note) { 'open source repository software' }
+
+    context "with new CurateGenericWork work" do
+      its(:technical_note) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a technical_note" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.technical_note = technical_note
+        end
+      end
+      its(:technical_note) { is_expected.to include 'software' }
+    end
+  end
+
+  describe "#issn" do
+    subject { described_class.new }
+    let(:issn) { '2039-4032' }
+
+    context "with new CurateGenericWork work" do
+      its(:issn) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a issn" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.issn = issn
+        end
+      end
+      its(:issn) { is_expected.to include '2039-4032' }
+    end
+  end
+
+  describe "#isbn" do
+    subject { described_class.new }
+    let(:isbn) { '978-3-16-148410-0' }
+
+    context "with new CurateGenericWork work" do
+      its(:isbn) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a isbn" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.isbn = isbn
+        end
+      end
+      its(:isbn) { is_expected.to include '978-3-16-148410-0' }
+    end
+  end
+
+  describe "#related_publications" do
+    subject { described_class.new }
+    let(:related_publications) { ['beauty and the beast'] }
+
+    context "with new CurateGenericWork work" do
+      its(:related_publications) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a related_publications" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.related_publications = related_publications
+        end
+      end
+      its(:related_publications) { is_expected.to eq(['beauty and the beast']) }
+    end
+  end
+
+  describe "#related_datasets" do
+    subject { described_class.new }
+    let(:related_datasets) { ['Image Processing Dataset'] }
+
+    context "with new CurateGenericWork work" do
+      its(:related_datasets) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a related_datasets" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.related_datasets = related_datasets
+        end
+      end
+      its(:related_datasets) { is_expected.to eq(['Image Processing Dataset']) }
+    end
+  end
 end
