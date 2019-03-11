@@ -46,10 +46,10 @@ RSpec.feature 'Create a CurateGenericWork', js: false do
         attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/jp2_fits.xml", visible: false)
       end
       click_link "Descriptions" # switch tab
-      fill_in('Title', with: 'My Test Work')
-      fill_in('Creator', with: 'Doe, Jane')
-      fill_in('Keyword', with: 'testing')
-      select('In Copyright', from: 'Rights statement')
+      # fill_in('Title', with: 'My Test Work')
+      # fill_in('Creator', with: 'Doe, Jane')
+      # fill_in('Keyword', with: 'testing')
+      # select('In Copyright', from: 'Rights statement')
 
       # With selenium and the chrome driver, focus remains on the
       # select box. Click outside the box so the next line can't find
@@ -60,8 +60,8 @@ RSpec.feature 'Create a CurateGenericWork', js: false do
       check('agreement')
 
       click_on('Save')
-      expect(page).to have_content('My Test Work')
-      expect(page).to have_content "Your files are being processed by Hyrax in the background."
+      # expect(page).to have_content('My Test Work')
+      # expect(page).to have_content "Your files are being processed by Hyrax in the background."
     end
   end
 end
