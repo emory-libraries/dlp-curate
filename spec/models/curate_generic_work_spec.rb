@@ -630,6 +630,184 @@ RSpec.describe CurateGenericWork do
         end
       end
       its(:related_datasets) { is_expected.to eq(['Image Processing Dataset']) }
+
+  describe "#extent" do
+    subject { described_class.new }
+    let(:extent) { '1920 x 1080' }
+
+    context "with new CurateGenericWork work" do
+      its(:extent) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has an extent" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.extent = extent
+        end
+      end
+      its(:extent) { is_expected.to eq '1920 x 1080' }
+    end
+  end
+
+  describe "#publisher" do
+    subject { described_class.new }
+    let(:publisher) { 'New publisher' }
+
+    context "with new CurateGenericWork work" do
+      its(:publisher) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a publisher" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.publisher = publisher
+        end
+      end
+      its(:publisher) { is_expected.to eq 'New publisher' }
+    end
+  end
+
+  describe "#date_created" do
+    subject { described_class.new }
+    let(:date_created) { Date.new(2018, 1, 12) }
+
+    context "with new CurateGenericWork work" do
+      its(:date_created) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a date_created" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.date_created = date_created
+        end
+      end
+      its(:date_created) { is_expected.to eq date_created }
+    end
+  end
+
+  describe "#date_issued" do
+    subject { described_class.new }
+    let(:date_issued) { Date.new(2018, 1, 12) }
+
+    context "with new CurateGenericWork work" do
+      its(:date_issued) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a date_issued" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.date_issued = date_issued
+        end
+      end
+      its(:date_issued) { is_expected.to eq date_issued }
+    end
+  end
+
+  describe "#conference_dates" do
+    subject { described_class.new }
+    let(:conference_dates) { Date.new(2018, 2, 24) }
+
+    context "with new CurateGenericWork work" do
+      its(:conference_dates) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has conference_dates" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.conference_dates = conference_dates
+        end
+      end
+      its(:conference_dates) { is_expected.to eq conference_dates }
+    end
+  end
+
+  describe "#data_collection_dates" do
+    subject { described_class.new }
+    let(:data_collection_dates) { [Date.new(2018, 3, 30)] }
+
+    context "with new CurateGenericWork work" do
+      its(:data_collection_dates) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has data_collection_dates" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.data_collection_dates = data_collection_dates
+        end
+      end
+      its(:data_collection_dates) { is_expected.to eq data_collection_dates }
+    end
+  end
+
+  describe "#local_call_number" do
+    subject { described_class.new }
+    let(:local_call_number) { '123' }
+
+    context "with new CurateGenericWork work" do
+      its(:local_call_number) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a local_call_number" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.local_call_number = local_call_number
+        end
+      end
+      its(:local_call_number) { is_expected.to eq '123' }
+    end
+  end
+
+  describe "#related_material" do
+    subject { described_class.new }
+    let(:related_material) { ['Free-text notes'] }
+
+    context "with new CurateGenericWork work" do
+      its(:related_material) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a related_material" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.related_material = related_material
+        end
+      end
+      its(:related_material) { is_expected.to eq ['Free-text notes'] }
+    end
+  end
+
+  describe "#final_published_version" do
+    subject { described_class.new }
+    let(:final_published_version) { ['http://www.example.com'] }
+
+    context "with new CurateGenericWork work" do
+      its(:final_published_version) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a final_published_version" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.final_published_version = final_published_version
+        end
+      end
+      its(:final_published_version) { is_expected.to eq final_published_version }
+    end
+  end
+
+  describe "#issue" do
+    subject { described_class.new }
+    let(:issue) { '119(1-2):18-21' }
+
+    context "with new CurateGenericWork work" do
+      its(:issue) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has an issue" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.issue = issue
+        end
+      end
+      its(:issue) { is_expected.to eq issue }
     end
   end
 end
