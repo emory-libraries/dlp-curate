@@ -506,4 +506,94 @@ RSpec.describe CurateGenericWork do
       its(:issue) { is_expected.to eq issue }
     end
   end
+
+  describe "#page_range_start" do
+    subject { described_class.new }
+    let(:page_range_start) { '1-5' }
+
+    context "with new CurateGenericWork work" do
+      its(:page_range_start) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a page_range_start" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.page_range_start = page_range_start
+        end
+      end
+      its(:page_range_start) { is_expected.to eq '1-5' }
+    end
+  end
+
+  describe "#page_range_end" do
+    subject { described_class.new }
+    let(:page_range_end) { '15-20' }
+
+    context "with new CurateGenericWork work" do
+      its(:page_range_end) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a page_range_end" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.page_range_end = page_range_end
+        end
+      end
+      its(:page_range_end) { is_expected.to eq '15-20' }
+    end
+  end
+
+  describe "#volume" do
+    subject { described_class.new }
+    let(:volume) { 'Volume 2' }
+
+    context "with new CurateGenericWork work" do
+      its(:volume) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a volume" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.volume = volume
+        end
+      end
+      its(:volume) { is_expected.to eq volume }
+    end
+  end
+
+  describe "#place_of_production" do
+    subject { described_class.new }
+    let(:place_of_production) { 'Atlanta' }
+
+    context "with new CurateGenericWork work" do
+      its(:place_of_production) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a place_of_production" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.place_of_production = place_of_production
+        end
+      end
+      its(:place_of_production) { is_expected.to eq 'Atlanta' }
+    end
+  end
+
+  describe "#keywords" do
+    subject { described_class.new }
+    let(:keywords) { ['Biology', 'Physics'] }
+
+    context "with new CurateGenericWork work" do
+      its(:keywords) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has keywords" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.keywords = keywords
+        end
+      end
+      its(:keywords) { is_expected.to eq keywords }
+    end
+  end
 end

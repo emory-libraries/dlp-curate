@@ -110,6 +110,18 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :issue, predicate: "http://purl.org/ontology/bibo/issue", multiple: false
 
+  property :page_range_start, predicate: "http://purl.org/ontology/bibo/pageStart", multiple: false
+
+  property :page_range_end, predicate: "http://purl.org/ontology/bibo/pageEnd", multiple: false
+
+  property :volume, predicate: "http://purl.org/ontology/bibo/volume", multiple: false
+
+  property :place_of_production, predicate: "http://id.loc.gov/vocabulary/relators/pup", multiple: false
+
+  property :keywords, predicate: "http://schema.org/keywords" do |index|
+    index.as :stored_searchable
+  end
+
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
   # include ::Hyrax::BasicMetadata
