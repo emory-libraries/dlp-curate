@@ -78,6 +78,64 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :contact_information, predicate: "http://www.rdaregistry.info/Elements/u/#P60490", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :publisher_version, predicate: "http://metadata.emory.edu/vocab/cor-terms#publicationStage", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :creator, predicate: "http://purl.org/dc/elements/1.1/creator" do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  property :contributor, predicate: "http://purl.org/dc/elements/1.1/contributor" do |index|
+    index.as :stored_searchable
+  end
+
+  property :sponsor, predicate: "http://id.loc.gov/vocabulary/relators/spn", multiple: false
+
+  property :data_producer, predicate: "http://id.loc.gov/vocabulary/relators/prv" do |index|
+    index.as :stored_searchable
+  end
+
+  property :grant, predicate: "http://id.loc.gov/vocabulary/relators/fnd" do |index|
+    index.as :stored_searchable
+  end
+
+  property :grant_information, predicate: "http://www.w3.org/2004/02/skos/core#grantOrFundingNote"
+
+  property :author_notes, predicate: "http://www.w3.org/2004/02/skos/core#authorNote", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :note, predicate: "http://www.w3.org/2004/02/skos/core#note" do |index|
+    index.as :stored_searchable
+  end
+
+  property :data_source_note, predicate: "http://www.w3.org/2004/02/skos/core#dataSourcesNote" do |index|
+    index.as :stored_searchable
+  end
+
+  property :geographic_unit, predicate: "http://metadata.emory.edu/vocab/cor-terms#geographicUnit", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :technical_note, predicate: "http://www.w3.org/2004/02/skos/core#technicalNote", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :issn, predicate: "http://id.loc.gov/vocabulary/identifiers/issn", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :isbn, predicate: "http://id.loc.gov/vocabulary/identifiers/isbn", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :related_publications, predicate: "http://purl.org/dc/terms/relation#publication"
+  property :related_datasets, predicate: "http://purl.org/dc/terms/relation#dataset"
   property :extent, predicate: "http://www.rdaregistry.info/Elements/u/#P60550", multiple: false
 
   property :publisher, predicate: "http://purl.org/dc/elements/1.1/publisher", multiple: false do |index|
