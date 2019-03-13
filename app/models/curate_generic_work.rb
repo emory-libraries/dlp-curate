@@ -180,6 +180,54 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :rights_statement, predicate: "http://purl.org/dc/elements/1.1/rights"
+
+  property :rights_statement_controlled, predicate: "http://www.europeana.eu/schemas/edm/rights", multiple: false do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  property :rights_holder, predicate: "http://purl.org/dc/terms/rightsHolder"
+
+  property :copyright_date, predicate: "http://purl.org/dc/terms/dateCopyrighted", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :license, predicate: "http://schema.org/license", multiple: false
+
+  property :access_right, predicate: "http://purl.org/dc/terms/accessRights" do |index|
+    index.as :stored_searchable
+  end
+
+  property :rights_documentation, predicate: "http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI", multiple: false
+
+  property :scheduled_rights_review, predicate: "http://metadata.emory.edu/vocab/cor-terms#scheduledRightsReview", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :scheduled_rights_review_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#scheduledRightsReviewNote", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :internal_rights_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#internalRightsNote", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :legacy_rights, predicate: "http://metadata.emory.edu/vocab/cor-terms#legacyRights", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :data_classification, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataClassification" do |index|
+    index.as :stored_searchable
+  end
+
+  property :sensitive_material, predicate: "http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterial" do |index|
+    index.as :stored_searchable
+  end
+
+  property :sensitive_material_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterialNote" do |index|
+    index.as :stored_searchable
+  end
+
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
   # include ::Hyrax::BasicMetadata
