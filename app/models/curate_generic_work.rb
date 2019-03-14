@@ -227,6 +227,33 @@ class CurateGenericWork < ActiveFedora::Base
   property :sensitive_material_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterialNote" do |index|
     index.as :stored_searchable
   end
+  property :staff_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#staffNote" do |index|
+    index.as :stored_searchable
+  end
+
+  property :date_digitized, predicate: "http://metadata.emory.edu/vocab/cor-terms#dateDigitized", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :transfer_engineer, predicate: "http://metadata.emory.edu/vocab/cor-terms#fileTransferEngineer", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :legacy_identifier, predicate: "http://id.loc.gov/vocabulary/identifiers/local#legacy" do |index|
+    index.as :stored_searchable
+  end
+
+  property :legacy_ark, predicate: "http://id.loc.gov/vocabulary/identifiers/local#ark" do |index|
+    index.as :stored_searchable
+  end
+
+  property :system_of_record_ID, predicate: "http://metadata.emory.edu/vocab/cor-terms#descriptiveSystemID", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :primary_repository_ID, predicate: "http://purl.org/dc/terms/identifier", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
