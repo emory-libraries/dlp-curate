@@ -902,4 +902,37 @@ RSpec.describe CurateGenericWork do
       its(:keywords) { is_expected.to eq keywords }
     end
   end
+
+  context "saves metadata in SolrDoc" do
+    let(:curate_generic_work) do
+      described_class.create(
+        title: ['Example title'],
+        primary_language: 'English',
+        abstract: 'This is an abstract'
+      )
+    end
+
+    before do
+      curate_generic_work.save
+    end
+
+    let(:work) { SolrDocument.find(curate_generic_work.id) }
+    let(:solr_doc) { work.solr_response.response['docs'][0] }
+
+    it "returns the SolrDoc with metadata" do
+      expect(work.class).to eq SolrDocument
+
+      # Check title (multi-valued)
+      expect(solr_doc).to include 'title_tesim'
+      expect(solr_doc['title_tesim']).to eq curate_generic_work.title.to_a
+
+      # Check primary_language (single-valued, stored-searchable, facetable)
+      expect(solr_doc).to include 'primary_language_tesi'
+      expect(solr_doc['primary_language_tesi']).to eq curate_generic_work.primary_language
+
+      # Check abstract (single-valued, stored-searchable)
+      expect(solr_doc).to include 'abstract_tes'
+      expect(solr_doc['abstract_tes']).to eq curate_generic_work.abstract
+    end
+  end
 end
