@@ -902,4 +902,256 @@ RSpec.describe CurateGenericWork do
       its(:keywords) { is_expected.to eq keywords }
     end
   end
+
+  describe "#rights_holder" do
+    subject { described_class.new }
+    let(:rights_holder) { ['Emory University'] }
+
+    context "with new CurateGenericWork work" do
+      its(:rights_holder) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has rights_holder" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.rights_holder = rights_holder
+        end
+      end
+      its(:rights_holder) { is_expected.to eq rights_holder }
+    end
+  end
+
+  describe "#rights_statement_controlled" do
+    subject { described_class.new }
+    let(:rights_statement_controlled) { 'Controlled Rights Statement' }
+
+    context "with new CurateGenericWork work" do
+      its(:rights_statement_controlled) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a rights_statement_controlled" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.rights_statement_controlled = rights_statement_controlled
+        end
+      end
+      its(:rights_statement_controlled) { is_expected.to eq 'Controlled Rights Statement' }
+    end
+  end
+
+  describe "#rights_statement" do
+    subject { described_class.new }
+    let(:rights_statement) { ['Sample Rights Statement'] }
+
+    context "with new CurateGenericWork work" do
+      its(:rights_statement) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has rights_statement" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.rights_statement = rights_statement
+        end
+      end
+      its(:rights_statement) { is_expected.to eq rights_statement }
+    end
+  end
+
+  describe "#copyright_date" do
+    subject { described_class.new }
+    let(:copyright_date) { Date.new(2017, 3, 30) }
+
+    context "with new CurateGenericWork work" do
+      its(:copyright_date) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has copyright_date" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.copyright_date = copyright_date
+        end
+      end
+      its(:copyright_date) { is_expected.to eq copyright_date }
+    end
+  end
+
+  describe "#license" do
+    subject { described_class.new }
+    let(:license) { 'MIT Licence' }
+
+    context "with new CurateGenericWork work" do
+      its(:license) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has license" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.license = license
+        end
+      end
+      its(:license) { is_expected.to eq license }
+    end
+  end
+
+  describe "#access_right" do
+    subject { described_class.new }
+    let(:access_right) { ['Public Access'] }
+
+    context "with new CurateGenericWork work" do
+      its(:access_right) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has access_right" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.access_right = access_right
+        end
+      end
+      its(:access_right) { is_expected.to eq access_right }
+    end
+  end
+
+  describe "#rights_documentation" do
+    subject { described_class.new }
+    let(:rights_documentation) { 'Rights documentation uri' }
+
+    context "with new CurateGenericWork work" do
+      its(:rights_documentation) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has rights_documentation" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.rights_documentation = rights_documentation
+        end
+      end
+      its(:rights_documentation) { is_expected.to eq rights_documentation }
+    end
+  end
+
+  describe "#scheduled_rights_review" do
+    subject { described_class.new }
+    let(:scheduled_rights_review) { 'Scheduled for 2019' }
+
+    context "with new CurateGenericWork work" do
+      its(:scheduled_rights_review) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has scheduled_rights_review" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.scheduled_rights_review = scheduled_rights_review
+        end
+      end
+      its(:scheduled_rights_review) { is_expected.to eq scheduled_rights_review }
+    end
+  end
+
+  describe "#scheduled_rights_review_note" do
+    subject { described_class.new }
+    let(:scheduled_rights_review_note) { 'Review note' }
+
+    context "with new CurateGenericWork work" do
+      its(:scheduled_rights_review_note) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has scheduled_rights_review_note" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.scheduled_rights_review_note = scheduled_rights_review_note
+        end
+      end
+      its(:scheduled_rights_review_note) { is_expected.to eq scheduled_rights_review_note }
+    end
+  end
+
+  describe "#internal_rights_note" do
+    subject { described_class.new }
+    let(:internal_rights_note) { 'Internal review note' }
+
+    context "with new CurateGenericWork work" do
+      its(:internal_rights_note) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has internal_rights_note" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.internal_rights_note = internal_rights_note
+        end
+      end
+      its(:internal_rights_note) { is_expected.to eq internal_rights_note }
+    end
+  end
+
+  describe "#legacy_rights" do
+    subject { described_class.new }
+    let(:legacy_rights) { 'Legacy from prior institution' }
+
+    context "with new CurateGenericWork work" do
+      its(:legacy_rights) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has legacy_rights" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.legacy_rights = legacy_rights
+        end
+      end
+      its(:legacy_rights) { is_expected.to eq legacy_rights }
+    end
+  end
+
+  describe "#data_classification" do
+    subject { described_class.new }
+    let(:data_classification) { ['excel spreadsheet'] }
+
+    context "with new CurateGenericWork work" do
+      its(:data_classification) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has data_classification" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.data_classification = data_classification
+        end
+      end
+      its(:data_classification) { is_expected.to eq data_classification }
+    end
+  end
+
+  describe "#sensitive_material" do
+    subject { described_class.new }
+    let(:sensitive_material) { ['supplemental material'] }
+
+    context "with new CurateGenericWork work" do
+      its(:sensitive_material) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has sensitive_material" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.sensitive_material = sensitive_material
+        end
+      end
+      its(:sensitive_material) { is_expected.to eq sensitive_material }
+    end
+  end
+
+  describe "#sensitive_material_note" do
+    subject { described_class.new }
+    let(:sensitive_material_note) { ['secret note'] }
+
+    context "with new CurateGenericWork work" do
+      its(:sensitive_material_note) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has sensitive_material_note" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.sensitive_material_note = sensitive_material_note
+        end
+      end
+      its(:sensitive_material_note) { is_expected.to eq sensitive_material_note }
+    end
+  end
 end
