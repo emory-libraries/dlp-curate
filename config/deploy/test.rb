@@ -1,3 +1,4 @@
+server 'curate-test.library.emory.edu', user: 'deploy', roles: [:web, :app, :db]
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
