@@ -22,3 +22,9 @@ In a production environment, we will use Shibboleth for authentication. However,
 In order to set up your dev environment for database authentication, you will need to set the following environment variable:
 
 `export DATABASE_AUTH=true`
+
+# Testing and CI
+
+Run the test suite with `bin/rails ci`
+
+For our CI we are using CircleCI that we adopted from hyrax project: <a href="https://github.com/samvera/hyrax/blob/master/.circleci/config.yml"><em>Hyrax CircleCI Config</em></a>
