@@ -27,4 +27,4 @@ In order to set up your dev environment for database authentication, you will ne
 
 Run the test suite with `bin/rails ci`
 
-For our CI we are using CircleCI that we adopted from hyrax project: <a href="https://github.com/samvera/hyrax/blob/master/.circleci/config.yml"><em>Hyrax CircleCI Config</em></a>
+For our CI we are using CircleCI that we adopted from hyrax project: [Hyrax CircleCI Config](https://github.com/samvera/hyrax/blob/master/.circleci/config.yml)
