@@ -1031,7 +1031,7 @@ RSpec.describe CurateGenericWork do
 
   describe "#scheduled_rights_review" do
     subject { described_class.new }
-    let(:scheduled_rights_review) { 'Scheduled for 2019' }
+    let(:scheduled_rights_review) { Date.new(2017, 3, 30) }
 
     context "with new CurateGenericWork work" do
       its(:scheduled_rights_review) { is_expected.to be_falsey }
