@@ -1154,4 +1154,130 @@ RSpec.describe CurateGenericWork do
       its(:sensitive_material_note) { is_expected.to eq sensitive_material_note }
     end
   end
+
+  describe "#staff_note" do
+    subject { described_class.new }
+    let(:staff_note) { ['This is for internal staff use only'] }
+
+    context "with new CurateGenericWork work" do
+      its(:staff_note) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a staff_note" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.staff_note = staff_note
+        end
+      end
+      its(:staff_note) { is_expected.to eq staff_note }
+    end
+  end
+
+  describe "#date_digitized" do
+    subject { described_class.new }
+    let(:date_digitized) { Date.new(2018, 1, 12) }
+
+    context "with new CurateGenericWork work" do
+      its(:date_digitized) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a date_digitized" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.date_digitized = date_digitized
+        end
+      end
+      its(:date_digitized) { is_expected.to eq date_digitized }
+    end
+  end
+
+  describe "#transfer_engineer" do
+    subject { described_class.new }
+    let(:transfer_engineer) { 'John Doe' }
+
+    context "with new CurateGenericWork work" do
+      its(:transfer_engineer) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a transfer_engineer" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.transfer_engineer = transfer_engineer
+        end
+      end
+      its(:transfer_engineer) { is_expected.to eq transfer_engineer }
+    end
+  end
+
+  describe "#legacy_identifier" do
+    subject { described_class.new }
+    let(:legacy_identifier) { ['ETDs'] }
+
+    context "with new CurateGenericWork work" do
+      its(:legacy_identifier) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a legacy_identifier" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.legacy_identifier = legacy_identifier
+        end
+      end
+      its(:legacy_identifier) { is_expected.to eq legacy_identifier }
+    end
+  end
+
+  describe "#legacy_ark" do
+    subject { described_class.new }
+    let(:legacy_ark) { ['Emory Legacy Ark'] }
+
+    context "with new CurateGenericWork work" do
+      its(:legacy_ark) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has a legacy_ark" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.legacy_ark = legacy_ark
+        end
+      end
+      its(:legacy_ark) { is_expected.to eq legacy_ark }
+    end
+  end
+
+  describe "#system_of_record_ID" do
+    subject { described_class.new }
+    let(:system_of_record_ID) { 'Alma:123' }
+
+    context "with new CurateGenericWork work" do
+      its(:system_of_record_ID) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a system_of_record_ID" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.system_of_record_ID = system_of_record_ID
+        end
+      end
+      its(:system_of_record_ID) { is_expected.to eq system_of_record_ID }
+    end
+  end
+
+  describe "#primary_repository_ID" do
+    subject { described_class.new }
+    let(:primary_repository_ID) { '123ABC' }
+
+    context "with new CurateGenericWork work" do
+      its(:primary_repository_ID) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a primary_repository_ID" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.primary_repository_ID = primary_repository_ID
+        end
+      end
+      its(:primary_repository_ID) { is_expected.to eq primary_repository_ID }
+    end
+  end
 end
