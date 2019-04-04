@@ -1121,10 +1121,10 @@ RSpec.describe CurateGenericWork do
 
   describe "#sensitive_material" do
     subject { described_class.new }
-    let(:sensitive_material) { ['supplemental material'] }
+    let(:sensitive_material) { 'supplemental material' }
 
     context "with new CurateGenericWork work" do
-      its(:sensitive_material) { is_expected.to be_empty }
+      its(:sensitive_material) { is_expected.to be_falsey }
     end
 
     context "with a CurateGenericWork work that has sensitive_material" do
@@ -1139,10 +1139,10 @@ RSpec.describe CurateGenericWork do
 
   describe "#sensitive_material_note" do
     subject { described_class.new }
-    let(:sensitive_material_note) { ['secret note'] }
+    let(:sensitive_material_note) { 'secret note' }
 
     context "with new CurateGenericWork work" do
-      its(:sensitive_material_note) { is_expected.to be_empty }
+      its(:sensitive_material_note) { is_expected.to be_falsey }
     end
 
     context "with a CurateGenericWork work that has sensitive_material_note" do
