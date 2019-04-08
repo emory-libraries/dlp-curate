@@ -3,8 +3,6 @@ class AuthConfig
   # but in development mode, you may want to use local database
   # authentication instead.
   def self.use_database_auth?
-    # !Rails.env.production? && ENV['DATABASE_AUTH'] == 'true'
-    # We will be using database authentication on production temporarily
-    ENV['DATABASE_AUTH'] == 'true'
+    !Rails.env.production? && ENV['DATABASE_AUTH'] == 'true'
   end
 end

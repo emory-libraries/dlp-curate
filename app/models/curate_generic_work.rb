@@ -7,6 +7,7 @@ class CurateGenericWork < ActiveFedora::Base
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
+  validates :date_created, :date_issued, :conference_dates, :copyright_date, :scheduled_rights_review, type: Date
 
   property :institution, predicate: "http://rdaregistry.info/Elements/u/P60402", multiple: false do |index|
     index.as :stored_searchable
@@ -28,7 +29,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :content_genre, predicate: "http://www.europeana.eu/schemas/edm/" do |index|
+  property :content_genre, predicate: "http://www.europeana.edu/schemas/edm/hasType" do |index|
     index.as :stored_searchable, :facetable
   end
 
@@ -74,7 +75,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :parent_title, predicate: "http://id.loc.gov/ontologies/bibframe/seriesStatement", multiple: false do |index|
+  property :parent_title, predicate: "http://rdaregistry.info/Elements/u/P60101", multiple: false do |index|
     index.as :stored_searchable
   end
 
@@ -104,9 +105,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :grant_information, predicate: "http://www.w3.org/2004/02/skos/core#grantOrFundingNote"
+  property :grant_information, predicate: "http://metadata.emory.edu/vocab/cor-terms#grantOrFundingNote"
 
-  property :author_notes, predicate: "http://www.w3.org/2004/02/skos/core#authorNote", multiple: false do |index|
+  property :author_notes, predicate: "http://metadata.emory.edu/vocab/cor-terms#authorNote", multiple: false do |index|
     index.as :stored_searchable
   end
 
@@ -114,7 +115,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :data_source_note, predicate: "http://www.w3.org/2004/02/skos/core#dataSourcesNote" do |index|
+  property :data_source_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataSourcesNote" do |index|
     index.as :stored_searchable
   end
 
@@ -122,7 +123,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :technical_note, predicate: "http://www.w3.org/2004/02/skos/core#technicalNote", multiple: false do |index|
+  property :technical_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#technicalNote", multiple: false do |index|
     index.as :stored_searchable
   end
 
@@ -177,6 +178,81 @@ class CurateGenericWork < ActiveFedora::Base
   property :place_of_production, predicate: "http://id.loc.gov/vocabulary/relators/pup", multiple: false
 
   property :keywords, predicate: "http://schema.org/keywords" do |index|
+    index.as :stored_searchable
+  end
+
+  property :rights_statement, predicate: "http://purl.org/dc/elements/1.1/rights"
+
+  property :rights_statement_controlled, predicate: "http://www.europeana.eu/schemas/edm/rights", multiple: false do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  property :rights_holder, predicate: "http://purl.org/dc/terms/rightsHolder"
+
+  property :copyright_date, predicate: "http://purl.org/dc/terms/dateCopyrighted", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :license, predicate: "http://schema.org/license", multiple: false
+
+  property :access_right, predicate: "http://purl.org/dc/terms/accessRights" do |index|
+    index.as :stored_searchable
+  end
+
+  property :rights_documentation, predicate: "http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI", multiple: false
+
+  property :scheduled_rights_review, predicate: "http://metadata.emory.edu/vocab/cor-terms#scheduledRightsReview", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :scheduled_rights_review_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#scheduledRightsReviewNote", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :internal_rights_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#internalRightsNote", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :legacy_rights, predicate: "http://metadata.emory.edu/vocab/cor-terms#legacyRights", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :data_classification, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataClassification" do |index|
+    index.as :stored_searchable
+  end
+
+  property :sensitive_material, predicate: "http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterial", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :sensitive_material_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterialNote", multiple: false do |index|
+    index.as :stored_searchable
+  end
+  property :staff_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#staffNote" do |index|
+    index.as :stored_searchable
+  end
+
+  property :date_digitized, predicate: "http://metadata.emory.edu/vocab/cor-terms#dateDigitized", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :transfer_engineer, predicate: "http://metadata.emory.edu/vocab/cor-terms#fileTransferEngineer", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :legacy_identifier, predicate: "http://id.loc.gov/vocabulary/identifiers/local#legacy" do |index|
+    index.as :stored_searchable
+  end
+
+  property :legacy_ark, predicate: "http://id.loc.gov/vocabulary/identifiers/local#ark" do |index|
+    index.as :stored_searchable
+  end
+
+  property :system_of_record_ID, predicate: "http://metadata.emory.edu/vocab/cor-terms#descriptiveSystemID", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :primary_repository_ID, predicate: "http://purl.org/dc/terms/identifier", multiple: false do |index|
     index.as :stored_searchable
   end
 
