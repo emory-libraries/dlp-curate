@@ -28,7 +28,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :content_genre, predicate: "http://www.europeana.eu/schemas/edm/" do |index|
+  property :content_genre, predicate: "http://www.europeana.edu/schemas/edm/hasType" do |index|
     index.as :stored_searchable, :facetable
   end
 
@@ -74,7 +74,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :parent_title, predicate: "http://id.loc.gov/ontologies/bibframe/seriesStatement", multiple: false do |index|
+  property :parent_title, predicate: "http://rdaregistry.info/Elements/u/P60101", multiple: false do |index|
     index.as :stored_searchable
   end
 
@@ -104,9 +104,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :grant_information, predicate: "http://www.w3.org/2004/02/skos/core#grantOrFundingNote"
+  property :grant_information, predicate: "http://metadata.emory.edu/vocab/cor-terms#grantOrFundingNote"
 
-  property :author_notes, predicate: "http://www.w3.org/2004/02/skos/core#authorNote", multiple: false do |index|
+  property :author_notes, predicate: "http://metadata.emory.edu/vocab/cor-terms#authorNote", multiple: false do |index|
     index.as :stored_searchable
   end
 
@@ -114,7 +114,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :data_source_note, predicate: "http://www.w3.org/2004/02/skos/core#dataSourcesNote" do |index|
+  property :data_source_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataSourcesNote" do |index|
     index.as :stored_searchable
   end
 
@@ -122,7 +122,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :technical_note, predicate: "http://www.w3.org/2004/02/skos/core#technicalNote", multiple: false do |index|
+  property :technical_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#technicalNote", multiple: false do |index|
     index.as :stored_searchable
   end
 
@@ -220,11 +220,38 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :sensitive_material, predicate: "http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterial" do |index|
+  property :sensitive_material, predicate: "http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterial", multiple: false do |index|
     index.as :stored_searchable
   end
 
-  property :sensitive_material_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterialNote" do |index|
+  property :sensitive_material_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterialNote", multiple: false do |index|
+    index.as :stored_searchable
+  end
+  property :staff_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#staffNote" do |index|
+    index.as :stored_searchable
+  end
+
+  property :date_digitized, predicate: "http://metadata.emory.edu/vocab/cor-terms#dateDigitized", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :transfer_engineer, predicate: "http://metadata.emory.edu/vocab/cor-terms#fileTransferEngineer", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :legacy_identifier, predicate: "http://id.loc.gov/vocabulary/identifiers/local#legacy" do |index|
+    index.as :stored_searchable
+  end
+
+  property :legacy_ark, predicate: "http://id.loc.gov/vocabulary/identifiers/local#ark" do |index|
+    index.as :stored_searchable
+  end
+
+  property :system_of_record_ID, predicate: "http://metadata.emory.edu/vocab/cor-terms#descriptiveSystemID", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :primary_repository_ID, predicate: "http://purl.org/dc/terms/identifier", multiple: false do |index|
     index.as :stored_searchable
   end
 
