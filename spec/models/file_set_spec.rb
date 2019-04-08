@@ -20,6 +20,8 @@ RSpec.describe FileSet do
         expect(related_files).to include(f2)
         expect(related_files).not_to include(f1)
       end
+    end
+  end
 
   it "multiple pcdm_use error" do
     expect { described_class.new(pcdm_use: [described_class::PRIMARY]) }.to raise_error(ArgumentError)
