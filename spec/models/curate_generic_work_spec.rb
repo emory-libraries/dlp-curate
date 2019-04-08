@@ -1280,13 +1280,19 @@ RSpec.describe CurateGenericWork do
       its(:primary_repository_ID) { is_expected.to eq primary_repository_ID }
     end
   end
-  
+
   context "saves metadata in SolrDoc" do
     let(:curate_generic_work) do
       described_class.create(
         title: ['Example title'],
         primary_language: 'English',
-        abstract: 'This is an abstract'
+        abstract: 'This is an abstract',
+        table_of_contents: 'This is point number 1',
+        date_created: Date.new(2018, 1, 12),
+        date_issued: Date.new(2018, 1, 12),
+        conference_dates: Date.new(2018, 1, 12),
+        copyright_date: Date.new(2018, 1, 12),
+        scheduled_rights_review: Date.new(2018, 1, 12)
       )
     end
 
@@ -1300,17 +1306,10 @@ RSpec.describe CurateGenericWork do
     it "returns the SolrDoc with metadata" do
       expect(work.class).to eq SolrDocument
 
-      # Check title (multi-valued)
-      expect(solr_doc).to include 'title_tesim'
       expect(solr_doc['title_tesim']).to eq curate_generic_work.title.to_a
-
-      # Check primary_language (single-valued, stored-searchable, facetable)
-      expect(solr_doc).to include 'primary_language_tesi'
-      expect(solr_doc['primary_language_tesi']).to eq curate_generic_work.primary_language
-
-      # Check abstract (single-valued, stored-searchable)
-      expect(solr_doc).to include 'abstract_tes'
-      expect(solr_doc['abstract_tes']).to eq curate_generic_work.abstract
+      expect(solr_doc['table_of_contents_tesim'][0]).to eq curate_generic_work.table_of_contents
+      expect(solr_doc['primary_language_tesim'][0]).to eq curate_generic_work.primary_language
+      expect(solr_doc['abstract_tesim'][0]).to eq curate_generic_work.abstract
     end
   end
 end
