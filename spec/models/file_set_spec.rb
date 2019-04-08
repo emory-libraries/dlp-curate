@@ -41,7 +41,6 @@ RSpec.describe FileSet do
       its(:pcdm_use) { is_expected.to eq described_class::SUPPLEMENTAL }
       it { is_expected.not_to be_primary }
       it { is_expected.to be_supplemental }
-
     end
   end
 end
