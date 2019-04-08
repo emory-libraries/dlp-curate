@@ -7,6 +7,7 @@ class CurateGenericWork < ActiveFedora::Base
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
+  validates :date_created, :date_issued, :conference_dates, :copyright_date, :scheduled_rights_review, type: Date
 
   property :institution, predicate: "http://rdaregistry.info/Elements/u/P60402", multiple: false do |index|
     index.as :stored_searchable
