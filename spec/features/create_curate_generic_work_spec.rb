@@ -4,7 +4,7 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 # NOTE: If you generated more than one work, you have to set "js: true"
-RSpec.feature 'Create a CurateGenericWork', js: false do
+RSpec.feature 'Create a CurateGenericWork', js: true do
   context 'a logged in user' do
     let(:user_attributes) do
       { uid: 'test@example.com' }
@@ -28,6 +28,20 @@ RSpec.feature 'Create a CurateGenericWork', js: false do
         access: 'deposit'
       )
       login_as user
+    end
+
+    scenario "'descriptions' loads with all its inputs" do
+      visit '/concern/curate_generic_works/new'
+
+      expect(page).to have_css('#metadata input#curate_generic_work_title')
+      expect(page).to have_css('#metadata input#curate_generic_work_creator')
+      expect(page).to have_css('#metadata select#curate_generic_work_rights_statement')
+
+      click_on 'Additional fields'
+
+      expect(page).to have_content('Add another Content genre')
+      expect(page).to have_css('#metadata input#curate_generic_work_staff_note')
+      expect(page).to have_content('Add another Staff note')
     end
 
     scenario "Create Curate Work" do
@@ -59,7 +73,7 @@ RSpec.feature 'Create a CurateGenericWork', js: false do
       expect(page).to have_content('Please note, making something visible to the world (i.e. marking this as Public) may be viewed as publishing which could impact your ability to')
       check('agreement')
 
-      click_on('Save')
+      # click_on('Save')
       # expect(page).to have_content('My Test Work')
       # expect(page).to have_content "Your files are being processed by Hyrax in the background."
     end
