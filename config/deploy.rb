@@ -5,7 +5,6 @@ set :application, "dlp-curate"
 set :repo_url, "https://github.com/emory-libraries/dlp-curate.git"
 set :deploy_to, '/opt/dlp-curate'
 set :rails_env, 'production'
-set :default_env, 'PASSENGER_INSTANCE_REGISTRY_DIR' => '/var/run'
 set :assets_prefix, "#{shared_path}/public/assets"
 
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
@@ -13,6 +12,11 @@ set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
 
 append :linked_dirs, "log", "public/assets", "tmp/pids", "tmp/cache", "tmp/sockets", "config/emory"
 append :linked_files, ".env.production", "config/secrets.yml"
+
+set :default_env,
+    PATH:                            '$PATH:/opt/rh/rh-ruby25/root/usr/local/bin:/opt/rh/rh-ruby25/root/usr/bin',
+    LD_LIBRARY_PATH:                 '$LD_LIBRARY_PATH:/opt/rh/rh-ruby25/root/usr/local/lib64:/opt/rh/rh-ruby25/root/usr/lib64',
+    PASSENGER_INSTANCE_REGISTRY_DIR: '/var/run'
 
 # Rake::Task["sidekiq:stop"].clear_actions
 # Rake::Task["sidekiq:start"].clear_actions

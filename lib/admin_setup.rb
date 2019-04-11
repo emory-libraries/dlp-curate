@@ -45,8 +45,7 @@ class AdminSetup
   def make_admin(uid, provider = "database")
     @logger.debug "Making admin #{uid}"
     admin_user = ::User.find_or_create_by(uid: uid)
-    # Comment out set_default_password condition for temp admin setup on production
-    admin_user.password = "123456" # if set_default_password?
+    admin_user.password = "123456" if set_default_password?
     admin_user.ppid = uid # temporary ppid, will get replaced when user signs in with shibboleth
     admin_user.provider = provider
     admin_user.save
