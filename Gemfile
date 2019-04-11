@@ -60,7 +60,7 @@ group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'coveralls', require: false
   gem 'database_cleaner'
-  gem 'selenium-webdriver'
+  gem 'webdrivers', '~> 3.0'
 end
 
 group :development do
