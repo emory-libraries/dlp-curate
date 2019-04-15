@@ -3,6 +3,24 @@
 require 'rails_helper'
 
 RSpec.describe CurateGenericWork do
+  context "multi-part objects" do
+    let(:work1)       { FactoryBot.build(:work, id: 'wk1', title: ['Work 1']) }
+    let(:work2)       { FactoryBot.build(:work, id: 'wk2', title: ['Work 2']) }
+    let(:work3)       { FactoryBot.build(:work, id: 'wk3', title: ['Work 3']) }
+    let(:fileset1)    { FactoryBot.build(:file_set, id: 'fs1', title: ['Fileset 1']) }
+    let(:fileset2)    { FactoryBot.build(:file_set, id: 'fs2', title: ['Fileset 2']) }
+
+    before do
+      work1.members = [work2, work3, fileset1, fileset2]
+      work1.save!
+    end
+
+    it 'access multi-part objects' do
+      w_members = work1.members
+      expect(w_members.map(&:id)).to match_array [work2.id, work3.id, fileset1.id, fileset2.id]
+    end
+  end
+
   describe "#institution" do
     subject { described_class.new }
     let(:institution) { 'Emory University' }
@@ -651,39 +669,39 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#publisher" do
+  describe "#publisher_work" do
     subject { described_class.new }
-    let(:publisher) { 'New publisher' }
+    let(:publisher_work) { 'New publisher' }
 
     context "with new CurateGenericWork work" do
-      its(:publisher) { is_expected.to be_falsey }
+      its(:publisher_work) { is_expected.to be_falsey }
     end
 
     context "with a CurateGenericWork work that has a publisher" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.publisher = publisher
+          cgw.publisher_work = publisher_work
         end
       end
-      its(:publisher) { is_expected.to eq 'New publisher' }
+      its(:publisher_work) { is_expected.to eq publisher_work }
     end
   end
 
-  describe "#date_created" do
+  describe "#date_created_work" do
     subject { described_class.new }
-    let(:date_created) { Date.new(2018, 1, 12) }
+    let(:date_created_work) { Date.new(2018, 1, 12) }
 
     context "with new CurateGenericWork work" do
-      its(:date_created) { is_expected.to be_falsey }
+      its(:date_created_work) { is_expected.to be_falsey }
     end
 
     context "with a CurateGenericWork work that has a date_created" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.date_created = date_created
+          cgw.date_created_work = date_created_work
         end
       end
-      its(:date_created) { is_expected.to eq date_created }
+      its(:date_created_work) { is_expected.to eq date_created_work }
     end
   end
 
@@ -903,6 +921,32 @@ RSpec.describe CurateGenericWork do
     end
   end
 
+  context "saves metadata in SolrDoc" do
+    let(:curate_generic_work) { FactoryBot.build(:work, id: 'wk5', title: ['Example title'], primary_language: 'English', abstract: 'This is an abstract') }
+    before do
+      curate_generic_work.save
+    end
+
+    let(:work) { SolrDocument.find(curate_generic_work.id) }
+    let(:solr_doc) { work.solr_response.response['docs'][0] }
+
+    it "returns the SolrDoc with metadata" do
+      expect(work.class).to eq SolrDocument
+
+      # Check title (multi-valued)
+      expect(solr_doc).to include 'title_tesim'
+      expect(solr_doc['title_tesim']).to eq curate_generic_work.title.to_a
+
+      # Check primary_language (single-valued, stored-searchable, facetable)
+      expect(solr_doc).to include 'primary_language_tesim'
+      expect(solr_doc['primary_language_tesim']).to eq [curate_generic_work.primary_language]
+
+      # Check abstract (single-valued, stored-searchable)
+      expect(solr_doc).to include 'abstract_tesim'
+      expect(solr_doc['abstract_tesim']).to eq [curate_generic_work.abstract]
+    end
+  end
+
   describe "#rights_holder" do
     subject { described_class.new }
     let(:rights_holder) { ['Emory University'] }
@@ -975,21 +1019,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#license" do
+  describe "#license_work" do
     subject { described_class.new }
-    let(:license) { 'MIT Licence' }
+    let(:license_work) { 'MIT Licence' }
 
     context "with new CurateGenericWork work" do
-      its(:license) { is_expected.to be_falsey }
+      its(:license_work) { is_expected.to be_falsey }
     end
 
     context "with a CurateGenericWork work that has license" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.license = license
+          cgw.license_work = license_work
         end
       end
-      its(:license) { is_expected.to eq license }
+      its(:license_work) { is_expected.to eq license_work }
     end
   end
 
