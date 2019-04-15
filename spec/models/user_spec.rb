@@ -10,13 +10,18 @@ auth_hash = OmniAuth::AuthHash.new(
 )
 
 RSpec.describe User, :clean do
+  let(:user) do
+    user = described_class.new(provider: "shibboleth", uid: "brianbboys1967", display_name: 'Brian Wilson')
+    user.save
+    user
+  end
   context "shibboleth" do
-    let(:user) { described_class.from_omniauth(auth_hash) }
+    let(:user_auth) { described_class.from_omniauth(auth_hash) }
     it "has a shibboleth provided name" do
-      expect(user.display_name).to eq auth_hash.info.display_name
+      expect(user.display_name).to eq user_auth.display_name
     end
     it "has a shibboleth provided uid" do
-      expect(user.uid).to eq auth_hash.info.uid
+      expect(user.uid).to eq user_auth.uid
     end
   end
   context "updating an existing user" do
@@ -46,10 +51,10 @@ RSpec.describe User, :clean do
   end
   context "signing in twice" do
     it "finds the original account instead of trying to make a new one" do
-      # create user first time
+      # try to create user first time
       expect { described_class.from_omniauth(auth_hash) }
         .to change { described_class.count }
-        .by(1)
+        .by(0)
 
       # login existing user second time
       expect { described_class.from_omniauth(auth_hash) }

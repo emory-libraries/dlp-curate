@@ -42,7 +42,7 @@ class User < ApplicationRecord
     Rails.logger.debug "auth = #{auth.inspect}"
     raise User::NilShibbolethUserError.new("No uid", auth) if auth.uid.empty? || auth.info.uid.empty?
     user = find_by(provider: auth.provider, uid: auth.info.uid)
-    raise User::NilShibbolethUserError.new("No user found", auth) if user.nil?
+    raise User::NilShibbolethUserError.new("No user found", user) if user.nil?
     user.display_name = auth.info.display_name
     user.uid = auth.info.uid
     user.ppid = auth.uid
