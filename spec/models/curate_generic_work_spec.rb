@@ -921,6 +921,32 @@ RSpec.describe CurateGenericWork do
     end
   end
 
+  context "saves metadata in SolrDoc" do
+    let(:curate_generic_work) { FactoryBot.build(:work, id: 'wk5', title: ['Example title'], primary_language: 'English', abstract: 'This is an abstract') }
+    before do
+      curate_generic_work.save
+    end
+
+    let(:work) { SolrDocument.find(curate_generic_work.id) }
+    let(:solr_doc) { work.solr_response.response['docs'][0] }
+
+    it "returns the SolrDoc with metadata" do
+      expect(work.class).to eq SolrDocument
+
+      # Check title (multi-valued)
+      expect(solr_doc).to include 'title_tesim'
+      expect(solr_doc['title_tesim']).to eq curate_generic_work.title.to_a
+
+      # Check primary_language (single-valued, stored-searchable, facetable)
+      expect(solr_doc).to include 'primary_language_tesim'
+      expect(solr_doc['primary_language_tesim']).to eq [curate_generic_work.primary_language]
+
+      # Check abstract (single-valued, stored-searchable)
+      expect(solr_doc).to include 'abstract_tesim'
+      expect(solr_doc['abstract_tesim']).to eq [curate_generic_work.abstract]
+    end
+  end
+
   describe "#rights_holder" do
     subject { described_class.new }
     let(:rights_holder) { ['Emory University'] }

@@ -4,7 +4,7 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 # NOTE: If you generated more than one work, you have to set "js: true"
-RSpec.feature 'Create a CurateGenericWork', js: false do
+RSpec.feature 'Create a CurateGenericWork' do
   context 'a logged in user' do
     let(:user_attributes) do
       { uid: 'test@example.com' }
@@ -28,6 +28,34 @@ RSpec.feature 'Create a CurateGenericWork', js: false do
         access: 'deposit'
       )
       login_as user
+    end
+
+    scenario "'descriptions' loads with all its inputs", js: true do
+      visit '/concern/curate_generic_works/new'
+
+      expect(page).to have_css('#metadata input#curate_generic_work_title')
+      expect(page).to have_css('#metadata select#curate_generic_work_rights_statement')
+
+      click_on 'Additional fields'
+
+      expect(page).to have_content('Add another Content genre')
+      expect(page).to have_css('#metadata input#curate_generic_work_staff_note')
+      expect(page).to have_content('Add another Staff note')
+    end
+
+    scenario "metadata fields are validated", js: true do
+      visit('/concern/curate_generic_works/new')
+
+      fill_in "curate_generic_work[title][]", with: "Example title"
+      fill_in "curate_generic_work[holding_repository]", with: "Woodruff"
+      fill_in "curate_generic_work[content_type]", with: "Book"
+      select("In Copyright", from: "Rights statement")
+      fill_in "curate_generic_work[rights_statement_controlled]", with: "Controlled Rights Statement"
+      fill_in "curate_generic_work[data_classification][]", with: "Excel spreadsheet"
+      fill_in "curate_generic_work[primary_repository_ID]", with: "123ABC"
+      find('body').click
+
+      expect(page).to have_css('li#required-metadata.complete')
     end
 
     scenario "Create Curate Work" do
@@ -59,7 +87,7 @@ RSpec.feature 'Create a CurateGenericWork', js: false do
       expect(page).to have_content('Please note, making something visible to the world (i.e. marking this as Public) may be viewed as publishing which could impact your ability to')
       check('agreement')
 
-      click_on('Save')
+      # click_on('Save')
       # expect(page).to have_content('My Test Work')
       # expect(page).to have_content "Your files are being processed by Hyrax in the background."
     end
