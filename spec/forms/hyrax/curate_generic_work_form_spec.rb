@@ -16,4 +16,21 @@ RSpec.describe Hyrax::CurateGenericWorkForm do
     its(:terms) { is_expected.to include(:internal_rights_note) }
     its(:terms) { is_expected.to include(:issue) }
   end
+
+  describe "repeating entries repeat in the form" do
+    context 'add repeating fields' do
+      let(:params) do
+        {
+          "title" => ["Test title", "Test title2"],
+          "creator" => ["Emory Univeristy", "CDC"]
+        }
+      end
+      it "repeated fields" do
+        allow(Hyrax::Forms::WorkForm).to receive(:sanitize_params).with(params)
+        described_class.sanitize_params(params)
+        expect(params["title"]).to eq ["Test title", "Test title2"]
+        expect(params["creator"]).to eq ["Emory Univeristy", "CDC"]
+      end
+    end
+  end
 end
