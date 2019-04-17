@@ -669,39 +669,39 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#publisher_work" do
+  describe "#publisher" do
     subject { described_class.new }
-    let(:publisher_work) { 'New publisher' }
+    let(:publisher) { 'New publisher' }
 
     context "with new CurateGenericWork work" do
-      its(:publisher_work) { is_expected.to be_falsey }
+      its(:publisher) { is_expected.to be_falsey }
     end
 
     context "with a CurateGenericWork work that has a publisher" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.publisher_work = publisher_work
+          cgw.publisher = publisher
         end
       end
-      its(:publisher_work) { is_expected.to eq publisher_work }
+      its(:publisher) { is_expected.to eq publisher }
     end
   end
 
-  describe "#date_created_work" do
+  describe "#date_created" do
     subject { described_class.new }
-    let(:date_created_work) { Date.new(2018, 1, 12) }
+    let(:date_created) { Date.new(2018, 1, 12) }
 
     context "with new CurateGenericWork work" do
-      its(:date_created_work) { is_expected.to be_falsey }
+      its(:date_created) { is_expected.to be_falsey }
     end
 
     context "with a CurateGenericWork work that has a date_created" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.date_created_work = date_created_work
+          cgw.date_created = date_created
         end
       end
-      its(:date_created_work) { is_expected.to eq date_created_work }
+      its(:date_created) { is_expected.to eq date_created }
     end
   end
 
@@ -921,32 +921,6 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  context "saves metadata in SolrDoc" do
-    let(:curate_generic_work) { FactoryBot.build(:work, id: 'wk5', title: ['Example title'], primary_language: 'English', abstract: 'This is an abstract') }
-    before do
-      curate_generic_work.save
-    end
-
-    let(:work) { SolrDocument.find(curate_generic_work.id) }
-    let(:solr_doc) { work.solr_response.response['docs'][0] }
-
-    it "returns the SolrDoc with metadata" do
-      expect(work.class).to eq SolrDocument
-
-      # Check title (multi-valued)
-      expect(solr_doc).to include 'title_tesim'
-      expect(solr_doc['title_tesim']).to eq curate_generic_work.title.to_a
-
-      # Check primary_language (single-valued, stored-searchable, facetable)
-      expect(solr_doc).to include 'primary_language_tesim'
-      expect(solr_doc['primary_language_tesim']).to eq [curate_generic_work.primary_language]
-
-      # Check abstract (single-valued, stored-searchable)
-      expect(solr_doc).to include 'abstract_tesim'
-      expect(solr_doc['abstract_tesim']).to eq [curate_generic_work.abstract]
-    end
-  end
-
   describe "#rights_holder" do
     subject { described_class.new }
     let(:rights_holder) { ['Emory University'] }
@@ -1019,21 +993,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#license_work" do
+  describe "#license" do
     subject { described_class.new }
-    let(:license_work) { 'MIT Licence' }
+    let(:license) { 'MIT Licence' }
 
     context "with new CurateGenericWork work" do
-      its(:license_work) { is_expected.to be_falsey }
+      its(:license) { is_expected.to be_falsey }
     end
 
     context "with a CurateGenericWork work that has license" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.license_work = license_work
+          cgw.license = license
         end
       end
-      its(:license_work) { is_expected.to eq license_work }
+      its(:license) { is_expected.to eq license }
     end
   end
 
@@ -1322,6 +1296,33 @@ RSpec.describe CurateGenericWork do
         end
       end
       its(:primary_repository_ID) { is_expected.to eq primary_repository_ID }
+    end
+  end
+
+  context "saves metadata in SolrDoc" do
+    let(:params) do
+      { title: ['Example Title'],
+        primary_language: 'English',
+        abstract: 'This is point number 1',
+        copyright_date: Date.new(2018, 1, 12) }
+    end
+    let(:curate_generic_work) { FactoryBot.build(:work, **params) }
+    let(:solr_doc) { curate_generic_work.to_solr }
+
+    it "returns the SolrDoc with metadata" do
+      expect(solr_doc.keys).to include('title_tesim', 'primary_language_tesim', 'abstract_tesim', 'copyright_date_dtsim')
+
+      # Check title (multi-valued)
+      expect(solr_doc['title_tesim']).to match_array params[:title]
+
+      # Check primary_language (single-valued, stored-searchable, facetable)
+      expect(solr_doc['primary_language_tesim']).to contain_exactly params[:primary_language]
+
+      # Check abstract (single-valued, stored-searchable)
+      expect(solr_doc['abstract_tesim']).to contain_exactly params[:abstract]
+
+      # Check a date
+      expect(solr_doc['copyright_date_dtsim']).to contain_exactly params[:copyright_date].strftime('%FT%TZ')
     end
   end
 end
