@@ -246,48 +246,13 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :license_work, predicate: "http://schema.org/license", multiple: false
-  property :publisher_work, predicate: "http://purl.org/dc/elements/1.1/publisher", multiple: false do |index|
+  property :license, predicate: "http://schema.org/license", multiple: false
+
+  property :publisher, predicate: "http://purl.org/dc/elements/1.1/publisher", multiple: false do |index|
     index.as :stored_searchable
   end
-  property :date_created_work, predicate: "http://purl.org/dc/terms/created", multiple: false do |index|
+
+  property :date_created, predicate: "http://purl.org/dc/terms/created", multiple: false do |index|
     index.as :stored_searchable, :facetable
   end
-
-  property :label, predicate: ActiveFedora::RDF::Fcrepo::Model.downloadFilename, multiple: false
-
-  property :relative_path, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#relativePath'), multiple: false
-
-  property :import_url, predicate: ::RDF::URI.new('http://scholarsphere.psu.edu/ns#importUrl'), multiple: false
-  property :resource_type, predicate: ::RDF::Vocab::DC.type
-  property :creator, predicate: ::RDF::Vocab::DC11.creator
-  property :contributor, predicate: ::RDF::Vocab::DC11.contributor
-  property :description, predicate: ::RDF::Vocab::DC11.description
-  property :keyword, predicate: ::RDF::Vocab::DC11.relation
-  # Used for a license
-  property :license, predicate: ::RDF::Vocab::DC.rights
-
-  property :rights_notes, predicate: ::RDF::URI.new('http://purl.org/dc/elements/1.1/rights'), multiple: true
-
-  # This is for the rights statement
-  property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
-  property :publisher, predicate: ::RDF::Vocab::DC11.publisher
-  property :date_created, predicate: ::RDF::Vocab::DC.created
-  property :subject, predicate: ::RDF::Vocab::DC11.subject
-  property :language, predicate: ::RDF::Vocab::DC11.language
-  property :identifier, predicate: ::RDF::Vocab::DC.identifier
-  property :based_near, predicate: ::RDF::Vocab::FOAF.based_near, class_name: Hyrax::ControlledVocabularies::Location
-  property :related_url, predicate: ::RDF::RDFS.seeAlso
-  property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation
-  property :source, predicate: ::RDF::Vocab::DC.source
-
-  id_blank = proc { |attributes| attributes[:id].blank? }
-
-  class_attribute :controlled_properties
-  self.controlled_properties = [:based_near]
-  accepts_nested_attributes_for :based_near, reject_if: id_blank, allow_destroy: true
-
-  # This must be included at the end, because it finalizes the metadata
-  # schema (by adding accepts_nested_attributes)
-  include ::Hyrax::BasicMetadata
 end
