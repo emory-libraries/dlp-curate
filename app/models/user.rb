@@ -39,12 +39,9 @@ class User < ApplicationRecord
   # a new one. Populate it with data we get from shibboleth.
   # @param [OmniAuth::AuthHash] auth
   def self.from_omniauth(auth)
-    Rails.logger.debug "auth = #{auth.inspect}"
     raise User::NilShibbolethUserError.new("No uid", auth) if auth.uid.empty? || auth.info.uid.empty?
-    user = where(provider: auth.provider, uid: auth.info.uid).first_or_create
-    user.display_name = auth.info.display_name
-    user.uid = auth.info.uid
-    user.ppid = auth.uid
+    user = User.find_or_initialize_by(provider: auth.provider, uid: auth.info.uid)
+    user.assign_attributes(display_name: auth.info.display_name, ppid: auth.uid)
     # tezprox@emory.edu isn't a real email address
     user.email = auth.info.uid + '@emory.edu' unless auth.info.uid == 'tezprox'
     user.save

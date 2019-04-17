@@ -78,7 +78,7 @@ class AdminSetup
   # return an array of all current admins
   # @return [Array(User)]
   def admins
-    raise "No admins are defined" unless admin_role.users.count > 0
+    raise "No admins are defined" unless admin_role.users.count.positive?
     admin_role.users
   end
 end
