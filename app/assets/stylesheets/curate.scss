@@ -1,0 +1,8 @@
+.ui-autocomplete-loading {
+  background: #fff url("/assets/loading.gif") right center no-repeat;
+}
+
+.ui-autocomplete {
+    max-height: 300px;
+    overflow-y: auto;
+}
