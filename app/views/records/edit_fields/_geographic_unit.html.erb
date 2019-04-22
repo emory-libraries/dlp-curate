@@ -1,0 +1,7 @@
+<% geographic_unit = Hyrax::GeographicUnitService.new %>
+
+<%= f.input :geographic_unit, as: :select,
+    collection: geographic_unit.select_active_options,
+    include_blank: true, required: false,
+    item_helper: geographic_unit.method(:include_current_value),
+    input_html: { class: 'form-control' } %>

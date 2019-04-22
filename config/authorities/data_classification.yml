@@ -1,0 +1,9 @@
+terms:
+    - id: Public
+      term: Public
+    - id: Internal
+      term: Internal
+    - id: Confidential
+      term: Confidential
+    - id: Restricted
+      term: Restricted

@@ -1,0 +1,7 @@
+<% publisher_version = Hyrax::PublisherVersionService.new %>
+
+<%= f.input :publisher_version, as: :select,
+    collection: publisher_version.select_active_options,
+    include_blank: true, required: false,
+    item_helper: publisher_version.method(:include_current_value),
+    input_html: { class: 'form-control' } %>

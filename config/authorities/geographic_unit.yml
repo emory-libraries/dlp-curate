@@ -1,0 +1,25 @@
+terms:
+    - id: continent
+      term: continent
+    - id: country
+      term: country
+    - id: province
+      term: province
+    - id: region
+      term: region
+    - id: state
+      term: state
+    - id: territory
+      term: territory
+    - id: county
+      term: county
+    - id: city
+      term: city
+    - id: citySection
+      term: citySection
+    - id: island
+      term: island
+    - id: area
+      term: area
+    - id: extraterrestrialArea
+      term: extraterrestrialArea

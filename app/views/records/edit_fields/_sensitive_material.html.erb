@@ -1,0 +1,7 @@
+<% sensitive_material = Hyrax::SensitiveMaterialService.new %>
+
+<%= f.input :sensitive_material, as: :select,
+    collection: sensitive_material.select_active_options,
+    include_blank: true, required: false,
+    item_helper: sensitive_material.method(:include_current_value),
+    input_html: { class: 'form-control' } %>
