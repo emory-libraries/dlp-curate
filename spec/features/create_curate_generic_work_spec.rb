@@ -48,7 +48,7 @@ RSpec.feature 'Create a CurateGenericWork' do
 
       fill_in "curate_generic_work[title][]", with: "Example title"
       fill_in "curate_generic_work[holding_repository]", with: "Woodruff"
-      fill_in "curate_generic_work[content_type]", with: "Book"
+      select("Audio", from: "Content type")
       select("In Copyright", from: "Rights statement")
       fill_in "curate_generic_work[rights_statement_controlled]", with: "Controlled Rights Statement"
       fill_in "curate_generic_work[data_classification][]", with: "Excel spreadsheet"
