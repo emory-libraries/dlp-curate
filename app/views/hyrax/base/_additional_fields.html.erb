@@ -1,0 +1,13 @@
+<%= link_to t(heading),
+            "#" + metadata,
+            class: 'btn btn-default additional-fields',
+            data: { toggle: 'collapse' },
+            role: "button",
+            'aria-expanded'=> "false",
+            'aria-controls'=> "extended-terms" %>
+<div id=<%= metadata %> class='collapse'>
+  <%= render 'form_media', f: f %>
+  <% fields.each do |term| %>
+    <%= render_edit_field_partial(term, f: f) %>
+  <% end %>
+</div>

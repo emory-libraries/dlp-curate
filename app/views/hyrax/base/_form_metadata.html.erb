@@ -6,21 +6,9 @@
       <%= render_edit_field_partial(term, f: f) %>
     <% end %>
   </div>
-  <% if f.object.display_additional_fields? %>
-    <%= link_to t('hyrax.works.form.additional_descriptive_fields'),
-                '#extended-terms-descriptive-metadata',
-                class: 'btn btn-default additional-fields',
-                data: { toggle: 'collapse' },
-                role: "button",
-                'aria-expanded'=> "false",
-                'aria-controls'=> "extended-terms" %>
-    <div id="extended-terms-descriptive-metadata" class='collapse'>
-      <%= render 'form_media', f: f %>
-      <% f.object.secondary_descriptive_metadata_fields.each do |term| %>
-        <%= render_edit_field_partial(term, f: f) %>
-      <% end %>
-    </div>
-  <% end %>
+  <% if f.object.secondary_descriptive_metadata_fields.any? %>
+    <%= render partial: 'additional_fields', locals: {heading: 'hyrax.works.form.additional_descriptive_fields', metadata: 'extended-terms-descriptive-metadata', f: f, fields: f.object.secondary_descriptive_metadata_fields} %>
+  <%end%>
 </div>
 
 <hr>
@@ -33,20 +21,8 @@
       <%= render_edit_field_partial(term, f: f) %>
     <% end %>
   </div>
-  <% if f.object.display_additional_fields? %>
-    <%= link_to t('hyrax.works.form.additional_rights_fields'),
-                '#extended-terms-rights-metadata',
-                class: 'btn btn-default additional-fields',
-                data: { toggle: 'collapse' },
-                role: "button",
-                'aria-expanded'=> "false",
-                'aria-controls'=> "extended-terms" %>
-    <div id="extended-terms-rights-metadata" class='collapse'>
-      <%= render 'form_media', f: f %>
-      <% f.object.secondary_rights_metadata_fields.each do |term| %>
-        <%= render_edit_field_partial(term, f: f) %>
-      <% end %>
-    </div>
+  <% if f.object.secondary_rights_metadata_fields.any? %>
+    <%= render partial: 'additional_fields', locals: {heading: 'hyrax.works.form.additional_rights_fields', metadata: 'extended-terms-rights-metadata', f: f, fields: f.object.secondary_rights_metadata_fields} %>
   <% end %>
 </div>
 
@@ -60,19 +36,7 @@
       <%= render_edit_field_partial(term, f: f) %>
     <% end %>
   </div>
-  <% if f.object.display_additional_fields? %>
-    <%= link_to t('hyrax.works.form.additional_admin_fields'),
-                '#extended-terms-admin-metadata',
-                class: 'btn btn-default additional-fields',
-                data: { toggle: 'collapse' },
-                role: "button",
-                'aria-expanded'=> "false",
-                'aria-controls'=> "extended-terms" %>
-    <div id="extended-terms-admin-metadata" class='collapse'>
-      <%= render 'form_media', f: f %>
-      <% f.object.secondary_admin_metadata_fields.each do |term| %>
-        <%= render_edit_field_partial(term, f: f) %>
-      <% end %>
-    </div>
+  <% if f.object.secondary_admin_metadata_fields.any? %>
+    <%= render partial: 'additional_fields', locals: {heading: 'hyrax.works.form.additional_admin_fields', metadata: 'extended-terms-admin-metadata', f: f, fields: f.object.secondary_admin_metadata_fields} %>
   <% end %>
 </div>
