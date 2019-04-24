@@ -36,9 +36,12 @@ RSpec.feature 'Create a CurateGenericWork' do
       expect(page).to have_css('#metadata input#curate_generic_work_title')
       expect(page).to have_css('#metadata select#curate_generic_work_rights_statement')
 
-      click_on 'Additional fields'
-
+      click_link('Additional descriptive fields')
       expect(page).to have_content('Add another Content genre')
+
+      sleep(2)
+
+      click_link('Additional admin fields')
       expect(page).to have_css('#metadata input#curate_generic_work_staff_note')
       expect(page).to have_content('Add another Staff note')
     end

@@ -56,3 +56,11 @@ en:
     institution_name_full: The Institution Name
     product_name: Hyrax
     product_twitter_handle: "@SamveraRepo"
+    works:
+      form:
+        descriptive_metadata_heading: "Descriptive Metadata"
+        additional_descriptive_fields: "Additional descriptive fields"
+        rights_metadata_heading: "Rights Metadata"
+        additional_rights_fields: "Additional rights fields"
+        admin_metadata_heading: "Admin Metadata"
+        additional_admin_fields: "Additional admin fields"
