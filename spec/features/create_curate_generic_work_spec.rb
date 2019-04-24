@@ -48,7 +48,7 @@ RSpec.feature 'Create a CurateGenericWork' do
 
       fill_in "curate_generic_work[title][]", with: "Example title"
       fill_in "curate_generic_work[holding_repository]", with: "Woodruff"
-      fill_in "curate_generic_work[content_type]", with: "Book"
+      select("Audio", from: "Content type")
       select("In Copyright", from: "Rights statement")
       fill_in "curate_generic_work[rights_statement_controlled]", with: "Controlled Rights Statement"
       fill_in "curate_generic_work[data_classification][]", with: "Excel spreadsheet"
@@ -90,6 +90,36 @@ RSpec.feature 'Create a CurateGenericWork' do
       # click_on('Save')
       # expect(page).to have_content('My Test Work')
       # expect(page).to have_content "Your files are being processed by Hyrax in the background."
+    end
+  end
+
+  context 'QA is appropriately loaded' do
+    it "returns search result for LOC names subauthority" do
+      subauthority = Qa::Authorities::Loc.subauthority_for('names')
+      search_result = subauthority.search('Emory')
+
+      expected_result = [{ "id" => "info:lc/authorities/names/no97052934", "label" => "Emory University Museum bulletin" },
+                         { "id" => "info:lc/authorities/names/n93031439", "label" =>
+                           "Appalachian Oral History Project of Alice Lloyd College, Appalachian State University, Emory and Henry College, and Lees Junior College" },
+                         { "id" => "info:lc/authorities/names/n80017622", "label" => "Emory University. Department of Psychiatry" },
+                         { "id" => "info:lc/authorities/names/no2012033126", "label" => "Emory University. Alumni Association" },
+                         { "id" => "info:lc/authorities/names/no2006021658", "label" => "Emory Center for Myth and Ritual in American Life" },
+                         { "id" => "info:lc/authorities/names/n94084139", "label" => "Emory Center for the Arts" }, { "id" => "info:lc/authorities/names/n84736378", "label" => "Emory Vico studies" },
+                         { "id" => "info:lc/authorities/names/no2005102736", "label" => "Emory Institute for Women's Studies" }, { "id" => "info:lc/authorities/names/no2001070729", "label" =>
+                           "Emory University. Law and Religion Program" },
+                         { "id" => "info:lc/authorities/names/no2012033509", "label" => "Emory University. Department of Geology" }, { "id" => "info:lc/authorities/names/n88500030", "label" =>
+                           "Emory studies in humanities" },
+                         { "id" => "info:lc/authorities/names/no2011188020", "label" => "Emory University. President's Office" }, { "id" => "info:lc/authorities/names/n83030612", "label" =>
+                           "Emory and Henry College" },
+                         { "id" => "info:lc/authorities/names/n93053981", "label" => "Emory texts and studies in ecclesial life" }, { "id" => "info:lc/authorities/names/no2012103342", "label" =>
+                           "Caucus of Emory Black Alumni" },
+                         { "id" => "info:lc/authorities/names/no2005102739", "label" => "Emory Women's Center" }, { "id" => "info:lc/authorities/names/no2012110949", "label" =>
+                           "D. V. S. Senior Honor Society (Emory University)" },
+                         { "id" => "info:lc/authorities/names/n83165634", "label" => "Emory University. Department of Gynecology-Obstetrics" }, { "id" => "info:lc/authorities/names/n80098110",
+                                                                                                                                                  "label" => "Emory University. School of Law" },
+                         { "id" => "info:lc/authorities/names/n89107611", "label" => "Emory University. Department of Orthopaedic Surgery" }]
+
+      expect(search_result).to eq(expected_result)
     end
   end
 end

@@ -1,0 +1,8 @@
+<%=
+  f.input key,
+  input_html: {
+    class: 'form-control',
+    data: { 'autocomplete-url' => "/authorities/search/loc/iso639-2",
+      'autocomplete' => key }
+  } ,
+  required: f.object.required?(key) %>
