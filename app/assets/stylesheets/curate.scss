@@ -6,3 +6,9 @@
     max-height: 300px;
     overflow-y: auto;
 }
+
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
