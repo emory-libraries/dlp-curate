@@ -40,10 +40,11 @@ class User < ApplicationRecord
   # @param [OmniAuth::AuthHash] auth
   def self.from_omniauth(auth)
     raise User::NilShibbolethUserError.new("No uid", auth) if auth.uid.empty? || auth.info.uid.empty?
-    user = User.find_or_initialize_by(provider: auth.provider, uid: auth.info.uid)
-    user.assign_attributes(display_name: auth.info.display_name, ppid: auth.uid)
-    # tezprox@emory.edu isn't a real email address
-    user.email = auth.info.uid + '@emory.edu' unless auth.info.uid == 'tezprox'
+    user = find_by(provider: auth.provider, uid: auth.info.uid)
+    raise User::NilShibbolethUserError.new("No user found", user) if user.nil?
+    user.display_name = auth.info.display_name
+    user.uid = auth.info.uid
+    user.ppid = auth.uid
     user.save
     user
   rescue User::NilShibbolethUserError => e
