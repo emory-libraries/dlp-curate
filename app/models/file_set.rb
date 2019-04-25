@@ -16,7 +16,7 @@ class FileSet < ActiveFedora::Base
     pcdm_use == PRIMARY
   end
 
-  def supplemental?
+  def supplementary?
     !primary?
   end
 
