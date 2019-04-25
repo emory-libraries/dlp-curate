@@ -1,0 +1,42 @@
+<div class="descriptive-metadata">
+  <h4><%= t("hyrax.works.form.descriptive_metadata_heading") %></h4>
+
+  <div class="base-terms">
+    <% f.object.primary_descriptive_metadata_fields.each do |term| %>
+      <%= render_edit_field_partial(term, f: f) %>
+    <% end %>
+  </div>
+  <% if f.object.secondary_descriptive_metadata_fields.any? %>
+    <%= render partial: 'additional_fields', locals: {heading: 'hyrax.works.form.additional_descriptive_fields', metadata: 'extended-terms-descriptive-metadata', f: f, fields: f.object.secondary_descriptive_metadata_fields} %>
+  <%end%>
+</div>
+
+<hr>
+
+<div class="rights-metadata">
+  <h4><%= t("hyrax.works.form.rights_metadata_heading") %></h4>
+
+  <div class="base-terms">
+    <% f.object.primary_rights_metadata_fields.each do |term| %>
+      <%= render_edit_field_partial(term, f: f) %>
+    <% end %>
+  </div>
+  <% if f.object.secondary_rights_metadata_fields.any? %>
+    <%= render partial: 'additional_fields', locals: {heading: 'hyrax.works.form.additional_rights_fields', metadata: 'extended-terms-rights-metadata', f: f, fields: f.object.secondary_rights_metadata_fields} %>
+  <% end %>
+</div>
+
+<hr>
+
+<div class="admin-metadata">
+  <h4><%= t("hyrax.works.form.admin_metadata_heading") %></h4>
+
+  <div class="base-terms">
+    <% f.object.primary_admin_metadata_fields.each do |term| %>
+      <%= render_edit_field_partial(term, f: f) %>
+    <% end %>
+  </div>
+  <% if f.object.secondary_admin_metadata_fields.any? %>
+    <%= render partial: 'additional_fields', locals: {heading: 'hyrax.works.form.additional_admin_fields', metadata: 'extended-terms-admin-metadata', f: f, fields: f.object.secondary_admin_metadata_fields} %>
+  <% end %>
+</div>
