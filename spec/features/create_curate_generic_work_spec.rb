@@ -52,7 +52,6 @@ RSpec.feature 'Create a CurateGenericWork' do
       select("Audio", from: "Content type")
       select("In Copyright", from: "Rights statement")
       fill_in "curate_generic_work[rights_statement_controlled]", with: "Controlled Rights Statement"
-      fill_in "curate_generic_work[data_classification][]", with: "Excel spreadsheet"
       fill_in "curate_generic_work[primary_repository_ID]", with: "123ABC"
       find('body').click
 
