@@ -1,6 +1,7 @@
 # Generated via
 #  `rails generate hyrax:work CurateGenericWork`
 require 'rails_helper'
+require_relative '../support/new_curate_generic_work_form.rb'
 include Warden::Test::Helpers
 
 # NOTE: If you generated more than one work, you have to set "js: true"
@@ -15,6 +16,8 @@ RSpec.feature 'Create a CurateGenericWork' do
     let(:admin_set_id) { AdminSet.find_or_create_default_admin_set_id }
     let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id) }
     let(:workflow) { Sipity::Workflow.create!(active: true, name: 'test-workflow', permission_template: permission_template) }
+
+    let(:new_cgw_form) { NewCurateGenericWorkForm.new }
 
     before do
       # Create a single action that can be taken
@@ -31,7 +34,7 @@ RSpec.feature 'Create a CurateGenericWork' do
     end
 
     scenario "'descriptions' loads with all its inputs", js: true do
-      visit '/concern/curate_generic_works/new'
+      new_cgw_form.visit_new_page
 
       expect(page).to have_css('#metadata input#curate_generic_work_title')
       expect(page).to have_css('#metadata select#curate_generic_work_rights_statement')
@@ -45,7 +48,7 @@ RSpec.feature 'Create a CurateGenericWork' do
     end
 
     scenario "repeating entries in the form", js: true do
-      visit '/concern/curate_generic_works/new'
+      new_cgw_form.visit_new_page
       expect(page).to have_content('Title')
       fill_in "curate_generic_work[title][]", with: "Example title"
       click_on 'Add another Title'
@@ -53,17 +56,20 @@ RSpec.feature 'Create a CurateGenericWork' do
     end
 
     scenario "metadata fields are validated", js: true do
-      visit('/concern/curate_generic_works/new')
-
-      fill_in "curate_generic_work[title][]", with: "Example title"
-      fill_in "curate_generic_work[holding_repository]", with: "Woodruff"
-      select("Audio", from: "Content type")
-      select("In Copyright", from: "Rights statement")
-      fill_in "curate_generic_work[rights_statement_controlled]", with: "Controlled Rights Statement"
-      fill_in "curate_generic_work[primary_repository_ID]", with: "123ABC"
+      new_cgw_form.visit_new_page.metadata_fill_in_with
       find('body').click
-
       expect(page).to have_css('li#required-metadata.complete')
+    end
+
+    scenario "url fields are validated" do
+      new_cgw_form.visit_new_page.metadata_fill_in_with.attach_files.check_visibility
+
+      click_link('Additional descriptive fields')
+      fill_in "curate_generic_work[final_published_version][]", with: "teststring"
+
+      click_on('Save')
+
+      expect(page).to have_content("is not a valid URL")
     end
 
     scenario "Create Curate Work" do
