@@ -12,7 +12,7 @@ RSpec.describe "Showing a file:", type: :feature do
     work.save!
   end
 
-  context 'when the user tries to update file content, but forgets to select a file:' do
+  context 'when the user tries to click on parent work from a show page' do
     it 'shows the edit page again' do
       visit hyrax_file_set_path(file_set)
       expect(page).to have_content('Parent Work')
