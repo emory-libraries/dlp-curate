@@ -20,6 +20,6 @@
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require blacklight/blacklight
 
-//= require_tree .
 //= require hyrax
+//= require hyrax/autocomplete/default
 
