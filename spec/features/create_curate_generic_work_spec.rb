@@ -54,6 +54,21 @@ RSpec.feature 'Create a CurateGenericWork' do
       expect(all("input[name='curate_generic_work[title][]']").count).to eq(2)
     end
 
+    scenario "invalid etdf of Date Created", js: true do
+      new_cgw_form.visit_new_page
+      click_link('Additional descriptive fields')
+      fill_in "curate_generic_work[date_created]", with: "invalid2"
+      find('body').click
+      expect(page).to have_css('.error-validate')
+    end
+
+    scenario "valid etdf of Date Created", js: true do
+      new_cgw_form.visit_new_page
+      click_link('Additional descriptive fields')
+      fill_in "curate_generic_work[date_created]", with: "2012/2013"
+      expect(page).not_to have_css('#curate_generic_work_date_issued-error')
+    end
+
     scenario "metadata fields are validated", js: true do
       new_cgw_form.visit_new_page.metadata_fill_in_with
       find('body').click
