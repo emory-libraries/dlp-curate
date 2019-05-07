@@ -1,12 +1,9 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
-unless ENV['NO_COVERAGE'] == 'true'
-  require 'coveralls'
-  Coveralls.wear!('rails')
-end
-
 require 'spec_helper'
+require 'rspec/its'
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
+
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
@@ -35,6 +32,7 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -63,6 +61,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
   # Selenium-webdriver with longer timeout
   Capybara.register_driver :selenium_with_long_timeout do |app|
     client = Selenium::WebDriver::Remote::Http::Default.new
