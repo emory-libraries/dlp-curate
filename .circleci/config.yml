@@ -1,8 +1,8 @@
 version: 2.1
 orbs:
-    samvera: samvera/circleci-orb@dev:optional-gemspec
+    samvera: samvera/circleci-orb@dev:fix-bundle-cache
 jobs:
-    install_and_test:
+    build:
         parameters:
             ruby_version:
                 type: string
@@ -18,32 +18,34 @@ jobs:
         steps:
             - checkout
 
-            - samvera/bundle_for_gem:
+            - samvera/bundle:
                 ruby_version: << parameters.ruby_version >>
                 bundler_version: << parameters.bundler_version >>
-                project: none
-                require_gemspec: false
 
             - samvera/rubocop
 
-            - samvera/install_solr_core
+            - run:
+                name: Get yarn version
+                command: echo $(yarn --version) >> "YARN_VERSION"
 
-            #- run:
-            #    command: |
-            #       curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            #       chmod +x ./cc-test-reporter
-            #       ./cc-test-reporter before-build
+            - restore_cache:
+                keys:
+                    - v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}
+
+            - run: yarn
+
+            - save_cache:
+                key: v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}
+                paths:
+                    - ~/project/node_modules
+
+            - samvera/install_solr_core
 
             - samvera/parallel_rspec
 
-            #- run:
-            #    command: ./cc-test-reporter after-build -t simplecov --exit-code $?
-
 workflows:
+    version: 2
     ci:
         jobs:
-            - install_and_test:
+            - build:
                 name: ruby2-5-3
-            #- install_and_test:
-            #    name: ruby2-6-3
-            #    ruby_version: 2.6.3
