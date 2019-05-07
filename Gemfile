@@ -13,13 +13,13 @@ gem 'devise'
 gem 'devise-guests', '~> 0.6'
 gem 'dotenv-rails'
 gem 'hydra-role-management'
-gem 'hyrax', '3.0.0-beta1'
+gem 'hyrax', '3.0.0-beta2'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 gem 'mysql2', '~> 0.5'
 gem 'omniauth-shibboleth', '~> 1.3'
 gem 'puma', '~> 3.7'
-gem 'rails', '~> 5.1.6'
+gem 'rails', '~> 5.1'
 gem 'riiif', '~> 2.0'
 gem 'rsolr', '>= 1.0'
 gem 'sass-rails', '~> 5.0'
@@ -28,6 +28,7 @@ gem 'turbolinks', '~> 5'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'uglifier', '>= 1.3.0'
+gem 'webpacker', '~> 4.x'
 
 group :development do
   gem "capistrano", "~> 3.11", require: false
