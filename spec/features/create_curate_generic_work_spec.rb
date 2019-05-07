@@ -72,6 +72,14 @@ RSpec.feature 'Create a CurateGenericWork' do
       expect(page).to have_content("is not a valid URL")
     end
 
+    scenario "custom terms show up as dynamic option for external vocab fields", js: true do
+      new_cgw_form.visit_new_page
+
+      click_link('Additional descriptive fields')
+      fill_in "curate_generic_work[institution]", with: "Test3"
+      expect(find('div.ui-menu-item-wrapper', match: :first).text).to eq 'Test3'
+    end
+
     scenario "Create Curate Work" do
       visit '/concern/curate_generic_works/new'
 
