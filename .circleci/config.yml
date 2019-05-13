@@ -1,8 +1,8 @@
 version: 2.1
 orbs:
-    samvera: samvera/circleci-orb@0
+    samvera: samvera/circleci-orb@dev:optional-gemspec
 jobs:
-    build:
+    install_and_test:
         parameters:
             ruby_version:
                 type: string
@@ -18,19 +18,32 @@ jobs:
         steps:
             - checkout
 
-            - samvera/bundle:
+            - samvera/bundle_for_gem:
                 ruby_version: << parameters.ruby_version >>
                 bundler_version: << parameters.bundler_version >>
+                project: none
+                require_gemspec: false
 
             - samvera/rubocop
 
             - samvera/install_solr_core
 
+            #- run:
+            #    command: |
+            #       curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            #       chmod +x ./cc-test-reporter
+            #       ./cc-test-reporter before-build
+
             - samvera/parallel_rspec
 
+            #- run:
+            #    command: ./cc-test-reporter after-build -t simplecov --exit-code $?
+
 workflows:
-    version: 2
     ci:
         jobs:
-            - build:
+            - install_and_test:
                 name: ruby2-5-3
+            #- install_and_test:
+            #    name: ruby2-6-3
+            #    ruby_version: 2.6.3
