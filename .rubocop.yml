@@ -29,3 +29,5 @@ RSpec/ExampleLength:
     Exclude:
         - 'spec/**/*'
 
+RSpec/MessageSpies:
+  Enabled: false
