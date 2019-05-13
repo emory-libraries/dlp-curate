@@ -16,6 +16,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+**/.DS_Store
 
 # Ignore coverage report
 coverage
