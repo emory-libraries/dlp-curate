@@ -1,3 +1,6 @@
+require 'rails_helper'
+include Warden::Test::Helpers
+
 RSpec.describe "Showing a file:", type: :feature do
   let(:user) { FactoryBot.create(:user) }
   let(:file_title) { 'Some kind of title' }
