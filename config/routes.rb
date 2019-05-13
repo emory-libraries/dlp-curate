@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     concerns :searchable
   end
 
-  devise_for :users, controllers: { omniauth_callbacks: "omniauth_callbacks" }
+  devise_for :users, skip: [:registrations], controllers: { omniauth_callbacks: "omniauth_callbacks" }
 
   # Disable these routes if you are using Devise's
   # database_authenticatable in your development environment.
