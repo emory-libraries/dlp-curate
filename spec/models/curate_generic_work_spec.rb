@@ -1325,4 +1325,16 @@ RSpec.describe CurateGenericWork do
       expect(solr_doc['copyright_date_dtsim']).to contain_exactly params[:copyright_date].strftime('%FT%TZ')
     end
   end
+
+  context "saves custom terms for fields that use external vocabs" do
+    let(:institution) { 'Test3' }
+
+    let(:curate_generic_work) { FactoryBot.build(:work, institution: institution) }
+
+    it "selects custom term and saves it" do
+      curate_generic_work.save
+
+      expect(curate_generic_work.institution).to eq institution
+    end
+  end
 end
