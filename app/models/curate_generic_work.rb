@@ -250,7 +250,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :license, predicate: "http://schema.org/license", multiple: false
+  property :re_use_license, predicate: "http://schema.org/license", multiple: false
 
   property :publisher, predicate: "http://purl.org/dc/elements/1.1/publisher", multiple: false do |index|
     index.as :stored_searchable

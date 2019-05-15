@@ -21,9 +21,6 @@
       <%= render_edit_field_partial(term, f: f) %>
     <% end %>
   </div>
-  <% if f.object.secondary_rights_metadata_fields.any? %>
-    <%= render partial: 'additional_fields', locals: {heading: 'hyrax.works.form.additional_rights_fields', metadata: 'extended-terms-rights-metadata', f: f, fields: f.object.secondary_rights_metadata_fields} %>
-  <% end %>
 </div>
 
 <hr>
@@ -36,7 +33,4 @@
       <%= render_edit_field_partial(term, f: f) %>
     <% end %>
   </div>
-  <% if f.object.secondary_admin_metadata_fields.any? %>
-    <%= render partial: 'additional_fields', locals: {heading: 'hyrax.works.form.additional_admin_fields', metadata: 'extended-terms-admin-metadata', f: f, fields: f.object.secondary_admin_metadata_fields} %>
-  <% end %>
 </div>
