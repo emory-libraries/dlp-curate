@@ -31,3 +31,6 @@ RSpec/ExampleLength:
 
 RSpec/MessageSpies:
   Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
