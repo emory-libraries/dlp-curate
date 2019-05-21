@@ -1,3 +1,4 @@
+require 'rails_helper'
 require 'redlock'
 
 RSpec.describe Hyrax::Actors::FileSetActor do

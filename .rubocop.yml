@@ -30,7 +30,4 @@ RSpec/ExampleLength:
         - 'spec/**/*'
 
 RSpec/MessageSpies:
-  Enabled: false
-
-RSpec/VerifiedDoubles:
-  Enabled: false
+    EnforcedStyle: receive
