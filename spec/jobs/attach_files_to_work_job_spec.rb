@@ -44,23 +44,6 @@ RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
     end
   end
 
-  context "with uploaded files at remote URLs" do
-    let(:url1) { 'https://example.com/my/img.png' }
-    let(:url2) { URI('https://example.com/other/img.png') }
-    let(:url3) { URI('https://example.com/another/img.png') }
-    let(:fog_file1) { double(CarrierWave::Storage::Abstract, url: url1) }
-    let(:fog_file2) { double(CarrierWave::Storage::Abstract, url: url2) }
-    let(:fog_file3) { double(CarrierWave::Storage::Abstract, url: url3) }
-
-    before do
-      allow(uploaded_file1.file).to receive(:file).and_return(fog_file1)
-      allow(uploaded_file2.file).to receive(:file).and_return(fog_file2)
-      allow(uploaded_file3.file).to receive(:file).and_return(fog_file3)
-    end
-
-    it_behaves_like 'a file attacher'
-  end
-
   context "deposited on behalf of another user" do
     before do
       generic_work.on_behalf_of = user.user_key
