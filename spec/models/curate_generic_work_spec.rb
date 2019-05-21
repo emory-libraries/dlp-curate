@@ -993,21 +993,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#license" do
+  describe "#re_use_license" do
     subject { described_class.new }
-    let(:license) { 'MIT Licence' }
+    let(:re_use_license) { 'MIT Licence' }
 
     context "with new CurateGenericWork work" do
-      its(:license) { is_expected.to be_falsey }
+      its(:re_use_license) { is_expected.to be_falsey }
     end
 
-    context "with a CurateGenericWork work that has license" do
+    context "with a CurateGenericWork work that has re_use_license" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.license = license
+          cgw.re_use_license = re_use_license
         end
       end
-      its(:license) { is_expected.to eq license }
+      its(:re_use_license) { is_expected.to eq re_use_license }
     end
   end
 
