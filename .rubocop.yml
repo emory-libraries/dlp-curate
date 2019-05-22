@@ -31,4 +31,4 @@ RSpec/ExampleLength:
         - 'spec/**/*'
 
 RSpec/MessageSpies:
-  Enabled: false
+    EnforcedStyle: receive

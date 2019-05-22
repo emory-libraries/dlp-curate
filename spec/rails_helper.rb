@@ -33,6 +33,8 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 
+ActiveJob::Base.queue_adapter = :test
+
 RSpec.configure do |config|
   config.before(:suite) do
     # Compile our JavaScript
