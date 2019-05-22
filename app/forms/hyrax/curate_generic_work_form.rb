@@ -43,5 +43,20 @@ module Hyrax
     def primary_admin_metadata_fields
       [:staff_note, :system_of_record_ID, :legacy_identifier, :legacy_ark, :date_digitized, :transfer_engineer]
     end
+
+    def self.build_permitted_params
+      permitted = super
+      permitted += [:representative_id,
+                    :thumbnail_id,
+                    :admin_set_id,
+                    :visibility_during_embargo,
+                    :embargo_release_date,
+                    :visibility_after_embargo,
+                    :visibility_during_lease,
+                    :lease_expiration_date,
+                    :visibility_after_lease,
+                    :visibility]
+      permitted
+    end
   end
 end

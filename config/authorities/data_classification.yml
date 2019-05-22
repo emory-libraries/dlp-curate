@@ -1,9 +1,13 @@
 terms:
     - id: Public
       term: Public
+      active: true
     - id: Internal
       term: Internal
+      active: true
     - id: Confidential
       term: Confidential
+      active: true
     - id: Restricted
       term: Restricted
+      active: true

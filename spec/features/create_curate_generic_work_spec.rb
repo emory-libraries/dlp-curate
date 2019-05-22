@@ -17,8 +17,6 @@ RSpec.feature 'Create a CurateGenericWork' do
     let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id) }
     let(:workflow) { Sipity::Workflow.create!(active: true, name: 'test-workflow', permission_template: permission_template) }
 
-    let(:new_cgw_form) { NewCurateGenericWorkForm.new }
-
     before do
       # Create a single action that can be taken
       Sipity::WorkflowAction.create!(name: 'submit', workflow: workflow)
@@ -32,6 +30,9 @@ RSpec.feature 'Create a CurateGenericWork' do
       )
       login_as user
     end
+
+    let(:new_cgw_form) { NewCurateGenericWorkForm.new }
+    let(:cgw) { FactoryBot.create(:work, user: user) }
 
     scenario "'descriptions' loads with all its inputs", js: true do
       new_cgw_form.visit_new_page
@@ -92,6 +93,19 @@ RSpec.feature 'Create a CurateGenericWork' do
       click_link('Additional descriptive fields')
       fill_in "curate_generic_work[institution]", with: "Test3"
       expect(find('div.ui-menu-item-wrapper', match: :first).text).to eq 'Test3'
+    end
+
+    scenario "verify work visibility can be edited" do
+      expect(cgw.visibility).to eq 'restricted'
+
+      visit("/concern/curate_generic_works/#{cgw.id}/edit")
+
+      find('body').click
+      choose('curate_generic_work_visibility_open')
+      click_on('Save')
+
+      cgw.reload
+      expect(cgw.visibility).to eq 'open'
     end
 
     scenario "Create Curate Work" do
