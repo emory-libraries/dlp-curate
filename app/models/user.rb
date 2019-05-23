@@ -41,6 +41,7 @@ class User < ApplicationRecord
   def self.from_omniauth(auth)
     raise User::NilShibbolethUserError.new("No uid", auth) if auth.info.uid.empty?
     user = find_by!(provider: auth.provider, uid: auth.info.uid)
+    raise User::NilShibbolethUserError.new("No uid", auth) if user.nil?
     user.assign_attributes(display_name: auth.info.display_name, ppid: auth.uid)
     # tezprox@emory.edu isn't a real email address
     user.email = auth.info.uid + '@emory.edu' unless auth.info.uid == 'tezprox'
