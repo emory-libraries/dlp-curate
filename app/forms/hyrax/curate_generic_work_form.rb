@@ -3,6 +3,7 @@
 module Hyrax
   # Generated form for CurateGenericWork
   class CurateGenericWorkForm < Hyrax::Forms::WorkForm
+    include SingleValuedForm
     self.model_class = ::CurateGenericWork
     self.terms = [:title, :institution, :holding_repository, :administrative_unit, :sublocation,
                   :content_type, :content_genre, :abstract, :table_of_contents, :edition,
@@ -20,6 +21,7 @@ module Hyrax
 
     self.required_fields = [:title, :holding_repository, :content_type, :rights_statement, :rights_statement_controlled,
                             :data_classification, :date_created]
+    self.single_valued_fields = [:title]
 
     def primary_descriptive_metadata_fields
       [:title, :holding_repository, :date_created, :content_type, :content_genre, :administrative_unit, :creator, :contributor,

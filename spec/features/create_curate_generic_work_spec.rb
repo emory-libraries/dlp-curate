@@ -47,14 +47,6 @@ RSpec.feature 'Create a CurateGenericWork' do
       expect(page).to have_content('Add another Staff note')
     end
 
-    scenario "repeating entries in the form", js: true do
-      new_cgw_form.visit_new_page
-      expect(page).to have_content('Title')
-      fill_in "curate_generic_work[title][]", with: "Example title"
-      click_on 'Add another Title'
-      expect(all("input[name='curate_generic_work[title][]']").count).to eq(2)
-    end
-
     scenario "invalid etdf of Date Created", js: true do
       new_cgw_form.visit_new_page
       click_link('Additional descriptive fields')
