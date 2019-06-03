@@ -1,24 +1,47 @@
 # [Hyrax-overwrite] Attaching multiple files to single fileset
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
-  let(:file1) { File.open(fixture_path + '/world.png') }
-  let(:file2) { File.open(fixture_path + '/image.jp2') }
-  let(:uploaded_file1) { FactoryBot.build(:uploaded_file, file: file1, file_type: :original_file) }
-  let(:uploaded_file2) { FactoryBot.build(:uploaded_file, file: file2, file_type: :preservation_master_file) }
-  let(:uploaded_file3) { FactoryBot.build(:uploaded_file, file: file2, file_type: :service_file) }
+  let(:file1) { File.open(fixture_path + '/world.png', "wb") }
+  let(:file2) { File.open(fixture_path + '/image.jp2', "wb") }
+  let(:file3) { File.open(fixture_path + '/sun.png', "wb") }
+  let(:file4) { File.open(fixture_path + '/world.png', "wb") }
+  let(:file5) { File.open(fixture_path + '/image.jp2', "wb") }
+  let(:uploaded_file1) do
+    FactoryBot.build(:uploaded_file,
+                     file: 'Example title',
+                     preservation_master_file: file1,
+                     intermediate_file: file3,
+                     service_file: file2,
+                     extracted_text: file4,
+                     transcript: file5)
+  end
+  let(:uploaded_file2) { FactoryBot.build(:uploaded_file, preservation_master_file: file1, service_file: file3, transcript: file5) }
   let(:generic_work) { FactoryBot.create(:public_generic_work) }
   let(:user) { FactoryBot.create(:user) }
 
   shared_examples 'a file attacher', perform_enqueued: [AttachFilesToWorkJob, IngestJob] do
     it 'attaches files, copies visibility and permissions and updates the uploaded files' do
-      expect(CharacterizeJob).to receive(:perform_later).exactly(3).times
-      described_class.perform_now(generic_work, [uploaded_file1, uploaded_file2, uploaded_file3])
+      expect(CharacterizeJob).to receive(:perform_later).exactly(5).times
+      described_class.perform_now(generic_work, [uploaded_file1])
       generic_work.reload
-      expect(generic_work.file_sets.first.files.size).to eq 3
+      expect(generic_work.file_sets.first.title).to eq ['Example title']
+      expect(generic_work.file_sets.first.files.size).to eq 5
       expect(generic_work.file_sets.map(&:visibility)).to all(eq 'open')
       expect(uploaded_file1.reload.file_set_uri).not_to be_nil
       expect(ImportUrlJob).not_to have_been_enqueued
+    end
+  end
+
+  context "sets fileset name" do
+    it_behaves_like 'a file attacher' do
+      it 'sets fileset name as preservation_master_file name when fileset name is not present' do
+        described_class.perform_now(generic_work, [uploaded_file2])
+
+        expect(generic_work.file_sets.first.title).to eq ['world.png']
+        expect(generic_work.file_sets.first.files.size).to eq 3
+      end
     end
   end
 

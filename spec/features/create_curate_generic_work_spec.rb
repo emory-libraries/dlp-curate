@@ -120,11 +120,11 @@ RSpec.feature 'Create a CurateGenericWork' do
       expect(page).to have_css('input#curate_generic_work_title.required')
       click_link "Files" # switch tab
       expect(page).to have_content "Add files"
-      expect(page).to have_content "Add folder"
-      within('span#addfiles') do
-        attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/image.jp2", visible: false)
-        attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/jp2_fits.xml", visible: false)
-      end
+      # expect(page).to have_content "Add folder"
+      # within('span#addfiles') do
+      #   attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/image.jp2", visible: false)
+      #   attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/jp2_fits.xml", visible: false)
+      # end
       click_link "Descriptions" # switch tab
       # fill_in('Title', with: 'My Test Work')
       # fill_in('Creator', with: 'Doe, Jane')
@@ -158,18 +158,16 @@ RSpec.feature 'Create a CurateGenericWork' do
                          { "id" => "info:lc/authorities/names/no2006021658", "label" => "Emory Center for Myth and Ritual in American Life" },
                          { "id" => "info:lc/authorities/names/n94084139", "label" => "Emory Center for the Arts" }, { "id" => "info:lc/authorities/names/n84736378", "label" => "Emory Vico studies" },
                          { "id" => "info:lc/authorities/names/no2005102736", "label" => "Emory Institute for Women's Studies" }, { "id" => "info:lc/authorities/names/no2001070729", "label" =>
-                           "Emory University. Law and Religion Program" },
+                           "Emory University. Law and Religion Program" }, { "id" => "info:lc/authorities/names/n84176318", "label" => "Emory University. Department of Medicine" },
                          { "id" => "info:lc/authorities/names/no2012033509", "label" => "Emory University. Department of Geology" }, { "id" => "info:lc/authorities/names/n88500030", "label" =>
                            "Emory studies in humanities" },
                          { "id" => "info:lc/authorities/names/no2011188020", "label" => "Emory University. President's Office" }, { "id" => "info:lc/authorities/names/n83030612", "label" =>
                            "Emory and Henry College" },
                          { "id" => "info:lc/authorities/names/n93053981", "label" => "Emory texts and studies in ecclesial life" }, { "id" => "info:lc/authorities/names/no2012103342", "label" =>
-                           "Caucus of Emory Black Alumni" },
+                           "Caucus of Emory Black Alumni" }, { "id" => "info:lc/authorities/names/no2005090287", "label" => "Emory University. College of Arts and Sciences" },
                          { "id" => "info:lc/authorities/names/no2005102739", "label" => "Emory Women's Center" }, { "id" => "info:lc/authorities/names/no2012110949", "label" =>
                            "D. V. S. Senior Honor Society (Emory University)" },
-                         { "id" => "info:lc/authorities/names/n83165634", "label" => "Emory University. Department of Gynecology-Obstetrics" }, { "id" => "info:lc/authorities/names/n80098110",
-                                                                                                                                                  "label" => "Emory University. School of Law" },
-                         { "id" => "info:lc/authorities/names/n89107611", "label" => "Emory University. Department of Orthopaedic Surgery" }]
+                         { "id" => "info:lc/authorities/names/n83165634", "label" => "Emory University. Department of Gynecology-Obstetrics" }]
 
       expect(search_result).to eq(expected_result)
     end
