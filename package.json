@@ -11,7 +11,8 @@
     "jquery": "^3.4.0",
     "jquery-validation": "^1.19.0",
     "popper.js": "^1.15.0",
-    "turbolinks": "^5.2.0"
+    "turbolinks": "^5.2.0",
+    "webpack": "^4.0.0"
   },
   "devDependencies": {
     "webpack-dev-server": "^3.3.1"
