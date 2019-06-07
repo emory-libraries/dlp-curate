@@ -1,5 +1,4 @@
-# Generated via
-#  `rails generate hyrax:work CurateGenericWork`
+# frozen_string_literal: true
 module Hyrax
   # Generated form for CurateGenericWork
   class CurateGenericWorkForm < Hyrax::Forms::WorkForm
@@ -21,6 +20,7 @@ module Hyrax
 
     self.required_fields = [:title, :holding_repository, :content_type, :rights_statement, :rights_statement_controlled,
                             :data_classification, :date_created]
+    # TODO: All single-valued fields should be configured this way.
     self.single_valued_fields = [:title]
 
     def primary_descriptive_metadata_fields

@@ -1,9 +1,8 @@
-# Generated via
-#  `rails generate hyrax:work CurateGenericWork`
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Hyrax::CurateGenericWorkForm do
-  describe "::terms" do
+  describe '::terms' do
     subject { described_class }
     its(:terms) { is_expected.to include(:title) }
     its(:terms) { is_expected.to include(:creator) }
@@ -17,20 +16,28 @@ RSpec.describe Hyrax::CurateGenericWorkForm do
     its(:terms) { is_expected.to include(:issue) }
   end
 
-  describe "repeating entries repeat in the form" do
-    context 'add repeating fields' do
-      let(:params) do
-        {
-          "title" => ["Test title"],
-          "creator" => ["Emory Univeristy", "CDC"]
-        }
-      end
-      it "repeated fields" do
-        allow(Hyrax::Forms::WorkForm).to receive(:sanitize_params).with(params)
-        described_class.sanitize_params(params)
-        expect(params["title"]).to eq ["Test title"]
-        expect(params["creator"]).to eq ["Emory Univeristy", "CDC"]
-      end
+  describe 'form fields' do
+    let(:params) do
+      {
+        'title':       ['This Title'],
+        'creator':     ['Me'],
+        'keywords':    ['Test', 'Thing'],
+        'institution': ['Emory University', 'CDC']
+      }
+    end
+
+    it 'repeats some fields' do
+      allow(Hyrax::Forms::WorkForm).to receive(:sanitize_params).with(params)
+      described_class.sanitize_params(params)
+      expect(params[:keywords]).to eq ['Test', 'Thing']
+      expect(params[:institution]).to eq ['Emory University', 'CDC']
+    end
+
+    it 'does not repeat some fields' do
+      allow(Hyrax::Forms::WorkForm).to receive(:sanitize_params).with(params)
+      described_class.sanitize_params(params)
+      expect(params[:title]).to eq ['This Title']
+      expect(params[:creator]).to eq ['Me']
     end
   end
 end

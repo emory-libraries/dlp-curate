@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class NewCurateGenericWorkForm
   include Capybara::DSL
 

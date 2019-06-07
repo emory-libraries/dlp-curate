@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+# This form comes from escowles via laevigata.
+# https://github.com/curationexperts/laevigata/commit/14815b9703bea4a46462904e46c6066d52f77720
+# https://github.com/curationexperts/laevigata/blob/master/app/forms/single_valued_form.rb
 module SingleValuedForm
   extend ActiveSupport::Concern
   included do
