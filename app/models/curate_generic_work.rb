@@ -1,5 +1,4 @@
-# Generated via
-#  `rails generate hyrax:work CurateGenericWork`
+# frozen_string_literal: true
 class CurateGenericWork < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
 
@@ -7,7 +6,6 @@ class CurateGenericWork < ActiveFedora::Base
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
-  validates :date_created, :date_issued, :conference_dates, :copyright_date, :scheduled_rights_review, type: Date
   validates :final_published_version, url: true, if: -> { final_published_version.present? }
   validates :related_publications, url: true, if: -> { related_publications.present? }
   validates :related_datasets, url: true, if: -> { related_datasets.present? }
