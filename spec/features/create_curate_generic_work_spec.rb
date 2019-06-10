@@ -1,5 +1,4 @@
-# Generated via
-#  `rails generate hyrax:work CurateGenericWork`
+# frozen_string_literal: true
 require 'rails_helper'
 require_relative '../support/new_curate_generic_work_form.rb'
 include Warden::Test::Helpers
@@ -49,10 +48,12 @@ RSpec.feature 'Create a CurateGenericWork' do
 
     scenario "repeating entries in the form", js: true do
       new_cgw_form.visit_new_page
-      expect(page).to have_content('Title')
-      fill_in "curate_generic_work[title][]", with: "Example title"
-      click_on 'Add another Title'
-      expect(all("input[name='curate_generic_work[title][]']").count).to eq(2)
+      expect(page).to have_content('Creator')
+      expect(page).to have_css('input#curate_generic_work_creator.multi_value')
+      fill_in "curate_generic_work[creator][]", with: "first creator"
+      click_on 'Add another Creator'
+      expect(all("input[name='curate_generic_work[creator][]']").count).to eq(2)
+      expect(page).not_to have_css('input#curate_generic_work_title.multi_value')
     end
 
     scenario "invalid etdf of Date Created", js: true do
@@ -116,6 +117,7 @@ RSpec.feature 'Create a CurateGenericWork' do
       # click_button "Create work"
 
       expect(page).to have_content "Add New Curate Generic Work"
+      expect(page).to have_css('input#curate_generic_work_title.required')
       click_link "Files" # switch tab
       expect(page).to have_content "Add files"
       expect(page).to have_content "Add folder"
