@@ -39,15 +39,26 @@ class User < ApplicationRecord
   # a new one. Populate it with data we get from shibboleth.
   # @param [OmniAuth::AuthHash] auth
   def self.from_omniauth(auth)
-    raise User::NilShibbolethUserError.new("No uid", auth) if auth.info.uid.empty?
-    user = find_by!(provider: auth.provider, uid: auth.info.uid)
+    begin
+      user = find_by!(provider: auth.provider, uid: auth.info.uid)
+    rescue ActiveRecord::RecordNotFound
+      log_omniauth_error(auth)
+      return User.new
+    end
     user.assign_attributes(display_name: auth.info.display_name, ppid: auth.uid)
     # tezprox@emory.edu isn't a real email address
     user.email = auth.info.uid + '@emory.edu' unless auth.info.uid == 'tezprox'
     user.save
     user
-  rescue User::NilShibbolethUserError => e
-    Rails.logger.error "Nil user detected: Shibboleth didn't pass a uid for #{e.auth.inspect}"
+  end
+
+  def self.log_omniauth_error(auth)
+    if auth.info.uid.empty?
+      Rails.logger.error "Nil user detected: Shibboleth didn't pass a uid for #{auth.inspect}"
+    else
+      # Log unauthorized logins to error.
+      Rails.logger.error "Unauthorized user attemped login: #{auth.inspect}"
+    end
   end
 end
 

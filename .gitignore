@@ -16,7 +16,6 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
-**/.DS_Store
 lib/tasks/ci.rake
 
 # Ignore coverage report
@@ -30,4 +29,9 @@ coverage
 yarn-debug.log*
 .yarn-integrity
 
+# Ignore OS-specific files
+**/.DS_Store
+
+# Ignore debugging artifacts
 .byebug_history
+dump.rdb

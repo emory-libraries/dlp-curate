@@ -1,8 +1,8 @@
-# Generated via
-#  `rails generate hyrax:work CurateGenericWork`
+# frozen_string_literal: true
 module Hyrax
   # Generated form for CurateGenericWork
   class CurateGenericWorkForm < Hyrax::Forms::WorkForm
+    include SingleValuedForm
     self.model_class = ::CurateGenericWork
     self.terms = [:title, :institution, :holding_repository, :administrative_unit, :sublocation,
                   :content_type, :content_genre, :abstract, :table_of_contents, :edition,
@@ -20,6 +20,8 @@ module Hyrax
 
     self.required_fields = [:title, :holding_repository, :content_type, :rights_statement, :rights_statement_controlled,
                             :data_classification, :date_created]
+    # TODO: All single-valued fields should be configured this way.
+    self.single_valued_fields = [:title]
 
     def primary_descriptive_metadata_fields
       [:title, :holding_repository, :date_created, :content_type, :content_genre, :administrative_unit, :creator, :contributor,
@@ -42,6 +44,21 @@ module Hyrax
 
     def primary_admin_metadata_fields
       [:staff_note, :system_of_record_ID, :legacy_identifier, :legacy_ark, :date_digitized, :transfer_engineer]
+    end
+
+    def self.build_permitted_params
+      permitted = super
+      permitted += [:representative_id,
+                    :thumbnail_id,
+                    :admin_set_id,
+                    :visibility_during_embargo,
+                    :embargo_release_date,
+                    :visibility_after_embargo,
+                    :visibility_during_lease,
+                    :lease_expiration_date,
+                    :visibility_after_lease,
+                    :visibility]
+      permitted
     end
   end
 end

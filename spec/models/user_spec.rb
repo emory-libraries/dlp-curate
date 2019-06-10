@@ -83,7 +83,11 @@ RSpec.describe User, :clean do
 
     it "does not allow a new user to sign in" do
       expect { described_class.from_omniauth(new_auth_hash) }
-        .to raise_error ActiveRecord::RecordNotFound
+        .not_to change { described_class.count }
+      expect(Rails.logger).to receive(:error)
+      u = described_class.from_omniauth(new_auth_hash)
+      expect(u.class.name).to eql 'User'
+      expect(u.persisted?).to be false
     end
   end
 
@@ -100,9 +104,12 @@ RSpec.describe User, :clean do
     end
 
     it "does not register new users" do
-      # do not create a new user if uid is blank
       expect { described_class.from_omniauth(invalid_auth_hash) }
         .not_to change { described_class.count }
+      expect(Rails.logger).to receive(:error)
+      u = described_class.from_omniauth(invalid_auth_hash)
+      expect(u.class.name).to eql 'User'
+      expect(u.persisted?).to be false
     end
   end
 
