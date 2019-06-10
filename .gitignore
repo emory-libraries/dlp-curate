@@ -17,6 +17,7 @@
 !/log/.keep
 !/tmp/.keep
 **/.DS_Store
+lib/tasks/ci.rake
 
 # Ignore coverage report
 coverage
