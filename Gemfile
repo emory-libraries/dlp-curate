@@ -7,6 +7,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'bootsnap'
 gem 'bootstrap-sass', '~> 3.0'
 gem 'coffee-rails', '~> 4.2'
 gem 'devise'
@@ -41,8 +42,6 @@ group :development do
   gem 'fcrepo_wrapper'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'solr_wrapper', '>= 0.3'
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'web-console', '>= 3.3.0'
   gem 'xray-rails'
 end
