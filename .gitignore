@@ -16,6 +16,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+lib/tasks/ci.rake
 
 # Ignore coverage report
 coverage
