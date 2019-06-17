@@ -21,10 +21,8 @@ class NewCurateGenericWorkForm
   end
 
   def attach_files
-    within('span#addfiles') do
-      attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/image.jp2", visible: false)
-      attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/jp2_fits.xml", visible: false)
-    end
+    click_link "Files"
+    attach_file("pmf", "#{Hyrax::Engine.root}/spec/fixtures/image.jp2", visible: false)
 
     self
   end

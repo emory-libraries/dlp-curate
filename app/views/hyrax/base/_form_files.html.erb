@@ -1,0 +1,94 @@
+<!-- [Hyrax-overwrite] -->
+<div>
+  <table class="table table-hover">
+    <tr>
+      <td>Fileset Name</td>
+      <td><input id="fsn" type="text" /></td>
+    </tr>
+    <tr>
+      <td>Preservation Master File<span style="color: red;">*</span></td>
+      <td><input id="pmf" type="file" /></td>
+    </tr>
+    <tr>
+      <td>Intermediate File</td>
+      <td><input id="imf" type="file" /></td>
+    </tr>
+    <tr>
+      <td>Service File</td>
+      <td><input id="sf" type="file" /></td>
+    </tr>
+    <tr>
+      <td>Extracted Text</td>
+      <td><input id="et" type="file" /></td>
+    </tr>
+    <tr>
+      <td>Transcript</td>
+      <td><input id="ts" type="file" /></td>
+    </tr>
+    <tr>
+      <td>File progress</td>
+      <td><progress max="100" value="0"></progress></td>
+    </tr>
+  </table>
+  <div id="message"></div>
+  <div><button id="upload">Upload</button></div>
+  <div class="uploaded_files"></div>
+</div>
+
+<script>
+$(document).on("click", "#upload", function() {
+  event.preventDefault();
+  var formData = new FormData();
+  var fsn = $("#fsn").val();
+  var pmf = $("#pmf")[0].files[0];
+  var imf = $("#imf")[0].files[0];
+  var sf = $("#sf")[0].files[0];
+  var et = $("#et")[0].files[0];
+  var ts = $("#ts")[0].files[0];
+  formData.append("file_name", fsn);
+  formData.append("preservation_master_file", pmf);
+  formData.append("intermediate_file", imf);
+  formData.append("service_file", sf);
+  formData.append("extracted_text", et);
+  formData.append("transcript", ts);
+
+  if($("#pmf")[0].files.length > 0) {
+    $.ajax({
+      url: '/uploads/',
+      type: 'POST',
+      processData: false,
+      contentType: false,
+      dataType: 'json',
+      data: formData,
+      success: function(data) {
+        var uf = data.files[0].id;
+        $("#message").html("Files uploaded");
+        var wrapper = (".uploaded_files");
+        $(wrapper).append("<input id='uf' type='hidden' name='uploaded_files[]' value='"+ uf +"' />");
+        $('li#required-files').removeClass('incomplete').addClass('complete');
+        $('input#agreement').prop("checked", false);
+        $('li#required-agreement').removeClass('complete').addClass('incomplete');
+        $('input#with_files_submit').prop("disabled", true);
+      },
+      xhr: function () {
+        var myXhr = $.ajaxSettings.xhr();
+        if (myXhr.upload) {
+          // For handling the progress of the upload
+          myXhr.upload.addEventListener('progress', function (e) {
+            if (e.lengthComputable) {
+              $('progress').attr({
+                value: e.loaded,
+                max: e.total,
+              });
+            }
+          }, false);
+        }
+        return myXhr;
+      }
+    });
+  }
+  else {
+    $("#message").html("<b style='color: red;'>Preservation Master File cannot be empty</b>");
+  }
+});
+</script>
