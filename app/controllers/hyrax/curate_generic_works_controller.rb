@@ -1,5 +1,4 @@
-# Generated via
-#  `rails generate hyrax:work CurateGenericWork`
+# frozen_string_literal: true
 module Hyrax
   # Generated controller for CurateGenericWork
   class CurateGenericWorksController < ApplicationController
