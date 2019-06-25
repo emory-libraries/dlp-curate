@@ -46,7 +46,7 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
 
     def process_fileset(actor, work_permissions, metadata, uploaded_file, work)
       actor.file_set.permissions_attributes = work_permissions
-      actor.create_metadata(metadata)
+      actor.create_metadata(uploaded_file.fileset_use, metadata)
       actor.fileset_name(uploaded_file.file.to_s) if uploaded_file.file.present?
       actor.create_content(uploaded_file.preservation_master_file, :preservation_master_file)
       actor.create_content(uploaded_file.intermediate_file, :intermediate_file) if uploaded_file.intermediate_file.present?

@@ -15,9 +15,16 @@ RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
                      intermediate_file: file3,
                      service_file: file2,
                      extracted_text: file4,
-                     transcript: file5)
+                     transcript: file5,
+                     fileset_use: 'primary')
   end
-  let(:uploaded_file2) { FactoryBot.build(:uploaded_file, preservation_master_file: file1, service_file: file3, transcript: file5) }
+  let(:uploaded_file2) do
+    FactoryBot.build(:uploaded_file,
+                     preservation_master_file: file1,
+                     service_file: file3,
+                     transcript: file5,
+                     fileset_use: 'supplementary')
+  end
   let(:generic_work) { FactoryBot.create(:public_generic_work) }
   let(:user) { FactoryBot.create(:user) }
 
@@ -27,6 +34,7 @@ RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
       described_class.perform_now(generic_work, [uploaded_file1])
       generic_work.reload
       expect(generic_work.file_sets.first.title).to eq ['Example title']
+      expect(generic_work.file_sets.first.pcdm_use).to eq 'primary'
       expect(generic_work.file_sets.first.files.size).to eq 5
       expect(generic_work.file_sets.map(&:visibility)).to all(eq 'open')
       expect(uploaded_file1.reload.file_set_uri).not_to be_nil
@@ -40,6 +48,7 @@ RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
         described_class.perform_now(generic_work, [uploaded_file2])
 
         expect(generic_work.file_sets.first.title).to eq ['world.png']
+        expect(generic_work.file_sets.first.pcdm_use).to eq 'supplementary'
         expect(generic_work.file_sets.first.files.size).to eq 3
       end
     end
