@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190531164546) do
+ActiveRecord::Schema.define(version: 20190620155826) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -495,6 +495,7 @@ ActiveRecord::Schema.define(version: 20190531164546) do
     t.string "service_file"
     t.string "extracted_text"
     t.string "transcript"
+    t.string "fileset_use"
     t.index ["file_set_uri"], name: "index_uploaded_files_on_file_set_uri"
     t.index ["user_id"], name: "index_uploaded_files_on_user_id"
   end

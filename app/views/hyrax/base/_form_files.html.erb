@@ -1,58 +1,99 @@
 <!-- [Hyrax-overwrite] -->
-<div>
+<div class="fileset">
   <table class="table table-hover">
     <tr>
       <td>Fileset Name</td>
-      <td><input id="fsn" type="text" /></td>
+      <td><input id="fsn0" type="text" /></td>
     </tr>
     <tr>
       <td>Preservation Master File<span style="color: red;">*</span></td>
-      <td><input id="pmf" type="file" /></td>
+      <td><input id="pmf0" type="file" /></td>
     </tr>
     <tr>
       <td>Intermediate File</td>
-      <td><input id="imf" type="file" /></td>
+      <td><input id="imf0" type="file" /></td>
     </tr>
     <tr>
       <td>Service File</td>
-      <td><input id="sf" type="file" /></td>
+      <td><input id="sf0" type="file" /></td>
     </tr>
     <tr>
       <td>Extracted Text</td>
-      <td><input id="et" type="file" /></td>
+      <td><input id="et0" type="file" /></td>
     </tr>
     <tr>
       <td>Transcript</td>
-      <td><input id="ts" type="file" /></td>
+      <td><input id="ts0" type="file" /></td>
+    </tr>
+    <tr>
+      <td>Fileset use:</td>
+      <td>
+        <select id="fs_use0">
+          <option value="primary">Primary</option>
+          <option value="supplementary">Supplementary</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Message:</td>
+      <td id="message0"></td>
     </tr>
     <tr>
       <td>File progress</td>
-      <td><progress max="100" value="0"></progress></td>
+      <td><progress id="progress0" max="100" value="0"></progress></td>
     </tr>
   </table>
-  <div id="message"></div>
-  <div><button id="upload">Upload</button></div>
-  <div class="uploaded_files"></div>
+  <div><button id="upload0" class="upload">Upload Fileset</button></div>
 </div>
+<div class="fileset-append"></div>
+<div><button id="add">+ Add Fileset</button></div>
+<div class="uploaded_files"></div>
 
 <script>
-$(document).on("click", "#upload", function() {
+var count = 1;
+$('#add').click(function() {
   event.preventDefault();
+  var source = $('.fileset:first'), clone = source.clone();
+  clone.find(':input').attr('id', function(i, val) {
+    return val.replace(/\d+/g, '') + count;
+  });
+  clone.find(':input').val("");
+  clone.find("#message0").attr('id', function(i, val) {
+    return val.replace(/\d+/g, '') + count;
+  });
+  clone.find("#message" + count).text("");
+  clone.find("#progress0").attr('id', function(i, val) {
+    return val.replace(/\d+/g, '') + count;
+  });
+  clone.find("#progress" + count).val(0);
+  clone.find("#upload0").attr('id', function(i, val) {
+    return val.replace(/\d+/g, '') + count;
+  });
+  clone.find("#upload" + count).prop("disabled", false);
+  clone.appendTo('.fileset-append');
+  count++;
+});
+$(document).on("click", ".upload", function() {
+  "use strict";
+  event.preventDefault();
+  var i = this.id.match(/\d+/);
   var formData = new FormData();
-  var fsn = $("#fsn").val();
-  var pmf = $("#pmf")[0].files[0];
-  var imf = $("#imf")[0].files[0];
-  var sf = $("#sf")[0].files[0];
-  var et = $("#et")[0].files[0];
-  var ts = $("#ts")[0].files[0];
+  var fsn = $("#fsn" + i).val();
+  var pmf = $("#pmf" + i)[0].files[0];
+  var imf = $("#imf" + i)[0].files[0];
+  var sf = $("#sf" + i)[0].files[0];
+  var et = $("#et" + i)[0].files[0];
+  var ts = $("#ts" + i)[0].files[0];
+  var fs_use = $("#fs_use" + i + " option:selected").val();
   formData.append("file_name", fsn);
   formData.append("preservation_master_file", pmf);
   formData.append("intermediate_file", imf);
   formData.append("service_file", sf);
   formData.append("extracted_text", et);
   formData.append("transcript", ts);
-
-  if($("#pmf")[0].files.length > 0) {
+  formData.append("fileset_use", fs_use);
+  
+  if(($("#pmf" + i)[0].files.length > 0)) {
     $.ajax({
       url: '/uploads/',
       type: 'POST',
@@ -62,13 +103,14 @@ $(document).on("click", "#upload", function() {
       data: formData,
       success: function(data) {
         var uf = data.files[0].id;
-        $("#message").html("Files uploaded");
+        $("#message" + i).html("Files uploaded");
         var wrapper = (".uploaded_files");
-        $(wrapper).append("<input id='uf' type='hidden' name='uploaded_files[]' value='"+ uf +"' />");
+        $(wrapper).append("<input id='uf"+ i +"' type='hidden' name='uploaded_files[]' value='"+ uf +"' />");
         $('li#required-files').removeClass('incomplete').addClass('complete');
         $('input#agreement').prop("checked", false);
         $('li#required-agreement').removeClass('complete').addClass('incomplete');
         $('input#with_files_submit').prop("disabled", true);
+        $("#upload" + i).prop("disabled", true);
       },
       xhr: function () {
         var myXhr = $.ajaxSettings.xhr();
@@ -76,7 +118,7 @@ $(document).on("click", "#upload", function() {
           // For handling the progress of the upload
           myXhr.upload.addEventListener('progress', function (e) {
             if (e.lengthComputable) {
-              $('progress').attr({
+              $("#progress" + i).attr({
                 value: e.loaded,
                 max: e.total,
               });
@@ -88,7 +130,7 @@ $(document).on("click", "#upload", function() {
     });
   }
   else {
-    $("#message").html("<b style='color: red;'>Preservation Master File cannot be empty</b>");
+    $("#message" + i).html("<b style='color: red;'>Preservation Master File cannot be empty</b>");
   }
 });
 </script>

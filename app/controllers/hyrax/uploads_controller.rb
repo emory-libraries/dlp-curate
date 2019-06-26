@@ -10,6 +10,7 @@ module Hyrax
                              service_file: params[:service_file],
                              extracted_text: params[:extracted_text],
                              transcript: params[:transcript],
+                             fileset_use: params[:fileset_use],
                              user: current_user }
       @upload.save!
     end

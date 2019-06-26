@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'rails_helper'
 class NewCurateGenericWorkForm
   include Capybara::DSL
 
@@ -22,7 +23,13 @@ class NewCurateGenericWorkForm
 
   def attach_files
     click_link "Files"
-    attach_file("pmf", "#{Hyrax::Engine.root}/spec/fixtures/image.jp2", visible: false)
+    fill_in "fsn0", with: "Example fileset"
+    attach_file("pmf0", "#{::Rails.root}/spec/fixtures/image.jp2", visible: false)
+    attach_file("sf0", "#{::Rails.root}/spec/fixtures/sun.png", visible: false)
+    attach_file("imf0", "#{::Rails.root}/spec/fixtures/world.png", visible: false)
+    attach_file("et0", "#{::Rails.root}/spec/fixtures/image.jp2", visible: false)
+    attach_file("ts0", "#{::Rails.root}/spec/fixtures/world.png", visible: false)
+    find('#fs_use0').find(:xpath, 'option[1]').select_option
 
     self
   end

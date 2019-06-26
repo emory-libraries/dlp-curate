@@ -60,12 +60,13 @@ module Hyrax
       #   we have to save both the parent work and the file_set in order to record the "metadata" relationship between them.
       # @param [Hash] file_set_params specifying the visibility, lease and/or embargo of the file set.
       #   Without visibility, embargo_release_date or lease_expiration_date, visibility will be copied from the parent.
-      def create_metadata(file_set_params = {})
+      def create_metadata(fileset_use, file_set_params = {})
         file_set.depositor = depositor_id(user)
         now = TimeService.time_in_utc
         file_set.date_uploaded = now
         file_set.date_modified = now
         file_set.creator = [user.user_key]
+        file_set.pcdm_use = fileset_use
         if assign_visibility?(file_set_params)
           env = Actors::Environment.new(file_set, ability, file_set_params)
           CurationConcern.file_set_create_actor.create(env)
