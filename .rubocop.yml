@@ -26,6 +26,7 @@ Metrics/ClassLength:
         - 'app/models/curate_generic_work.rb'
         - 'app/controllers/catalog_controller.rb'
         - 'app/actors/hyrax/actors/file_set_actor.rb'
+        - 'app/forms/hyrax/forms/collection_form.rb'
 
 
 RSpec/ExampleLength:
