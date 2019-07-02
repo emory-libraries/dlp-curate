@@ -93,6 +93,7 @@ RSpec.feature 'Create a CurateGenericWork' do
 
       click_link('Additional descriptive fields')
       fill_in "curate_generic_work[institution]", with: "Test3"
+      sleep(3)
       expect(find('div.ui-menu-item-wrapper', match: :first).text).to eq 'Test3'
     end
 
