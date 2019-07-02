@@ -24,5 +24,16 @@ RSpec.feature 'Create a collection' do
       expect(page).to have_css("input#collection_creator")
       expect(page).to have_content("Add another Creator")
     end
+
+    scenario "url fields are validated" do
+      visit("dashboard/collections/new?collection_type_id=1")
+
+      click_link('Additional fields')
+      fill_in "collection[related_material]", with: "teststring"
+
+      click_on('Save')
+
+      expect(page).to have_content("is not a valid URL")
+    end
   end
 end
