@@ -24,7 +24,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
   describe "#primary_terms" do
     subject { form.primary_terms }
 
-    it { is_expected.to eq([:title]) }
+    it { is_expected.to eq([:title, :holding_repository, :creator, :abstract, :primary_repository_ID]) }
   end
 
   describe "#secondary_terms" do
@@ -32,11 +32,10 @@ RSpec.describe Hyrax::Forms::CollectionForm do
 
     it do
       is_expected.to eq [
-        :holding_repository, :administrative_unit, :creator, :contributor, :abstract,
-        :primary_language, :related_material, :institution, :local_call_number, :keywords,
-        :subject_topics, :subject_names, :subject_geo, :subject_time_periods, :note,
-        :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
-        :staff_note, :system_of_record_ID, :legacy_ark, :primary_repository_ID
+        :administrative_unit, :contributor, :primary_language, :related_material, :institution,
+        :local_call_number, :keywords, :subject_topics, :subject_names, :subject_geo, :subject_time_periods,
+        :note, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
+        :staff_note, :system_of_record_ID, :legacy_ark
       ]
     end
   end

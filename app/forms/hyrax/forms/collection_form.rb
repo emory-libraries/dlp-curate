@@ -29,7 +29,7 @@ module Hyrax
                     :contact_information, :staff_note, :system_of_record_ID, :legacy_ark,
                     :primary_repository_ID]
 
-      self.required_fields = [:title]
+      self.required_fields = [:title, :holding_repository, :creator, :abstract, :primary_repository_ID]
 
       self.single_valued_fields = [:title]
 
@@ -61,16 +61,15 @@ module Hyrax
 
       # Terms that appear above the accordion
       def primary_terms
-        [:title]
+        [:title, :holding_repository, :creator, :abstract, :primary_repository_ID]
       end
 
       # Terms that appear within the accordion
       def secondary_terms
-        [:holding_repository, :administrative_unit, :creator, :contributor, :abstract,
-         :primary_language, :related_material, :institution, :local_call_number, :keywords,
-         :subject_topics, :subject_names, :subject_geo, :subject_time_periods, :note,
-         :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
-         :staff_note, :system_of_record_ID, :legacy_ark, :primary_repository_ID]
+        [:administrative_unit, :contributor, :primary_language, :related_material,
+         :institution, :local_call_number, :keywords, :subject_topics, :subject_names,
+         :subject_geo, :subject_time_periods, :note, :rights_documentation, :sensitive_material,
+         :internal_rights_note, :contact_information, :staff_note, :system_of_record_ID, :legacy_ark]
       end
 
       def banner_info

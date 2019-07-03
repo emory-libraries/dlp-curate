@@ -4,6 +4,9 @@ class Collection < ActiveFedora::Base
 
   self.indexer = Hyrax::CollectionWithBasicMetadataIndexer
 
+  validates :related_material, url: true, if: -> { related_material.present? }
+  validates :rights_documentation, url: true, if: -> { rights_documentation.present? }
+
   property :holding_repository, predicate: 'http://id.loc.gov/vocabulary/relators/rps' do |index|
     index.as :stored_searchable, :facetable
   end
