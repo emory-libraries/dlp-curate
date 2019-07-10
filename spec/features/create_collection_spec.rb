@@ -18,7 +18,7 @@ RSpec.feature 'Create a collection' do
     scenario "input fields are present", js: true do
       visit("dashboard/collections/new?collection_type_id=1")
 
-      expect(page).to have_css("input#collection_title")
+      expect(page).to have_css("textarea#collection_title")
 
       click_link('Additional fields')
       expect(page).to have_css("input#collection_creator")
