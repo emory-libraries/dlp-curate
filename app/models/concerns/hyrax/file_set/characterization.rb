@@ -21,7 +21,8 @@ module Hyrax
         self.characterization_terms = [
           :format_label, :file_size, :height, :width, :filename, :well_formed,
           :page_count, :file_title, :last_modified, :original_checksum,
-          :duration, :sample_rate
+          :duration, :sample_rate, :file_path, :creating_application_name,
+          :creating_os, :puid
         ]
         self.characterization_proxy = :preservation_master_file
 
