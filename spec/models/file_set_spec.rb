@@ -43,4 +43,14 @@ RSpec.describe FileSet do
       it { is_expected.to be_supplementary }
     end
   end
+
+  describe "metadata" do
+    let(:file_set) { described_class.new }
+    it 'has properties from characterization metadata' do
+      expect(file_set).to respond_to(:file_path)
+      expect(file_set).to respond_to(:creating_application_name)
+      expect(file_set).to respond_to(:creating_os)
+      expect(file_set).to respond_to(:puid)
+    end
+  end
 end
