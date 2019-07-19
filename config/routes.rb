@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
@@ -26,6 +28,12 @@ Rails.application.routes.draw do
   root 'hyrax/homepage#index'
   curation_concerns_basic_routes
   concern :exportable, Blacklight::Routes::Exportable.new
+
+  # Mount sidekiq web ui and require authentication by an admin user
+
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
     concerns :exportable
