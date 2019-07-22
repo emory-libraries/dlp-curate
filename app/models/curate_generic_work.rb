@@ -3,17 +3,20 @@ class CurateGenericWork < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   require 'noid-rails'
 
-  self.indexer = CurateGenericWorkIndexer
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
+  self.indexer = CurateGenericWorkIndexer
+
+  def assign_id
+    self.id = service.mint unless new_record?
+  end
+
   validates :title, presence: { message: 'Your work must have a title.' }
   validates :final_published_version, url: true, if: -> { final_published_version.present? }
   validates :related_publications, url: true, if: -> { related_publications.present? }
   validates :related_datasets, url: true, if: -> { related_datasets.present? }
   validates :rights_documentation, url: true, if: -> { rights_documentation.present? }
-  def assign_id
-    self.id = service.mint unless new_record?
-  end
+
   property :institution, predicate: "http://rdaregistry.info/Elements/u/P60402", multiple: false do |index|
     index.as :stored_searchable
   end

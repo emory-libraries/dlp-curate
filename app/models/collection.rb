@@ -2,6 +2,7 @@
 class Collection < ActiveFedora::Base
   include ::Hyrax::CollectionBehavior
   require 'noid-rails'
+
   self.indexer = Hyrax::CollectionWithBasicMetadataIndexer
 
   def assign_id

@@ -80,6 +80,7 @@ Hyrax.config do |config|
 
   # Store identifier minter's state in a file for later replayability
   # config.minter_statefile = '/tmp/minter-state'
+
   # Prefix for Redis keys
   # config.redis_namespace = "hyrax"
 
