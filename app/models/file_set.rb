@@ -3,6 +3,11 @@ class FileSet < ActiveFedora::Base
   PRIMARY = 'primary'.freeze
   PRESERVATION = 'supplementary'.freeze
   SUPPLEMENTAL = 'supplementary'.freeze
+  require 'noid-rails'
+
+  def assign_id
+    self.id = service.mint unless new_record?
+  end
 
   property :pcdm_use, predicate: 'http://pcdm.org/use', multiple: false do |index|
     index.as :facetable
@@ -27,4 +32,10 @@ class FileSet < ActiveFedora::Base
   directly_contains_one :intermediate_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#IntermediateFile'), class_name: 'Hydra::PCDM::File'
   directly_contains_one :transcript_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#Transcript'), class_name: 'Hydra::PCDM::File'
   directly_contains_one :extracted, through: :files, type: ::RDF::URI('http://pcdm.org/use#ExtractedText'), class_name: 'Hydra::PCDM::File'
+
+  private
+
+    def service
+      @service ||= Noid::Rails::Service.new
+    end
 end

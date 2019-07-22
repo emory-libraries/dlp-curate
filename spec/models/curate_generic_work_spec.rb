@@ -21,6 +21,13 @@ RSpec.describe CurateGenericWork do
     end
   end
 
+  context "noid template" do
+    let(:id) { Noid::Rails::Service.new.mint }
+    it "checks noid template" do
+      expect(id).to match(/cor.\d\d\d/)
+    end
+  end
+
   describe "#institution" do
     subject { described_class.new }
     let(:institution) { 'Emory University' }

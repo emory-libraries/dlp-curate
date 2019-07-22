@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CurateGenericWork < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
+  require 'noid-rails'
 
   self.indexer = CurateGenericWorkIndexer
   # Change this to restrict which works can be added as a child.
@@ -10,7 +11,9 @@ class CurateGenericWork < ActiveFedora::Base
   validates :related_publications, url: true, if: -> { related_publications.present? }
   validates :related_datasets, url: true, if: -> { related_datasets.present? }
   validates :rights_documentation, url: true, if: -> { rights_documentation.present? }
-
+  def assign_id
+    self.id = service.mint unless new_record?
+  end
   property :institution, predicate: "http://rdaregistry.info/Elements/u/P60402", multiple: false do |index|
     index.as :stored_searchable
   end
@@ -257,4 +260,10 @@ class CurateGenericWork < ActiveFedora::Base
   property :date_created, predicate: "http://purl.org/dc/terms/created", multiple: false do |index|
     index.as :stored_searchable, :facetable
   end
+
+  private
+
+    def service
+      @service ||= Noid::Rails::Service.new
+    end
 end
