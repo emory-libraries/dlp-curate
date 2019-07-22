@@ -54,7 +54,7 @@ en:
       service_html: A service of <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
     institution_name: Emory Network
     institution_name_full: The Institution Name
-    product_name: Hyrax
+    product_name: Curate
     product_twitter_handle: "@SamveraRepo"
     works:
       form:
