@@ -147,7 +147,7 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :conference_dates, predicate: "http://rdaregistry.info/Elements/u/P60526", multiple: false
 
-  property :data_collection_dates, predicate: "http://schema.org/temporalCoverage" do |index|
+  property :data_collection_dates, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataCollectionDates" do |index|
     index.as :stored_searchable
   end
 
