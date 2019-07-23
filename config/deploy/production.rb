@@ -1,4 +1,4 @@
-server 'curate.library.emory.edu', user: 'deploy', roles: [:web, :app, :db]
+server 'curate.library.emory.edu', user: 'deploy', roles: [:web, :app, :db, :redhatapp]
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
