@@ -41,7 +41,7 @@ set :default_env,
 
 namespace :deploy do
   after :finishing, :restart_apache do
-    on roles(:app) do
+    on roles(:redhatapp) do
       execute :sudo, :systemctl, :restart, :httpd
     end
   end
