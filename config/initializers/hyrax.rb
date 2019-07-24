@@ -73,10 +73,10 @@ Hyrax.config do |config|
   # config.enable_noids = true
 
   # Template for your repository's NOID IDs
-  # config.noid_template = ".reeddeeddk"
+  config.noid_template = "cor..rdddeeeeeee"
 
   # Use the database-backed minter class
-  # config.noid_minter_class = Noid::Rails::Minter::Db
+  config.noid_minter_class = Noid::Rails::Minter::Db
 
   # Store identifier minter's state in a file for later replayability
   # config.minter_statefile = '/tmp/minter-state'

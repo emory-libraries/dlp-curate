@@ -21,6 +21,7 @@ Metrics/BlockLength:
         - 'config/routes.rb'
         - 'config/initializers/simple_form_bootstrap.rb'
         - 'app/controllers/catalog_controller.rb'
+        - 'config/initializers/hyrax.rb'
 
 Metrics/ClassLength:
     Exclude:
