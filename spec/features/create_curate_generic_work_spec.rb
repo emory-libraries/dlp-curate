@@ -43,7 +43,7 @@ RSpec.feature 'Create a CurateGenericWork' do
       expect(page).to have_content('Add another Note')
 
       expect(page).to have_css('#metadata textarea#curate_generic_work_staff_note')
-      expect(page).to have_content('Add another Staff note')
+      expect(page).to have_content('Add another Staff Note')
     end
 
     scenario "repeating entries in the form", js: true do
