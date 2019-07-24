@@ -43,4 +43,26 @@ RSpec.describe FileSet do
       it { is_expected.to be_supplementary }
     end
   end
+
+  describe '#visibility' do
+    subject(:file_set) { FactoryBot.build(:file_set, visibility: open) }
+
+    let(:open)       { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+    let(:restricted) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+    let(:authenticated) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+    let(:lease) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE }
+    let(:embargo) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO }
+
+    it 'can set to restricted' do
+      expect { file_set.visibility = restricted }
+        .to change { file_set.visibility }
+        .to restricted
+    end
+
+    it 'can set to authenticated' do
+      expect { file_set.visibility = authenticated }
+        .to change { file_set.visibility }
+        .to authenticated
+    end
+  end
 end
