@@ -40,10 +40,29 @@ set :default_env,
 #  end
 # end
 
+# Restart apache on RedHat
 namespace :deploy do
   after :finishing, :restart_apache do
     on roles(:redhatapp) do
       execute :sudo, :systemctl, :restart, :httpd
+    end
+  end
+end
+
+# Restart apache on Ubuntu
+namespace :deploy do
+  after :finishing, :restart_apache do
+    on roles(:ubuntuapp) do
+      execute :sudo, :systemctl, :restart, :apache2
+    end
+  end
+end
+
+# Setup DCE accounts on Ubuntu
+namespace :deploy do
+  after :finishing, :dce_accounts do
+    on roles(:ubuntuapp) do
+      execute "cd #{current_path} && RAILS_ENV=production bundle exec rake dce:account_setup"
     end
   end
 end
