@@ -6,6 +6,7 @@ set :repo_url, "https://github.com/emory-libraries/dlp-curate.git"
 set :deploy_to, '/opt/dlp-curate'
 set :rails_env, 'production'
 set :assets_prefix, "#{shared_path}/public/assets"
+set :migration_role, :app
 
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
@@ -47,9 +48,6 @@ namespace :deploy do
   end
 end
 
-namespace :deploy do
-  Rake::Task["migrate"].clear_actions
-end
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
