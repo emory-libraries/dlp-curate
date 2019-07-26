@@ -149,8 +149,13 @@ export default class SaveWorkControl {
   // sets the metadata indicator to complete/incomplete
   validateMetadata() {
     if (this.requiredFields.areComplete) {
-      this.requiredMetadata.check()
-      return true
+      let invalidDates = this.form.find('.error-validate').length
+      if (invalidDates < 1 || invalidDates === null) {
+        this.requiredMetadata.check()  
+        return true
+      }
+      this.requiredMetadata.uncheck()
+      return false
     }
     this.requiredMetadata.uncheck()
     return false

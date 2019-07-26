@@ -1,10 +1,16 @@
 # frozen_string_literal: true
 class CurateGenericWork < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
+  require 'noid-rails'
 
-  self.indexer = CurateGenericWorkIndexer
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
+  self.indexer = CurateGenericWorkIndexer
+
+  def assign_id
+    self.id = service.mint unless new_record?
+  end
+
   validates :title, presence: { message: 'Your work must have a title.' }
   validates :final_published_version, url: true, if: -> { final_published_version.present? }
   validates :related_publications, url: true, if: -> { related_publications.present? }
@@ -147,7 +153,7 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :conference_dates, predicate: "http://rdaregistry.info/Elements/u/P60526", multiple: false
 
-  property :data_collection_dates, predicate: "http://schema.org/temporalCoverage" do |index|
+  property :data_collection_dates, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataCollectionDates" do |index|
     index.as :stored_searchable
   end
 
@@ -257,4 +263,10 @@ class CurateGenericWork < ActiveFedora::Base
   property :date_created, predicate: "http://purl.org/dc/terms/created", multiple: false do |index|
     index.as :stored_searchable, :facetable
   end
+
+  private
+
+    def service
+      @service ||= Noid::Rails::Service.new
+    end
 end

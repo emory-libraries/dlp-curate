@@ -1,0 +1,3 @@
+Style/MethodMissing:
+    Exclude:
+        - 'app/models/concerns/hyrax/file_set/characterization.rb'

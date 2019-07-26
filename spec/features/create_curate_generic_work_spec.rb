@@ -43,14 +43,14 @@ RSpec.feature 'Create a CurateGenericWork' do
     scenario "'descriptions' loads with all its inputs", js: true do
       new_cgw_form.visit_new_page
 
-      expect(page).to have_css('#metadata input#curate_generic_work_title')
+      expect(page).to have_css('#metadata textarea#curate_generic_work_title')
       expect(page).to have_css('#metadata select#curate_generic_work_rights_statement')
 
       click_link('Additional descriptive fields')
       expect(page).to have_content('Add another Note')
 
-      expect(page).to have_css('#metadata input#curate_generic_work_staff_note')
-      expect(page).to have_content('Add another Staff note')
+      expect(page).to have_css('#metadata textarea#curate_generic_work_staff_note')
+      expect(page).to have_content('Add another Staff Note')
     end
 
     scenario "repeating entries in the form", js: true do
@@ -190,7 +190,7 @@ RSpec.feature 'Create a CurateGenericWork' do
       # click_button "Create work"
 
       expect(page).to have_content "Add New Curate Generic Work"
-      expect(page).to have_css('input#curate_generic_work_title.required')
+      expect(page).to have_css('textarea#curate_generic_work_title.required')
       click_link "Files" # switch tab
       expect(page).to have_content "Add files"
       # expect(page).to have_content "Add folder"

@@ -6,6 +6,7 @@ set :repo_url, "https://github.com/emory-libraries/dlp-curate.git"
 set :deploy_to, '/opt/dlp-curate'
 set :rails_env, 'production'
 set :assets_prefix, "#{shared_path}/public/assets"
+set :migration_role, :app
 
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
@@ -39,17 +40,33 @@ set :default_env,
 #  end
 # end
 
+# Restart apache on RedHat
 namespace :deploy do
   after :finishing, :restart_apache do
-    on roles(:app) do
+    on roles(:redhatapp) do
       execute :sudo, :systemctl, :restart, :httpd
     end
   end
 end
 
+# Restart apache on Ubuntu
 namespace :deploy do
-  Rake::Task["migrate"].clear_actions
+  after :finishing, :restart_apache do
+    on roles(:ubuntuapp) do
+      execute :sudo, :systemctl, :restart, :apache2
+    end
+  end
 end
+
+# Setup DCE accounts on Ubuntu
+namespace :deploy do
+  after :finishing, :dce_accounts do
+    on roles(:ubuntuapp) do
+      execute "cd #{current_path} && RAILS_ENV=production bundle exec rake dce:account_setup"
+    end
+  end
+end
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 

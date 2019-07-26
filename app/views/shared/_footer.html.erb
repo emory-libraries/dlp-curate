@@ -1,0 +1,16 @@
+<%# [Hyrax-overwrite] %>
+<footer class="navbar navbar-inverse site-footer">
+  <div class="container-fluid">
+    <div class="navbar-text text-left">
+        <p><%= t('hyrax.footer.service_html') %></p>
+        <p><%= t('hyrax.product_name') %> <%= BRANCH %>@<%= GIT_SHA %> updated on <%= LAST_DEPLOYED %></p>
+        <p>Hyrax v<%= Hyrax::VERSION %></p>
+    </div>
+    <div class="navbar-right">
+      <div class="navbar-text text-right">
+        <p><%= t('hyrax.footer.copyright_html') %></p>
+        <p><%= t('hyrax.background_attribution_html') %></p>
+      </div>
+    </div>
+  </div>
+</footer>

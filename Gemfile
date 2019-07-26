@@ -7,7 +7,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'bootsnap'
+gem 'bootsnap', require: false
 gem 'bootstrap-sass', '~> 3.0'
 gem 'coffee-rails', '~> 4.2'
 gem 'devise'
@@ -18,6 +18,7 @@ gem 'hyrax', '3.0.0-beta1'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 gem 'mysql2', '~> 0.5'
+gem 'noid-rails'
 gem 'omniauth-shibboleth', '~> 1.3'
 gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1'
@@ -50,6 +51,7 @@ group :development, :test do
   gem 'bixby' # bixby = rubocop rules for Hyrax apps
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw] unless ENV['CI'] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'capybara', '~> 2.13'
+  gem 'coveralls', require: false
   gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 4.11.1'
   gem 'ffaker'
