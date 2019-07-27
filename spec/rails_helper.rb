@@ -42,6 +42,15 @@ RSpec.configure do |config|
     `bin/webpack`
   end
 
+  config.before(:suite) do
+    ActiveJob::Base.queue_adapter = :test
+    ActiveFedora::Cleaner.clean!
+  end
+
+  config.before(clean: true) do
+    ActiveFedora::Cleaner.clean!
+  end
+
   include Noid::Rails::RSpec
   config.before(:suite) { disable_production_minter! }
   config.after(:suite)  { enable_production_minter! }

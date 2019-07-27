@@ -675,6 +675,7 @@ GEM
       rdf (~> 3.0, >= 3.0.11)
     rdf-xsd (3.0.1)
       rdf (~> 3.0)
+    redcarpet (3.4.0)
     redic (1.5.1)
       hiredis
     redis (4.1.0)
@@ -867,6 +868,11 @@ GEM
       nokogiri (~> 1.8)
     xray-rails (0.3.1)
       rails (>= 3.1.0)
+    zizia (2.0.0.alpha.01)
+      active-fedora
+      carrierwave
+      rails (~> 5.1.7)
+      redcarpet
 
 PLATFORMS
   ruby
@@ -922,6 +928,7 @@ DEPENDENCIES
   webdrivers (~> 3.0)
   webpacker (~> 4.x)
   xray-rails
+  zizia (= 2.0.0.alpha.01)
 
 RUBY VERSION
    ruby 2.5.3p105
