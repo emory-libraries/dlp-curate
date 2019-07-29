@@ -12,6 +12,12 @@ RSpec.feature 'Create a CurateGenericWork' do
     let(:user) do
       User.new(user_attributes) { |u| u.save(validate: false) }
     end
+    let(:user_attributes_second) do
+      { uid: 'test2@example.com' }
+    end
+    let(:user_2) do
+      User.new(user_attributes_second) { |u| u.save(validate: false) }
+    end
     let(:admin_set_id) { AdminSet.find_or_create_default_admin_set_id }
     let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id) }
     let(:workflow) { Sipity::Workflow.create!(active: true, name: 'test-workflow', permission_template: permission_template) }
@@ -32,6 +38,7 @@ RSpec.feature 'Create a CurateGenericWork' do
 
     let(:new_cgw_form) { NewCurateGenericWorkForm.new }
     let(:cgw) { FactoryBot.create(:work, user: user) }
+    let(:cgw_second) { FactoryBot.create(:work, user: user_2) }
 
     scenario "'descriptions' loads with all its inputs", js: true do
       new_cgw_form.visit_new_page
@@ -104,6 +111,71 @@ RSpec.feature 'Create a CurateGenericWork' do
 
       find('body').click
       choose('curate_generic_work_visibility_open')
+      click_on('Save')
+
+      cgw.reload
+      expect(cgw.visibility).to eq 'open'
+    end
+
+    scenario "verify work authenticated visibility" do
+      expect(cgw.visibility).to eq 'restricted'
+
+      visit("/concern/curate_generic_works/#{cgw.id}/edit")
+
+      find('body').click
+      choose('curate_generic_work_visibility_authenticated')
+      click_on('Save')
+
+      cgw.reload
+      expect(cgw.visibility).to eq 'authenticated'
+    end
+
+    scenario "verify work authenticated visibility no user" do
+      expect(cgw.visibility).to eq 'restricted'
+      logout
+      visit("/concern/curate_generic_works/#{cgw.id}")
+
+      expect(page).not_to have_content('Test title')
+    end
+
+    scenario "verify work private visibility" do
+      expect(cgw.visibility).to eq 'restricted'
+
+      visit("/concern/curate_generic_works/#{cgw.id}/edit")
+
+      find('body').click
+      choose('curate_generic_work_visibility_restricted')
+      click_on('Save')
+
+      cgw.reload
+      expect(cgw.visibility).to eq 'restricted'
+    end
+
+    it "verify work private visibility different user" do
+      visit("/concern/curate_generic_works/#{cgw_second.id}")
+      expect(page).not_to have_content('Test title')
+    end
+
+    scenario "verify work embargo visibility" do
+      expect(cgw.visibility).to eq 'restricted'
+
+      visit("/concern/curate_generic_works/#{cgw.id}/edit")
+
+      find('body').click
+      choose('curate_generic_work_visibility_embargo')
+      click_on('Save')
+
+      cgw.reload
+      expect(cgw.visibility).to eq 'restricted'
+    end
+
+    scenario "verify work lease visibility" do
+      expect(cgw.visibility).to eq 'restricted'
+
+      visit("/concern/curate_generic_works/#{cgw.id}/edit")
+
+      find('body').click
+      choose('curate_generic_work_visibility_lease')
       click_on('Save')
 
       cgw.reload
