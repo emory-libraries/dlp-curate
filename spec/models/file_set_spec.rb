@@ -63,6 +63,8 @@ RSpec.describe FileSet do
       expect { file_set.visibility = authenticated }
         .to change { file_set.visibility }
         .to authenticated
+    end
+  end
 
   describe "metadata" do
     let(:file_set) { described_class.new }
