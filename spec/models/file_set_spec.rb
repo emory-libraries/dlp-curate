@@ -1,8 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe FileSet do
+RSpec.describe FileSet, :perform_enqueued do
   describe '#related_files' do
-    let!(:f1) { described_class.new }
+    let!(:f1) { FactoryBot.create(:file_set, content: File.open(Rails.root.join('spec', 'fixtures', 'world.png'))) }
+
+    describe "#original_file" do
+      it "is the same as the preservation_master_file" do
+        expect(f1.original_file).to eq(f1.preservation_master_file)
+      end
+    end
 
     context 'when there are no related files' do
       it 'returns an empty array' do
