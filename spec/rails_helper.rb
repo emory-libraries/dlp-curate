@@ -81,4 +81,13 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.before perform_jobs: true do
+    ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
+  end
+
+  config.after perform_jobs: true do
+    ActiveJob::Base.queue_adapter.filter                = nil
+    ActiveJob::Base.queue_adapter.perform_enqueued_jobs = false
+  end
 end
