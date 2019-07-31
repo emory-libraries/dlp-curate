@@ -29,7 +29,7 @@ def load_sample_data
     object.member_of_collections << collection
     object.save
   end
-  object.update_index
+  collection.update_index
 end
 
 def make_langmuir_collection
