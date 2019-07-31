@@ -1,16 +1,43 @@
 # frozen_string_literal: true
+
 namespace :dce do
   desc "Load initial sample data"
   task load_sample_data: :environment do
+    Rake::Task["hyrax:default_admin_set:create"].invoke
+    Rake::Task["hyrax:default_collection_types:create"].invoke
     load_sample_data
     puts "Loaded sample data"
+  end
+
+  desc "Clean everything out"
+  task clean: :environment do
+    CurateGenericWork.all.each do |cgw|
+      cgw.destroy!
+    end
+    Collection.all.each do |c|
+      c.destroy!
+    end
   end
 end
 
 def load_sample_data
-  load_first_object
-  load_second_object
-  load_third_object
+  collection = make_langmuir_collection
+  first_object = load_first_object
+  second_object = load_second_object
+  third_object = load_third_object
+  [first_object, second_object, third_object].each do |object|
+    object.member_of_collections << collection
+    object.save
+  end
+  object.update_index
+end
+
+def make_langmuir_collection
+  col = Collection.new
+  col.title = ["Robert Langmuir African American photograph collection"]
+  col.collection_type_gid = Hyrax::CollectionType.first.gid
+  col.save
+  col
 end
 
 def load_first_object
@@ -49,6 +76,7 @@ def load_first_object
   work.date_digitized = "Fake Date Digitized"
   work.transfer_engineer = "Fake Transfer Engineer"
   work.save
+  work
 end
 
 def load_second_object
@@ -87,6 +115,7 @@ def load_second_object
   work.date_digitized = "Fake Date Digitized"
   work.transfer_engineer = "Fake Transfer Engineer"
   work.save
+  work
 end
 
 def load_third_object
@@ -136,4 +165,5 @@ def load_third_object
   work.date_digitized = "Fake Date Digitized"
   work.transfer_engineer = "Fake Transfer Engineer"
   work.save
+  work
 end
