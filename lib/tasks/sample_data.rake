@@ -36,6 +36,7 @@ def make_langmuir_collection
   col = Collection.new
   col.title = ["Robert Langmuir African American photograph collection"]
   col.collection_type_gid = Hyrax::CollectionType.first.gid
+  col.visibility = "open"
   col.save
   col
 end
