@@ -11,12 +11,8 @@ namespace :dce do
 
   desc "Clean everything out"
   task clean: :environment do
-    CurateGenericWork.all.each do |cgw|
-      cgw.destroy!
-    end
-    Collection.all.each do |c|
-      c.destroy!
-    end
+    CurateGenericWork.all.each(&:destroy!)
+    Collection.all.each(&:destroy!)
   end
 end
 
