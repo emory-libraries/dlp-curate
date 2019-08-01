@@ -10,7 +10,7 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= 
+//=
 //= require turbolinks
 //
 // Required by Blacklight
@@ -19,7 +19,7 @@
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require blacklight/blacklight
-
 //= require hyrax
 //= require hyrax/autocomplete/default
-
+//= require almond
+//= require zizia/application
