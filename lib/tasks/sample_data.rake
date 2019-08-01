@@ -56,7 +56,7 @@ def load_first_object
   work.legacy_ark = ["Fake Legacy Ark"]
   work.place_of_production = "Fake Place of Production"
   work.publisher = "Fake Publisher"
-  work.rights_statement_controlled = "Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."
+  work.rights_statement_text = ["Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."]
   work.rights_statement = ["http://rightsstatements.org/vocab/InC/1.0/"]
   work.subject_names = ["Fake Subject Name 1", "Fake Subject Name 2"]
   work.subject_geo = ["Fake Subject Geo 1", "Fake Subject Geo 2"]
@@ -96,7 +96,7 @@ def load_second_object
   work.legacy_ark = ["Fake Legacy Ark"]
   work.place_of_production = "Fake Place of Production"
   work.publisher = "Fake Publisher"
-  work.rights_statement_controlled = "Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."
+  work.rights_statement_text = ["Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."]
   work.rights_statement = ["http://rightsstatements.org/vocab/InC/1.0/"]
   work.subject_names = ["Fake Subject Name 1", "Fake Subject Name 2"]
   work.subject_geo = ["Fake Subject Geo 1", "Fake Subject Geo 2"]
@@ -136,7 +136,7 @@ def load_third_object
   work.legacy_ark = ["Fake Legacy Ark"]
   work.place_of_production = "Fake Place of Production"
   work.publisher = "Fake Publisher"
-  work.rights_statement_controlled = "Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."
+  work.rights_statement_text = ["Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."]
   work.rights_statement = ["http://rightsstatements.org/vocab/NoC-US/1.0/"]
   work.subject_names = [
     "University of Tennessee, Memphis.",
