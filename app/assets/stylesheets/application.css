@@ -12,6 +12,7 @@
  *
  *= require hyrax
  *= require curate
+ *= require zizia/application
  *= require openseadragon
  *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
  *= require_self
