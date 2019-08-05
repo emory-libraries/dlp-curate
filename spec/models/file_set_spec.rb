@@ -1,8 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe FileSet do
+RSpec.describe FileSet, :perform_enqueued do
   describe '#related_files' do
-    let!(:f1) { described_class.new }
+    let!(:f1) { FactoryBot.create(:file_set, content: File.open(Rails.root.join('spec', 'fixtures', 'world.png'))) }
+
+    describe "#original_file" do
+      it "is the same as the preservation_master_file" do
+        expect(f1.original_file).to eq(f1.preservation_master_file)
+      end
+    end
 
     context 'when there are no related files' do
       it 'returns an empty array' do
@@ -41,6 +47,28 @@ RSpec.describe FileSet do
       its(:pcdm_use) { is_expected.to eq described_class::SUPPLEMENTAL }
       it { is_expected.not_to be_primary }
       it { is_expected.to be_supplementary }
+    end
+  end
+
+  describe '#visibility' do
+    subject(:file_set) { FactoryBot.build(:file_set, visibility: open) }
+
+    let(:open)       { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+    let(:restricted) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+    let(:authenticated) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+    let(:lease) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE }
+    let(:embargo) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO }
+
+    it 'can set to restricted' do
+      expect { file_set.visibility = restricted }
+        .to change { file_set.visibility }
+        .to restricted
+    end
+
+    it 'can set to authenticated' do
+      expect { file_set.visibility = authenticated }
+        .to change { file_set.visibility }
+        .to authenticated
     end
   end
 

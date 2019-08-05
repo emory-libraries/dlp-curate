@@ -107,8 +107,33 @@ FactoryBot.define do
       with_permission_template { false }
       with_nesting_attributes { nil }
       with_solr_document { false }
+      collection_type { Hyrax::CollectionType.find_or_create_default_collection_type }
     end
-    sequence(:title) { |n| ["Collection Title #{n}"] }
+    # sequence(:title) { |n| ["Collection Title #{n}"] }
+    title { ['Testing Collection'] }
+    holding_repository { ['Emory'] }
+    administrative_unit { ['Library'] }
+    creator { ['Someone'] }
+    contributor { ['Someone else'] }
+    abstract { 'A detailed abstract' }
+    primary_language { 'English' }
+    related_material { 'https://my-finding-aid.com' }
+    institution { 'Emory' }
+    local_call_number { '90210' }
+    keywords { ['test collection'] }
+    subject_topics { ['Topics'] }
+    subject_names { ['Someone'] }
+    subject_geo { ['Atlanta'] }
+    subject_time_periods { ['Anthropocene'] }
+    note { ['a brief note'] }
+    rights_documentation { 'http://example.com/rights' }
+    sensitive_material { 'very sensitive' }
+    internal_rights_note { 'Do not publish' }
+    contact_information { 'telex' }
+    staff_note { ['dictated but not read'] }
+    system_of_record_ID { '1' }
+    legacy_ark { ['2'] }
+    primary_repository_ID { '3' }
 
     after(:build) do |collection, evaluator|
       collection.apply_depositor_metadata(evaluator.user.user_key)

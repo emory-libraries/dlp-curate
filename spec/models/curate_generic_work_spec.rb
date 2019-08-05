@@ -946,39 +946,39 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#rights_statement_controlled" do
-    subject { described_class.new }
-    let(:rights_statement_controlled) { 'Controlled Rights Statement' }
-
-    context "with new CurateGenericWork work" do
-      its(:rights_statement_controlled) { is_expected.to be_falsey }
-    end
-
-    context "with a CurateGenericWork work that has a rights_statement_controlled" do
-      subject do
-        described_class.create.tap do |cgw|
-          cgw.rights_statement_controlled = rights_statement_controlled
-        end
-      end
-      its(:rights_statement_controlled) { is_expected.to eq 'Controlled Rights Statement' }
-    end
-  end
-
   describe "#rights_statement" do
     subject { described_class.new }
-    let(:rights_statement) { ['Sample Rights Statement'] }
+    let(:rights_statement) { 'Controlled Rights Statement' }
 
     context "with new CurateGenericWork work" do
       its(:rights_statement) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has rights_statement" do
+    context "with a CurateGenericWork work that has a rights_statement" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.rights_statement = rights_statement
+          cgw.rights_statement = [rights_statement]
         end
       end
-      its(:rights_statement) { is_expected.to eq rights_statement }
+      its(:rights_statement) { is_expected.to eq ['Controlled Rights Statement'] }
+    end
+  end
+
+  describe "#rights_statement_text" do
+    subject { described_class.new }
+    let(:rights_statement_text) { ['Sample Rights Statement'] }
+
+    context "with new CurateGenericWork work" do
+      its(:rights_statement_text) { is_expected.to be_empty }
+    end
+
+    context "with a CurateGenericWork work that has rights_statement_text" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.rights_statement_text = rights_statement_text
+        end
+      end
+      its(:rights_statement_text) { is_expected.to eq rights_statement_text }
     end
   end
 
