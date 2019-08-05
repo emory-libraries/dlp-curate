@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ModularImporter, :clean do
-  let(:modular_csv) { 'spec/fixtures/csv_import/zizia_basic.csv' }
+  let(:modular_csv) { 'spec/fixtures/csv_import/good/langmuir_tiny.csv' }
   let(:user) { ::User.batch_user }
   let(:collection) { FactoryBot.build(:collection_lw) }
   let(:csv_import) do
@@ -13,6 +13,6 @@ RSpec.describe ModularImporter, :clean do
   end
 
   it "imports a csv" do
-    expect { ModularImporter.new(csv_import).import }.to change { CurateGenericWork.count }.by 3
+    expect { ModularImporter.new(csv_import).import }.to change { CurateGenericWork.count }.by 1
   end
 end

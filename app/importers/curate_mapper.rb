@@ -4,7 +4,7 @@ class CurateMapper < Zizia::HashMapper
   attr_reader :row_number
 
   CURATE_TERMS_MAP = {
-    title: "Title"
+    title: "Desc - Title"
   }.freeze
 
   DELIMITER = '|~|'
@@ -22,7 +22,7 @@ class CurateMapper < Zizia::HashMapper
 
   # What columns must exist in the CSV
   def self.required_headers
-    ['Title']
+    ["Desc - Title"]
   end
 
   def fields
