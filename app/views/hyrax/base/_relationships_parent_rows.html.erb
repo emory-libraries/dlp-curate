@@ -1,0 +1,15 @@
+<%# Render presenters which aren't specified in the 'presenter_types' %>
+<% presenter.grouped_presenters(except: presenter.presenter_types).each_pair do |model_name, items| %>
+  <%= render 'relationships_parent_row', type: model_name, items: items, presenter: presenter %>
+<% end %>
+
+<%# [scholar-override] Show parent relationships for child %>
+<%= render 'parent_relationship_table', child_id: presenter.solr_document.id %>
+
+
+<%# Render grouped presenters. Show rows if there are any items of that type %>
+<% presenter.presenter_types.each do |type| %>
+  <% presenter.grouped_presenters(filtered_by: type).each_pair do |_, items| %>
+    <%= render 'relationships_parent_row', type: type, items: items, presenter: presenter %>
+  <% end %>
+<% end %>
