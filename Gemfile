@@ -13,6 +13,7 @@ gem 'coffee-rails', '~> 4.2'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
 gem 'dotenv-rails'
+gem 'honeybadger', '~> 4.0'
 gem 'hydra-role-management'
 gem 'hyrax', '3.0.0-beta1'
 gem 'jbuilder', '~> 2.5'
@@ -31,6 +32,7 @@ gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '~> 4.x'
+gem 'zizia', '~> 2.1.0.alpha.05'
 
 group :development do
   gem "capistrano", "~> 3.11", require: false
@@ -51,6 +53,7 @@ group :development, :test do
   gem 'bixby' # bixby = rubocop rules for Hyrax apps
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw] unless ENV['CI'] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'capybara', '~> 2.13'
+  gem 'coveralls', require: false
   gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 4.11.1'
   gem 'ffaker'

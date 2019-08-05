@@ -3,7 +3,7 @@ class Collection < ActiveFedora::Base
   include ::Hyrax::CollectionBehavior
   require 'noid-rails'
 
-  self.indexer = Hyrax::CollectionWithBasicMetadataIndexer
+  self.indexer = CurateCollectionIndexer
 
   def assign_id
     self.id = service.mint unless new_record?

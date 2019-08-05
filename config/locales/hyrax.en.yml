@@ -1,4 +1,3 @@
----
 en:
   blacklight:
     search:
@@ -54,7 +53,7 @@ en:
       service_html: A service of <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
     institution_name: Emory Network
     institution_name_full: The Institution Name
-    product_name: Curate
+    product_name: Hyrax
     product_twitter_handle: "@SamveraRepo"
     works:
       form:
@@ -116,10 +115,14 @@ en:
         title: ''
     labels:
       defaults:
+        title: "Title"
+        date_created: "Date Created"
         creator: "Creator"
+        administrative_unit: "Administrative Unit"
         holding_repository: "Library"
         content_genre: "Genre"
         content_type: "Format"
+        final_published_version: "Final Published Version"
         abstract: "Description/Abstract"
         extent: "Extent/Dimensions"
         local_call_number: "Call Number"
@@ -133,11 +136,19 @@ en:
         publisher_version: "Version of Publication"
         page_range_start: "Page Range"
         page_range_end: "Page Range"
+        table_of_contents: "Table of Contents"
+        related_material: "Related Material"
+        related_datasets: "Related Datasets"
+        related_publications: "Related Publications"
         place_of_production: "Place of Publication/Production"
+        series_title: "Series Title"
+        uniform_title: "Uniform Title"
         issn: "ISSN"
         isbn: "ISBN"
+        conference_dates: "Conference Dates"
         conference_name: "Conference/Meeting Name"
         grant: "Grant/Funding Agency"
+        date_producer: "Data Producer"
         grant_information: "Grant/Funding Information"
         data_source_note: "Data Sources Note"
         access_right: "Access Restrictions"
@@ -149,7 +160,7 @@ en:
         legacy_identifier: "Other Identifiers"
         legacy_ark: "Legacy ARK ID"
         primary_repository_ID: "Persistent URL"
-        re_use_license: "Re-use License"
+        re_use_license: "Re-Use License"
         contact_information: "Contact Information"
         staff_note: "Staff Note"
         system_of_record_id: "System Of Record ID"
@@ -161,8 +172,9 @@ en:
         rights_holder: "Rights Holder"
         data_classification: "Data Classification"
         rights_statement: "Rights Statement"
-        rights_statement_controlled: "Rights Statement Controlled"
+        rights_statement_controlled: "Rights Statement - Controlled"
         date_issued: "Date Issued"
         primary_language: "Primary Language"
         administrative_unit: "Administrative Unit"
-
+        technical_note: "Technical Note"
+        author_notes: "Author Notes"

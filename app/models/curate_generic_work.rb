@@ -181,9 +181,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :rights_statement, predicate: "http://purl.org/dc/elements/1.1/rights"
+  property :rights_statement_text, predicate: "http://purl.org/dc/elements/1.1/rights"
 
-  property :rights_statement_controlled, predicate: "http://www.europeana.eu/schemas/edm/rights", multiple: false do |index|
+  property :rights_statement, predicate: "http://www.europeana.eu/schemas/edm/rights" do |index|
     index.as :stored_searchable, :facetable
   end
 
