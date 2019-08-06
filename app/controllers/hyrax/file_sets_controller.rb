@@ -7,6 +7,7 @@ module Hyrax
     before_action :authenticate_user!, except: [:show, :citation, :stats]
     load_and_authorize_resource class: ::FileSet, except: :show
     before_action :build_breadcrumbs, only: [:show, :edit, :stats]
+    before_action :set_file_set, only: [:show]
 
     # provides the help_text view method
     helper PermissionsHelper
@@ -38,6 +39,7 @@ module Hyrax
     # GET /concern/parent/:parent_id/file_sets/:id
     def show
       @parent = main_app.polymorphic_path(presenter.parent)
+      files
       respond_to do |wants|
         wants.html { presenter }
         wants.json { presenter }
@@ -180,6 +182,17 @@ module Hyrax
                    'dashboard'
                  end
         File.join(theme, layout)
+      end
+
+      def set_file_set
+        @file_set = ::FileSet.find(params[:id])
+      end
+
+      def files
+        @sf = @file_set.service_file unless @file_set.service_file.nil?
+        @if = @file_set.intermediate_file unless @file_set.intermediate_file.nil?
+        @et = @file_set.extracted_text unless @file_set.extracted_text.nil?
+        @tf = @file_set.transcript_file unless @file_set.transcript_file.nil?
       end
   end
 end
