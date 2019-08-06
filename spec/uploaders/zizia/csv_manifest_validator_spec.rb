@@ -49,12 +49,15 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
   end
 
   context 'a CSV that is missing required headers' do
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'missing_title_header.csv') }
+    let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'missing_headers.csv') }
 
-    it 'has an error' do
-      missing_title_error = 'Missing required column: Desc Title. Your spreadsheet must have this column. If you already have this column, please check the spelling and capitalization.'
+    it 'has an error for every missing header' do
       validator.validate
-      expect(validator.errors).to contain_exactly(missing_title_error)
+      expected_errors = ["Desc Title", "Type Of Resource"]
+      expected_errors.each do |error|
+        matches = validator.errors.map { |e| e.match(error) }
+        expect(matches.compact).not_to be_empty
+      end
     end
   end
 

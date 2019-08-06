@@ -20,11 +20,6 @@ class CurateMapper < Zizia::HashMapper
       ['Visibility']
   end
 
-  # What columns must exist in the CSV
-  def self.required_headers
-    ["Desc - Title"]
-  end
-
   def fields
     # The fields common to all object types
     common_fields = CURATE_TERMS_MAP.keys + [:visibility]

@@ -111,7 +111,7 @@ module Zizia
       end
 
       def required_headers
-        ['Desc - Title', 'Filename']
+        ['Desc - Title', 'Filename', "Desc - Type of Resource"]
       end
 
       def duplicate_headers
