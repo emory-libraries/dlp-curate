@@ -2,15 +2,15 @@
 require 'rails_helper'
 include Warden::Test::Helpers
 
-RSpec.describe 'Importing records from a CSV file', :perform_jobs, :clean, type: :system, js: true do
-  let(:csv_file) { File.join(fixture_path, 'csv_import', 'zizia_basic.csv') }
+RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, type: :system, js: true do
+  let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_tiny.csv') }
 
   context 'logged in as an admin user' do
     let(:collection) { FactoryBot.build(:collection_lw) }
     let(:admin_user) { FactoryBot.create(:admin) }
 
     before do
-      allow(CharacterizeJob).to receive(:perform_later) # There is no fits installed on travis-ci
+      allow(CharacterizeJob).to receive(:perform_later) # There is no fits installed on ci
       collection.save!
       login_as admin_user
     end
@@ -29,7 +29,7 @@ RSpec.describe 'Importing records from a CSV file', :perform_jobs, :clean, type:
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
 
-      expect(page).to have_content 'This import will add 3 new records.'
+      expect(page).to have_content 'This import will add 1 new records.'
 
       # There is a link so the user can cancel.
       expect(page).to have_link 'Cancel', href: '/csv_imports/new?locale=en'
@@ -46,14 +46,14 @@ RSpec.describe 'Importing records from a CSV file', :perform_jobs, :clean, type:
       expect(page).to have_content 'Testing Collection'
 
       # Let the background jobs run, and check that the expected number of records got created.
-      expect(CurateGenericWork.count).to eq 3
+      expect(CurateGenericWork.count).to eq 1
 
       # Ensure that all the fields got assigned as expected
-      work = CurateGenericWork.where(title: "*Dog*").first
-      expect(work.title.first).to match(/Dog/)
+      work = CurateGenericWork.where(title: "*Tennessee*").first
+      expect(work.title.first).to match(/Tennessee/)
 
       visit "/dashboard/works"
-      click_on 'A Cute Dog'
+      click_on 'Faculty and graduates of University of West Tennessee, Memphis, Tenn. in medicine, dentistry and nurse training in 1921'
       expect(page).to have_content work.title.first
     end
   end
