@@ -7,7 +7,7 @@ RSpec.describe CurateMapper do
 
   let(:metadata) do
     {
-      "Desc - Title" => "what an awesome title" # title
+      "title" => "what an awesome title" # title
     }
   end
 
