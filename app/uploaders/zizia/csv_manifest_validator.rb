@@ -55,43 +55,39 @@ module Zizia
 
       def valid_headers
         [
-          'Item ID', 'Desc - Abstract',
-          'Desc - Administrative Unit',
-          'Desc - Call Number/MSS Number',
-          'Desc - Collection Name',
-          'Desc - Contact Information',
-          'Desc - Creator',
-          'Desc - Date Created',
-          'Desc - Date Published',
-          'Desc - Genre - AAT',
-          'Desc - Genre - Legacy Data',
-          'Desc - Holding Repository',
-          'Desc - Institution',
-          'Desc - Language - Primary',
-          'Desc - Language - Secondary',
-          'Desc - Legacy Identifier',
-          'Desc - Notes',
-          'Desc - PID',
-          'Desc - Place of Publication',
-          'Desc - Publisher',
-          'Desc - Rights Statement',
-          'Desc - RightsStatement.org Designation (Label)',
-          'Desc - RightsStatement.org Designation (URI)',
-          'Desc - Subject - Corporate Name - LCNAF',
-          'Desc - Subject - Geographic - LCSH',
-          'Desc - Subject - Keywords',
-          'Desc - Subject - Meeting Name - LCNAF',
-          'Desc - Subject - Personal Name - LCNAF',
-          'Desc - Subject - Topic - LCSH',
-          'Desc - Subject - Uniform Title - LCNAF',
-          'Desc - Table of Contents (Books)',
-          'Desc - Title',
-          'Desc - Type of Resource',
-          'Digital Object - Data Classification',
-          'Digital Object - Structure',
-          'Digital Object - Viewer Settings',
-          'Digital Object - Visibility',
-          'Filename'
+          'legacy_identifier_1',
+          'legacy_identifier_2',
+          'abstract',
+          'administrative_unit',
+          'local_call_number',
+          'contact_information',
+          'creator',
+          'date_created',
+          'date_issued',
+          'content_genre',
+          'holding_repository',
+          'institution',
+          'primary_language',
+          'legacy_identifier',
+          'note',
+          'legacy_ark',
+          'place_of_publication',
+          'publisher',
+          'rights_statement_text',
+          'rights_statement',
+          'subject_names_corporate',
+          'subject_geo',
+          'keywords',
+          'subject_names_meeting',
+          'subject_names_personal',
+          'subject_topics',
+          'uniform_title',
+          'table_of_contents',
+          'title',
+          'content_type',
+          'data_classification',
+          'visibility',
+          'filename'
         ]
       end
 
@@ -105,13 +101,13 @@ module Zizia
 
       def missing_headers
         required_headers.each do |header|
-          next if @transformed_headers.include?(header.downcase.strip)
-          @errors << "Missing required column: #{header.titleize.squeeze(' ')}. Your spreadsheet must have this column. If you already have this column, please check the spelling and capitalization."
+          next if @transformed_headers.include?(header)
+          @errors << "Missing required column: #{header}. Your spreadsheet must have this column. If you already have this column, please check the spelling and capitalization."
         end
       end
 
       def required_headers
-        ['Desc - Title', 'Filename', "Desc - Type of Resource"]
+        ['title', 'filename', 'content_type']
       end
 
       def duplicate_headers

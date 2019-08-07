@@ -53,7 +53,7 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
 
     it 'has an error for every missing header' do
       validator.validate
-      expected_errors = ["Desc Title", "Type Of Resource"]
+      expected_errors = ["title", "content_type"]
       expected_errors.each do |error|
         matches = validator.errors.map { |e| e.match(error) }
         expect(matches.compact).not_to be_empty
