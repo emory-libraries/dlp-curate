@@ -49,3 +49,7 @@ workflows:
         jobs:
             - build:
                 name: ruby2-5-3
+
+notify:
+    webhooks:
+        url: https://coveralls.io/webhook?repo_token=${COVERALLS_REPO_TOKEN}
