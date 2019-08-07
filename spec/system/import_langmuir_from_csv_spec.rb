@@ -51,6 +51,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       # Ensure that all the fields got assigned as expected
       work = CurateGenericWork.where(title: "*Tennessee*").first
       expect(work.title.first).to match(/Tennessee/)
+      expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
 
       visit "/dashboard/works"
       click_on 'Faculty and graduates of University of West Tennessee, Memphis, Tenn. in medicine, dentistry and nurse training in 1921'
