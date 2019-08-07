@@ -7,7 +7,8 @@ RSpec.describe CurateMapper do
 
   let(:metadata) do
     {
-      "title" => "what an awesome title" # title
+      "title" => "what an awesome title", # title
+      "content_type" => 'still image'
     }
   end
 
@@ -17,10 +18,29 @@ RSpec.describe CurateMapper do
     expect(Zizia.config.metadata_mapper_class).to eq described_class
   end
 
-  it "maps resource type to local authority values, if possible" do
-    expect(mapper.title).to contain_exactly(
-      "what an awesome title"
-    )
+  context "content_type" do
+    context "when the string matches exactly" do
+      let(:metadata) do
+        {
+          "title" => "my title",
+          "content_type" => 'Still image'
+        }
+      end
+      it "maps content_type to a uri" do
+        expect(mapper.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
+      end
+    end
+    context "when the string matches except for capitalization and whitespace" do
+      let(:metadata) do
+        {
+          "title" => "my title",
+          "content_type" => 'still image  '
+        }
+      end
+      it "maps content_type to a uri" do
+        expect(mapper.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
+      end
+    end
   end
 
   it "maps the required title field" do
