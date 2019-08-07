@@ -10,6 +10,6 @@ RSpec.describe 'viewing the importer guide', type: :system do
 
   it 'displays without error' do
     visit '/importer_documentation/guide'
-    expect(page.title).to eq('Guide Importer Documentation // Curate')
+    expect(page.title).to be_in(['Guide Importer Documentation // Curate', 'Zizia'])
   end
 end
