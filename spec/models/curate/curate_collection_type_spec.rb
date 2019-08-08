@@ -1,7 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe Curate::CollectionType, type: :model do
+RSpec.describe Curate::CollectionType, :clean, type: :model do
   let(:collection_type) { described_class.new }
+
+  it "we can find or create it easily and it won't proliferate" do
+    expect(Curate::CollectionType.count).to eq 0
+    Curate::CollectionType.find_or_create_library_collection_type
+    expect(Curate::CollectionType.count).to eq 1
+    Curate::CollectionType.find_or_create_library_collection_type
+    expect(Curate::CollectionType.count).to eq 1
+  end
 
   it "is named Library Collection" do
     expect(collection_type.title).to eq "Library Collection"
