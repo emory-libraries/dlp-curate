@@ -24,4 +24,5 @@ class SolrDocument
   # Do content negotiation for AF models.
 
   use_extension(Hydra::ContentNegotiation)
+  include SolrDocumentAccessors
 end
