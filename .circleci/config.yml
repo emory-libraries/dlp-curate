@@ -58,6 +58,9 @@ jobs:
                 root: coverage
                 paths: codeclimate.*.json
 
+            - deploy:
+                command: curl -k https://coveralls.io/webhook?repo_token=${COVERALLS_REPO_TOKEN} -d "payload[build_num]=${CIRCLE_BUILD_NUM}&payload[status]=done"
+
     coverage:
         docker:
             - image: circleci/ruby:2.5.3
@@ -89,7 +92,3 @@ workflows:
                 name: codeclimate
                 requires:
                     - ruby2-5-3
-
-notify:
-    webhooks:
-        url: https://coveralls.io/webhook?repo_token=${COVERALLS_REPO_TOKEN}
