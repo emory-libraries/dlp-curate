@@ -184,6 +184,15 @@ en:
           transfer_engineer: "Transfer Engineer"
           title: "Title"
   hyrax:
+    relationships_parent_row:
+      label: "In Parent Work:"
+    base:
+      relationships_parent_row:
+        label: "In Collection:"
+      form_progress:
+        required_agreement: Check distribution license
+      items:
+        empty: 'This %{type} has no files associated with it. (If you just created this %{type}, it may take a few minutes for the files to display. Try refreshing the page again.) Otherwise, click edit to add more files.'
     account_name: My Institution Account Id
     directory:
       suffix: "@example.org"

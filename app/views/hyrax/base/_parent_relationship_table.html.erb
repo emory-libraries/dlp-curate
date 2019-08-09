@@ -1,0 +1,13 @@
+<% parent_solr_docs = ParentQueryService.query_parents_for_id(child_id) %>
+
+<dt> <%= t('hyrax.relationships_parent_row.label') unless parent_solr_docs.blank? %> </dt>
+  <dd>
+    <ul class="tabular">
+      <% parent_solr_docs.each do |item| unless parent_solr_docs.blank? %>
+        <li class='attribute attribute-title'>
+          <%= link_to item["title_tesim"].first, url_for_document(SolrDocument.find(item["id"])) %>
+        </li>
+      <% end %>
+     <% end %> 
+    </ul>
+  </dd>
