@@ -33,7 +33,7 @@ RSpec.describe Curate::CollectionType, :clean, type: :model do
   end
 
   it 'has a description' do
-    expect(collection_type.description).to eq "Library staff-curated collections"
+    expect(collection_type.description).to eq "Library staff curated collections"
   end
 
   it 'has a machine_id' do
