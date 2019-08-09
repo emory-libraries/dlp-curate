@@ -13,6 +13,7 @@ class Ability
     return unless current_user.admin?
     can [:create, :show, :add_user, :remove_user, :index, :edit, :update, :destroy], Role
 
+    can :manage, Zizia::CsvImport if current_user.admin?
     # Limits creating new objects to a specific group
     #
     # if user_groups.include? 'special_group'

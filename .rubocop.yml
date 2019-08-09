@@ -11,6 +11,7 @@ AllCops:
         - 'tmp/**/*'
         - 'vendor/**/*'
         - 'node_modules/**/*'
+        - lib/tasks/sample_data.rake
 
 Style/FrozenStringLiteralComment:
     Enabled: false
@@ -30,7 +31,11 @@ Metrics/ClassLength:
         - 'app/controllers/catalog_controller.rb'
         - 'app/actors/hyrax/actors/file_set_actor.rb'
         - 'app/forms/hyrax/forms/collection_form.rb'
+        - app/uploaders/zizia/csv_manifest_validator.rb
 
+Metrics/MethodLength:
+    Exclude:
+        - app/uploaders/zizia/csv_manifest_validator.rb
 
 RSpec/ExampleLength:
     Exclude:

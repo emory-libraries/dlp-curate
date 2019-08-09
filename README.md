@@ -2,7 +2,7 @@
 
 <table width="100%">
 <tr><td>
-<img src="https://cdn.vectorlogosupply.com/logos/large/2x/emory-university-png-transparent-logo.png" width="200">
+<img src="app/assets/images/EU_vt_280.png" width="200">
 </td><td>
 A repository application for digital curators (preservation, rights and metadata management, collection management). Find more about the project on our
 <a href="https://wiki.service.emory.edu/display/DLPP"><em>DLP Wiki</em></a>

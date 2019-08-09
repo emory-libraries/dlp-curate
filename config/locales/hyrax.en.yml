@@ -4,47 +4,185 @@ en:
     search:
       fields:
         facet:
-          based_near_label_sim: Location
-          creator_sim: Creator
-          file_format_sim: Format
-          generic_type_sim: Type
-          keyword_sim: Keyword
-          language_sim: Language
-          publisher_sim: Publisher
-          subject_sim: Subject
+          abstract: "Description/Abstract"
+          access_right: "Access Restrictions"
+          administrative_unit: "Administrative Unit"
+          administrative_unit: "Administrative Unit"
+          author_notes: "Author Notes"
+          conference_dates: "Conference Dates"
+          conference_name: "Conference/Meeting Name"
+          contact_information: "Contact Information"
+          content_genre: "Genre"
+          content_type: "Format"
+          copyright_date: "Copyright Date"
+          creator: "Creator"
+          data_classification: "Data Classification"
+          data_collection_dates: "Data Collection Dates"
+          data_source_note: "Data Sources Note"
+          date_created: "Date Created"
+          date_digitized: "Date Digitized"
+          date_issued: "Date Issued"
+          data_producer: "Data Producer"
+          extent: "Extent/Dimensions"
+          final_published_version: "Final Published Version"
+          geographic_unit: "Geographic Level For Dataset"
+          grant: "Grant/Funding Agency"
+          grant_information: "Grant/Funding Information"
+          holding_repository: "Library"
+          internal_rights_note: "Internal Rights Note"
+          isbn: "ISBN"
+          issn: "ISSN"
+          legacy_ark: "Legacy ARK ID"
+          legacy_identifier: "Other Identifiers"
+          legacy_rights: "Legacy Rights Data"
+          local_call_number: "Call Number"
+          page_range_end: "Page Range - End"
+          page_range_start: "Page Range - Start"
+          parent_title: "Title of Parent Work"
+          place_of_production: "Place of Publication/Production"
+          primary_language: "Primary Language"
+          primary_repository_ID: "Persistent URL"
+          publisher_version: "Version of Publication"
+          re_use_license: "Re-Use License"
+          related_datasets: "Related Datasets"
+          related_material: "Related Material"
+          rights_documentation: "Rights Documentation URL"
+          rights_holder: "Rights Holder"
+          rights_statement: "Rights Statement - Controlled"
+          rights_statement_text: "Rights Statement"
+          scheduled_rights_review: "Scheduled Rights Review Date"
+          scheduled_rights_review_note: "Scheduled Rights Review Note"
+          sensitive_material: "Sensitive/Objectionable Material"
+          sensitive_material_note: "Sensitive/Objectionable Material Note"
+          staff_note: "Staff Note"
+          subject_geo: "Subject - Geographic Locations"
+          subject_names: "Subject - Names"
+          subject_time_periods: "Subject - Time Periods"
+          subject_topics: "Subject - Topics"
+          system_of_record_ID: "System Of Record ID"
+          technical_note: "Technical Note"
+          title: "Title"
+          transfer_engineer: "Transfer Engineer"
         index:
-          based_near_tesim: Location
-          contributor_tesim: Contributor
-          creator_tesim: Creator
-          date_created_tesim: Date Created
-          date_modified_dtsi: Date Modified
-          date_uploaded_dtsi: Date Uploaded
-          description_tesim: Description
-          file_format_tesim: File Format
-          identifier_tesim: Identifier
-          keyword_tesim: Keyword
-          language_tesim: Language
-          license_tesim: License
-          publisher_tesim: Publisher
-          rights_statement_tesim: Rights Statement
-          subject_tesim: Subject
+          abstract: "Description/Abstract"
+          access_right: "Access Restrictions"
+          administrative_unit: "Administrative Unit"
+          administrative_unit: "Administrative Unit"
+          author_notes: "Author Notes"
+          conference_dates: "Conference Dates"
+          conference_name: "Conference/Meeting Name"
+          contact_information: "Contact Information"
+          content_genre: "Genre"
+          content_type: "Format"
+          copyright_date: "Copyright Date"
+          creator: "Creator"
+          data_classification: "Data Classification"
+          data_collection_dates: "Data Collection Dates"
+          data_source_note: "Data Sources Note"
+          date_created: "Date Created"
+          date_digitized: "Date Digitized"
+          date_issued: "Date Issued"
+          data_producer: "Data Producer"
+          extent: "Extent/Dimensions"
+          final_published_version: "Final Published Version"
+          geographic_unit: "Geographic Level For Dataset"
+          grant: "Grant/Funding Agency"
+          grant_information: "Grant/Funding Information"
+          holding_repository: "Library"
+          internal_rights_note: "Internal Rights Note"
+          isbn: "ISBN"
+          issn: "ISSN"
+          legacy_ark: "Legacy ARK ID"
+          legacy_identifier: "Other Identifiers"
+          legacy_rights: "Legacy Rights Data"
+          local_call_number: "Call Number"
+          page_range_end: "Page Range - End"
+          page_range_start: "Page Range - Start"
+          parent_title: "Title of Parent Work"
+          place_of_production: "Place of Publication/Production"
+          primary_language: "Primary Language"
+          primary_repository_ID: "Persistent URL"
+          publisher_version: "Version of Publication"
+          re_use_license: "Re-Use License"
+          related_datasets: "Related Datasets"
+          related_material: "Related Material"
+          rights_documentation: "Rights Documentation URL"
+          rights_holder: "Rights Holder"
+          rights_statement: "Rights Statement - Controlled"
+          rights_statement_text: "Rights Statement"
+          scheduled_rights_review: "Scheduled Rights Review Date"
+          scheduled_rights_review_note: "Scheduled Rights Review Note"
+          sensitive_material: "Sensitive/Objectionable Material"
+          sensitive_material_note: "Sensitive/Objectionable Material Note"
+          staff_note: "Staff Note"
+          subject_geo: "Subject - Geographic Locations"
+          subject_names: "Subject - Names"
+          subject_time_periods: "Subject - Time Periods"
+          subject_topics: "Subject - Topics"
+          system_of_record_ID: "System Of Record ID"
+          technical_note: "Technical Note"
+          title: "Title"
+          transfer_engineer: "Transfer Engineer"
         show:
-          based_near_tesim: Location
-          contributor_tesim: Contributor
-          creator_tesim: Creator
-          date_created_tesim: Date Created
-          date_modified_dtsi: Date Modified
-          date_uploaded_dtsi: Date Uploaded
-          description_tesim: Description
-          file_format_tesim: File Format
-          identifier_tesim: Identifier
-          keyword_tesim: Keyword
-          language_tesim: Language
-          license_tesim: License
-          publisher_tesim: Publisher
-          rights_statement_tesim: Rights Statement
-          subject_tesim: Subject
-          title_tesim: Title
+          abstract: "Description/Abstract"
+          access_right: "Access Restrictions"
+          administrative_unit: "Administrative Unit"
+          administrative_unit: "Administrative Unit"
+          author_notes: "Author Notes"
+          conference_dates: "Conference Dates"
+          conference_name: "Conference/Meeting Name"
+          contact_information: "Contact Information"
+          content_genre: "Genre"
+          content_type: "Format"
+          copyright_date: "Copyright Date"
+          creator: "Creator"
+          data_classification: "Data Classification"
+          data_collection_dates: "Data Collection Dates"
+          data_source_note: "Data Sources Note"
+          date_created: "Date Created"
+          date_digitized: "Date Digitized"
+          date_issued: "Date Issued"
+          data_producer: "Data Producer"
+          extent: "Extent/Dimensions"
+          final_published_version: "Final Published Version"
+          geographic_unit: "Geographic Level For Dataset"
+          grant: "Grant/Funding Agency"
+          grant_information: "Grant/Funding Information"
+          holding_repository: "Library"
+          internal_rights_note: "Internal Rights Note"
+          isbn: "ISBN"
+          issn: "ISSN"
+          legacy_ark: "Legacy ARK ID"
+          legacy_identifier: "Other Identifiers"
+          legacy_rights: "Legacy Rights Data"
+          local_call_number: "Call Number"
+          page_range_end: "Page Range - End"
+          page_range_start: "Page Range - Start"
+          parent_title: "Title of Parent Work"
+          place_of_production: "Place of Publication/Production"
+          primary_language: "Primary Language"
+          primary_repository_ID: "Persistent URL"
+          publisher_version: "Version of Publication"
+          re_use_license: "Re-Use License"
+          related_datasets: "Related Datasets"
+          related_material: "Related Material"
+          rights_documentation: "Rights Documentation URL"
+          rights_holder: "Rights Holder"
+          rights_statement: "Rights Statement - Controlled"
+          rights_statement_text: "Rights Statement"
+          scheduled_rights_review: "Scheduled Rights Review Date"
+          scheduled_rights_review_note: "Scheduled Rights Review Note"
+          sensitive_material: "Sensitive/Objectionable Material"
+          sensitive_material_note: "Sensitive/Objectionable Material Note"
+          staff_note: "Staff Note"
+          subject_geo: "Subject - Geographic Locations"
+          subject_names: "Subject - Names"
+          subject_time_periods: "Subject - Time Periods"
+          subject_topics: "Subject - Topics"
+          system_of_record_ID: "System Of Record ID"
+          technical_note: "Technical Note"
+          transfer_engineer: "Transfer Engineer"
+          title: "Title"
   hyrax:
     account_name: My Institution Account Id
     directory:
@@ -64,3 +202,114 @@ en:
         additional_rights_fields: "Additional rights fields"
         admin_metadata_heading: "Admin Metadata"
         additional_admin_fields: "Additional admin fields"
+  simple_form:
+    hints:
+      admin_set:
+        description: ''
+        title: ''
+      collection:
+        based_near: ''
+        contributor: ''
+        creator: ''
+        date_created: ''
+        description: ''
+        identifier: ''
+        keyword: ''
+        language: ''
+        license: ''
+        publisher: ''
+        related_url: ''
+        resource_type: ''
+        subject: ''
+        title: ''
+      collection_type:
+        allow_multiple_membership: ''
+        assigns_visibility: ''
+        assigns_workflow: ''
+        brandable: ''
+        description: ''
+        discoverable: ''
+        nestable: ''
+        require_membership: ''
+        sharable: ''
+        share_applies_to_new_works: ''
+        title: ''
+      defaults:
+        abstract: ''
+        access_right: ''
+        based_near: ''
+        contributor: ''
+        creator: ''
+        date_created: ''
+        description: ''
+        identifier: ''
+        keyword: ''
+        language: ''
+        license: ''
+        publisher: ''
+        related_url: ''
+        resource_type: ''
+        rights_notes: ''
+        subject: ''
+        title: ''
+    labels:
+      defaults:
+        abstract: "Description/Abstract"
+        access_right: "Access Restrictions"
+        administrative_unit: "Administrative Unit"
+        administrative_unit: "Administrative Unit"
+        author_notes: "Author Notes"
+        conference_dates: "Conference Dates"
+        conference_name: "Conference/Meeting Name"
+        contact_information: "Contact Information"
+        content_genre: "Genre"
+        content_type: "Format"
+        copyright_date: "Copyright Date"
+        creator: "Creator"
+        data_classification: "Data Classification"
+        data_collection_dates: "Data Collection Dates"
+        data_source_note: "Data Sources Note"
+        date_created: "Date Created"
+        date_digitized: "Date Digitized"
+        date_issued: "Date Issued"
+        data__producer: "Data Producer"
+        extent: "Extent/Dimensions"
+        final_published_version: "Final Published Version"
+        geographic_unit: "Geographic Level For Dataset"
+        grant: "Grant/Funding Agency"
+        grant_information: "Grant/Funding Information"
+        holding_repository: "Library"
+        internal_rights_note: "Internal Rights Note"
+        isbn: "ISBN"
+        issn: "ISSN"
+        legacy_ark: "Legacy ARK ID"
+        legacy_identifier: "Other Identifiers"
+        legacy_rights: "Legacy Rights Data"
+        local_call_number: "Call Number"
+        page_range_end: "Page Range - End"
+        page_range_start: "Page Range - Start"
+        parent_title: "Title of Parent Work"
+        place_of_production: "Place of Publication/Production"
+        primary_language: "Primary Language"
+        primary_repository_ID: "Persistent URL"
+        publisher_version: "Version of Publication"
+        re_use_license: "Re-Use License"
+        related_datasets: "Related Datasets"
+        related_material: "Related Material"
+        rights_documentation: "Rights Documentation URL"
+        rights_holder: "Rights Holder"
+        rights_statement: "Rights Statement - Controlled"
+        rights_statement_text: "Rights Statement"
+        scheduled_rights_review: "Scheduled Rights Review Date"
+        scheduled_rights_review_note: "Scheduled Rights Review Note"
+        sensitive_material: "Sensitive/Objectionable Material"
+        sensitive_material_note: "Sensitive/Objectionable Material Note"
+        staff_note: "Staff Note"
+        subject_geo: "Subject - Geographic Locations"
+        subject_names: "Subject - Names"
+        subject_time_periods: "Subject - Time Periods"
+        subject_topics: "Subject - Topics"
+        system_of_record_ID: "System Of Record ID"
+        technical_note: "Technical Note"
+        transfer_engineer: "Transfer Engineer"
+        title: "Title"

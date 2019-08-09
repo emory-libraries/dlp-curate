@@ -22,11 +22,86 @@ FactoryBot.define do
       work.save! if work.member_of_collections.present?
     end
 
-    title { ["Test title"] }
     visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+    title { ["Test title"] }
 
     after(:build) do |work, evaluator|
       work.apply_depositor_metadata(evaluator.user.user_key)
+    end
+
+    factory :work_with_full_metadata do
+      abstract { 'Abstract' }
+      access_right { ['true'] }
+      administrative_unit { 'Emory University Archives' }
+      author_notes { 'None found' }
+      conference_dates { '1995' }
+      conference_name { 'None' }
+      contact_information { 'Call here' }
+      content_genre { ['Photos'] }
+      content_type { 'media' }
+      contributor { ['Someone else'] }
+      copyright_date { '1922' }
+      creator { ['the author'] }
+      data_classification { ['open'] }
+      data_collection_dates { ['785'] }
+      data_producer { ['Megacorp'] }
+      data_source_note { ['Found materials'] }
+      date_created { '1992' }
+      date_digitized { '2102' }
+      date_issued { '1999' }
+      date_modified { '2023' }
+      date_uploaded { '2001' }
+      edition { 'first' }
+      extent { 'large' }
+      final_published_version { ['http://example.com'] }
+      geographic_unit { 'cm' }
+      grant { ['For five years'] }
+      grant_information { ['More grant information'] }
+      holding_repository { 'Emory Libraries' }
+      institution { 'Emory' }
+      internal_rights_note { 'check again please' }
+      isbn { '54321' }
+      issn { '123435' }
+      issue { '123' }
+      keywords { ['photos'] }
+      legacy_ark { ['25'] }
+      legacy_identifier { ['1'] }
+      legacy_rights { 'no' }
+      local_call_number { '1234' }
+      note { ['Many found'] }
+      page_range_end { '1' }
+      page_range_start { '0' }
+      parent_title { 'A parent title' }
+      place_of_production { 'Antartic' }
+      primary_language { 'Esperanto' }
+      publisher { 'emory' }
+      publisher_version { '1' }
+      re_use_license { 'true' }
+      related_datasets { ['http://example.com'] }
+      related_material { ['More stuff'] }
+      related_publications { ['https://example.com'] }
+      rights_documentation { 'https://example.com' }
+      rights_holder { ['Emory'] }
+      rights_statement { ['https://localhost'] }
+      rights_statement_text { ['rights statement'] }
+      scheduled_rights_review { 'true' }
+      scheduled_rights_review_note { 'check please' }
+      sensitive_material { 'false' }
+      sensitive_material_note { 'do not check' }
+      series_title { 'A series' }
+      sponsor { 'Another person' }
+      staff_note { ['Did not check'] }
+      subject_geo { ['Artic'] }
+      subject_names { ['Someone'] }
+      subject_time_periods { ['Neolithic'] }
+      subject_topics { ['Photographs'] }
+      sublocation { 'Emory 2' }
+      system_of_record_ID { '1' }
+      table_of_contents { '1. A Toc' }
+      technical_note { '1mb' }
+      transfer_engineer { 'yes' }
+      uniform_title { 'More uniform title' }
+      volume { '1234' }
     end
 
     factory :public_generic_work, aliases: [:public_work], traits: [:public]

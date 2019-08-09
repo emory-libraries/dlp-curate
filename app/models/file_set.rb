@@ -26,6 +26,10 @@ class FileSet < ActiveFedora::Base
     !primary?
   end
 
+  def original_file
+    preservation_master_file
+  end
+
   include ::Hyrax::FileSetBehavior
 
   directly_contains_one :preservation_master_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#PreservationMasterFile'), class_name: 'Hydra::PCDM::File'

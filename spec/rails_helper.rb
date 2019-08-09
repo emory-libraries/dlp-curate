@@ -23,7 +23,7 @@ require 'noid/rails/rspec'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -40,6 +40,15 @@ RSpec.configure do |config|
   config.before(:suite) do
     # Compile our JavaScript
     `bin/webpack`
+  end
+
+  config.before(:suite) do
+    ActiveJob::Base.queue_adapter = :test
+    ActiveFedora::Cleaner.clean!
+  end
+
+  config.before(clean: true) do
+    ActiveFedora::Cleaner.clean!
   end
 
   include Noid::Rails::RSpec
@@ -73,11 +82,12 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  # Selenium-webdriver with longer timeout
-  Capybara.register_driver :selenium_with_long_timeout do |app|
-    client = Selenium::WebDriver::Remote::Http::Default.new
-    client.read_timeout = 120
-    Capybara::Selenium::Driver.new(app, browser: :chrome, http_client: client)
+  config.before perform_jobs: true do
+    ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
   end
-  Capybara.javascript_driver = :selenium_with_long_timeout
+
+  config.after perform_jobs: true do
+    ActiveJob::Base.queue_adapter.filter                = nil
+    ActiveJob::Base.queue_adapter.perform_enqueued_jobs = false
+  end
 end

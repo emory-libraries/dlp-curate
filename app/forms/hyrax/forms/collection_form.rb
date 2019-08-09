@@ -8,7 +8,7 @@ module Hyrax
       # Used by the search builder
       attr_reader :scope
 
-      delegate :id, :depositor, :permissions, :human_readable_type, :member_ids, :nestable?, to: :model
+      delegate :id, :depositor, :permissions, :human_readable_type, :member_ids, :nestable?, :thumbnail_id, to: :model
 
       class_attribute :membership_service_class
 

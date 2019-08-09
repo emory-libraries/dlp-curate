@@ -1,0 +1,3 @@
+<% CurateGenericWorkAttributes.instance.attributes.each do |key| %>
+  <%= presenter.attribute_to_html(key.to_sym) %>
+<% end %>
