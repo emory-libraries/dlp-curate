@@ -16,6 +16,10 @@ AllCops:
 Style/FrozenStringLiteralComment:
     Enabled: false
 
+Metrics/AbcSize:
+  Exclude:
+    - app/importers/curate_collection_importer.rb
+
 Metrics/BlockLength:
     Exclude:
         - 'spec/**/*'
@@ -23,6 +27,7 @@ Metrics/BlockLength:
         - 'config/initializers/simple_form_bootstrap.rb'
         - 'app/controllers/catalog_controller.rb'
         - 'config/initializers/hyrax.rb'
+        - app/importers/curate_collection_importer.rb
 
 Metrics/ClassLength:
     Exclude:
@@ -36,6 +41,7 @@ Metrics/ClassLength:
 Metrics/MethodLength:
     Exclude:
         - app/uploaders/zizia/csv_manifest_validator.rb
+        - app/importers/curate_collection_importer.rb
 
 RSpec/ExampleLength:
     Exclude:
