@@ -76,6 +76,14 @@ namespace :deploy do
   end
 end
 
+namespace :deploy do
+  after :finishing, :create_migration_collections do
+    on roles(:app) do
+      execute "cd #{current_path} && RAILS_ENV=production bundle exec rake curate:collections:langmuir_setup"
+    end
+  end
+end
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
