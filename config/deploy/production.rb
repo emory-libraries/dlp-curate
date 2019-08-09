@@ -1,3 +1,4 @@
+set :stage, :PROD
 ec2_role :app,
   user: 'deploy',
   ssh_options: {

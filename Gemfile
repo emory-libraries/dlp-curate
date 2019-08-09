@@ -39,7 +39,7 @@ group :development do
   gem 'capistrano-bundler', '~> 1.3'
   gem 'capistrano-ext'
   gem 'capistrano-passenger'
-  gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2', ref: '2a495e5'
+  gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2', ref: '5e1d1b8'
   gem 'capistrano-rails'
   gem 'capistrano-rails-collection'
   gem 'capistrano-sidekiq', '~> 0.20.0'
