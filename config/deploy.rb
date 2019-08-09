@@ -24,6 +24,18 @@ set :ec2_contact_point, :private_ip
 set :ec2_project_tag, 'EmoryApplicationName'
 set :ec2_stages_tag, 'EmoryEnvironment'
 
+ec2_role :app,
+  user: 'deploy',
+  ssh_options: {
+    keys: "#{ENV['SSH_EC2_KEY_FILE']}",
+    forward_agent: true,
+    verify_host_key: :never,
+    }
+
+# Default value for local_user is ENV['USER']
+set :local_user, -> { `git config user.name`.chomp }
+
+
 # Rake::Task["sidekiq:stop"].clear_actions
 # Rake::Task["sidekiq:start"].clear_actions
 # Rake::Task["sidekiq:restart"].clear_actions
@@ -81,8 +93,6 @@ end
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
-# Default value for local_user is ENV['USER']
-set :local_user, -> { `git config user.name`.chomp }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
