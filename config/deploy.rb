@@ -36,6 +36,8 @@ ec2_role :app,
 # Default value for local_user is ENV['USER']
 set :local_user, -> { `git config user.name`.chomp }
 
+# Restart passenger after deploy is finished
+after :'deploy:finished', :'passenger:restart'
 
 # Rake::Task["sidekiq:stop"].clear_actions
 # Rake::Task["sidekiq:start"].clear_actions
