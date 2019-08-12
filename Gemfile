@@ -38,8 +38,8 @@ group :development do
   gem "capistrano", "~> 3.11", require: false
   gem 'capistrano-bundler', '~> 1.3'
   gem 'capistrano-ext'
+  gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2'
   gem 'capistrano-passenger'
-  gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2' 
   gem 'capistrano-rails'
   gem 'capistrano-rails-collection'
   gem 'capistrano-sidekiq', '~> 0.20.0'

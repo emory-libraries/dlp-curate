@@ -20,7 +20,7 @@ set :default_env,
     PASSENGER_INSTANCE_REGISTRY_DIR: '/var/run'
 
 set :ec2_profile, ENV['AWS_PROFILE'] || ENV['AWS_DEFAULT_PROFILE']
-set :ec2_region, %w{us-east-1}
+set :ec2_region, %w[us-east-1]
 set :ec2_contact_point, :private_ip
 set :ec2_project_tag, 'EmoryApplicationName'
 set :ec2_stages_tag, 'EmoryEnvironment'
