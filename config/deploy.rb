@@ -79,7 +79,7 @@ end
 namespace :deploy do
   after :finishing, :create_migration_collections do
     on roles(:app) do
-      execute "cd #{current_path} && RAILS_ENV=production bundle exec rake curate:collections:langmuir_setup"
+      execute "cd #{current_path} && RAILS_ENV=production bundle exec rake curate:collections:migration_setup"
     end
   end
 end

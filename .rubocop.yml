@@ -28,6 +28,7 @@ Metrics/BlockLength:
         - 'app/controllers/catalog_controller.rb'
         - 'config/initializers/hyrax.rb'
         - app/importers/curate_collection_importer.rb
+        - lib/tasks/curate_collections.rake
 
 Metrics/ClassLength:
     Exclude:
