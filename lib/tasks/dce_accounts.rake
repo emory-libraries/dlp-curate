@@ -8,8 +8,11 @@ namespace :dce do
     u.password = ENV['ADMIN_PASSWORD'] || 'password'
     u.save
     admin_role = Role.find_or_create_by(name: 'admin')
-    admin_role.users << u
-    admin_role.save
+    existing_admin_uids = admin_role.users.map(&:uid)
+    unless existing_admin_uids.include? 'admin'
+      admin_role.users << u
+      admin_role.save
+    end
 
     puts "Created DCE default admin account"
 
