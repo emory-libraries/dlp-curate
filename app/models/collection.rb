@@ -6,7 +6,7 @@ class Collection < ActiveFedora::Base
   self.indexer = CurateCollectionIndexer
 
   def assign_id
-    self.id = service.mint unless new_record?
+    service.mint
   end
 
   validates :related_material, url: true, if: -> { related_material.present? }
