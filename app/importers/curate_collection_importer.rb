@@ -19,6 +19,7 @@ class CurateCollectionImporter
       collection_attrs = row.to_hash
       local_call_number = collection_attrs["local_call_number"]
       collection = check_for_existing_collection(local_call_number)
+      collection.visibility = "open"
       collection.local_call_number = local_call_number
       collection.collection_type_gid = @library_collection_type_gid
       collection.title = multivalue_mapping(collection_attrs, "title")
