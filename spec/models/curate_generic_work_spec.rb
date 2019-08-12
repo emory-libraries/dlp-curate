@@ -24,7 +24,7 @@ RSpec.describe CurateGenericWork do
   context "noid template" do
     let(:id) { Noid::Rails::Service.new.mint }
     it "checks noid template" do
-      expect(id).to match(/cor.\d\d\d/)
+      expect(id).to match(/cor-\d\d\d/)
     end
   end
 
