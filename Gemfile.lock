@@ -1,7 +1,6 @@
 GIT
   remote: https://github.com/emory-libraries/cap-ec2.git
-  revision: 5e1d1b83716c46d86dc5fbed09fb747af6cd725d
-  ref: 5e1d1b8
+  revision: aa48832ed4a33944b8e5498b43af0a9c4866fca1
   specs:
     cap-ec2-emory (1.2.2)
       aws-sdk (>= 2.0)
