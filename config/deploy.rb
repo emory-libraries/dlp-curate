@@ -31,27 +31,6 @@ set :local_user, -> { `git config user.name`.chomp }
 # Restart passenger after deploy is finished
 after :'deploy:finished', :'passenger:restart'
 
-# Rake::Task["sidekiq:stop"].clear_actions
-# Rake::Task["sidekiq:start"].clear_actions
-# Rake::Task["sidekiq:restart"].clear_actions
-# namespace :sidekiq do
-#  task :stop do
-#    on roles(:app) do
-#      execute :sudo, :systemctl, :stop, :sidekiq
-#    end
-#  end
-#  task :start do
-#    on roles(:app) do
-#      execute :sudo, :systemctl, :start, :sidekiq
-#    end
-#  end
-#  task :restart do
-#    on roles(:app) do
-#      execute :sudo, :systemctl, :restart, :sidekiq
-#    end
-#  end
-# end
-
 # Restart apache on RedHat
 namespace :deploy do
   after :finishing, :restart_apache do
