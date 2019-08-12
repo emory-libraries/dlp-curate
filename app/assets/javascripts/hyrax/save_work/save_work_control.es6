@@ -150,15 +150,19 @@ export default class SaveWorkControl {
   validateMetadata() {
     if (this.requiredFields.areComplete) {
       let invalidDates = this.form.find('.error-validate').length
+      console.log(invalidDates)
       if (invalidDates < 1 || invalidDates === null) {
         this.requiredMetadata.check()  
         return true
+      }else{
+      this.requiredMetadata.uncheck()
+      return false
       }
+      
+    }else{
       this.requiredMetadata.uncheck()
       return false
     }
-    this.requiredMetadata.uncheck()
-    return false
   }
 
   // sets the files indicator to complete/incomplete
