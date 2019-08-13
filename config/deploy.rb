@@ -19,26 +19,17 @@ set :default_env,
     LD_LIBRARY_PATH:                 '$LD_LIBRARY_PATH:/opt/rh/rh-ruby25/root/usr/local/lib64:/opt/rh/rh-ruby25/root/usr/lib64',
     PASSENGER_INSTANCE_REGISTRY_DIR: '/var/run'
 
-# Rake::Task["sidekiq:stop"].clear_actions
-# Rake::Task["sidekiq:start"].clear_actions
-# Rake::Task["sidekiq:restart"].clear_actions
-# namespace :sidekiq do
-#  task :stop do
-#    on roles(:app) do
-#      execute :sudo, :systemctl, :stop, :sidekiq
-#    end
-#  end
-#  task :start do
-#    on roles(:app) do
-#      execute :sudo, :systemctl, :start, :sidekiq
-#    end
-#  end
-#  task :restart do
-#    on roles(:app) do
-#      execute :sudo, :systemctl, :restart, :sidekiq
-#    end
-#  end
-# end
+set :ec2_profile, ENV['AWS_PROFILE'] || ENV['AWS_DEFAULT_PROFILE']
+set :ec2_region, %w[us-east-1]
+set :ec2_contact_point, :private_ip
+set :ec2_project_tag, 'EmoryApplicationName'
+set :ec2_stages_tag, 'EmoryEnvironment'
+
+# Default value for local_user is ENV['USER']
+set :local_user, -> { `git config user.name`.chomp }
+
+# Restart passenger after deploy is finished
+after :'deploy:finished', :'passenger:restart'
 
 # Restart apache on RedHat
 namespace :deploy do
@@ -108,9 +99,6 @@ end
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
-
-# Default value for local_user is ENV['USER']
-# set :local_user, -> { `git config user.name`.chomp }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
