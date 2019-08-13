@@ -12,9 +12,17 @@
     "jquery-validation": "^1.19.0",
     "popper.js": "^1.15.0",
     "turbolinks": "^5.2.0",
+    "universalviewer": "^3.0.16",
     "webpack": "^4.0.0"
   },
   "devDependencies": {
+    "shx": "^0.3.2",
     "webpack-dev-server": "^3.3.1"
+  },
+  "scripts": {
+    "preinstall": "rm -rf ./public/uv",
+    "postinstall": "yarn run uv-install && yarn run uv-config",
+    "uv-install": "shx cp -r ./node_modules/universalviewer/uv ./public/",
+    "uv-config": "shx cp ./config/uv/uv.html ./public/uv/uv.html & shx cp ./config/uv/uv-config.json ./public/uv/"
   }
 }
