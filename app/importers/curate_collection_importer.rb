@@ -44,6 +44,7 @@ class CurateCollectionImporter
       collection.system_of_record_ID = collection_attrs["system_of_record_ID"]
       collection.legacy_ark = multivalue_mapping(collection_attrs, "legacy_ark")
       collection.primary_repository_ID = collection_attrs["primary_repository_ID"]
+      collection.finding_aid_link = collection_attrs["finding_aid_link"]
       collection.save
     end
   end
