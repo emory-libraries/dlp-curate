@@ -29,7 +29,7 @@ RSpec.feature 'Create a collection' do
       visit("dashboard/collections/new?collection_type_id=1")
 
       click_link('Additional fields')
-      fill_in "collection[related_material]", with: "teststring"
+      fill_in "collection[finding_aid_link]", with: "teststring"
 
       click_on('Save')
 
