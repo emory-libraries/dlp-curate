@@ -22,6 +22,8 @@ RSpec.describe 'Creating a collection', :perform_jobs, clean: true, type: :syste
       fill_in 'Creator', with: 'creator'
       fill_in 'Description/Abstract', with: 'test'
       fill_in 'Persistent URL', with: 'https://example.org/collection'
+      click_link('Additional fields')
+      fill_in 'Finding aid link', with: 'https://example.org/collection'
       click_on 'Save'
       expect(page).to have_content 'Collection was successfully created'
     end

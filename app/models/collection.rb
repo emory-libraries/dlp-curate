@@ -36,7 +36,9 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :finding_aid_link, predicate: 'http://metadata.emory.edu/vocab/cor-terms#findingAid', multiple: false
+  property :finding_aid_link, predicate: 'http://metadata.emory.edu/vocab/cor-terms#findingAid', multiple: false do |index|
+    index.as :displayable
+  end
 
   property :institution, predicate: 'http://rdaregistry.info/Elements/u/P60402', multiple: false do |index|
     index.as :stored_searchable
