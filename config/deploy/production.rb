@@ -1,5 +1,5 @@
 set :stage, :PROD
-ec2_role :app,
+ec2_role [:web, :app, :db, :redhatapp],
   user: 'deploy',
   ssh_options: {
     keys: ENV['SSH_EC2_KEY_FILE'],
