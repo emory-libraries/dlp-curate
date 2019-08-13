@@ -9,7 +9,7 @@ class Collection < ActiveFedora::Base
     service.mint
   end
 
-  validates :related_material, url: true, if: -> { related_material.present? }
+  validates :finding_aid_link, url: true, if: -> { finding_aid_link.present? }
   validates :rights_documentation, url: true, if: -> { rights_documentation.present? }
 
   property :holding_repository, predicate: 'http://id.loc.gov/vocabulary/relators/rps' do |index|
@@ -36,7 +36,7 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :related_material, predicate: 'http://metadata.emory.edu/vocab/cor-terms#findingAid', multiple: false
+  property :finding_aid_link, predicate: 'http://metadata.emory.edu/vocab/cor-terms#findingAid', multiple: false
 
   property :institution, predicate: 'http://rdaregistry.info/Elements/u/P60402', multiple: false do |index|
     index.as :stored_searchable

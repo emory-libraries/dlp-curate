@@ -117,7 +117,7 @@ FactoryBot.define do
     contributor { ['Someone else'] }
     abstract { 'A detailed abstract' }
     primary_language { 'English' }
-    related_material { 'https://my-finding-aid.com' }
+    finding_aid_link { 'https://my-finding-aid.com' }
     institution { 'Emory' }
     local_call_number { '90210' }
     keywords { ['test collection'] }

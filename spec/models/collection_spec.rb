@@ -109,21 +109,21 @@ RSpec.describe Collection do
     end
   end
 
-  describe "#related_material" do
+  describe "#finding_aid_link" do
     subject { described_class.new }
-    let(:related_material) { 'Free-text notes' }
+    let(:finding_aid_link) { 'http://findingaid.edu' }
 
     context "with new collection" do
-      its(:related_material) { is_expected.to be_falsey }
+      its(:finding_aid_link) { is_expected.to be_falsey }
     end
 
-    context "with a collection that has a related_material" do
+    context "with a collection that has a finding_aid_link" do
       subject do
         described_class.create.tap do |col|
-          col.related_material = related_material
+          col.finding_aid_link = finding_aid_link
         end
       end
-      its(:related_material) { is_expected.to eq related_material }
+      its(:finding_aid_link) { is_expected.to eq finding_aid_link }
     end
   end
 
