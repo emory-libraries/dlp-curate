@@ -51,5 +51,6 @@ RSpec.describe CurateCollectionImporter, :clean do
     expect(langmuir_collection.system_of_record_ID).to include("Fake System of Record ID")
     expect(langmuir_collection.legacy_ark).to include("Fake legacy ark")
     expect(langmuir_collection.primary_repository_ID).to include("Fake primary repository ID")
+    expect(langmuir_collection.finding_aid_link).to include("http://findingaid.org/langmuir")
   end
 end

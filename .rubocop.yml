@@ -43,6 +43,7 @@ Metrics/MethodLength:
     Exclude:
         - app/uploaders/zizia/csv_manifest_validator.rb
         - app/importers/curate_collection_importer.rb
+        - app/presenters/hyrax/curate_collection_presenter.rb
 
 RSpec/ExampleLength:
     Exclude:

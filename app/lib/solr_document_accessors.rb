@@ -9,5 +9,9 @@ module SolrDocumentAccessors
     define_method(method.to_sym) do
       self["#{method}_tesim"]
     end
+
+    def finding_aid_link
+      self["finding_aid_link_ssm"]
+    end
   end
 end

@@ -1,5 +1,7 @@
 module Curate
   class CollectionType < Hyrax::CollectionType
+    USER_COLLECTION_DEFAULT_TITLE = 'Library Collection'.freeze
+
     # If a Curate::CollectionType already exists, ensure it adheres to expectations and return it.
     # Otherwise, make a new one and return that.
     def self.find_or_create_library_collection_type
