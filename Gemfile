@@ -35,10 +35,10 @@ gem 'webpacker', '~> 4.x'
 gem 'zizia', '~> 2.1.0.alpha.07'
 
 group :development do
+  gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2'
   gem "capistrano", "~> 3.11", require: false
   gem 'capistrano-bundler', '~> 1.3'
   gem 'capistrano-ext'
-  gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2'
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'capistrano-rails-collection'
