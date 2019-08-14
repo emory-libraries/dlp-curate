@@ -51,3 +51,7 @@ RSpec/ExampleLength:
 
 RSpec/MessageSpies:
     EnforcedStyle: receive
+
+RSpec/NestedGroups:
+    Exclude:
+        - 'spec/controllers/hyrax/downloads_controller_spec.rb'

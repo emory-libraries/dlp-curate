@@ -90,4 +90,6 @@ RSpec.configure do |config|
     ActiveJob::Base.queue_adapter.filter                = nil
     ActiveJob::Base.queue_adapter.perform_enqueued_jobs = false
   end
+
+  config.include Devise::Test::ControllerHelpers, type: :controller
 end

@@ -1,5 +1,9 @@
 <tr>
-  <td><%= file.file_name.first %></td>
+  <td><%= link_to file.file_name.first,
+                  hyrax.download_path(file_set, use: use.downcase.gsub(' ','_')),
+                  data: { label: file_set.id },
+                  target: :_blank,
+                  id: "file_download" %></td>
   <td><%= use %></td>
   <td><%= Date.parse(file.create_date.to_s) %></td>
-</tr> 
+</tr>
