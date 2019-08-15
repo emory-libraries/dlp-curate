@@ -75,6 +75,8 @@ $('#add').click(function() {
 });
 $(document).on("click", ".upload", function() {
   "use strict";
+  event.stopPropagation();
+  event.stopImmediatePropagation();
   event.preventDefault();
   var i = this.id.match(/\d+/);
   var formData = new FormData();
@@ -94,40 +96,42 @@ $(document).on("click", ".upload", function() {
   formData.append("fileset_use", fs_use);
   
   if(($("#pmf" + i)[0].files.length > 0)) {
-    $.ajax({
-      url: '/uploads/',
-      type: 'POST',
-      processData: false,
-      contentType: false,
-      dataType: 'json',
-      data: formData,
-      success: function(data) {
-        var uf = data.files[0].id;
-        $("#message" + i).html("Files uploaded");
-        var wrapper = (".uploaded_files");
-        $(wrapper).append("<input id='uf"+ i +"' type='hidden' name='uploaded_files[]' value='"+ uf +"' />");
-        $('li#required-files').removeClass('incomplete').addClass('complete');
-        $('input#agreement').prop("checked", false);
-        $('li#required-agreement').removeClass('complete').addClass('incomplete');
-        $('input#with_files_submit').prop("disabled", true);
-        $("#upload" + i).prop("disabled", true);
-      },
-      xhr: function () {
-        var myXhr = $.ajaxSettings.xhr();
-        if (myXhr.upload) {
-          // For handling the progress of the upload
-          myXhr.upload.addEventListener('progress', function (e) {
-            if (e.lengthComputable) {
-              $("#progress" + i).attr({
-                value: e.loaded,
-                max: e.total,
-              });
-            }
-          }, false);
+    if (($("#uf" + i).length < 1)) {
+      $.ajax({
+        url: '/uploads/',
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        data: formData,
+        success: function(data) {
+          var uf = data.files[0].id;
+          $("#message" + i).html("Files uploaded");
+          var wrapper = (".uploaded_files");
+          $(wrapper).append("<input id='uf"+ i +"' type='hidden' name='uploaded_files[]' value='"+ uf +"' />");
+          $('li#required-files').removeClass('incomplete').addClass('complete');
+          $('input#agreement').prop("checked", false);
+          $('li#required-agreement').removeClass('complete').addClass('incomplete');
+          $('input#with_files_submit').prop("disabled", true);
+          $("#upload" + i).prop("disabled", true);
+        },
+        xhr: function () {
+          var myXhr = $.ajaxSettings.xhr();
+          if (myXhr.upload) {
+            // For handling the progress of the upload
+            myXhr.upload.addEventListener('progress', function (e) {
+              if (e.lengthComputable) {
+                $("#progress" + i).attr({
+                  value: e.loaded,
+                  max: e.total,
+                });
+              }
+            }, false);
+          }
+          return myXhr;
         }
-        return myXhr;
-      }
-    });
+      });
+    }
   }
   else {
     $("#message" + i).html("<b style='color: red;'>Preservation Master File cannot be empty</b>");

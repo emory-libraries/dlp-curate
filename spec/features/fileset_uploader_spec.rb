@@ -35,6 +35,7 @@ RSpec.feature 'Fileset upload' do
       expect(find('#message0').text).to eq 'Files uploaded'
       expect(page).to have_css('li#required-files.complete')
       expect(page).to have_css('#upload0:disabled')
+      expect(page).to have_css('input#uf0', visible: false, count: 1)
 
       uf = page.find('input#uf0', visible: false).value
       file_id = Hyrax::UploadedFile.find(uf)
@@ -46,6 +47,8 @@ RSpec.feature 'Fileset upload' do
       expect(file_id.extracted_text.file.filename).to eq 'image.jp2'
       expect(file_id.transcript.file.filename).to eq 'world.png'
       expect(file_id.fileset_use).to eq 'primary'
+
+      expect(Hyrax::UploadedFile.count).to eq(1)
     end
 
     scenario 'with multiple filesets' do
@@ -56,6 +59,7 @@ RSpec.feature 'Fileset upload' do
       expect(find('#message0').text).to eq 'Files uploaded'
       expect(page).to have_css('li#required-files.complete')
       expect(page).to have_css('#upload0:disabled')
+      expect(page).to have_css('input#uf0', visible: false, count: 1)
 
       click_on '+ Add Fileset'
       within('.fileset-append') do
@@ -68,6 +72,7 @@ RSpec.feature 'Fileset upload' do
       wait_for_ajax
       expect(find('#message1').text).to eq 'Files uploaded'
       expect(page).to have_css('#upload1:disabled')
+      expect(page).to have_css('input#uf1', visible: false, count: 1)
 
       uf = page.find('input#uf0', visible: false).value
       file_id = Hyrax::UploadedFile.find(uf)
@@ -88,6 +93,8 @@ RSpec.feature 'Fileset upload' do
       expect(file_id1.fileset_use).to eq 'supplementary'
 
       expect(page).to have_selector("input[name='uploaded_files[]'", visible: false, count: 2)
+
+      expect(Hyrax::UploadedFile.count).to eq(2)
     end
 
     scenario 'without PMF for second filset' do
@@ -110,6 +117,8 @@ RSpec.feature 'Fileset upload' do
       expect(page).to have_css('li#required-files.complete')
 
       expect(page).to have_selector("input[name='uploaded_files[]']", visible: false, count: 2)
+
+      expect(Hyrax::UploadedFile.count).to eq(2)
     end
   end
 end
