@@ -12,7 +12,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
                          :subject_names, :subject_geo, :subject_time_periods, :note,
                          :rights_documentation, :sensitive_material, :internal_rights_note,
                          :contact_information, :staff_note, :system_of_record_ID, :legacy_ark,
-                         :primary_repository_ID, :visibility]
+                         :visibility]
     end
   end
 
@@ -24,7 +24,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
   describe "#primary_terms" do
     subject { form.primary_terms }
 
-    it { is_expected.to eq([:title, :holding_repository, :creator, :abstract, :primary_repository_ID]) }
+    it { is_expected.to eq([:title, :holding_repository, :creator, :abstract]) }
   end
 
   describe "#secondary_terms" do
@@ -92,7 +92,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
                          :abstract, :primary_language, :finding_aid_link, :institution, :local_call_number, { keywords: [] },
                          { subject_topics: [] }, { subject_names: [] }, { subject_geo: [] }, { subject_time_periods: [] },
                          { note: [] }, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
-                         { staff_note: [] }, :system_of_record_ID, { legacy_ark: [] }, :primary_repository_ID, :visibility,
+                         { staff_note: [] }, :system_of_record_ID, { legacy_ark: [] }, :visibility,
                          { permissions_attributes: [:type, :name, :access, :id, :_destroy] }]
     end
   end
