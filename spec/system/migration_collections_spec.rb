@@ -26,7 +26,7 @@ RSpec.describe 'Depositing items into a migration collection', :perform_jobs, :c
       hpta_count = Hyrax::PermissionTemplateAccess.where(
         permission_template_id: hpt.id,
         agent_type: "group",
-        agent_id: "Repository Administrators",
+        agent_id: "admin",
         access: "manage"
       ).count
       expect(hpta_count).to eq 1
