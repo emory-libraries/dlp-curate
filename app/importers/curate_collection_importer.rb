@@ -46,39 +46,8 @@ class CurateCollectionImporter
       collection.primary_repository_ID = collection_attrs["primary_repository_ID"]
       collection.finding_aid_link = collection_attrs["finding_aid_link"]
       collection.save
-      add_repository_administrators_as_managers(collection)
+      CollectionPermissionEnsurer.new(collection: collection, access_permissions: ['manage', 'deposit'])
     end
-  end
-
-  def find_or_create_permission_template(collection)
-    existing_hpt = Hyrax::PermissionTemplate.where(source_id: collection.id).try(:first)
-    return existing_hpt if existing_hpt
-    hpt = Hyrax::PermissionTemplate.new
-    hpt.source_id = collection.id
-    hpt.save
-    hpt
-  end
-
-  def repo_admins_have_manage_rights?(hpt)
-    existing_hpta = Hyrax::PermissionTemplateAccess.where(
-      permission_template_id: hpt.id,
-      agent_type: "group",
-      agent_id: "Repository Administrators",
-      access: "manage"
-    ).count
-    return true if existing_hpta.positive?
-    false
-  end
-
-  def add_repository_administrators_as_managers(collection)
-    hpt = find_or_create_permission_template(collection)
-    return if repo_admins_have_manage_rights?(hpt)
-    hpta = Hyrax::PermissionTemplateAccess.new
-    hpta.permission_template_id = hpt.id
-    hpta.agent_type = "group"
-    hpta.agent_id = "Repository Administrators"
-    hpta.access = "manage"
-    hpta.save
   end
 
   # Return an array of values. Use pipe (|) as the delimiter for values.
