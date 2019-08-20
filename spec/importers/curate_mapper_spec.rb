@@ -9,8 +9,9 @@ RSpec.describe CurateMapper do
     {
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library|Some other library",
       "content_type" => 'still image',
+      "date_created" => "1985-11-01",
       "title" => "what an awesome title",
-      "visibility" => "Emory Network",
+      "visibility" => "Emory Network"
     }
   end
 
@@ -26,21 +27,6 @@ RSpec.describe CurateMapper do
         "Stuart A. Rose Manuscript, Archives and Rare Book Library",
         "Some other library"
       )
-    end
-  end
-
-  context "#visibility" do
-    context "Emory Network" do
-      let(:metadata) do
-        {
-          "title" => "my title",
-          "content_type" => "http://id.loc.gov/vocabulary/resourceTypes/img",
-          "visibility" => "Emory Network"
-        }
-      end
-      it "gives authenticated" do
-        expect(mapper.visibility).to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-      end
     end
   end
 
@@ -80,9 +66,26 @@ RSpec.describe CurateMapper do
     end
   end
 
-  it "maps the required title field" do
-    expect(mapper.map_field(:title))
-      .to contain_exactly("what an awesome title")
+  context "#title" do
+    it "maps the required title field" do
+      expect(mapper.map_field(:title))
+        .to contain_exactly("what an awesome title")
+    end
+  end
+
+  context "#visibility" do
+    context "Emory Network" do
+      let(:metadata) do
+        {
+          "title" => "my title",
+          "content_type" => "http://id.loc.gov/vocabulary/resourceTypes/img",
+          "visibility" => "Emory Network"
+        }
+      end
+      it "gives authenticated" do
+        expect(mapper.visibility).to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+      end
+    end
   end
 
   describe '#fields' do
