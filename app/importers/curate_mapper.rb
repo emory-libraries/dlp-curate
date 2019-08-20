@@ -7,6 +7,8 @@ class CurateMapper < Zizia::HashMapper
     administrative_unit: "administrative_unit",
     content_type: "content_type",
     date_created: "date_created",
+    rights_statement_text: "rights_statement_text",
+    rights_statement: "rights_statement",
     title: "title",
     visibility: "visibility"
   }.freeze
@@ -50,6 +52,14 @@ class CurateMapper < Zizia::HashMapper
       'open' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       'public' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     }.freeze
+  end
+
+  def rights_statement
+    active_terms = Qa::Authorities::Local.subauthority_for('rights_statements').all.select { |term| term[:active] }
+    csv_term = @metadata["rights_statement"]
+    valid_uri_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
+    return csv_term if valid_uri_option
+    raise "Invalid rights_statement value: #{csv_term}"
   end
 
   # If we get a URI for content_type, check that it matches a URI in the questioning

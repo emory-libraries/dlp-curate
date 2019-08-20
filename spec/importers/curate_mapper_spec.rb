@@ -10,6 +10,8 @@ RSpec.describe CurateMapper do
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library|Some other library",
       "content_type" => 'still image',
       "date_created" => "1985-11-01",
+      "rights_statement_text" => "Emory University does not control copyright for this image.",
+      "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
       "title" => "what an awesome title",
       "visibility" => "Emory Network"
     }
@@ -70,6 +72,29 @@ RSpec.describe CurateMapper do
     it "maps the date_created field" do
       expect(mapper.date_created)
         .to contain_exactly("1985-11-01")
+    end
+  end
+
+  context "#rights_statement_text" do
+    it "maps the rights_statement_text field" do
+      expect(mapper.rights_statement_text)
+        .to contain_exactly("Emory University does not control copyright for this image.")
+    end
+  end
+
+  context "#rights_statement" do
+    it "maps the rights_statement field when it's valid" do
+      expect(mapper.rights_statement).to eq "http://rightsstatements.org/vocab/InC/1.0/"
+    end
+    context "invalid rights statement" do
+      let(:metadata) do
+        {
+          "rights_statement" => "http://badrightsstatements.org/vocab/InC/1.0/"
+        }
+      end
+      it "raises an exception when it isn't valid" do
+        expect { mapper.rights_statement }.to raise_error RuntimeError
+      end
     end
   end
 
