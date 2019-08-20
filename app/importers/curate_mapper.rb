@@ -8,6 +8,7 @@ class CurateMapper < Zizia::HashMapper
     content_type: "content_type",
     data_classification: "data_classification",
     date_created: "date_created",
+    holding_repository: "holding_repository",
     rights_statement_text: "rights_statement_text",
     rights_statement: "rights_statement",
     title: "title",
@@ -99,7 +100,7 @@ class CurateMapper < Zizia::HashMapper
     csv_term = @metadata["content_type"]
     # Check whether this is a uri that matches a valid URI option
     valid_uri_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
-    return csv_term if valid_uri_option
+    return valid_uri_option["id"] if valid_uri_option && valid_uri_option["id"]
     # Check whether this is a string that can be easily matched to a valid URI
     matching_term = active_terms.select { |s| s["label"].downcase.strip == csv_term.downcase.strip }.first
     raise "Invalid resource_type value: #{csv_term}" unless matching_term
@@ -107,7 +108,7 @@ class CurateMapper < Zizia::HashMapper
   end
 
   def singular_fields
-    ["date_created"]
+    ["date_created", "holding_repository"]
   end
 
   def map_field(name)

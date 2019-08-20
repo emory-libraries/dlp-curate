@@ -11,6 +11,7 @@ RSpec.describe CurateMapper do
       "content_type" => 'still image',
       "data_classification" => "Confidential|Internal",
       "date_created" => "1985-11-01",
+      "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
       "title" => "what an awesome title",
@@ -75,6 +76,12 @@ RSpec.describe CurateMapper do
   context "#date_created" do
     it "maps the date_created field" do
       expect(mapper.date_created).to eq "1985-11-01"
+    end
+  end
+
+  context "#holding_repository" do
+    it "maps the holding_repository field" do
+      expect(mapper.holding_repository).to eq "Stuart A. Rose Manuscript, Archives and Rare Book Library"
     end
   end
 
