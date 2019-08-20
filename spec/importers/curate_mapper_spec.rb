@@ -7,9 +7,10 @@ RSpec.describe CurateMapper do
 
   let(:metadata) do
     {
-      "title" => "what an awesome title", # title
+      "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library|Some other library",
       "content_type" => 'still image',
-      "visibility" => "Emory Network"
+      "title" => "what an awesome title",
+      "visibility" => "Emory Network",
     }
   end
 
@@ -17,6 +18,15 @@ RSpec.describe CurateMapper do
 
   it 'is configured to be the zizia metadata mapper' do
     expect(Zizia.config.metadata_mapper_class).to eq described_class
+  end
+
+  context "#administrative_unit" do
+    it "maps directly" do
+      expect(mapper.administrative_unit).to contain_exactly(
+        "Stuart A. Rose Manuscript, Archives and Rare Book Library",
+        "Some other library"
+      )
+    end
   end
 
   context "#visibility" do

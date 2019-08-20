@@ -4,12 +4,13 @@ class CurateMapper < Zizia::HashMapper
   attr_reader :row_number
 
   CURATE_TERMS_MAP = {
-    title: "title",
+    administrative_unit: "administrative_unit",
     content_type: "content_type",
+    title: "title",
     visibility: "visibility"
   }.freeze
 
-  DELIMITER = '|~|'
+  DELIMITER = '|'
 
   def initialize(attributes = {})
     @row_number = attributes[:row_number]
