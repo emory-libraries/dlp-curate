@@ -7,9 +7,9 @@ RSpec.describe CurateMapper do
 
   let(:metadata) do
     {
-      "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library|Some other library",
+      "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "content_type" => 'still image',
-      "data_classification" => "Confidential",
+      "data_classification" => "Confidential|Internal",
       "date_created" => "1985-11-01",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
@@ -25,11 +25,8 @@ RSpec.describe CurateMapper do
   end
 
   context "#administrative_unit" do
-    it "maps directly" do
-      expect(mapper.administrative_unit).to contain_exactly(
-        "Stuart A. Rose Manuscript, Archives and Rare Book Library",
-        "Some other library"
-      )
+    it "does its best to match the configured controlled vocabulary term" do
+      expect(mapper.administrative_unit).to eq "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
     end
   end
 
@@ -71,14 +68,13 @@ RSpec.describe CurateMapper do
 
   context "#data_classification" do
     it "maps the data_classification field" do
-      expect(mapper.data_classification).to eq "Confidential"
+      expect(mapper.data_classification).to contain_exactly("Confidential", "Internal")
     end
   end
 
   context "#date_created" do
     it "maps the date_created field" do
-      expect(mapper.date_created)
-        .to contain_exactly("1985-11-01")
+      expect(mapper.date_created).to eq "1985-11-01"
     end
   end
 

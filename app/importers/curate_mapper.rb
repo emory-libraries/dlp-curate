@@ -55,12 +55,31 @@ class CurateMapper < Zizia::HashMapper
     }.freeze
   end
 
+  # Normalize the value coming in because there are subtle mis-matches against the expected controlled
+  # vocabulary term. E.g.,
+  # "Stuart A. Rose Manuscript, Archives and Rare Book Library" vs
+  # "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
+  def administrative_unit
+    active_terms = Qa::Authorities::Local.subauthority_for('administrative_unit').all.select { |term| term[:active] }
+    csv_term = @metadata["administrative_unit"]
+    normalized_csv_term = csv_term.downcase.gsub(/[^a-z0-9\s]/i, '')
+    valid_option = active_terms.select { |s| s["id"].downcase.gsub(/[^a-z0-9\s]/i, '') == normalized_csv_term }.try(:first)
+    return valid_option["id"] if valid_option
+    raise "Invalid administrative_unit value: #{csv_term}"
+  end
+
+  # Iterate through all values for data_classification and ensure they are all
+  # valid options according to Questioning Authority
   def data_classification
+    csv_terms = @metadata["data_classification"]&.split(DELIMITER)
     active_terms = Qa::Authorities::Local.subauthority_for('data_classification').all.select { |term| term[:active] }
-    csv_term = @metadata["data_classification"]
-    valid_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
-    return csv_term if valid_option
-    raise "Invalid data_classification value: #{csv_term}"
+    data_classification_values = []
+    csv_terms.each do |c|
+      valid_option = active_terms.select { |s| s["id"] == c }.try(:first)
+      raise "Invalid data_classification value: #{c}" unless valid_option
+      data_classification_values << valid_option["id"]
+    end
+    data_classification_values
   end
 
   def rights_statement
@@ -87,8 +106,13 @@ class CurateMapper < Zizia::HashMapper
     matching_term["id"]
   end
 
+  def singular_fields
+    ["date_created"]
+  end
+
   def map_field(name)
     return unless CURATE_TERMS_MAP.keys.include?(name)
+    return @metadata[name.to_s] if singular_fields.include?(name.to_s)
 
     Array.wrap(CURATE_TERMS_MAP[name]).map do |source_field|
       metadata[source_field]&.split(DELIMITER)
