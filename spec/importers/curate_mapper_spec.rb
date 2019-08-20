@@ -19,7 +19,22 @@ RSpec.describe CurateMapper do
     expect(Zizia.config.metadata_mapper_class).to eq described_class
   end
 
-  context "content_type" do
+  context "#visibility" do
+    context "Emory Network" do
+      let(:metadata) do
+        {
+          "title" => "my title",
+          "content_type" => "http://id.loc.gov/vocabulary/resourceTypes/img",
+          "visibility" => "Emory Network"
+        }
+      end
+      it "gives authenticated" do
+        expect(mapper.visibility).to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+      end
+    end
+  end
+
+  context "#content_type" do
     context "when the string matches exactly" do
       let(:metadata) do
         {
