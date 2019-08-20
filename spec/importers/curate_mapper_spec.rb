@@ -8,7 +8,8 @@ RSpec.describe CurateMapper do
   let(:metadata) do
     {
       "title" => "what an awesome title", # title
-      "content_type" => 'still image'
+      "content_type" => 'still image',
+      "visibility" => "Emory Network"
     }
   end
 
@@ -38,6 +39,17 @@ RSpec.describe CurateMapper do
         }
       end
       it "maps content_type to a uri" do
+        expect(mapper.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
+      end
+    end
+    context "when the CSV has a uri instead of a string" do
+      let(:metadata) do
+        {
+          "title" => "my title",
+          "content_type" => 'http://id.loc.gov/vocabulary/resourceTypes/img'
+        }
+      end
+      it "maps content_type to the uri" do
         expect(mapper.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       end
     end
