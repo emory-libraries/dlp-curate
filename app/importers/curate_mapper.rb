@@ -6,6 +6,7 @@ class CurateMapper < Zizia::HashMapper
   CURATE_TERMS_MAP = {
     administrative_unit: "administrative_unit",
     content_type: "content_type",
+    data_classification: "data_classification",
     date_created: "date_created",
     rights_statement_text: "rights_statement_text",
     rights_statement: "rights_statement",
@@ -52,6 +53,14 @@ class CurateMapper < Zizia::HashMapper
       'open' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       'public' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     }.freeze
+  end
+
+  def data_classification
+    active_terms = Qa::Authorities::Local.subauthority_for('data_classification').all.select { |term| term[:active] }
+    csv_term = @metadata["data_classification"]
+    valid_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
+    return csv_term if valid_option
+    raise "Invalid data_classification value: #{csv_term}"
   end
 
   def rights_statement

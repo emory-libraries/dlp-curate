@@ -9,6 +9,7 @@ RSpec.describe CurateMapper do
     {
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library|Some other library",
       "content_type" => 'still image',
+      "data_classification" => "Confidential",
       "date_created" => "1985-11-01",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
@@ -65,6 +66,12 @@ RSpec.describe CurateMapper do
       it "maps content_type to the uri" do
         expect(mapper.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       end
+    end
+  end
+
+  context "#data_classification" do
+    it "maps the data_classification field" do
+      expect(mapper.data_classification).to eq "Confidential"
     end
   end
 
