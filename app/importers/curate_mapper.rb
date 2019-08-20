@@ -6,6 +6,7 @@ class CurateMapper < Zizia::HashMapper
   CURATE_TERMS_MAP = {
     administrative_unit: "administrative_unit",
     content_type: "content_type",
+    date_created: "date_created",
     title: "title",
     visibility: "visibility"
   }.freeze

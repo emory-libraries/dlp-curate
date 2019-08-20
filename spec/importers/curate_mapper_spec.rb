@@ -66,6 +66,13 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#date_created" do
+    it "maps the date_created field" do
+      expect(mapper.date_created)
+        .to contain_exactly("1985-11-01")
+    end
+  end
+
   context "#title" do
     it "maps the required title field" do
       expect(mapper.map_field(:title))
