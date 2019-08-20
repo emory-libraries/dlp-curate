@@ -49,11 +49,17 @@ class CurateMapper < Zizia::HashMapper
     }.freeze
   end
 
-  # Translate a content_type string in the CSV (e.g., 'still image') into its
-  # corresponding controlled vocabulary uri as defined by Questioning Authority
+  # If we get a URI for content_type, check that it matches a URI in the questioning
+  # authority config, and return it if so.
+  # If we get a string for content_type, (e.g., 'still image'), transform it into its
+  # corresponding Questioning Authority controlled vocabulary uri.
   def content_type
     active_terms = Qa::Authorities::Local.subauthority_for('resource_types').all.select { |term| term[:active] }
     csv_term = @metadata["content_type"]
+    # Check whether this is a uri that matches a valid URI option
+    valid_uri_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
+    return csv_term if valid_uri_option
+    # Check whether this is a string that can be easily matched to a valid URI
     matching_term = active_terms.select { |s| s["label"].downcase.strip == csv_term.downcase.strip }.first
     raise "Invalid resource_type value: #{csv_term}" unless matching_term
     matching_term["id"]
