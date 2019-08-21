@@ -20,6 +20,7 @@ RSpec.describe CurateMapper do
       "legacy_ark" => "ark://abc/123",
       "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
       "note" => "This is a note.",
+      "place_of_production" => "London",
       "primary_language" => "English",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
@@ -133,6 +134,12 @@ RSpec.describe CurateMapper do
   context "#legacy_identifier" do
     it "maps the legacy_identifier field" do
       expect(mapper.legacy_identifier).to contain_exactly("dams:152815", "MSS1218_B001_I002")
+    end
+  end
+
+  context "#place_of_production" do
+    it "maps the place_of_production field" do
+      expect(mapper.place_of_production).to eq "London"
     end
   end
 
