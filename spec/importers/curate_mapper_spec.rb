@@ -7,6 +7,7 @@ RSpec.describe CurateMapper do
 
   let(:metadata) do
     {
+      "abstract" => "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier",
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "content_type" => 'still image',
       "data_classification" => "Confidential|Internal",
@@ -24,6 +25,12 @@ RSpec.describe CurateMapper do
 
   it 'is configured to be the zizia metadata mapper' do
     expect(Zizia.config.metadata_mapper_class).to eq described_class
+  end
+
+  context "#abstract" do
+    it "maps the abstract field" do
+      expect(mapper.abstract).to eq "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier"
+    end
   end
 
   context "#administrative_unit" do
