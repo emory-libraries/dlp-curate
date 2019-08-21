@@ -30,6 +30,7 @@ RSpec.describe CurateMapper do
       "rights_statement_text" => "Emory University does not control copyright for this image.",
       "subject_geo" => "Ghana.|Africa.",
       "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
+      "subject_topics" => "Snowblowers.|Snow.|Air bases.|Towers.",
       "title" => "what an awesome title",
       "visibility" => "Emory Network"
     }
@@ -219,6 +220,13 @@ RSpec.describe CurateMapper do
     it "maps the subject_names field" do
       expect(mapper.subject_names)
         .to contain_exactly("Mouvement national congolais.", "Okito, Joseph.", "Lumumba, Patrice, 1925-1961.")
+    end
+  end
+
+  context "#subject_topics" do
+    it "maps the subject_topics field" do
+      expect(mapper.subject_topics)
+        .to contain_exactly("Snowblowers.", "Snow.", "Air bases.", "Towers.")
     end
   end
 

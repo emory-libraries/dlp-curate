@@ -27,6 +27,7 @@ class CurateMapper < Zizia::HashMapper
     rights_statement_text: "rights_statement_text",
     subject_geo: "subject_geo",
     subject_names: "subject_names",
+    subject_topics: "subject_topics",
     title: "title",
     visibility: "visibility"
   }.freeze
