@@ -1,0 +1,34 @@
+<% content_for :title, 'Importer Field Guide' %>
+
+<% @details.each do |detail| %>
+  <dl>
+    <h2>
+      <dt>
+        <%= detail[0] %>
+      </dt>
+    </h2>
+    <dd>
+      <div>
+        <b>Predicate:</b>
+        <a href="<%= detail[1][:predicate] %>"/><%= detail[1][:predicate] %></a>
+
+      </div>
+      <div>
+        <b>Type:</b>
+        <%= detail[1][:type] %>
+      </div>
+      <div>
+        <b>Validation:</b>
+        <%= detail[1][:validator] %>
+      </div>
+      <div>
+        <b>Multiple:</b>
+        <%= detail[1][:multiple] %>
+      </div>
+      <div>
+        <b>Edit Form Label:</b>
+        <%= detail[1][:label] %>
+      </div>
+    </dd>
+  </ul>
+<% end  %>

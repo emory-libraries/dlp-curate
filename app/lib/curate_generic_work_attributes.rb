@@ -12,9 +12,13 @@
 # programmatically, but without using any unnecessary memory.
 class CurateGenericWorkAttributes
   include Singleton
-  attr_reader :attributes
+  attr_reader :attributes, :properties, :validators, :local_attributes
 
   def initialize
-    @attributes ||= CurateGenericWork.new.local_attributes
+    work ||= CurateGenericWork.new
+    @local_attributes || work.local_attributes
+    @attributes ||= work.local_attributes
+    @properties ||= work.send(:properties)
+    @validators ||= work.send(:_validators)
   end
 end
