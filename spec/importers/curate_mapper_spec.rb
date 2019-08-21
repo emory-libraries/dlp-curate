@@ -13,6 +13,7 @@ RSpec.describe CurateMapper do
       "creator" => "Harris, Teenie, 1908-1998.",
       "data_classification" => "Confidential|Internal",
       "date_created" => "1985-11-01",
+      "date_issued" => "Unknown",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
@@ -91,6 +92,12 @@ RSpec.describe CurateMapper do
   context "#date_created" do
     it "maps the date_created field" do
       expect(mapper.date_created).to eq "1985-11-01"
+    end
+  end
+
+  context "#date_issued" do
+    it "maps the date_issued field" do
+      expect(mapper.date_issued).to eq "Unknown"
     end
   end
 
