@@ -54,7 +54,7 @@ RSpec.describe CurateMapper do
       expect(mapper.content_genre).to eq ["black-and-white photographs"]
     end
   end
-  
+
   context "#contact_information" do
     it "maps the contact_information field" do
       expect(mapper.contact_information).to eq "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu"
@@ -162,7 +162,7 @@ RSpec.describe CurateMapper do
       expect(mapper.primary_language).to eq "English"
     end
   end
-  
+
   context "#local_call_number" do
     it "maps the local_call_number field" do
       expect(mapper.local_call_number).to eq "MSS 1218"
