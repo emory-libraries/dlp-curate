@@ -14,6 +14,7 @@ class CurateMapper < Zizia::HashMapper
     date_issued: "date_issued",
     holding_repository: "holding_repository",
     institution: "institution",
+    legacy_ark: "legacy_ark",
     legacy_identifier: "legacy_identifier",
     note: "note",
     primary_language: "primary_language",
