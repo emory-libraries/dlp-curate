@@ -24,6 +24,7 @@ class CurateMapper < Zizia::HashMapper
     place_of_production: "place_of_production",
     primary_language: "primary_language",
     publisher: "publisher",
+    rights_holder: "rights_holder",
     rights_statement: "rights_statement",
     rights_statement_text: "rights_statement_text",
     subject_geo: "subject_geo",
@@ -69,6 +70,7 @@ class CurateMapper < Zizia::HashMapper
       "place_of_production",
       "primary_language",
       "publisher",
+      "rights_holder",
       "table_of_contents",
       "uniform_title"
     ]
