@@ -31,6 +31,7 @@ RSpec.describe CurateMapper do
       "subject_geo" => "Ghana.|Africa.",
       "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
       "subject_topics" => "Snowblowers.|Snow.|Air bases.|Towers.",
+      "table_of_contents" => "Thing 1. Thing 2.",
       "title" => "what an awesome title",
       "uniform_title" => "Pittsburg courier.",
       "visibility" => "Emory Network"
@@ -228,6 +229,13 @@ RSpec.describe CurateMapper do
     it "maps the subject_topics field" do
       expect(mapper.subject_topics)
         .to contain_exactly("Snowblowers.", "Snow.", "Air bases.", "Towers.")
+    end
+  end
+
+  context "#table_of_contents" do
+    it "maps the table_of_contents field" do
+      expect(mapper.table_of_contents)
+        .to eq "Thing 1. Thing 2."
     end
   end
 

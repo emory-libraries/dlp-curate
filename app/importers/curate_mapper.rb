@@ -28,6 +28,7 @@ class CurateMapper < Zizia::HashMapper
     subject_geo: "subject_geo",
     subject_names: "subject_names",
     subject_topics: "subject_topics",
+    table_of_contents: "table_of_contents",
     title: "title",
     uniform_title: "uniform_title",
     visibility: "visibility"
@@ -66,6 +67,7 @@ class CurateMapper < Zizia::HashMapper
       "place_of_production",
       "primary_language",
       "publisher",
+      "table_of_contents",
       "uniform_title"
     ]
   end
