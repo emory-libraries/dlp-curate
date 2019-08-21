@@ -137,6 +137,18 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#extent" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "extent" => "10.29 x 08.53 inches"
+      }
+    end
+    it "maps the extent field" do
+      expect(mapper.extent).to eq "10.29 x 08.53 inches"
+    end
+  end
+
   context "#holding_repository" do
     it "maps the holding_repository field" do
       expect(mapper.holding_repository).to eq "Stuart A. Rose Manuscript, Archives and Rare Book Library"
