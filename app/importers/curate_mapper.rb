@@ -7,6 +7,7 @@ class CurateMapper < Zizia::HashMapper
     abstract: "abstract",
     administrative_unit: "administrative_unit",
     content_type: "content_type",
+    creator: "creator",
     data_classification: "data_classification",
     date_created: "date_created",
     holding_repository: "holding_repository",

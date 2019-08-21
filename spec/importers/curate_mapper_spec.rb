@@ -10,6 +10,7 @@ RSpec.describe CurateMapper do
       "abstract" => "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier",
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "content_type" => 'still image',
+      "creator" => "Harris, Teenie, 1908-1998.",
       "data_classification" => "Confidential|Internal",
       "date_created" => "1985-11-01",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
@@ -72,6 +73,12 @@ RSpec.describe CurateMapper do
       it "maps content_type to the uri" do
         expect(mapper.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       end
+    end
+  end
+
+  context "#creator" do
+    it "maps the creator field" do
+      expect(mapper.creator).to eq ["Harris, Teenie, 1908-1998."]
     end
   end
 
