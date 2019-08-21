@@ -19,6 +19,7 @@ RSpec.describe CurateMapper do
       "date_issued" => "Unknown",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "institution" => "Emory University",
+      "internal_rights_note" => "This is my internal rights note.",
       "keywords" => "Tangerine|Blueberry",
       "legacy_ark" => "ark://abc/123",
       "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
@@ -145,6 +146,12 @@ RSpec.describe CurateMapper do
   context "#institution" do
     it "maps the institution field" do
       expect(mapper.institution).to eq "Emory University"
+    end
+  end
+
+  context "#internal_rights_note" do
+    it "maps the internal_rights_note field" do
+      expect(mapper.internal_rights_note).to eq "This is my internal rights note."
     end
   end
 
