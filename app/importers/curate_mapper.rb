@@ -39,6 +39,7 @@ class CurateMapper < Zizia::HashMapper
     sublocation: "sublocation",
     table_of_contents: "table_of_contents",
     title: "title",
+    transfer_engineer: "transfer_engineer",
     uniform_title: "uniform_title",
     visibility: "visibility"
   }.freeze
@@ -84,6 +85,7 @@ class CurateMapper < Zizia::HashMapper
       "sensitive_material",
       "sensitive_material_note",
       "sublocation",
+      "transfer_engineer",
       "rights_holder",
       "table_of_contents",
       "uniform_title"

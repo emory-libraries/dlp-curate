@@ -342,6 +342,18 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#transfer_engineer" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "transfer_engineer" => "Leroy Jenkins"
+      }
+    end
+    it "maps the transfer_engineer field" do
+      expect(mapper.transfer_engineer).to eq "Leroy Jenkins"
+    end
+  end
+
   context "#uniform_title" do
     it "maps the uniform_title field" do
       expect(mapper.uniform_title)
