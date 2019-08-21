@@ -12,21 +12,31 @@ RSpec.describe CurateMapper do
       "content_genre" => "black-and-white photographs",
       "contact_information" => "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu",
       "content_type" => 'still image',
+      "copyright_date" => "1985-11-01",
       "creator" => "Harris, Teenie, 1908-1998.",
       "data_classification" => "Confidential|Internal",
       "date_created" => "1985-11-01",
       "date_issued" => "Unknown",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "institution" => "Emory University",
+      "internal_rights_note" => "This is my internal rights note.",
+      "keywords" => "Tangerine|Blueberry",
       "legacy_ark" => "ark://abc/123",
       "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
+      "local_call_number" => "MSS 1218",
       "note" => "This is a note.",
       "place_of_production" => "London",
       "primary_language" => "English",
-      "local_call_number" => "MSS 1218",
-      "rights_statement_text" => "Emory University does not control copyright for this image.",
+      "publisher" => "Gutenberg",
+      "rights_holder" => "Unknown",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
+      "rights_statement_text" => "Emory University does not control copyright for this image.",
+      "subject_geo" => "Ghana.|Africa.",
+      "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
+      "subject_topics" => "Snowblowers.|Snow.|Air bases.|Towers.",
+      "table_of_contents" => "Thing 1. Thing 2.",
       "title" => "what an awesome title",
+      "uniform_title" => "Pittsburg courier.",
       "visibility" => "Emory Network"
     }
   end
@@ -97,6 +107,12 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#copyright_date" do
+    it "maps the copyright_date field" do
+      expect(mapper.copyright_date).to eq "1985-11-01"
+    end
+  end
+
   context "#creator" do
     it "maps the creator field" do
       expect(mapper.creator).to eq ["Harris, Teenie, 1908-1998."]
@@ -133,6 +149,18 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#internal_rights_note" do
+    it "maps the internal_rights_note field" do
+      expect(mapper.internal_rights_note).to eq "This is my internal rights note."
+    end
+  end
+
+  context "#keywords" do
+    it "maps the keywords field" do
+      expect(mapper.keywords).to contain_exactly("Tangerine", "Blueberry")
+    end
+  end
+
   context "#legacy_ark" do
     it "maps the legacy_ark field" do
       expect(mapper.legacy_ark).to contain_exactly("ark://abc/123")
@@ -142,6 +170,27 @@ RSpec.describe CurateMapper do
   context "#legacy_identifier" do
     it "maps the legacy_identifier field" do
       expect(mapper.legacy_identifier).to contain_exactly("dams:152815", "MSS1218_B001_I002")
+    end
+  end
+
+  context "#legacy_rights" do
+    let(:legacy_rights) do
+      "Emory University does not control copyright for this image.  This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.  Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.  We are always interested in learning more about our collections.  If you have information regarding this photograph, please contact marbl@emory.edu."
+    end
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "legacy_rights" => legacy_rights
+      }
+    end
+    it "maps the legacy_rights field" do
+      expect(mapper.legacy_rights).to eq legacy_rights
+    end
+  end
+
+  context "#local_call_number" do
+    it "maps the local_call_number field" do
+      expect(mapper.local_call_number).to eq "MSS 1218"
     end
   end
 
@@ -163,9 +212,15 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#local_call_number" do
-    it "maps the local_call_number field" do
-      expect(mapper.local_call_number).to eq "MSS 1218"
+  context "#publisher" do
+    it "maps the publisher field" do
+      expect(mapper.publisher).to eq "Gutenberg"
+    end
+  end
+
+  context "#rights_holder" do
+    it "maps the rights_holder field" do
+      expect(mapper.rights_holder).to eq "Unknown"
     end
   end
 
@@ -192,10 +247,45 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#subject_geo" do
+    it "maps the subject_geo field" do
+      expect(mapper.subject_geo)
+        .to contain_exactly("Ghana.", "Africa.")
+    end
+  end
+
+  context "#subject_names" do
+    it "maps the subject_names field" do
+      expect(mapper.subject_names)
+        .to contain_exactly("Mouvement national congolais.", "Okito, Joseph.", "Lumumba, Patrice, 1925-1961.")
+    end
+  end
+
+  context "#subject_topics" do
+    it "maps the subject_topics field" do
+      expect(mapper.subject_topics)
+        .to contain_exactly("Snowblowers.", "Snow.", "Air bases.", "Towers.")
+    end
+  end
+
+  context "#table_of_contents" do
+    it "maps the table_of_contents field" do
+      expect(mapper.table_of_contents)
+        .to eq "Thing 1. Thing 2."
+    end
+  end
+
   context "#title" do
     it "maps the required title field" do
       expect(mapper.map_field(:title))
         .to contain_exactly("what an awesome title")
+    end
+  end
+
+  context "#uniform_title" do
+    it "maps the uniform_title field" do
+      expect(mapper.uniform_title)
+        .to eq "Pittsburg courier."
     end
   end
 

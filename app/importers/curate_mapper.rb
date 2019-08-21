@@ -9,21 +9,32 @@ class CurateMapper < Zizia::HashMapper
     content_genre: "content_genre",
     contact_information: "contact_information",
     content_type: "content_type",
+    copyright_date: "copyright_date",
     creator: "creator",
     data_classification: "data_classification",
     date_created: "date_created",
     date_issued: "date_issued",
     holding_repository: "holding_repository",
     institution: "institution",
+    internal_rights_note: "internal_rights_note",
+    keywords: "keywords",
     legacy_ark: "legacy_ark",
     legacy_identifier: "legacy_identifier",
+    legacy_rights: "legacy_rights",
+    local_call_number: "local_call_number",
     note: "note",
     place_of_production: "place_of_production",
     primary_language: "primary_language",
-    local_call_number: "local_call_number",
-    rights_statement_text: "rights_statement_text",
+    publisher: "publisher",
+    rights_holder: "rights_holder",
     rights_statement: "rights_statement",
+    rights_statement_text: "rights_statement_text",
+    subject_geo: "subject_geo",
+    subject_names: "subject_names",
+    subject_topics: "subject_topics",
+    table_of_contents: "table_of_contents",
     title: "title",
+    uniform_title: "uniform_title",
     visibility: "visibility"
   }.freeze
 
@@ -49,7 +60,24 @@ class CurateMapper < Zizia::HashMapper
   # fields that are assumed to be singular, however. List them here for an easy
   # way to check whether a field is multi-valued when retrieving it.
   def singular_fields
-    ["abstract", "contact_information", "date_created", "date_issued", "holding_repository", "local_call_number", "institution", "place_of_production", "primary_language"]
+    [
+      "abstract",
+      "contact_information",
+      "copyright_date",
+      "date_created",
+      "date_issued",
+      "holding_repository",
+      "local_call_number",
+      "institution",
+      "internal_rights_note",
+      "legacy_rights",
+      "place_of_production",
+      "primary_language",
+      "publisher",
+      "rights_holder",
+      "table_of_contents",
+      "uniform_title"
+    ]
   end
 
   # Match a visibility string to the value below; default to restricted

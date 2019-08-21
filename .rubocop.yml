@@ -39,6 +39,11 @@ Metrics/ClassLength:
         - 'app/forms/hyrax/forms/collection_form.rb'
         - app/uploaders/zizia/csv_manifest_validator.rb
         - app/presenters/hyrax/collection_presenter.rb
+        - app/importers/curate_mapper.rb
+
+Metrics/LineLength:
+    Exclude:
+        - spec/importers/curate_mapper_spec.rb
 
 Metrics/MethodLength:
     Exclude:
@@ -46,6 +51,7 @@ Metrics/MethodLength:
         - app/importers/curate_collection_importer.rb
         - app/presenters/hyrax/curate_collection_presenter.rb
         - app/presenters/hyrax/collection_presenter.rb
+        - app/importers/curate_mapper.rb
 
 RSpec/ExampleLength:
     Exclude:
