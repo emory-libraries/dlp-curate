@@ -30,6 +30,7 @@ class CurateMapper < Zizia::HashMapper
     rights_statement: "rights_statement",
     rights_statement_text: "rights_statement_text",
     sensitive_material: "sensitive_material",
+    sensitive_material_note: "sensitive_material_note",
     subject_geo: "subject_geo",
     subject_names: "subject_names",
     subject_topics: "subject_topics",
@@ -76,6 +77,7 @@ class CurateMapper < Zizia::HashMapper
       "primary_language",
       "publisher",
       "sensitive_material",
+      "sensitive_material_note",
       "rights_holder",
       "table_of_contents",
       "uniform_title"
