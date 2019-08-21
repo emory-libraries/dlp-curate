@@ -4,11 +4,13 @@ class CurateMapper < Zizia::HashMapper
   attr_reader :row_number
 
   CURATE_TERMS_MAP = {
+    abstract: "abstract",
     administrative_unit: "administrative_unit",
     content_type: "content_type",
     data_classification: "data_classification",
     date_created: "date_created",
     holding_repository: "holding_repository",
+    legacy_identifier: "legacy_identifier",
     rights_statement_text: "rights_statement_text",
     rights_statement: "rights_statement",
     title: "title",
@@ -31,6 +33,13 @@ class CurateMapper < Zizia::HashMapper
     # The fields common to all object types
     common_fields = CURATE_TERMS_MAP.keys
     common_fields
+  end
+
+  # Samvera generally assumes that all fields are multi-valued. Curate has many
+  # fields that are assumed to be singular, however. List them here for an easy
+  # way to check whether a field is multi-valued when retrieving it.
+  def singular_fields
+    ["abstract", "date_created", "holding_repository"]
   end
 
   # Match a visibility string to the value below; default to restricted
@@ -105,10 +114,6 @@ class CurateMapper < Zizia::HashMapper
     matching_term = active_terms.select { |s| s["label"].downcase.strip == csv_term.downcase.strip }.first
     raise "Invalid resource_type value: #{csv_term}" unless matching_term
     matching_term["id"]
-  end
-
-  def singular_fields
-    ["date_created", "holding_repository"]
   end
 
   def map_field(name)
