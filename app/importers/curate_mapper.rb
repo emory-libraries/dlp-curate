@@ -9,6 +9,7 @@ class CurateMapper < Zizia::HashMapper
     data_classification: "data_classification",
     date_created: "date_created",
     holding_repository: "holding_repository",
+    legacy_identifier: "legacy_identifier",
     rights_statement_text: "rights_statement_text",
     rights_statement: "rights_statement",
     title: "title",
