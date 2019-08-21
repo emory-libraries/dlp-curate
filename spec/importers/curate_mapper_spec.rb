@@ -10,6 +10,7 @@ RSpec.describe CurateMapper do
       "abstract" => "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier",
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "content_genre" => "black-and-white photographs",
+      "contact_information" => "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu",
       "content_type" => 'still image',
       "creator" => "Harris, Teenie, 1908-1998.",
       "data_classification" => "Confidential|Internal",
@@ -22,6 +23,7 @@ RSpec.describe CurateMapper do
       "note" => "This is a note.",
       "place_of_production" => "London",
       "primary_language" => "English",
+      "local_call_number" => "MSS 1218",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
       "title" => "what an awesome title",
@@ -50,6 +52,12 @@ RSpec.describe CurateMapper do
   context "#content_genre" do
     it "maps the content_genre field" do
       expect(mapper.content_genre).to eq ["black-and-white photographs"]
+    end
+  end
+  
+  context "#contact_information" do
+    it "maps the contact_information field" do
+      expect(mapper.contact_information).to eq "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu"
     end
   end
 
@@ -152,6 +160,12 @@ RSpec.describe CurateMapper do
   context "#primary_language" do
     it "maps the primary_language field" do
       expect(mapper.primary_language).to eq "English"
+    end
+  end
+  
+  context "#local_call_number" do
+    it "maps the local_call_number field" do
+      expect(mapper.local_call_number).to eq "MSS 1218"
     end
   end
 
