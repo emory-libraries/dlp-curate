@@ -247,6 +247,18 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#sensitive_material" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "sensitive_material" => "No"
+      }
+    end
+    it "maps the sensitive_material field" do
+      expect(mapper.sensitive_material).to eq "No"
+    end
+  end
+
   context "#subject_geo" do
     it "maps the subject_geo field" do
       expect(mapper.subject_geo)
