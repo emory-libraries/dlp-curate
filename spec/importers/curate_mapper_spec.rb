@@ -32,6 +32,7 @@ RSpec.describe CurateMapper do
       "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
       "subject_topics" => "Snowblowers.|Snow.|Air bases.|Towers.",
       "title" => "what an awesome title",
+      "uniform_title" => "Pittsburg courier.",
       "visibility" => "Emory Network"
     }
   end
@@ -234,6 +235,13 @@ RSpec.describe CurateMapper do
     it "maps the required title field" do
       expect(mapper.map_field(:title))
         .to contain_exactly("what an awesome title")
+    end
+  end
+
+  context "#uniform_title" do
+    it "maps the uniform_title field" do
+      expect(mapper.uniform_title)
+        .to eq "Pittsburg courier."
     end
   end
 

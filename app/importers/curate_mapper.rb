@@ -29,6 +29,7 @@ class CurateMapper < Zizia::HashMapper
     subject_names: "subject_names",
     subject_topics: "subject_topics",
     title: "title",
+    uniform_title: "uniform_title",
     visibility: "visibility"
   }.freeze
 
@@ -64,7 +65,8 @@ class CurateMapper < Zizia::HashMapper
       "institution",
       "place_of_production",
       "primary_language",
-      "publisher"
+      "publisher",
+      "uniform_title"
     ]
   end
 
