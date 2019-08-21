@@ -15,6 +15,7 @@ class CurateMapper < Zizia::HashMapper
     date_issued: "date_issued",
     holding_repository: "holding_repository",
     institution: "institution",
+    keywords: "keywords",
     legacy_ark: "legacy_ark",
     legacy_identifier: "legacy_identifier",
     local_call_number: "local_call_number",
@@ -24,6 +25,8 @@ class CurateMapper < Zizia::HashMapper
     publisher: "publisher",
     rights_statement: "rights_statement",
     rights_statement_text: "rights_statement_text",
+    subject_geo: "subject_geo",
+    subject_names: "subject_names",
     title: "title",
     visibility: "visibility"
   }.freeze

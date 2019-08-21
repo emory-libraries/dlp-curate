@@ -18,6 +18,7 @@ RSpec.describe CurateMapper do
       "date_issued" => "Unknown",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "institution" => "Emory University",
+      "keywords" => "Tangerine|Blueberry",
       "legacy_ark" => "ark://abc/123",
       "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
       "local_call_number" => "MSS 1218",
@@ -27,6 +28,8 @@ RSpec.describe CurateMapper do
       "publisher" => "Gutenberg",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
+      "subject_geo" => "Ghana.|Africa.",
+      "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
       "title" => "what an awesome title",
       "visibility" => "Emory Network"
     }
@@ -134,6 +137,12 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#keywords" do
+    it "maps the keywords field" do
+      expect(mapper.keywords).to contain_exactly("Tangerine", "Blueberry")
+    end
+  end
+
   context "#legacy_ark" do
     it "maps the legacy_ark field" do
       expect(mapper.legacy_ark).to contain_exactly("ark://abc/123")
@@ -196,6 +205,20 @@ RSpec.describe CurateMapper do
       it "raises an exception when it isn't valid" do
         expect { mapper.rights_statement }.to raise_error RuntimeError
       end
+    end
+  end
+
+  context "#subject_geo" do
+    it "maps the subject_geo field" do
+      expect(mapper.subject_geo)
+        .to contain_exactly("Ghana.", "Africa.")
+    end
+  end
+
+  context "#subject_names" do
+    it "maps the subject_names field" do
+      expect(mapper.subject_names)
+        .to contain_exactly("Mouvement national congolais.", "Okito, Joseph.", "Lumumba, Patrice, 1925-1961.")
     end
   end
 
