@@ -16,6 +16,7 @@ RSpec.describe CurateMapper do
       "date_created" => "1985-11-01",
       "date_issued" => "Unknown",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
+      "institution" => "Emory University",
       "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
@@ -111,6 +112,12 @@ RSpec.describe CurateMapper do
   context "#holding_repository" do
     it "maps the holding_repository field" do
       expect(mapper.holding_repository).to eq "Stuart A. Rose Manuscript, Archives and Rare Book Library"
+    end
+  end
+
+  context "#institution" do
+    it "maps the institution field" do
+      expect(mapper.institution).to eq "Emory University"
     end
   end
 
