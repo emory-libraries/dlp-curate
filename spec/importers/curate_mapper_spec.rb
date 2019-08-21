@@ -9,11 +9,13 @@ RSpec.describe CurateMapper do
     {
       "abstract" => "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier",
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
+      "contact_information" => "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu",
       "content_type" => 'still image',
       "data_classification" => "Confidential|Internal",
       "date_created" => "1985-11-01",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
+      "local_call_number" => "MSS 1218",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
       "title" => "what an awesome title",
@@ -36,6 +38,12 @@ RSpec.describe CurateMapper do
   context "#administrative_unit" do
     it "does its best to match the configured controlled vocabulary term" do
       expect(mapper.administrative_unit).to eq "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
+    end
+  end
+
+  context "#contact_information" do
+    it "maps the contact_information field" do
+      expect(mapper.contact_information).to eq "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu"
     end
   end
 
@@ -96,6 +104,12 @@ RSpec.describe CurateMapper do
   context "#legacy_identifier" do
     it "maps the legacy_identifier field" do
       expect(mapper.legacy_identifier).to contain_exactly("dams:152815", "MSS1218_B001_I002")
+    end
+  end
+
+  context "#local_call_number" do
+    it "maps the local_call_number field" do
+      expect(mapper.local_call_number).to eq "MSS 1218"
     end
   end
 
