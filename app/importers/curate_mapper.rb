@@ -15,6 +15,7 @@ class CurateMapper < Zizia::HashMapper
     holding_repository: "holding_repository",
     institution: "institution",
     legacy_identifier: "legacy_identifier",
+    primary_language: "primary_language",
     rights_statement_text: "rights_statement_text",
     rights_statement: "rights_statement",
     title: "title",
@@ -43,7 +44,7 @@ class CurateMapper < Zizia::HashMapper
   # fields that are assumed to be singular, however. List them here for an easy
   # way to check whether a field is multi-valued when retrieving it.
   def singular_fields
-    ["abstract", "date_created", "date_issued", "holding_repository", "institution"]
+    ["abstract", "date_created", "date_issued", "holding_repository", "institution", "primary_language"]
   end
 
   # Match a visibility string to the value below; default to restricted
