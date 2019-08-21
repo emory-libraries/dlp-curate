@@ -173,6 +173,21 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#legacy_rights" do
+    let(:legacy_rights) do
+      "Emory University does not control copyright for this image.  This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.  Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.  We are always interested in learning more about our collections.  If you have information regarding this photograph, please contact marbl@emory.edu."
+    end
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "legacy_rights" => legacy_rights
+      }
+    end
+    it "maps the legacy_rights field" do
+      expect(mapper.legacy_rights).to eq legacy_rights
+    end
+  end
+
   context "#local_call_number" do
     it "maps the local_call_number field" do
       expect(mapper.local_call_number).to eq "MSS 1218"

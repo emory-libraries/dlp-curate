@@ -41,6 +41,10 @@ Metrics/ClassLength:
         - app/presenters/hyrax/collection_presenter.rb
         - app/importers/curate_mapper.rb
 
+Metrics/LineLength:
+    Exclude:
+        - spec/importers/curate_mapper_spec.rb
+
 Metrics/MethodLength:
     Exclude:
         - app/uploaders/zizia/csv_manifest_validator.rb
