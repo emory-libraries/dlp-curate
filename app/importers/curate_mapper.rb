@@ -35,6 +35,7 @@ class CurateMapper < Zizia::HashMapper
     subject_geo: "subject_geo",
     subject_names: "subject_names",
     subject_topics: "subject_topics",
+    sublocation: "sublocation",
     table_of_contents: "table_of_contents",
     title: "title",
     uniform_title: "uniform_title",
@@ -80,6 +81,7 @@ class CurateMapper < Zizia::HashMapper
       "publisher",
       "sensitive_material",
       "sensitive_material_note",
+      "sublocation",
       "rights_holder",
       "table_of_contents",
       "uniform_title"

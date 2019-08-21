@@ -304,6 +304,18 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#sublocation" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "sublocation" => "Box 1"
+      }
+    end
+    it "maps the sublocation field" do
+      expect(mapper.sublocation).to eq "Box 1"
+    end
+  end
+
   context "#table_of_contents" do
     it "maps the table_of_contents field" do
       expect(mapper.table_of_contents)
