@@ -9,6 +9,7 @@ RSpec.describe CurateMapper do
     {
       "abstract" => "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier",
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
+      "content_genre" => "black-and-white photographs",
       "content_type" => 'still image',
       "creator" => "Harris, Teenie, 1908-1998.",
       "data_classification" => "Confidential|Internal",
@@ -38,6 +39,12 @@ RSpec.describe CurateMapper do
   context "#administrative_unit" do
     it "does its best to match the configured controlled vocabulary term" do
       expect(mapper.administrative_unit).to eq "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
+    end
+  end
+
+  context "#content_genre" do
+    it "maps the content_genre field" do
+      expect(mapper.content_genre).to eq ["black-and-white photographs"]
     end
   end
 
