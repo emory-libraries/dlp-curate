@@ -131,6 +131,18 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#date_digitized" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "date_digitized" => "1985-11-01"
+      }
+    end
+    it "maps the date_digitized field" do
+      expect(mapper.date_digitized).to eq "1985-11-01"
+    end
+  end
+
   context "#date_issued" do
     it "maps the date_issued field" do
       expect(mapper.date_issued).to eq "Unknown"
