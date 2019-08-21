@@ -131,9 +131,33 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#date_digitized" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "date_digitized" => "1985-11-01"
+      }
+    end
+    it "maps the date_digitized field" do
+      expect(mapper.date_digitized).to eq "1985-11-01"
+    end
+  end
+
   context "#date_issued" do
     it "maps the date_issued field" do
       expect(mapper.date_issued).to eq "Unknown"
+    end
+  end
+
+  context "#extent" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "extent" => "10.29 x 08.53 inches"
+      }
+    end
+    it "maps the extent field" do
+      expect(mapper.extent).to eq "10.29 x 08.53 inches"
     end
   end
 
@@ -247,6 +271,30 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#sensitive_material" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "sensitive_material" => "No"
+      }
+    end
+    it "maps the sensitive_material field" do
+      expect(mapper.sensitive_material).to eq "No"
+    end
+  end
+
+  context "#sensitive_material_note" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "sensitive_material_note" => "Be very careful with this sensitive material."
+      }
+    end
+    it "maps the sensitive_material_note field" do
+      expect(mapper.sensitive_material_note).to eq "Be very careful with this sensitive material."
+    end
+  end
+
   context "#subject_geo" do
     it "maps the subject_geo field" do
       expect(mapper.subject_geo)
@@ -268,6 +316,18 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#sublocation" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "sublocation" => "Box 1"
+      }
+    end
+    it "maps the sublocation field" do
+      expect(mapper.sublocation).to eq "Box 1"
+    end
+  end
+
   context "#table_of_contents" do
     it "maps the table_of_contents field" do
       expect(mapper.table_of_contents)
@@ -279,6 +339,18 @@ RSpec.describe CurateMapper do
     it "maps the required title field" do
       expect(mapper.map_field(:title))
         .to contain_exactly("what an awesome title")
+    end
+  end
+
+  context "#transfer_engineer" do
+    let(:metadata) do
+      {
+        "title" => "my title",
+        "transfer_engineer" => "Leroy Jenkins"
+      }
+    end
+    it "maps the transfer_engineer field" do
+      expect(mapper.transfer_engineer).to eq "Leroy Jenkins"
     end
   end
 
