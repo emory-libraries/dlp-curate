@@ -60,6 +60,7 @@ group :development, :test do
   gem 'ffaker'
   gem 'pry' unless ENV['CI']
   gem 'pry-byebug' unless ENV['CI']
+  gem 'rails-controller-testing'
   gem 'rspec-its'
   gem 'rspec-rails'
   gem 'sqlite3', '~> 1.3.7'
