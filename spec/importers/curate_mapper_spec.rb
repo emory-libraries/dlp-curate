@@ -20,12 +20,13 @@ RSpec.describe CurateMapper do
       "institution" => "Emory University",
       "legacy_ark" => "ark://abc/123",
       "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
+      "local_call_number" => "MSS 1218",
       "note" => "This is a note.",
       "place_of_production" => "London",
       "primary_language" => "English",
-      "local_call_number" => "MSS 1218",
-      "rights_statement_text" => "Emory University does not control copyright for this image.",
+      "publisher" => "Gutenberg",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
+      "rights_statement_text" => "Emory University does not control copyright for this image.",
       "title" => "what an awesome title",
       "visibility" => "Emory Network"
     }
@@ -145,6 +146,12 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#local_call_number" do
+    it "maps the local_call_number field" do
+      expect(mapper.local_call_number).to eq "MSS 1218"
+    end
+  end
+
   context "#place_of_production" do
     it "maps the place_of_production field" do
       expect(mapper.place_of_production).to eq "London"
@@ -163,9 +170,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#local_call_number" do
-    it "maps the local_call_number field" do
-      expect(mapper.local_call_number).to eq "MSS 1218"
+  context "#publisher" do
+    it "maps the publisher field" do
+      expect(mapper.publisher).to eq "Gutenberg"
     end
   end
 
