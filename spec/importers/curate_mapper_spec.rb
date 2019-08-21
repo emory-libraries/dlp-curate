@@ -18,6 +18,7 @@ RSpec.describe CurateMapper do
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "institution" => "Emory University",
       "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
+      "note" => "This is a note.",
       "primary_language" => "English",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
@@ -125,6 +126,12 @@ RSpec.describe CurateMapper do
   context "#legacy_identifier" do
     it "maps the legacy_identifier field" do
       expect(mapper.legacy_identifier).to contain_exactly("dams:152815", "MSS1218_B001_I002")
+    end
+  end
+
+  context "#note" do
+    it "maps the note field" do
+      expect(mapper.note).to eq ["This is a note."]
     end
   end
 
