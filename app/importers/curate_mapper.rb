@@ -9,6 +9,7 @@ class CurateMapper < Zizia::HashMapper
     content_genre: "content_genre",
     contact_information: "contact_information",
     content_type: "content_type",
+    copyright_date: "copyright_date",
     creator: "creator",
     data_classification: "data_classification",
     date_created: "date_created",
@@ -59,6 +60,7 @@ class CurateMapper < Zizia::HashMapper
     [
       "abstract",
       "contact_information",
+      "copyright_date",
       "date_created",
       "date_issued",
       "holding_repository",

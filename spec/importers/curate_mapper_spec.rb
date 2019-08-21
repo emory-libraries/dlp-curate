@@ -12,6 +12,7 @@ RSpec.describe CurateMapper do
       "content_genre" => "black-and-white photographs",
       "contact_information" => "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu",
       "content_type" => 'still image',
+      "copyright_date" => "1985-11-01",
       "creator" => "Harris, Teenie, 1908-1998.",
       "data_classification" => "Confidential|Internal",
       "date_created" => "1985-11-01",
@@ -101,6 +102,12 @@ RSpec.describe CurateMapper do
       it "maps content_type to the uri" do
         expect(mapper.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       end
+    end
+  end
+
+  context "#copyright_date" do
+    it "maps the copyright_date field" do
+      expect(mapper.copyright_date).to eq "1985-11-01"
     end
   end
 

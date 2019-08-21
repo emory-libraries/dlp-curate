@@ -47,6 +47,7 @@ Metrics/MethodLength:
         - app/importers/curate_collection_importer.rb
         - app/presenters/hyrax/curate_collection_presenter.rb
         - app/presenters/hyrax/collection_presenter.rb
+        - app/importers/curate_mapper.rb
 
 RSpec/ExampleLength:
     Exclude:
