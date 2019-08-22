@@ -150,6 +150,29 @@ class CurateMapper < Zizia::HashMapper
     raise "Invalid rights_statement value: #{csv_term}"
   end
 
+  def truthy?(term)
+    return true if term.downcase.strip == "yes"
+    return true if term.downcase.strip == "true"
+    false
+  end
+
+  def falsey?(term)
+    return true if term.downcase.strip == "no"
+    return true if term.downcase.strip == "false"
+    false
+  end
+
+  def sensitive_material
+    csv_term = @metadata["sensitive_material"]
+    return nil unless csv_term
+    active_terms = Qa::Authorities::Local.subauthority_for('sensitive_material').all.select { |term| term[:active] }
+    transformed_term = false if falsey?(csv_term)
+    transformed_term = true if truthy?(csv_term)
+    valid_option = active_terms.select { |s| s["id"] == transformed_term }.try(:first)
+    return transformed_term.to_s if valid_option
+    raise "Invalid sensitive_material value: #{csv_term}"
+  end
+
   # If we get a URI for content_type, check that it matches a URI in the questioning
   # authority config, and return it if so.
   # If we get a string for content_type, (e.g., 'still image'), transform it into its
