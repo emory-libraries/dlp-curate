@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
-require(File.join(Rails.root, 'spec', 'support', 'new_curate_generic_work_form.rb'))
-require(File.join(Rails.root, 'spec', 'support', 'wait_for_ajax.rb'))
+require(Rails.root.join('spec', 'support', 'new_curate_generic_work_form.rb'))
+require(Rails.root.join('spec', 'support', 'wait_for_ajax.rb'))
 include Warden::Test::Helpers
 
 RSpec.describe 'Fileset upload', integration: true, clean: true, js: true, type: :system do

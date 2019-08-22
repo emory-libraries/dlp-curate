@@ -9,7 +9,7 @@ RSpec.describe 'Creating a collection', :perform_jobs, clean: true, type: :syste
     let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id) }
     let(:admin_user) { FactoryBot.create(:admin) }
 
-    before :each do
+    before do
       admin_set_id
       permission_template
       Hyrax::CollectionType.find_or_create_default_collection_type
