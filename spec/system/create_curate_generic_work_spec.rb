@@ -4,7 +4,7 @@ require_relative '../support/new_curate_generic_work_form.rb'
 include Warden::Test::Helpers
 
 # NOTE: If you generated more than one work, you have to set "js: true"
-RSpec.feature 'Create a CurateGenericWork' do
+RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, type: :system do
   context 'a logged in user' do
     let(:user_attributes) do
       { uid: 'test@example.com' }

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 require 'rails_helper'
-require_relative '../support/new_curate_generic_work_form.rb'
-require_relative '../support/wait_for_ajax.rb'
+require(Rails.root.join('spec', 'support', 'new_curate_generic_work_form.rb'))
+require(Rails.root.join('spec', 'support', 'wait_for_ajax.rb'))
 include Warden::Test::Helpers
 
-RSpec.feature 'Fileset upload' do
-  context 'a logged in user uploads fileset', js: true do
+RSpec.describe 'Fileset upload', integration: true, clean: true, js: true, type: :system do
+  context 'a logged in user uploads fileset' do
     let(:user_attributes) do
       { uid: 'test@example.com' }
     end

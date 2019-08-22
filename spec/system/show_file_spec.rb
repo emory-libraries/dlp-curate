@@ -1,7 +1,7 @@
 require 'rails_helper'
 include Warden::Test::Helpers
 
-RSpec.describe "Showing a file:", type: :feature do
+RSpec.describe "Showing a file:", integration: true, clean: true, type: :system do
   let(:user) { FactoryBot.create(:user) }
   let(:file_title) { 'Some kind of title' }
   let(:work) { FactoryBot.build(:work, user: user) }
