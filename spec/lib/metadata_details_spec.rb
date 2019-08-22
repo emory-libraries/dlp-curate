@@ -25,4 +25,13 @@ RSpec.describe MetadataDetails do
   it 'has the validator' do
     expect(metadata_details.details(work_attributes: work_attributes)['title'][:validator]).to eq("required")
   end
+
+  context "find csv headers for each field" do
+    it 'finds the csv header when the field is mapped' do
+      expect(metadata_details.details(work_attributes: work_attributes)['title'][:csv_header]).to eq("title")
+    end
+    it 'indicates when field is not configured' do
+      expect(metadata_details.details(work_attributes: work_attributes)['date_modified'][:csv_header]).to eq("not configured")
+    end
+  end
 end
