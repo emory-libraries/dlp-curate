@@ -55,7 +55,6 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw] unless ENV['CI'] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'capybara', '~> 2.13'
   gem 'coveralls', require: false
-  gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 4.11.1'
   gem 'ffaker'
   gem 'pry' unless ENV['CI']
