@@ -51,6 +51,12 @@ RSpec.configure do |config|
     ActiveFedora::Cleaner.clean!
   end
 
+  config.before(admin_set: true) do
+    admin_set_id = AdminSet.find_or_create_default_admin_set_id
+    Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id)
+    Hyrax::CollectionType.find_or_create_default_collection_type
+  end
+
   # include Noid::Rails::RSpec
   # config.before(:suite) { disable_production_minter! }
   # config.after(:suite)  { enable_production_minter! }

@@ -53,9 +53,7 @@ end
 group :development, :test do
   gem 'bixby' # bixby = rubocop rules for Hyrax apps
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw] unless ENV['CI'] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'capybara', '~> 2.13'
   gem 'coveralls', require: false
-  gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 4.11.1'
   gem 'ffaker'
   gem 'pry' unless ENV['CI']
@@ -63,10 +61,12 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'rspec-its'
   gem 'rspec-rails'
+  gem 'selenium-webdriver'
   gem 'sqlite3', '~> 1.3.7'
   gem 'webdrivers', '~> 3.0'
 end
 
 group :test do
+  gem 'capybara'
   gem 'rspec_junit_formatter'
 end
