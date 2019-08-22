@@ -1,3 +1,5 @@
+Webdrivers.cache_time = 3
+
 # Setup chrome headless driver
 Capybara.server = :puma, { Silent: true }
 
