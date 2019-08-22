@@ -1,7 +1,7 @@
 require 'rails_helper'
 include Warden::Test::Helpers
 
-RSpec.feature 'Admin dashboard', integration: true do
+RSpec.describe 'Admin dashboard', integration: true, clean: true, type: :system do
   context 'as a non-admin user' do
     let(:user) { FactoryBot.create(:user) }
     before do
