@@ -14,4 +14,9 @@ RSpec.describe MetadataDetailsController, type: :controller do
     details = assigns(:details)
     expect(details['title'][:predicate]).to eq('http://purl.org/dc/terms/title')
   end
+
+  it 'has a downloadable csv' do
+    get :csv
+    expect(response.content_type).to eq('text/csv')
+  end
 end
