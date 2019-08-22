@@ -25,4 +25,12 @@ RSpec.describe MetadataDetails do
   it 'has the validator' do
     expect(metadata_details.details(work_attributes: work_attributes)['title'][:validator]).to eq("required")
   end
+
+  it 'can produce a CSV with the right headers' do
+    expect(metadata_details.to_csv(work_attributes: work_attributes)).to match(/attribute,predicate/)
+  end
+
+  it 'can produce a CSV with the right data' do
+    expect(metadata_details.to_csv(work_attributes: work_attributes)).to match(/access_right,http:\/\/purl.org\/dc\/terms\/accessRights/)
+  end
 end
