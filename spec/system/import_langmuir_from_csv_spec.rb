@@ -47,14 +47,13 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
 
       # Let the background jobs run, and check that the expected number of records got created.
       expect(CurateGenericWork.count).to eq 1
-
       # Ensure that all the fields got assigned as expected
-      work = CurateGenericWork.where(title: "*Tennessee*").first
-      expect(work.title.first).to match(/Tennessee/)
+      work = CurateGenericWork.where(title: "*Advertising*").first
+      expect(work.title.first).to match(/Advertising/)
       expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
 
       visit "/dashboard/works"
-      click_on 'Faculty and graduates of University of West Tennessee, Memphis, Tenn. in medicine, dentistry and nurse training in 1921'
+      click_on work.title.first
       expect(page).to have_content work.title.first
     end
   end
