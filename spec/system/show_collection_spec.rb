@@ -34,7 +34,6 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
       :local_call_number,
       :sensitive_material,
       :internal_rights_note,
-      :contact_information,
       :system_of_record_ID,
       :primary_repository_ID
     ]
@@ -44,6 +43,7 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
     visit "/collections/#{collection.id}"
     expect(page).to have_content 'Robert Langmuir African American Photograph Collection'
     expect(page).to have_content 'Created by: Langmuir, Robert, collector'
+    expect(page).to have_content 'Rose Library'
     singular_fields.each do |fieldname|
       expect(page).to have_content collection.send(fieldname)
     end
