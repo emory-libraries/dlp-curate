@@ -27,11 +27,15 @@
       </div>
       <div>
         <b>Edit Form Label:</b>
+        <span class=<%= css_class(detail[1][:label])%>>
         <%= detail[1][:label] %>
+        </span>
       </div>
       <div>
         <b>Import header:</b>
+        <span class=<%= css_class(detail[1][:csv_header])%>>
         <%= detail[1][:csv_header] %>
+        </span>
       </div>
     </dd>
   </ul>
