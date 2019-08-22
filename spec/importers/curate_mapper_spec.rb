@@ -278,8 +278,8 @@ RSpec.describe CurateMapper do
         "sensitive_material" => "No"
       }
     end
-    it "maps the sensitive_material field" do
-      expect(mapper.sensitive_material).to eq "No"
+    it "maps the sensitive_material field to what the QA authority expects" do
+      expect(mapper.sensitive_material).to eq "false"
     end
   end
 
