@@ -53,7 +53,7 @@ class CurateMapper < Zizia::HashMapper
 
   # What columns are allowed in the CSV
   def self.allowed_headers
-    CURATE_TERMS_MAP.values
+    CURATE_TERMS_MAP.values + ['filename']
   end
 
   def fields

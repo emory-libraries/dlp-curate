@@ -53,50 +53,6 @@ module Zizia
         Zizia::HyraxBasicMetadataMapper.new.delimiter
       end
 
-      def valid_headers
-        %w[
-          abstract
-          administrative_unit
-          content_genre
-          contact_information
-          content_type
-          copyright_date
-          creator
-          data_classification
-          date_created
-          date_digitized
-          date_issued
-          extent
-          holding_repository
-          institution
-          internal_rights_note
-          keywords
-          legacy_ark
-          legacy_identifier
-          legacy_rights
-          local_call_number
-          note
-          place_of_production
-          primary_language
-          publisher
-          rights_holder
-          rights_statement
-          rights_statement_text
-          sensitive_material
-          sensitive_material_note
-          subject_geo
-          subject_names
-          subject_topics
-          sublocation
-          table_of_contents
-          title
-          transfer_engineer
-          uniform_title
-          visibility
-          filename
-        ]
-      end
-
       def parse_csv
         @rows = CSV.read(csv_file.path)
         @headers = @rows.first || []
@@ -129,6 +85,7 @@ module Zizia
 
       # Warn the user if we find any unexpected headers.
       def unrecognized_headers
+        valid_headers = Zizia.config.metadata_mapper_class.allowed_headers
         normalized_valid_headers = valid_headers.map { |a| a.downcase.strip }
         extra_headers = @transformed_headers - normalized_valid_headers
         extra_headers.each do |header|
