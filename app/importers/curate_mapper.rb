@@ -56,6 +56,11 @@ class CurateMapper < Zizia::HashMapper
     CURATE_TERMS_MAP.values
   end
 
+  # Given a field name, return the CSV header
+  def self.csv_header(field)
+    CURATE_TERMS_MAP[field.to_sym]
+  end
+
   def fields
     # The fields common to all object types
     common_fields = CURATE_TERMS_MAP.keys
