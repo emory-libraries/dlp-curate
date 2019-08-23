@@ -1,6 +1,7 @@
 require_relative 'boot'
 
 require 'rails/all'
+require_relative '../app/logging/log_formatter'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -12,7 +13,7 @@ module DlpCurate
 
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
-    config.logger = ActiveSupport::Logger.new("log/#{Rails.env}.log")
+    config.log_formatter = LogFormatter.new
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
