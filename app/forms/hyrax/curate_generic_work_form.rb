@@ -18,8 +18,7 @@ module Hyrax
                   :data_classification, :sensitive_material, :sensitive_material_note, :staff_note, :date_digitized,
                   :transfer_engineer, :legacy_identifier, :legacy_ark, :system_of_record_ID, :primary_repository_ID]
 
-    self.required_fields = [:title, :holding_repository, :content_type, :rights_statement_text, :rights_statement,
-                            :data_classification, :date_created]
+    self.required_fields = REQUIRED_FIELDS_ON_FORM
     # TODO: All single-valued fields should be configured this way.
     self.single_valued_fields = [:title]
 
