@@ -3,39 +3,43 @@
   <a class="btn btn-primary" href="/importer_documentation/csv">Download CSV</a>
   <dl>
     <% @details.each do |detail| %>
-        <h2>
-          <dt>
-            <%= detail[0] %>
-          </dt>
-        </h2>
-        <dd>
-          <div>
-            <b>Predicate:</b>
-            <a href="<%= detail[1][:predicate] %>"/><%= detail[1][:predicate] %></a>
-          </div>
-          <div>
-            <b>Type:</b>
-            <%= detail[1][:type] %>
-          </div>
-          <div>
-            <b>Model Validation:</b>
-            <%= detail[1][:validator] %>
-          </div>
-          <div>
-            <b>Multiple:</b>
-            <%= detail[1][:multiple] %>
-          </div>
-          <div>
-            <b>Edit Form Label:</b>
-            <span class=<%= css_class(detail[1][:label])%>>
-            <%= detail[1][:label] %>
-          </div>
-          <div>
-            <b>Import header:</b>
-            <span class=<%= css_class(detail[1][:csv_header])%>>
+      <h2>
+        <dt>
+          <%= detail[0] %>
+        </dt>
+      </h2>
+      <dd>
+        <div>
+          <b>Predicate:</b>
+          <a href="<%= detail[1][:predicate] %>"/><%= detail[1][:predicate] %></a>
+
+        </div>
+        <div>
+          <b>Type:</b>
+          <%= detail[1][:type] %>
+        </div>
+        <div>
+          <b>Validation:</b>
+          <%= detail[1][:validator] %>
+        </div>
+        <div>
+          <b>Multiple:</b>
+          <%= detail[1][:multiple] %>
+        </div>
+        <div>
+          <b>Edit Form Label:</b>
+          <%= detail[1][:label] %>
+        </div>
+        <div>
+          <b>Import header:</b>
+          <span class=<%= css_class(detail[1][:csv_header])%>>
             <%= detail[1][:csv_header] %>
-          </div>
-        </dd>
-      <% end  %>
+        </div>
+        <div>
+          <b>Required on Edit Form:</b>
+          <%= detail[1][:required_on_form] %>
+        </div>
+      </dd>
+    <% end  %>
   </dl>
 </div>
