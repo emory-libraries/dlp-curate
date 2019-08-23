@@ -23,7 +23,7 @@ class ModularImporter
 
     file = File.open(@csv_file)
 
-    Zizia.config.default_info_stream << "event: start_import, batch_id: #{@csv_import.id}, collection_id: #{@collection_id}, user: #{@user_email}"
+    Rails.logger.info "[zizia] event: start_import, batch_id: #{@csv_import.id}, collection_id: #{@collection_id}, user: #{@user_email}"
     Zizia::Importer.new(parser: Zizia::CsvParser.new(file: file), record_importer: Zizia::HyraxRecordImporter.new(attributes: attrs)).import
     file.close
   end
