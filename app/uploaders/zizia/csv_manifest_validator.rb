@@ -114,7 +114,7 @@ module Zizia
       end
 
       def invalid_resource_type
-        validate_values('Desc - Type of Resource', :valid_resource_types)
+        validate_values('content_type', :valid_resource_types)
       end
 
       def invalid_rights_statement

@@ -67,7 +67,7 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     it 'has an error' do
       validator.validate
       expect(validator.errors.first).to match(/Duplicate column name/)
-      expect(validator.errors.first).to match(/Call Number/)
+      expect(validator.errors.first).to match(/local_call_number/)
     end
   end
 
@@ -77,7 +77,7 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     it 'has errors' do
       validator.validate
       expect(validator.errors.first).to match(/row 2/)
-      expect(validator.errors.first).to match(/Title/)
+      expect(validator.errors.first).to match(/title/)
     end
   end
 
@@ -108,7 +108,7 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     it 'has warnings' do
       validator.validate
       expect(validator.errors).to include(
-        "Invalid Desc   Type Of Resource in row 2: invalid resource type"
+        "Invalid content_type in row 2: http://id.loc.gov/vocabulary/resourcetypes/foobar"
       )
     end
   end
