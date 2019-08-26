@@ -33,7 +33,7 @@ module Zizia
       missing_values
       # invalid_license # Not yet implemented for Emory
       invalid_resource_type
-      # invalid_rights_statement # Not yet implemented for Emory
+      invalid_rights_statement
     end
 
     # One record per row
@@ -118,7 +118,7 @@ module Zizia
       end
 
       def invalid_rights_statement
-        validate_values('rights statement', :valid_rights_statements)
+        validate_values('rights_statement', :valid_rights_statements)
       end
 
       def valid_licenses
@@ -146,11 +146,13 @@ module Zizia
           next unless row[column_number]
 
           values = row[column_number].split(delimiter)
+          values = values.map { |v| v.downcase.strip }
           valid_values = method(valid_values_method).call
+          valid_values = valid_values.map { |v| v.downcase.strip }
           invalid_values = values.select { |value| !valid_values.include?(value) }
 
           invalid_values.each do |value|
-            @errors << "Invalid #{header_name.titleize} in row #{i + 1}: #{value}"
+            @errors << "Invalid #{header_name} in row #{i + 1}: #{value}"
           end
         end
       end
