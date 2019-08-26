@@ -71,6 +71,7 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     end
   end
 
+  # These will produce actual errors. Other metadata mistakes are warnings.
   context 'a CSV that is missing required values' do
     let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'missing_values.csv') }
 
@@ -107,7 +108,7 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
 
     it 'has warnings' do
       validator.validate
-      expect(validator.errors).to include(
+      expect(validator.warnings).to include(
         "Invalid content_type in row 2: http://id.loc.gov/vocabulary/resourcetypes/foobar"
       )
     end

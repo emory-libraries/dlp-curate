@@ -100,6 +100,7 @@ module Zizia
       def missing_values
         column_numbers = transformed_required_headers.map { |header| @transformed_headers.find_index(header) }.compact
         @rows.each_with_index do |row, i|
+          next if i.zero? # Skip the header row
           column_numbers.each_with_index do |column_number, j|
             next unless row[column_number].blank?
             @errors << "Missing required metadata in row #{i + 1}: \"#{required_headers[j]}\" field cannot be blank"
@@ -152,7 +153,7 @@ module Zizia
           invalid_values = values.select { |value| !valid_values.include?(value) }
 
           invalid_values.each do |value|
-            @errors << "Invalid #{header_name} in row #{i + 1}: #{value}"
+            @warnings << "Invalid #{header_name} in row #{i + 1}: #{value}"
           end
         end
       end
