@@ -79,7 +79,7 @@ module Zizia
           duplicates << x if x == sorted_headers[i + 1]
         end
         duplicates.uniq.each do |header|
-          @errors << "Duplicate column names: You can have only one \"#{header.titleize}\" column."
+          @errors << "Duplicate column names: You can have only one \"#{header}\" column."
         end
       end
 
@@ -102,7 +102,7 @@ module Zizia
         @rows.each_with_index do |row, i|
           column_numbers.each_with_index do |column_number, j|
             next unless row[column_number].blank?
-            @errors << "Missing required metadata in row #{i + 1}: \"#{required_headers[j].titleize}\" field cannot be blank"
+            @errors << "Missing required metadata in row #{i + 1}: \"#{required_headers[j]}\" field cannot be blank"
           end
         end
       end

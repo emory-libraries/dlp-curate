@@ -15,7 +15,7 @@ RSpec.describe 'Importing records with an invalid rights statement', :perform_jo
       login_as admin_user
     end
 
-    it 'starts the import' do
+    it 'lets the user know about invalid rights statements' do
       visit '/csv_imports/new'
       expect(page).to have_content 'Testing Collection'
       expect(page).not_to have_content '["Testing Collection"]'
