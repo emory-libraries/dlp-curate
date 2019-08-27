@@ -53,9 +53,22 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
 
     it 'has an error for every missing header' do
       validator.validate
-      expected_errors = ["title", "content_type"]
+      expected_errors = ["title"]
       expected_errors.each do |error|
         matches = validator.errors.map { |e| e.match(error) }
+        expect(matches.compact).not_to be_empty
+      end
+    end
+  end
+
+  context 'a CSV that is missing headers required by the edit form' do
+    let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'missing_fields_required_on_edit_form.csv') }
+
+    it 'has a warning for every missing header' do
+      validator.validate
+      expected_warnings = REQUIRED_FIELDS_ON_FORM.map(&:to_s) - ["title"]
+      expected_warnings.each do |warning|
+        matches = validator.warnings.map { |e| e.match(warning) }
         expect(matches.compact).not_to be_empty
       end
     end

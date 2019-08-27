@@ -28,6 +28,7 @@ module Zizia
       return unless @rows
 
       missing_headers
+      missing_headers_required_by_edit_form
       duplicate_headers
       unrecognized_headers
       missing_values
@@ -68,8 +69,16 @@ module Zizia
         end
       end
 
+      def missing_headers_required_by_edit_form
+        required_headers = REQUIRED_FIELDS_ON_FORM.map(&:to_s)
+        required_headers.each do |header|
+          next if @transformed_headers.include?(header)
+          @warnings << "Missing column: #{header}. This field is required by the edit form."
+        end
+      end
+
       def required_headers
-        ['title', 'filename', 'content_type']
+        ['title']
       end
 
       def duplicate_headers
