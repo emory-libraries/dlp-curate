@@ -33,7 +33,7 @@ module Zizia
       missing_values
       # invalid_license # Not yet implemented for Emory
       invalid_resource_type
-      # invalid_rights_statement # Not yet implemented for Emory
+      invalid_rights_statement
     end
 
     # One record per row
@@ -79,7 +79,7 @@ module Zizia
           duplicates << x if x == sorted_headers[i + 1]
         end
         duplicates.uniq.each do |header|
-          @errors << "Duplicate column names: You can have only one \"#{header.titleize}\" column."
+          @errors << "Duplicate column names: You can have only one \"#{header}\" column."
         end
       end
 
@@ -100,9 +100,10 @@ module Zizia
       def missing_values
         column_numbers = transformed_required_headers.map { |header| @transformed_headers.find_index(header) }.compact
         @rows.each_with_index do |row, i|
+          next if i.zero? # Skip the header row
           column_numbers.each_with_index do |column_number, j|
             next unless row[column_number].blank?
-            @errors << "Missing required metadata in row #{i + 1}: \"#{required_headers[j].titleize}\" field cannot be blank"
+            @errors << "Missing required metadata in row #{i + 1}: \"#{required_headers[j]}\" field cannot be blank"
           end
         end
       end
@@ -114,11 +115,11 @@ module Zizia
       end
 
       def invalid_resource_type
-        validate_values('Desc - Type of Resource', :valid_resource_types)
+        validate_values('content_type', :valid_resource_types)
       end
 
       def invalid_rights_statement
-        validate_values('rights statement', :valid_rights_statements)
+        validate_values('rights_statement', :valid_rights_statements)
       end
 
       def valid_licenses
@@ -146,11 +147,13 @@ module Zizia
           next unless row[column_number]
 
           values = row[column_number].split(delimiter)
+          values = values.map { |v| v.downcase.strip }
           valid_values = method(valid_values_method).call
+          valid_values = valid_values.map { |v| v.downcase.strip }
           invalid_values = values.select { |value| !valid_values.include?(value) }
 
           invalid_values.each do |value|
-            @errors << "Invalid #{header_name.titleize} in row #{i + 1}: #{value}"
+            @warnings << "Invalid #{header_name} in row #{i + 1}: #{value}"
           end
         end
       end
