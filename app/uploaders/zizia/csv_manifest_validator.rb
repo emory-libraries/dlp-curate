@@ -33,6 +33,7 @@ module Zizia
       unrecognized_headers
       missing_values
       # invalid_license # Not yet implemented for Emory
+      invalid_administrative_unit
       invalid_resource_type
       invalid_rights_statement
     end
@@ -127,6 +128,10 @@ module Zizia
         validate_values('content_type', :valid_resource_types)
       end
 
+      def invalid_administrative_unit
+        validate_values('administrative_unit', :valid_administrative_units)
+      end
+
       def invalid_rights_statement
         validate_values('rights_statement', :valid_rights_statements)
       end
@@ -144,6 +149,10 @@ module Zizia
 
       def valid_rights_statements
         @valid_rights_statement_ids ||= Qa::Authorities::Local.subauthority_for('rights_statements').all.select { |term| term[:active] }.map { |term| term[:id] }
+      end
+
+      def valid_administrative_units
+        @valid_administrative_units ||= Qa::Authorities::Local.subauthority_for('administrative_unit').all.select { |term| term[:active] }.map { |term| term[:id] }
       end
 
       # Make sure this column contains only valid values

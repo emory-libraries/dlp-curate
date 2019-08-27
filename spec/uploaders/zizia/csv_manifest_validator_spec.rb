@@ -74,6 +74,30 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     end
   end
 
+  context 'a CSV with invalid administrative unit data' do
+    let(:header) { "title, administrative_unit, holding_repository, content_type, rights_statement_text, rights_statement, data_classification, date_created" }
+    let(:row2) { "Title1, Emory University Archives,,,,,,, " }
+    let(:row3) { "Title2, Fake Administrative Unit,,,,,,," }
+    let(:rows) { [header, row2, row3] }
+    let(:file_path) { "tmp/administrative_unit_test.csv" }
+    let(:csv_file) do
+      CSV.open(file_path, "w") do |csv|
+        rows.each do |row|
+          csv << row.split(",")
+        end
+      end
+      file_path
+    end
+
+    after { File.delete(file_path) }
+
+    it 'has a warning' do
+      validator.validate
+      expected_warning = "Invalid administrative_unit in row 3: fake administrative unit"
+      expect(validator.warnings).to include(expected_warning)
+    end
+  end
+
   context 'a CSV with duplicate headers' do
     let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'duplicate_headers.csv') }
 
