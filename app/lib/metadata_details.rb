@@ -23,7 +23,7 @@ class MetadataDetails
 
   def to_csv(work_attributes:)
     details_hash = details(work_attributes: work_attributes)
-    headers = [:attribute, :predicate, :multiple, :type, :validator, :label]
+    headers = [:attribute, :predicate, :multiple, :type, :validator, :label, :csv_header, :required_on_form]
     csv_string = CSV.generate do |csv|
       csv << headers
       details_hash.each do |detail|
