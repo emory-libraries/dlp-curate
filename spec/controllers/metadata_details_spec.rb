@@ -19,4 +19,11 @@ RSpec.describe MetadataDetailsController, type: :controller do
     get :csv
     expect(response.content_type).to eq('text/csv')
   end
+
+  it 'includes expected headers' do
+    get :csv
+    first_row = response.body.lines.first
+    expect(first_row).to include('csv_header')
+    expect(first_row).to include('required_on_form')
+  end
 end
