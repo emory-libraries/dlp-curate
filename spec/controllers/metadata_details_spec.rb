@@ -28,11 +28,11 @@ RSpec.describe MetadataDetailsController, type: :controller do
   end
 
   it 'includes a date in the filename' do
-    todays_date = Date.new(1985, 7, 3)
+    todays_date = "Wed, 03 Jul 1985".to_date
     allow(Date).to receive(:current) { todays_date }
 
     get :csv
     filename = response.headers['Content-Disposition']
-    expect(filename).to include todays_date.to_s
+    expect(filename).to include "1985-07-03"
   end
 end
