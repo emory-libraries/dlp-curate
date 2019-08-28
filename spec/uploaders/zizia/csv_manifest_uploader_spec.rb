@@ -29,15 +29,4 @@ RSpec.describe Zizia::CsvManifestUploader, type: :model do
       expect(uploader.records).to eq 1
     end
   end
-
-  context 'a CSV that has warnings' do
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'extra_headers.csv') }
-
-    it 'has warning messages' do
-      expect(uploader.warnings).to eq [
-        'The field name "another_header_1" is not supported.  This field will be ignored, and the metadata for this field will not be imported.',
-        'The field name "another_header_2" is not supported.  This field will be ignored, and the metadata for this field will not be imported.'
-      ]
-    end
-  end
 end
