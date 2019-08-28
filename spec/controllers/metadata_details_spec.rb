@@ -16,12 +16,12 @@ RSpec.describe MetadataDetailsController, type: :controller do
   end
 
   it 'has a downloadable csv' do
-    get :csv
+    get :profile
     expect(response.content_type).to eq('text/csv')
   end
 
   it 'includes expected headers' do
-    get :csv
+    get :profile
     first_row = response.body.lines.first
     expect(first_row).to include('csv_header')
     expect(first_row).to include('required_on_form')
@@ -31,7 +31,7 @@ RSpec.describe MetadataDetailsController, type: :controller do
     todays_date = "Wed, 03 Jul 1985".to_date
     allow(Date).to receive(:current) { todays_date }
 
-    get :csv
+    get :profile
     filename = response.headers['Content-Disposition']
     expect(filename).to include "1985-07-03"
   end
