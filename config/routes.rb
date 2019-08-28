@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   mount Blacklight::Engine => '/'
 
   get 'importer_documentation/guide', to: 'metadata_details#show'
-  get 'importer_documentation/csv', to: 'metadata_details#csv'
+  get 'importer_documentation/profile', to: 'metadata_details#profile'
   mount Zizia::Engine => '/'
 
   concern :searchable, Blacklight::Routes::Searchable.new

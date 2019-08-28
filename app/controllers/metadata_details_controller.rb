@@ -4,7 +4,7 @@ class MetadataDetailsController < ApplicationController
                                                 CurateGenericWorkAttributes.instance)
   end
 
-  def csv
+  def profile
     @csv = ::MetadataDetails.instance.to_csv(work_attributes:
                                               CurateGenericWorkAttributes.instance)
     send_data @csv, type: 'text/csv', filename: "metadata-profile-#{Date.current}.csv"
