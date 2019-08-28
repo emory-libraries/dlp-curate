@@ -26,4 +26,13 @@ RSpec.describe MetadataDetailsController, type: :controller do
     expect(first_row).to include('csv_header')
     expect(first_row).to include('required_on_form')
   end
+
+  it 'includes a date in the filename' do
+    todays_date = Date.new(1985, 7, 3)
+    allow(Date).to receive(:current) { todays_date }
+
+    get :csv
+    filename = response.headers['Content-Disposition']
+    expect(filename).to include todays_date.to_s
+  end
 end
