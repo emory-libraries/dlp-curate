@@ -9,7 +9,7 @@ RSpec.describe CurateMapper do
     {
       "abstract" => "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier",
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
-      "content_genre" => "black-and-white photographs",
+      "content_genres" => "black-and-white photographs",
       "contact_information" => "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu",
       "content_type" => 'still image',
       "copyright_date" => "1985-11-01",
@@ -59,9 +59,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#content_genre" do
-    it "maps the content_genre field" do
-      expect(mapper.content_genre).to eq ["black-and-white photographs"]
+  context "#content_genres" do
+    it "maps the content_genres field" do
+      expect(mapper.content_genres).to eq ["black-and-white photographs"]
     end
   end
 

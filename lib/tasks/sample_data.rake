@@ -48,7 +48,7 @@ def load_first_object
   work.creator = ["Fake Creator"]
   work.date_created = "XXXX"
   work.date_issued = "XXXX"
-  work.content_genre = ["card photographs (photographs)"]
+  work.content_genres = ["card photographs (photographs)"]
   work.holding_repository = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
   work.institution = "Emory University"
   work.primary_language = "Fake Primary Language"
@@ -88,7 +88,7 @@ def load_second_object
   work.creator = ["Fake Creator"]
   work.date_created = "XXXX"
   work.date_issued = "XXXX"
-  work.content_genre = ["card photographs (photographs)"]
+  work.content_genres = ["card photographs (photographs)"]
   work.holding_repository = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
   work.institution = "Emory University"
   work.primary_language = "Fake Primary Language"
@@ -128,7 +128,7 @@ def load_third_object
   work.creator = ["Hooks Brothers."]
   work.date_created = "1921"
   work.date_issued = "XXXX"
-  work.content_genre = ["card photographs (photographs)"]
+  work.content_genres = ["card photographs (photographs)"]
   work.holding_repository = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
   work.institution = "Emory University"
   work.primary_language = "Fake Primary Language"

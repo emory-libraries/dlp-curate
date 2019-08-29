@@ -5,7 +5,7 @@ module Hyrax
     include SingleValuedForm
     self.model_class = ::CurateGenericWork
     self.terms = [:title, :institution, :holding_repository, :administrative_unit, :sublocation,
-                  :content_type, :content_genre, :abstract, :table_of_contents, :edition,
+                  :content_type, :content_genres, :abstract, :table_of_contents, :edition,
                   :primary_language, :subject_topics, :subject_names, :subject_geo, :subject_time_periods,
                   :conference_name, :uniform_title, :series_title, :parent_title, :contact_information,
                   :publisher_version, :creator, :contributor, :sponsor, :data_producer, :grant, :grant_information,
@@ -23,7 +23,7 @@ module Hyrax
     self.single_valued_fields = [:title]
 
     def primary_descriptive_metadata_fields
-      [:title, :holding_repository, :date_created, :content_type, :content_genre, :administrative_unit, :creator, :contributor,
+      [:title, :holding_repository, :date_created, :content_type, :content_genres, :administrative_unit, :creator, :contributor,
        :abstract, :primary_language, :date_issued, :extent, :sublocation]
     end
 
