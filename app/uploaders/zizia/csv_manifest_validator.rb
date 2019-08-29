@@ -37,6 +37,7 @@ module Zizia
       invalid_administrative_unit
       invalid_resource_type
       invalid_rights_statement
+      check_for_valid_sensitive_material_values
     end
 
     # One record per row
@@ -119,6 +120,10 @@ module Zizia
         end
       end
 
+      def check_for_valid_sensitive_material_values
+        validate_values('sensitive_material', :valid_sensitive_material_values)
+      end
+
       # Only allow valid license values expected by Hyrax.
       # Otherwise the app throws an error when it displays the work.
       def invalid_license
@@ -146,6 +151,11 @@ module Zizia
         @valid_resource_type_ids ||= Qa::Authorities::Local.subauthority_for('resource_types').all.select { |term| term[:active] }.map { |term| term[:id] }
         @valid_resource_type_labels ||= Qa::Authorities::Local.subauthority_for('resource_types').all.select { |term| term[:active] }.map { |term| term[:label] }
         @valid_resource_type_ids + @valid_resource_type_labels + @valid_resource_type_labels.map { |a| a.downcase.strip.squeeze(' ') }
+      end
+
+      def valid_sensitive_material_values
+        @valid_sensitive_material ||= Qa::Authorities::Local.subauthority_for('sensitive_material')
+                                                            .all.select { |term| term[:active] }.map { |term| term[:id].to_s } + ["yes", "no"]
       end
 
       def valid_rights_statements
