@@ -6,7 +6,7 @@ class CurateMapper < Zizia::HashMapper
   CURATE_TERMS_MAP = {
     abstract: "abstract",
     administrative_unit: "administrative_unit",
-    content_genre: "content_genre",
+    content_genres: "content_genres",
     contact_information: "contact_information",
     content_type: "content_type",
     copyright_date: "copyright_date",

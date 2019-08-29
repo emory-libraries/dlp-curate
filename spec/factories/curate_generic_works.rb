@@ -37,7 +37,7 @@ FactoryBot.define do
       conference_dates { '1995' }
       conference_name { 'None' }
       contact_information { 'Call here' }
-      content_genre { ['Photos'] }
+      content_genres { ['Photos'] }
       content_type { 'http://id.loc.gov/vocabulary/resourceTypes/aud' }
       contributor { ['Someone else'] }
       copyright_date { '1922' }

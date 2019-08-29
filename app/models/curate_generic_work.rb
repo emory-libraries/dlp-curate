@@ -42,7 +42,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :content_genre, predicate: "http://www.europeana.edu/schemas/edm/hasType" do |index|
+  property :content_genres, predicate: "http://www.europeana.edu/schemas/edm/hasType" do |index|
     index.as :stored_searchable, :facetable
   end
 

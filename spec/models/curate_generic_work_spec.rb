@@ -131,21 +131,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#content_genre" do
+  describe "#content_genres" do
     subject { described_class.new }
-    let(:content_genre) { ['Fictional book'] }
+    let(:content_genres) { ['Fictional book', 'Another Book'] }
 
     context "with new CurateGenericWork work" do
-      its(:content_genre) { is_expected.to be_empty }
+      its(:content_genres) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a content_genre" do
+    context "with a CurateGenericWork work that has content_genres" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.content_genre = content_genre
+          cgw.content_genres = content_genres
         end
       end
-      its(:content_genre) { is_expected.to eq ['Fictional book'] }
+      its(:content_genres) { is_expected.to eq ['Fictional book', 'Another Book'] }
     end
   end
 
