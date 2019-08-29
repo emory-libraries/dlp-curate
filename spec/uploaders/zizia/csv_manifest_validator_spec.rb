@@ -186,6 +186,35 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     end
   end
 
+  context 'a CSV with invalid sensitive_material values' do
+    let(:headers_with_sensitive_material) { header + ["sensitive_material"] }
+    let(:rows) { [headers_with_sensitive_material, data_with_sensitive_material] }
+    context "sensitive_material is true" do
+      let(:data_with_sensitive_material) { row2 + [true] }
+      it "doesn't cause errors or warnings" do
+        validator.validate
+        expect(validator.errors).to eq []
+        expect(validator.warnings).to eq []
+      end
+    end
+    context "sensitive_material is yes" do
+      let(:data_with_sensitive_material) { row2 + ["yes"] }
+      it "doesn't cause errors or warnings" do
+        validator.validate
+        expect(validator.errors).to eq []
+        expect(validator.warnings).to eq []
+      end
+    end
+    context "sensitive_material is an unexpected value" do
+      let(:data_with_sensitive_material) { row2 + ["highly contagious"] }
+      it "raises a warning" do
+        validator.validate
+        expected_warning = "Invalid sensitive_material in row 2: highly contagious"
+        expect(validator.warnings).to include(expected_warning)
+      end
+    end
+  end
+
   # We don't yet know how we plan to find the files, so removing this check for now.
   # context 'when the csv has a missing file' do
   #   let(:csv_file) { 'spec/fixtures/example-missingimage.csv' }
