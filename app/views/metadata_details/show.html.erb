@@ -12,7 +12,6 @@
         <div>
           <b>Predicate:</b>
           <a href="<%= detail[1][:predicate] %>"/><%= detail[1][:predicate] %></a>
-
         </div>
         <div>
           <b>Type:</b>
@@ -34,10 +33,15 @@
           <b>Import header:</b>
           <span class=<%= css_class(detail[1][:csv_header])%>>
             <%= detail[1][:csv_header] %>
+          </span>
         </div>
         <div>
           <b>Required on Edit Form:</b>
           <%= detail[1][:required_on_form] %>
+        </div>
+        <div class=metadata_usage>
+          <b>Usage:</b>
+          <%= detail[1][:usage] %>
         </div>
       </dd>
     <% end  %>

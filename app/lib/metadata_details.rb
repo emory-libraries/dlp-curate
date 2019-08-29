@@ -4,7 +4,7 @@ require 'csv'
 class MetadataDetails
   include Singleton
 
-  def details(work_attributes:) # rubocop:disable Metrics/AbcSize
+  def details(work_attributes:) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     validators = work_attributes.validators
     work_attributes.properties.sort.map do |p|
       Hash[
@@ -17,13 +17,14 @@ class MetadataDetails
         label: I18n.t("simple_form.labels.defaults.#{p[0]}"),
         csv_header: csv_header(p[0]),
         required_on_form: required_on_form_to_s(p[0]),
+        usage: METADATA_USAGE[p[0]]
       ]
     end.reduce({}, :merge)
   end
 
   def to_csv(work_attributes:)
     details_hash = details(work_attributes: work_attributes)
-    headers = [:attribute, :predicate, :multiple, :type, :validator, :label, :csv_header, :required_on_form]
+    headers = [:attribute, :predicate, :multiple, :type, :validator, :label, :csv_header, :required_on_form, :usage]
     csv_string = CSV.generate do |csv|
       csv << headers
       details_hash.each do |detail|
