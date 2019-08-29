@@ -31,7 +31,7 @@ FactoryBot.define do
 
     factory :work_with_full_metadata do
       abstract { 'Abstract' }
-      access_right { ['true'] }
+      access_restriction_notes { ['true'] }
       administrative_unit { 'Emory University Archives' }
       author_notes { 'None found' }
       conference_dates { '1995' }

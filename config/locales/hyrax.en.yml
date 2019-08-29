@@ -5,7 +5,7 @@ en:
       fields:
         facet:
           abstract: "Description/Abstract"
-          access_right: "Access Restrictions"
+          access_restriction_notes: "Access Restrictions"
           administrative_unit: "Administrative Unit"
           administrative_unit: "Administrative Unit"
           author_notes: "Author Notes"
@@ -65,7 +65,7 @@ en:
           transfer_engineer: "Transfer Engineer"
         index:
           abstract: "Description/Abstract"
-          access_right: "Access Restrictions"
+          access_restriction_notes: "Access Restrictions"
           administrative_unit: "Administrative Unit"
           administrative_unit: "Administrative Unit"
           author_notes: "Author Notes"
@@ -125,7 +125,7 @@ en:
           transfer_engineer: "Transfer Engineer"
         show:
           abstract: "Description/Abstract"
-          access_right: "Access Restrictions"
+          access_restriction_notes: "Access Restrictions"
           administrative_unit: "Administrative Unit"
           administrative_unit: "Administrative Unit"
           author_notes: "Author Notes"
@@ -246,7 +246,7 @@ en:
         title: ''
       defaults:
         abstract: ''
-        access_right: ''
+        access_restriction_notes: ''
         based_near: ''
         contributor: ''
         creator: ''
@@ -265,7 +265,7 @@ en:
     labels:
       defaults:
         abstract: "Description/Abstract"
-        access_right: "Access Restrictions"
+        access_restriction_notes: "Access Restrictions"
         administrative_unit: "Administrative Unit"
         administrative_unit: "Administrative Unit"
         author_notes: "Author Notes"

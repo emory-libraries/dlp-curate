@@ -1031,21 +1031,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#access_right" do
+  describe "#access_restriction_notes" do
     subject { described_class.new }
-    let(:access_right) { ['Public Access'] }
+    let(:access_restriction_notes) { ['Public Access'] }
 
     context "with new CurateGenericWork work" do
-      its(:access_right) { is_expected.to be_empty }
+      its(:access_restriction_notes) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has access_right" do
+    context "with a CurateGenericWork work that has access_restriction_notes" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.access_right = access_right
+          cgw.access_restriction_notes = access_restriction_notes
         end
       end
-      its(:access_right) { is_expected.to eq access_right }
+      its(:access_restriction_notes) { is_expected.to eq access_restriction_notes }
     end
   end
 

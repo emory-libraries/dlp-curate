@@ -20,7 +20,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :access_right, predicate: "http://purl.org/dc/terms/accessRights" do |index|
+  property :access_restriction_notes, predicate: "http://purl.org/dc/terms/accessRights" do |index|
     index.as :stored_searchable
   end
 
