@@ -67,6 +67,11 @@ class CurateMapper < Zizia::HashMapper
     common_fields
   end
 
+  # Zizia expects files to return an Array
+  def files
+    [@metadata["Filename"]]
+  end
+
   # Samvera generally assumes that all fields are multi-valued. Curate has many
   # fields that are assumed to be singular, however. List them here for an easy
   # way to check whether a field is multi-valued when retrieving it.
@@ -118,6 +123,13 @@ class CurateMapper < Zizia::HashMapper
       'open' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       'public' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     }.freeze
+  end
+
+  # Return the title if there is one. Otherwise, set it to a placeholder value.
+  # We will sometimes have CSV rows that contain only a Filename, but no metadata.
+  def title
+    value = @metadata["title"] || "Unknown Title"
+    Array.wrap(value)
   end
 
   # Normalize the value coming in because there are subtle mis-matches against the expected controlled
