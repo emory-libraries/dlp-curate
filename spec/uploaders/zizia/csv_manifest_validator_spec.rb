@@ -158,6 +158,26 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     end
   end
 
+  context 'a CSV with the wrong number of values in a row' do
+    let(:rows) { [header, wrong_number_of_values_row] }
+    context "too many values in a row" do
+      let(:wrong_number_of_values_row) { row2 + ["whatever"] }
+      it "raises a warning" do
+        validator.validate
+        expected_warning = "row 2: too many fields in the row"
+        expect(validator.warnings).to include(expected_warning)
+      end
+    end
+    context "too few values in a row" do
+      let(:wrong_number_of_values_row) { ["whatever", "whatever"] }
+      it "raises a warning" do
+        validator.validate
+        expected_warning = "row 2: too few fields in the row"
+        expect(validator.warnings).to include(expected_warning)
+      end
+    end
+  end
+
   context 'either string values or URIs in resource type field' do
     context 'with a string' do
       it 'recognizes a valid string for resource type' do
