@@ -31,6 +31,7 @@ module Zizia
       missing_headers_required_by_edit_form
       duplicate_headers
       unrecognized_headers
+      check_number_of_values_in_a_row
       missing_values
       # invalid_license # Not yet implemented for Emory
       invalid_administrative_unit
@@ -153,6 +154,17 @@ module Zizia
 
       def valid_administrative_units
         @valid_administrative_units ||= Qa::Authorities::Local.subauthority_for('administrative_unit').all.select { |term| term[:active] }.map { |term| term[:id] }
+      end
+
+      def check_number_of_values_in_a_row
+        expected_number_of_values = @transformed_headers.size
+        @rows.each_with_index do |row, i|
+          next if i.zero? # Skip the header row
+          row_size = row.size
+          next if row_size == expected_number_of_values
+          @warnings << "row #{i + 1}: too many fields in the row" if row_size > expected_number_of_values
+          @warnings << "row #{i + 1}: too few fields in the row" if row_size < expected_number_of_values
+        end
       end
 
       # Make sure this column contains only valid values
