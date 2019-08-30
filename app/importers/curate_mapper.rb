@@ -11,7 +11,7 @@ class CurateMapper < Zizia::HashMapper
     content_type: "content_type",
     copyright_date: "copyright_date",
     creator: "creator",
-    data_classification: "data_classification",
+    data_classifications: "data_classifications",
     date_created: "date_created",
     date_digitized: "date_digitized",
     date_issued: "date_issued",
@@ -146,12 +146,12 @@ class CurateMapper < Zizia::HashMapper
     raise "Invalid administrative_unit value: #{csv_term}"
   end
 
-  # Iterate through all values for data_classification and ensure they are all
+  # Iterate through all values for data_classifications and ensure they are all
   # valid options according to Questioning Authority
-  def data_classification
-    return nil unless @metadata["data_classification"]
-    csv_terms = @metadata["data_classification"]&.split(DELIMITER)
-    active_terms = Qa::Authorities::Local.subauthority_for('data_classification').all.select { |term| term[:active] }
+  def data_classifications
+    return nil unless @metadata["data_classifications"]
+    csv_terms = @metadata["data_classifications"]&.split(DELIMITER)
+    active_terms = Qa::Authorities::Local.subauthority_for('data_classifications').all.select { |term| term[:active] }
     data_classification_values = []
     csv_terms.each do |c|
       valid_option = active_terms.select { |s| s["id"] == c }.try(:first)

@@ -18,7 +18,7 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
       content_type
       rights_statement_text
       rights_statement
-      data_classification
+      data_classifications
       date_created
     ]
   end
@@ -109,7 +109,7 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
         content_type
         rights_statement_text
         rights_statement
-        data_classification
+        data_classifications
         date_created
       ]
     end

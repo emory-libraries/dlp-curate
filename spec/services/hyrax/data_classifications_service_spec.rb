@@ -1,4 +1,4 @@
-RSpec.describe Hyrax::DataClassificationService do
+RSpec.describe Hyrax::DataClassificationsService do
   before do
     # Configure QA to use fixtures
     qa_fixtures = { local_path: File.expand_path('config/authorities') }

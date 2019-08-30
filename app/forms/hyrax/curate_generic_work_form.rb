@@ -15,7 +15,7 @@ module Hyrax
                   :issue, :page_range_start, :page_range_end, :volume, :place_of_production, :keywords, :rights_statement_text,
                   :rights_statement, :rights_holder, :copyright_date, :re_use_license, :access_restriction_notes, :rights_documentation,
                   :scheduled_rights_review, :scheduled_rights_review_note, :internal_rights_note, :legacy_rights,
-                  :data_classification, :sensitive_material, :sensitive_material_note, :staff_note, :date_digitized,
+                  :data_classifications, :sensitive_material, :sensitive_material_note, :staff_note, :date_digitized,
                   :transfer_engineer, :legacy_identifier, :legacy_ark, :system_of_record_ID, :primary_repository_ID]
 
     self.required_fields = REQUIRED_FIELDS_ON_FORM
@@ -36,7 +36,7 @@ module Hyrax
     end
 
     def primary_rights_metadata_fields
-      [:rights_statement_text, :rights_statement, :data_classification, :rights_holder, :copyright_date, :re_use_license, :access_restriction_notes,
+      [:rights_statement_text, :rights_statement, :data_classifications, :rights_holder, :copyright_date, :re_use_license, :access_restriction_notes,
        :rights_documentation, :sensitive_material, :sensitive_material_note, :scheduled_rights_review, :scheduled_rights_review_note,
        :internal_rights_note, :legacy_rights, :contact_information]
     end

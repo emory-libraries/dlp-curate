@@ -14,7 +14,7 @@ RSpec.describe CurateMapper do
       "content_type" => 'still image',
       "copyright_date" => "1985-11-01",
       "creator" => "Harris, Teenie, 1908-1998.",
-      "data_classification" => "Confidential|Internal",
+      "data_classifications" => "Confidential|Internal",
       "date_created" => "1985-11-01",
       "date_issued" => "Unknown",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
@@ -119,9 +119,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#data_classification" do
-    it "maps the data_classification field" do
-      expect(mapper.data_classification).to contain_exactly("Confidential", "Internal")
+  context "#data_classifications" do
+    it "maps the data_classifications field" do
+      expect(mapper.data_classifications).to contain_exactly("Confidential", "Internal")
     end
   end
 

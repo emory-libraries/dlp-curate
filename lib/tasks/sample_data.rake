@@ -66,7 +66,7 @@ def load_first_object
   work.table_of_contents = "Fake TOC"
   work.title = ["Students sitting on floor, chairs and tables in classroom with furnace"]
   work.content_type = "http://id.loc.gov/vocabulary/resourceTypes/img"
-  work.data_classification = ["Confidential"]
+  work.data_classifications = ["Confidential"]
   work.visibility = "open"
   work.copyright_date = "Fake Copyright Date"
   work.rights_holder = ["Fake Rights Holder"]
@@ -106,7 +106,7 @@ def load_second_object
   work.table_of_contents = "Fake TOC"
   work.title = ["Students sitting on floor, chairs and tables in classroom with furnace"]
   work.content_type = "http://id.loc.gov/vocabulary/resourceTypes/img"
-  work.data_classification = ["Confidential"]
+  work.data_classifications = ["Confidential"]
   work.visibility = "open"
   work.copyright_date = "Fake Copyright Date"
   work.rights_holder = ["Fake Rights Holder"]
@@ -157,7 +157,7 @@ def load_third_object
   work.table_of_contents = "Fake TOC"
   work.title = ["Faculty and graduates of University of West Tennessee, Memphis, Tenn. in medicine, dentistry and nurse training in 1921"]
   work.content_type = "http://id.loc.gov/vocabulary/resourceTypes/img"
-  work.data_classification = ["Confidential"]
+  work.data_classifications = ["Confidential"]
   work.visibility = "open"
   work.copyright_date = "Fake Copyright Date"
   work.rights_holder = ["Fake Rights Holder"]
