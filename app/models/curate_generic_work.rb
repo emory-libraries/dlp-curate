@@ -50,7 +50,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :contributor, predicate: "http://purl.org/dc/elements/1.1/contributor" do |index|
+  property :contributors, predicate: "http://purl.org/dc/elements/1.1/contributor" do |index|
     index.as :stored_searchable
   end
 

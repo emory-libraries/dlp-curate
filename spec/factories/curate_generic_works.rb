@@ -39,7 +39,7 @@ FactoryBot.define do
       contact_information { 'Call here' }
       content_genres { ['Photos'] }
       content_type { 'http://id.loc.gov/vocabulary/resourceTypes/aud' }
-      contributor { ['Someone else'] }
+      contributors { ['Someone else'] }
       copyright_date { '1922' }
       creator { ['the author'] }
       data_classification { ['open'] }

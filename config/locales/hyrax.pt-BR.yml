@@ -14,7 +14,7 @@ pt-BR:
           subject_sim: Sujeito
         index:
           based_near_tesim: Localização
-          contributor_tesim: Contribuinte
+          contributors_tesim: Contribuinte
           creator_tesim: O Criador
           date_created_tesim: Data Criada
           date_modified_dtsi: Data modificada
@@ -30,7 +30,7 @@ pt-BR:
           subject_tesim: Sujeito
         show:
           based_near_tesim: Localização
-          contributor_tesim: Contribuinte
+          contributors_tesim: Contribuinte
           creator_tesim: O Criador
           date_created_tesim: Data Criada
           date_modified_dtsi: Data modificada

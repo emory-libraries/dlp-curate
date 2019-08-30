@@ -35,7 +35,7 @@ class CurateCollectionImporter
       collection.subject_geo = multivalue_mapping(collection_attrs, "subject_geo")
       collection.subject_time_periods = multivalue_mapping(collection_attrs, "subject_time_periods")
       collection.creator = multivalue_mapping(collection_attrs, "creator")
-      collection.contributor = multivalue_mapping(collection_attrs, "contributor")
+      collection.contributors = multivalue_mapping(collection_attrs, "contributors")
       collection.note = multivalue_mapping(collection_attrs, "note")
       collection.rights_documentation = collection_attrs["rights_documentation"]
       collection.internal_rights_note = collection_attrs["internal_rights_note"]

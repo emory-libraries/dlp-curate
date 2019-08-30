@@ -14,7 +14,7 @@ fr:
           subject_sim: Assujettir
         index:
           based_near_tesim: Emplacement
-          contributor_tesim: Donateur
+          contributors_tesim: Donateur
           creator_tesim: Créateur
           date_created_tesim: date créée
           date_modified_dtsi: Date modifiée
@@ -30,7 +30,7 @@ fr:
           subject_tesim: Assujettir
         show:
           based_near_tesim: Emplacement
-          contributor_tesim: Donateur
+          contributors_tesim: Donateur
           creator_tesim: Créateur
           date_created_tesim: date créée
           date_modified_dtsi: Date modifiée

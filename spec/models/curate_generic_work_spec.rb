@@ -419,21 +419,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#contributor" do
+  describe "#contributors" do
     subject { described_class.new }
-    let(:contributor) { ['Leo Tolstoy'] }
+    let(:contributors) { ['Leo Tolstoy'] }
 
     context "with new CurateGenericWork work" do
-      its(:contributor) { is_expected.to be_empty }
+      its(:contributors) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a contributor" do
+    context "with a CurateGenericWork work that has contributors" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.contributor = contributor
+          cgw.contributors = contributors
         end
       end
-      its(:contributor) { is_expected.to eq(['Leo Tolstoy']) }
+      its(:contributors) { is_expected.to eq(['Leo Tolstoy']) }
     end
   end
 

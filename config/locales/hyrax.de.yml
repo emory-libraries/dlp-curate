@@ -14,7 +14,7 @@ de:
           subject_sim: Fach
         index:
           based_near_tesim: Ort
-          contributor_tesim: Mitwirkender
+          contributors_tesim: Mitwirkender
           creator_tesim: Schöpfer
           date_created_tesim: Datum erstellt
           date_modified_dtsi: Datum geändert
@@ -30,7 +30,7 @@ de:
           subject_tesim: Fach
         show:
           based_near_tesim: Ort
-          contributor_tesim: Mitwirkender
+          contributors_tesim: Mitwirkender
           creator_tesim: Schöpfer
           date_created_tesim: Datum erstellt
           date_modified_dtsi: Datum geändert

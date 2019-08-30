@@ -7,7 +7,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
 
     it do
       is_expected.to eq [:title, :holding_repository, :administrative_unit, :creator,
-                         :contributor, :abstract, :primary_language, :finding_aid_link,
+                         :contributors, :abstract, :primary_language, :finding_aid_link,
                          :institution, :local_call_number, :keywords, :subject_topics,
                          :subject_names, :subject_geo, :subject_time_periods, :note,
                          :rights_documentation, :sensitive_material, :internal_rights_note,
@@ -32,7 +32,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
 
     it do
       is_expected.to eq [
-        :administrative_unit, :contributor, :primary_language, :finding_aid_link, :institution,
+        :administrative_unit, :contributors, :primary_language, :finding_aid_link, :institution,
         :local_call_number, :keywords, :subject_topics, :subject_names, :subject_geo, :subject_time_periods,
         :note, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
         :staff_note, :system_of_record_ID, :legacy_ark
@@ -88,7 +88,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
     subject { described_class.build_permitted_params }
 
     it do
-      is_expected.to eq [:title, { holding_repository: [] }, { administrative_unit: [] }, { creator: [] }, { contributor: [] },
+      is_expected.to eq [:title, { holding_repository: [] }, { administrative_unit: [] }, { creator: [] }, { contributors: [] },
                          :abstract, :primary_language, :finding_aid_link, :institution, :local_call_number, { keywords: [] },
                          { subject_topics: [] }, { subject_names: [] }, { subject_geo: [] }, { subject_time_periods: [] },
                          { note: [] }, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
