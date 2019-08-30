@@ -14,7 +14,7 @@ es:
           subject_sim: Tema
         index:
           based_near_tesim: Ubicación
-          contributor_tesim: Contribuidor
+          contributors_tesim: Contribuidor
           creator_tesim: Creador
           date_created_tesim: Fecha de Creacion
           date_modified_dtsi: Fecha Modificada
@@ -30,7 +30,7 @@ es:
           subject_tesim: Tema
         show:
           based_near_tesim: Ubicación
-          contributor_tesim: Contribuidor
+          contributors_tesim: Contribuidor
           creator_tesim: Creador
           date_created_tesim: Fecha de Creacion
           date_modified_dtsi: Fecha Modificada

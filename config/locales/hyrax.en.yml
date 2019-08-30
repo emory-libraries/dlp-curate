@@ -219,7 +219,7 @@ en:
         title: ''
       collection:
         based_near: ''
-        contributor: ''
+        contributors: ''
         creator: ''
         date_created: ''
         description: ''
@@ -248,7 +248,7 @@ en:
         abstract: ''
         access_restriction_notes: ''
         based_near: ''
-        contributor: ''
+        contributors: ''
         creator: ''
         date_created: ''
         description: ''

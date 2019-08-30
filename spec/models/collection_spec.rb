@@ -55,21 +55,21 @@ RSpec.describe Collection do
     end
   end
 
-  describe "#contributor" do
+  describe "#contributors" do
     subject { described_class.new }
-    let(:contributor) { ['Leo Tolstoy'] }
+    let(:contributors) { ['Leo Tolstoy'] }
 
     context "with new collection" do
-      its(:contributor) { is_expected.to be_empty }
+      its(:contributors) { is_expected.to be_empty }
     end
 
-    context "with a collection that has a contributor" do
+    context "with a collection that has contributors" do
       subject do
         described_class.create.tap do |col|
-          col.contributor = contributor
+          col.contributors = contributors
         end
       end
-      its(:contributor) { is_expected.to eq(['Leo Tolstoy']) }
+      its(:contributors) { is_expected.to eq(['Leo Tolstoy']) }
     end
   end
 

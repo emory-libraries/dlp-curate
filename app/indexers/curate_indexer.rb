@@ -1,7 +1,7 @@
 # This class gets called by ActiveFedora::IndexingService#olrize_rdf_assertions
 class CurateIndexer < ActiveFedora::RDF::IndexingService
   class_attribute :stored_and_facetable_fields, :stored_fields, :symbol_fields
-  self.stored_and_facetable_fields = %i[creator contributor holding_repository primary_language subject_topics subject_names subject_geo]
+  self.stored_and_facetable_fields = %i[creator contributors holding_repository primary_language subject_topics subject_names subject_geo]
   self.stored_fields = %i[abstract administrative_unit abstract institution
                           local_call_number keywords subject_time_periods note sensitive_material
                           internal_rights_note contact_information staff_note system_of_record_ID

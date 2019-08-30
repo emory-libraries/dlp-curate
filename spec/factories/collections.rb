@@ -114,7 +114,7 @@ FactoryBot.define do
     holding_repository { ['Emory'] }
     administrative_unit { ['Library'] }
     creator { ['Someone'] }
-    contributor { ['Someone else'] }
+    contributors { ['Someone else'] }
     abstract { 'A detailed abstract' }
     primary_language { 'English' }
     finding_aid_link { 'https://my-finding-aid.com' }
