@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fits xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd" version="1.4.0" timestamp="8/30/19 12:46 PM">
+  <identification>
+    <identity format="JPEG File Interchange Format" mimetype="image/jpeg" toolname="FITS" toolversion="1.4.0">
+      <tool toolname="Droid" toolversion="6.4" />
+      <tool toolname="Jhove" toolversion="1.20.1" />
+      <tool toolname="file utility" toolversion="5.33" />
+      <tool toolname="Exiftool" toolversion="11.14" />
+      <tool toolname="NLNZ Metadata Extractor" toolversion="3.6GA" />
+      <version toolname="Droid" toolversion="6.4">1.01</version>
+      <externalIdentifier toolname="Droid" toolversion="6.4" type="puid">fmt/43</externalIdentifier>
+    </identity>
+  </identification>
+  <fileinfo>
+    <size toolname="Jhove" toolversion="1.20.1">3448</size>
+    <filepath toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">/Users/dmatlaw/Downloads/cat.jpeg</filepath>
+    <filename toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">cat.jpeg</filename>
+    <md5checksum toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">369825e3cea145091eba0f9b76ca8d01</md5checksum>
+    <fslastmodified toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">1565814248000</fslastmodified>
+  </fileinfo>
+  <filestatus>
+    <well-formed toolname="Jhove" toolversion="1.20.1" status="SINGLE_RESULT">true</well-formed>
+    <valid toolname="Jhove" toolversion="1.20.1" status="SINGLE_RESULT">true</valid>
+  </filestatus>
+  <metadata>
+    <image>
+      <byteOrder toolname="Jhove" toolversion="1.20.1" status="SINGLE_RESULT">big endian</byteOrder>
+      <compressionScheme toolname="Jhove" toolversion="1.20.1" status="SINGLE_RESULT">JPEG</compressionScheme>
+      <imageWidth toolname="Jhove" toolversion="1.20.1">112</imageWidth>
+      <imageHeight toolname="Jhove" toolversion="1.20.1">130</imageHeight>
+      <colorSpace toolname="Jhove" toolversion="1.20.1" status="SINGLE_RESULT">YCbCr</colorSpace>
+      <YCbCrSubSampling toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">2 2</YCbCrSubSampling>
+      <samplingFrequencyUnit toolname="Jhove" toolversion="1.20.1">no absolute unit of measurement</samplingFrequencyUnit>
+      <xSamplingFrequency toolname="Exiftool" toolversion="11.14">1</xSamplingFrequency>
+      <ySamplingFrequency toolname="Exiftool" toolversion="11.14">1</ySamplingFrequency>
+      <bitsPerSample toolname="Jhove" toolversion="1.20.1">8 8 8</bitsPerSample>
+      <samplesPerPixel toolname="Jhove" toolversion="1.20.1" status="SINGLE_RESULT">3</samplesPerPixel>
+      <lightSource toolname="NLNZ Metadata Extractor" toolversion="3.6GA" status="SINGLE_RESULT">unknown</lightSource>
+    </image>
+  </metadata>
+  <statistics fitsExecutionTime="1390">
+    <tool toolname="MediaInfo" toolversion="0.7.75" status="did not run" />
+    <tool toolname="OIS Audio Information" toolversion="0.1" status="did not run" />
+    <tool toolname="ADL Tool" toolversion="0.1" status="did not run" />
+    <tool toolname="VTT Tool" toolversion="0.1" status="did not run" />
+    <tool toolname="Droid" toolversion="6.4" executionTime="199" />
+    <tool toolname="Jhove" toolversion="1.20.1" executionTime="1242" />
+    <tool toolname="file utility" toolversion="5.33" executionTime="1296" />
+    <tool toolname="Exiftool" toolversion="11.14" executionTime="1300" />
+    <tool toolname="NLNZ Metadata Extractor" toolversion="3.6GA" executionTime="1156" />
+    <tool toolname="OIS File Information" toolversion="0.2" executionTime="172" />
+    <tool toolname="OIS XML Metadata" toolversion="0.2" status="did not run" />
+    <tool toolname="ffident" toolversion="0.2" executionTime="971" />
+    <tool toolname="Tika" toolversion="1.19.1" executionTime="196" />
+  </statistics>
+</fits>
+

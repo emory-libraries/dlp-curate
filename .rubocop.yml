@@ -67,3 +67,7 @@ RSpec/NestedGroups:
 RSpec/InstanceVariable:
     Exclude:
         - 'spec/services/characterization_service_spec.rb'
+
+RSpec/MessageChain:
+    Exclude:
+        - 'spec/services/characterization_service_spec.rb'
