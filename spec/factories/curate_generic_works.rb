@@ -42,7 +42,7 @@ FactoryBot.define do
       contributors { ['Someone else'] }
       copyright_date { '1922' }
       creator { ['the author'] }
-      data_classification { ['open'] }
+      data_classifications { ['open'] }
       data_collection_dates { ['785'] }
       data_producer { ['Megacorp'] }
       data_source_note { ['Found materials'] }

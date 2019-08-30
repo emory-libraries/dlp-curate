@@ -1139,21 +1139,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#data_classification" do
+  describe "#data_classifications" do
     subject { described_class.new }
-    let(:data_classification) { ['excel spreadsheet'] }
+    let(:data_classifications) { ['excel spreadsheet'] }
 
     context "with new CurateGenericWork work" do
-      its(:data_classification) { is_expected.to be_empty }
+      its(:data_classifications) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has data_classification" do
+    context "with a CurateGenericWork work that has data_classifications" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.data_classification = data_classification
+          cgw.data_classifications = data_classifications
         end
       end
-      its(:data_classification) { is_expected.to eq data_classification }
+      its(:data_classifications) { is_expected.to eq data_classifications }
     end
   end
 

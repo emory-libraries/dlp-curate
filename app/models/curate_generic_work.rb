@@ -62,7 +62,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :data_classification, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataClassification" do |index|
+  property :data_classifications, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataClassification" do |index|
     index.as :stored_searchable
   end
 
