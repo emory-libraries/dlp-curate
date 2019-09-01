@@ -70,7 +70,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :data_producer, predicate: "http://id.loc.gov/vocabulary/relators/prv" do |index|
+  property :data_producers, predicate: "http://id.loc.gov/vocabulary/relators/prv" do |index|
     index.as :stored_searchable
   end
 
