@@ -455,21 +455,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#data_producer" do
+  describe "#data_producers" do
     subject { described_class.new }
-    let(:data_producer) { ['Emory University'] }
+    let(:data_producers) { ['Emory University'] }
 
     context "with new CurateGenericWork work" do
-      its(:data_producer) { is_expected.to be_empty }
+      its(:data_producers) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a data_producer" do
+    context "with a CurateGenericWork work that has data_producers" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.data_producer = data_producer
+          cgw.data_producers = data_producers
         end
       end
-      its(:data_producer) { is_expected.to eq(['Emory University']) }
+      its(:data_producers) { is_expected.to eq(['Emory University']) }
     end
   end
 
