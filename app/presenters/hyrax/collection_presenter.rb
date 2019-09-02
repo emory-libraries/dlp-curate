@@ -59,7 +59,7 @@ module Hyrax
              :contact_information,
              :staff_note,
              :system_of_record_ID,
-             :legacy_ark,
+             :emory_ark,
              :primary_repository_ID,
              to: :solr_document
 
@@ -87,7 +87,7 @@ module Hyrax
         :contact_information,
         :staff_note,
         :system_of_record_ID,
-        :legacy_ark,
+        :emory_ark,
         :primary_repository_ID
       ]
     end

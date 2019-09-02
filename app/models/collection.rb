@@ -94,7 +94,7 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :legacy_ark, predicate: 'http://id.loc.gov/vocabulary/identifiers/local#ark' do |index|
+  property :emory_ark, predicate: 'http://id.loc.gov/vocabulary/identifiers/local#ark' do |index|
     index.as :stored_searchable
   end
 

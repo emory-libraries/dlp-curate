@@ -379,21 +379,21 @@ RSpec.describe Collection do
     end
   end
 
-  describe "#legacy_ark" do
+  describe "#emory_ark" do
     subject { described_class.new }
-    let(:legacy_ark) { ['Emory Legacy Ark'] }
+    let(:emory_ark) { ['Emory Legacy Ark'] }
 
     context "with new collection" do
-      its(:legacy_ark) { is_expected.to be_empty }
+      its(:emory_ark) { is_expected.to be_empty }
     end
 
-    context "with a collection that has a legacy_ark" do
+    context "with a collection that has a emory_ark" do
       subject do
         described_class.create.tap do |col|
-          col.legacy_ark = legacy_ark
+          col.emory_ark = emory_ark
         end
       end
-      its(:legacy_ark) { is_expected.to eq legacy_ark }
+      its(:emory_ark) { is_expected.to eq emory_ark }
     end
   end
 

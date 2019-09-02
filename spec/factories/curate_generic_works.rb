@@ -64,7 +64,7 @@ FactoryBot.define do
       issn { '123435' }
       issue { '123' }
       keywords { ['photos'] }
-      legacy_ark { ['25'] }
+      emory_ark { ['25'] }
       legacy_identifier { ['1'] }
       legacy_rights { 'no' }
       local_call_number { '1234' }

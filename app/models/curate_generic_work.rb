@@ -92,6 +92,10 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :edition, predicate: "http://id.loc.gov/ontologies/bibframe/editionStatement", multiple: false
 
+  property :emory_ark, predicate: "http://id.loc.gov/vocabulary/identifiers/local#ark" do |index|
+    index.as :stored_searchable
+  end
+
   property :extent, predicate: "http://www.rdaregistry.info/Elements/u/#P60550", multiple: false do |index|
     index.as :stored_searchable
   end
@@ -131,10 +135,6 @@ class CurateGenericWork < ActiveFedora::Base
   property :issue, predicate: "http://purl.org/ontology/bibo/issue", multiple: false
 
   property :keywords, predicate: "http://schema.org/keywords" do |index|
-    index.as :stored_searchable
-  end
-
-  property :legacy_ark, predicate: "http://id.loc.gov/vocabulary/identifiers/local#ark" do |index|
     index.as :stored_searchable
   end
 
