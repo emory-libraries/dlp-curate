@@ -186,7 +186,7 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :related_datasets, predicate: "http://purl.org/dc/terms/relation#dataset"
 
-  property :related_material, predicate: "http://purl.org/dc/elements/1.1/relation" do |index|
+  property :related_material_notes, predicate: "http://purl.org/dc/elements/1.1/relation" do |index|
     index.as :stored_searchable
   end
 

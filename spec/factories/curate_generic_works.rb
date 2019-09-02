@@ -78,7 +78,7 @@ FactoryBot.define do
       publisher_version { '1' }
       re_use_license { 'true' }
       related_datasets { ['http://example.com'] }
-      related_material { ['More stuff'] }
+      related_material_notes { ['More stuff'] }
       related_publications { ['https://example.com'] }
       rights_documentation { 'https://example.com' }
       rights_holder { ['Emory'] }
