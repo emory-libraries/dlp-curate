@@ -88,7 +88,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       new_cgw_form.visit_new_page.metadata_fill_in_with.attach_files.check_visibility
 
       click_link('Additional descriptive fields')
-      fill_in "curate_generic_work[final_published_version][]", with: "teststring"
+      fill_in "curate_generic_work[final_published_versions][]", with: "teststring"
 
       click_on('Save')
 

@@ -11,7 +11,7 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   validates :title, presence: { message: 'Your work must have a title.' }
-  validates :final_published_version, url: true, if: -> { final_published_version.present? }
+  validates :final_published_versions, url: true, if: -> { final_published_versions.present? }
   validates :related_publications, url: true, if: -> { related_publications.present? }
   validates :related_datasets, url: true, if: -> { related_datasets.present? }
   validates :rights_documentation, url: true, if: -> { rights_documentation.present? }
@@ -96,7 +96,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :final_published_version, predicate: "http://purl.org/dc/terms/hasVersion"
+  property :final_published_versions, predicate: "http://purl.org/dc/terms/hasVersion"
 
   property :geographic_unit, predicate: "http://metadata.emory.edu/vocab/cor-terms#geographicUnit", multiple: false do |index|
     index.as :stored_searchable

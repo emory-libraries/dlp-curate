@@ -815,21 +815,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#final_published_version" do
+  describe "#final_published_versions" do
     subject { described_class.new }
-    let(:final_published_version) { ['http://www.example.com'] }
+    let(:final_published_versions) { ['http://www.example.com'] }
 
     context "with new CurateGenericWork work" do
-      its(:final_published_version) { is_expected.to be_empty }
+      its(:final_published_versions) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a final_published_version" do
+    context "with a CurateGenericWork work that has final_published_versions" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.final_published_version = final_published_version
+          cgw.final_published_versions = final_published_versions
         end
       end
-      its(:final_published_version) { is_expected.to eq final_published_version }
+      its(:final_published_versions) { is_expected.to eq final_published_versions }
     end
   end
 
