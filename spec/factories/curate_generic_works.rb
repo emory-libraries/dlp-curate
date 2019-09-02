@@ -45,7 +45,7 @@ FactoryBot.define do
       data_classifications { ['open'] }
       data_collection_dates { ['785'] }
       data_producers { ['Megacorp'] }
-      data_source_note { ['Found materials'] }
+      data_source_notes { ['Found materials'] }
       date_created { '1992' }
       date_digitized { '2102' }
       date_issued { '1999' }

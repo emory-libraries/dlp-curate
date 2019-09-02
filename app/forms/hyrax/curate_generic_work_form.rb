@@ -9,7 +9,7 @@ module Hyrax
                   :primary_language, :subject_topics, :subject_names, :subject_geo, :subject_time_periods,
                   :conference_name, :uniform_title, :series_title, :parent_title, :contact_information,
                   :publisher_version, :creator, :contributors, :sponsor, :data_producers, :grant, :grant_information,
-                  :author_notes, :note, :data_source_note, :geographic_unit, :technical_note, :issn, :isbn,
+                  :author_notes, :note, :data_source_notes, :geographic_unit, :technical_note, :issn, :isbn,
                   :related_publications, :related_datasets, :extent, :publisher, :date_created, :date_issued,
                   :conference_dates, :data_collection_dates, :local_call_number, :related_material, :final_published_version,
                   :issue, :page_range_start, :page_range_end, :volume, :place_of_production, :keywords, :rights_statement_text,
@@ -32,7 +32,7 @@ module Hyrax
        :geographic_unit, :subject_time_periods, :data_collection_dates, :note, :parent_title, :uniform_title, :series_title,
        :related_publications, :related_datasets, :related_material, :publisher, :final_published_version, :publisher_version,
        :issue, :page_range_start, :page_range_end, :volume, :edition, :place_of_production, :issn, :isbn, :conference_dates,
-       :conference_name, :sponsor, :data_producers, :grant, :grant_information, :author_notes, :data_source_note, :technical_note]
+       :conference_name, :sponsor, :data_producers, :grant, :grant_information, :author_notes, :data_source_notes, :technical_note]
     end
 
     def primary_rights_metadata_fields
