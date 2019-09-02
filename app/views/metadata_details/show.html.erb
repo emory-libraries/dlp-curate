@@ -5,43 +5,43 @@
     <% @details.each do |detail| %>
       <h2>
         <dt>
-          <%= detail[0] %>
+          <%= detail[:attribute] %>
         </dt>
       </h2>
       <dd>
         <div>
           <b>Predicate:</b>
-          <a href="<%= detail[1][:predicate] %>"/><%= detail[1][:predicate] %></a>
+          <a href="<%= detail[:predicate] %>"><%= detail[:predicate] %></a>
         </div>
         <div>
           <b>Type:</b>
-          <%= detail[1][:type] %>
+          <%= detail[:type] %>
         </div>
         <div>
           <b>Validation:</b>
-          <%= detail[1][:validator] %>
+          <%= detail[:validator] %>
         </div>
         <div>
           <b>Multiple:</b>
-          <%= detail[1][:multiple] %>
+          <%= detail[:multiple] %>
         </div>
         <div>
           <b>Edit Form Label:</b>
-          <%= detail[1][:label] %>
+          <%= detail[:label] %>
         </div>
         <div>
           <b>Import header:</b>
-          <span class=<%= css_class(detail[1][:csv_header])%>>
-            <%= detail[1][:csv_header] %>
+          <span class=<%= css_class(detail[:csv_header])%>>
+            <%= detail[:csv_header] %>
           </span>
         </div>
         <div>
           <b>Required on Edit Form:</b>
-          <%= detail[1][:required_on_form] %>
+          <%= detail[:required_on_form] %>
         </div>
         <div class=metadata_usage>
           <b>Usage:</b>
-          <%= detail[1][:usage] %>
+          <%= detail[:usage] %>
         </div>
       </dd>
     <% end  %>

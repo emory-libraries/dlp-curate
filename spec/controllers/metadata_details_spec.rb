@@ -12,7 +12,8 @@ RSpec.describe MetadataDetailsController, type: :controller do
   it 'has details' do
     get :show
     details = assigns(:details)
-    expect(details['title'][:predicate]).to eq('http://purl.org/dc/terms/title')
+    title = details.find { |h| h[:attribute] == 'title' }
+    expect(title[:predicate]).to eq('http://purl.org/dc/terms/title')
   end
 
   it 'has a downloadable csv' do
