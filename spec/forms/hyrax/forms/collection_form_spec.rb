@@ -11,7 +11,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
                          :institution, :local_call_number, :keywords, :subject_topics,
                          :subject_names, :subject_geo, :subject_time_periods, :note,
                          :rights_documentation, :sensitive_material, :internal_rights_note,
-                         :contact_information, :staff_note, :system_of_record_ID, :legacy_ark,
+                         :contact_information, :staff_note, :system_of_record_ID, :emory_ark,
                          :visibility]
     end
   end
@@ -35,7 +35,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
         :administrative_unit, :contributors, :primary_language, :finding_aid_link, :institution,
         :local_call_number, :keywords, :subject_topics, :subject_names, :subject_geo, :subject_time_periods,
         :note, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
-        :staff_note, :system_of_record_ID, :legacy_ark
+        :staff_note, :system_of_record_ID, :emory_ark
       ]
     end
   end
@@ -92,7 +92,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
                          :abstract, :primary_language, :finding_aid_link, :institution, :local_call_number, { keywords: [] },
                          { subject_topics: [] }, { subject_names: [] }, { subject_geo: [] }, { subject_time_periods: [] },
                          { note: [] }, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
-                         { staff_note: [] }, :system_of_record_ID, { legacy_ark: [] }, :visibility,
+                         { staff_note: [] }, :system_of_record_ID, { emory_ark: [] }, :visibility,
                          { permissions_attributes: [:type, :name, :access, :id, :_destroy] }]
     end
   end

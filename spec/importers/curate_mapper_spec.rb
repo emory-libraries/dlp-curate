@@ -21,7 +21,7 @@ RSpec.describe CurateMapper do
       "institution" => "Emory University",
       "internal_rights_note" => "This is my internal rights note.",
       "keywords" => "Tangerine|Blueberry",
-      "legacy_ark" => "ark://abc/123",
+      "emory_ark" => "ark://abc/123",
       "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
       "local_call_number" => "MSS 1218",
       "note" => "This is a note.",
@@ -185,9 +185,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#legacy_ark" do
-    it "maps the legacy_ark field" do
-      expect(mapper.legacy_ark).to contain_exactly("ark://abc/123")
+  context "#emory_ark" do
+    it "maps the emory_ark field" do
+      expect(mapper.emory_ark).to contain_exactly("ark://abc/123")
     end
   end
 

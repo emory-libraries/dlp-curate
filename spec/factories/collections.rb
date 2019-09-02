@@ -132,7 +132,7 @@ FactoryBot.define do
     contact_information { 'telex' }
     staff_note { ['dictated but not read'] }
     system_of_record_ID { '1' }
-    legacy_ark { ['2'] }
+    emory_ark { ['2'] }
     primary_repository_ID { '3' }
 
     after(:build) do |collection, evaluator|

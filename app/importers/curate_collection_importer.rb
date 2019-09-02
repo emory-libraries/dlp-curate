@@ -42,7 +42,7 @@ class CurateCollectionImporter
       collection.sensitive_material = collection_attrs["sensitive_material"]
       collection.staff_note = multivalue_mapping(collection_attrs, "staff_note")
       collection.system_of_record_ID = collection_attrs["system_of_record_ID"]
-      collection.legacy_ark = multivalue_mapping(collection_attrs, "legacy_ark")
+      collection.emory_ark = multivalue_mapping(collection_attrs, "emory_ark")
       collection.primary_repository_ID = collection_attrs["primary_repository_ID"]
       collection.finding_aid_link = collection_attrs["finding_aid_link"]
       collection.save

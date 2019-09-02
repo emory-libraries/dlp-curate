@@ -53,7 +53,7 @@ def load_first_object
   work.institution = "Emory University"
   work.primary_language = "Fake Primary Language"
   work.note = ["Fake Note"]
-  work.legacy_ark = ["Fake Legacy Ark"]
+  work.emory_ark = ["Fake Legacy Ark"]
   work.place_of_production = "Fake Place of Production"
   work.publisher = "Fake Publisher"
   work.rights_statement_text = ["Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."]
@@ -93,7 +93,7 @@ def load_second_object
   work.institution = "Emory University"
   work.primary_language = "Fake Primary Language"
   work.note = ["Fake Note"]
-  work.legacy_ark = ["Fake Legacy Ark"]
+  work.emory_ark = ["Fake Legacy Ark"]
   work.place_of_production = "Fake Place of Production"
   work.publisher = "Fake Publisher"
   work.rights_statement_text = ["Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."]
@@ -133,7 +133,7 @@ def load_third_object
   work.institution = "Emory University"
   work.primary_language = "Fake Primary Language"
   work.note = ["Fake Note"]
-  work.legacy_ark = ["Fake Legacy Ark"]
+  work.emory_ark = ["Fake Legacy Ark"]
   work.place_of_production = "Fake Place of Production"
   work.publisher = "Fake Publisher"
   work.rights_statement_text = ["Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."]

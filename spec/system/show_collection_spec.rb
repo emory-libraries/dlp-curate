@@ -22,7 +22,7 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
       :note,
       :rights_documentation,
       :staff_note,
-      :legacy_ark
+      :emory_ark
     ]
   end
   let(:singular_fields) do
