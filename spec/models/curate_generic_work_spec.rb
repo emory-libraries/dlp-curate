@@ -977,21 +977,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#rights_statement_text" do
+  describe "#emory_rights_statements" do
     subject { described_class.new }
-    let(:rights_statement_text) { ['Sample Rights Statement'] }
+    let(:emory_rights_statements) { ['Sample Rights Statement'] }
 
     context "with new CurateGenericWork work" do
-      its(:rights_statement_text) { is_expected.to be_empty }
+      its(:emory_rights_statements) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has rights_statement_text" do
+    context "with a CurateGenericWork work that has emory_rights_statements" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.rights_statement_text = rights_statement_text
+          cgw.emory_rights_statements = emory_rights_statements
         end
       end
-      its(:rights_statement_text) { is_expected.to eq rights_statement_text }
+      its(:emory_rights_statements) { is_expected.to eq emory_rights_statements }
     end
   end
 

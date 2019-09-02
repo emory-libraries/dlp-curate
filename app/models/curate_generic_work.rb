@@ -96,6 +96,10 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :emory_rights_statements, predicate: "http://purl.org/dc/elements/1.1/rights" do |index|
+    index.as :stored_searchable
+  end
+
   property :extent, predicate: "http://www.rdaregistry.info/Elements/u/#P60550", multiple: false do |index|
     index.as :stored_searchable
   end
@@ -198,10 +202,6 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :rights_statement, predicate: "http://www.europeana.eu/schemas/edm/rights" do |index|
     index.as :stored_searchable, :facetable
-  end
-
-  property :rights_statement_text, predicate: "http://purl.org/dc/elements/1.1/rights" do |index|
-    index.as :stored_searchable
   end
 
   property :scheduled_rights_review, predicate: "http://metadata.emory.edu/vocab/cor-terms#scheduledRightsReview", multiple: false do |index|

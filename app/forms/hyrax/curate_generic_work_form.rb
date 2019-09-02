@@ -12,7 +12,7 @@ module Hyrax
                   :author_notes, :note, :data_source_notes, :geographic_unit, :technical_note, :issn, :isbn,
                   :related_publications, :related_datasets, :extent, :publisher, :date_created, :date_issued,
                   :conference_dates, :data_collection_dates, :local_call_number, :related_material_notes, :final_published_versions,
-                  :issue, :page_range_start, :page_range_end, :volume, :place_of_production, :keywords, :rights_statement_text,
+                  :issue, :page_range_start, :page_range_end, :volume, :place_of_production, :keywords, :emory_rights_statements,
                   :rights_statement, :rights_holders, :copyright_date, :re_use_license, :access_restriction_notes, :rights_documentation,
                   :scheduled_rights_review, :scheduled_rights_review_note, :internal_rights_note, :legacy_rights,
                   :data_classifications, :sensitive_material, :sensitive_material_note, :staff_note, :date_digitized,
@@ -36,7 +36,7 @@ module Hyrax
     end
 
     def primary_rights_metadata_fields
-      [:rights_statement_text, :rights_statement, :data_classifications, :rights_holders, :copyright_date, :re_use_license, :access_restriction_notes,
+      [:emory_rights_statements, :rights_statement, :data_classifications, :rights_holders, :copyright_date, :re_use_license, :access_restriction_notes,
        :rights_documentation, :sensitive_material, :sensitive_material_note, :scheduled_rights_review, :scheduled_rights_review_note,
        :internal_rights_note, :legacy_rights, :contact_information]
     end
