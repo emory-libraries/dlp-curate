@@ -90,7 +90,7 @@ FactoryBot.define do
       sensitive_material_note { 'do not check' }
       series_title { 'A series' }
       sponsor { 'Another person' }
-      staff_note { ['Did not check'] }
+      staff_notes { ['Did not check'] }
       subject_geo { ['Artic'] }
       subject_names { ['Someone'] }
       subject_time_periods { ['Neolithic'] }

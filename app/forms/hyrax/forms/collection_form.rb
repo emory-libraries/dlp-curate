@@ -26,7 +26,7 @@ module Hyrax
                     :institution, :local_call_number, :keywords, :subject_topics,
                     :subject_names, :subject_geo, :subject_time_periods, :note,
                     :rights_documentation, :sensitive_material, :internal_rights_note,
-                    :contact_information, :staff_note, :system_of_record_ID, :emory_ark,
+                    :contact_information, :staff_notes, :system_of_record_ID, :emory_ark,
                     :visibility]
 
       self.required_fields = [:title, :holding_repository, :creator, :abstract]
@@ -69,7 +69,7 @@ module Hyrax
         [:administrative_unit, :contributors, :primary_language, :finding_aid_link,
          :institution, :local_call_number, :keywords, :subject_topics, :subject_names,
          :subject_geo, :subject_time_periods, :note, :rights_documentation, :sensitive_material,
-         :internal_rights_note, :contact_information, :staff_note, :system_of_record_ID, :emory_ark]
+         :internal_rights_note, :contact_information, :staff_notes, :system_of_record_ID, :emory_ark]
       end
 
       def banner_info

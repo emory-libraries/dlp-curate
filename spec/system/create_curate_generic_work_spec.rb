@@ -49,7 +49,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       click_link('Additional descriptive fields')
       expect(page).to have_content('Add another Note')
 
-      expect(page).to have_css('#metadata textarea#curate_generic_work_staff_note')
+      expect(page).to have_css('#metadata textarea#curate_generic_work_staff_notes')
       expect(page).to have_content('Add another Staff Note')
     end
 

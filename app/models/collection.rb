@@ -86,7 +86,7 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :staff_note, predicate: 'http://metadata.emory.edu/vocab/cor-terms#staffNote' do |index|
+  property :staff_notes, predicate: 'http://metadata.emory.edu/vocab/cor-terms#staffNote' do |index|
     index.as :stored_searchable
   end
 
