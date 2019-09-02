@@ -1247,21 +1247,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#legacy_identifier" do
+  describe "#other_identifiers" do
     subject { described_class.new }
-    let(:legacy_identifier) { ['ETDs'] }
+    let(:other_identifiers) { ['ETDs'] }
 
     context "with new CurateGenericWork work" do
-      its(:legacy_identifier) { is_expected.to be_empty }
+      its(:other_identifiers) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a legacy_identifier" do
+    context "with a CurateGenericWork work that has other_identifiers" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.legacy_identifier = legacy_identifier
+          cgw.other_identifiers = other_identifiers
         end
       end
-      its(:legacy_identifier) { is_expected.to eq legacy_identifier }
+      its(:other_identifiers) { is_expected.to eq other_identifiers }
     end
   end
 

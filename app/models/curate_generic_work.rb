@@ -138,10 +138,6 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :legacy_identifier, predicate: "http://id.loc.gov/vocabulary/identifiers/local#legacy" do |index|
-    index.as :stored_searchable
-  end
-
   property :legacy_rights, predicate: "http://metadata.emory.edu/vocab/cor-terms#legacyRights", multiple: false do |index|
     index.as :stored_searchable
   end
@@ -151,6 +147,10 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :note, predicate: "http://www.w3.org/2004/02/skos/core#note" do |index|
+    index.as :stored_searchable
+  end
+
+  property :other_identifiers, predicate: "http://id.loc.gov/vocabulary/identifiers/local#legacy" do |index|
     index.as :stored_searchable
   end
 

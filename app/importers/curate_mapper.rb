@@ -21,7 +21,7 @@ class CurateMapper < Zizia::HashMapper
     internal_rights_note: "internal_rights_note",
     keywords: "keywords",
     emory_ark: "emory_ark",
-    legacy_identifier: "legacy_identifier",
+    other_identifiers: "other_identifiers",
     legacy_rights: "legacy_rights",
     local_call_number: "local_call_number",
     note: "note",

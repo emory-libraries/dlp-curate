@@ -16,7 +16,7 @@ module Hyrax
                   :rights_statement, :rights_holder, :copyright_date, :re_use_license, :access_restriction_notes, :rights_documentation,
                   :scheduled_rights_review, :scheduled_rights_review_note, :internal_rights_note, :legacy_rights,
                   :data_classifications, :sensitive_material, :sensitive_material_note, :staff_note, :date_digitized,
-                  :transfer_engineer, :legacy_identifier, :emory_ark, :system_of_record_ID, :primary_repository_ID]
+                  :transfer_engineer, :other_identifiers, :emory_ark, :system_of_record_ID, :primary_repository_ID]
 
     self.required_fields = REQUIRED_FIELDS_ON_FORM
     # TODO: All single-valued fields should be configured this way.
@@ -42,7 +42,7 @@ module Hyrax
     end
 
     def primary_admin_metadata_fields
-      [:staff_note, :system_of_record_ID, :legacy_identifier, :emory_ark, :date_digitized, :transfer_engineer]
+      [:staff_note, :system_of_record_ID, :other_identifiers, :emory_ark, :date_digitized, :transfer_engineer]
     end
 
     def preservation_workflow_metadata_fields
