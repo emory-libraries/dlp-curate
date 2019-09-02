@@ -11,7 +11,7 @@ module Hyrax
                   :publisher_version, :creator, :contributors, :sponsor, :data_producers, :grant, :grant_information,
                   :author_notes, :note, :data_source_notes, :geographic_unit, :technical_note, :issn, :isbn,
                   :related_publications, :related_datasets, :extent, :publisher, :date_created, :date_issued,
-                  :conference_dates, :data_collection_dates, :local_call_number, :related_material, :final_published_version,
+                  :conference_dates, :data_collection_dates, :local_call_number, :related_material, :final_published_versions,
                   :issue, :page_range_start, :page_range_end, :volume, :place_of_production, :keywords, :rights_statement_text,
                   :rights_statement, :rights_holder, :copyright_date, :re_use_license, :access_restriction_notes, :rights_documentation,
                   :scheduled_rights_review, :scheduled_rights_review_note, :internal_rights_note, :legacy_rights,
@@ -30,7 +30,7 @@ module Hyrax
     def secondary_descriptive_metadata_fields
       [:institution, :table_of_contents, :local_call_number, :keywords, :subject_topics, :subject_names, :subject_geo,
        :geographic_unit, :subject_time_periods, :data_collection_dates, :note, :parent_title, :uniform_title, :series_title,
-       :related_publications, :related_datasets, :related_material, :publisher, :final_published_version, :publisher_version,
+       :related_publications, :related_datasets, :related_material, :publisher, :final_published_versions, :publisher_version,
        :issue, :page_range_start, :page_range_end, :volume, :edition, :place_of_production, :issn, :isbn, :conference_dates,
        :conference_name, :sponsor, :data_producers, :grant, :grant_information, :author_notes, :data_source_notes, :technical_note]
     end
