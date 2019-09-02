@@ -65,7 +65,7 @@ FactoryBot.define do
       issue { '123' }
       keywords { ['photos'] }
       emory_ark { ['25'] }
-      legacy_identifier { ['1'] }
+      other_identifiers { ['1'] }
       legacy_rights { 'no' }
       local_call_number { '1234' }
       note { ['Many found'] }

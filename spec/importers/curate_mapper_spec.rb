@@ -22,7 +22,7 @@ RSpec.describe CurateMapper do
       "internal_rights_note" => "This is my internal rights note.",
       "keywords" => "Tangerine|Blueberry",
       "emory_ark" => "ark://abc/123",
-      "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
+      "other_identifiers" => "dams:152815|MSS1218_B001_I002",
       "local_call_number" => "MSS 1218",
       "note" => "This is a note.",
       "place_of_production" => "London",
@@ -191,9 +191,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#legacy_identifier" do
-    it "maps the legacy_identifier field" do
-      expect(mapper.legacy_identifier).to contain_exactly("dams:152815", "MSS1218_B001_I002")
+  context "#other_identifiers" do
+    it "maps the other_identifiers field" do
+      expect(mapper.other_identifiers).to contain_exactly("dams:152815", "MSS1218_B001_I002")
     end
   end
 
