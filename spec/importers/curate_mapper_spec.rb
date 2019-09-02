@@ -28,7 +28,7 @@ RSpec.describe CurateMapper do
       "place_of_production" => "London",
       "primary_language" => "English",
       "publisher" => "Gutenberg",
-      "rights_holder" => "Unknown",
+      "rights_holders" => "Unknown",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
       "rights_statement_text" => "Emory University does not control copyright for this image.",
       "subject_geo" => "Ghana.|Africa.",
@@ -242,9 +242,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#rights_holder" do
-    it "maps the rights_holder field" do
-      expect(mapper.rights_holder).to eq "Unknown"
+  context "#rights_holders" do
+    it "maps the rights_holders field" do
+      expect(mapper.rights_holders).to eq "Unknown"
     end
   end
 

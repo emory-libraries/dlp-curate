@@ -941,21 +941,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#rights_holder" do
+  describe "#rights_holders" do
     subject { described_class.new }
-    let(:rights_holder) { ['Emory University'] }
+    let(:rights_holders) { ['Emory University'] }
 
     context "with new CurateGenericWork work" do
-      its(:rights_holder) { is_expected.to be_empty }
+      its(:rights_holders) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has rights_holder" do
+    context "with a CurateGenericWork work that has rights_holders" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.rights_holder = rights_holder
+          cgw.rights_holders = rights_holders
         end
       end
-      its(:rights_holder) { is_expected.to eq rights_holder }
+      its(:rights_holders) { is_expected.to eq rights_holders }
     end
   end
 

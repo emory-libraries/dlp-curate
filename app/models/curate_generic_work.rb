@@ -194,7 +194,7 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :rights_documentation, predicate: "http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI", multiple: false
 
-  property :rights_holder, predicate: "http://purl.org/dc/terms/rightsHolder"
+  property :rights_holders, predicate: "http://purl.org/dc/terms/rightsHolder"
 
   property :rights_statement, predicate: "http://www.europeana.eu/schemas/edm/rights" do |index|
     index.as :stored_searchable, :facetable
