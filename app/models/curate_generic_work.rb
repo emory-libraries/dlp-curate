@@ -74,7 +74,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :data_source_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataSourcesNote" do |index|
+  property :data_source_notes, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataSourcesNote" do |index|
     index.as :stored_searchable
   end
 

@@ -545,21 +545,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#data_source_note" do
+  describe "#data_source_notes" do
     subject { described_class.new }
-    let(:data_source_note) { ['general data source note'] }
+    let(:data_source_notes) { ['general data source note'] }
 
     context "with new CurateGenericWork work" do
-      its(:data_source_note) { is_expected.to be_empty }
+      its(:data_source_notes) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a data_source_note" do
+    context "with a CurateGenericWork work that has data_source_notes" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.data_source_note = data_source_note
+          cgw.data_source_notes = data_source_notes
         end
       end
-      its(:data_source_note) { is_expected.to eq(['general data source note']) }
+      its(:data_source_notes) { is_expected.to eq(['general data source note']) }
     end
   end
 
