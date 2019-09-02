@@ -473,21 +473,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#grant" do
+  describe "#grant_agencies" do
     subject { described_class.new }
-    let(:grant) { ['NIH'] }
+    let(:grant_agencies) { ['NIH'] }
 
     context "with new CurateGenericWork work" do
-      its(:grant) { is_expected.to be_empty }
+      its(:grant_agencies) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a grant" do
+    context "with a CurateGenericWork work that has grant_agencies" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.grant = grant
+          cgw.grant_agencies = grant_agencies
         end
       end
-      its(:grant) { is_expected.to eq(['NIH']) }
+      its(:grant_agencies) { is_expected.to eq(['NIH']) }
     end
   end
 
