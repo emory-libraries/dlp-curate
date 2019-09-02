@@ -69,7 +69,7 @@ def load_first_object
   work.data_classifications = ["Confidential"]
   work.visibility = "open"
   work.copyright_date = "Fake Copyright Date"
-  work.rights_holder = ["Fake Rights Holder"]
+  work.rights_holders = ["Fake Rights Holder"]
   work.legacy_rights = "Emory University does not control copyright for this image. This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research. Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk. We are always interested in learning more about our collections. If you have information regarding this photograph, please contact marbl@emory.edu."
   work.date_digitized = "Fake Date Digitized"
   work.transfer_engineer = "Fake Transfer Engineer"
@@ -109,7 +109,7 @@ def load_second_object
   work.data_classifications = ["Confidential"]
   work.visibility = "open"
   work.copyright_date = "Fake Copyright Date"
-  work.rights_holder = ["Fake Rights Holder"]
+  work.rights_holders = ["Fake Rights Holder"]
   work.legacy_rights = "Emory University does not control copyright for this image. This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research. Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk. We are always interested in learning more about our collections. If you have information regarding this photograph, please contact marbl@emory.edu."
   work.date_digitized = "Fake Date Digitized"
   work.transfer_engineer = "Fake Transfer Engineer"
@@ -160,7 +160,7 @@ def load_third_object
   work.data_classifications = ["Confidential"]
   work.visibility = "open"
   work.copyright_date = "Fake Copyright Date"
-  work.rights_holder = ["Fake Rights Holder"]
+  work.rights_holders = ["Fake Rights Holder"]
   work.legacy_rights = "Emory University does not control copyright for this image. This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research. Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk. We are always interested in learning more about our collections. If you have information regarding this photograph, please contact marbl@emory.edu."
   work.date_digitized = "Fake Date Digitized"
   work.transfer_engineer = "Fake Transfer Engineer"

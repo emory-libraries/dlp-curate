@@ -28,7 +28,7 @@ class CurateMapper < Zizia::HashMapper
     place_of_production: "place_of_production",
     primary_language: "primary_language",
     publisher: "publisher",
-    rights_holder: "rights_holder",
+    rights_holders: "rights_holders",
     rights_statement: "rights_statement",
     rights_statement_text: "rights_statement_text",
     sensitive_material: "sensitive_material",
@@ -96,7 +96,7 @@ class CurateMapper < Zizia::HashMapper
       "sensitive_material_note",
       "sublocation",
       "transfer_engineer",
-      "rights_holder",
+      "rights_holders",
       "table_of_contents",
       "uniform_title"
     ]

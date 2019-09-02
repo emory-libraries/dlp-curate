@@ -81,9 +81,9 @@ FactoryBot.define do
       related_material_notes { ['More stuff'] }
       related_publications { ['https://example.com'] }
       rights_documentation { 'https://example.com' }
-      rights_holder { ['Emory'] }
-      rights_statement_text { ['This is my rights statement text'] }
+      rights_holders { ['Emory'] }
       rights_statement { ['http://rightsstatements.org/vocab/InC/1.0/'] }
+      rights_statement_text { ['This is my rights statement text'] }
       scheduled_rights_review { 'true' }
       scheduled_rights_review_note { 'check please' }
       sensitive_material { 'false' }
