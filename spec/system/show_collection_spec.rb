@@ -21,7 +21,7 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
       :subject_time_periods,
       :note,
       :rights_documentation,
-      :staff_note,
+      :staff_notes,
       :emory_ark
     ]
   end

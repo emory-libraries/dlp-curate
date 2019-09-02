@@ -130,7 +130,7 @@ FactoryBot.define do
     sensitive_material { 'very sensitive' }
     internal_rights_note { 'Do not publish' }
     contact_information { 'telex' }
-    staff_note { ['dictated but not read'] }
+    staff_notes { ['dictated but not read'] }
     system_of_record_ID { '1' }
     emory_ark { ['2'] }
     primary_repository_ID { '3' }

@@ -1193,21 +1193,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#staff_note" do
+  describe "#staff_notes" do
     subject { described_class.new }
-    let(:staff_note) { ['This is for internal staff use only'] }
+    let(:staff_notes) { ['This is for internal staff use only'] }
 
     context "with new CurateGenericWork work" do
-      its(:staff_note) { is_expected.to be_empty }
+      its(:staff_notes) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a staff_note" do
+    context "with a CurateGenericWork work that has staff_notes" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.staff_note = staff_note
+          cgw.staff_notes = staff_notes
         end
       end
-      its(:staff_note) { is_expected.to eq staff_note }
+      its(:staff_notes) { is_expected.to eq staff_notes }
     end
   end
 

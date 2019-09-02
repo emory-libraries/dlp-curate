@@ -226,7 +226,7 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :sponsor, predicate: "http://id.loc.gov/vocabulary/relators/spn", multiple: false
 
-  property :staff_note, predicate: "http://metadata.emory.edu/vocab/cor-terms#staffNote" do |index|
+  property :staff_notes, predicate: "http://metadata.emory.edu/vocab/cor-terms#staffNote" do |index|
     index.as :stored_searchable
   end
 

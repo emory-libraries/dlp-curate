@@ -47,7 +47,7 @@ RSpec.describe CurateCollectionImporter, :clean do
     expect(langmuir_collection.rights_documentation).to eq "http://rightsstatements.org/vocab/InC-NC/1.0/"
     expect(langmuir_collection.internal_rights_note).to include("Fake Internal Rights Note")
     expect(langmuir_collection.sensitive_material).to include("No")
-    expect(langmuir_collection.staff_note).to include("Fake Staff Note")
+    expect(langmuir_collection.staff_notes).to include("Fake Staff Note")
     expect(langmuir_collection.system_of_record_ID).to include("Fake System of Record ID")
     expect(langmuir_collection.emory_ark).to include("Fake legacy ark")
     expect(langmuir_collection.primary_repository_ID).to include("Fake primary repository ID")
