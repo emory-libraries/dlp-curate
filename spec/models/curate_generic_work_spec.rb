@@ -797,21 +797,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#related_material" do
+  describe "#related_material_notes" do
     subject { described_class.new }
-    let(:related_material) { ['Free-text notes'] }
+    let(:related_material_notes) { ['Free-text notes'] }
 
     context "with new CurateGenericWork work" do
-      its(:related_material) { is_expected.to be_empty }
+      its(:related_material_notes) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a related_material" do
+    context "with a CurateGenericWork work that has related_material_notes" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.related_material = related_material
+          cgw.related_material_notes = related_material_notes
         end
       end
-      its(:related_material) { is_expected.to eq ['Free-text notes'] }
+      its(:related_material_notes) { is_expected.to eq ['Free-text notes'] }
     end
   end
 
