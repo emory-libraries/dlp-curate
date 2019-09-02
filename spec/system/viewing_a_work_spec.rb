@@ -68,10 +68,12 @@ RSpec.describe 'viewing the importer guide', type: :system do
     # expect(page).to have_content 'Related Datasets'
     expect(page).to have_content 'Related Material'
     # Not indexed in solr
-    # expect(page).to have_content 'Rights Documentation URL'
+    # expect(page).to have_content 'rights_documentation (Rights Documentation URL)'
     # Not indexed in solr
-    # expect(page).to have_content 'Rights Holder'
-    expect(page).to have_content 'Rights Statement - Controlled'
+    # expect(page).to have_content 'rights_holders (Rights Holder)'
+    expect(page).to have_content 'rights_statement (Rights Statement - Controlled)'
+    expect(page).to have_content 'In Copyright'
+    expect(page).to have_content 'emory_rights_statements (Rights Statement)'
     expect(page).to have_content 'This is my rights statement text'
     expect(page).to have_content 'In Copyright'
     expect(page).to have_content 'Rights Statement'

@@ -30,7 +30,7 @@ class CurateMapper < Zizia::HashMapper
     publisher: "publisher",
     rights_holders: "rights_holders",
     rights_statement: "rights_statement",
-    rights_statement_text: "rights_statement_text",
+    emory_rights_statements: "emory_rights_statements",
     sensitive_material: "sensitive_material",
     sensitive_material_note: "sensitive_material_note",
     subject_geo: "subject_geo",

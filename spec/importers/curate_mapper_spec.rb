@@ -30,7 +30,7 @@ RSpec.describe CurateMapper do
       "publisher" => "Gutenberg",
       "rights_holders" => "Unknown",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
-      "rights_statement_text" => "Emory University does not control copyright for this image.",
+      "emory_rights_statements" => "Emory University does not control copyright for this image.",
       "subject_geo" => "Ghana.|Africa.",
       "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
       "subject_topics" => "Snowblowers.|Snow.|Air bases.|Towers.",
@@ -248,9 +248,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#rights_statement_text" do
-    it "maps the rights_statement_text field" do
-      expect(mapper.rights_statement_text)
+  context "#emory_rights_statements" do
+    it "maps the emory_rights_statements field" do
+      expect(mapper.emory_rights_statements)
         .to contain_exactly("Emory University does not control copyright for this image.")
     end
   end

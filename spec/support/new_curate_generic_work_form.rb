@@ -15,7 +15,7 @@ class NewCurateGenericWorkForm
     fill_in "curate_generic_work[date_created]", with: Date.new(2018, 1, 12)
     select("Audio", from: "Format")
     select("In Copyright", from: "Rights Statement")
-    fill_in "curate_generic_work[rights_statement_text][]", with: "Controlled Rights Statement"
+    fill_in "curate_generic_work[emory_rights_statements][]", with: "Controlled Rights Statement"
     select("Public", from: "Data Classification")
 
     self
