@@ -55,7 +55,7 @@ FactoryBot.define do
       extent { 'A very large extent' }
       final_published_versions { ['http://example.com'] }
       geographic_unit { 'cm' }
-      grant { ['For five years'] }
+      grant_agencies { ['For five years'] }
       grant_information { ['More grant information'] }
       holding_repository { 'Emory Libraries' }
       institution { 'Emory' }

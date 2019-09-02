@@ -102,7 +102,7 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :grant, predicate: "http://id.loc.gov/vocabulary/relators/fnd" do |index|
+  property :grant_agencies, predicate: "http://id.loc.gov/vocabulary/relators/fnd" do |index|
     index.as :stored_searchable
   end
 
