@@ -19,7 +19,7 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
       :subject_names,
       :subject_geo,
       :subject_time_periods,
-      :note,
+      :notes,
       :rights_documentation,
       :staff_notes,
       :emory_ark

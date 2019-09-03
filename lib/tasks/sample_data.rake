@@ -52,7 +52,7 @@ def load_first_object
   work.holding_repository = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
   work.institution = "Emory University"
   work.primary_language = "Fake Primary Language"
-  work.note = ["Fake Note"]
+  work.notes = ["Fake Note"]
   work.emory_ark = ["Fake Legacy Ark"]
   work.place_of_production = "Fake Place of Production"
   work.publisher = "Fake Publisher"
@@ -92,7 +92,7 @@ def load_second_object
   work.holding_repository = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
   work.institution = "Emory University"
   work.primary_language = "Fake Primary Language"
-  work.note = ["Fake Note"]
+  work.notes = ["Fake Note"]
   work.emory_ark = ["Fake Legacy Ark"]
   work.place_of_production = "Fake Place of Production"
   work.publisher = "Fake Publisher"
@@ -132,7 +132,7 @@ def load_third_object
   work.holding_repository = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
   work.institution = "Emory University"
   work.primary_language = "Fake Primary Language"
-  work.note = ["Fake Note"]
+  work.notes = ["Fake Note"]
   work.emory_ark = ["Fake Legacy Ark"]
   work.place_of_production = "Fake Place of Production"
   work.publisher = "Fake Publisher"

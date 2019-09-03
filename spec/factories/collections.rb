@@ -125,7 +125,7 @@ FactoryBot.define do
     subject_names { ['Someone'] }
     subject_geo { ['Atlanta'] }
     subject_time_periods { ['Anthropocene'] }
-    note { ['a brief note'] }
+    notes { ['a brief note'] }
     rights_documentation { 'http://example.com/rights' }
     sensitive_material { 'very sensitive' }
     internal_rights_note { 'Do not publish' }

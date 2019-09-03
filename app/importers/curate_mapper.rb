@@ -24,7 +24,7 @@ class CurateMapper < Zizia::HashMapper
     other_identifiers: "other_identifiers",
     legacy_rights: "legacy_rights",
     local_call_number: "local_call_number",
-    note: "note",
+    notes: "notes",
     place_of_production: "place_of_production",
     primary_language: "primary_language",
     publisher: "publisher",

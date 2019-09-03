@@ -43,7 +43,7 @@ RSpec.describe CurateCollectionImporter, :clean do
     expect(langmuir_collection.subject_time_periods).to include("Era 2")
     expect(langmuir_collection.creator).to eq ["Langmuir, Robert, collector"]
     expect(langmuir_collection.contributors).to include("Fake Contributor")
-    expect(langmuir_collection.note).to include("Fake Note")
+    expect(langmuir_collection.notes).to include("Fake Note")
     expect(langmuir_collection.rights_documentation).to eq "http://rightsstatements.org/vocab/InC-NC/1.0/"
     expect(langmuir_collection.internal_rights_note).to include("Fake Internal Rights Note")
     expect(langmuir_collection.sensitive_material).to include("No")

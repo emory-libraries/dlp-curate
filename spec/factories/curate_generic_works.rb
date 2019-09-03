@@ -68,7 +68,7 @@ FactoryBot.define do
       other_identifiers { ['1'] }
       legacy_rights { 'no' }
       local_call_number { '1234' }
-      note { ['Many found'] }
+      notes { ['Many found'] }
       page_range_end { '1' }
       page_range_start { '0' }
       parent_title { 'A parent title' }

@@ -68,7 +68,7 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :note, predicate: 'http://www.w3.org/2004/02/skos/core#note' do |index|
+  property :notes, predicate: 'http://www.w3.org/2004/02/skos/core#note' do |index|
     index.as :stored_searchable
   end
 
