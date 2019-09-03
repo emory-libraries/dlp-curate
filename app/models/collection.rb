@@ -12,11 +12,19 @@ class Collection < ActiveFedora::Base
   validates :finding_aid_link, url: true, if: -> { finding_aid_link.present? }
   validates :rights_documentation, url: true, if: -> { rights_documentation.present? }
 
-  property :holding_repository, predicate: 'http://id.loc.gov/vocabulary/relators/rps' do |index|
-    index.as :stored_searchable, :facetable
+  property :abstract, predicate: 'http://purl.org/dc/elements/1.1/description', multiple: false do |index|
+    index.as :stored_searchable
   end
 
   property :administrative_unit, predicate: 'http://id.loc.gov/vocabulary/relators/cur' do |index|
+    index.as :stored_searchable
+  end
+
+  property :contact_information, predicate: 'http://www.rdaregistry.info/Elements/u/#P60490', multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :contributors, predicate: 'http://purl.org/dc/elements/1.1/contributor' do |index|
     index.as :stored_searchable
   end
 
@@ -24,27 +32,23 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :contributors, predicate: 'http://purl.org/dc/elements/1.1/contributor' do |index|
+  property :emory_ark, predicate: 'http://id.loc.gov/vocabulary/identifiers/local#ark' do |index|
     index.as :stored_searchable
-  end
-
-  property :abstract, predicate: 'http://purl.org/dc/elements/1.1/description', multiple: false do |index|
-    index.as :stored_searchable
-  end
-
-  property :primary_language, predicate: 'http://purl.org/dc/elements/1.1/language', multiple: false do |index|
-    index.as :stored_searchable, :facetable
   end
 
   property :finding_aid_link, predicate: 'http://metadata.emory.edu/vocab/cor-terms#findingAid', multiple: false do |index|
     index.as :displayable
   end
 
+  property :holding_repository, predicate: 'http://id.loc.gov/vocabulary/relators/rps' do |index|
+    index.as :stored_searchable, :facetable
+  end
+
   property :institution, predicate: 'http://rdaregistry.info/Elements/u/P60402', multiple: false do |index|
     index.as :stored_searchable
   end
 
-  property :local_call_number, predicate: 'http://metadata.emory.edu/vocab/cor-terms#localCallNumber', multiple: false do |index|
+  property :internal_rights_note, predicate: 'http://metadata.emory.edu/vocab/cor-terms#internalRightsNote', multiple: false do |index|
     index.as :stored_searchable
   end
 
@@ -52,23 +56,19 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :subject_topics, predicate: 'http://purl.org/dc/elements/1.1/subject' do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :subject_names, predicate: 'http://purl.org/dc/elements/1.1/subject#names' do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :subject_geo, predicate: 'http://purl.org/dc/elements/1.1/coverage' do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :subject_time_periods, predicate: 'http://schema.org/temporalCoverage' do |index|
+  property :local_call_number, predicate: 'http://metadata.emory.edu/vocab/cor-terms#localCallNumber', multiple: false do |index|
     index.as :stored_searchable
   end
 
   property :notes, predicate: 'http://www.w3.org/2004/02/skos/core#note' do |index|
+    index.as :stored_searchable
+  end
+
+  property :primary_language, predicate: 'http://purl.org/dc/elements/1.1/language', multiple: false do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  property :primary_repository_ID, predicate: 'http://purl.org/dc/terms/identifier', multiple: false do |index|
     index.as :stored_searchable
   end
 
@@ -78,27 +78,27 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :internal_rights_note, predicate: 'http://metadata.emory.edu/vocab/cor-terms#internalRightsNote', multiple: false do |index|
-    index.as :stored_searchable
-  end
-
-  property :contact_information, predicate: 'http://www.rdaregistry.info/Elements/u/#P60490', multiple: false do |index|
-    index.as :stored_searchable
-  end
-
   property :staff_notes, predicate: 'http://metadata.emory.edu/vocab/cor-terms#staffNote' do |index|
     index.as :stored_searchable
   end
 
+  property :subject_geo, predicate: 'http://purl.org/dc/elements/1.1/coverage' do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  property :subject_names, predicate: 'http://purl.org/dc/elements/1.1/subject#names' do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  property :subject_time_periods, predicate: 'http://schema.org/temporalCoverage' do |index|
+    index.as :stored_searchable
+  end
+
+  property :subject_topics, predicate: 'http://purl.org/dc/elements/1.1/subject' do |index|
+    index.as :stored_searchable, :facetable
+  end
+
   property :system_of_record_ID, predicate: 'http://metadata.emory.edu/vocab/cor-terms#descriptiveSystemID', multiple: false do |index|
-    index.as :stored_searchable
-  end
-
-  property :emory_ark, predicate: 'http://id.loc.gov/vocabulary/identifiers/local#ark' do |index|
-    index.as :stored_searchable
-  end
-
-  property :primary_repository_ID, predicate: 'http://purl.org/dc/terms/identifier', multiple: false do |index|
     index.as :stored_searchable
   end
 
