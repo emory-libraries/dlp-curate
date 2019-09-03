@@ -24,7 +24,7 @@ RSpec.describe CurateMapper do
       "emory_ark" => "ark://abc/123",
       "other_identifiers" => "dams:152815|MSS1218_B001_I002",
       "local_call_number" => "MSS 1218",
-      "note" => "This is a note.",
+      "notes" => "This is a note.",
       "place_of_production" => "London",
       "primary_language" => "English",
       "publisher" => "Gutenberg",
@@ -224,9 +224,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#note" do
-    it "maps the note field" do
-      expect(mapper.note).to eq ["This is a note."]
+  context "#notes" do
+    it "maps the notes field" do
+      expect(mapper.notes).to eq ["This is a note."]
     end
   end
 

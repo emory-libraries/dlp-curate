@@ -253,21 +253,21 @@ RSpec.describe Collection do
     end
   end
 
-  describe "#note" do
+  describe "#notes" do
     subject { described_class.new }
-    let(:note) { ['general note'] }
+    let(:notes) { ['general note'] }
 
     context "with new collection" do
-      its(:note) { is_expected.to be_empty }
+      its(:notes) { is_expected.to be_empty }
     end
 
-    context "with a collection that has a note" do
+    context "with a collection that has notes" do
       subject do
         described_class.create.tap do |col|
-          col.note = note
+          col.notes = notes
         end
       end
-      its(:note) { is_expected.to eq(['general note']) }
+      its(:notes) { is_expected.to eq(['general note']) }
     end
   end
 

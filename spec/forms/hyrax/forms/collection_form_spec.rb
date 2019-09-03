@@ -9,7 +9,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
       is_expected.to eq [:title, :holding_repository, :administrative_unit, :creator,
                          :contributors, :abstract, :primary_language, :finding_aid_link,
                          :institution, :local_call_number, :keywords, :subject_topics,
-                         :subject_names, :subject_geo, :subject_time_periods, :note,
+                         :subject_names, :subject_geo, :subject_time_periods, :notes,
                          :rights_documentation, :sensitive_material, :internal_rights_note,
                          :contact_information, :staff_notes, :system_of_record_ID, :emory_ark,
                          :visibility]
@@ -34,7 +34,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
       is_expected.to eq [
         :administrative_unit, :contributors, :primary_language, :finding_aid_link, :institution,
         :local_call_number, :keywords, :subject_topics, :subject_names, :subject_geo, :subject_time_periods,
-        :note, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
+        :notes, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
         :staff_notes, :system_of_record_ID, :emory_ark
       ]
     end
@@ -91,7 +91,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
       is_expected.to eq [:title, { holding_repository: [] }, { administrative_unit: [] }, { creator: [] }, { contributors: [] },
                          :abstract, :primary_language, :finding_aid_link, :institution, :local_call_number, { keywords: [] },
                          { subject_topics: [] }, { subject_names: [] }, { subject_geo: [] }, { subject_time_periods: [] },
-                         { note: [] }, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
+                         { notes: [] }, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
                          { staff_notes: [] }, :system_of_record_ID, { emory_ark: [] }, :visibility,
                          { permissions_attributes: [:type, :name, :access, :id, :_destroy] }]
     end
