@@ -12,7 +12,8 @@
       </header>
       <%# TODO: render 'show_descriptions' See https://github.com/samvera/hyrax/issues/1481 %>
       <%= render 'show_details' %>
-       <%= link_to "Parent Work", @parent, class: 'btn btn-link' %>
+      <div id="fileset-category"><strong >FileSet category:</strong> <%= @fileset_use %></div>
+      <%= link_to "Parent Work", @parent, class: 'btn btn-link' %>
       <%= render 'hyrax/users/activity_log', events: @presenter.events %>
     </div><!-- /columns second -->
   </div> <!-- /.row -->
