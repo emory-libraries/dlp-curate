@@ -38,7 +38,7 @@ FactoryBot.define do
       conference_name { 'None' }
       contact_information { 'Call here' }
       content_genre { ['Photos'] }
-      content_type { 'media' }
+      content_type { 'http://id.loc.gov/vocabulary/resourceTypes/aud' }
       contributor { ['Someone else'] }
       copyright_date { '1922' }
       creator { ['the author'] }
@@ -82,8 +82,8 @@ FactoryBot.define do
       related_publications { ['https://example.com'] }
       rights_documentation { 'https://example.com' }
       rights_holder { ['Emory'] }
-      rights_statement { ['https://localhost'] }
       rights_statement_text { ['This is my rights statement text'] }
+      rights_statement { ['http://rightsstatements.org/vocab/InC/1.0/'] }
       scheduled_rights_review { 'true' }
       scheduled_rights_review_note { 'check please' }
       sensitive_material { 'false' }
