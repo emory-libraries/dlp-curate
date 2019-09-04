@@ -19,6 +19,7 @@ Style/FrozenStringLiteralComment:
 Metrics/AbcSize:
   Exclude:
     - app/importers/curate_collection_importer.rb
+    - app/importers/curate_record_importer.rb
 
 Metrics/BlockLength:
     Exclude:
@@ -41,9 +42,14 @@ Metrics/ClassLength:
         - app/presenters/hyrax/collection_presenter.rb
         - app/importers/curate_mapper.rb
 
+Metrics/CyclomaticComplexity:
+    Exclude:
+      - app/importers/curate_record_importer.rb
+
 Metrics/LineLength:
     Exclude:
         - spec/importers/curate_mapper_spec.rb
+        - app/importers/curate_record_importer.rb
 
 Metrics/MethodLength:
     Exclude:
@@ -52,6 +58,11 @@ Metrics/MethodLength:
         - app/presenters/hyrax/curate_collection_presenter.rb
         - app/presenters/hyrax/collection_presenter.rb
         - app/importers/curate_mapper.rb
+        - app/importers/curate_record_importer.rb
+
+Metrics/PerceivedComplexity:
+    Exclude:
+      - app/importers/curate_record_importer.rb
 
 RSpec/ExampleLength:
     Exclude:

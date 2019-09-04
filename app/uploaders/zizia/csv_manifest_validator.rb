@@ -81,7 +81,7 @@ module Zizia
       end
 
       def required_headers
-        ['title']
+        []
       end
 
       def duplicate_headers

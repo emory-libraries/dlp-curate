@@ -72,20 +72,6 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     end
   end
 
-  context 'a CSV that is missing required headers' do
-    let(:header) { ["administrative_unit"] }
-    let(:row2) { ["Emory University Archives"] }
-
-    it 'has an error for every missing header' do
-      validator.validate
-      expected_errors = ["title"]
-      expected_errors.each do |error|
-        matches = validator.errors.map { |e| e.match(error) }
-        expect(matches.compact).not_to be_empty
-      end
-    end
-  end
-
   context 'a CSV that is missing headers required by the edit form' do
     let(:header) { ["title"] }
     let(:row2) { ["Advertising, High Boy cigarettes"] }
@@ -135,14 +121,13 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     end
   end
 
-  # These will produce actual errors. Other metadata mistakes are warnings.
-  context 'a CSV that is missing required values' do
+  # There are no fields that should produce errors if they're missing
+  context 'a CSV that is missing values' do
     let(:row2) { ["", "", "", "", "", "", "", "", ""] }
 
-    it 'has errors' do
+    it 'has no errors' do
       validator.validate
-      expect(validator.errors.first).to match(/row 2/)
-      expect(validator.errors.first).to match(/title/)
+      expect(validator.errors).to eq []
     end
   end
 
