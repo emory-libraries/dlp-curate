@@ -70,7 +70,7 @@ RSpec.describe 'viewing the importer guide', type: :system do
     # Not indexed in solr
     # expect(page).to have_content 'Rights Holder'
     expect(page).to have_content 'Rights Statement - Controlled'
-    expect(page).to have_content 'Rights Statement'
+    expect(page).to have_content 'This is my rights statement text'
     expect(page).to have_content 'Scheduled Rights Review Date'
     expect(page).to have_content 'Scheduled Rights Review Note'
     expect(page).to have_content 'Sensitive/Objectionable Material'
