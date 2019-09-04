@@ -46,7 +46,7 @@ RSpec.describe 'Fileset upload', integration: true, clean: true, js: true, type:
       expect(file_id.intermediate_file.file.filename).to eq 'world.png'
       expect(file_id.extracted_text.file.filename).to eq 'image.jp2'
       expect(file_id.transcript.file.filename).to eq 'world.png'
-      expect(file_id.fileset_use).to eq 'primary'
+      expect(file_id.fileset_use).to eq 'Primary Content'
 
       expect(Hyrax::UploadedFile.count).to eq(1)
     end
@@ -83,14 +83,14 @@ RSpec.describe 'Fileset upload', integration: true, clean: true, js: true, type:
       expect(file_id.intermediate_file.file.filename).to eq 'world.png'
       expect(file_id.extracted_text.file.filename).to eq 'image.jp2'
       expect(file_id.transcript.file.filename).to eq 'world.png'
-      expect(file_id.fileset_use).to eq 'primary'
+      expect(file_id.fileset_use).to eq 'Primary Content'
 
       uf1 = page.find('input#uf1', visible: false).value
       file_id1 = Hyrax::UploadedFile.find(uf1)
 
       expect(file_id1.file).to eq 'Example 2 fileset'
       expect(file_id1.preservation_master_file.file.filename).to eq 'image.jp2'
-      expect(file_id1.fileset_use).to eq 'supplementary'
+      expect(file_id1.fileset_use).to eq 'Supplemental Content'
 
       expect(page).to have_selector("input[name='uploaded_files[]'", visible: false, count: 2)
 
