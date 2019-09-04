@@ -83,7 +83,7 @@ FactoryBot.define do
       rights_documentation { 'https://example.com' }
       rights_holder { ['Emory'] }
       rights_statement { ['https://localhost'] }
-      rights_statement_text { ['rights statement'] }
+      rights_statement_text { ['This is my rights statement text'] }
       scheduled_rights_review { 'true' }
       scheduled_rights_review_note { 'check please' }
       sensitive_material { 'false' }
