@@ -35,6 +35,7 @@ RSpec.describe 'viewing the importer guide', type: :system do
     expect(page).to have_content 'Data Producer'
     # Not indexed in solr
     # expect(page).to have_content 'Extent/Dimensions'
+    expect(page).to have_content 'A very large extent'
     # Not indexed in solr
     # expect(page).to have_content 'Final Published Version'
     expect(page).to have_content 'Geographic Level For Dataset'
