@@ -52,7 +52,7 @@ FactoryBot.define do
       date_modified { '2023' }
       date_uploaded { '2001' }
       edition { 'first' }
-      extent { 'large' }
+      extent { 'A very large extent' }
       final_published_version { ['http://example.com'] }
       geographic_unit { 'cm' }
       grant { ['For five years'] }

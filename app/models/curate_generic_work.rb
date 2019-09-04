@@ -144,7 +144,9 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :related_publications, predicate: "http://purl.org/dc/terms/relation#publication"
   property :related_datasets, predicate: "http://purl.org/dc/terms/relation#dataset"
-  property :extent, predicate: "http://www.rdaregistry.info/Elements/u/#P60550", multiple: false
+  property :extent, predicate: "http://www.rdaregistry.info/Elements/u/#P60550", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   property :date_issued, predicate: "http://purl.org/dc/terms/issued", multiple: false do |index|
     index.as :stored_searchable, :facetable
