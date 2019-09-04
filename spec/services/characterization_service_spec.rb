@@ -32,14 +32,17 @@ describe Hydra::Works::CharacterizationService do
   describe "handling strings, files, and Hydra::PCDM::File as sources" do
     # Stub Hydra::FileCharacterization.characterize
     let(:characterization)   { class_double("Hydra::FileCharacterization").as_stubbed_const }
-    let(:fits_filename)      { 'fits_0.8.5_pdf.xml' }
+    let(:fits_filename)      { 'fits_1.4.0_sample_pdf.xml' }
     let(:fits_response)      { IO.read(File.join(fixture_path, fits_filename)) }
     let(:filename)           { 'sample-file.pdf' }
     let(:file_content)       { IO.read(File.join(fixture_path, filename)) }
     let(:file)               { Hydra::PCDM::File.new { |f| f.content = file_content } }
+    let(:digest)             { class_double("Digest::SHA256").as_stubbed_const }
+    let(:hexdigest_value)    { "urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a" }
 
     before do
       allow(characterization).to receive(:characterize).and_return(fits_response)
+      allow(digest).to receive_message_chain(:file, :hexdigest, :prepend).and_return(hexdigest_value)
     end
 
     context "with the object as the source" do
@@ -84,10 +87,12 @@ describe Hydra::Works::CharacterizationService do
 
   context "passing an object that does not have matching properties" do
     let(:characterization) { class_double("Hydra::FileCharacterization").as_stubbed_const }
-    let(:fits_filename)    { 'fits_0.8.5_pdf.xml' }
+    let(:fits_filename)    { 'fits_1.4.0_sample_pdf.xml' }
     let(:fits_response)    { IO.read(File.join(fixture_path, fits_filename)) }
     let(:file_content)     { 'dummy content' }
     let(:file)             { Hydra::PCDM::File.new { |f| f.content = file_content } }
+    let(:digest)           { class_double("Digest::SHA256").as_stubbed_const }
+    let(:hexdigest_value)  { "urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a" }
 
     around do |example|
       @current_schemas = ActiveFedora::WithMetadata::DefaultMetadataClassFactory.file_metadata_schemas
@@ -101,6 +106,7 @@ describe Hydra::Works::CharacterizationService do
 
     before do
       allow(characterization).to receive(:characterize).and_return(fits_response)
+      allow(digest).to receive_message_chain(:file, :hexdigest, :prepend).and_return(hexdigest_value)
     end
 
     it 'does not explode with an error' do
@@ -112,15 +118,19 @@ describe Hydra::Works::CharacterizationService do
     # Stub Hydra::FileCharacterization.characterize
     let(:characterization) { class_double("Hydra::FileCharacterization").as_stubbed_const }
     let(:file)             { Hydra::PCDM::File.new }
+    let(:digest)           { class_double("Digest::SHA256").as_stubbed_const }
+    let(:hexdigest_value)  { "urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a" }
 
     before do
       allow(file).to receive(:content).and_return("mocked content")
       allow(characterization).to receive(:characterize).and_return(fits_response)
+      allow(digest).to receive_message_chain(:file, :hexdigest, :prepend).and_return(hexdigest_value)
+
       described_class.run(file)
     end
 
     context 'using document metadata' do
-      let(:fits_filename) { 'fits_0.8.5_pdf.xml' }
+      let(:fits_filename) { 'fits_1.4.0_sample_pdf.xml' }
       let(:fits_response) { IO.read(File.join(fixture_path, fits_filename)) }
 
       it 'assigns expected values to document properties.' do
@@ -141,8 +151,8 @@ describe Hydra::Works::CharacterizationService do
     context 'using image metadata' do
       let(:fits_response) { IO.read(File.join(fixture_path, fits_filename)) }
 
-      context 'with fits_0.8.5' do
-        let(:fits_filename) { 'fits_0.8.5_jp2.xml' }
+      context 'with fits_1.4.0' do
+        let(:fits_filename) { 'fits_1.4.0_image_jp2.xml' }
         it 'assigns expected values to image properties.' do
           expect(file.file_size).to eq(["11043"])
           expect(file.byte_order).to eq(["big endian"])
@@ -166,19 +176,8 @@ describe Hydra::Works::CharacterizationService do
     context 'using video metadata' do
       let(:fits_response) { IO.read(File.join(fixture_path, fits_filename)) }
 
-      context 'with fits_0.8.5' do
-        let(:fits_filename) { 'fits_0.8.5_avi.xml' }
-        it 'assigns expected values to video properties.' do
-          expect(file.height).to eq(["264"])
-          expect(file.width).to eq(["356"])
-          expect(file.duration).to eq(["14.10 s"])
-          expect(file.frame_rate).to eq(["10"])
-          expect(file.sample_rate).to eq(["11025"])
-        end
-      end
-
-      context 'with fits_1.2.0' do
-        let(:fits_filename) { 'fits_1.2.0_avi.xml' }
+      context 'with fits_1.4.0' do
+        let(:fits_filename) { 'fits_1.4.0_countdown_avi.xml' }
         it 'assigns expected values to video properties.' do
           expect(file.height).to eq(["264"])
           expect(file.width).to eq(["356"])
@@ -193,18 +192,8 @@ describe Hydra::Works::CharacterizationService do
     context 'using audio metadata' do
       let(:fits_response) { IO.read(File.join(fixture_path, fits_filename)) }
 
-      context 'with fits_0.8.5' do
-        let(:fits_filename) { 'fits_0.8.5_mp3.xml' }
-        it 'assigns expected values to audio properties.' do
-          expect(file.mime_type).to eq("audio/mpeg")
-          expect(file.duration).to eq(["0:0:15:261"])
-          expect(file.bit_rate).to include("192000")
-          expect(file.sample_rate).to eq(["44100"])
-        end
-      end
-
-      context 'with fits_1.2.0' do
-        let(:fits_filename) { 'fits_1.2.0_mp3.xml' }
+      context 'with fits_1.4.0' do
+        let(:fits_filename) { 'fits_1.4.0_test5_mp3.xml' }
         it 'assigns expected values to audio properties.' do
           expect(file.mime_type).to eq("audio/mpeg")
           expect(file.duration).to eq(["0:0:15:261"])
@@ -215,52 +204,59 @@ describe Hydra::Works::CharacterizationService do
     end
 
     context 'using multi-layer tiff metadata' do
-      let(:fits_filename) { 'fits_0.8.5_tiff.xml' }
+      let(:fits_filename) { 'fits_1.4.0_test_tiff.xml' }
       let(:fits_response) { IO.read(File.join(fixture_path, fits_filename)) }
 
       it 'assigns single largest value to width, height' do
-        expect(file.width).to eq(["2226"])
-        expect(file.height).to eq(["1650"])
+        expect(file.width).to eq(["800"])
+        expect(file.height).to eq(["600"])
       end
     end
   end
 
-  describe 'assigned properties from fits 0.6.2' do
+  describe 'assigned properties from fits 1.4.0' do
     # Stub Hydra::FileCharacterization.characterize
     let(:characterization) { class_double("Hydra::FileCharacterization").as_stubbed_const }
+    let(:digest)           { class_double("Digest::SHA256").as_stubbed_const }
     let(:file)             { Hydra::PCDM::File.new }
 
     context 'using image metadata' do
-      let(:fits_filename) { 'fits_0.6.2_jpg.xml' }
+      let(:fits_filename) { 'fits_1.4.0_cat_jpeg.xml' }
       let(:fits_response) { IO.read(File.join(fixture_path, fits_filename)) }
+      let(:hexdigest_value) { "urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a" }
       before do
         allow(file).to receive(:content).and_return("mocked content")
         allow(characterization).to receive(:characterize).and_return(fits_response)
+        allow(digest).to receive_message_chain(:file, :hexdigest, :prepend).and_return(hexdigest_value)
         described_class.run(file)
       end
       it 'assigns expected values to image properties.' do
-        expect(file.file_size).to eq(["57639"])
+        expect(file.file_size).to eq(["3448"])
         expect(file.byte_order).to eq(["big endian"])
-        expect(file.compression).to eq(["JPEG (old-style)"])
-        expect(file.width).to eq(["600"])
-        expect(file.height).to eq(["381"])
+        expect(file.compression).to eq(["JPEG"])
+        expect(file.width).to eq(["112"])
+        expect(file.height).to eq(["130"])
         expect(file.color_space).to eq(["YCbCr"])
       end
     end
 
     # Tests for technical metadata that we added in curate_file_schema.rb
     context 'using pdf metadata' do
-      let(:fits_filename) { 'fits_0.6.2_pdf.xml' }
+      let(:fits_filename) { 'fits_1.4.0_sample_pdf.xml' }
       let(:fits_response) { IO.read(File.join(fixture_path, fits_filename)) }
+      let(:hexdigest_value) { "urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a" }
       before do
         allow(file).to receive(:content).and_return("mocked content")
         allow(characterization).to receive(:characterize).and_return(fits_response)
+        allow(digest).to receive_message_chain(:file, :hexdigest, :prepend).and_return(hexdigest_value)
         described_class.run(file)
       end
       it 'assigns expected values to pdf properties' do
         expect(file.puid).to eq(["fmt/17"])
         expect(file.creating_application_name).to eq(["Mac OS X 10.10.3 Quartz PDFContext/TextEdit"])
-        expect(file.file_path).to eq(["/home/grosscol/workspace/hydra-works/spec/fixtures/sample-file.pdf"])
+        expect(file.file_path).to eq(["/Users/dmatlaw/Downloads/sample-file.pdf"])
+        expect(file.original_checksum).to include("urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a")
+        expect(file.original_checksum).to include("urn:md5:3a1735b5b30c4adc3f92c70004ae53ed")
       end
     end
   end
