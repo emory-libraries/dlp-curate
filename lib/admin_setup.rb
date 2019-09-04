@@ -4,7 +4,7 @@ require 'yaml'
 # Set up application's initial state: load required roles and users
 class AdminSetup
   attr_accessor :admins_config
-  DEFAULT_ADMIN_CONFIG = "#{::Rails.root}/config/emory/admins.yml".freeze
+  DEFAULT_ADMIN_CONFIG = "#{::Rails.root}/config/emory/groups/admins.yml".freeze
 
   # Set up the parameters for
   # @param [String] admins_config a file containing the email addresses of the application's admin users
