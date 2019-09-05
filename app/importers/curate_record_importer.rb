@@ -28,14 +28,14 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
 
   def upload_preservation_master_file(filename)
     file = File.open(find_file_path(filename))
-    huf = Hyrax::UploadedFile.create(user: @depositor, preservation_master_file: file)
+    huf = Hyrax::UploadedFile.create(user: @depositor, preservation_master_file: file, fileset_use: FileSet::PRIMARY)
     file.close
     huf
   end
 
   def upload_intermediate_file(filename)
     file = File.open(find_file_path(filename))
-    huf = Hyrax::UploadedFile.create(user: @depositor, intermediate_file: file)
+    huf = Hyrax::UploadedFile.create(user: @depositor, intermediate_file: file, fileset_use: FileSet::PRIMARY)
     file.close
     huf
   end

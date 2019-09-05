@@ -54,6 +54,7 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
       expect(work.title.first).to match(/Advertising/)
       expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       expect(work.file_sets.count).to eq 2
+      expect(work.file_sets.first.pcdm_use).to eq "primary"
 
       # Ensure two files get attached to the same work, when the first one doesn't have all the metadata
       # (i.e., if the first one is blank, it should get stub metadata and the second one should write over its metadata)
