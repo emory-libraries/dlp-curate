@@ -28,14 +28,14 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
 
   def upload_preservation_master_file(filename)
     file = File.open(find_file_path(filename))
-    huf = Hyrax::UploadedFile.create(user: @depositor, preservation_master_file: file, file: fileset_label(filename))
+    huf = Hyrax::UploadedFile.create(user: @depositor, preservation_master_file: file, fileset_use: FileSet::PRIMARY, file: fileset_label(filename))
     file.close
     huf
   end
 
   def upload_intermediate_file(filename)
     file = File.open(find_file_path(filename))
-    huf = Hyrax::UploadedFile.create(user: @depositor, intermediate_file: file, file: fileset_label(filename))
+    huf = Hyrax::UploadedFile.create(user: @depositor, intermediate_file: file, fileset_use: FileSet::PRIMARY, file: fileset_label(filename))
     file.close
     huf
   end
@@ -89,11 +89,14 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     existing_records&.first
   end
 
-  # We might eventually have a more sophisticated algorithm for deciding when to apply
-  # a row's metadata to an object. For now, if it doesn't have a populated title field,
-  # assume it isn't valid metadata and we only want the file.
+  # When I have sequence number 1 and file ARCH, read the rest of the metadata
+  # from the row and update the work's metadata.
+  # For anything else, skip the metadata
   def skip_metadata?(update_record)
-    return true if update_record.mapper.metadata["title"].nil?
+    filename = update_record.mapper.files.first
+    split = filename.split("_")
+    return true unless split.last.split(".").first == "ARCH"
+    return true unless split[3].last == "1"
     false
   end
 
