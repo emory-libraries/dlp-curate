@@ -28,16 +28,29 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
 
   def upload_preservation_master_file(filename)
     file = File.open(find_file_path(filename))
-    huf = Hyrax::UploadedFile.create(user: @depositor, preservation_master_file: file, fileset_use: FileSet::PRIMARY)
+    huf = Hyrax::UploadedFile.create(user: @depositor, preservation_master_file: file, fileset_use: FileSet::PRIMARY, file: fileset_label(filename))
     file.close
     huf
   end
 
   def upload_intermediate_file(filename)
     file = File.open(find_file_path(filename))
-    huf = Hyrax::UploadedFile.create(user: @depositor, intermediate_file: file, fileset_use: FileSet::PRIMARY)
+    huf = Hyrax::UploadedFile.create(user: @depositor, intermediate_file: file, fileset_use: FileSet::PRIMARY, file: fileset_label(filename))
     file.close
     huf
+  end
+
+  # Convert the "part" section of the filename to a number and use it to generate
+  # the fileset label
+  # Return the filename as the label if anything goes wrong.
+  def fileset_label(filename)
+    part = filename.split("_")[3]
+    part_number = part.delete("P").to_i
+    return "Front" if part_number == 1
+    return "Back" if part_number == 2
+    part
+  rescue
+    filename
   end
 
   def file_type(filename)

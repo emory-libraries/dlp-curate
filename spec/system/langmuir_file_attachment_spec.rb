@@ -54,6 +54,7 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
       expect(work.title.first).to match(/Advertising/)
       expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       expect(work.file_sets.count).to eq 2
+      expect(work.file_sets.map { |a| a.title.first }).to contain_exactly("Front", "Back")
       expect(work.file_sets.first.pcdm_use).to eq "Primary Content"
 
       # Ensure two files get attached to the same work, when the first one doesn't have all the metadata
@@ -65,10 +66,6 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
 
       work = CurateGenericWork.where(title: "*Rosalie Reese*").first
       expect(work.file_sets.count).to eq 2
-
-      # visit "/dashboard/works"
-      # click_on work.title.first
-      # expect(page).to have_content work.title.first
     end
   end
 end
