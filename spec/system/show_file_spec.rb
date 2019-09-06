@@ -5,7 +5,7 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
   let(:user) { FactoryBot.create(:user) }
   let(:file_title) { 'Some kind of title' }
   let(:work) { FactoryBot.build(:work, user: user) }
-  let(:file_set) { FactoryBot.create(:file_set, user: user, title: [file_title]) }
+  let(:file_set) { FactoryBot.create(:file_set, user: user, title: [file_title], pcdm_use: 'Primary Content') }
   let(:file) { File.open(fixture_path + '/world.png') }
   let(:file1) { File.open(fixture_path + '/sun.png') }
   let(:file2) { File.open(fixture_path + '/image.jp2') }
@@ -35,6 +35,11 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
       expect(page).to have_content('Service File')
       expect(page).to have_content('image.jp2')
       expect(page).to have_content('Intermediate File')
+    end
+
+    it 'shows fileset category' do
+      visit hyrax_file_set_path(file_set)
+      expect(find('#fileset-category').text).to include('Primary Content')
     end
   end
 end
