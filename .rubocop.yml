@@ -19,6 +19,7 @@ Style/FrozenStringLiteralComment:
 Metrics/AbcSize:
   Exclude:
     - app/importers/curate_collection_importer.rb
+    - app/importers/curate_record_importer.rb
 
 Metrics/BlockLength:
     Exclude:
@@ -41,9 +42,14 @@ Metrics/ClassLength:
         - app/presenters/hyrax/collection_presenter.rb
         - app/importers/curate_mapper.rb
 
+Metrics/CyclomaticComplexity:
+    Exclude:
+      - app/importers/curate_record_importer.rb
+
 Metrics/LineLength:
     Exclude:
         - spec/importers/curate_mapper_spec.rb
+        - app/importers/curate_record_importer.rb
 
 Metrics/MethodLength:
     Exclude:
@@ -57,6 +63,11 @@ Metrics/MethodLength:
 Layout/AlignHash:
     Exclude:
         - app/models/curate_generic_work.rb
+        - app/importers/curate_record_importer.rb
+
+Metrics/PerceivedComplexity:
+    Exclude:
+      - app/importers/curate_record_importer.rb
 
 RSpec/ExampleLength:
     Exclude:
@@ -68,3 +79,11 @@ RSpec/MessageSpies:
 RSpec/NestedGroups:
     Exclude:
         - 'spec/controllers/hyrax/downloads_controller_spec.rb'
+
+RSpec/InstanceVariable:
+    Exclude:
+        - 'spec/services/characterization_service_spec.rb'
+
+RSpec/MessageChain:
+    Exclude:
+        - 'spec/services/characterization_service_spec.rb'

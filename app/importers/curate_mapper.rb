@@ -67,6 +67,11 @@ class CurateMapper < Zizia::HashMapper
     common_fields
   end
 
+  # Zizia expects files to return an Array
+  def files
+    [@metadata["Filename"]]
+  end
+
   # Samvera generally assumes that all fields are multi-valued. Curate has many
   # fields that are assumed to be singular, however. List them here for an easy
   # way to check whether a field is multi-valued when retrieving it.
@@ -120,14 +125,22 @@ class CurateMapper < Zizia::HashMapper
     }.freeze
   end
 
+  # Return the title if there is one. Otherwise, set it to a placeholder value.
+  # We will sometimes have CSV rows that contain only a Filename, but no metadata.
+  def title
+    value = @metadata["title"] || "Unknown Title"
+    Array.wrap(value)
+  end
+
   # Normalize the value coming in because there are subtle mis-matches against the expected controlled
   # vocabulary term. E.g.,
   # "Stuart A. Rose Manuscript, Archives and Rare Book Library" vs
   # "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
   def administrative_unit
-    active_terms = Qa::Authorities::Local.subauthority_for('administrative_unit').all.select { |term| term[:active] }
     csv_term = @metadata["administrative_unit"]
+    return nil unless csv_term
     normalized_csv_term = csv_term.downcase.gsub(/[^a-z0-9\s]/i, '')
+    active_terms = Qa::Authorities::Local.subauthority_for('administrative_unit').all.select { |term| term[:active] }
     valid_option = active_terms.select { |s| s["id"].downcase.gsub(/[^a-z0-9\s]/i, '') == normalized_csv_term }.try(:first)
     return valid_option["id"] if valid_option
     raise "Invalid administrative_unit value: #{csv_term}"
@@ -136,6 +149,7 @@ class CurateMapper < Zizia::HashMapper
   # Iterate through all values for data_classification and ensure they are all
   # valid options according to Questioning Authority
   def data_classification
+    return nil unless @metadata["data_classification"]
     csv_terms = @metadata["data_classification"]&.split(DELIMITER)
     active_terms = Qa::Authorities::Local.subauthority_for('data_classification').all.select { |term| term[:active] }
     data_classification_values = []
@@ -148,6 +162,7 @@ class CurateMapper < Zizia::HashMapper
   end
 
   def rights_statement
+    return nil unless @metadata["rights_statement"]
     active_terms = Qa::Authorities::Local.subauthority_for('rights_statements').all.select { |term| term[:active] }
     csv_term = @metadata["rights_statement"]
     valid_uri_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)

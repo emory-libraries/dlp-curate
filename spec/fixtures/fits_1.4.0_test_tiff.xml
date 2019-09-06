@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fits xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd" version="1.4.0" timestamp="8/30/19 1:10 PM">
+  <identification status="SINGLE_RESULT">
+    <identity format="TIFF EXIF" mimetype="image/tiff" toolname="FITS" toolversion="1.4.0">
+      <tool toolname="Exiftool" toolversion="11.14" />
+    </identity>
+  </identification>
+  <fileinfo>
+    <size toolname="Jhove" toolversion="1.20.1">1462460</size>
+    <creatingApplicationName toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">Adobe Photoshop CS6 (Macintosh)</creatingApplicationName>
+    <lastmodified toolname="Exiftool" toolversion="11.14" status="CONFLICT">2019:08:23 15:10:10</lastmodified>
+    <lastmodified toolname="Tika" toolversion="1.19.1" status="CONFLICT">2019-08-23T11:10:10</lastmodified>
+    <created toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">2019:08:23 15:08:03-04:00</created>
+    <filepath toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">/Users/dmatlaw/Downloads/test.tif</filepath>
+    <filename toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">test.tif</filename>
+    <md5checksum toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">6fdaa9fff2443b21b865a4beb61e655d</md5checksum>
+    <fslastmodified toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">1566587540000</fslastmodified>
+  </fileinfo>
+  <filestatus />
+  <metadata>
+    <image>
+      <compressionScheme toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">Uncompressed</compressionScheme>
+      <imageWidth toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">800</imageWidth>
+      <imageHeight toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">600</imageHeight>
+      <colorSpace toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">RGB</colorSpace>
+      <iccProfileName toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">sRGB IEC61966-2.1</iccProfileName>
+      <iccProfileVersion toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">2.1.0</iccProfileVersion>
+      <orientation toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">normal*</orientation>
+      <samplingFrequencyUnit toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">in.</samplingFrequencyUnit>
+      <xSamplingFrequency toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">200</xSamplingFrequency>
+      <ySamplingFrequency toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">200</ySamplingFrequency>
+      <bitsPerSample toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">8 8 8</bitsPerSample>
+      <samplesPerPixel toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">3</samplesPerPixel>
+      <scanningSoftwareName toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">Adobe Photoshop CS6 (Macintosh)</scanningSoftwareName>
+    </image>
+  </metadata>
+  <statistics fitsExecutionTime="1333">
+    <tool toolname="MediaInfo" toolversion="0.7.75" status="did not run" />
+    <tool toolname="OIS Audio Information" toolversion="0.1" status="did not run" />
+    <tool toolname="ADL Tool" toolversion="0.1" status="did not run" />
+    <tool toolname="VTT Tool" toolversion="0.1" status="did not run" />
+    <tool toolname="Droid" toolversion="6.4" executionTime="426" />
+    <tool toolname="Jhove" toolversion="1.20.1" executionTime="1303" />
+    <tool toolname="file utility" toolversion="5.33" executionTime="1178" />
+    <tool toolname="Exiftool" toolversion="11.14" executionTime="1194" />
+    <tool toolname="NLNZ Metadata Extractor" toolversion="3.6GA" status="did not run" />
+    <tool toolname="OIS File Information" toolversion="0.2" executionTime="208" />
+    <tool toolname="OIS XML Metadata" toolversion="0.2" status="did not run" />
+    <tool toolname="ffident" toolversion="0.2" executionTime="901" />
+    <tool toolname="Tika" toolversion="1.19.1" executionTime="375" />
+  </statistics>
+</fits>
+

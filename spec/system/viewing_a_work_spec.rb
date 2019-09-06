@@ -24,6 +24,7 @@ RSpec.describe 'viewing the importer guide', type: :system do
     expect(page).to have_content 'Contact Information'
     expect(page).to have_content 'Genre'
     expect(page).to have_content 'Format'
+    expect(page).to have_content 'Audio'
     expect(page).to have_content 'Copyright Date'
     expect(page).to have_content 'Creator'
     expect(page).to have_content 'Data Classification'
@@ -35,6 +36,7 @@ RSpec.describe 'viewing the importer guide', type: :system do
     expect(page).to have_content 'Data Producer'
     # Not indexed in solr
     # expect(page).to have_content 'Extent/Dimensions'
+    expect(page).to have_content 'A very large extent'
     # Not indexed in solr
     # expect(page).to have_content 'Final Published Version'
     expect(page).to have_content 'Geographic Level For Dataset'
@@ -70,6 +72,8 @@ RSpec.describe 'viewing the importer guide', type: :system do
     # Not indexed in solr
     # expect(page).to have_content 'Rights Holder'
     expect(page).to have_content 'Rights Statement - Controlled'
+    expect(page).to have_content 'This is my rights statement text'
+    expect(page).to have_content 'In Copyright'
     expect(page).to have_content 'Rights Statement'
     expect(page).to have_content 'Scheduled Rights Review Date'
     expect(page).to have_content 'Scheduled Rights Review Note'

@@ -1,6 +1,7 @@
 # Place any default configuration for solr_wrapper here
 version: 7.7.1
-# port: 8983
+port: 8983
+download_dir: /var/tmp
 instance_dir: tmp/solr-development
 collection:
   persist: true

@@ -10,18 +10,44 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     File.open(csv_file) { |f| import.manifest = f }
     import
   end
-
-  before do
-    allow(ENV).to receive(:[]).and_call_original
-    allow(ENV).to receive(:[]).with('IMPORT_FILE_PATH').and_return(fixture_path)
-
-    allow(File).to receive(:exist?).and_call_original
-    allow(File).to receive(:exist?).with(File.join(ENV['IMPORT_FILE_PATH'], 'Masters/dlmasters/clusc_1_1_00010432a.tif')).and_return(true)
+  let(:header) do
+    %w[
+      title
+      administrative_unit
+      holding_repository
+      content_type
+      rights_statement_text
+      rights_statement
+      data_classification
+      date_created
+    ]
   end
+  let(:row2) do
+    [
+      'Advertising, High Boy cigarettes',
+      'Emory University Archives',
+      'Stuart A. Rose Manuscript, Archives, and Rare Book Library',
+      'http://id.loc.gov/vocabulary/resourceTypes/img',
+      'Emory University does not control copyright for this image.',
+      'http://rightsstatements.org/vocab/InC/1.0/',
+      'Confidential',
+      '194X'
+    ]
+  end
+  let(:file_path) { "tmp/test.csv" }
+  let(:csv_file) do
+    CSV.open(file_path, "w") do |csv|
+      rows.each do |row|
+        csv << row
+      end
+    end
+    file_path
+  end
+  let(:rows) { [header, row2] }
+
+  after { File.delete(file_path) }
 
   context 'a valid CSV file' do
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_tiny.csv') }
-
     it 'has no errors' do
       expect(validator.errors).to eq []
     end
@@ -37,8 +63,6 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
   end
 
   context 'a file that can\'t be parsed' do
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_tiny.csv') }
-
     it 'has an error' do
       allow(CSV).to receive(:read).and_raise(CSV::MalformedCSVError, 'abcdefg')
       validator.validate
@@ -48,42 +72,68 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     end
   end
 
-  context 'a CSV that is missing required headers' do
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'missing_headers.csv') }
+  context 'a CSV that is missing headers required by the edit form' do
+    let(:header) { ["title"] }
+    let(:row2) { ["Advertising, High Boy cigarettes"] }
 
-    it 'has an error for every missing header' do
+    it 'has a warning for every missing header' do
       validator.validate
-      expected_errors = ["title", "content_type"]
-      expected_errors.each do |error|
-        matches = validator.errors.map { |e| e.match(error) }
+      expected_warnings = REQUIRED_FIELDS_ON_FORM.map(&:to_s) - ["title"]
+      expected_warnings.each do |warning|
+        matches = validator.warnings.map { |e| e.match(warning) }
         expect(matches.compact).not_to be_empty
       end
     end
   end
 
+  context 'a CSV with invalid administrative unit data' do
+    let(:row2) { ["Title1", "Emory University Archives", "", "", "", "", "", "", ""] }
+    let(:row3) { ["Title2", "Fake Administrative Unit", "", "", "", "", "", "", ""] }
+    let(:rows) { [header, row2, row3] }
+
+    it 'has a warning' do
+      validator.validate
+      expected_warning = "Invalid administrative_unit in row 3: fake administrative unit"
+      expect(validator.warnings).to include(expected_warning)
+    end
+  end
+
   context 'a CSV with duplicate headers' do
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'duplicate_headers.csv') }
+    let(:header) do
+      %w[
+        title
+        local_call_number
+        local_call_number
+        administrative_unit
+        holding_repository
+        content_type
+        rights_statement_text
+        rights_statement
+        data_classification
+        date_created
+      ]
+    end
 
     it 'has an error' do
       validator.validate
       expect(validator.errors.first).to match(/Duplicate column name/)
-      expect(validator.errors.first).to match(/Call Number/)
+      expect(validator.errors.first).to match(/local_call_number/)
     end
   end
 
-  context 'a CSV that is missing required values' do
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'missing_values.csv') }
+  # There are no fields that should produce errors if they're missing
+  context 'a CSV that is missing values' do
+    let(:row2) { ["", "", "", "", "", "", "", "", ""] }
 
-    it 'has errors' do
+    it 'has no errors' do
       validator.validate
-      expect(validator.errors.first).to match(/row 2/)
-      expect(validator.errors.first).to match(/Title/)
+      expect(validator.errors).to eq []
     end
   end
 
   context 'a CSV that has extra headers' do
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'extra_headers.csv') }
-
+    let(:extra_headers) { header + ["another_header_1", "another_header_2"] }
+    let(:rows) { [extra_headers, row2] }
     it 'has a warning' do
       validator.validate
       expect(validator.warnings).to include(
@@ -93,23 +143,80 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
     end
   end
 
+  context 'a CSV with the wrong number of values in a row' do
+    let(:rows) { [header, wrong_number_of_values_row] }
+    context "too many values in a row" do
+      let(:wrong_number_of_values_row) { row2 + ["whatever"] }
+      it "raises a warning" do
+        validator.validate
+        expected_warning = "row 2: too many fields in the row"
+        expect(validator.warnings).to include(expected_warning)
+      end
+    end
+    context "too few values in a row" do
+      let(:wrong_number_of_values_row) { ["whatever", "whatever"] }
+      it "raises a warning" do
+        validator.validate
+        expected_warning = "row 2: too few fields in the row"
+        expect(validator.warnings).to include(expected_warning)
+      end
+    end
+  end
+
   context 'either string values or URIs in resource type field' do
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_tiny.csv') }
-    it 'recognizes a valid string for resource type' do
-      validator.validate
-      expect(validator.errors).to eq []
-      expect(validator.warnings).to eq []
+    context 'with a string' do
+      it 'recognizes a valid string for resource type' do
+        row2[3] = "Still image"
+        validator.validate
+        expect(validator.errors).to eq []
+        expect(validator.warnings).to eq []
+      end
+    end
+    context 'with a uri' do
+      it 'recognizes a valid uri for resource type' do
+        validator.validate
+        expect(validator.errors).to eq []
+        expect(validator.warnings).to eq []
+      end
     end
   end
 
   context 'a CSV with invalid values in controlled-vocabulary fields' do
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'invalid_values.csv') }
-
     it 'has warnings' do
+      row2[3] = "http://id.loc.gov/vocabulary/resourcetypes/foobar"
       validator.validate
-      expect(validator.errors).to include(
-        "Invalid Desc   Type Of Resource in row 2: invalid resource type"
+      expect(validator.warnings).to include(
+        "Invalid content_type in row 2: http://id.loc.gov/vocabulary/resourcetypes/foobar"
       )
+    end
+  end
+
+  context 'a CSV with invalid sensitive_material values' do
+    let(:headers_with_sensitive_material) { header + ["sensitive_material"] }
+    let(:rows) { [headers_with_sensitive_material, data_with_sensitive_material] }
+    context "sensitive_material is true" do
+      let(:data_with_sensitive_material) { row2 + [true] }
+      it "doesn't cause errors or warnings" do
+        validator.validate
+        expect(validator.errors).to eq []
+        expect(validator.warnings).to eq []
+      end
+    end
+    context "sensitive_material is yes" do
+      let(:data_with_sensitive_material) { row2 + ["yes"] }
+      it "doesn't cause errors or warnings" do
+        validator.validate
+        expect(validator.errors).to eq []
+        expect(validator.warnings).to eq []
+      end
+    end
+    context "sensitive_material is an unexpected value" do
+      let(:data_with_sensitive_material) { row2 + ["highly contagious"] }
+      it "raises a warning" do
+        validator.validate
+        expected_warning = "Invalid sensitive_material in row 2: highly contagious"
+        expect(validator.warnings).to include(expected_warning)
+      end
     end
   end
 

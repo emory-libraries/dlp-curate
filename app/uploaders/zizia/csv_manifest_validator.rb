@@ -28,12 +28,16 @@ module Zizia
       return unless @rows
 
       missing_headers
+      missing_headers_required_by_edit_form
       duplicate_headers
       unrecognized_headers
+      check_number_of_values_in_a_row
       missing_values
       # invalid_license # Not yet implemented for Emory
+      invalid_administrative_unit
       invalid_resource_type
-      # invalid_rights_statement # Not yet implemented for Emory
+      invalid_rights_statement
+      check_for_valid_sensitive_material_values
     end
 
     # One record per row
@@ -68,8 +72,16 @@ module Zizia
         end
       end
 
+      def missing_headers_required_by_edit_form
+        required_headers = REQUIRED_FIELDS_ON_FORM.map(&:to_s)
+        required_headers.each do |header|
+          next if @transformed_headers.include?(header)
+          @warnings << "Missing column: #{header}. This field is required by the edit form."
+        end
+      end
+
       def required_headers
-        ['title', 'filename', 'content_type']
+        []
       end
 
       def duplicate_headers
@@ -79,7 +91,7 @@ module Zizia
           duplicates << x if x == sorted_headers[i + 1]
         end
         duplicates.uniq.each do |header|
-          @errors << "Duplicate column names: You can have only one \"#{header.titleize}\" column."
+          @errors << "Duplicate column names: You can have only one \"#{header}\" column."
         end
       end
 
@@ -100,11 +112,16 @@ module Zizia
       def missing_values
         column_numbers = transformed_required_headers.map { |header| @transformed_headers.find_index(header) }.compact
         @rows.each_with_index do |row, i|
+          next if i.zero? # Skip the header row
           column_numbers.each_with_index do |column_number, j|
             next unless row[column_number].blank?
-            @errors << "Missing required metadata in row #{i + 1}: \"#{required_headers[j].titleize}\" field cannot be blank"
+            @errors << "Missing required metadata in row #{i + 1}: \"#{required_headers[j]}\" field cannot be blank"
           end
         end
+      end
+
+      def check_for_valid_sensitive_material_values
+        validate_values('sensitive_material', :valid_sensitive_material_values)
       end
 
       # Only allow valid license values expected by Hyrax.
@@ -114,11 +131,15 @@ module Zizia
       end
 
       def invalid_resource_type
-        validate_values('Desc - Type of Resource', :valid_resource_types)
+        validate_values('content_type', :valid_resource_types)
+      end
+
+      def invalid_administrative_unit
+        validate_values('administrative_unit', :valid_administrative_units)
       end
 
       def invalid_rights_statement
-        validate_values('rights statement', :valid_rights_statements)
+        validate_values('rights_statement', :valid_rights_statements)
       end
 
       def valid_licenses
@@ -132,8 +153,28 @@ module Zizia
         @valid_resource_type_ids + @valid_resource_type_labels + @valid_resource_type_labels.map { |a| a.downcase.strip.squeeze(' ') }
       end
 
+      def valid_sensitive_material_values
+        @valid_sensitive_material ||= Qa::Authorities::Local.subauthority_for('sensitive_material')
+                                                            .all.select { |term| term[:active] }.map { |term| term[:id].to_s } + ["yes", "no"]
+      end
+
       def valid_rights_statements
         @valid_rights_statement_ids ||= Qa::Authorities::Local.subauthority_for('rights_statements').all.select { |term| term[:active] }.map { |term| term[:id] }
+      end
+
+      def valid_administrative_units
+        @valid_administrative_units ||= Qa::Authorities::Local.subauthority_for('administrative_unit').all.select { |term| term[:active] }.map { |term| term[:id] }
+      end
+
+      def check_number_of_values_in_a_row
+        expected_number_of_values = @transformed_headers.size
+        @rows.each_with_index do |row, i|
+          next if i.zero? # Skip the header row
+          row_size = row.size
+          next if row_size == expected_number_of_values
+          @warnings << "row #{i + 1}: too many fields in the row" if row_size > expected_number_of_values
+          @warnings << "row #{i + 1}: too few fields in the row" if row_size < expected_number_of_values
+        end
       end
 
       # Make sure this column contains only valid values
@@ -146,11 +187,13 @@ module Zizia
           next unless row[column_number]
 
           values = row[column_number].split(delimiter)
+          values = values.map { |v| v.downcase.strip }
           valid_values = method(valid_values_method).call
+          valid_values = valid_values.map { |v| v.downcase.strip }
           invalid_values = values.select { |value| !valid_values.include?(value) }
 
           invalid_values.each do |value|
-            @errors << "Invalid #{header_name.titleize} in row #{i + 1}: #{value}"
+            @warnings << "Invalid #{header_name} in row #{i + 1}: #{value}"
           end
         end
       end
