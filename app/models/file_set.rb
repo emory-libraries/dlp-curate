@@ -2,9 +2,9 @@
 class FileSet < ActiveFedora::Base
   require 'noid-rails'
 
-  PRIMARY = 'primary'.freeze
-  PRESERVATION = 'supplementary'.freeze
-  SUPPLEMENTAL = 'supplementary'.freeze
+  PRIMARY = 'Primary Content'.freeze
+  SUPPLEMENTAL = 'Supplemental Content'.freeze
+  PRESERVATION = 'Supplemental Preservation'.freeze
 
   # def assign_id
   #   service.mint
