@@ -30,7 +30,7 @@ RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
 
   shared_examples 'a file attacher', perform_enqueued: [AttachFilesToWorkJob, IngestJob] do
     it 'attaches files, copies visibility and permissions and updates the uploaded files' do
-      expect(CharacterizeJob).to receive(:perform_later).exactly(5).times
+      expect(CharacterizeJob).to receive(:perform_later).once
       described_class.perform_now(generic_work, [uploaded_file1])
       generic_work.reload
       expect(generic_work.file_sets.first.title).to eq ['Example title']
