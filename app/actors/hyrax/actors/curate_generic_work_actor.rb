@@ -13,6 +13,7 @@ module Hyrax
           attribute = attribute_key.to_s.gsub('_attributes', '').to_sym
           env.curation_concern.send(attribute).each { |member| member.try(:persist!) }
         end
+      end
       # Some CSV rows have blank metadata and are only used to attach a file.
       # Those rows should come through with env.attributes["skip_metadata"] = true
       # 1. Remove that value from the attributes, since it will cause an error if you try to save it to the object
