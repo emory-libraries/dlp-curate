@@ -12,8 +12,8 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     return [] if files_to_attach.nil? || files_to_attach.empty?
     uploaded_file_ids = []
     files_to_attach.each do |filename|
-      next if filename.nil?
       uploaded_file = upload_file(filename)
+      next unless uploaded_file
       uploaded_file_ids << uploaded_file.id
     end
     uploaded_file_ids
@@ -27,15 +27,17 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
   end
 
   def upload_preservation_master_file(filename)
-    file = File.open(find_file_path(filename))
-    huf = Hyrax::UploadedFile.create(user: @depositor, preservation_master_file: file, fileset_use: FileSet::PRIMARY, file: fileset_label(filename))
-    file.close
-    huf
+    create_hyrax_uploaded_file(filename: filename, type: :preservation_master_file)
   end
 
   def upload_intermediate_file(filename)
+    create_hyrax_uploaded_file(filename: filename, type: :intermediate_file)
+  end
+
+  def create_hyrax_uploaded_file(filename:, type:)
+    return unless File.exist?(find_file_path(filename))
     file = File.open(find_file_path(filename))
-    huf = Hyrax::UploadedFile.create(user: @depositor, intermediate_file: file, fileset_use: FileSet::PRIMARY, file: fileset_label(filename))
+    huf = Hyrax::UploadedFile.create(:user => @depositor, type => file, :fileset_use => FileSet::PRIMARY, :file => fileset_label(filename))
     file.close
     huf
   end
@@ -54,6 +56,7 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
   end
 
   def file_type(filename)
+    return if filename.nil?
     return "preservation_master_file" if filename.match?(/ARCH/)
     return "intermediate_file" if filename.match?(/PROD/)
     raise "Unrecognized file_type for filename #{filename}"
