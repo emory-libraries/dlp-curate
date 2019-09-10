@@ -16,9 +16,13 @@ class FileArranger
   end
 
   def arrange
-    case @file_set.label
+    case @file_set.title.first
     when 'Front'
       @work.ordered_members.insert_at(0, @file_set)
+      # Front or the first item should always be the
+      # thumbnail
+      @work.representative = @file_set
+      @work.thumbnail = @file_set
     when 'Back'
       # There may not be a Front so make the Back first
       if @work.ordered_members.to_a.empty?
