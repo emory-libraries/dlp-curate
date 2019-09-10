@@ -81,7 +81,10 @@ module Hyrax
           # Ensure we have an up-to-date copy of the members association, so that we append to the end of the list.
           work.reload unless work.new_record?
           file_set.visibility = work.visibility unless assign_visibility?(file_set_params)
-          work.ordered_members << file_set
+
+          arranger = FileArranger.new(work: work, file_set: file_set)
+          arranger.arrange
+
           work.representative = file_set if work.representative_id.blank?
           work.thumbnail = file_set if work.thumbnail_id.blank?
           # Save the work so the association between the work and the file_set is persisted (head_id)
