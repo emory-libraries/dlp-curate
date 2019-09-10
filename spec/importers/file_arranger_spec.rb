@@ -15,6 +15,8 @@ RSpec.describe FileArranger do
     arranger.arrange
     expect(work.ordered_members.to_a.first.title).to eq(['Front'])
     expect(work.ordered_members.to_a[1].title).to eq(['Back'])
+
+    expect(work.thumbnail).to eq(file_set_front)
   end
 
   it 'inserts Back first if there is no front' do
