@@ -16,6 +16,8 @@ class CurateGenericWork < ActiveFedora::Base
   validates :related_datasets, url: true, if: -> { related_datasets.present? }
   validates :rights_documentation, url: true, if: -> { rights_documentation.present? }
 
+  property :preservation_workflow, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow", class_name: "PreservationWorkflow"
+
   property :institution, predicate: "http://rdaregistry.info/Elements/u/P60402", multiple: false do |index|
     index.as :stored_searchable
   end
@@ -266,6 +268,19 @@ class CurateGenericWork < ActiveFedora::Base
   property :date_created, predicate: "http://purl.org/dc/terms/created", multiple: false do |index|
     index.as :stored_searchable, :facetable
   end
+
+  # accepts_nested_attributes_for can not be called until all
+  # the properties are declared because it calls resource_class,
+  # which finalizes the propery declarations.
+  # See https://github.com/projecthydra/active_fedora/issues/847
+  accepts_nested_attributes_for :preservation_workflow, allow_destroy: true,
+  reject_if: proc { |attrs|
+    ['workflow_type', 'workflow_notes', 'workflow_rights_basis',
+     'workflow_rights_basis_note', 'workflow_rights_basis_date',
+     'workflow_rights_basis_reviewer', 'workflow_rights_basis_uri'].all? do |key|
+       Array(attrs[key]).all?(&:blank?)
+     end
+  }
 
   private
 

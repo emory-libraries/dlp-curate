@@ -58,6 +58,12 @@ Metrics/MethodLength:
         - app/presenters/hyrax/curate_collection_presenter.rb
         - app/presenters/hyrax/collection_presenter.rb
         - app/importers/curate_mapper.rb
+        - app/forms/hyrax/curate_generic_work_form.rb
+        - app/importers/curate_record_importer.rb
+
+Layout/AlignHash:
+    Exclude:
+        - app/models/curate_generic_work.rb
         - app/importers/curate_record_importer.rb
 
 Metrics/PerceivedComplexity:
