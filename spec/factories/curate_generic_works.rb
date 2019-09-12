@@ -52,6 +52,8 @@ FactoryBot.define do
       date_modified { '2023' }
       date_uploaded { '2001' }
       edition { 'first' }
+      emory_ark { ['25'] }
+      emory_rights_statements { ['This is my rights statement text'] }
       extent { 'A very large extent' }
       final_published_versions { ['http://example.com'] }
       geographic_unit { 'cm' }
@@ -64,11 +66,10 @@ FactoryBot.define do
       issn { '123435' }
       issue { '123' }
       keywords { ['photos'] }
-      emory_ark { ['25'] }
-      other_identifiers { ['1'] }
       legacy_rights { 'no' }
       local_call_number { '1234' }
       notes { ['Many found'] }
+      other_identifiers { ['1'] }
       page_range_end { '1' }
       page_range_start { '0' }
       parent_title { 'A parent title' }
@@ -83,7 +84,6 @@ FactoryBot.define do
       rights_documentation { 'https://example.com' }
       rights_holders { ['Emory'] }
       rights_statement { ['http://rightsstatements.org/vocab/InC/1.0/'] }
-      emory_rights_statements { ['This is my rights statement text'] }
       scheduled_rights_review { 'true' }
       scheduled_rights_review_note { 'check please' }
       sensitive_material { 'false' }
