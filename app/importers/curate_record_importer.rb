@@ -87,7 +87,7 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     filename = record.mapper.metadata["Filename"]
     return if filename.nil?
     call_number = extract_call_number(filename)
-    existing_records = CurateGenericWork.where(legacy_identifier: call_number)
+    existing_records = CurateGenericWork.where(other_identifiers: call_number)
     raise "More than one record matches call number #{call_number}" if existing_records.count > 1
     existing_records&.first
   end
