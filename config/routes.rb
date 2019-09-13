@@ -38,6 +38,8 @@ Rails.application.routes.draw do
 
   authenticate :user, ->(u) { u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
+    get 'csv_import_details/index'
+    get 'csv_import_details/show/:id', to: 'csv_import_details#show', as: 'csv_import_detail'
   end
 
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do

@@ -1,0 +1,33 @@
+<div>
+  <h3>About the Import:</h3>
+  <ul>
+    <li>Import created by: <%= User.find(@csv_import_detail.csv_import.user_id).uid %>
+    </li>
+    <li>CSV File: <%= @csv_import_detail.csv_import.manifest %></li>
+    <li>Total Size in Bytes: <%= @csv_import_detail.total_size %></li>
+  </ul>
+
+  <h3>Files</h3>
+  <table id="files-table" class="dataTable display responsive nowrap table table-striped works-list" style="width:100%">
+    <tr>
+      <th>Filename</th>
+      <th>Size in Bytes</th>
+      <th>Row Number</th>
+    </tr>
+
+    <% @csv_import_detail.pre_ingest_files.each do |pre_ingest_file| %>
+      <tr>
+        <td>
+          <%= pre_ingest_file.filename %>
+        </td>
+        <td>
+          <%= pre_ingest_file.size %>
+        </td>
+        <td>
+          Row number:
+          <%= pre_ingest_file.row_number %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>

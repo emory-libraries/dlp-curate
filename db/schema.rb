@@ -576,6 +576,13 @@ ActiveRecord::Schema.define(version: 201901241536541) do
     t.index ["work_id"], name: "index_work_view_stats_on_work_id"
   end
 
+  create_table "zizia_csv_import_details", force: :cascade do |t|
+    t.integer "csv_import_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["csv_import_id"], name: "index_zizia_csv_import_details_on_csv_import_id"
+  end
+
   create_table "zizia_csv_imports", force: :cascade do |t|
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -583,6 +590,25 @@ ActiveRecord::Schema.define(version: 201901241536541) do
     t.string "manifest"
     t.string "fedora_collection_id"
     t.index ["user_id"], name: "index_zizia_csv_imports_on_user_id"
+  end
+
+  create_table "zizia_pre_ingest_files", force: :cascade do |t|
+    t.integer "size"
+    t.text "row"
+    t.integer "row_number"
+    t.string "filename"
+    t.integer "pre_ingest_work_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pre_ingest_work_id"], name: "index_zizia_pre_ingest_files_on_pre_ingest_work_id"
+  end
+
+  create_table "zizia_pre_ingest_works", force: :cascade do |t|
+    t.integer "parent_object"
+    t.integer "csv_import_detail_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["csv_import_detail_id"], name: "index_zizia_pre_ingest_works_on_csv_import_detail_id"
   end
 
 end
