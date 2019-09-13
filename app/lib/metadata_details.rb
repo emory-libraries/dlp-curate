@@ -4,7 +4,7 @@ require 'csv'
 class MetadataDetails
   include Singleton
 
-  def details(work_attributes:) # rubocop:disable Metrics/AbcSize
+  def details(work_attributes:)
     validators = work_attributes.validators
     work_attributes.properties.sort.map do |p|
       Hash[
