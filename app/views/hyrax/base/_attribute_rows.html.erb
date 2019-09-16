@@ -1,6 +1,6 @@
 <% CurateGenericWorkAttributes.instance.attributes.each do |key| %>
-  <% case key %>
-  <% when 'content_type' %>
+  <% case key
+     when 'content_type' %>
     <%= presenter.attribute_to_html(key.to_sym, render_as: 'format')  %>
   <% when 'rights_statement' %>
     <%= presenter.attribute_to_html(key.to_sym, render_as: 'rights_statement') %>
