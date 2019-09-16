@@ -5,10 +5,7 @@
 # See https://github.com/samvera/hyrax/issues/3128 for more details.
 ::Noid::Rails.configure do |config|
   config.minter_class = Noid::Rails::Minter::Db
-end
-
-::Noid::Rails.configure do |config|
-  config.template = 'cor-.rdddeeeeeee'
+  config.template = '.rdddeeeeeee'
 end
 
 ::Noid::Rails.config.identifier_in_use = lambda do |id|

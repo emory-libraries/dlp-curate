@@ -32,12 +32,9 @@ RSpec.describe CurateGenericWork do
     it "access preservation workflow properties after saving" do
       expect(work1.preservation_workflow.map(&:workflow_type).flatten).to include(['default'])
     end
-  end
 
-  context "noid template" do
-    let(:id) { Noid::Rails::Service.new.mint }
-    it "checks noid template" do
-      expect(id).to match(/cor-\d\d\d/)
+    it "checks assign id" do
+      expect(work1.assign_id).to include('-cor')
     end
   end
 

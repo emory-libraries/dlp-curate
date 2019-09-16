@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 class CurateGenericWork < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
-
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
   self.indexer = CurateGenericWorkIndexer
 
   def assign_id
-    service.mint
+    service.mint + Rails.configuration.x.curate_template
   end
 
   validates :title, presence: { message: 'Your work must have a title.' }
