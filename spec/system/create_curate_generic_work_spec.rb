@@ -110,11 +110,13 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       visit("/concern/curate_generic_works/#{cgw.id}/edit")
 
       find('body').click
-      choose('curate_generic_work_visibility_open')
+      choose('curate_generic_work_visibility_low_res')
+      choose('curate_generic_work_visibility_emory_low')
+      choose('curate_generic_work_visibility_rose_high')
       click_on('Save')
 
       cgw.reload
-      expect(cgw.visibility).to eq 'open'
+      expect(cgw.visibility).to eq 'rose_high'
     end
 
     scenario "verify work authenticated visibility" do
