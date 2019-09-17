@@ -38,6 +38,11 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
       :primary_repository_ID
     ]
   end
+  let(:private_work) { FactoryBot.build(:private_work) }
+  before do
+    private_work.member_of_collections = [collection]
+    private_work.save!
+  end
 
   it 'has all the expected metadata fields' do
     visit "/collections/#{collection.id}"
@@ -50,5 +55,16 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
     multi_fields.each do |fieldname|
       expect(page).to have_content collection.send(fieldname).first
     end
+    expect(page).to have_content '0 Items'
+    expect(page).not_to have_content 'Works (1)'
+    expect(page).not_to have_content 'Test title'
+  end
+
+  it 'has access to private works in a public collection when signed in as admin' do
+    login_as admin_user
+    visit "/collections/#{collection.id}"
+    expect(page).to have_content 'Works (1)'
+    expect(page).to have_content 'Test title'
+    expect(page).to have_content 'Private'
   end
 end
