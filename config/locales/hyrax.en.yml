@@ -187,6 +187,21 @@ en:
           title: "title (Title)"
           transfer_engineer: "transfer_engineer (Transfer Engineer)"
   hyrax:
+    visibility:
+      public:
+        note_html: 'Public access high resolution'
+        text: 'Public high resolution'
+      low_res:
+        note_html: 'LowRes'
+        text: 'LowRes'
+      emory_low:
+        note_html: 'Emory Low Resolution'
+        text: 'Emory Low'
+      rose_high:
+        note_html: 'Rose High Resolution'
+        text: 'Rose High Resolution'
+
+
     relationships_parent_row:
       label: "In Parent Work:"
     base:

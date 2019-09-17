@@ -11,6 +11,8 @@ AllCops:
         - 'tmp/**/*'
         - 'vendor/**/*'
         - 'node_modules/**/*'
+        - config/initializers/access_right.rb
+        - config/initializers/visibility.rb
         - lib/tasks/sample_data.rake
 
 Style/FrozenStringLiteralComment:
