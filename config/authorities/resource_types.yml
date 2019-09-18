@@ -1,4 +1,7 @@
 terms:
+  - id: http://id.loc.gov/vocabulary/resourceTypes/art
+    term: Artifact
+    active: true
   - id: http://id.loc.gov/vocabulary/resourceTypes/aud
     term: Audio
     active: true
