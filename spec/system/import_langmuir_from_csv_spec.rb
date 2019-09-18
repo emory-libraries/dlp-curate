@@ -46,11 +46,18 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       expect(page).to have_content 'Testing Collection'
 
       # Let the background jobs run, and check that the expected number of records got created.
-      expect(CurateGenericWork.count).to be 5
+      expect(CurateGenericWork.count).to eq 5
+
       # Ensure that all the fields got assigned as expected
       work = CurateGenericWork.where(title: "*Advertising*").first
       expect(work.title.first).to match(/Advertising/)
       expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
+
+      # Ensure that we have all the custom visibility levels
+      visibilities = CurateGenericWork.all.map(&:visibility)
+      expect(visibilities).to include('emory_low')
+      expect(visibilities).to include('low_res')
+      expect(visibilities).to include('rose_high')
 
       visit "/dashboard/works"
       click_on work.title.first
@@ -58,6 +65,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
 
       # Viewing additional details after an import
       visit "/csv_import_details/index"
+
       expect(page).to have_content('Total Size in Bytes')
       find(:xpath, '//*[@id="content-wrapper"]/table/tbody/tr[2]/td[1]/a').click
       expect(page).to have_content('MSS1218_B001_I001_P0001_ARCH.tif')

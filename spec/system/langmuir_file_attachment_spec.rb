@@ -45,6 +45,7 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
       # Let the background jobs run, and check that the expected number of records got created.
+      # this is 5 because not every line in the spreadsheet is a work
       expect(CurateGenericWork.count).to eq 5
       # Ensure that all the fields got assigned as expected
 

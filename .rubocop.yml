@@ -11,8 +11,6 @@ AllCops:
         - 'tmp/**/*'
         - 'vendor/**/*'
         - 'node_modules/**/*'
-        - config/initializers/access_right.rb
-        - config/initializers/visibility.rb
         - lib/tasks/sample_data.rake
 
 Style/FrozenStringLiteralComment:
@@ -53,7 +51,7 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
     Exclude:
       - app/importers/curate_record_importer.rb
-
+      - config/prepends/custom_visibility.rb
 Metrics/LineLength:
     Exclude:
         - spec/importers/curate_mapper_spec.rb
@@ -69,6 +67,7 @@ Metrics/MethodLength:
         - app/forms/hyrax/curate_generic_work_form.rb
         - app/importers/curate_record_importer.rb
         - app/importers/modular_importer.rb
+        - config/prepends/custom_visibility.rb
 
 Layout/AlignHash:
     Exclude:
