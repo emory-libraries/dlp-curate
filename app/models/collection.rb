@@ -6,7 +6,7 @@ class Collection < ActiveFedora::Base
   self.indexer = CurateCollectionIndexer
 
   def assign_id
-    service.mint
+    service.mint + Rails.configuration.x.curate_template
   end
 
   validates :finding_aid_link, url: true, if: -> { finding_aid_link.present? }
