@@ -34,7 +34,7 @@ RSpec.describe CurateGenericWork do
     end
 
     it "checks assign id" do
-      expect(work1.assign_id).to include('-cor')
+      expect(work1.assign_id).to match(/\d{3}[A-z0-9]{7}-cor/)
     end
   end
 
