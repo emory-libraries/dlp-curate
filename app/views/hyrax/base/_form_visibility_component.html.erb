@@ -67,24 +67,24 @@
         </li>
         <li class="radio">
           <label>
-            <%= f.radio_button :visibility, 'low_res' %>
-            <%= visibility_badge(:low_res) %>
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES %>
+            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES) %>
             <br />
             <%= t('hyrax.visibility.low_res.note_html') %>
           </label>
         </li>
         <li class="radio">
           <label>
-            <%= f.radio_button :visibility, 'emory_low' %>
-            <%= visibility_badge(:emory_low) %>
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW %>
+            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW) %>
             <br />
             <%= t('hyrax.visibility.emory_low.note_html') %>
           </label>
         </li>
         <li class="radio">
           <label>
-            <%= f.radio_button :visibility, 'rose_high' %>
-            <%= visibility_badge(:rose_high) %>
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH %>
+            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH) %>
             <br />
             <%= t('hyrax.visibility.rose_high.note_html') %>
           </label>
