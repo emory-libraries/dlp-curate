@@ -165,7 +165,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :place_of_production, predicate: "http://id.loc.gov/vocabulary/relators/pup", multiple: false
+  property :place_of_production, predicate: "http://id.loc.gov/vocabulary/relators/pup", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   property :preservation_workflow, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow", class_name: "PreservationWorkflow"
 

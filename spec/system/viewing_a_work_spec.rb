@@ -55,8 +55,7 @@ RSpec.describe 'viewing the importer guide', type: :system do
     # Not indexed in solr
     # expect(page).to have_content 'page_range_start (Page Range - Start)'
     expect(page).to have_content 'parent_title (Title of Parent Work)'
-    # Not indexed in solr
-    # expect(page).to have_content 'place_of_production (Place of Publication/Production)'
+    expect(page).to have_content 'place_of_production (Place of Publication/Production)'
     expect(page).to have_content 'primary_language (Primary Language)'
     # Not indexed in solr
     # expect(page).to have_content 'primary_repository_ID (Persistent URL)'
