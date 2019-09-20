@@ -9,28 +9,28 @@ RSpec.describe CurateMapper do
     {
       "abstract" => "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier",
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
-      "content_genre" => "black-and-white photographs",
+      "content_genres" => "black-and-white photographs",
       "contact_information" => "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu",
       "content_type" => 'still image',
       "copyright_date" => "1985-11-01",
       "creator" => "Harris, Teenie, 1908-1998.",
-      "data_classification" => "Confidential|Internal",
+      "data_classifications" => "Confidential|Internal",
       "date_created" => "1985-11-01",
       "date_issued" => "Unknown",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "institution" => "Emory University",
       "internal_rights_note" => "This is my internal rights note.",
       "keywords" => "Tangerine|Blueberry",
-      "legacy_ark" => "ark://abc/123",
-      "legacy_identifier" => "dams:152815|MSS1218_B001_I002",
+      "emory_ark" => "ark://abc/123",
+      "other_identifiers" => "dams:152815|MSS1218_B001_I002",
       "local_call_number" => "MSS 1218",
-      "note" => "This is a note.",
+      "notes" => "This is a note.",
       "place_of_production" => "London",
       "primary_language" => "English",
       "publisher" => "Gutenberg",
-      "rights_holder" => "Unknown",
+      "rights_holders" => "Unknown",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
-      "rights_statement_text" => "Emory University does not control copyright for this image.",
+      "emory_rights_statements" => "Emory University does not control copyright for this image.",
       "subject_geo" => "Ghana.|Africa.",
       "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
       "subject_topics" => "Snowblowers.|Snow.|Air bases.|Towers.",
@@ -59,9 +59,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#content_genre" do
-    it "maps the content_genre field" do
-      expect(mapper.content_genre).to eq ["black-and-white photographs"]
+  context "#content_genres" do
+    it "maps the content_genres field" do
+      expect(mapper.content_genres).to eq ["black-and-white photographs"]
     end
   end
 
@@ -119,9 +119,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#data_classification" do
-    it "maps the data_classification field" do
-      expect(mapper.data_classification).to contain_exactly("Confidential", "Internal")
+  context "#data_classifications" do
+    it "maps the data_classifications field" do
+      expect(mapper.data_classifications).to contain_exactly("Confidential", "Internal")
     end
   end
 
@@ -185,15 +185,15 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#legacy_ark" do
-    it "maps the legacy_ark field" do
-      expect(mapper.legacy_ark).to contain_exactly("ark://abc/123")
+  context "#emory_ark" do
+    it "maps the emory_ark field" do
+      expect(mapper.emory_ark).to contain_exactly("ark://abc/123")
     end
   end
 
-  context "#legacy_identifier" do
-    it "maps the legacy_identifier field" do
-      expect(mapper.legacy_identifier).to contain_exactly("dams:152815", "MSS1218_B001_I002")
+  context "#other_identifiers" do
+    it "maps the other_identifiers field" do
+      expect(mapper.other_identifiers).to contain_exactly("dams:152815", "MSS1218_B001_I002")
     end
   end
 
@@ -224,9 +224,9 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#note" do
-    it "maps the note field" do
-      expect(mapper.note).to eq ["This is a note."]
+  context "#notes" do
+    it "maps the notes field" do
+      expect(mapper.notes).to eq ["This is a note."]
     end
   end
 
@@ -242,15 +242,15 @@ RSpec.describe CurateMapper do
     end
   end
 
-  context "#rights_holder" do
-    it "maps the rights_holder field" do
-      expect(mapper.rights_holder).to eq "Unknown"
+  context "#rights_holders" do
+    it "maps the rights_holders field" do
+      expect(mapper.rights_holders).to eq "Unknown"
     end
   end
 
-  context "#rights_statement_text" do
-    it "maps the rights_statement_text field" do
-      expect(mapper.rights_statement_text)
+  context "#emory_rights_statements" do
+    it "maps the emory_rights_statements field" do
+      expect(mapper.emory_rights_statements)
         .to contain_exactly("Emory University does not control copyright for this image.")
     end
   end

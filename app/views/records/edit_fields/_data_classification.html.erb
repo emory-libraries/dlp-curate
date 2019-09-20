@@ -1,8 +1,0 @@
-<% data_classification = Hyrax::DataClassificationService.new %>
-
-<%= f.input :data_classification, as: :multi_value_select,
-    collection: data_classification.select_active_options,
-    include_blank: true, required: true,
-    item_helper: data_classification.method(:include_current_value),
-    input_html: { class: 'form-control' } %>
-    

@@ -42,14 +42,14 @@ RSpec.describe CurateCollectionImporter, :clean do
     expect(langmuir_collection.subject_geo).to include("Place 2")
     expect(langmuir_collection.subject_time_periods).to include("Era 2")
     expect(langmuir_collection.creator).to eq ["Langmuir, Robert, collector"]
-    expect(langmuir_collection.contributor).to include("Fake Contributor")
-    expect(langmuir_collection.note).to include("Fake Note")
+    expect(langmuir_collection.contributors).to include("Fake Contributor")
+    expect(langmuir_collection.notes).to include("Fake Note")
     expect(langmuir_collection.rights_documentation).to eq "http://rightsstatements.org/vocab/InC-NC/1.0/"
     expect(langmuir_collection.internal_rights_note).to include("Fake Internal Rights Note")
     expect(langmuir_collection.sensitive_material).to include("No")
-    expect(langmuir_collection.staff_note).to include("Fake Staff Note")
+    expect(langmuir_collection.staff_notes).to include("Fake Staff Note")
     expect(langmuir_collection.system_of_record_ID).to include("Fake System of Record ID")
-    expect(langmuir_collection.legacy_ark).to include("Fake legacy ark")
+    expect(langmuir_collection.emory_ark).to include("Fake legacy ark")
     expect(langmuir_collection.primary_repository_ID).to include("Fake primary repository ID")
     expect(langmuir_collection.finding_aid_link).to include("http://findingaid.org/langmuir")
   end

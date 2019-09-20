@@ -10,3 +10,13 @@ require 'admin_setup'
 a = AdminSetup.new
 # Setup admins
 a.setup
+
+require 'user_setup'
+Dir.glob("#{::Rails.root}/config/emory/groups/*.yml") do |yml_file|
+  unless yml_file.include?("admin")
+    # Initialize UserSetup class
+    u = UserSetup.new(yml_file)
+    # Add users to user_group
+    u.setup
+  end
+end

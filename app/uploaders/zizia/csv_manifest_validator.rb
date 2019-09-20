@@ -38,6 +38,7 @@ module Zizia
       invalid_resource_type
       invalid_rights_statement
       check_for_valid_sensitive_material_values
+      check_that_files_exist
     end
 
     # One record per row
@@ -164,6 +165,28 @@ module Zizia
 
       def valid_administrative_units
         @valid_administrative_units ||= Qa::Authorities::Local.subauthority_for('administrative_unit').all.select { |term| term[:active] }.map { |term| term[:id] }
+      end
+
+      def check_that_files_exist
+        @rows.each_with_index do |row, i|
+          next if filename_index.nil? || i.zero?
+          filename = row[filename_index]
+          filepath = filename_to_full_path(filename)
+          FileExistsWarningAppender.new(index: i,
+                                        filepath: filepath,
+                                        warnings: @warnings).check
+        end
+      end
+
+      def filename_to_full_path(filename)
+        split = filename.split("_")
+        kind_of_file = split.last.split(".").first # Is this an ARCH or a PROD file?
+        directory_name = split[1] # e.g., "B001"
+        File.join(ENV['IMPORT_PATH'], kind_of_file, directory_name, filename)
+      end
+
+      def filename_index
+        @rows[0].index('Filename') || @rows[0].index('filename')
       end
 
       def check_number_of_values_in_a_row

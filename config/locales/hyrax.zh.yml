@@ -14,7 +14,7 @@ zh:
           subject_sim: 学科
         index:
           based_near_tesim: 位置
-          contributor_tesim: 贡献者
+          contributors_tesim: 贡献者
           creator_tesim: 创造者
           date_created_tesim: 创建日期
           date_modified_dtsi: 修改日期
@@ -30,7 +30,7 @@ zh:
           subject_tesim: 学科
         show:
           based_near_tesim: 位置
-          contributor_tesim: 贡献者
+          contributors_tesim: 贡献者
           creator_tesim: 创造者
           date_created_tesim: 创建日期
           date_modified_dtsi: 修改日期

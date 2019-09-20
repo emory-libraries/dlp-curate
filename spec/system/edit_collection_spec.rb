@@ -38,15 +38,15 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
 
     scenario 'successfully edits the work' do
       visit "/dashboard/collections/#{collection.id}/edit"
-      expect(find_field('Title').value).to eq 'Robert Langmuir African American Photograph Collection'
-      expect(find_field('Library').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
-      expect(find_field('Creator').value).to eq 'Langmuir, Robert, collector.'
-      expect(find_field('Description/Abstract').value).to eq 'Collection of photographs depicting African American life and culture collected by Robert Langmuir.'
+      expect(find_field('title (Title)').value).to eq 'Robert Langmuir African American Photograph Collection'
+      expect(find_field('holding_repository (Library)').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
+      expect(find_field('creator (Creator)').value).to eq 'Langmuir, Robert, collector.'
+      expect(find_field('abstract (Description/Abstract)').value).to eq 'Collection of photographs depicting African American life and culture collected by Robert Langmuir.'
       click_on 'Additional fields'
-      expect(find_field('Administrative Unit').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
+      expect(find_field('administrative_unit (Administrative Unit)').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
 
       # Edit some fields in the form
-      fill_in 'Title', with: 'New Title'
+      fill_in 'title (Title)', with: 'New Title'
 
       click_on 'Save changes'
 

@@ -56,7 +56,7 @@ RSpec.describe CurateRecordImporter, :clean do
   end
 
   context "an existing record for a given call number" do
-    let(:existing_work) { FactoryBot.create(:work_with_full_metadata, legacy_identifier: ["MSS1218_B001_I001"]) }
+    let(:existing_work) { FactoryBot.create(:work_with_full_metadata, other_identifiers: ["MSS1218_B001_I001"]) }
     let(:record) do
       ir = Zizia::InputRecord.new
       ir.mapper = CurateMapper.new

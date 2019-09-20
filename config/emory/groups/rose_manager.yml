@@ -1,0 +1,6 @@
+database:
+  - user3
+
+# TODO:
+# shibboleth:
+#   - rose_manager-username

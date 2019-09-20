@@ -55,21 +55,21 @@ RSpec.describe Collection do
     end
   end
 
-  describe "#contributor" do
+  describe "#contributors" do
     subject { described_class.new }
-    let(:contributor) { ['Leo Tolstoy'] }
+    let(:contributors) { ['Leo Tolstoy'] }
 
     context "with new collection" do
-      its(:contributor) { is_expected.to be_empty }
+      its(:contributors) { is_expected.to be_empty }
     end
 
-    context "with a collection that has a contributor" do
+    context "with a collection that has contributors" do
       subject do
         described_class.create.tap do |col|
-          col.contributor = contributor
+          col.contributors = contributors
         end
       end
-      its(:contributor) { is_expected.to eq(['Leo Tolstoy']) }
+      its(:contributors) { is_expected.to eq(['Leo Tolstoy']) }
     end
   end
 
@@ -253,21 +253,21 @@ RSpec.describe Collection do
     end
   end
 
-  describe "#note" do
+  describe "#notes" do
     subject { described_class.new }
-    let(:note) { ['general note'] }
+    let(:notes) { ['general note'] }
 
     context "with new collection" do
-      its(:note) { is_expected.to be_empty }
+      its(:notes) { is_expected.to be_empty }
     end
 
-    context "with a collection that has a note" do
+    context "with a collection that has notes" do
       subject do
         described_class.create.tap do |col|
-          col.note = note
+          col.notes = notes
         end
       end
-      its(:note) { is_expected.to eq(['general note']) }
+      its(:notes) { is_expected.to eq(['general note']) }
     end
   end
 
@@ -343,21 +343,21 @@ RSpec.describe Collection do
     end
   end
 
-  describe "#staff_note" do
+  describe "#staff_notes" do
     subject { described_class.new }
-    let(:staff_note) { ['This is for internal staff use only'] }
+    let(:staff_notes) { ['This is for internal staff use only'] }
 
     context "with new collection" do
-      its(:staff_note) { is_expected.to be_empty }
+      its(:staff_notes) { is_expected.to be_empty }
     end
 
-    context "with a collection that has a staff_note" do
+    context "with a collection that has staff_notes" do
       subject do
         described_class.create.tap do |col|
-          col.staff_note = staff_note
+          col.staff_notes = staff_notes
         end
       end
-      its(:staff_note) { is_expected.to eq staff_note }
+      its(:staff_notes) { is_expected.to eq staff_notes }
     end
   end
 
@@ -379,21 +379,21 @@ RSpec.describe Collection do
     end
   end
 
-  describe "#legacy_ark" do
+  describe "#emory_ark" do
     subject { described_class.new }
-    let(:legacy_ark) { ['Emory Legacy Ark'] }
+    let(:emory_ark) { ['Emory Legacy Ark'] }
 
     context "with new collection" do
-      its(:legacy_ark) { is_expected.to be_empty }
+      its(:emory_ark) { is_expected.to be_empty }
     end
 
-    context "with a collection that has a legacy_ark" do
+    context "with a collection that has a emory_ark" do
       subject do
         described_class.create.tap do |col|
-          col.legacy_ark = legacy_ark
+          col.emory_ark = emory_ark
         end
       end
-      its(:legacy_ark) { is_expected.to eq legacy_ark }
+      its(:emory_ark) { is_expected.to eq emory_ark }
     end
   end
 

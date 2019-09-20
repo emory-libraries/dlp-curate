@@ -47,18 +47,18 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(page).to have_css('#metadata select#curate_generic_work_rights_statement')
 
       click_link('Additional descriptive fields')
-      expect(page).to have_content('Add another Note')
+      expect(page).to have_content('Add another notes (Note)')
 
-      expect(page).to have_css('#metadata textarea#curate_generic_work_staff_note')
-      expect(page).to have_content('Add another Staff Note')
+      expect(page).to have_css('#metadata textarea#curate_generic_work_staff_notes')
+      expect(page).to have_content('Add another staff_notes (Staff Note)')
     end
 
     scenario "repeating entries in the form", js: true do
       new_cgw_form.visit_new_page
-      expect(page).to have_content('Creator')
+      expect(page).to have_content('creator (Creator)')
       expect(page).to have_css('input#curate_generic_work_creator.multi_value')
       fill_in "curate_generic_work[creator][]", with: "first creator"
-      click_on 'Add another Creator'
+      click_on 'Add another creator (Creator)'
       expect(all("input[name='curate_generic_work[creator][]']").count).to eq(2)
       expect(page).not_to have_css('input#curate_generic_work_title.multi_value')
     end
@@ -88,7 +88,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       new_cgw_form.visit_new_page.metadata_fill_in_with.attach_files.check_visibility
 
       click_link('Additional descriptive fields')
-      fill_in "curate_generic_work[final_published_version][]", with: "teststring"
+      fill_in "curate_generic_work[final_published_versions][]", with: "teststring"
 
       click_on('Save')
 
@@ -110,11 +110,13 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       visit("/concern/curate_generic_works/#{cgw.id}/edit")
 
       find('body').click
-      choose('curate_generic_work_visibility_open')
+      choose('curate_generic_work_visibility_low_res')
+      choose('curate_generic_work_visibility_emory_low')
+      choose('curate_generic_work_visibility_rose_high')
       click_on('Save')
 
       cgw.reload
-      expect(cgw.visibility).to eq 'open'
+      expect(cgw.visibility).to eq 'rose_high'
     end
 
     scenario "verify work authenticated visibility" do

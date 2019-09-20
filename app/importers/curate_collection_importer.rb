@@ -35,14 +35,14 @@ class CurateCollectionImporter
       collection.subject_geo = multivalue_mapping(collection_attrs, "subject_geo")
       collection.subject_time_periods = multivalue_mapping(collection_attrs, "subject_time_periods")
       collection.creator = multivalue_mapping(collection_attrs, "creator")
-      collection.contributor = multivalue_mapping(collection_attrs, "contributor")
-      collection.note = multivalue_mapping(collection_attrs, "note")
+      collection.contributors = multivalue_mapping(collection_attrs, "contributors")
+      collection.notes = multivalue_mapping(collection_attrs, "notes")
       collection.rights_documentation = collection_attrs["rights_documentation"]
       collection.internal_rights_note = collection_attrs["internal_rights_note"]
       collection.sensitive_material = collection_attrs["sensitive_material"]
-      collection.staff_note = multivalue_mapping(collection_attrs, "staff_note")
+      collection.staff_notes = multivalue_mapping(collection_attrs, "staff_notes")
       collection.system_of_record_ID = collection_attrs["system_of_record_ID"]
-      collection.legacy_ark = multivalue_mapping(collection_attrs, "legacy_ark")
+      collection.emory_ark = multivalue_mapping(collection_attrs, "emory_ark")
       collection.primary_repository_ID = collection_attrs["primary_repository_ID"]
       collection.finding_aid_link = collection_attrs["finding_aid_link"]
       collection.save

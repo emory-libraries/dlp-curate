@@ -22,11 +22,11 @@ module Hyrax
       delegate :blacklight_config, to: Hyrax::CollectionsController
 
       self.terms = [:title, :holding_repository, :administrative_unit, :creator,
-                    :contributor, :abstract, :primary_language, :finding_aid_link,
+                    :contributors, :abstract, :primary_language, :finding_aid_link,
                     :institution, :local_call_number, :keywords, :subject_topics,
-                    :subject_names, :subject_geo, :subject_time_periods, :note,
+                    :subject_names, :subject_geo, :subject_time_periods, :notes,
                     :rights_documentation, :sensitive_material, :internal_rights_note,
-                    :contact_information, :staff_note, :system_of_record_ID, :legacy_ark,
+                    :contact_information, :staff_notes, :system_of_record_ID, :emory_ark,
                     :visibility]
 
       self.required_fields = [:title, :holding_repository, :creator, :abstract]
@@ -66,10 +66,10 @@ module Hyrax
 
       # Terms that appear within the accordion
       def secondary_terms
-        [:administrative_unit, :contributor, :primary_language, :finding_aid_link,
+        [:administrative_unit, :contributors, :primary_language, :finding_aid_link,
          :institution, :local_call_number, :keywords, :subject_topics, :subject_names,
-         :subject_geo, :subject_time_periods, :note, :rights_documentation, :sensitive_material,
-         :internal_rights_note, :contact_information, :staff_note, :system_of_record_ID, :legacy_ark]
+         :subject_geo, :subject_time_periods, :notes, :rights_documentation, :sensitive_material,
+         :internal_rights_note, :contact_information, :staff_notes, :system_of_record_ID, :emory_ark]
       end
 
       def banner_info

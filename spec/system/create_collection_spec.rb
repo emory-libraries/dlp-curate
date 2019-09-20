@@ -14,10 +14,10 @@ RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: t
     it 'sucessfully creates a collection with the UI' do
       visit 'dashboard/collections/new'
       expect(page).to have_content 'New User Collection'
-      fill_in 'Title', with: 'testing title'
-      fill_in 'Library', with: 'testing library'
-      fill_in 'Creator', with: 'creator'
-      fill_in 'Description/Abstract', with: 'test'
+      fill_in 'title (Title)', with: 'testing title'
+      fill_in 'holding_repository (Library)', with: 'testing library'
+      fill_in 'creator (Creator)', with: 'creator'
+      fill_in 'abstract (Description/Abstract)', with: 'test'
       click_link('Additional fields')
       fill_in 'Finding aid link', with: 'https://example.org/collection'
       click_on 'Save'
@@ -29,16 +29,16 @@ RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: t
       expect(page).to have_css("textarea#collection_title")
       click_link('Additional fields')
       expect(page).to have_css("input#collection_creator")
-      expect(page).to have_content("Add another Creator")
+      expect(page).to have_content("Add another creator (Creator)")
     end
 
     it "validates url fields" do
       visit 'dashboard/collections/new'
       expect(page).to have_content 'New User Collection'
-      fill_in 'Title', with: 'testing title'
-      fill_in 'Library', with: 'testing library'
-      fill_in 'Creator', with: 'creator'
-      fill_in 'Description/Abstract', with: 'test'
+      fill_in 'title (Title)', with: 'testing title'
+      fill_in 'holding_repository (Library)', with: 'testing library'
+      fill_in 'creator (Creator)', with: 'creator'
+      fill_in 'abstract (Description/Abstract)', with: 'test'
       click_link('Additional fields')
       fill_in 'Finding aid link', with: 'teststring'
       click_on 'Save'

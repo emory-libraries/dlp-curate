@@ -36,12 +36,12 @@ module Hyrax
       delegate key.to_sym, to: :solr_document
     end
     # Metadata Methods
-    delegate :title, :description, :creator, :contributor, :subject, :publisher, :keyword, :language, :embargo_release_date,
+    delegate :title, :description, :creator, :contributors, :subject, :publisher, :keyword, :language, :embargo_release_date,
              :lease_expiration_date, :license, :date_created, :resource_type, :based_near, :related_url, :identifier, :thumbnail_path,
              :title_or_label, :collection_type_gid, :create_date, :modified_date, :visibility, :edit_groups, :edit_people,
              :holding_repository,
              :administrative_unit,
-             :contributor,
+             :contributors,
              :abstract,
              :primary_language,
              :finding_aid_link,
@@ -52,14 +52,14 @@ module Hyrax
              :subject_names,
              :subject_geo,
              :subject_time_periods,
-             :note,
+             :notes,
              :rights_documentation,
              :sensitive_material,
              :internal_rights_note,
              :contact_information,
-             :staff_note,
+             :staff_notes,
              :system_of_record_ID,
-             :legacy_ark,
+             :emory_ark,
              :primary_repository_ID,
              to: :solr_document
 
@@ -69,7 +69,7 @@ module Hyrax
       [
         :holding_repository,
         :administrative_unit,
-        :contributor,
+        :contributors,
         :abstract,
         :primary_language,
         :finding_aid_link,
@@ -80,14 +80,14 @@ module Hyrax
         :subject_names,
         :subject_geo,
         :subject_time_periods,
-        :note,
+        :notes,
         :rights_documentation,
         :sensitive_material,
         :internal_rights_note,
         :contact_information,
-        :staff_note,
+        :staff_notes,
         :system_of_record_ID,
-        :legacy_ark,
+        :emory_ark,
         :primary_repository_ID
       ]
     end

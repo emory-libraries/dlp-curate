@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fits xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd" version="1.4.0" timestamp="9/5/19 7:57 PM">
+  <identification>
+    <identity format="Portable Network Graphics" mimetype="image/png" toolname="FITS" toolversion="1.4.0">
+      <tool toolname="Droid" toolversion="6.4" />
+      <tool toolname="Exiftool" toolversion="11.14" />
+      <tool toolname="ffident" toolversion="0.2" />
+      <tool toolname="Tika" toolversion="1.19.1" />
+      <version toolname="Droid" toolversion="6.4">1.1</version>
+      <externalIdentifier toolname="Droid" toolversion="6.4" type="puid">fmt/12</externalIdentifier>
+    </identity>
+  </identification>
+  <fileinfo>
+    <filepath toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">/Users/dmatlaw/Downloads/image.png</filepath>
+    <filename toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">image.png</filename>
+    <size toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">19102</size>
+    <md5checksum toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">354c7b6da70b120e897c4df08e74e6ac</md5checksum>
+    <fslastmodified toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">1566941483000</fslastmodified>
+  </fileinfo>
+  <filestatus />
+  <metadata>
+    <image>
+      <compressionScheme toolname="Exiftool" toolversion="11.14" status="CONFLICT">Deflate/Inflate</compressionScheme>
+      <compressionScheme toolname="Tika" toolversion="1.19.1" status="CONFLICT">Deflate</compressionScheme>
+      <imageWidth toolname="Exiftool" toolversion="11.14">300</imageWidth>
+      <imageHeight toolname="Exiftool" toolversion="11.14">168</imageHeight>
+      <iccProfileName toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">HD 709-A Calibrated</iccProfileName>
+      <iccProfileVersion toolname="Exiftool" toolversion="11.14" status="SINGLE_RESULT">2.1.0</iccProfileVersion>
+      <orientation toolname="Tika" toolversion="1.19.1" status="SINGLE_RESULT">normal*</orientation>
+    </image>
+  </metadata>
+  <statistics fitsExecutionTime="1297">
+    <tool toolname="MediaInfo" toolversion="0.7.75" status="did not run" />
+    <tool toolname="OIS Audio Information" toolversion="0.1" status="did not run" />
+    <tool toolname="ADL Tool" toolversion="0.1" status="did not run" />
+    <tool toolname="VTT Tool" toolversion="0.1" status="did not run" />
+    <tool toolname="Droid" toolversion="6.4" executionTime="255" />
+    <tool toolname="Jhove" toolversion="1.20.1" executionTime="1174" />
+    <tool toolname="file utility" toolversion="5.33" executionTime="1224" />
+    <tool toolname="Exiftool" toolversion="11.14" executionTime="1255" />
+    <tool toolname="NLNZ Metadata Extractor" toolversion="3.6GA" status="did not run" />
+    <tool toolname="OIS File Information" toolversion="0.2" executionTime="252" />
+    <tool toolname="OIS XML Metadata" toolversion="0.2" status="did not run" />
+    <tool toolname="ffident" toolversion="0.2" executionTime="1059" />
+    <tool toolname="Tika" toolversion="1.19.1" executionTime="640" />
+  </statistics>
+</fits>
+

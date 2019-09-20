@@ -16,7 +16,7 @@ module Hyrax
     copy_blacklight_config_from(::CatalogController)
 
     class_attribute :show_presenter, :form_class
-    self.show_presenter = Hyrax::FileSetPresenter
+    self.show_presenter = Curate::FileSetPresenter
     self.form_class = Hyrax::Forms::FileSetEditForm
 
     # A little bit of explanation, CanCan(Can) sets the @file_set via the .load_and_authorize_resource
@@ -39,6 +39,7 @@ module Hyrax
     # GET /concern/parent/:parent_id/file_sets/:id
     def show
       @parent = main_app.polymorphic_path(presenter.parent)
+      @fileset_use = presenter.pcdm_use.first unless presenter.pcdm_use.nil?
       files
       respond_to do |wants|
         wants.html { presenter }

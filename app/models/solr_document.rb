@@ -28,4 +28,8 @@ class SolrDocument
 
   use_extension(Hydra::ContentNegotiation)
   include SolrDocumentAccessors
+
+  def pcdm_use
+    self['pcdm_use_tesim']
+  end
 end

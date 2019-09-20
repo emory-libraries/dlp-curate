@@ -12,8 +12,8 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     return [] if files_to_attach.nil? || files_to_attach.empty?
     uploaded_file_ids = []
     files_to_attach.each do |filename|
-      next if filename.nil?
       uploaded_file = upload_file(filename)
+      next unless uploaded_file
       uploaded_file_ids << uploaded_file.id
     end
     uploaded_file_ids
@@ -27,27 +27,50 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
   end
 
   def upload_preservation_master_file(filename)
-    file = File.open(find_file_path(filename))
-    huf = Hyrax::UploadedFile.create(user: @depositor, preservation_master_file: file)
-    file.close
-    huf
+    create_hyrax_uploaded_file(filename: filename, type: :preservation_master_file)
   end
 
   def upload_intermediate_file(filename)
+    create_hyrax_uploaded_file(filename: filename, type: :intermediate_file)
+  end
+
+  def create_hyrax_uploaded_file(filename:, type:)
+    return unless File.exist?(find_file_path(filename))
     file = File.open(find_file_path(filename))
-    huf = Hyrax::UploadedFile.create(user: @depositor, intermediate_file: file)
+    huf = Hyrax::UploadedFile.create(:user => @depositor, type => file, :fileset_use => FileSet::PRIMARY, :file => fileset_label(filename))
     file.close
     huf
   end
 
+  # Convert the "part" section of the filename to a number and use it to generate
+  # the fileset label
+  # Return the filename as the label if anything goes wrong.
+  def fileset_label(filename)
+    part = filename.split("_")[3]
+    part_number = part.delete("P").to_i
+    return "Front" if part_number == 1
+    return "Back" if part_number == 2
+    part
+  rescue
+    filename
+  end
+
   def file_type(filename)
+    return if filename.nil?
     return "preservation_master_file" if filename.match?(/ARCH/)
     return "intermediate_file" if filename.match?(/PROD/)
     raise "Unrecognized file_type for filename #{filename}"
   end
 
+  # Find the file according to the system in place on
+  # /mnt/prodefs/Collections/dmfiles/MARBL/Manuscripts/MSS_1218_Langmuir
+  # This will need to be updated for other collections if their files do not
+  # follow the same organizational system.
   def find_file_path(filename)
-    Rails.root.join('spec', 'fixtures', 'fake_images', filename).to_s
+    split = filename.split("_")
+    kind_of_file = split.last.split(".").first # Is this an ARCH or a PROD file?
+    directory_name = split[1] # e.g., "B001"
+    File.join(ENV['IMPORT_PATH'], kind_of_file, directory_name, filename)
   end
 
   # Take a filename like "MSS1218_B001_I001_P0001_ARCH.tif" and get the first part,
@@ -64,16 +87,19 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     filename = record.mapper.metadata["Filename"]
     return if filename.nil?
     call_number = extract_call_number(filename)
-    existing_records = CurateGenericWork.where(legacy_identifier: call_number)
+    existing_records = CurateGenericWork.where(other_identifiers: call_number)
     raise "More than one record matches call number #{call_number}" if existing_records.count > 1
     existing_records&.first
   end
 
-  # We might eventually have a more sophisticated algorithm for deciding when to apply
-  # a row's metadata to an object. For now, if it doesn't have a populated title field,
-  # assume it isn't valid metadata and we only want the file.
+  # When I have sequence number 1 and file ARCH, read the rest of the metadata
+  # from the row and update the work's metadata.
+  # For anything else, skip the metadata
   def skip_metadata?(update_record)
-    return true if update_record.mapper.metadata["title"].nil?
+    filename = update_record.mapper.files.first
+    split = filename.split("_")
+    return true unless split.last.split(".").first == "ARCH"
+    return true unless split[3].last == "1"
     false
   end
 

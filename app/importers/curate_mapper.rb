@@ -6,12 +6,12 @@ class CurateMapper < Zizia::HashMapper
   CURATE_TERMS_MAP = {
     abstract: "abstract",
     administrative_unit: "administrative_unit",
-    content_genre: "content_genre",
+    content_genres: "content_genres",
     contact_information: "contact_information",
     content_type: "content_type",
     copyright_date: "copyright_date",
     creator: "creator",
-    data_classification: "data_classification",
+    data_classifications: "data_classifications",
     date_created: "date_created",
     date_digitized: "date_digitized",
     date_issued: "date_issued",
@@ -20,17 +20,17 @@ class CurateMapper < Zizia::HashMapper
     institution: "institution",
     internal_rights_note: "internal_rights_note",
     keywords: "keywords",
-    legacy_ark: "legacy_ark",
-    legacy_identifier: "legacy_identifier",
+    emory_ark: "emory_ark",
+    other_identifiers: "other_identifiers",
     legacy_rights: "legacy_rights",
     local_call_number: "local_call_number",
-    note: "note",
+    notes: "notes",
     place_of_production: "place_of_production",
     primary_language: "primary_language",
     publisher: "publisher",
-    rights_holder: "rights_holder",
+    rights_holders: "rights_holders",
     rights_statement: "rights_statement",
-    rights_statement_text: "rights_statement_text",
+    emory_rights_statements: "emory_rights_statements",
     sensitive_material: "sensitive_material",
     sensitive_material_note: "sensitive_material_note",
     subject_geo: "subject_geo",
@@ -96,7 +96,7 @@ class CurateMapper < Zizia::HashMapper
       "sensitive_material_note",
       "sublocation",
       "transfer_engineer",
-      "rights_holder",
+      "rights_holders",
       "table_of_contents",
       "uniform_title"
     ]
@@ -121,7 +121,10 @@ class CurateMapper < Zizia::HashMapper
       'emory' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
       'emory network' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
       'open' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-      'public' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      'public' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
+      'public low view' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES,
+      'emory low download' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW,
+      'rose high view' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
     }.freeze
   end
 
@@ -146,12 +149,12 @@ class CurateMapper < Zizia::HashMapper
     raise "Invalid administrative_unit value: #{csv_term}"
   end
 
-  # Iterate through all values for data_classification and ensure they are all
+  # Iterate through all values for data_classifications and ensure they are all
   # valid options according to Questioning Authority
-  def data_classification
-    return nil unless @metadata["data_classification"]
-    csv_terms = @metadata["data_classification"]&.split(DELIMITER)
-    active_terms = Qa::Authorities::Local.subauthority_for('data_classification').all.select { |term| term[:active] }
+  def data_classifications
+    return nil unless @metadata["data_classifications"]
+    csv_terms = @metadata["data_classifications"]&.split(DELIMITER)
+    active_terms = Qa::Authorities::Local.subauthority_for('data_classifications').all.select { |term| term[:active] }
     data_classification_values = []
     csv_terms.each do |c|
       valid_option = active_terms.select { |s| s["id"] == c }.try(:first)

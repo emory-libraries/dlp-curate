@@ -114,7 +114,7 @@ FactoryBot.define do
     holding_repository { ['Emory'] }
     administrative_unit { ['Library'] }
     creator { ['Someone'] }
-    contributor { ['Someone else'] }
+    contributors { ['Someone else'] }
     abstract { 'A detailed abstract' }
     primary_language { 'English' }
     finding_aid_link { 'https://my-finding-aid.com' }
@@ -125,14 +125,14 @@ FactoryBot.define do
     subject_names { ['Someone'] }
     subject_geo { ['Atlanta'] }
     subject_time_periods { ['Anthropocene'] }
-    note { ['a brief note'] }
+    notes { ['a brief note'] }
     rights_documentation { 'http://example.com/rights' }
     sensitive_material { 'very sensitive' }
     internal_rights_note { 'Do not publish' }
     contact_information { 'telex' }
-    staff_note { ['dictated but not read'] }
+    staff_notes { ['dictated but not read'] }
     system_of_record_ID { '1' }
-    legacy_ark { ['2'] }
+    emory_ark { ['2'] }
     primary_repository_ID { '3' }
 
     after(:build) do |collection, evaluator|

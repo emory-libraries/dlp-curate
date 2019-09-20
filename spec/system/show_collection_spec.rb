@@ -13,16 +13,16 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
     [
       :holding_repository,
       :administrative_unit,
-      :contributor,
+      :contributors,
       :keywords,
       :subject_topics,
       :subject_names,
       :subject_geo,
       :subject_time_periods,
-      :note,
+      :notes,
       :rights_documentation,
-      :staff_note,
-      :legacy_ark
+      :staff_notes,
+      :emory_ark
     ]
   end
   let(:singular_fields) do

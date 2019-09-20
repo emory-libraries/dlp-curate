@@ -2,10 +2,12 @@ FactoryBot.define do
   factory :file_set do
     transient do
       user { build(:user) }
+      title { nil }
       content { nil }
     end
     after(:build) do |fs, evaluator|
       fs.apply_depositor_metadata evaluator.user.user_key
+      fs.title = evaluator.title
     end
 
     after(:create) do |file, evaluator|

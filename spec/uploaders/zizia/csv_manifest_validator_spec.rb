@@ -16,9 +16,9 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
       administrative_unit
       holding_repository
       content_type
-      rights_statement_text
+      emory_rights_statements
       rights_statement
-      data_classification
+      data_classifications
       date_created
     ]
   end
@@ -107,9 +107,9 @@ RSpec.describe Zizia::CsvManifestValidator, type: :model do
         administrative_unit
         holding_repository
         content_type
-        rights_statement_text
+        emory_rights_statements
         rights_statement
-        data_classification
+        data_classifications
         date_created
       ]
     end

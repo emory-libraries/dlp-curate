@@ -34,10 +34,16 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  context "noid template" do
-    let(:id) { Noid::Rails::Service.new.mint }
-    it "checks noid template" do
-      expect(id).to match(/cor-\d\d\d/)
+    it "has a preservation workflow which is a PreservationWorkflow object" do
+      expect(work2.preservation_workflow.build).to be_instance_of PreservationWorkflow
+    end
+
+    it "access preservation workflow properties after saving" do
+      expect(work1.preservation_workflow.map(&:workflow_type).flatten).to include(['default'])
+    end
+
+    it "checks assign id" do
+      expect(work1.assign_id).to match(/\d{3}[A-z0-9]{7}-cor/)
     end
   end
 
@@ -131,21 +137,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#content_genre" do
+  describe "#content_genres" do
     subject { described_class.new }
-    let(:content_genre) { ['Fictional book'] }
+    let(:content_genres) { ['Fictional book', 'Another Book'] }
 
     context "with new CurateGenericWork work" do
-      its(:content_genre) { is_expected.to be_empty }
+      its(:content_genres) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a content_genre" do
+    context "with a CurateGenericWork work that has content_genres" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.content_genre = content_genre
+          cgw.content_genres = content_genres
         end
       end
-      its(:content_genre) { is_expected.to eq ['Fictional book'] }
+      its(:content_genres) { is_expected.to eq ['Fictional book', 'Another Book'] }
     end
   end
 
@@ -419,21 +425,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#contributor" do
+  describe "#contributors" do
     subject { described_class.new }
-    let(:contributor) { ['Leo Tolstoy'] }
+    let(:contributors) { ['Leo Tolstoy'] }
 
     context "with new CurateGenericWork work" do
-      its(:contributor) { is_expected.to be_empty }
+      its(:contributors) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a contributor" do
+    context "with a CurateGenericWork work that has contributors" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.contributor = contributor
+          cgw.contributors = contributors
         end
       end
-      its(:contributor) { is_expected.to eq(['Leo Tolstoy']) }
+      its(:contributors) { is_expected.to eq(['Leo Tolstoy']) }
     end
   end
 
@@ -455,39 +461,39 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#data_producer" do
+  describe "#data_producers" do
     subject { described_class.new }
-    let(:data_producer) { ['Emory University'] }
+    let(:data_producers) { ['Emory University'] }
 
     context "with new CurateGenericWork work" do
-      its(:data_producer) { is_expected.to be_empty }
+      its(:data_producers) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a data_producer" do
+    context "with a CurateGenericWork work that has data_producers" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.data_producer = data_producer
+          cgw.data_producers = data_producers
         end
       end
-      its(:data_producer) { is_expected.to eq(['Emory University']) }
+      its(:data_producers) { is_expected.to eq(['Emory University']) }
     end
   end
 
-  describe "#grant" do
+  describe "#grant_agencies" do
     subject { described_class.new }
-    let(:grant) { ['NIH'] }
+    let(:grant_agencies) { ['NIH'] }
 
     context "with new CurateGenericWork work" do
-      its(:grant) { is_expected.to be_empty }
+      its(:grant_agencies) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a grant" do
+    context "with a CurateGenericWork work that has grant_agencies" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.grant = grant
+          cgw.grant_agencies = grant_agencies
         end
       end
-      its(:grant) { is_expected.to eq(['NIH']) }
+      its(:grant_agencies) { is_expected.to eq(['NIH']) }
     end
   end
 
@@ -527,39 +533,39 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#note" do
+  describe "#notes" do
     subject { described_class.new }
-    let(:note) { ['general note'] }
+    let(:notes) { ['general note'] }
 
     context "with new CurateGenericWork work" do
-      its(:note) { is_expected.to be_empty }
+      its(:notes) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a note" do
+    context "with a CurateGenericWork work that has notes" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.note = note
+          cgw.notes = notes
         end
       end
-      its(:note) { is_expected.to eq(['general note']) }
+      its(:notes) { is_expected.to eq(['general note']) }
     end
   end
 
-  describe "#data_source_note" do
+  describe "#data_source_notes" do
     subject { described_class.new }
-    let(:data_source_note) { ['general data source note'] }
+    let(:data_source_notes) { ['general data source note'] }
 
     context "with new CurateGenericWork work" do
-      its(:data_source_note) { is_expected.to be_empty }
+      its(:data_source_notes) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a data_source_note" do
+    context "with a CurateGenericWork work that has data_source_notes" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.data_source_note = data_source_note
+          cgw.data_source_notes = data_source_notes
         end
       end
-      its(:data_source_note) { is_expected.to eq(['general data source note']) }
+      its(:data_source_notes) { is_expected.to eq(['general data source note']) }
     end
   end
 
@@ -797,39 +803,39 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#related_material" do
+  describe "#related_material_notes" do
     subject { described_class.new }
-    let(:related_material) { ['Free-text notes'] }
+    let(:related_material_notes) { ['Free-text notes'] }
 
     context "with new CurateGenericWork work" do
-      its(:related_material) { is_expected.to be_empty }
+      its(:related_material_notes) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a related_material" do
+    context "with a CurateGenericWork work that has related_material_notes" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.related_material = related_material
+          cgw.related_material_notes = related_material_notes
         end
       end
-      its(:related_material) { is_expected.to eq ['Free-text notes'] }
+      its(:related_material_notes) { is_expected.to eq ['Free-text notes'] }
     end
   end
 
-  describe "#final_published_version" do
+  describe "#final_published_versions" do
     subject { described_class.new }
-    let(:final_published_version) { ['http://www.example.com'] }
+    let(:final_published_versions) { ['http://www.example.com'] }
 
     context "with new CurateGenericWork work" do
-      its(:final_published_version) { is_expected.to be_empty }
+      its(:final_published_versions) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a final_published_version" do
+    context "with a CurateGenericWork work that has final_published_versions" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.final_published_version = final_published_version
+          cgw.final_published_versions = final_published_versions
         end
       end
-      its(:final_published_version) { is_expected.to eq final_published_version }
+      its(:final_published_versions) { is_expected.to eq final_published_versions }
     end
   end
 
@@ -941,21 +947,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#rights_holder" do
+  describe "#rights_holders" do
     subject { described_class.new }
-    let(:rights_holder) { ['Emory University'] }
+    let(:rights_holders) { ['Emory University'] }
 
     context "with new CurateGenericWork work" do
-      its(:rights_holder) { is_expected.to be_empty }
+      its(:rights_holders) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has rights_holder" do
+    context "with a CurateGenericWork work that has rights_holders" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.rights_holder = rights_holder
+          cgw.rights_holders = rights_holders
         end
       end
-      its(:rights_holder) { is_expected.to eq rights_holder }
+      its(:rights_holders) { is_expected.to eq rights_holders }
     end
   end
 
@@ -977,21 +983,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#rights_statement_text" do
+  describe "#emory_rights_statements" do
     subject { described_class.new }
-    let(:rights_statement_text) { ['Sample Rights Statement'] }
+    let(:emory_rights_statements) { ['Sample Rights Statement'] }
 
     context "with new CurateGenericWork work" do
-      its(:rights_statement_text) { is_expected.to be_empty }
+      its(:emory_rights_statements) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has rights_statement_text" do
+    context "with a CurateGenericWork work that has emory_rights_statements" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.rights_statement_text = rights_statement_text
+          cgw.emory_rights_statements = emory_rights_statements
         end
       end
-      its(:rights_statement_text) { is_expected.to eq rights_statement_text }
+      its(:emory_rights_statements) { is_expected.to eq emory_rights_statements }
     end
   end
 
@@ -1031,21 +1037,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#access_right" do
+  describe "#access_restriction_notes" do
     subject { described_class.new }
-    let(:access_right) { ['Public Access'] }
+    let(:access_restriction_notes) { ['Public Access'] }
 
     context "with new CurateGenericWork work" do
-      its(:access_right) { is_expected.to be_empty }
+      its(:access_restriction_notes) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has access_right" do
+    context "with a CurateGenericWork work that has access_restriction_notes" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.access_right = access_right
+          cgw.access_restriction_notes = access_restriction_notes
         end
       end
-      its(:access_right) { is_expected.to eq access_right }
+      its(:access_restriction_notes) { is_expected.to eq access_restriction_notes }
     end
   end
 
@@ -1139,21 +1145,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#data_classification" do
+  describe "#data_classifications" do
     subject { described_class.new }
-    let(:data_classification) { ['excel spreadsheet'] }
+    let(:data_classifications) { ['excel spreadsheet'] }
 
     context "with new CurateGenericWork work" do
-      its(:data_classification) { is_expected.to be_empty }
+      its(:data_classifications) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has data_classification" do
+    context "with a CurateGenericWork work that has data_classifications" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.data_classification = data_classification
+          cgw.data_classifications = data_classifications
         end
       end
-      its(:data_classification) { is_expected.to eq data_classification }
+      its(:data_classifications) { is_expected.to eq data_classifications }
     end
   end
 
@@ -1193,21 +1199,21 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#staff_note" do
+  describe "#staff_notes" do
     subject { described_class.new }
-    let(:staff_note) { ['This is for internal staff use only'] }
+    let(:staff_notes) { ['This is for internal staff use only'] }
 
     context "with new CurateGenericWork work" do
-      its(:staff_note) { is_expected.to be_empty }
+      its(:staff_notes) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a staff_note" do
+    context "with a CurateGenericWork work that has staff_notes" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.staff_note = staff_note
+          cgw.staff_notes = staff_notes
         end
       end
-      its(:staff_note) { is_expected.to eq staff_note }
+      its(:staff_notes) { is_expected.to eq staff_notes }
     end
   end
 
@@ -1247,39 +1253,39 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe "#legacy_identifier" do
+  describe "#other_identifiers" do
     subject { described_class.new }
-    let(:legacy_identifier) { ['ETDs'] }
+    let(:other_identifiers) { ['ETDs'] }
 
     context "with new CurateGenericWork work" do
-      its(:legacy_identifier) { is_expected.to be_empty }
+      its(:other_identifiers) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a legacy_identifier" do
+    context "with a CurateGenericWork work that has other_identifiers" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.legacy_identifier = legacy_identifier
+          cgw.other_identifiers = other_identifiers
         end
       end
-      its(:legacy_identifier) { is_expected.to eq legacy_identifier }
+      its(:other_identifiers) { is_expected.to eq other_identifiers }
     end
   end
 
-  describe "#legacy_ark" do
+  describe "#emory_ark" do
     subject { described_class.new }
-    let(:legacy_ark) { ['Emory Legacy Ark'] }
+    let(:emory_ark) { ['Emory Legacy Ark'] }
 
     context "with new CurateGenericWork work" do
-      its(:legacy_ark) { is_expected.to be_empty }
+      its(:emory_ark) { is_expected.to be_empty }
     end
 
-    context "with a CurateGenericWork work that has a legacy_ark" do
+    context "with a CurateGenericWork work that has a emory_ark" do
       subject do
         described_class.create.tap do |cgw|
-          cgw.legacy_ark = legacy_ark
+          cgw.emory_ark = emory_ark
         end
       end
-      its(:legacy_ark) { is_expected.to eq legacy_ark }
+      its(:emory_ark) { is_expected.to eq emory_ark }
     end
   end
 

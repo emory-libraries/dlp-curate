@@ -40,31 +40,33 @@ FactoryBot.define do
 
     factory :work_with_full_metadata do
       abstract { 'Abstract' }
-      access_right { ['true'] }
+      access_restriction_notes { ['true'] }
       administrative_unit { 'Emory University Archives' }
       author_notes { 'None found' }
       conference_dates { '1995' }
       conference_name { 'None' }
       contact_information { 'Call here' }
-      content_genre { ['Photos'] }
-      content_type { 'media' }
-      contributor { ['Someone else'] }
+      content_genres { ['Photos'] }
+      content_type { 'http://id.loc.gov/vocabulary/resourceTypes/aud' }
+      contributors { ['Someone else'] }
       copyright_date { '1922' }
       creator { ['the author'] }
-      data_classification { ['open'] }
+      data_classifications { ['open'] }
       data_collection_dates { ['785'] }
-      data_producer { ['Megacorp'] }
-      data_source_note { ['Found materials'] }
+      data_producers { ['Megacorp'] }
+      data_source_notes { ['Found materials'] }
       date_created { '1992' }
       date_digitized { '2102' }
       date_issued { '1999' }
       date_modified { '2023' }
       date_uploaded { '2001' }
       edition { 'first' }
+      emory_ark { ['25'] }
+      emory_rights_statements { ['This is my rights statement text'] }
       extent { 'A very large extent' }
-      final_published_version { ['http://example.com'] }
+      final_published_versions { ['http://example.com'] }
       geographic_unit { 'cm' }
-      grant { ['For five years'] }
+      grant_agencies { ['For five years'] }
       grant_information { ['More grant information'] }
       holding_repository { 'Emory Libraries' }
       institution { 'Emory' }
@@ -73,11 +75,10 @@ FactoryBot.define do
       issn { '123435' }
       issue { '123' }
       keywords { ['photos'] }
-      legacy_ark { ['25'] }
-      legacy_identifier { ['1'] }
       legacy_rights { 'no' }
       local_call_number { '1234' }
-      note { ['Many found'] }
+      notes { ['Many found'] }
+      other_identifiers { ['1'] }
       page_range_end { '1' }
       page_range_start { '0' }
       parent_title { 'A parent title' }
@@ -87,19 +88,18 @@ FactoryBot.define do
       publisher_version { '1' }
       re_use_license { 'true' }
       related_datasets { ['http://example.com'] }
-      related_material { ['More stuff'] }
+      related_material_notes { ['More stuff'] }
       related_publications { ['https://example.com'] }
       rights_documentation { 'https://example.com' }
-      rights_holder { ['Emory'] }
-      rights_statement { ['https://localhost'] }
-      rights_statement_text { ['This is my rights statement text'] }
+      rights_holders { ['Emory'] }
+      rights_statement { ['http://rightsstatements.org/vocab/InC/1.0/'] }
       scheduled_rights_review { 'true' }
       scheduled_rights_review_note { 'check please' }
       sensitive_material { 'false' }
       sensitive_material_note { 'do not check' }
       series_title { 'A series' }
       sponsor { 'Another person' }
-      staff_note { ['Did not check'] }
+      staff_notes { ['Did not check'] }
       subject_geo { ['Artic'] }
       subject_names { ['Someone'] }
       subject_time_periods { ['Neolithic'] }

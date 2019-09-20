@@ -1,2 +1,2 @@
-REQUIRED_FIELDS_ON_FORM = [:title, :holding_repository, :content_type, :rights_statement_text, :rights_statement,
-                           :data_classification, :date_created].freeze
+REQUIRED_FIELDS_ON_FORM = [:title, :holding_repository, :content_type, :emory_rights_statements, :rights_statement,
+                           :data_classifications, :date_created].freeze
