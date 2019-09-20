@@ -9,11 +9,17 @@ module Hyrax
 
     # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::CurateGenericWorkPresenter
-
     def show # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       @user_collections = user_collections
       @parent = main_app.polymorphic_path(parent_presenter) if parent_presenter
-
+      if presenter.preservation_workflow_terms
+        @preservation_workflow_display = JSON.parse(presenter.preservation_workflow_terms[0]) if presenter.preservation_workflow_terms
+        preservation_workflow_display_copy = @preservation_workflow_display.clone
+        @preservation_workflow_display.each_key do |key|
+          preservation_workflow_display_copy[key.split('_').map(&:capitalize).join(' ')] = preservation_workflow_display_copy.delete(key)
+        end
+        @preservation_workflow_display = preservation_workflow_display_copy
+      end
       respond_to do |wants|
         wants.html { presenter && parent_presenter }
         wants.json do

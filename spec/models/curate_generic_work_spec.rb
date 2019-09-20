@@ -12,12 +12,25 @@ RSpec.describe CurateGenericWork do
 
     before do
       work1.members = [work2, work3, fileset1, fileset2]
+      pres_workflow = work1.preservation_workflow.build
+      pres_workflow.workflow_type = 'default'
+      pres_workflow.workflow_notes = 'note example'
+      pres_workflow.persist!
       work1.save!
+      work1.reload
     end
 
     it 'access multi-part objects' do
       w_members = work1.members
       expect(w_members.map(&:id)).to match_array [work2.id, work3.id, fileset1.id, fileset2.id]
+    end
+
+    it "has a preservation workflow which is a PreservationWorkflow object" do
+      expect(work2.preservation_workflow.build).to be_instance_of PreservationWorkflow
+    end
+
+    it "access preservation workflow properties after saving" do
+      expect(work1.preservation_workflow.map(&:workflow_type).flatten).to include(['default'])
     end
   end
 

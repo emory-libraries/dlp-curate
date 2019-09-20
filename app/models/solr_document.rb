@@ -7,6 +7,9 @@ class SolrDocument
   include Hyrax::SolrDocumentBehavior
 
   # self.unique_key = 'id'
+  def preservation_workflow_terms
+    self[Solrizer.solr_name('preservation_workflow_terms')]
+  end
 
   # Email uses the semantic field mappings below to generate the body of an email.
   SolrDocument.use_extension(Blacklight::Document::Email)

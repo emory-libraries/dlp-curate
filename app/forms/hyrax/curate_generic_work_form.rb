@@ -45,6 +45,16 @@ module Hyrax
       [:staff_note, :system_of_record_ID, :legacy_identifier, :legacy_ark, :date_digitized, :transfer_engineer]
     end
 
+    def preservation_workflow_metadata_fields
+      [:preservation_workflow_attributes]
+    end
+
+    # In the view we have "fields_for :preservation_workflow".
+    # This method is needed to make fields_for behave as an
+    # association and populate the form with the correct
+    # preservation workflow data.
+    delegate :preservation_workflow_attributes=, to: :model
+
     def self.build_permitted_params
       permitted = super
       permitted += [:representative_id,
@@ -57,7 +67,22 @@ module Hyrax
                     :lease_expiration_date,
                     :visibility_after_lease,
                     :visibility]
+      permitted << { preservation_workflow_attributes: [:id,
+                                                        { workflow_type: [] }, { workflow_notes: [] },
+                                                        { workflow_rights_basis: [] }, { workflow_rights_basis_note: [] },
+                                                        { workflow_rights_basis_date: [] }, { workflow_rights_basis_reviewer: [] },
+                                                        { workflow_rights_basis_uri: [] }, :_destroy] }
       permitted
+    end
+    # We need to call '.to_a' on preservation_workflow to force it
+    # to resolve.  Otherwise in the form, the fields don't
+    # display.
+    # Instead they display something like:
+    # '#<ActiveTriples::Relation:0x007fb564969c88>'
+
+    def preservation_workflow
+      model.preservation_workflow.build if model.preservation_workflow.blank?
+      model.preservation_workflow.to_a
     end
   end
 end

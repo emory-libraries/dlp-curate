@@ -8,6 +8,7 @@ RSpec.describe 'viewing the importer guide', type: :system do
   before do
     login_as admin_user
     work.save!
+    work.reload
   end
 
   it 'has all the labels' do
@@ -85,5 +86,13 @@ RSpec.describe 'viewing the importer guide', type: :system do
     expect(page).to have_content 'Technical Note'
     expect(page).to have_content 'Title'
     expect(page).to have_content 'Transfer Engineer'
+    # preservation workflow
+    expect(page).to have_content 'Workflow Type'
+    expect(page).to have_content 'Workflow Notes'
+    expect(page).to have_content 'Workflow Rights Basis'
+    expect(page).to have_content 'Workflow Rights Basis Note'
+    expect(page).to have_content 'Workflow Rights Basis Date'
+    expect(page).to have_content 'Workflow Rights Basis Reviewer'
+    expect(page).to have_content 'Workflow Rights Basis Uri'
   end
 end

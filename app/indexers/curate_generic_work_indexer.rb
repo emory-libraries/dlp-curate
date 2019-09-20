@@ -9,10 +9,13 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   # this behavior
   # include Hyrax::IndexesLinkedMetadata
 
-  # Uncomment this block if you want to add custom indexing behavior:
-  # def generate_solr_document
-  #  super.tap do |solr_doc|
-  #    solr_doc['my_custom_field_ssim'] = object.my_custom_property
-  #  end
-  # end
+  def generate_solr_document
+    super.tap do |solr_doc|
+      solr_doc['preservation_workflow_terms_sim'] = preservation_workflow_terms
+    end
+  end
+
+  def preservation_workflow_terms
+    object.preservation_workflow.map(&:preservation_terms)
+  end
 end

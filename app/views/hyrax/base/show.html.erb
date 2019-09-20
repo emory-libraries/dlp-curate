@@ -29,6 +29,14 @@
           <div class="col-sm-9">
             <%= render 'work_description', presenter: @presenter %>
             <%= render 'metadata', presenter: @presenter %>
+            <% if @preservation_workflow_display %>
+            <% @preservation_workflow_display.each do |key, value| %>
+            <%= key %>
+            <ul class="tabular"><li class="attribute"><span itemprop="dateCreated">
+            <%= value %>
+            </span></li></ul>
+            <% end %>
+            <% end %>
           </div>
         </div>
       </div>
