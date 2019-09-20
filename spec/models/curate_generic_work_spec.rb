@@ -32,15 +32,6 @@ RSpec.describe CurateGenericWork do
     it "access preservation workflow properties after saving" do
       expect(work1.preservation_workflow.map(&:workflow_type).flatten).to include(['default'])
     end
-  end
-
-    it "has a preservation workflow which is a PreservationWorkflow object" do
-      expect(work2.preservation_workflow.build).to be_instance_of PreservationWorkflow
-    end
-
-    it "access preservation workflow properties after saving" do
-      expect(work1.preservation_workflow.map(&:workflow_type).flatten).to include(['default'])
-    end
 
     it "checks assign id" do
       expect(work1.assign_id).to match(/\d{3}[A-z0-9]{7}-cor/)
