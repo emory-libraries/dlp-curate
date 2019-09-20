@@ -203,20 +203,20 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :related_datasets, predicate: "http://purl.org/dc/terms/relation#dataset" do |index|
-  index.as :stored_searchable
-end
+    index.as :stored_searchable
+  end
 
   property :related_material_notes, predicate: "http://purl.org/dc/elements/1.1/relation" do |index|
     index.as :stored_searchable
   end
 
   property :related_publications, predicate: "http://purl.org/dc/terms/relation#publication" do |index|
-  index.as :stored_searchable
-end
+    index.as :stored_searchable
+  end
 
   property :rights_documentation, predicate: "http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI", multiple: false do |index|
-  index.as :stored_searchable
-end
+    index.as :stored_searchable
+  end
 
   property :rights_holders, predicate: "http://purl.org/dc/terms/rightsHolder" do |index|
     index.as :stored_searchable
