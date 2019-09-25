@@ -192,7 +192,7 @@ module Hyrax
       def files
         @sf = @file_set.service_file unless @file_set.service_file.nil?
         @if = @file_set.intermediate_file unless @file_set.intermediate_file.nil?
-        @et = @file_set.extracted_text unless @file_set.extracted_text.nil?
+        @et = @file_set.extracted unless @file_set.extracted.nil?
         @tf = @file_set.transcript_file unless @file_set.transcript_file.nil?
       end
   end

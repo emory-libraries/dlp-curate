@@ -3,26 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
-  let(:file1) { File.open(fixture_path + '/world.png', "wb") }
-  let(:file2) { File.open(fixture_path + '/image.jp2', "wb") }
-  let(:file3) { File.open(fixture_path + '/sun.png', "wb") }
-  let(:file4) { File.open(fixture_path + '/world.png', "wb") }
-  let(:file5) { File.open(fixture_path + '/image.jp2', "wb") }
+  let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
+  let(:inf) { File.open(fixture_path + '/book_page/0003_intermediate.jp2') }
+  let(:sf)  { File.open(fixture_path + '/book_page/0003_service.jpg') }
+  let(:et)  { File.open(fixture_path + '/book_page/0003_extracted_text.pos') }
+  let(:tf)  { File.open(fixture_path + '/book_page/0003_transcript.txt') }
   let(:uploaded_file1) do
     FactoryBot.build(:uploaded_file,
                      file: 'Example title',
-                     preservation_master_file: file1,
-                     intermediate_file: file3,
-                     service_file: file2,
-                     extracted_text: file4,
-                     transcript: file5,
+                     preservation_master_file: pmf,
+                     intermediate_file: inf,
+                     service_file: sf,
+                     extracted_text: et,
+                     transcript: tf,
                      fileset_use: 'primary')
   end
   let(:uploaded_file2) do
     FactoryBot.build(:uploaded_file,
-                     preservation_master_file: file1,
-                     service_file: file3,
-                     transcript: file5,
+                     preservation_master_file: pmf,
+                     service_file: sf,
+                     transcript: tf,
                      fileset_use: 'supplementary')
   end
   let(:generic_work) { FactoryBot.create(:public_generic_work) }
@@ -36,6 +36,8 @@ RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
       expect(generic_work.file_sets.first.title).to eq ['Example title']
       expect(generic_work.file_sets.first.pcdm_use).to eq 'primary'
       expect(generic_work.file_sets.first.files.size).to eq 5
+      expect(generic_work.file_sets.first.extracted_text).to eq nil
+      expect(generic_work.file_sets.first.extracted.file_name).to eq ['0003_extracted_text.pos']
       expect(generic_work.file_sets.map(&:visibility)).to all(eq 'open')
       expect(uploaded_file1.reload.file_set_uri).not_to be_nil
       expect(ImportUrlJob).not_to have_been_enqueued
@@ -47,7 +49,7 @@ RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
       it 'sets fileset name as preservation_master_file name when fileset name is not present' do
         described_class.perform_now(generic_work, [uploaded_file2])
 
-        expect(generic_work.file_sets.first.title).to eq ['world.png']
+        expect(generic_work.file_sets.first.title).to eq ['0003_preservation_master.tif']
         expect(generic_work.file_sets.first.pcdm_use).to eq 'supplementary'
         expect(generic_work.file_sets.first.files.size).to eq 3
       end
@@ -66,7 +68,7 @@ RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
 
       describe 'with existing files' do
         let(:file_set)       { FactoryBot.create(:file_set) }
-        let(:uploaded_file1) { FactoryBot.build(:uploaded_file, file: file1, file_set_uri: 'http://example.com/file_set') }
+        let(:uploaded_file1) { FactoryBot.build(:uploaded_file, file: pmf, file_set_uri: 'http://example.com/file_set') }
 
         it 'skips files that already have a FileSet' do
           expect { described_class.perform_now(generic_work, [uploaded_file1, uploaded_file2]) }
