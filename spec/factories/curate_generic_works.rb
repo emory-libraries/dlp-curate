@@ -84,6 +84,7 @@ FactoryBot.define do
       parent_title { 'A parent title' }
       place_of_production { 'Antartic' }
       primary_language { 'Esperanto' }
+      primary_repository_ID { 'http://example.com' }
       publisher { 'emory' }
       publisher_version { '1' }
       re_use_license { 'true' }

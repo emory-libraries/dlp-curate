@@ -46,7 +46,11 @@ class CurateCollectionImporter
       collection.primary_repository_ID = collection_attrs["primary_repository_ID"]
       collection.finding_aid_link = collection_attrs["finding_aid_link"]
       collection.save
-      CollectionPermissionEnsurer.new(collection: collection, access_permissions: ['manage', 'deposit'])
+      manage_groups = multivalue_mapping(collection_attrs, "manage")
+      deposit_groups = multivalue_mapping(collection_attrs, "deposit")
+      view_groups = multivalue_mapping(collection_attrs, "view")
+      access_groups = { 'manage' => manage_groups, 'deposit' => deposit_groups, 'view' => view_groups }
+      CollectionPermissionEnsurer.new(collection: collection, access_permissions: access_groups)
     end
   end
 

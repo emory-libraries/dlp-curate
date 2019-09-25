@@ -38,7 +38,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :conference_dates, predicate: "http://rdaregistry.info/Elements/u/P60526", multiple: false
+  property :conference_dates, predicate: "http://rdaregistry.info/Elements/u/P60526", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   property :conference_name, predicate: "http://purl.org/dc/terms/relation#conferenceOrMeeting", multiple: false do |index|
     index.as :stored_searchable
@@ -96,7 +98,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :edition, predicate: "http://id.loc.gov/ontologies/bibframe/editionStatement", multiple: false
+  property :edition, predicate: "http://id.loc.gov/ontologies/bibframe/editionStatement", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   property :emory_ark, predicate: "http://id.loc.gov/vocabulary/identifiers/local#ark" do |index|
     index.as :stored_searchable
@@ -110,7 +114,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :final_published_versions, predicate: "http://purl.org/dc/terms/hasVersion"
+  property :final_published_versions, predicate: "http://purl.org/dc/terms/hasVersion" do |index|
+    index.as :stored_searchable
+  end
 
   property :geographic_unit, predicate: "http://metadata.emory.edu/vocab/cor-terms#geographicUnit", multiple: false do |index|
     index.as :stored_searchable
@@ -164,15 +170,21 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :page_range_end, predicate: "http://purl.org/ontology/bibo/pageEnd", multiple: false
+  property :page_range_end, predicate: "http://purl.org/ontology/bibo/pageEnd", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
-  property :page_range_start, predicate: "http://purl.org/ontology/bibo/pageStart", multiple: false
+  property :page_range_start, predicate: "http://purl.org/ontology/bibo/pageStart", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   property :parent_title, predicate: "http://rdaregistry.info/Elements/u/P60101", multiple: false do |index|
     index.as :stored_searchable
   end
 
-  property :place_of_production, predicate: "http://id.loc.gov/vocabulary/relators/pup", multiple: false
+  property :place_of_production, predicate: "http://id.loc.gov/vocabulary/relators/pup", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   property :preservation_workflow, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow", class_name: "PreservationWorkflow"
 
@@ -192,19 +204,29 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :re_use_license, predicate: "http://schema.org/license", multiple: false
+  property :re_use_license, predicate: "http://schema.org/license", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
-  property :related_datasets, predicate: "http://purl.org/dc/terms/relation#dataset"
+  property :related_datasets, predicate: "http://purl.org/dc/terms/relation#dataset" do |index|
+    index.as :stored_searchable
+  end
 
   property :related_material_notes, predicate: "http://purl.org/dc/elements/1.1/relation" do |index|
     index.as :stored_searchable
   end
 
-  property :related_publications, predicate: "http://purl.org/dc/terms/relation#publication"
+  property :related_publications, predicate: "http://purl.org/dc/terms/relation#publication" do |index|
+    index.as :stored_searchable
+  end
 
-  property :rights_documentation, predicate: "http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI", multiple: false
+  property :rights_documentation, predicate: "http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
-  property :rights_holders, predicate: "http://purl.org/dc/terms/rightsHolder"
+  property :rights_holders, predicate: "http://purl.org/dc/terms/rightsHolder" do |index|
+    index.as :stored_searchable
+  end
 
   property :rights_statement, predicate: "http://www.europeana.eu/schemas/edm/rights" do |index|
     index.as :stored_searchable, :facetable
@@ -230,7 +252,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :sponsor, predicate: "http://id.loc.gov/vocabulary/relators/spn", multiple: false
+  property :sponsor, predicate: "http://id.loc.gov/vocabulary/relators/spn", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   property :staff_notes, predicate: "http://metadata.emory.edu/vocab/cor-terms#staffNote" do |index|
     index.as :stored_searchable
@@ -276,11 +300,13 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :volume, predicate: "http://purl.org/ontology/bibo/volume", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
   def index_preservation_workflow_terms
     self.preservation_workflow_terms = preservation_workflow.map(&:preservation_terms)
   end
-
-  property :volume, predicate: "http://purl.org/ontology/bibo/volume", multiple: false
 
   # accepts_nested_attributes_for can not be called until all
   # the properties are declared because it calls resource_class,

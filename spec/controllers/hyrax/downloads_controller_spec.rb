@@ -71,7 +71,7 @@ RSpec.describe Hyrax::DownloadsController do
       end
 
       it 'sends the extracted text' do
-        get :show, params: { id: file_set, use: 'extracted_text' }
+        get :show, params: { id: file_set, use: 'extracted' }
         expect(response.body).to eq file_set.extracted.content
       end
 
