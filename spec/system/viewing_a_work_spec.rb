@@ -8,6 +8,7 @@ RSpec.describe 'viewing the importer guide', type: :system do
   before do
     login_as admin_user
     work.save!
+    work.reload
   end
 
   it 'has all the labels' do
@@ -66,7 +67,6 @@ RSpec.describe 'viewing the importer guide', type: :system do
     expect(page).to have_content 'In Copyright'
     expect(page).to have_content 'emory_rights_statements (Rights Statement)'
     expect(page).to have_content 'This is my rights statement text'
-    expect(page).to have_content 'In Copyright'
     # What is now the emory_rights_statement previously matched against the same text as rights_statement above.
     # expect(page).to have_content 'emory_rights_statement (Rights Statement)'
     expect(page).to have_content 'This is my rights statement text'
@@ -85,5 +85,13 @@ RSpec.describe 'viewing the importer guide', type: :system do
     expect(page).to have_content 'title (Title)'
     expect(page).to have_content 'transfer_engineer (Transfer Engineer)'
     expect(page).to have_content 'Volume'
+    # preservation workflow
+    expect(page).to have_content 'Workflow Type'
+    expect(page).to have_content 'Workflow Notes'
+    expect(page).to have_content 'Workflow Rights Basis'
+    expect(page).to have_content 'Workflow Rights Basis Note'
+    expect(page).to have_content 'Workflow Rights Basis Date'
+    expect(page).to have_content 'Workflow Rights Basis Reviewer'
+    expect(page).to have_content 'Workflow Rights Basis Uri'
   end
 end

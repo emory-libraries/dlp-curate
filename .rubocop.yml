@@ -73,10 +73,16 @@ Layout/AlignHash:
     Exclude:
         - app/models/curate_generic_work.rb
         - app/importers/curate_record_importer.rb
+        - app/forms/hyrax/curate_generic_work_form.rb
 
 Metrics/PerceivedComplexity:
     Exclude:
       - app/importers/curate_record_importer.rb
+      - app/forms/hyrax/curate_generic_work_form.rb
+
+Layout/AlignHash:
+    Exclude:
+        - app/models/curate_generic_work.rb
 
 RSpec/ExampleLength:
     Exclude:

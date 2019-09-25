@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'active_triples'
+require 'json'
 
 class PreservationWorkflow < ActiveTriples::Resource
   include ActiveTriples::RDFSource
@@ -29,5 +30,16 @@ class PreservationWorkflow < ActiveTriples::Resource
       uri = RDF::URI(uri)
     end
     super
+  end
+
+  def preservation_terms
+    attributes_map = { 'workflow_type' => workflow_type.first,
+                       'workflow_notes' => workflow_notes.first,
+                       'workflow_rights_basis' => workflow_rights_basis.first,
+                       'workflow_rights_basis_note' => workflow_rights_basis_note.first,
+                       'workflow_rights_basis_date' => workflow_rights_basis_date.first,
+                       'workflow_rights_basis_reviewer' => workflow_rights_basis_reviewer.first,
+                       'workflow_rights_basis_uri' => workflow_rights_basis_uri.first }
+    attributes_map.to_json
   end
 end

@@ -14,6 +14,7 @@ class CurateGenericWork < ActiveFedora::Base
   validates :related_publications, url: true, if: -> { related_publications.present? }
   validates :related_datasets, url: true, if: -> { related_datasets.present? }
   validates :rights_documentation, url: true, if: -> { rights_documentation.present? }
+  before_save :index_preservation_workflow_terms
 
   property :abstract, predicate: "http://purl.org/dc/elements/1.1/description", multiple: false do |index|
     index.as :stored_searchable
@@ -181,6 +182,10 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :preservation_workflow, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow", class_name: "PreservationWorkflow"
 
+  property :preservation_workflow_terms, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow_attributes" do |index|
+    index.as :stored_searchable, :facetable
+  end
+
   property :primary_language, predicate: "http://purl.org/dc/elements/1.1/language", multiple: false do |index|
     index.as :stored_searchable, :facetable
   end
@@ -295,6 +300,10 @@ class CurateGenericWork < ActiveFedora::Base
 
   property :volume, predicate: "http://purl.org/ontology/bibo/volume", multiple: false do |index|
     index.as :stored_searchable
+  end
+
+  def index_preservation_workflow_terms
+    self.preservation_workflow_terms = preservation_workflow.map(&:preservation_terms)
   end
 
   # accepts_nested_attributes_for can not be called until all
