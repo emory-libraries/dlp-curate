@@ -42,6 +42,25 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     huf
   end
 
+  def process_attrs(record:)
+    additional_attrs = {
+      uploaded_files: create_upload_files(record),
+      depositor: depositor.user_key
+    }
+
+    attrs = record.attributes.merge(additional_attrs)
+    attrs = attrs.merge(member_of_collections_attributes: { '0' => { id: collection_id } }) if collection_id
+
+    # Ensure nothing is passed in the files field,
+    # since this is reserved for Hyrax and is where uploaded_files will be attached
+    attrs.delete(:files)
+    attrs.delete(:remote_files)
+    based_near = attrs.delete(:based_near)
+    attrs.merge(skip_metadata: skip_metadata?(record))
+    attrs.merge(based_near_attributes: based_near_attributes(based_near)) unless based_near.nil? || based_near.empty?
+    attrs
+  end
+
   # Convert the "part" section of the filename to a number and use it to generate
   # the fileset label
   # Return the filename as the label if anything goes wrong.
@@ -79,6 +98,36 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     filename.split("_P00").first
   end
 
+  # Update an existing object using the Hyrax actor stack
+  # We assume the object was created as expected if the actor stack returns true.
+  def update_for(existing_record:, update_record:)
+    files_only_check(update_record: update_record)
+    updater = case csv_import_detail.update_actor_stack
+              when 'HyraxMetadataOnly'
+                Zizia::HyraxMetadataOnlyUpdater.new(csv_import_detail: csv_import_detail,
+                                                    existing_record: existing_record,
+                                                    update_record: update_record,
+                                                    attrs: process_attrs(record: update_record))
+              when 'HyraxDelete'
+                Zizia::HyraxDeleteFilesUpdater.new(csv_import_detail: csv_import_detail,
+                                                   existing_record: existing_record,
+                                                   update_record: update_record,
+                                                   attrs: process_attrs(record: update_record))
+              when 'HyraxOnlyNew'
+                return unless existing_record[deduplication_field] != update_record.try(deduplication_field)
+                Zizia::HyraxDefaultUpdater.new(csv_import_detail: csv_import_detail,
+                                               existing_record: existing_record,
+                                               update_record: update_record,
+                                               attrs: process_attrs(record: update_record))
+              when 'CurateFilesOnly'
+                Zizia::HyraxDefaultUpdater.new(csv_import_detail: csv_import_detail,
+                                               existing_record: existing_record,
+                                               update_record: update_record,
+                                               attrs: process_attrs(record: update_record))
+              end
+    updater.update
+  end
+
   ##
   # @param record [Zizia::InputRecord]
   # @return [ActiveFedora::Base]
@@ -103,38 +152,9 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     false
   end
 
-  # Update an existing object using the Hyrax actor stack
-  # We assume the object was created as expected if the actor stack returns true.
-  # Note that for now the update stack will only update metadata and update collection membership, it will not re-import files.
-  def update_for(existing_record:, update_record:)
-    Rails.logger.info "[zizia] event: record_update_started, batch_id: #{batch_id}, collection_id: #{collection_id}, #{deduplication_field}: #{update_record.respond_to?(deduplication_field) ? update_record.send(deduplication_field) : update_record}"
-
-    additional_attrs = {
-      uploaded_files: create_upload_files(update_record),
-      depositor: @depositor.user_key,
-      skip_metadata: skip_metadata?(update_record)
-    }
-    attrs = update_record.attributes.merge(additional_attrs)
-    attrs = attrs.merge(member_of_collections_attributes: { '0' => { id: collection_id } }) if collection_id
-    # Ensure nothing is passed in the files field,
-    # since this is reserved for Hyrax and is where uploaded_files will be attached
-    attrs.delete(:files)
-
-    # We aren't using the attach remote files actor, so make sure any remote files are removed from the params before we try to save the object.
-    attrs.delete(:remote_files)
-
-    based_near = attrs.delete(:based_near)
-    attrs = attrs.merge(based_near_attributes: based_near_attributes(based_near)) unless based_near.nil? || based_near.empty?
-
-    actor_env = Hyrax::Actors::Environment.new(existing_record, ::Ability.new(@depositor), attrs)
-    if Hyrax::CurationConcern.actor.update(actor_env)
-      Rails.logger.info "[zizia] event: record_updated, batch_id: #{batch_id}, record_id: #{existing_record.id}, collection_id: #{collection_id}, #{deduplication_field}: #{existing_record.respond_to?(deduplication_field) ? existing_record.send(deduplication_field) : existing_record}"
-      @success_count += 1
-    else
-      existing_record.errors.each do |attr, msg|
-        Rails.logger.error "[zizia] event: validation_failed, batch_id: #{batch_id}, collection_id: #{collection_id}, attribute: #{attr.capitalize}, message: #{msg}, record_title: record_title: #{attrs[:title] ? attrs[:title] : attrs}"
-      end
-      @failure_count += 1
-    end
+  def files_only_check(update_record:)
+    return unless skip_metadata?(update_record)
+    csv_import_detail.update_actor_stack = 'CurateFilesOnly'
+    csv_import_detail.save
   end
 end

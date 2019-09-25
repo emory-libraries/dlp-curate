@@ -2,7 +2,7 @@
 # [Hyrax-overwrite] Adds tests for additional files
 require 'rails_helper'
 
-RSpec.describe Hyrax::DownloadsController do
+RSpec.describe Hyrax::DownloadsController, :clean do
   routes { Hyrax::Engine.routes }
 
   describe '#show' do
