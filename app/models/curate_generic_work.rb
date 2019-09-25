@@ -16,12 +16,6 @@ class CurateGenericWork < ActiveFedora::Base
   validates :rights_documentation, url: true, if: -> { rights_documentation.present? }
   before_save :index_preservation_workflow_terms
 
-  property :preservation_workflow, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow", class_name: "PreservationWorkflow"
-
-  property :preservation_workflow_terms, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow_attributes" do |index|
-    index.as :stored_searchable, :facetable
-  end
-
   property :abstract, predicate: "http://purl.org/dc/elements/1.1/description", multiple: false do |index|
     index.as :stored_searchable
   end
@@ -187,6 +181,10 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :preservation_workflow, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow", class_name: "PreservationWorkflow"
+
+  property :preservation_workflow_terms, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow_attributes" do |index|
+    index.as :stored_searchable, :facetable
+  end
 
   property :primary_language, predicate: "http://purl.org/dc/elements/1.1/language", multiple: false do |index|
     index.as :stored_searchable, :facetable
