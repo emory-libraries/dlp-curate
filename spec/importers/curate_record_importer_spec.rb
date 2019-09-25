@@ -3,7 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe CurateRecordImporter, :clean do
-  subject(:curate_record_importer) { described_class.new }
+  subject(:curate_record_importer) do
+    described_class.new(attributes: {
+                          csv_import_detail: csv_import_detail
+                        })
+  end
+  let(:csv_import_detail) { Zizia::CsvImportDetail.new(attributes: {}) }
+
   let(:arch_filename) { "MSS1218_B001_I001_P0001_ARCH.tif" }
   let(:prod_filename) { "MSS1218_B001_I001_P0001_PROD.tif" }
 
@@ -66,10 +72,6 @@ RSpec.describe CurateRecordImporter, :clean do
     it 'extracts a call number from a filename' do
       call_number = curate_record_importer.extract_call_number(arch_filename)
       expect(call_number).to eq "MSS1218_B001_I001"
-    end
-    it 'finds the existing record' do
-      existing_work
-      expect(curate_record_importer.find_existing_record(record)).to eq existing_work
     end
   end
 end

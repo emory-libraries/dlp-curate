@@ -47,6 +47,7 @@ Metrics/ClassLength:
         - app/uploaders/zizia/csv_manifest_validator.rb
         - app/presenters/hyrax/collection_presenter.rb
         - app/importers/curate_mapper.rb
+        - app/importers/curate_record_importer.rb
 
 Metrics/CyclomaticComplexity:
     Exclude:

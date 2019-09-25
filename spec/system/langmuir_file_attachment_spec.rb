@@ -29,7 +29,7 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
 
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
-      expect(page).to have_content 'This import will add 9 new records.'
+      expect(page).to have_content 'This import will create or update 9 records.'
 
       # There is a link so the user can cancel.
       expect(page).to have_link 'Cancel', href: '/csv_imports/new?locale=en'

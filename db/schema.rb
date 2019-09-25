@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 201901241536541) do
+ActiveRecord::Schema.define(version: 201901241536542) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -580,6 +580,13 @@ ActiveRecord::Schema.define(version: 201901241536541) do
     t.integer "csv_import_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "depositor_id"
+    t.string "collection_id"
+    t.string "batch_id"
+    t.integer "success_count"
+    t.integer "failure_count"
+    t.string "deduplication_field"
+    t.string "update_actor_stack"
     t.index ["csv_import_id"], name: "index_zizia_csv_import_details_on_csv_import_id"
   end
 
@@ -589,6 +596,7 @@ ActiveRecord::Schema.define(version: 201901241536541) do
     t.datetime "updated_at", null: false
     t.string "manifest"
     t.string "fedora_collection_id"
+    t.string "update_actor_stack"
     t.index ["user_id"], name: "index_zizia_csv_imports_on_user_id"
   end
 

@@ -8,6 +8,7 @@ RSpec.describe ModularImporter, :clean do
   let(:collection) { FactoryBot.build(:collection_lw) }
   let(:csv_import) do
     import = Zizia::CsvImport.new(user: user, fedora_collection_id: collection.id)
+    import.update_actor_stack = 'HyraxMetadataOnly'
     File.open(modular_csv) { |f| import.manifest = f }
     import
   end

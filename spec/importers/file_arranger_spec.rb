@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe FileArranger do
+RSpec.describe FileArranger, :clean do
   let(:work) { FactoryBot.create(:work) }
   let!(:file_set_front) { FactoryBot.create(:file_set, content: File.open(Rails.root.join('spec', 'fixtures', 'world.png')), title: ['Front']) }
   let!(:file_set_back) { FactoryBot.create(:file_set, content: File.open(Rails.root.join('spec', 'fixtures', 'world.png')), title: ['Back']) }

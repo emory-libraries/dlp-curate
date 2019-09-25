@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe AttachFilesToWorkJob, perform_enqueued: [AttachFilesToWorkJob] do
+RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWorkJob] do
   let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   let(:inf) { File.open(fixture_path + '/book_page/0003_intermediate.jp2') }
   let(:sf)  { File.open(fixture_path + '/book_page/0003_service.jpg') }
