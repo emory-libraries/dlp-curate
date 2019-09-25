@@ -9,6 +9,7 @@ module Hyrax
 
     # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::CurateGenericWorkPresenter
+
     def show # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       @user_collections = user_collections
       @parent = main_app.polymorphic_path(parent_presenter) if parent_presenter
