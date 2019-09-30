@@ -32,7 +32,7 @@ gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '~> 4.x'
-gem 'zizia', '~> 4.0.4.alpha.01'
+gem 'zizia', '4.1.0.alpha.01'
 
 group :development do
   gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2'
