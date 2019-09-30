@@ -1,4 +1,15 @@
 GIT
+  remote: https://github.com/curationexperts/zizia.git
+  revision: 06ac5e1b4856bd34e3ee9752c0d8b7dc8cd6d165
+  branch: check-for-existing-roles
+  specs:
+    zizia (4.1.0.alpha.01)
+      active-fedora
+      carrierwave
+      rails (~> 5.1.4)
+      redcarpet
+
+GIT
   remote: https://github.com/emory-libraries/cap-ec2.git
   revision: aa48832ed4a33944b8e5498b43af0a9c4866fca1
   specs:
@@ -1652,11 +1663,6 @@ GEM
       nokogiri (~> 1.8)
     xray-rails (0.3.2)
       rails (>= 3.1.0)
-    zizia (4.0.4.alpha.01)
-      active-fedora
-      carrierwave
-      rails (~> 5.1.4)
-      redcarpet
 
 PLATFORMS
   ruby
@@ -1715,7 +1721,7 @@ DEPENDENCIES
   webdrivers (~> 3.0)
   webpacker (~> 4.x)
   xray-rails
-  zizia (~> 4.0.4.alpha.01)
+  zizia!
 
 RUBY VERSION
    ruby 2.5.5p157
