@@ -29,22 +29,22 @@ class UserSetup
 
   # Adds users from the yaml file to the given user_group
   def load_users
-    # user_role.users = []
-    # user_role.save
+    user_set = Set[]
     @users_config.each_key do |provider|
       @users_config[provider].each do |a|
-        add_user(a, provider)
+        add_user(a, user_set, provider)
       end
     end
+    add_users_to_group(user_set)
   end
 
   # Add user to specific group
   # @param [String] the uid of the user
   # @return [User] the user who was just added to the group
-  def add_user(uid, provider = "database")
+  def add_user(uid, user_set, provider = "database")
     user = ::User.find_by(provider: provider, uid: uid)
     user = create_user(uid, provider) if user.nil?
-    add_user_to_group(uid, user) unless user_role.users.include?(user)
+    user_set << user
     user
   end
 
@@ -60,6 +60,11 @@ class UserSetup
     user_role.users
   end
 
+  def add_users_to_group(user_set)
+    user_role.users = user_set.to_a
+    user_role.save
+  end
+
   private
 
     def create_user(uid, provider)
@@ -70,11 +75,5 @@ class UserSetup
       user.provider = provider
       user.save
       user
-    end
-
-    def add_user_to_group(uid, user)
-      @logger.debug "Adding user #{uid} to #{@user_group}"
-      user_role.users << user
-      user_role.save
     end
 end
