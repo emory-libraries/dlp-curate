@@ -6,4 +6,4 @@ ec2_role [:web, :app, :db, :redhatapp, :collection],
            forward_agent: true,
            verify_host_key: :never
          }
-#server 'PRIVATE_IP_Address', user: 'deploy', roles: [:web, :app, :db, :redhatapp, :collection]
+# server 'PRIVATE_IP_Address', user: 'deploy', roles: [:web, :app, :db, :redhatapp, :collection]
