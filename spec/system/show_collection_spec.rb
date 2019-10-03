@@ -4,10 +4,10 @@ include Warden::Test::Helpers
 
 RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
   let(:admin_user) { FactoryBot.build(:admin) }
-  let(:langmuir_csv) { File.join(fixture_path, 'csv_import', 'collections', 'langmuir_collection.csv') }
+  let(:collections_csv) { File.join(fixture_path, 'csv_import', 'collections', 'collections.csv') }
   let(:collection) do
-    CurateCollectionImporter.new.import(langmuir_csv)
-    Collection.last
+    CurateCollectionImporter.new.import(collections_csv)
+    Collection.where(local_call_number: "MSS1218").first
   end
   let(:multi_fields) do
     [

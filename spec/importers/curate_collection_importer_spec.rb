@@ -3,22 +3,21 @@ require 'rails_helper'
 
 RSpec.describe CurateCollectionImporter, :clean do
   subject(:cci) { described_class.new }
-  let(:langmuir_csv) { File.join(fixture_path, 'csv_import', 'collections', 'langmuir_collection.csv') }
+  let(:collections_csv) { File.join(fixture_path, 'csv_import', 'collections', 'collections.csv') }
   let(:langmuir_collection) do
-    cci.import(langmuir_csv)
-    Collection.last
+    cci.import(collections_csv)
+    Collection.where(local_call_number: "MSS1218").first
   end
 
-  it 'makes a collection object' do
-    cci.import(langmuir_csv)
-    expect(Collection.count).to eq 1
+  it 'makes collection objects' do
+    cci.import(collections_csv)
+    expect(Collection.count).to eq 2
   end
 
   it 'only makes one collection object per call number' do
-    cci.import(langmuir_csv)
-    expect(Collection.count).to eq 1
-    cci.import(langmuir_csv)
-    expect(Collection.count).to eq 1
+    cci.import(collections_csv)
+    expect(Collection.where(local_call_number: "MSS1218").count).to eq 1
+    expect(Collection.where(local_call_number: "YELLOWBACKS").count).to eq 1
   end
 
   it 'makes a collection using Curate::CollectionType' do
