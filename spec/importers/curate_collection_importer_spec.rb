@@ -53,4 +53,12 @@ RSpec.describe CurateCollectionImporter, :clean do
     expect(langmuir_collection.primary_repository_ID).to include("Fake primary repository ID")
     expect(langmuir_collection.finding_aid_link).to include("http://findingaid.org/langmuir")
   end
+
+  it 'does not override existing collection metadata' do
+    langmuir_collection.reload
+    langmuir_collection.title = ["New Title"]
+    langmuir_collection.save
+    cci.import(langmuir_csv)
+    expect(Collection.last.title).to eq ["New Title"]
+  end
 end
