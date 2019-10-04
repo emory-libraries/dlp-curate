@@ -1,4 +1,4 @@
-set :stage, :TEST
+set :stage, :ARCH
 ec2_role [:web, :app, :db, :redhatapp, :collection],
          user: 'deploy',
          ssh_options: {

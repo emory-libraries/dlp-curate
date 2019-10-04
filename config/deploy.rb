@@ -61,7 +61,7 @@ end
 # On deploy, ensure library collection type exists
 namespace :deploy do
   after :finishing, :create_library_collection_type do
-    on roles(:app) do
+    on roles(:collection) do
       execute "cd #{current_path} && RAILS_ENV=production bundle exec rake curate:create_library_collection_type"
     end
   end
@@ -69,7 +69,7 @@ end
 
 namespace :deploy do
   after :finishing, :create_migration_collections do
-    on roles(:app) do
+    on roles(:collection) do
       execute "cd #{current_path} && RAILS_ENV=production bundle exec rake curate:collections:migration_setup"
     end
   end
