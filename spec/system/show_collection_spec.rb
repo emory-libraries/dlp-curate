@@ -6,7 +6,7 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
   let(:admin_user) { FactoryBot.build(:admin) }
   let(:collections_csv) { File.join(fixture_path, 'csv_import', 'collections', 'collections.csv') }
   let(:collection) do
-    CurateCollectionImporter.new.import(collections_csv)
+    CurateCollectionImporter.new.import(collections_csv, "/dev/null")
     Collection.where(local_call_number: "MSS1218").first
   end
   let(:multi_fields) do

@@ -5,7 +5,6 @@ namespace :curate do
       collection_pre_reqs
       collections_csv_file = Rails.root.join('config', 'collection_metadata', 'collections.csv')
       CurateCollectionImporter.new.import(collections_csv_file)
-      puts "Collection objects created"
     end
 
     def collection_pre_reqs

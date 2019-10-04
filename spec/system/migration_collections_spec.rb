@@ -9,14 +9,13 @@ RSpec.describe 'Depositing items into a migration collection', :perform_jobs, :c
   before do
     allow(Role).to receive(:exists?).and_return(true)
     Curate::CollectionType.find_or_create_library_collection_type
-    CurateCollectionImporter.new.import(collections_csv_file)
+    CurateCollectionImporter.new.import(collections_csv_file, "/dev/null")
   end
   let(:langmuir) { Collection.where(local_call_number: "MSS1218").first }
   let(:yellowbacks) { Collection.where(local_call_number: "YELLOWBACKS").first }
 
   context 'logged in as an admin user' do
     before do
-      allow(CharacterizeJob).to receive(:perform_later) # There is no fits installed on ci
       login_as admin_user
     end
 

@@ -5,17 +5,20 @@ RSpec.describe CurateCollectionImporter, :clean do
   subject(:cci) { described_class.new }
   let(:collections_csv) { File.join(fixture_path, 'csv_import', 'collections', 'collections.csv') }
   let(:langmuir_collection) do
-    cci.import(collections_csv)
+    cci.import(collections_csv, "/dev/null")
     Collection.where(local_call_number: "MSS1218").first
   end
 
   it 'makes collection objects' do
-    cci.import(collections_csv)
+    cci.import(collections_csv, "/dev/null")
     expect(Collection.count).to eq 2
   end
 
   it 'only makes one collection object per call number' do
-    cci.import(collections_csv)
+    cci.import(collections_csv, "/dev/null")
+    expect(Collection.where(local_call_number: "MSS1218").count).to eq 1
+    expect(Collection.where(local_call_number: "YELLOWBACKS").count).to eq 1
+    cci.import(collections_csv, "/dev/null")
     expect(Collection.where(local_call_number: "MSS1218").count).to eq 1
     expect(Collection.where(local_call_number: "YELLOWBACKS").count).to eq 1
   end
@@ -57,7 +60,7 @@ RSpec.describe CurateCollectionImporter, :clean do
     langmuir_collection.reload
     langmuir_collection.title = ["New Title"]
     langmuir_collection.save
-    cci.import(langmuir_csv)
-    expect(Collection.last.title).to eq ["New Title"]
+    cci.import(collections_csv, "/dev/null")
+    expect(Collection.where(local_call_number: "MSS1218").first.title).to eq ["New Title"]
   end
 end

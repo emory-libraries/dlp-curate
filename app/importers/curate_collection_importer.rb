@@ -13,7 +13,7 @@ class CurateCollectionImporter
     existing_collection ? true : false
   end
 
-  def import(csv_file)
+  def import(csv_file, log_location = STDOUT)
     CSV.foreach(csv_file, headers: true) do |row|
       collection_attrs = row.to_hash
       local_call_number = collection_attrs["local_call_number"]
@@ -51,6 +51,9 @@ class CurateCollectionImporter
       view_groups = multivalue_mapping(collection_attrs, "view")
       access_groups = { 'manage' => manage_groups, 'deposit' => deposit_groups, 'view' => view_groups }
       CollectionPermissionEnsurer.new(collection: collection, access_permissions: access_groups)
+      @logger = Logger.new(log_location)
+      @logger.level = Logger::DEBUG
+      @logger.info "#{collection} collection object created"
     end
   end
 
