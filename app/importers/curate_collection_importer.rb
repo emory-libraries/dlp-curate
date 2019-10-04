@@ -6,19 +6,19 @@ class CurateCollectionImporter
     @library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.gid
   end
 
-  # If a Collection object with the specified call number already exists, return it
-  # for updating. Otherwise, create a new Collection object.
-  def check_for_existing_collection(local_call_number)
+  # If a Collection object with the specified call number already exists,
+  # don't update the collection
+  def collection_exists?(local_call_number)
     existing_collection = Collection.where(local_call_number: local_call_number)&.first
-    return existing_collection if existing_collection
-    Collection.new
+    existing_collection ? true : false
   end
 
   def import(csv_file)
     CSV.foreach(csv_file, headers: true) do |row|
       collection_attrs = row.to_hash
       local_call_number = collection_attrs["local_call_number"]
-      collection = check_for_existing_collection(local_call_number)
+      next if collection_exists?(local_call_number)
+      collection = Collection.new
       collection.visibility = "open"
       collection.local_call_number = local_call_number
       collection.collection_type_gid = @library_collection_type_gid
