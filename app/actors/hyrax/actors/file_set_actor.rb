@@ -85,8 +85,6 @@ module Hyrax
           work.representative = file_set if work.representative_id.blank?
           work.thumbnail = file_set if work.thumbnail_id.blank?
 
-          arranger = FileArranger.new(work: work, file_set: file_set)
-          arranger.arrange
           # Save the work so the association between the work and the file_set is persisted (head_id)
           # NOTE: the work may not be valid, in which case this save doesn't do anything.
           work.save
