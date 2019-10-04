@@ -7,6 +7,7 @@ RSpec.describe UserSetup, :clean do
     # Change "/dev/null" to STDOUT to unblock all logging output
     let(:w) { described_class.new("#{fixture_path}/config/emory/groups/rose_manager.yml", "/dev/null") }
     let(:user_uid) { "rosemanager001" }
+    let(:user_set) { Set[] }
     it "makes Rose Manager role" do
       rose_manager = w.user_role
       expect(rose_manager).to be_instance_of(Role)
@@ -18,15 +19,17 @@ RSpec.describe UserSetup, :clean do
       expect(w.user_role.users.pluck(:uid).include?("rosemanager002")).to eq true
     end
     it "adds user to specific user_group" do
-      w.add_user(user_uid)
+      w.add_user(user_uid, user_set)
+      w.add_users_to_group(user_set)
       expect(User.where(uid: user_uid).count).to eq 1
       expect((w.user_role.users.map(&:uid).include? user_uid)).to eq true
     end
     it "returns all users" do
       s = %w[user1 user2 user3]
       s.each do |t|
-        w.add_user(t)
+        w.add_user(t, user_set)
       end
+      w.add_users_to_group(user_set)
       expect(w.user_role.users.count).to eq 3
       expect(w.user_role.users.pluck(:uid).include?(s.first)).to be true
     end
@@ -35,6 +38,7 @@ RSpec.describe UserSetup, :clean do
     # Change "/dev/null" to STDOUT to unblock all logging output
     let(:w) { described_class.new("#{fixture_path}/config/emory/groups/rose_viewer.yml", "/dev/null") }
     let(:user_uid) { "roseviewer001" }
+    let(:user_set) { Set[] }
     it "makes Rose Viewer role" do
       rose_viewer = w.user_role
       expect(rose_viewer).to be_instance_of(Role)
@@ -46,15 +50,17 @@ RSpec.describe UserSetup, :clean do
       expect(w.user_role.users.pluck(:uid).include?("roseviewer002")).to eq true
     end
     it "adds user to specific user_group" do
-      w.add_user(user_uid)
+      w.add_user(user_uid, user_set)
+      w.add_users_to_group(user_set)
       expect(User.where(uid: user_uid).count).to eq 1
       expect((w.user_role.users.map(&:uid).include? user_uid)).to eq true
     end
     it "returns all users" do
       s = %w[user1 user2 user3]
       s.each do |t|
-        w.add_user(t)
+        w.add_user(t, user_set)
       end
+      w.add_users_to_group(user_set)
       expect(w.user_role.users.count).to eq 3
       expect(w.user_role.users.pluck(:uid).include?(s.first)).to be true
     end
