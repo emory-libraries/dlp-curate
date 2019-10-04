@@ -6,7 +6,7 @@ class ModularImporter
 
   attr_accessor :csv_import_detail
 
-  DEDUPLICATION_FIELD = 'identifier'.freeze
+  DEDUPLICATION_FIELD = 'desc - legacy identifier'.freeze
 
   def initialize(csv_import)
     @csv_import = csv_import
@@ -14,54 +14,39 @@ class ModularImporter
     @collection_id = csv_import.fedora_collection_id
     @user_id = csv_import.user_id
     @user_email = User.find(csv_import.user_id).email
-    @row = 0 # Row number doesn't seem to be recorded in the mappper -- there is an attribute for it. record.mapper.row_number is always nil
   end
 
   def import
     raise "Cannot find expected input file #{@csv_file}" unless File.exist?(@csv_file)
     file = File.open(@csv_file)
-    csv_import.save
 
-    csv_import_detail = create_csv_import_detail
+    importer = Zizia::Importer.new(parser: Zizia::CsvParser.new(file: file), record_importer: {})
 
-    attrs = {
-      csv_import_detail: csv_import_detail
-    }
-
-    log_start_import
-    importer = Zizia::Importer.new(parser: Zizia::CsvParser.new(file: file), record_importer: CurateRecordImporter.new(attributes: attrs))
+    work_id = nil
     importer.records.each do |record|
-      pre_ingest_work = Zizia::PreIngestWork.new(csv_import_detail_id: csv_import_detail.id)
-      @row += 1
-      pre_ingest_file = Zizia::PreIngestFile.new(row_number: @row,
-                                                 pre_ingest_work: pre_ingest_work,
-                                                 filename: record.mapper.files.first,
-                                                 size: pre_ingest_file_size(record: record))
-      pre_ingest_work.save
-      pre_ingest_file.save
+      case record.mapper.metadata['type']
+      when 'work'
+        # Gather the metadata from the custom methods and hash and combine into a single hash
+        work = CurateGenericWork.new(record.mapper.send(:fields).map { |k| { "#{k}": record.mapper.try(k.to_sym) || record.mapper.metadata[k.to_s] } }.reduce({}, :merge))
+        work.depositor = User.find(user_id).user_key
+        work.save
+        work_id = work.id
+      when 'fileset'
+        open_preservation_master_file = File.open(DeepFilePath.new(beginning: ENV['IMPORT_PATH'],
+                                                                   ending: record.mapper.metadata['Preservation Master File']).to_s)
+        open_intermediate_file = File.open(DeepFilePath.new(beginning: ENV['IMPORT_PATH'],
+                                                            ending: record.mapper.metadata['Intermediate File']).to_s)
+        uploaded_file = Hyrax::UploadedFile.create(user: User.find(user_id),
+                                                   file: record.mapper.metadata['fileset label'],
+                                                   fileset_use: 'primary',
+                                                   preservation_master_file: open_preservation_master_file,
+                                                   intermediate_file: open_intermediate_file)
+
+        AttachFilesToWorkJob.perform_now(CurateGenericWork.find(work_id), [uploaded_file])
+        CurateGenericWork.find(work_id).reload
+        open_preservation_master_file.close
+        open_intermediate_file.close
+      end
     end
-    importer.import
-    file.close
   end
-
-  private
-
-    def pre_ingest_file_size(record:)
-      File.join(ENV['IMPORT_PATH'], record.mapper.files.first).size
-    end
-
-    def log_start_import
-      Rails.logger.info "[zizia] event: start_import, batch_id: #{@csv_import.id}, collection_id: #{@collection_id}, user: #{@user_email}"
-    end
-
-    def create_csv_import_detail
-      detail = Zizia::CsvImportDetail.find_or_create_by(csv_import_id: csv_import.id)
-      detail.collection_id = collection_id
-      detail.depositor_id = user_id
-      detail.batch_id = csv_import.id
-      detail.deduplication_field = DEDUPLICATION_FIELD
-      detail.update_actor_stack = csv_import.update_actor_stack
-      detail.save
-      detail
-    end
 end

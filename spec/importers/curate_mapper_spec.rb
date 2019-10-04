@@ -257,7 +257,7 @@ RSpec.describe CurateMapper do
 
   context "#rights_statement" do
     it "maps the rights_statement field when it's valid" do
-      expect(mapper.rights_statement).to eq "http://rightsstatements.org/vocab/InC/1.0/"
+      expect(mapper.rights_statement).to eq ["http://rightsstatements.org/vocab/InC/1.0/"]
     end
     context "invalid rights statement" do
       let(:metadata) do

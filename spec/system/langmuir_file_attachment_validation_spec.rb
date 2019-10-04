@@ -28,7 +28,7 @@ RSpec.describe 'Importing records with a bad file attachment', :perform_jobs, :c
       click_on 'Preview Import'
 
       expect(page).to have_content "row 2: Unable to find"
-      expect(page).to have_content "/ARCH/B001/MSS1218_B001_I001_P999_ARCH.tif"
+      expect(page).to have_content "ARCH.tif"
     end
   end
 end

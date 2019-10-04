@@ -3,7 +3,7 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, type: :system, js: true do
-  let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'batch_of_ten.csv') }
+  let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_post_processing.csv') }
 
   context 'logged in as an admin user' do
     let(:collection) { FactoryBot.build(:collection_lw) }
@@ -29,7 +29,7 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
 
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
-      expect(page).to have_content 'This import will create or update 9 records.'
+      expect(page).to have_content 'This import will create or update 12 records.'
 
       # There is a link so the user can cancel.
       expect(page).to have_link 'Cancel', href: '/csv_imports/new?locale=en'
@@ -45,27 +45,27 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
       # Let the background jobs run, and check that the expected number of records got created.
-      # this is 5 because not every line in the spreadsheet is a work
-      expect(CurateGenericWork.count).to eq 5
+      # this is 4 because not every line in the spreadsheet is a work
+      expect(CurateGenericWork.count).to eq 4
       # Ensure that all the fields got assigned as expected
 
       # Ensure two files get attached to the same work, when the second one doesn't have all the metadata
       # (i.e., ensure attaching the second file doesn't remove the metadata from the first file)
-      work = CurateGenericWork.where(title: "*Advertising*").first
-      expect(work.title.first).to match(/Advertising/)
+      work = CurateGenericWork.where(title: "*Augustine").first
+      expect(work.title.first).to match(/Augustine/)
       expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       expect(work.file_sets.count).to eq 2
-      expect(work.file_sets.map { |a| a.title.first }).to contain_exactly("Front", "Back")
-      expect(work.file_sets.first.pcdm_use).to eq "Primary Content"
+      expect(work.file_sets.map { |a| a.title.first }).to contain_exactly("front", "back")
+      expect(work.file_sets.first.pcdm_use).to eq "primary"
 
       # Ensure two files get attached to the same work, when the first one doesn't have all the metadata
       # (i.e., if the first one is blank, it should get stub metadata and the second one should write over its metadata)
-      work = CurateGenericWork.where(title: "*milk*").first
-      expect(work.title.first).to match(/milk/)
+      work = CurateGenericWork.where(title: "*Palm Beach*").first
+      expect(work.title.first).to match(/Palm Beach/)
       expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       expect(work.file_sets.count).to eq 2
 
-      work = CurateGenericWork.where(title: "*Rosalie Reese*").first
+      work = CurateGenericWork.where(title: "*wooden*").first
       expect(work.file_sets.count).to eq 2
     end
   end

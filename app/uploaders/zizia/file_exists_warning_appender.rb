@@ -8,17 +8,17 @@ module Zizia
     end
 
     def check
-      @warnings << message unless condition
+      warnings << message unless condition
     end
 
     private
 
       def message
-        "row #{@index + 1}: Unable to find #{@filepath}"
+        "row #{@index + 1}: Unable to find #{filepath}"
       end
 
       def condition
-        File.exist?(@filepath)
+        File.exist?(filepath)
       end
   end
 end
