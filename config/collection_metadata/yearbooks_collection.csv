@@ -1,8 +1,8 @@
-visibility,title,institution,holding_repository,administrative_unit,contact_information,abstract,primary_language,local_call_number,keywords,subject_topics,subject_names,subject_geo,subject_time_periods,creator,contributors,notes,rights_documentation,internal_rights_note,sensitive_material,staff_notes,system_of_record_ID,emory_ark,primary_repository_ID
+visibility,title,institution,holding_repository,administrative_unit,contact_information,abstract,primary_language,local_call_number,keywords,subject_topics,subject_names,subject_geo,subject_time_periods,creator,contributors,notes,rights_documentation,internal_rights_note,sensitive_material,staff_notes,system_of_record_ID,emory_ark,primary_repository_ID,manage,deposit,view
 Public,Emory University Yearbooks,Emory Universit,"Stuart A. Rose Manuscript, Archives, and Rare Book Library | Oxford College Library (Oxford, Ga.)",Emory University Archives,"Rose Library
 Woodruff Library
 Emory University 
 540 Asbury Circle
 Atlanta, GA 30322 
 rose.library@emory.edu
-404-727-6887","Emory student yearbooks including Oxford, Emory College, and Emory University.",English,YEARBOOKS,,,Emory University--Periodicals,,,Emory University,,,,,No,,,http://rose.library.emory.edu/collections/archives/yearbooks/index.html,
+404-727-6887","Emory student yearbooks including Oxford, Emory College, and Emory University.",English,YEARBOOKS,,,Emory University--Periodicals,,,Emory University,,,,,No,,,http://rose.library.emory.edu/collections/archives/yearbooks/index.html,,admin | repository_manager | rose_manager | oxford_manager,,rose_viewer | oxford_viewer
