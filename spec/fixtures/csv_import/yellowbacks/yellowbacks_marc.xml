@@ -1,0 +1,326 @@
+<?xml version="1.0"?>
+<collection>
+  <record>
+    <controlfield tag="008"> eng </controlfield>
+    <controlfield tag="001">111111111111111111</controlfield>
+    <datafield tag="245" ind1="1" ind2="3">
+      <subfield code="a">Edge cases /</subfield>
+      <subfield code="c">by Emory Catalogers ; with multiple examples.
+      </subfield>
+    </datafield>
+    <!--from mmsid 990020056740302486-->
+    <datafield tag="600" ind1="0" ind2="0">
+      <subfield code="a">Mary,</subfield>
+      <subfield code="c">Queen of Scots,</subfield>
+      <subfield code="d">1542-1587</subfield>
+    </datafield>
+    <datafield tag="600" ind1="1" ind2="0">
+      <subfield code="a">Bothwell, James Hepburn,</subfield>
+      <subfield code="c">Earl of,</subfield>
+      <subfield code="d">1536?-1578</subfield>
+    </datafield>
+    <!--from mmsid 990015285710302486-->
+    <datafield tag="611" ind1="2" ind2="0">
+      <subfield code="a">International Exhibition</subfield>
+      <subfield code="d">(1862 :</subfield>
+      <subfield code="c">London, England)</subfield>
+    </datafield>
+    <!-- from mmsid 9936829718402486 -->
+    <datafield tag="700" ind1="1" ind2=" ">
+      <subfield code="a">Topp, Chester W.,</subfield>
+      <subfield code="e">collector.</subfield>
+      <subfield code="5">GEU</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Chatto & Windus (Firm),</subfield>
+      <subfield code="e">publisher.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">William Clowes and Sons,</subfield>
+      <subfield code="e">printer.</subfield>
+    </datafield>
+    <!--from mmsid 990020983590302486-->
+    <datafield tag="830" ind1=" " ind2="0">
+      <subfield code="a">Routledge's railway library.</subfield>
+    </datafield>
+    <datafield tag="830" ind1=" " ind2="0">
+      <subfield code="a">Jarrolds' railway library.</subfield>
+    </datafield>
+  </record>
+  <record>
+    <controlfield tag="008"> eng </controlfield>
+    <controlfield tag="001">990017826870302486</controlfield>
+    <datafield tag="090" ind1=" " ind2=" ">
+      <subfield code="a">QL555.G7</subfield>
+      <subfield code="b">W85</subfield>
+    </datafield>
+    <datafield tag="100" ind1="1" ind2=" ">
+      <subfield code="a">Wood, J. G.</subfield>
+      <subfield code="q">(John George),</subfield>
+      <subfield code="d">1827-1889.</subfield>
+    </datafield>
+    <datafield tag="245" ind1="1" ind2="4">
+      <subfield code="a">The common moths of England /</subfield>
+      <subfield code="c">
+        by J.G. Wood ; with illustrations by E. Smith, T.W. Wood, and W.S. Coleman.
+      </subfield>
+    </datafield>
+    <datafield tag="264" ind1=" " ind2="1">
+      <subfield code="a">London :</subfield>
+      <subfield code="b">G. Routledge and Sons,</subfield>
+      <subfield code="c">[1870]</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">154 pages, 12 leaves of plates :</subfield>
+      <subfield code="b">illustrations ;</subfield>
+      <subfield code="c">17 cm.</subfield>
+    </datafield>
+    <datafield tag="490" ind1="1" ind2=" ">
+      <subfield code="a">Books for the country</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Bound in illustrated paper-covered boards.</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Date of publication from Topp.</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Includes index.</subfield>
+    </datafield>
+    <datafield tag="583" ind1=" " ind2=" ">
+      <subfield code="c">2009</subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+        Manuscript, Archives, and Rare Book Library copy 1 is ca. 1873 issue with peach-colored boards and "One shilling, with twelve plates" at head of cover; from the collection of Chester W. Topp.
+      </subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+        Manuscript, Archives, and Rare Book Library copy 2 is ca. 1875 issue with yellow boards, "Books for the country" at head of cover and "44" at foot of cover illustration.
+      </subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+        Manuscript, Archives, and Rare Book Library copy 3 is ca. 1877 issue with yellow boards and "Price one shilling" at head of cover.
+      </subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+        Manuscript, Archives, and Rare Book Library copy 4 is ca. 1882 issue with light blue boards, "Books for the country" at head of cover and "44" at foot of cover illustration; from the collection of Chester W. Topp.
+      </subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+        The online edition of this book in the public domain, i.e., not protected by copyright, has been produced by the Emory University Digital Library Publications Program.
+      </subfield>
+    </datafield>
+    <datafield tag="650" ind1=" " ind2="0">
+      <subfield code="a">Moths</subfield>
+      <subfield code="z">Great Britain.</subfield>
+    </datafield>
+    <datafield tag="655" ind1=" " ind2="7">
+      <subfield code="a">Yellowbacks.</subfield>
+    </datafield>
+    <datafield tag="700" ind1="1" ind2=" ">
+      <subfield code="a">Smith, E.,</subfield>
+      <subfield code="e">illustrator.</subfield>
+    </datafield>
+    <datafield tag="700" ind1="1" ind2=" ">
+      <subfield code="a">Wood, Thomas Waterman,</subfield>
+      <subfield code="d">1823-1903,</subfield>
+      <subfield code="e">illustrator.</subfield>
+    </datafield>
+    <datafield tag="700" ind1="1" ind2=" ">
+      <subfield code="a">Coleman, W. S.</subfield>
+      <subfield code="q">(William Stephen),</subfield>
+      <subfield code="d">1829-1904,</subfield>
+      <subfield code="e">illustrator.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">George Routledge and Sons.</subfield>
+    </datafield>
+    <datafield tag="700" ind1="1" ind2=" ">
+      <subfield code="a">Topp, Chester W.,</subfield>
+      <subfield code="e">collector.</subfield>
+      <subfield code="5">GEU</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">
+        Chester W. Topp collection of Victorian yellowbacks and paperbacks (Emory University. MARBL)
+      </subfield>
+      <subfield code="5">GEU</subfield>
+    </datafield>
+    <datafield tag="830" ind1=" " ind2="0">
+      <subfield code="a">Books for the country.</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="1">
+      <subfield code="u">http://pid.emory.edu/ark:/25593/7st4v/IA</subfield>
+      <subfield code="y">Internet Archive version</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="1">
+      <subfield code="u">http://pid.emory.edu/ark:/25593/7st50/IA</subfield>
+      <subfield code="y">Internet Archive version</subfield>
+    </datafield>
+  </record>
+  <record>
+    <controlfield tag="008"> eng </controlfield>
+    <controlfield tag="001">990015328360302486</controlfield>
+    <datafield tag="041" ind1="0" ind2=" ">
+      <subfield code="a">eng</subfield>
+    </datafield>
+    <datafield tag="100" ind1="1" ind2=" ">
+      <subfield code="a">Twain, Mark,</subfield>
+      <subfield code="d">1835-1910.</subfield>
+    </datafield>
+    <datafield tag="240" ind1="1" ind2="0">
+      <subfield code="a">Works.</subfield>
+    </datafield>
+    <datafield tag="245" ind1="1" ind2="0">
+      <subfield code="a">Choice bits from Mark Twain.</subfield>
+    </datafield>
+    <datafield tag="264" ind1=" " ind2="1">
+      <subfield code="a">London :</subfield>
+      <subfield code="b">Diprose AND! Bateman,</subfield>
+      <subfield code="c">[1885?]</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">192 pages ;</subfield>
+      <subfield code="c">17 cm</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Title vignette (portrait)</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Bound in illustrated paper-covered boards.</subfield>
+    </datafield>
+    <datafield tag="505" ind1="0" ind2=" ">
+      <subfield code="a">
+        Autobiography -- Memoranda -- The facts in the case of the great beef contract -- Mark Twain's first interview with Artemus Ward -- Baker's cat -- The story of the good little boy who did not prosper -- Story of the bad little boy -- Soda water -- How I edited an agricultural paper -- The undertaker's story -- Running for governor -- Wit inspirations of the"Two-year-olds" -- A story of haunting horror -- The echo that didn't answer -- A shocking story -- Mark Twain's fine old man -- Mark Twain's remarkable stranger -- A whopper -- Mark Twain's tone-imparting committee -- Rigging the market -- Extraordinary fishing -- Mark Twain at Niagara Falls -- Sending them through -- A curious dream -- Rev. Henry Ward Beecher's farm -- A new Beecher church -- Personal habits of the Siamese twins -- The jumping frog -- "History repeats itself."
+      </subfield>
+    </datafield>
+    <datafield tag="583" ind1="1" ind2=" ">
+      <subfield code="c">2008</subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+        The online edition of this book in the public domain, i.e., not protected by copyright, has been produced by the Emory University Digital Library Publications Program.
+      </subfield>
+    </datafield>
+    <datafield tag="655" ind1=" " ind2="7">
+      <subfield code="a">Yellowbacks.</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="1">
+      <subfield code="u">http://pid.emory.edu/ark:/25593/4c1gx/IA</subfield>
+      <subfield code="y">Internet Archive version</subfield>
+    </datafield>
+  </record>
+  <record>
+    <controlfield tag="008"> eng </controlfield>
+    <controlfield tag="001">990015185390302486</controlfield>
+    <datafield tag="100" ind1="1" ind2=" ">
+      <subfield code="a">Sketchley, Arthur,</subfield>
+      <subfield code="d">1817-1882.</subfield>
+    </datafield>
+    <datafield tag="245" ind1="1" ind2="0">
+      <subfield code="a">Mrs. Brown at the Crystal Palace /</subfield>
+      <subfield code="c">by Arthur Sketchley.</subfield>
+    </datafield>
+    <datafield tag="264" ind1=" " ind2="1">
+      <subfield code="a">London :</subfield>
+      <subfield code="b">G. Routledge and Sons,</subfield>
+      <subfield code="c">[1875]</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">156 pages ;</subfield>
+      <subfield code="c">17 cm</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Bound in illustrated paper-covered boards.</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Date of publication from Topp.</subfield>
+    </datafield>
+    <datafield tag="583" ind1=" " ind2=" ">
+      <subfield code="c">2009</subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+        The online edition of this book in the public domain, i.e., not protected by copyright, has been produced by the Emory University Digital Library Publications Program.
+      </subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Crystal Palace (Sydenham, London, England)</subfield>
+    </datafield>
+    <datafield tag="655" ind1=" " ind2="7">
+      <subfield code="a">Yellowbacks.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">George Routledge and Sons.</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="1">
+      <subfield code="u">http://pid.emory.edu/ark:/25593/4cpj5/IA</subfield>
+      <subfield code="y">Internet Archive version</subfield>
+    </datafield>
+  </record>
+  <record>
+    <controlfield tag="008"> eng </controlfield>
+    <controlfield tag="001">990024722450302486</controlfield>
+    <datafield tag="100" ind1="1" ind2=" ">
+      <subfield code="a">Shakespeare, William,</subfield>
+      <subfield code="d">1564-1616.</subfield>
+    </datafield>
+    <datafield tag="245" ind1="1" ind2="0">
+      <subfield code="a">Shakespeare's comedy of The merchant of Venice /</subfield>
+      <subfield code="c">with preface, glossary, AND!c. by Israel Gollancz.</subfield>
+    </datafield>
+    <datafield tag="250" ind1=" " ind2=" ">
+      <subfield code="a">5th edition.</subfield>
+    </datafield>
+    <datafield tag="264" ind1=" " ind2="1">
+      <subfield code="a">London :</subfield>
+      <subfield code="b">J.M. Dent,</subfield>
+      <subfield code="c">1898.</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">pages ;</subfield>
+      <subfield code="c">cm</subfield>
+    </datafield>
+    <datafield tag="490" ind1="1" ind2=" ">
+      <subfield code="a">The Temple Shakespeare</subfield>
+    </datafield>
+    <datafield tag="583" ind1="1" ind2=" ">
+      <subfield code="c">2009</subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+        The online edition of this book in the public domain, i.e., not protected by copyright, has been produced by the Emory University Digital Library Publications Program.
+      </subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+        Manuscript, Archives, and Rare Book Library copy from the library of Ted Hughes.
+      </subfield>
+    </datafield>
+    <datafield tag="700" ind1="1" ind2=" ">
+      <subfield code="a">Gollancz, Israel,</subfield>
+      <subfield code="d">1864-1930.</subfield>
+    </datafield>
+    <datafield tag="700" ind1="1" ind2=" ">
+      <subfield code="a">Hughes, Ted,</subfield>
+      <subfield code="d">1930-1998,</subfield>
+      <subfield code="e">former owner.</subfield>
+      <subfield code="5">GEU</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">
+        Ted Hughes Library (Emory University. General Libraries)
+      </subfield>
+      <subfield code="5">GEU</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="1">
+      <subfield code="u">http://pid.emory.edu/ark:/25593/7stsg/IA</subfield>
+      <subfield code="y">Internet Archive version</subfield>
+    </datafield>
+  </record>
+</collection>
