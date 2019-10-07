@@ -6,7 +6,7 @@ class ModularImporter
 
   attr_accessor :csv_import_detail
 
-  DEDUPLICATION_FIELD = 'desc - legacy identifier'.freeze
+  DEDUPLICATION_FIELD = 'deduplication_key'.freeze
 
   def initialize(csv_import)
     @csv_import = csv_import
