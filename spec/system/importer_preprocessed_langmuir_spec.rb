@@ -27,7 +27,6 @@ RSpec.describe 'Importing preprocessed langmuir', :clean, perform_enqueued: [Att
       expect(CurateGenericWork.first.ordered_members.to_a.last.title).to eq(['Back'])
       expect(CurateGenericWork.first.representative.title).to eq(['Front'])
       expect(CurateGenericWork.last.representative.title).to eq(['Front'])
-      visit('/')
     end
   end
 end
