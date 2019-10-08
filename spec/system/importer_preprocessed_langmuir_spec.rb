@@ -23,10 +23,10 @@ RSpec.describe 'Importing preprocessed langmuir', :clean, perform_enqueued: [Att
       expect(CurateGenericWork.count).to eq(4)
       expect(FileSet.count).to eq(8)
       expect(CurateGenericWork.first.file_sets.size).to eq(2)
-      expect(CurateGenericWork.first.ordered_members.to_a.first.title).to eq(['front'])
-      expect(CurateGenericWork.first.ordered_members.to_a.last.title).to eq(['back'])
-      expect(CurateGenericWork.first.representative.title).to eq(['front'])
-      expect(CurateGenericWork.last.representative.title).to eq(['front'])
+      expect(CurateGenericWork.first.ordered_members.to_a.first.title).to eq(['Front'])
+      expect(CurateGenericWork.first.ordered_members.to_a.last.title).to eq(['Back'])
+      expect(CurateGenericWork.first.representative.title).to eq(['Front'])
+      expect(CurateGenericWork.last.representative.title).to eq(['Front'])
       visit('/')
     end
   end
