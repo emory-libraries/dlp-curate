@@ -30,7 +30,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
 
-      expect(page).to have_content 'This import will create or update 12 records.'
+      expect(page).to have_content 'This import will create or update 17 records.'
 
       # There is a link so the user can cancel.
       expect(page).to have_link 'Cancel', href: '/csv_imports/new?locale=en'
@@ -47,7 +47,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       expect(page).to have_content 'Testing Collection'
 
       # Let the background jobs run, and check that the expected number of records got created.
-      expect(CurateGenericWork.count).to eq 4
+      expect(CurateGenericWork.count).to eq 5
 
       # Ensure that all the fields got assigned as expected
       work = CurateGenericWork.where(title: "*City gates*").first
