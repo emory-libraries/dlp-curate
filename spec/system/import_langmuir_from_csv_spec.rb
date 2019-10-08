@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
+
 include Warden::Test::Helpers
 
 RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, type: :system, js: true do
@@ -71,8 +72,10 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       expect(page).to have_content('Total Size in Bytes')
 
       # Bring back these checks when csv import details returns
-      # find(:xpath, '//*[@id="content-wrapper"]/table/tbody/tr[2]/td[1]/a').click
-      # expect(page).to have_content('MSS1218_B001_I001_P0001_ARCH.tif')
+      find(:xpath, '//*[@id="content-wrapper"]/table/tbody/tr[2]/td[1]/a').click
+      expect(page).to have_content('MSS1218_B071_I205_P0001_PROD.tif')
+      expect(page).to have_content('MSS1218_B071_I205_P0001_ARCH.tif')
+      expect(page).to have_content('162784')
     end
   end
 end
