@@ -2,7 +2,7 @@
 # [Hyrax-overwrite]
 require 'rails_helper'
 
-RSpec.describe Hyrax::Actors::FileActor do
+RSpec.describe Hyrax::Actors::FileActor, :clean do
   include ActionDispatch::TestProcess
   # commenting out next line because we are not using mocked file anywhere in this test
   # include Hyrax::FactoryHelpers

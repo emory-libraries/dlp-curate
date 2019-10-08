@@ -29,7 +29,7 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
 
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
-      expect(page).to have_content 'This import will create or update 12 records.'
+      expect(page).to have_content 'This import will create or update 17 records.'
 
       # There is a link so the user can cancel.
       expect(page).to have_link 'Cancel', href: '/csv_imports/new?locale=en'
@@ -46,7 +46,7 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
       expect(page).to have_content 'Testing Collection'
       # Let the background jobs run, and check that the expected number of records got created.
       # this is 4 because not every line in the spreadsheet is a work
-      expect(CurateGenericWork.count).to eq 4
+      expect(CurateGenericWork.count).to eq 5
       # Ensure that all the fields got assigned as expected
 
       # Ensure two files get attached to the same work, when the second one doesn't have all the metadata

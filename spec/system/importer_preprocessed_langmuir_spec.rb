@@ -18,15 +18,16 @@ RSpec.describe 'Importing preprocessed langmuir', :clean, perform_enqueued: [Att
   end
 
   context 'after running an import' do
-    it 'has 4 CurateGenericWorks' do
+    it 'has 5 CurateGenericWorks' do
       importer.import
-      expect(CurateGenericWork.count).to eq(4)
-      expect(FileSet.count).to eq(8)
+      expect(CurateGenericWork.count).to eq(5)
+      expect(FileSet.count).to eq(12)
       expect(CurateGenericWork.first.file_sets.size).to eq(2)
       expect(CurateGenericWork.first.ordered_members.to_a.first.title).to eq(['Front'])
       expect(CurateGenericWork.first.ordered_members.to_a.last.title).to eq(['Back'])
       expect(CurateGenericWork.first.representative.title).to eq(['Front'])
-      expect(CurateGenericWork.last.representative.title).to eq(['Front'])
+      expect(CurateGenericWork.where(title: '*frisky*').first.representative.title).to eq(['Side 1'])
+      expect(CurateGenericWork.where(title: '*frisky*').first.ordered_members.to_a.last.title).to eq(['Side 4'])
     end
   end
 end
