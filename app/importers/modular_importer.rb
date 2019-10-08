@@ -33,11 +33,11 @@ class ModularImporter
         work_id = work.id
       when 'fileset'
         open_preservation_master_file = File.open(DeepFilePath.new(beginning: ENV['IMPORT_PATH'],
-                                                                   ending: record.mapper.metadata['Preservation Master File']).to_s)
+                                                                   ending: record.mapper.metadata['preservation_master_file']).to_s)
         open_intermediate_file = File.open(DeepFilePath.new(beginning: ENV['IMPORT_PATH'],
-                                                            ending: record.mapper.metadata['Intermediate File']).to_s)
+                                                            ending: record.mapper.metadata['intermediate_file']).to_s)
         uploaded_file = Hyrax::UploadedFile.create(user: User.find(user_id),
-                                                   file: record.mapper.metadata['fileset label'],
+                                                   file: record.mapper.metadata['fileset_label'],
                                                    fileset_use: 'primary',
                                                    preservation_master_file: open_preservation_master_file,
                                                    intermediate_file: open_intermediate_file)

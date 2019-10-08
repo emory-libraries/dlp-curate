@@ -55,7 +55,7 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
       expect(work.title.first).to match(/Augustine/)
       expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       expect(work.file_sets.count).to eq 2
-      expect(work.file_sets.map { |a| a.title.first }).to contain_exactly("front", "back")
+      expect(work.file_sets.map { |a| a.title.first }).to contain_exactly("Front", "Back")
       expect(work.file_sets.first.pcdm_use).to eq "primary"
 
       # Ensure two files get attached to the same work, when the first one doesn't have all the metadata

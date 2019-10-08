@@ -187,7 +187,7 @@ module Zizia
       end
 
       def filename_index
-        @rows[0].index('Preservation Master File')
+        @rows[0].index('preservation_master_file')
       end
 
       def type_index
