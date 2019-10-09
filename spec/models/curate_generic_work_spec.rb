@@ -29,6 +29,10 @@ RSpec.describe CurateGenericWork do
       expect(work2.preservation_workflow.build).to be_instance_of PreservationWorkflow
     end
 
+    it "has a preservation event which is a PreservationEvent object" do
+      expect(work2.preservation_event.build).to be_instance_of PreservationEvent
+    end
+
     it "access preservation workflow properties after saving" do
       expect(work1.preservation_workflow.map(&:workflow_type).flatten).to include(['default'])
     end
