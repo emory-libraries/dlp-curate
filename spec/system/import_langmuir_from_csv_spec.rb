@@ -5,7 +5,8 @@ include Warden::Test::Helpers
 
 RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, type: :system, js: true do
   let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_post_processing.csv') }
-
+  let(:metadata_update_csv_file) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_post_processing_update_metadata.csv') }
+  let(:metadata_new_work) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_post_processing_new_work.csv') }
   context 'logged in as an admin user' do
     let(:collection) { FactoryBot.build(:collection_lw) }
     let(:admin_user) { FactoryBot.create(:admin) }
@@ -16,66 +17,158 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       login_as admin_user
     end
 
-    it 'starts the import' do
+    def upload_csv(page)
       visit '/csv_imports/new'
       expect(page).to have_content 'Testing Collection'
       expect(page).not_to have_content '["Testing Collection"]'
       select 'Testing Collection', from: "csv_import[fedora_collection_id]"
-
       # Fill in and submit the form
       attach_file('csv_import[manifest]', csv_file, make_visible: true)
+    end
 
-      click_on 'Preview Import'
+    def upload_new_work_csv(page)
+      visit '/csv_imports/new'
+      expect(page).to have_content 'Testing Collection'
+      expect(page).not_to have_content '["Testing Collection"]'
+      select 'Testing Collection', from: "csv_import[fedora_collection_id]"
+      # Fill in and submit the form
+      attach_file('csv_import[manifest]', metadata_new_work, make_visible: true)
+    end
 
+    def upload_metadata_only_csv(page)
+      visit '/csv_imports/new'
+      expect(page).to have_content 'Testing Collection'
+      expect(page).not_to have_content '["Testing Collection"]'
+      select 'Testing Collection', from: "csv_import[fedora_collection_id]"
+      # Fill in and submit the form
+      attach_file('csv_import[manifest]', metadata_update_csv_file, make_visible: true)
+    end
+
+    def start_import(page)
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
-
-      expect(page).to have_content 'This import will create or update 17 records.'
-
+      expect(page).to have_content(/This import will create or update (17|20) records./)
       # There is a link so the user can cancel.
       expect(page).to have_link 'Cancel', href: '/csv_imports/new?locale=en'
-
       # After reading the warnings, the user decides
       # to continue with the import.
       click_on 'Start Import'
-
       # The show page for the CsvImport
       # expect(page).to have_content 'all_fields.csv'
       expect(page).to have_content 'Start time'
-
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
+    end
 
-      # Let the background jobs run, and check that the expected number of records got created.
+    def check_details(page)
+      # Viewing additional details after an import
+      visit "/csv_import_details/index"
+      expect(page).to have_content('Total Size in Bytes')
+      find(:xpath, '//*[@id="content-wrapper"]/table/tbody/tr[2]/td[1]/a').click
+      expect(page).to have_content('MSS1218_B071_I205_P0001_PROD.tif')
+      expect(page).to have_content('MSS1218_B071_I205_P0001_ARCH.tif')
+      expect(page).to have_content('162784')
+    end
+
+    def default_update(page)
       expect(CurateGenericWork.count).to eq 5
-
       # Ensure that all the fields got assigned as expected
       work = CurateGenericWork.where(title: "*City gates*").first
       expect(work.title.first).to match(/City gates/)
-
       # No resource type in the CSV
       expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
-
       # Ensure that we have all the custom visibility levels
       visibilities = CurateGenericWork.all.map(&:visibility)
       expect(visibilities).to include('emory_low')
       expect(visibilities).to include('low_res')
       expect(visibilities).to include('rose_high')
+      visit "/dashboard/works"
+      click_on work.title.first
+      expect(page).to have_content work.title.first
+    end
+
+    def metadata_only_update(page)
+      expect(CurateGenericWork.count).to eq 5
+      # Ensure that all the fields got assigned as expected
+      work = CurateGenericWork.where(title: "*Uriel*").first
+      expect(work.title.first).to match(/Uriel/)
+      expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
+      # Ensure that we have all the custom visibility levels
+      visibilities = CurateGenericWork.all.map(&:visibility)
+      expect(visibilities).to include('emory_low')
+      expect(visibilities).to include('low_res')
+      expect(visibilities).to include('rose_high')
+      visit "/dashboard/works"
+      click_on work.title.first
+      expect(page).to have_content work.title.first
+    end
+
+    def delete_only_update(page)
+      expect(CurateGenericWork.count).to eq 5
+      # Ensure that all the fields got assigned as expected
+      work = CurateGenericWork.where(title: "*City Gates*").first
+      expect(work.title.first).to match(/City Gates/)
+      expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
+      visit "/dashboard/works"
+      click_on work.title.first
+      expect(page).to have_content work.title.first
+    end
+
+    def new_work_update(page)
+      expect(CurateGenericWork.count).to eq 6
+      # Ensure that all the fields got assigned as expected
+      work = CurateGenericWork.where(title: "*Tampa*").first
+      expect(work.title.first).to match(/Tampa/)
+
+      expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
 
       visit "/dashboard/works"
       click_on work.title.first
       expect(page).to have_content work.title.first
+    end
 
-      # Viewing additional details after an import
-      visit "/csv_import_details/index"
+    def initial_import(page)
+      upload_csv(page)
+      click_on 'Preview Import'
+      start_import(page)
+      default_update(page)
+      check_details(page)
+    end
 
-      expect(page).to have_content('Total Size in Bytes')
+    def check_update_metadata_only_option(page)
+      upload_metadata_only_csv(page)
+      select 'Update metadata for any existing IDs', from: 'csv_import[update_actor_stack]'
+      click_on 'Preview Import'
+      start_import(page)
+      metadata_only_update(page)
+      check_details(page)
+    end
 
-      # Bring back these checks when csv import details returns
-      find(:xpath, '//*[@id="content-wrapper"]/table/tbody/tr[2]/td[1]/a').click
-      expect(page).to have_content('MSS1218_B071_I205_P0001_PROD.tif')
-      expect(page).to have_content('MSS1218_B071_I205_P0001_ARCH.tif')
-      expect(page).to have_content('162784')
+    def check_update_delete_option(page)
+      work_id = CurateGenericWork.where(title: "*City Gates*").first.id
+      upload_metadata_only_csv(page)
+      select 'Update metadata and files or create new works as required', from: 'csv_import[update_actor_stack]'
+      click_on 'Preview Import'
+      start_import(page)
+      metadata_only_update(page)
+      check_details(page)
+      expect(CurateGenericWork.where(title: "*City Gates*").first.id).not_to eq work_id
+    end
+
+    def check_update_new_option(page)
+      upload_new_work_csv(page)
+      select 'Only create works for new IDs', from: 'csv_import[update_actor_stack]'
+      click_on 'Preview Import'
+      start_import(page)
+      new_work_update(page)
+      check_details(page)
+    end
+
+    it 'starts the import' do
+      initial_import(page)
+      check_update_metadata_only_option(page)
+      check_update_delete_option(page)
+      check_update_new_option(page)
     end
   end
 end

@@ -304,7 +304,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :deduplication_key, predicate: "http://metadata.emory.edu/vocab/predicates#deduplicationKey", multiple: false
+  property :deduplication_key, predicate: "http://metadata.emory.edu/vocab/predicates#deduplicationKey", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   def index_preservation_workflow_terms
     self.preservation_workflow_terms = preservation_workflow.map(&:preservation_terms)

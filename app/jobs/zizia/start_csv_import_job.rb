@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Zizia
   class StartCsvImportJob < ApplicationJob
     queue_as :default
@@ -7,6 +9,7 @@ module Zizia
       importer = ModularImporter.new(csv_import)
       importer.extend(ModularImporterDetailsDecorator)
       importer.extend(ModularImporterLoggingDecorator)
+      importer.extend(ModularImporterUpdateDecorator)
       importer.import
     end
   end
