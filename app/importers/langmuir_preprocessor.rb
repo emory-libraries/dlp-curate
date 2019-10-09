@@ -95,7 +95,7 @@ class LangmuirPreprocessor
     if two_sided
       side == 1 ? 'Front' : 'Back'
     else
-      "Side #{side}"
+      "Image #{side}"
     end
   end
 end
