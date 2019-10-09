@@ -21,15 +21,41 @@ class YellowbackPreprocessor
     @processed_csv = File.join(directory, filename + "-merged.csv")
   end
 
-  def merge
+  def merge # rubocop:disable Metrics/MethodLength
     merge_csv = CSV.open(@processed_csv, 'w+', headers: true, write_headers: true)
-    headers = ['pl_row', 'work_id', 'title']
+    headers = [
+      # Context fields to help humans compare this file to sources
+      'pl_row',
+      'work_id',
+      'title',
+      # Fields extracted from the csv pull list
+      'administrative_unit',
+      'content_type',
+      'data_classifications',
+      'emory_ark',
+      'emory_rights_statements',
+      'holding_repository',
+      'institution',
+      'other_identifiers',
+      'rights_statement',
+      'system_of_record_ID'
+    ]
     merge_csv << headers
     @pull_list.each.with_index do |row, csv_index|
       new_row = [
         csv_index + 2,    # pl_row  (original row number from pull list)
         row['emory_ark'], # work_id
-        row['CSV Title']  # title
+        row['CSV Title'], # title
+        row['administrative_unit'], # administrative_unit
+        row['content_type'], # content_type
+        row['data_classifications'], # data_classification
+        row['emory_ark'], # emory_ark
+        row['emory_rights_statements'], # emory_rights_statement
+        row['holding_repository'], # holding_repository
+        row['institution'], # institution
+        row['other_identifiers'], # other_identifiers
+        row['rights_statement'], # rights_statement
+        row['system_of_record_ID'], # system_of_record_ID
       ]
       merge_csv << new_row
     end
