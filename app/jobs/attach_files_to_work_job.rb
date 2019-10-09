@@ -9,7 +9,7 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
     validate_files!(uploaded_files)
     depositor = proxy_or_depositor(work)
     user = User.find_by_user_key(depositor)
-    work_permissions = work.permissions.map(&:to_hash)
+    work, work_permissions = create_permissions work, depositor
     metadata = visibility_attributes(work_attributes)
     uploaded_files.each do |uploaded_file|
       next if uploaded_file.file_set_uri.present?
@@ -21,6 +21,13 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
   end
 
   private
+
+    def create_permissions(work, depositor)
+      work.edit_users += [depositor]
+      work.edit_users = work.edit_users.dup
+      work_permissions = work.permissions.map(&:to_hash)
+      [work, work_permissions]
+    end
 
     # The attributes used for visibility - sent as initial params to created FileSets.
     def visibility_attributes(attributes)
@@ -44,7 +51,7 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       work.on_behalf_of.blank? ? work.depositor : work.on_behalf_of
     end
 
-    def process_fileset(actor, work_permissions, metadata, uploaded_file, work)
+    def process_fileset(actor, work_permissions, metadata, uploaded_file, work) # rubocop:disable Metrics/AbcSize
       actor.file_set.permissions_attributes = work_permissions
       actor.create_metadata(uploaded_file.fileset_use, metadata)
       actor.fileset_name(uploaded_file.file.to_s) if uploaded_file.file.present?
@@ -53,6 +60,10 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       actor.create_content(uploaded_file.service_file, :service_file) if uploaded_file.service_file.present?
       actor.create_content(uploaded_file.extracted_text, :extracted) if uploaded_file.extracted_text.present?
       actor.create_content(uploaded_file.transcript, :transcript_file) if uploaded_file.transcript.present?
+
+      work.ordered_members << actor.file_set
+      work.save
+      actor.file_set.save
       actor.attach_to_work(work)
     end
 end

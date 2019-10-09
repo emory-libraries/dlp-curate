@@ -60,6 +60,7 @@ FactoryBot.define do
       date_issued { '1999' }
       date_modified { '2023' }
       date_uploaded { '2001' }
+      deduplication_key { 'dedupestring' }
       edition { 'first' }
       emory_ark { ['25'] }
       emory_rights_statements { ['This is my rights statement text'] }

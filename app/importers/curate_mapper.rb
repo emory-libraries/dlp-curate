@@ -15,6 +15,7 @@ class CurateMapper < Zizia::HashMapper
     date_created: "date_created",
     date_digitized: "date_digitized",
     date_issued: "date_issued",
+    deduplication_key: "deduplication_key",
     extent: "extent",
     holding_repository: "holding_repository",
     institution: "institution",
@@ -83,6 +84,7 @@ class CurateMapper < Zizia::HashMapper
       "date_created",
       "date_digitized",
       "date_issued",
+      "deduplication_key",
       "extent",
       "holding_repository",
       "local_call_number",
@@ -169,7 +171,7 @@ class CurateMapper < Zizia::HashMapper
     active_terms = Qa::Authorities::Local.subauthority_for('rights_statements').all.select { |term| term[:active] }
     csv_term = @metadata["rights_statement"]
     valid_uri_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
-    return csv_term if valid_uri_option
+    return [csv_term] if valid_uri_option
     raise "Invalid rights_statement value: #{csv_term}"
   end
 
@@ -196,13 +198,19 @@ class CurateMapper < Zizia::HashMapper
     raise "Invalid sensitive_material value: #{csv_term}"
   end
 
+  def content_genres
+    Array.wrap(@metadata['content_genres'])
+  end
+
   # If we get a URI for content_type, check that it matches a URI in the questioning
   # authority config, and return it if so.
-  # If we get a string for content_type, (e.g., 'still image'), transform it into its
+  # If we get a string for contenttype, (e.g., 'still image'), transform it into its
   # corresponding Questioning Authority controlled vocabulary uri.
   def content_type
-    active_terms = Qa::Authorities::Local.subauthority_for('resource_types').all.select { |term| term[:active] }
     csv_term = @metadata["content_type"]
+    return unless csv_term
+    active_terms = Qa::Authorities::Local.subauthority_for('resource_types').all.select { |term| term[:active] }
+
     # Check whether this is a uri that matches a valid URI option
     valid_uri_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
     return valid_uri_option["id"] if valid_uri_option && valid_uri_option["id"]

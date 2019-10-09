@@ -167,26 +167,31 @@ module Zizia
         @valid_administrative_units ||= Qa::Authorities::Local.subauthority_for('administrative_unit').all.select { |term| term[:active] }.map { |term| term[:id] }
       end
 
-      def check_that_files_exist
+      def check_that_files_exist # rubocop:disable Metrics/CyclomaticComplexity
         @rows.each_with_index do |row, i|
+          next unless type_index
+          next if row[type_index] == 'work'
           next if filename_index.nil? || i.zero?
           filename = row[filename_index]
+          next if filename.nil?
           filepath = filename_to_full_path(filename)
+          next if File.exist?(filepath)
           FileExistsWarningAppender.new(index: i,
-                                        filepath: filepath,
+                                        filepath: filename,
                                         warnings: @warnings).check
         end
       end
 
       def filename_to_full_path(filename)
-        split = filename.split("_")
-        kind_of_file = split.last.split(".").first # Is this an ARCH or a PROD file?
-        directory_name = split[1] # e.g., "B001"
-        File.join(ENV['IMPORT_PATH'], kind_of_file, directory_name, filename)
+        DeepFilePath.new(beginning: ENV['IMPORT_PATH'], ending: filename).to_s
       end
 
       def filename_index
-        @rows[0].index('Filename') || @rows[0].index('filename')
+        @rows[0].index('preservation_master_file')
+      end
+
+      def type_index
+        @rows[0].index('type')
       end
 
       def check_number_of_values_in_a_row
