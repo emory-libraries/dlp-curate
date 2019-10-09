@@ -48,7 +48,7 @@ class LangmuirPreprocessor
 
   def process_source_rows
     @source_csv.each.with_index do |row, row_num|
-      process_row(row, row_num + 2)
+      process_row(row, row_num + 2) if row['Digital Object - Parent Identifier'] # skip blank rows in the source csv
     end
   end
 
@@ -70,18 +70,25 @@ class LangmuirPreprocessor
 
   def process_row(row, source_row)
     deduplication_key = row['Digital Object - Parent Identifier']
-    return unless deduplication_key # skip blank rows in source csv
+    sequence_number, target_file, metadata_row = extract_structure(row)
     @tree[deduplication_key] ||= { metadata: nil, filesets: {} } # create a placeholder if we don't have one for this key
-    part, role = row['Filename'].scan(/P(\d+)_(ARCH|PROD)/).flatten
-    part = part.to_i
-    if part == 1 && role == 'ARCH'
-      processed_row = CSV::Row.new(additional_headers, [source_row, deduplication_key, 'work'])
-      processed_row << row.to_hash
-      @tree[deduplication_key][:metadata] = processed_row
-    end
-    target_file = role == 'ARCH' ? 'preservation_master_file' : 'intermediate_file'
-    @tree[deduplication_key][:filesets][part] ||= CSV::Row.new(additional_headers, [source_row, deduplication_key, 'fileset'])
-    @tree[deduplication_key][:filesets][part][target_file] = row['Filename']
+    @tree[deduplication_key][:metadata] = extract_metadata(row, source_row) if metadata_row
+    @tree[deduplication_key][:filesets][sequence_number] ||= CSV::Row.new(additional_headers, [source_row, deduplication_key, 'fileset'])
+    @tree[deduplication_key][:filesets][sequence_number][target_file] = row['Filename']
+  end
+
+  def extract_structure(row)
+    filename = row['Filename']
+    p_number = filename.scan(/P0+(\d+)_(ARCH|PROD)/)[0][0].to_i
+    target_file = filename.include?('ARCH') ? 'preservation_master_file' : 'intermediate_file'
+    metadata_row = p_number == 1 && target_file == 'preservation_master_file'
+    [p_number, target_file, metadata_row]
+  end
+
+  def extract_metadata(row, source_row)
+    deduplication_key = row['Digital Object - Parent Identifier']
+    processed_row = CSV::Row.new(additional_headers, [source_row, deduplication_key, 'work'])
+    processed_row << row.to_hash
   end
 
   def make_label(side, two_sided)
