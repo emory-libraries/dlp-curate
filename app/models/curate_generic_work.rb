@@ -180,6 +180,8 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :preservation_event, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_event", class_name: "PreservationEvent"
+
   property :preservation_workflow, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow", class_name: "PreservationWorkflow"
 
   property :preservation_workflow_terms, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_workflow_attributes" do |index|
@@ -315,6 +317,16 @@ class CurateGenericWork < ActiveFedora::Base
     ['workflow_type', 'workflow_notes', 'workflow_rights_basis',
      'workflow_rights_basis_note', 'workflow_rights_basis_date',
      'workflow_rights_basis_reviewer', 'workflow_rights_basis_uri'].all? do |key|
+       Array(attrs[key]).all?(&:blank?)
+     end
+  }
+
+  accepts_nested_attributes_for :preservation_event, allow_destroy: true,
+  reject_if: proc { |attrs|
+    ['event_id', 'event_type', 'work_id',
+     'initiating_user', 'event_start',
+     'event_end', 'outcome', 'fileset_id',
+     'software_version', 'workflow_id', 'event_details'].all? do |key|
        Array(attrs[key]).all?(&:blank?)
      end
   }
