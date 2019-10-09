@@ -56,8 +56,8 @@ RSpec.describe LangmuirPreprocessor do
   end
 
   it 'uses Side # as fileset labels for multi-sided works' do
-    expect(import_rows[13]['fileset_label']).to eq('Side 1') # Advertising : Rafael's, gay 'n frisky
-    expect(import_rows[16]['fileset_label']).to eq('Side 4') # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[13]['fileset_label']).to eq('Image 1') # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[16]['fileset_label']).to eq('Image 4') # Advertising : Rafael's, gay 'n frisky
   end
 
   it 'attaches the ARCH file as the preservation_master_file' do
@@ -69,9 +69,9 @@ RSpec.describe LangmuirPreprocessor do
   end
 
   it 'attaches the expected files to the expected filesets in the expected order' do # Advertising : Rafael's, gay 'n frisky
-    expect(import_rows[14]['fileset_label']).to eq('Side 2') # P0002
+    expect(import_rows[14]['fileset_label']).to eq('Image 2') # P0002
     expect(import_rows[14]['preservation_master_file']).to eq('MSS1218_B028_I091_P0002_ARCH.tif') # ARCH
-    expect(import_rows[15]['fileset_label']).to eq('Side 3') # P0003
+    expect(import_rows[15]['fileset_label']).to eq('Image 3') # P0003
     expect(import_rows[15]['intermediate_file']).to eq('MSS1218_B028_I091_P0003_PROD.tif') # PROD
   end
 end
