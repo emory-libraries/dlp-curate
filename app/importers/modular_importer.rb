@@ -6,7 +6,7 @@ class ModularImporter
   attr_reader :csv_import, :collection_id,
               :user_id, :row, :open_csv_file
 
-  attr_accessor :csv_import_detail, :mapper, :work, :work_id, :uploaded_file
+  attr_accessor :csv_import_detail, :mapper, :work, :work_id, :uploaded_file, :related_rows
 
   DEDUPLICATION_FIELD = 'deduplication_key'
 
@@ -28,9 +28,12 @@ class ModularImporter
       @mapper = record.mapper
       case mapper.metadata['type']
       when 'work'
+        rows_from_key(key: mapper.metadata['deduplication_key'])
         save_work
+        related_rows.pop
       when 'fileset'
         attach_files
+        related_rows.pop
       end
     end
   end
@@ -43,8 +46,12 @@ class ModularImporter
     raise "Cannot find expected input file #{csv_file}" unless File.exist?(open_csv_file)
   end
 
+  def work_metadata
+    mapper.send(:fields).map { |k| { "#{k}": mapper.try(k.to_sym) || mapper.metadata[k.to_s] } }.reduce({}, :merge)
+  end
+
   def create_work_from_mapper_metadata
-    CurateGenericWork.new(mapper.send(:fields).map { |k| { "#{k}": mapper.try(k.to_sym) || mapper.metadata[k.to_s] } }.reduce({}, :merge))
+    CurateGenericWork.new(work_metadata)
   end
 
   def save_work
@@ -78,5 +85,13 @@ class ModularImporter
     CurateGenericWork.find(work_id).reload
     open_preservation_master_file.close
     open_intermediate_file.close
+  end
+
+  def existing_work
+    CurateGenericWork.where(deduplication_key: @mapper.metadata['deduplication_key'])
+  end
+
+  def rows_from_key(key:)
+    @related_rows = importer.parser.records.collect { |m| m.mapper.metadata }.collect { |r| r['deduplication_key'] == key }
   end
 end
