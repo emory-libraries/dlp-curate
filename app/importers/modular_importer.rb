@@ -81,10 +81,19 @@ class ModularImporter
 
   def attach_files
     @uploaded_file = create_hyrax_uploaded_file
+    add_to_collection
     AttachFilesToWorkJob.perform_now(CurateGenericWork.find(work_id), [uploaded_file])
-    CurateGenericWork.find(work_id).reload
     open_preservation_master_file.close
     open_intermediate_file.close
+    CurateGenericWork.find(work_id).save
+  end
+
+  def add_to_collection
+    return unless collection_id
+    collection = Collection.find(collection_id)
+    work = CurateGenericWork.find(work_id)
+    work.member_of_collections << collection
+    collection.save
   end
 
   def existing_work

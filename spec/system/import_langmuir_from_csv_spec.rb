@@ -85,6 +85,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       visit "/dashboard/works"
       click_on work.title.first
       expect(page).to have_content work.title.first
+      expect(work.member_of_collections).not_to eq []
     end
 
     def metadata_only_update(page)
