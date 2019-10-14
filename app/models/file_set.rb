@@ -17,6 +17,8 @@ class FileSet < ActiveFedora::Base
     index.as :facetable
   end
 
+  property :preservation_event, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_event", class_name: "PreservationEvent"
+
   def primary?
     pcdm_use == PRIMARY
   end
@@ -37,6 +39,16 @@ class FileSet < ActiveFedora::Base
   directly_contains_one :intermediate_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#IntermediateFile'), class_name: 'Hydra::PCDM::File'
   directly_contains_one :transcript_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#Transcript'), class_name: 'Hydra::PCDM::File'
   directly_contains_one :extracted, through: :files, type: ::RDF::URI('http://metadata.emory.edu/vocab/cor-terms#fileuseExtractedText'), class_name: 'Hydra::PCDM::File'
+
+  accepts_nested_attributes_for :preservation_event, allow_destroy: true,
+  reject_if: proc { |attrs|
+    ['event_id', 'event_type', 'work_id',
+     'initiating_user', 'event_start',
+     'event_end', 'outcome', 'fileset_id',
+     'software_version', 'workflow_id', 'event_details'].all? do |key|
+       Array(attrs[key]).all?(&:blank?)
+     end
+  }
 
   private
 

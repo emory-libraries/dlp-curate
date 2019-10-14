@@ -3,6 +3,7 @@ require 'active_triples'
 
 class PreservationEvent < ActiveTriples::Resource
   include ActiveTriples::RDFSource
+  include PreservationUri
 
   property :event_details, predicate: "http://metadata.emory.edu/vocab/cor-terms#eventDetails", multiple: false
   property :event_end, predicate: "http://metadata.emory.edu/vocab/cor-terms#eventEnd", multiple: false

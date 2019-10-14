@@ -83,6 +83,7 @@ Metrics/PerceivedComplexity:
 Layout/AlignHash:
     Exclude:
         - app/models/curate_generic_work.rb
+        - app/models/file_set.rb
 
 RSpec/ExampleLength:
     Exclude:
