@@ -68,6 +68,7 @@ Metrics/MethodLength:
         - app/forms/hyrax/curate_generic_work_form.rb
         - app/importers/curate_record_importer.rb
         - config/prepends/custom_visibility.rb
+        - app/controllers/hyrax/file_sets_controller.rb
 
 Layout/AlignHash:
     Exclude:

@@ -41,6 +41,16 @@ module Hyrax
       @parent = main_app.polymorphic_path(presenter.parent)
       @fileset_use = presenter.pcdm_use.first unless presenter.pcdm_use.nil?
       files
+      if @sf
+        @display_file = @sf
+        @display_use = 'service_file'
+      elsif @if
+        @display_file = @if
+        @display_use = 'intermediate_file'
+      else
+        @display_file = @file_set.preservation_master_file
+        @display_use = 'preservation_master_file'
+      end
       respond_to do |wants|
         wants.html { presenter }
         wants.json { presenter }
