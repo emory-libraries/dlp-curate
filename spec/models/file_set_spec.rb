@@ -80,5 +80,9 @@ RSpec.describe FileSet, :perform_enqueued do
       expect(file_set).to respond_to(:creating_os)
       expect(file_set).to respond_to(:puid)
     end
+
+    it 'has a preservation event which is a PreservationEvent object' do
+      expect(file_set.preservation_event.build).to be_instance_of PreservationEvent
+    end
   end
 end
