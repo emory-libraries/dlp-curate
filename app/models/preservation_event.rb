@@ -14,4 +14,13 @@ class PreservationEvent < ActiveTriples::Resource
   property :outcome, predicate: "http://metadata.emory.edu/vocab/cor-terms#eventOutcome", multiple: false
   property :software_version, predicate: "http://metadata.emory.edu/vocab/cor-terms#softwareVersion", multiple: false
   property :workflow_id, predicate: "http://metadata.emory.edu/vocab/cor-terms#workflowRelatedObject", multiple: false
+
+  def initialize(uri, parent)
+    if uri.try(:node?)
+      uri = RDF::URI("#events_#{uri.to_s.gsub('_:', '')}")
+    elsif uri.start_with?("#")
+      uri = RDF::URI(uri)
+    end
+    super
+  end
 end

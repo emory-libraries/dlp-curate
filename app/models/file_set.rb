@@ -17,6 +17,8 @@ class FileSet < ActiveFedora::Base
     index.as :facetable
   end
 
+  property :preservation_event, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_event", class_name: "PreservationEvent"
+
   def primary?
     pcdm_use == PRIMARY
   end
