@@ -5,6 +5,7 @@ module Hyrax
     # Actions are decoupled from controller logic so that they may be called from a controller or a background job.
     class FileSetActor
       include Lockable
+      include PreservationEvents
       attr_reader :file_set, :user, :attributes
 
       def initialize(file_set, user)
@@ -23,7 +24,10 @@ module Hyrax
         # If the file set doesn't have a title or label assigned, set a default.
         file_set.label ||= label_for(file)
         file_set.title = [file_set.label] if file_set.title.blank?
+        event_start = DateTime.current
         return false unless file_set.save # Need to save to get an id
+        # create preservation_event for fileset creation (method in PreservationEvents module)
+        create_preservation_event(file_set, 'Replication (FileSet created)', event_start)
         if from_url
           # If ingesting from URL, don't spawn an IngestJob; instead
           # reach into the FileActor and run the ingest with the file instance in
