@@ -1,0 +1,21 @@
+<% if Hyrax.config.display_media_download_link? && can?(:download, file_set.id) %>
+    <div>
+      <h2 class="sr-only"><%= t('hyrax.file_set.show.downloadable_content.heading') %></h2>
+      <%= image_tag hyrax.download_path(file_set, use: @display_use),
+                    class: "representative-media",
+                    alt: "",
+                    role: "presentation" %>
+      <%= link_to @display_file.file_name.first,
+                  hyrax.download_path(file_set, use: @display_use),
+                  data: { label: file_set.id },
+                  target: :_blank,
+                  id: "file_download" %>
+    </div>
+<% else %>
+    <div>
+      <%= image_tag hyrax.download_path(file_set, use: @display_use),
+                    class: "representative-media",
+                    alt: "",
+                    role: "presentation" %>
+    </div>
+<% end %>
