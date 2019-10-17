@@ -27,7 +27,7 @@ module Hyrax
         event_start = DateTime.current
         return false unless file_set.save # Need to save to get an id
         # create preservation_event for fileset creation (method in PreservationEvents module)
-        create_preservation_event(file_set, 'Replication (FileSet created)', event_start)
+        create_preservation_event(file_set, 'Replication (FileSet created)', event_start, 'Success', 'File replicated to cross-region S3 storage', 'Fedora v4.7.5', user.uid)
         if from_url
           # If ingesting from URL, don't spawn an IngestJob; instead
           # reach into the FileActor and run the ingest with the file instance in
