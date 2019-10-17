@@ -90,6 +90,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
 
     def metadata_only_update(page)
       expect(CurateGenericWork.count).to eq 5
+      expect(FileSet.all.size).to eq 12
       # Ensure that all the fields got assigned as expected
       work = CurateGenericWork.where(title: "*Uriel*").first
       expect(work.title.first).to match(/Uriel/)
@@ -146,14 +147,15 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
     end
 
     def check_update_delete_option(page)
-      work_id = CurateGenericWork.where(title: "*City Gates*").first.id
+      work = CurateGenericWork.where(title: "*City Gates*").first
+      file_set_id = work.file_sets.first.id
       upload_metadata_only_csv(page)
       select 'Update metadata and files or create new works as required', from: 'csv_import[update_actor_stack]'
       click_on 'Preview Import'
       start_import(page)
       metadata_only_update(page)
       check_details(page)
-      expect(CurateGenericWork.where(title: "*City Gates*").first.id).not_to eq work_id
+      expect(CurateGenericWork.where(title: "*City Gates*").first.file_sets.first.id).not_to eq file_set_id
     end
 
     def check_update_new_option(page)
