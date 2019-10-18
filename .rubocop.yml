@@ -86,6 +86,10 @@ Layout/AlignHash:
         - app/models/curate_generic_work.rb
         - app/models/file_set.rb
 
+Metrics/ParameterLists:
+    Exclude:
+        - app/lib/preservation_events.rb
+
 RSpec/ExampleLength:
     Exclude:
         - 'spec/**/*'
