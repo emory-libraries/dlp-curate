@@ -23,7 +23,9 @@ class CreateWorkJob < Hyrax::ApplicationJob
     env = Hyrax::Actors::Environment.new(work, current_ability, attributes)
     event_start = DateTime.current
     status = work_actor.create(env)
-    create_preservation_event(work, 'Object Validation (Work created)', event_start, 'Success', 'Valid submission package submitted', 'Curate v.1', user.uid) if status
+    event = { 'type' => 'Object Validation (Work created)', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Valid submission package submitted', 'software_version' => 'Curate v.1',
+              'user' => user.uid }
+    create_preservation_event(work, event) if status
     return operation.success! if status
     operation.fail!(work.errors.full_messages.join(' '))
   end
