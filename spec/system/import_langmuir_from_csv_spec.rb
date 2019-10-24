@@ -50,6 +50,14 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       expect(page).to have_content(/This import will create or update (17|20) records./)
       # There is a link so the user can cancel.
       expect(page).to have_link 'Cancel', href: '/csv_imports/new?locale=en'
+
+      # We get warnings about unsupported fields
+      expect(page).to have_content('The field name "rights - digitization basis note" is not supported.')
+      expect(page).not_to have_content('The field name "type" is not supported')
+      expect(page).not_to have_content('The field name "intermediate_file" is not supported')
+      expect(page).not_to have_content('The field name "fileset_label" is not supported')
+      expect(page).not_to have_content('The field name "preservation_master_file" is not supported')
+
       # After reading the warnings, the user decides
       # to continue with the import.
       click_on 'Start Import'
