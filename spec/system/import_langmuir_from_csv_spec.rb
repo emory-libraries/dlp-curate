@@ -63,11 +63,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
     def check_details(page)
       # Viewing additional details after an import
       visit "/csv_import_details/index"
-      expect(page).to have_content('Total Size in Bytes')
-      find(:xpath, '//*[@id="content-wrapper"]/table/tbody/tr[2]/td[1]/a').click
-      expect(page).to have_content('MSS1218_B071_I205_P0001_PROD.tif')
-      expect(page).to have_content('MSS1218_B071_I205_P0001_ARCH.tif')
-      expect(page).to have_content('162784')
+      expect(page).to have_content('Total Size')
     end
 
     def default_update(page)
@@ -121,9 +117,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       # Ensure that all the fields got assigned as expected
       work = CurateGenericWork.where(title: "*Tampa*").first
       expect(work.title.first).to match(/Tampa/)
-
       expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
-
       visit "/dashboard/works"
       click_on work.title.first
       expect(page).to have_content work.title.first
@@ -139,7 +133,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
 
     def check_update_metadata_only_option(page)
       upload_metadata_only_csv(page)
-      select 'Update metadata for any existing IDs', from: 'csv_import[update_actor_stack]'
+      find('select#update_actor_stack_id').select("Update Existing Metadata, create new works")
       click_on 'Preview Import'
       start_import(page)
       metadata_only_update(page)
@@ -150,7 +144,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       work = CurateGenericWork.where(title: "*City Gates*").first
       file_set_id = work.file_sets.first.id
       upload_metadata_only_csv(page)
-      select 'Update metadata and files or create new works as required', from: 'csv_import[update_actor_stack]'
+      find('select#update_actor_stack_id').select("Overwrite All Files & Metadata")
       click_on 'Preview Import'
       start_import(page)
       metadata_only_update(page)
@@ -160,7 +154,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
 
     def check_update_new_option(page)
       upload_new_work_csv(page)
-      select 'Only create works for new IDs', from: 'csv_import[update_actor_stack]'
+      find('select#update_actor_stack_id').select("Ignore Existing Works, new works only")
       click_on 'Preview Import'
       start_import(page)
       new_work_update(page)
