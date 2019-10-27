@@ -6,6 +6,7 @@ class CurateMapper < Zizia::HashMapper
   CURATE_TERMS_MAP = {
     abstract: "abstract",
     administrative_unit: "administrative_unit",
+    conference_name: "conference_name",
     content_genres: "content_genres",
     contact_information: "contact_information",
     content_type: "content_type",
@@ -79,6 +80,7 @@ class CurateMapper < Zizia::HashMapper
   def singular_fields
     [
       "abstract",
+      "conference_name",
       "contact_information",
       "copyright_date",
       "date_created",
