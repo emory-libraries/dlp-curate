@@ -18,6 +18,7 @@ RSpec.describe CurateMapper do
       "data_classifications" => "Confidential|Internal",
       "date_created" => "1985-11-01",
       "date_issued" => "Unknown",
+      "edition" => "2nd edition.",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "institution" => "Emory University",
       "internal_rights_note" => "This is my internal rights note.",
@@ -153,6 +154,12 @@ RSpec.describe CurateMapper do
   context "#date_issued" do
     it "maps the date_issued field" do
       expect(mapper.date_issued).to eq "Unknown"
+    end
+  end
+
+  context "#edition" do
+    it "maps the edition field" do
+      expect(mapper.edition).to eq "2nd edition."
     end
   end
 
