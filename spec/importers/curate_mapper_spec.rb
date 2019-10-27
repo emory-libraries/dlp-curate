@@ -9,6 +9,7 @@ RSpec.describe CurateMapper do
     {
       "abstract" => "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier",
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
+      "conference_name" => "Exposition universelle de 1878 (Paris, France)",
       "content_genres" => "black-and-white photographs",
       "contact_information" => "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu",
       "content_type" => 'still image',
@@ -56,6 +57,12 @@ RSpec.describe CurateMapper do
   context "#administrative_unit" do
     it "does its best to match the configured controlled vocabulary term" do
       expect(mapper.administrative_unit).to eq "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
+    end
+  end
+
+  context "#conference_name" do
+    it "maps the conference_NAME field" do
+      expect(mapper.conference_name).to eq "Exposition universelle de 1878 (Paris, France)"
     end
   end
 
