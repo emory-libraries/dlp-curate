@@ -10,6 +10,7 @@ class CurateMapper < Zizia::HashMapper
     content_genres: "content_genres",
     contact_information: "contact_information",
     content_type: "content_type",
+    contributors: "contributors",
     copyright_date: "copyright_date",
     creator: "creator",
     data_classifications: "data_classifications",
