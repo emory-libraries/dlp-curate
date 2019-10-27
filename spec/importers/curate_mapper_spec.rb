@@ -13,6 +13,7 @@ RSpec.describe CurateMapper do
       "content_genres" => "black-and-white photographs",
       "contact_information" => "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu",
       "content_type" => 'still image',
+      "contributors" => "Craigie, Dorothy, 1901- collector. GEU|Greene, Graham, 1904-1991, collector. GEU",
       "copyright_date" => "1985-11-01",
       "creator" => "Harris, Teenie, 1908-1998.",
       "data_classifications" => "Confidential|Internal",
@@ -112,6 +113,12 @@ RSpec.describe CurateMapper do
       it "maps content_type to the uri" do
         expect(mapper.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       end
+    end
+  end
+
+  context "#contributors" do
+    it "maps the contributors field" do
+      expect(mapper.contributors).to contain_exactly("Craigie, Dorothy, 1901- collector. GEU", "Greene, Graham, 1904-1991, collector. GEU")
     end
   end
 
