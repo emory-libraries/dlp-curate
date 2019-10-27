@@ -25,6 +25,7 @@ date_digitized:         "Date that the item was originally digitized (as opposed
 date_issued:            "The date the material was formally released or published"
 date_modified:          "-- system field - not directly editable --"
 date_uploaded:          "-- system field - not directly editable --"
+deduplication_key:      "The deduplication_key allows the importer to update existing works instead of creating new works. Each work in the repository must have a unique deduplication key.  All import manifest lines assoicated with that work must have the same deduplication_key. Deduplication keys may come from multiple sources and do not have a required seqence - i.e. you may mix ARK, MMSID, and/or manually assigned unique ids within the same respository."
 depositor:              "-- system field - not directly editable --"
 edition:                "Indicates the specific edition of a published work which the repository object contains"
 emory_ark:              "A legacy Emory-issued ark"
