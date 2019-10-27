@@ -34,6 +34,7 @@ RSpec.describe CurateMapper do
       "rights_holders" => "Unknown",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
       "emory_rights_statements" => "Emory University does not control copyright for this image.",
+      "series_title" => "Chatterbox library.",
       "subject_geo" => "Ghana.|Africa.",
       "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
       "subject_topics" => "Snowblowers.|Snow.|Air bases.|Towers.",
@@ -313,6 +314,12 @@ RSpec.describe CurateMapper do
     end
     it "maps the sensitive_material_note field" do
       expect(mapper.sensitive_material_note).to eq "Be very careful with this sensitive material."
+    end
+  end
+
+  context "#series_title" do
+    it "maps the series_title field" do
+      expect(mapper.series_title).to eq "Chatterbox library."
     end
   end
 
