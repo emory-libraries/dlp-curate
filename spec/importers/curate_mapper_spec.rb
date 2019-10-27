@@ -38,6 +38,7 @@ RSpec.describe CurateMapper do
       "subject_geo" => "Ghana.|Africa.",
       "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
       "subject_topics" => "Snowblowers.|Snow.|Air bases.|Towers.",
+      "system_of_record_ID" => "990020982660302486",
       "table_of_contents" => "Thing 1. Thing 2.",
       "title" => "what an awesome title",
       "uniform_title" => "Pittsburg courier.",
@@ -353,6 +354,12 @@ RSpec.describe CurateMapper do
     end
     it "maps the sublocation field" do
       expect(mapper.sublocation).to eq "Box 1"
+    end
+  end
+
+  context "#system_of_record_ID" do
+    it "maps the system_of_record_ID field" do
+      expect(mapper.system_of_record_ID).to eq "990020982660302486"
     end
   end
 
