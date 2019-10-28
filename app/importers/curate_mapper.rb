@@ -107,7 +107,6 @@ class CurateMapper < Zizia::HashMapper
       "sublocation",
       "system_of_record_ID",
       "transfer_engineer",
-      "rights_holders",
       "table_of_contents",
       "uniform_title"
     ]
