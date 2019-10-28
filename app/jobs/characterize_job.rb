@@ -16,7 +16,11 @@ class CharacterizeJob < Hyrax::ApplicationJob
     raise "#{file_set.class.characterization_proxy} was not found for FileSet #{file_set.id}" unless file_set.characterization_proxy?
     filepath = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id) unless filepath && File.exist?(filepath)
     Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath)
-    create_preservation_event(file_set, 'Characterization', event_start, 'Success')
+    event = {
+      'type' => 'Characterization', 'start' => event_start, 'outcome' => 'Success',
+      'details' => 'Metadata extracted, format identified, and files validated', 'software_version' => 'Curate v.1', 'user' => nil
+    }
+    create_preservation_event(file_set, event)
     Rails.logger.debug "Ran characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
     file_set.characterization_proxy.save!
     file_set.update_index
