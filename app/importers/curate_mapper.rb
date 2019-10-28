@@ -78,38 +78,14 @@ class CurateMapper < Zizia::HashMapper
     [@metadata["Filename"]]
   end
 
-  # Samvera generally assumes that all fields are multi-valued. Curate has many
-  # fields that are assumed to be singular, however. List them here for an easy
-  # way to check whether a field is multi-valued when retrieving it.
+  # Samvera generally assumes that all fields are multi-valued. Curate, however,
+  # has many fields that are defined to be singular. This method returns the array
+  # of single-value fields for an easy way to check whether a field is single-valued
+  # or multi-valued when mapping it.
   def singular_fields
-    [
-      "abstract",
-      "conference_name",
-      "contact_information",
-      "copyright_date",
-      "date_created",
-      "date_digitized",
-      "date_issued",
-      "deduplication_key",
-      "edition",
-      "extent",
-      "holding_repository",
-      "local_call_number",
-      "institution",
-      "internal_rights_note",
-      "legacy_rights",
-      "place_of_production",
-      "primary_language",
-      "publisher",
-      "sensitive_material",
-      "sensitive_material_note",
-      "series_title",
-      "sublocation",
-      "system_of_record_ID",
-      "transfer_engineer",
-      "table_of_contents",
-      "uniform_title"
-    ]
+    work = CurateGenericWork.new
+    properties = work.send(:properties)
+    properties.select { |_k, v| v.respond_to? :multiple? }.select { |_k, v| !v.multiple? }.keys
   end
 
   # Match a visibility string to the value below; default to restricted
