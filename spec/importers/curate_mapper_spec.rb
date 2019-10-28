@@ -267,7 +267,7 @@ RSpec.describe CurateMapper do
 
   context "#rights_holders" do
     it "maps the rights_holders field" do
-      expect(mapper.rights_holders).to eq "Unknown"
+      expect(mapper.rights_holders).to eq ["Unknown"]
     end
   end
 
