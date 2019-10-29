@@ -260,4 +260,51 @@ describe Hydra::Works::CharacterizationService do
       end
     end
   end
+
+  describe 'preservation event for message digest' do
+    let(:characterization) { class_double("Hydra::FileCharacterization").as_stubbed_const }
+    let(:user)             { FactoryBot.create(:user) }
+    let(:file_set)         { FactoryBot.create(:file_set, user: user, title: ['Some title']) }
+    let(:filename)         { 'sample-file.pdf' }
+    let(:path_on_disk)     { File.join(fixture_path, filename) }
+    let(:file)             { File.open(path_on_disk) }
+    let(:fits_filename)    { 'fits_1.4.0_sample_pdf.xml' }
+    let(:fits_response)    { IO.read(File.join(fixture_path, fits_filename)) }
+    let(:digest)           { class_double("Digest::SHA256").as_stubbed_const }
+    let(:hexdigest_value)  { "urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a" }
+
+    before do
+      Hydra::Works::AddFileToFileSet.call(file_set, file, :preservation_master_file)
+      allow(characterization).to receive(:characterize).and_return(fits_response)
+    end
+
+    context 'with all three checksums present' do
+      before do
+        allow(digest).to receive_message_chain(:file, :hexdigest, :prepend).and_return(hexdigest_value)
+        described_class.run(file_set.preservation_master_file, path_on_disk)
+        file_set.reload
+      end
+
+      it 'creates a success preservation event on fileset' do
+        expect(file_set.preservation_event.first.event_type).to eq ['Message Digest Calculation']
+        expect(file_set.preservation_event.first.event_details).to include 'urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a'
+        expect(file_set.preservation_event.first.initiating_user).to eq [user.uid]
+        expect(file_set.preservation_event.first.outcome).to eq ['Success']
+      end
+    end
+
+    context 'with one checksum missing' do
+      before do
+        allow(digest).to receive_message_chain(:file, :hexdigest, :prepend)
+        described_class.run(file_set.preservation_master_file, path_on_disk)
+        file_set.reload
+      end
+
+      it 'creates a failure preservation event on fileset' do
+        expect(file_set.preservation_event.first.event_type).to eq ['Message Digest Calculation']
+        expect(file_set.preservation_event.first.event_details).not_to include 'urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a'
+        expect(file_set.preservation_event.first.outcome).to eq ['Failure']
+      end
+    end
+  end
 end
