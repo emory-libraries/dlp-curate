@@ -12,6 +12,10 @@ RSpec.describe 'Admin dashboard', integration: true, clean: true, type: :system 
     scenario 'does not have settings tab' do
       expect(page).not_to have_link 'Settings'
     end
+
+    scenario 'does not have import csv link' do
+      expect(page).not_to have_link 'Import Content From a CSV'
+    end
   end
 
   context 'as an admin user' do
@@ -28,6 +32,10 @@ RSpec.describe 'Admin dashboard', integration: true, clean: true, type: :system 
 
     scenario 'does have settings tab' do
       expect(page).to have_link 'Settings'
+    end
+
+    scenario 'does  have an import csv link' do
+      expect(page).to have_link 'Import Content From a CSV'
     end
 
     # TODO: Add more admin tests, for eg: stats page, when work is created
