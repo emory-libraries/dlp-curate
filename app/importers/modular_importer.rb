@@ -33,7 +33,7 @@ class ModularImporter
     log_start_import
     importer = Zizia::Importer.new(parser: Zizia::CsvParser.new(file: file), record_importer: CurateRecordImporter.new(attributes: attrs))
     importer.records.each do |record|
-      pre_ingest_work = Zizia::PreIngestWork.new(csv_import_detail_id: csv_import_detail.id)
+      pre_ingest_work = Zizia::PreIngestWork.new(csv_import_detail_id: csv_import_detail.id, deduplication_key: record.mapper.metadata['deduplication_key'])
       @row += 1
       if record.mapper.metadata['preservation_master_file']
         @row += 1
