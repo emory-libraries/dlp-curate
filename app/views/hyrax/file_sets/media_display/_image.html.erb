@@ -5,8 +5,8 @@
                     class: "representative-media",
                     alt: "",
                     role: "presentation" %>
-      <%= link_to @display_file.file_name.first,
-                  hyrax.download_path(file_set, use: @display_use),
+      <%= link_to t('hyrax.file_set.show.downloadable_content.image_link'),
+                  hyrax.download_path(file_set),
                   data: { label: file_set.id },
                   target: :_blank,
                   id: "file_download" %>
