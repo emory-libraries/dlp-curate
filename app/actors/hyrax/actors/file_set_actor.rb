@@ -26,8 +26,7 @@ module Hyrax
         file_set.title = [file_set.label] if file_set.title.blank?
         event_start = DateTime.current
         return false unless file_set.save # Need to save to get an id
-        # create preservation_event for fileset creation (method in PreservationEvents module)
-        create_preservation_event(file_set, 'Replication (FileSet created)', event_start)
+        file_set_preservation_event(file_set, event_start)
         if from_url
           # If ingesting from URL, don't spawn an IngestJob; instead
           # reach into the FileActor and run the ingest with the file instance in
@@ -174,6 +173,13 @@ module Hyrax
           work.representative = nil if work.representative_id == file_set.id
           work.rendering_ids -= [file_set.id]
           work.save!
+        end
+
+        # create preservation_event for fileset creation (method in PreservationEvents module)
+        def file_set_preservation_event(file_set, event_start)
+          event = { 'type' => 'Replication (FileSet created)', 'start' => event_start, 'outcome' => 'Success', 'details' => 'File replicated to cross-region S3 storage',
+                    'software_version' => 'Fedora v4.7.5', 'user' => user.uid }
+          create_preservation_event(file_set, event)
         end
       # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/CyclomaticComplexity
