@@ -37,6 +37,7 @@ Metrics/BlockLength:
         - 'config/initializers/hyrax.rb'
         - app/importers/curate_collection_importer.rb
         - lib/tasks/curate_collections.rake
+        - config/initializers/characterization_service.rb
 
 Metrics/ClassLength:
     Exclude:
