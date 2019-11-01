@@ -8,6 +8,9 @@ RSpec.describe CurateCollectionImporter, :clean do
     cci.import(collections_csv, "/dev/null")
     Collection.where(local_call_number: "MSS1218").first
   end
+  let(:yellowbacks_collection) do
+    Collection.where(local_call_number: "YELLOWBACKS").first
+  end
 
   it 'makes collection objects' do
     cci.import(collections_csv, "/dev/null")
@@ -58,9 +61,13 @@ RSpec.describe CurateCollectionImporter, :clean do
 
   it 'does not override existing collection metadata' do
     langmuir_collection.reload
-    langmuir_collection.title = ["New Title"]
+    langmuir_collection.title = ["New Langmuir Title"]
     langmuir_collection.save
+    yellowbacks_collection.reload
+    yellowbacks_collection.abstract = "New Yellowbacks Abstract"
+    yellowbacks_collection.save
     cci.import(collections_csv, "/dev/null")
-    expect(Collection.where(local_call_number: "MSS1218").first.title).to eq ["New Title"]
+    expect(Collection.where(local_call_number: "MSS1218").first.title).to eq ["New Langmuir Title"]
+    expect(Collection.where(local_call_number: "YELLOWBACKS").first.abstract).to eq "New Yellowbacks Abstract"
   end
 end
