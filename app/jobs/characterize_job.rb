@@ -18,7 +18,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
     Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath)
     event = {
       'type' => 'Characterization', 'start' => event_start, 'outcome' => 'Success',
-      'details' => 'Metadata extracted, format identified, and files validated', 'software_version' => 'Curate v.1', 'user' => nil
+      'details' => 'Metadata extracted, format identified, and files validated', 'software_version' => 'Curate v.1', 'user' => file_set.depositor
     }
     create_preservation_event(file_set, event)
     Rails.logger.debug "Ran characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
