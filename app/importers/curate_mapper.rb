@@ -6,9 +6,11 @@ class CurateMapper < Zizia::HashMapper
   CURATE_TERMS_MAP = {
     abstract: "abstract",
     administrative_unit: "administrative_unit",
+    conference_name: "conference_name",
     content_genres: "content_genres",
     contact_information: "contact_information",
     content_type: "content_type",
+    contributors: "contributors",
     copyright_date: "copyright_date",
     creator: "creator",
     data_classifications: "data_classifications",
@@ -16,6 +18,7 @@ class CurateMapper < Zizia::HashMapper
     date_digitized: "date_digitized",
     date_issued: "date_issued",
     deduplication_key: "deduplication_key",
+    edition: "edition",
     extent: "extent",
     holding_repository: "holding_repository",
     institution: "institution",
@@ -34,10 +37,12 @@ class CurateMapper < Zizia::HashMapper
     emory_rights_statements: "emory_rights_statements",
     sensitive_material: "sensitive_material",
     sensitive_material_note: "sensitive_material_note",
+    series_title: "series_title",
     subject_geo: "subject_geo",
     subject_names: "subject_names",
     subject_topics: "subject_topics",
     sublocation: "sublocation",
+    system_of_record_ID: "system_of_record_ID",
     table_of_contents: "table_of_contents",
     title: "title",
     transfer_engineer: "transfer_engineer",
@@ -54,7 +59,7 @@ class CurateMapper < Zizia::HashMapper
 
   # What columns are allowed in the CSV
   def self.allowed_headers
-    CURATE_TERMS_MAP.values + ['filename']
+    CURATE_TERMS_MAP.values + ['filename', 'type', 'intermediate_file', 'fileset_label', 'preservation_master_file']
   end
 
   # Given a field name, return the CSV header
@@ -73,35 +78,14 @@ class CurateMapper < Zizia::HashMapper
     [@metadata["Filename"]]
   end
 
-  # Samvera generally assumes that all fields are multi-valued. Curate has many
-  # fields that are assumed to be singular, however. List them here for an easy
-  # way to check whether a field is multi-valued when retrieving it.
+  # Samvera generally assumes that all fields are multi-valued. Curate, however,
+  # has many fields that are defined to be singular. This method returns the array
+  # of single-value fields for an easy way to check whether a field is single-valued
+  # or multi-valued when mapping it.
   def singular_fields
-    [
-      "abstract",
-      "contact_information",
-      "copyright_date",
-      "date_created",
-      "date_digitized",
-      "date_issued",
-      "deduplication_key",
-      "extent",
-      "holding_repository",
-      "local_call_number",
-      "institution",
-      "internal_rights_note",
-      "legacy_rights",
-      "place_of_production",
-      "primary_language",
-      "publisher",
-      "sensitive_material",
-      "sensitive_material_note",
-      "sublocation",
-      "transfer_engineer",
-      "rights_holders",
-      "table_of_contents",
-      "uniform_title"
-    ]
+    work = CurateGenericWork.new
+    properties = work.send(:properties)
+    properties.select { |_k, v| v.respond_to? :multiple? }.select { |_k, v| !v.multiple? }.keys
   end
 
   # Match a visibility string to the value below; default to restricted

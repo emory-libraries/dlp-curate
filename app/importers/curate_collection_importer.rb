@@ -6,21 +6,17 @@ class CurateCollectionImporter
     @library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.gid
   end
 
-  # If a Collection object with the specified call number already exists,
-  # don't update the collection
-  def collection_exists?(local_call_number)
-    existing_collection = Collection.where(local_call_number: local_call_number)&.first
-    existing_collection ? true : false
-  end
-
   def import(csv_file, log_location = STDOUT)
     CSV.foreach(csv_file, headers: true) do |row|
       collection_attrs = row.to_hash
-      local_call_number = collection_attrs["local_call_number"]
-      next if collection_exists?(local_call_number)
+      # If a Collection object with a given deduplication key-value pair already exists,
+      # don't update the collection
+      dedup_key = collection_attrs["deduplication_key"]
+      dedup_value = collection_attrs[dedup_key]
+      next if Collection.exists?(dedup_key => dedup_value)
       collection = Collection.new
       collection.visibility = "open"
-      collection.local_call_number = local_call_number
+      collection.local_call_number = collection_attrs["local_call_number"]
       collection.collection_type_gid = @library_collection_type_gid
       collection.title = multivalue_mapping(collection_attrs, "title")
       collection.institution = collection_attrs["institution"]

@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe CharacterizeJob do
+RSpec.describe CharacterizeJob, :clean do
   let(:file_set_id) { 'abc12345' }
   let(:filename)    { Rails.root.join('tmp', 'uploads', 'ab', 'c1', '23', '45', 'abc12345', 'picture.png').to_s }
   let(:file_set) do
@@ -65,6 +65,16 @@ RSpec.describe CharacterizeJob do
     it "reindexes the collection" do
       expect(collection).to receive(:update_index)
       described_class.perform_now(file_set, file.id)
+    end
+  end
+
+  context "when performed" do
+    before do
+      described_class.perform_now(file_set, file.id)
+    end
+    it "adds a new preservation event for fileset characterization" do
+      expect(file_set.preservation_event.first.event_type).to eq ['Characterization']
+      expect(file_set.preservation_event.first.outcome).to eq ['Success']
     end
   end
 end

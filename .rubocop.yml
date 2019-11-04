@@ -22,6 +22,7 @@ Lint/NonLocalExitFromIterator:
 
 Metrics/AbcSize:
   Exclude:
+    - app/importers/modular_importer.rb
     - spec/system/import_langmuir_from_csv_spec.rb
     - app/importers/curate_collection_importer.rb
     - app/importers/curate_record_importer.rb
@@ -36,6 +37,7 @@ Metrics/BlockLength:
         - 'config/initializers/hyrax.rb'
         - app/importers/curate_collection_importer.rb
         - lib/tasks/curate_collections.rake
+        - config/initializers/characterization_service.rb
 
 Metrics/ClassLength:
     Exclude:
@@ -70,6 +72,7 @@ Metrics/MethodLength:
         - config/prepends/custom_visibility.rb
         - app/controllers/hyrax/file_sets_controller.rb
         - app/jobs/create_work_job.rb
+        - app/importers/modular_importer.rb
 
 Layout/AlignHash:
     Exclude:

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+# [Hyrax-overwrite] Adds preservation_event on work creatio
 # This is a job spawned by the BatchCreateJob
 class CreateWorkJob < Hyrax::ApplicationJob
   include PreservationEvents

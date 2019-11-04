@@ -9,14 +9,17 @@ RSpec.describe CurateMapper do
     {
       "abstract" => "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier",
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
+      "conference_name" => "Exposition universelle de 1878 (Paris, France)",
       "content_genres" => "black-and-white photographs",
       "contact_information" => "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu",
       "content_type" => 'still image',
+      "contributors" => "Craigie, Dorothy, 1901- collector. GEU|Greene, Graham, 1904-1991, collector. GEU",
       "copyright_date" => "1985-11-01",
       "creator" => "Harris, Teenie, 1908-1998.",
       "data_classifications" => "Confidential|Internal",
       "date_created" => "1985-11-01",
       "date_issued" => "Unknown",
+      "edition" => "2nd edition.",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "institution" => "Emory University",
       "internal_rights_note" => "This is my internal rights note.",
@@ -31,9 +34,11 @@ RSpec.describe CurateMapper do
       "rights_holders" => "Unknown",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
       "emory_rights_statements" => "Emory University does not control copyright for this image.",
+      "series_title" => "Chatterbox library.",
       "subject_geo" => "Ghana.|Africa.",
       "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
       "subject_topics" => "Snowblowers.|Snow.|Air bases.|Towers.",
+      "system_of_record_ID" => "990020982660302486",
       "table_of_contents" => "Thing 1. Thing 2.",
       "title" => "what an awesome title",
       "uniform_title" => "Pittsburg courier.",
@@ -56,6 +61,12 @@ RSpec.describe CurateMapper do
   context "#administrative_unit" do
     it "does its best to match the configured controlled vocabulary term" do
       expect(mapper.administrative_unit).to eq "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
+    end
+  end
+
+  context "#conference_name" do
+    it "maps the conference_NAME field" do
+      expect(mapper.conference_name).to eq "Exposition universelle de 1878 (Paris, France)"
     end
   end
 
@@ -107,6 +118,12 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#contributors" do
+    it "maps the contributors field" do
+      expect(mapper.contributors).to contain_exactly("Craigie, Dorothy, 1901- collector. GEU", "Greene, Graham, 1904-1991, collector. GEU")
+    end
+  end
+
   context "#copyright_date" do
     it "maps the copyright_date field" do
       expect(mapper.copyright_date).to eq "1985-11-01"
@@ -146,6 +163,12 @@ RSpec.describe CurateMapper do
   context "#date_issued" do
     it "maps the date_issued field" do
       expect(mapper.date_issued).to eq "Unknown"
+    end
+  end
+
+  context "#edition" do
+    it "maps the edition field" do
+      expect(mapper.edition).to eq "2nd edition."
     end
   end
 
@@ -244,7 +267,7 @@ RSpec.describe CurateMapper do
 
   context "#rights_holders" do
     it "maps the rights_holders field" do
-      expect(mapper.rights_holders).to eq "Unknown"
+      expect(mapper.rights_holders).to eq ["Unknown"]
     end
   end
 
@@ -295,6 +318,12 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#series_title" do
+    it "maps the series_title field" do
+      expect(mapper.series_title).to eq "Chatterbox library."
+    end
+  end
+
   context "#subject_geo" do
     it "maps the subject_geo field" do
       expect(mapper.subject_geo)
@@ -325,6 +354,12 @@ RSpec.describe CurateMapper do
     end
     it "maps the sublocation field" do
       expect(mapper.sublocation).to eq "Box 1"
+    end
+  end
+
+  context "#system_of_record_ID" do
+    it "maps the system_of_record_ID field" do
+      expect(mapper.system_of_record_ID).to eq "990020982660302486"
     end
   end
 
