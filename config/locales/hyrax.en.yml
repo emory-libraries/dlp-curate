@@ -230,6 +230,9 @@ en:
         admin_metadata_heading: "Admin Metadata"
         additional_admin_fields: "Additional admin fields"
         preservation_workflow_metadata_heading: "Preservation Workflow Metadata"
+    file_sets:
+      form:
+        pcdm_use: "FileSet use"
   simple_form:
     hints:
       admin_set:
