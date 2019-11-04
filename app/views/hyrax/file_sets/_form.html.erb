@@ -1,0 +1,27 @@
+<!-- [Hyrax-overwrite] -->
+<!-- Adding fileset use category#L9 -->
+<%= simple_form_for [main_app, curation_concern], html: { multipart: true } do |f| %>
+  <fieldset class="required">
+    <span class="control-label">
+      <%= label_tag 'file_set[title][]', t('.title'),  class: "string optional" %>
+    </span>
+    <%= text_field_tag 'file_set[title][]', curation_concern.title.first, class: 'form-control', required: true %>
+    <!-- fileset-use category input field -->
+    <span class="control-label">
+      <%= label_tag 'file_set[pcdm_use]', t('.pcdm_use'),  class: "string optional" %>
+    </span>
+    <div>
+      <%= select_tag 'file_set[pcdm_use]', options_for_select(["#{FileSet::PRIMARY}", "#{FileSet::SUPPLEMENTAL}", "#{FileSet::PRESERVATION}"], curation_concern.pcdm_use), class: 'form-control' %>
+    </div>
+  </fieldset>
+
+  <div class="row">
+    <div class="col-md-12 form-actions">
+      <%= f.submit(
+        (curation_concern.persisted? ? t('.save') : t('.attach_to', parent: @parent.human_readable_type)),
+        class: 'btn btn-primary'
+      ) %>
+      <%= link_to t('.cancel'), parent_path(@parent), class: 'btn btn-link' %>
+    </div>
+  </div>
+<% end %>
