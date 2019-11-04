@@ -47,10 +47,10 @@ RSpec.describe CreateWorkJob do
         end.and_return(true)
         cgw
         expect(log.reload.status).to eq 'success'
-        expect(work.preservation_event.first.event_type).to eq ['Object Validation (Work created)']
+        expect(work.preservation_event.pluck(:event_type)).to include ['Object Validation (Work created)']
         expect(work.preservation_event.first.outcome).to eq ['Success']
         expect(work.preservation_event.first.initiating_user).to eq [user.uid]
-        expect(work.preservation_event.count).to eq 1
+        expect(work.preservation_event.count).to eq 3
       end
     end
 

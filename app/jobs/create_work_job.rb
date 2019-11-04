@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite] Adds preservation_event on work creation
+# [Hyrax-overwrite] Adds preservation_event on work creatio
 # This is a job spawned by the BatchCreateJob
 class CreateWorkJob < Hyrax::ApplicationJob
   include PreservationEvents
@@ -25,8 +25,16 @@ class CreateWorkJob < Hyrax::ApplicationJob
     status = work_actor.create(env)
     event = { 'type' => 'Object Validation (Work created)', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Valid submission package submitted', 'software_version' => 'Curate v.1',
               'user' => user.uid }
-    create_preservation_event(work, event) if status
-    return operation.success! if status
+    event_policy = { 'type' => 'Policy Assignment', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Policy was assigned', 'software_version' => 'Curate v.1',
+                     'user' => user.uid }
+    event_metadata = { 'type' => 'Metadata Extraction', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Descriptive, Rights, and Administrative metadata extracted from CSV',
+                       'software_version' => 'Curate v.1', 'user' => user.uid }
+    if status
+      create_preservation_event(work, event)
+      create_preservation_event(work, event_policy)
+      create_preservation_event(work, event_metadata)
+      return operation.success!
+    end
     operation.fail!(work.errors.full_messages.join(' '))
   end
 
