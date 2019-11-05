@@ -66,10 +66,7 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
   # This will need to be updated for other collections if their files do not
   # follow the same organizational system.
   def find_file_path(filename)
-    split = filename.split("_")
-    kind_of_file = split.last.split(".").first # Is this an ARCH or a PROD file?
-    directory_name = split[1] # e.g., "B001"
-    File.join(ENV['IMPORT_PATH'], kind_of_file, directory_name, filename)
+    File.join(ENV['IMPORT_PATH'], filename)
   end
 
   # Take a filename like "MSS1218_B001_I001_P0001_ARCH.tif" and get the first part,
