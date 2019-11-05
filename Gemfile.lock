@@ -1715,7 +1715,7 @@ DEPENDENCIES
   webdrivers (~> 3.0)
   webpacker (~> 4.x)
   xray-rails
-  zizia (~> 5.0)
+  zizia (~> 5.1)
 
 RUBY VERSION
    ruby 2.5.5p157
