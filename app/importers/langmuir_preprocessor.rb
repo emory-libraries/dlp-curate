@@ -68,13 +68,13 @@ class LangmuirPreprocessor
     merge_csv.close
   end
 
-  def process_row(row, source_row)
+  def process_row(row, source_row_num)
     deduplication_key = row['Digital Object - Parent Identifier']
     sequence_number, target_file, metadata_row = extract_structure(row)
     @tree[deduplication_key] ||= { metadata: nil, filesets: {} } # create a placeholder if we don't have one for this key
-    @tree[deduplication_key][:metadata] = extract_metadata(row, source_row) if metadata_row
-    @tree[deduplication_key][:filesets][sequence_number] ||= CSV::Row.new(additional_headers, [source_row, deduplication_key, 'fileset'])
-    @tree[deduplication_key][:filesets][sequence_number][target_file] = row['Filename']
+    @tree[deduplication_key][:metadata] = extract_metadata(row, source_row_num) if metadata_row
+    @tree[deduplication_key][:filesets][sequence_number] ||= CSV::Row.new(additional_headers, [source_row_num, deduplication_key, 'fileset'])
+    @tree[deduplication_key][:filesets][sequence_number][target_file] = relative_path_to_file(row)
   end
 
   def extract_structure(row)
@@ -85,10 +85,16 @@ class LangmuirPreprocessor
     [p_number, target_file, metadata_row]
   end
 
-  def extract_metadata(row, source_row)
+  def extract_metadata(row, source_row_num)
     deduplication_key = row['Digital Object - Parent Identifier']
-    processed_row = CSV::Row.new(additional_headers, [source_row, deduplication_key, 'work'])
+    processed_row = CSV::Row.new(additional_headers, [source_row_num, deduplication_key, 'work'])
     processed_row << row.to_hash
+  end
+
+  def relative_path_to_file(row)
+    absolute_path = row['Path'] # e.g. "::nasn2dmz.cc.emory.edu:dmfiles:MARBL:Manuscripts:MSS_1218_Langmuir:ARCH:B071:MSS1218_B071_I205_P0001_ARCH.tif"
+    relative_path = absolute_path.gsub(/::(\w+\.)*\w+:/, '.:') # replace any initial ::hostname.domain: prefix with '.:'
+    relative_path.tr(':', '/') # convert path segment separators from colons to forward slashes
   end
 
   def make_label(side, two_sided)

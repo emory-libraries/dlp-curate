@@ -70,8 +70,12 @@ RSpec.describe LangmuirPreprocessor do
 
   it 'attaches the expected files to the expected filesets in the expected order' do # Advertising : Rafael's, gay 'n frisky
     expect(import_rows[14]['fileset_label']).to eq('Image 2') # P0002
-    expect(import_rows[14]['preservation_master_file']).to eq('MSS1218_B028_I091_P0002_ARCH.tif') # ARCH
+    expect(import_rows[14]['preservation_master_file']).to match('MSS1218_B028_I091_P0002_ARCH.tif') # ARCH
     expect(import_rows[15]['fileset_label']).to eq('Image 3') # P0003
-    expect(import_rows[15]['intermediate_file']).to eq('MSS1218_B028_I091_P0003_PROD.tif') # PROD
+    expect(import_rows[15]['intermediate_file']).to match('MSS1218_B028_I091_P0003_PROD.tif') # PROD
+  end
+
+  it 'includes the relative path in the file attachment' do
+    expect(import_rows[7]['preservation_master_file']).to eq('./dmfiles/MARBL/Manuscripts/MSS_1218_Langmuir/ARCH/B071/MSS1218_B071_I207_P0001_ARCH.tif')
   end
 end
