@@ -93,7 +93,7 @@ class LangmuirPreprocessor
 
   def relative_path_to_file(row)
     absolute_path = row['Path'] # e.g. "::nasn2dmz.cc.emory.edu:dmfiles:MARBL:Manuscripts:MSS_1218_Langmuir:ARCH:B071:MSS1218_B071_I205_P0001_ARCH.tif"
-    relative_path = absolute_path.gsub(/::(\w+\.)*\w+:/, '.:') # replace any initial ::hostname.domain: prefix with '.:'
+    relative_path = absolute_path.gsub(/::(\w+\.)*\w+:/, '') # remove any initial ::hostname.domain: prefix
     relative_path.tr(':', '/') # convert path segment separators from colons to forward slashes
   end
 

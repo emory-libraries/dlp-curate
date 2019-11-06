@@ -76,6 +76,6 @@ RSpec.describe LangmuirPreprocessor do
   end
 
   it 'includes the relative path in the file attachment' do
-    expect(import_rows[7]['preservation_master_file']).to eq('./dmfiles/MARBL/Manuscripts/MSS_1218_Langmuir/ARCH/B071/MSS1218_B071_I207_P0001_ARCH.tif')
+    expect(import_rows[7]['preservation_master_file']).to eq('dmfiles/MARBL/Manuscripts/MSS_1218_Langmuir/ARCH/B071/MSS1218_B071_I207_P0001_ARCH.tif')
   end
 end
