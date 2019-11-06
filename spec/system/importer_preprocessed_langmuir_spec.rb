@@ -28,6 +28,9 @@ RSpec.describe 'Importing preprocessed langmuir', :clean, perform_enqueued: [Att
       expect(CurateGenericWork.first.representative.title).to eq(['Front'])
       expect(CurateGenericWork.where(title: '*frisky*').first.representative.title).to eq(['Side 1'])
       expect(CurateGenericWork.where(title: '*frisky*').first.ordered_members.to_a.last.title).to eq(['Side 4'])
+      expect(Zizia::PreIngestWork.count).to eq(5)
+      expect(Zizia::PreIngestFile.count).to eq(24)
+      expect(Zizia::PreIngestFile.last.row_number).to eq(18)
       expect(Zizia::PreIngestWork.last['deduplication_key']).to be_kind_of(String)
     end
   end
