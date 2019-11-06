@@ -33,8 +33,10 @@ class ModularImporter
     log_start_import
     importer = Zizia::Importer.new(parser: Zizia::CsvParser.new(file: file), record_importer: CurateRecordImporter.new(attributes: attrs))
     importer.records.each do |record|
-      pre_ingest_work = Zizia::PreIngestWork.new(csv_import_detail_id: csv_import_detail.id, deduplication_key: record.mapper.metadata['deduplication_key'])
-      @row += 1
+      pre_ingest_work = create_pre_ingest_work(type: record.mapper.metadata['type'],
+                                               csv_import_detail_id: csv_import_detail.id,
+                                               deduplication_key: record.mapper.metadata['deduplication_key'])
+
       if record.mapper.metadata['preservation_master_file']
         @row += 1
         pre_ingest_file = Zizia::PreIngestFile.new(row_number: @row,
@@ -44,7 +46,6 @@ class ModularImporter
         pre_ingest_file.save
       end
       if record.mapper.metadata['intermediate_file']
-        @row += 1
         pre_ingest_file = Zizia::PreIngestFile.new(row_number: @row,
                                                    pre_ingest_work: pre_ingest_work,
                                                    filename: record.mapper.metadata['intermediate_file'],
@@ -77,5 +78,18 @@ class ModularImporter
       detail.update_actor_stack = csv_import.update_actor_stack
       detail.save
       detail
+    end
+
+    def create_pre_ingest_work(type:, csv_import_detail_id:, deduplication_key:)
+      case type
+      # Create a PreIngestWork if the type in the CSV is work
+      when 'work'
+        @row += 1
+        pre_ingest_work = Zizia::PreIngestWork.new(csv_import_detail_id: csv_import_detail_id, deduplication_key: deduplication_key)
+      # Use an existing PreIngestWork if the type is fileset in the CSV
+      when 'fileset'
+        pre_ingest_work = Zizia::PreIngestWork.where(csv_import_detail_id: csv_import_detail_id, deduplication_key: deduplication_key).first
+      end
+      pre_ingest_work
     end
 end
