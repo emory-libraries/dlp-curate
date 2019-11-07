@@ -183,7 +183,7 @@ module Zizia
       end
 
       def filename_to_full_path(filename)
-        DeepFilePath.new(beginning: ENV['IMPORT_PATH'], ending: filename).to_s
+        [ENV['IMPORT_PATH'], '/', filename].join
       end
 
       def filename_index
