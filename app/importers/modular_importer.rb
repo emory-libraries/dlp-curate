@@ -60,8 +60,10 @@ class ModularImporter
   private
 
     def pre_ingest_file_size(record:, type:)
-      file = File.open(Dir.glob([ENV['IMPORT_PATH'], '/**/', record.mapper.metadata[type]].join).first)
-      file.size
+      file = File.open([ENV['IMPORT_PATH'], '/', record.mapper.metadata[type]].join)
+      file_size = file.size
+      file.close
+      file_size
     end
 
     def log_start_import
