@@ -2,7 +2,7 @@
 # [Hyrax-overwrite] Adds test for preservation_event on work creation
 require 'rails_helper'
 
-RSpec.describe CreateWorkJob do
+RSpec.describe CreateWorkJob, :clean do
   let(:user) { FactoryBot.create(:user) }
   let(:log) do
     Hyrax::Operation.create!(user: user,

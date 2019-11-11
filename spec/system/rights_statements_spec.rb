@@ -28,7 +28,7 @@ RSpec.describe 'Importing records with an invalid rights statement', :perform_jo
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
 
-      expect(page).to have_content 'This import will create or update 2 records.'
+      expect(page).to have_content('This import will process 2 row')
 
       expect(page).not_to have_content 'Invalid rights_statement in row 2'
       expect(page).to have_content 'Invalid rights_statement in row 3'

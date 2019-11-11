@@ -1650,7 +1650,7 @@ GEM
       nokogiri (~> 1.8)
     xray-rails (0.3.2)
       rails (>= 3.1.0)
-    zizia (5.2.0)
+    zizia (5.3.0)
       active-fedora
       carrierwave
       kaminari
@@ -1714,7 +1714,7 @@ DEPENDENCIES
   webdrivers (~> 3.0)
   webpacker (~> 4.x)
   xray-rails
-  zizia (~> 5.2.0)
+  zizia (~> 5.3.0)
 
 RUBY VERSION
    ruby 2.5.5p157
