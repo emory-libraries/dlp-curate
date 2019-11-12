@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/file_set_helper'
 include Warden::Test::Helpers
 
 RSpec.describe "Showing a file:", integration: true, clean: true, type: :system do
@@ -40,6 +41,37 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
     it 'shows fileset category' do
       visit hyrax_file_set_path(file_set)
       expect(find('#fileset-category').text).to include('Primary Content')
+    end
+  end
+
+  context 'when characterization is run' do
+    let(:work2)             { FactoryBot.build(:work, user: user) }
+    let(:file_set2)         { FactoryBot.create(:file_set, user: user, title: ['Some title'], pcdm_use: 'Primary Content') }
+    let(:filename2)         { 'sample-file.pdf' }
+    let(:path_on_disk)      { File.join(fixture_path, filename2) }
+    let(:file4)             { File.open(path_on_disk) }
+
+    before do
+      login_as user
+      Hydra::Works::AddFileToFileSet.call(file_set2, file4, :preservation_master_file)
+      work2.ordered_members << file_set2
+      work2.save!
+      CharacterizeJob.perform_now(file_set2, file_set2.id, path_on_disk)
+    end
+
+    it 'displays technical metadata' do
+      visit hyrax_file_set_path(file_set2)
+      expect(page).to have_content('File Title:')
+      expect(page).to have_content('File Path:')
+      expect(page).to have_content('File Size:')
+      expect(page).to have_content('Mime Type:')
+      expect(page).to have_content('Created:')
+      expect(page).to have_content('Valid:')
+      expect(page).to have_content('Well Formed:')
+      expect(page).to have_content('Creating Application Name:')
+      expect(page).to have_content('Puid:')
+      expect(page).to have_content('Page Count:')
+      expect(page).to have_content('File Format:')
     end
   end
 end
