@@ -3,6 +3,7 @@
 module Hyrax
   module Actors
     class CurateGenericWorkActor < Hyrax::Actors::BaseActor
+      include PreservationEvents
       KNOWN_NESTED_ATTRIBUTES = [:preservation_workflow_attributes].freeze
       # Some CSV rows have blank metadata and are only used to attach a file.
       # Those rows should come through with env.attributes["skip_metadata"] = true
@@ -22,6 +23,24 @@ module Hyrax
           attribute = attribute_key.to_s.gsub('_attributes', '').to_sym
           env.curation_concern.send(attribute).each { |member| member.try(:persist!) }
         end
+      end
+
+      def create(env)
+        event_start = DateTime.current # record event_start timestamp
+        apply_creation_data_to_curation_concern(env)
+        apply_save_data_to_curation_concern(env)
+        # Create our three required events
+        work_creation = { 'type' => 'Object Validation (Work created)', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Valid submission package submitted',
+                          'software_version' => 'Curate v.1', 'user' => env.user.uid }
+        work_policy = { 'type' => 'Policy Assignment', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Policy was assigned', 'software_version' => 'Curate v.1',
+                        'user' => env.user.uid }
+        work_metadata = { 'type' => 'Metadata Extraction', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Descriptive, Rights, and Administrative metadata extracted from CSV',
+                          'software_version' => 'Curate v.1', 'user' => env.user.uid }
+        save(env) && next_actor.create(env) && run_callbacks(:after_create_concern, env)
+        # Create preservation events
+        create_preservation_event(env.curation_concern, work_creation)
+        create_preservation_event(env.curation_concern, work_policy)
+        create_preservation_event(env.curation_concern, work_metadata)
       end
     end
   end
