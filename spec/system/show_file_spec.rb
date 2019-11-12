@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/file_set_helper'
 include Warden::Test::Helpers
 
 RSpec.describe "Showing a file:", integration: true, clean: true, type: :system do
