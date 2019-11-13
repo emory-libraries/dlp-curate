@@ -26,6 +26,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     'pl_row',
     'work_id',
     'CSV title',
+    'type',
     # Fields extracted from the csv pull list
     'administrative_unit',
     'content_type',
@@ -58,7 +59,15 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     'subject_topics',
     'table_of_contents',
     'title',
-    'uniform_title'
+    'uniform_title',
+    # Fileset fields
+    'fileset_label',
+    'preservation_master_file',
+    'service_file',
+    'intermediate_file',
+    'transcript_file',
+    'extracted',
+    'pcdm_use'
   ].freeze
 
   def merge
@@ -67,21 +76,24 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     @pull_list.each.with_index do |row, csv_index|
       mmsid = row['ALMA MMSID']
       record = @marc_records.xpath("//record/controlfield[@tag='001'][text()='#{mmsid}']/ancestor::record").first
-      new_row = context_fields(csv_index, row)
+      new_row = context_fields(csv_index, row, 'work')
       new_row += pull_list_mappings(row)
       new_row += alma_mappings(record, row)
+      new_row += file_placeholder
       merge_csv << new_row
+      add_file_rows(csv_index, merge_csv, row)
     end
     merge_csv.close
   end
 
   private
 
-    def context_fields(csv_index, row)
+    def context_fields(csv_index, row, type)
       [
         csv_index + 2, # pl_row  (original row number from pull list)
         row['emory_ark'], # work_id
-        row['CSV Title'] # title
+        row['CSV Title'], # title
+        type # row type (work | fileset)
       ]
     end
 
@@ -124,6 +136,66 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
         title(record, row),
         uniform_title(record)
       ]
+    end
+
+    def add_file_rows(csv_index, merge_csv, row)
+      merge_csv << pdf_row(csv_index, row) if row['PDF_Cnt'] == '1'
+
+      merge_csv << ocr_row(csv_index, row) if row['OCR_Cnt'] == '1'
+
+      pages = row['Disp_Cnt'].to_i
+      relative_path = row['Disp_Path'].sub("Volumes", "Yellowbacks") + '/'
+
+      (1..pages).each do |page|
+        merge_csv << file_row(csv_index, row, page, relative_path)
+      end
+    end
+
+    def pdf_row(csv_index, row)
+      pdf = row['PDF_Path'].sub("Volumes", "Yellowbacks")
+      new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
+      new_row + file_mappings(fileset_label: 'PDF for volume', preservation_master_file: pdf)
+    end
+
+    def ocr_row(csv_index, row)
+      ocr = row['OCR_Path'].sub("Volumes", "Yellowbacks")
+      new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
+      new_row + file_mappings(fileset_label: 'OCR Output for Volume', preservation_master_file: ocr, pcdm_use: ::FileSet::SUPPLEMENTAL)
+    end
+
+    def file_row(csv_index, row, page, relative_path)
+      page_number = page.to_s.rjust(4, '0')
+      image = relative_path + page_number + '.tif'
+      extract = relative_path + page_number + '.pos'
+      trans = relative_path + page_number + '.txt'
+      new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
+      new_row + file_mappings(fileset_label: "Page #{page}", preservation_master_file: image, transcript_file: trans, extracted: extract)
+    end
+
+    def file_mappings(args = {})
+      [
+        args[:fileset_label],
+        args[:preservation_master_file],
+        args[:service_file],
+        args[:intermediate_file],
+        args[:transcript_file],
+        args[:extracted],
+        args[:pcdm_use]
+      ]
+    end
+
+    # return an array to pad the correct number of colums for alma fields
+    def alma_placeholder
+      alma_mappings(Nokogiri::XML("<empty_doc/>"), {}).fill(nil)
+    end
+
+    # return an array to pad the correct number of colums for pull list fields
+    def pull_list_placeholder
+      pull_list_mappings({}).fill(nil)
+    end
+
+    def file_placeholder
+      file_mappings
     end
 
     def conference_name(marc_record)
