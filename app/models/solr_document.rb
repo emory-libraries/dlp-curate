@@ -65,10 +65,6 @@ class SolrDocument
     self['puid_ssim']
   end
 
-  def date_modified
-    self['date_modified_ssim']
-  end
-
   def character_set
     self['character_set_ssim']
   end

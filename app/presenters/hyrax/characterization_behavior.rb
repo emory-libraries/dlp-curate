@@ -10,10 +10,10 @@ module Hyrax
         [
           :original_checksum, :file_name, :file_path, :file_size, :mime_type,
           :created, :format_label, :valid, :well_formed, :creating_application_name,
-          :puid, :date_modified, :height, :width, :page_count, :character_set,
-          :byte_order, :color_space, :compression, :profile_name, :profile_version,
-          :orientation, :color_map, :image_producer, :capture_device, :scanning_software,
-          :gps_timestamp, :latitude, :longitude, :file_format, :file_title, :duration,
+          :puid, :height, :width, :page_count, :character_set, :byte_order,
+          :color_space, :compression, :profile_name, :profile_version, :orientation,
+          :color_map, :image_producer, :capture_device, :scanning_software,
+          :gps_timestamp, :latitude, :longitude, :file_format, :duration,
           :sample_rate, :filename
         ]
       end
