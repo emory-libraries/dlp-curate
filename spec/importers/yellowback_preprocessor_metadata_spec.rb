@@ -50,12 +50,12 @@ RSpec.describe YellowbackPreprocessor do
   end
 
   it 'maps the ark as the unique work_id' do
-    expect(import_rows[shakespeare_start]['work_id']).to eq('7stsg') # Shakespeare's comedy of The merchant of Venice
+    expect(import_rows[shakespeare_start]['deduplication_key']).to eq('7stsg') # Shakespeare's comedy of The merchant of Venice
   end
 
   it 'correctly assigns work_id for mulitple volumes' do # The common moths of England
-    expect(import_rows[moths1_start]['work_id']).to eq('7st4v') # copy 2
-    expect(import_rows[moths2_start]['work_id']).to eq('7st50') # copy 2
+    expect(import_rows[moths1_start]['deduplication_key']).to eq('7st4v') # copy 2
+    expect(import_rows[moths2_start]['deduplication_key']).to eq('7st50') # copy 2
   end
 
   # Pull List tests ############################################
