@@ -59,11 +59,6 @@ RSpec.configure do |config|
     Hyrax::CollectionType.find_or_create_default_collection_type
   end
 
-  config.before do
-    class_double("Clamby").as_stubbed_const
-    allow(Clamby).to receive(:virus?).and_return(false)
-  end
-
   # include Noid::Rails::RSpec
   # config.before(:suite) { disable_production_minter! }
   # config.after(:suite)  { enable_production_minter! }
