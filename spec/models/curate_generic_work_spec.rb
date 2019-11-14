@@ -1358,4 +1358,15 @@ RSpec.describe CurateGenericWork do
       expect(curate_generic_work.institution).to eq institution
     end
   end
+
+  context "validates url for work creation" do
+    let(:bad_url) { 'teststring' }
+    let(:curate_generic_work) { FactoryBot.build(:work, final_published_versions: [bad_url]) }
+
+    it "does not save work with bad url" do
+      curate_generic_work.save
+      expect(curate_generic_work.errors.count).to eq 1
+      expect(curate_generic_work.persisted?).to eq false
+    end
+  end
 end

@@ -84,17 +84,6 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(page).to have_css('li#required-metadata.complete')
     end
 
-    scenario "url fields are validated" do
-      new_cgw_form.visit_new_page.metadata_fill_in_with.attach_files.check_visibility
-
-      click_link('Additional descriptive fields')
-      fill_in "curate_generic_work[final_published_versions][]", with: "teststring"
-
-      click_on('Save')
-
-      expect(page).to have_content("is not a valid URL")
-    end
-
     scenario "custom terms show up as dynamic option for external vocab fields", js: true do
       new_cgw_form.visit_new_page
 
