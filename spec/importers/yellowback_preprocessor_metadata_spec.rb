@@ -1,3 +1,4 @@
+# coding: utf-8
 # frozen_string_literal: true
 require 'rails_helper'
 
@@ -112,8 +113,8 @@ RSpec.describe YellowbackPreprocessor do
     expect(import_rows[shakespeare_start]['copyright_date']).to eq('1898') # Shakespeare's comedy of The merchant of Venice
   end
 
-  it 'extracts contributor information from Alma' do
-    expect(import_rows[shakespeare_start]['contributor']).to eq('Gollancz, Israel, 1864-1930.|' + # Shakespeare's comedy of The merchant of Venice
+  it 'extracts contributors information from Alma' do
+    expect(import_rows[shakespeare_start]['contributors']).to eq('Gollancz, Israel, 1864-1930.|' + # Shakespeare's comedy of The merchant of Venice
                                                 'Hughes, Ted, 1930-1998, former owner. GEU|' +
                                                 'Ted Hughes Library (Emory University. General Libraries) GEU')
   end
@@ -146,12 +147,12 @@ RSpec.describe YellowbackPreprocessor do
     expect(import_rows[moths1_start]['extent']).to eq('154 pages, 12 leaves of plates : illustrations ; 17 cm.') # The common moths of England
   end
 
-  it 'extracts genre from Alma' do
-    expect(import_rows[twain_start]['genre']).to eq('Yellowbacks.') # Choice bits from Mark Twain
+  it 'extracts content_genres from Alma' do
+    expect(import_rows[twain_start]['content_genres']).to eq('Yellowbacks.') # Choice bits from Mark Twain
   end
 
-  it 'leaves genre blank if no value exists Alma' do
-    expect(import_rows[shakespeare_start]['genre']).to be_nil # Shakespeare's comedy of The merchant of Venice
+  it 'leaves content_genres blank if no value exists Alma' do
+    expect(import_rows[shakespeare_start]['content_genres']).to be_nil # Shakespeare's comedy of The merchant of Venice
   end
 
   it 'extracts local_call_number from Alma' do

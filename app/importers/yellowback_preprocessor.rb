@@ -40,7 +40,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     'system_of_record_ID',
     # Fields extracted from Alma MARC records
     'conference_name',
-    'contributor',
+    'contributors',
     'copyright_date',
     'creator',
     'date_created',
@@ -48,7 +48,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     'date_issued',
     'edition',
     'extent',
-    'genre',
+    'content_genres',
     'local_call_number',
     'place_of_production',
     'primary_language',
@@ -115,7 +115,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     def alma_mappings(record, row) # rubocop:disable Metrics/MethodLength
       [
         conference_name(record),
-        contributor(record),
+        contributors(record),
         copyright_date(record),
         creator(record),
         date_created(record),
@@ -123,7 +123,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
         date_issued(record),
         edition(record),
         extent(record),
-        genre(record),
+        content_genres(record),
         local_call_number(record),
         place_of_production(record),
         primary_language(record),
@@ -202,7 +202,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       extract_datafields(marc_record, '611')
     end
 
-    def contributor(marc_record)
+    def contributors(marc_record)
       [extract_datafields(marc_record, '700'),
        extract_datafields(marc_record, '710')].join('|')
     end
@@ -245,7 +245,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       extract_datafields(marc_record, '300')
     end
 
-    def genre(marc_record)
+    def content_genres(marc_record)
       extract_datafields(marc_record, '655')
     end
 
