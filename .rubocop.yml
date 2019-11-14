@@ -112,3 +112,4 @@ RSpec/MessageChain:
     Exclude:
         - 'spec/services/characterization_service_spec.rb'
         - 'spec/actors/hyrax/actors/file_actor_spec.rb'
+        - 'spec/system/show_file_spec.rb'
