@@ -39,6 +39,11 @@ RSpec.describe YellowbackPreprocessor do
     expect(import_rows[moths2_start]['title']).to eq('The common moths of England [Copy 3]') # The common moths of England
   end
 
+  it 'provides a deduplication key', :aggregate_failures do
+    expect(import_rows[shakespeare_start]['deduplication_key']).to eq('7stsg') # Shakespeare's comedy of The merchant of Venice
+    expect(import_rows[twain_start]['deduplication_key']).to eq('4c1gx') # Choice bits from Mark Twain
+  end
+
   it 'adds filesets for PDFs', :aggregate_failures do
     shakespeare_pdf = import_rows[shakespeare_start + pdf_offset] # Shakespeare's comedy of The merchant of Venice
     expect(shakespeare_pdf['type']).to eq('fileset')

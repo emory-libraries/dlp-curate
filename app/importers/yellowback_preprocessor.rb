@@ -23,8 +23,8 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
 
   HEADER_FIELDS = [
     # Context fields to help humans compare this file to sources
+    'deduplication_key',
     'pl_row',
-    'work_id',
     'CSV title',
     'type',
     # Fields extracted from the csv pull list
@@ -90,8 +90,8 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
 
     def context_fields(csv_index, row, type)
       [
+        row['emory_ark'], # deduplication_key
         csv_index + 2, # pl_row  (original row number from pull list)
-        row['emory_ark'], # work_id
         row['CSV Title'], # title
         type # row type (work | fileset)
       ]
