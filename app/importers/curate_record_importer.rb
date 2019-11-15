@@ -38,14 +38,13 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     Curate::FILE_TYPES.each do |file_type|
       open_files[file_type.to_sym] = File.open(find_file_path(filenames[file_type])) if File.exist?(find_file_path(filenames[file_type]))
     end
-
     huf = Hyrax::UploadedFile.create(user: @depositor,
                                      preservation_master_file: open_files[:preservation_master_file],
                                      intermediate_file: open_files[:intermediate_file],
                                      service_file: open_files[:service_file],
                                      extracted_text: open_files[:extracted],
                                      transcript: open_files[:transcript_file],
-                                     fileset_use: FileSet::PRIMARY,
+                                     fileset_use: filenames[:filename].metadata['pcdm_use'],
                                      file: filenames[:filename].metadata['fileset_label']) # this is the label
     Curate::FILE_TYPES.each do |file_type|
       open_files[file_type]&.close

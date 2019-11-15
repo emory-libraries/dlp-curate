@@ -59,7 +59,7 @@ class CurateMapper < Zizia::HashMapper
 
   # What columns are allowed in the CSV
   def self.allowed_headers
-    CURATE_TERMS_MAP.values + ['filename', 'type', 'intermediate_file', 'fileset_label', 'preservation_master_file', 'service_file', 'extracted', 'transcript_file']
+    CURATE_TERMS_MAP.values + ['filename', 'type', 'intermediate_file', 'fileset_label', 'preservation_master_file', 'service_file', 'extracted', 'transcript_file', 'pcdm_use']
   end
 
   # Given a field name, return the CSV header
@@ -133,6 +133,30 @@ class CurateMapper < Zizia::HashMapper
     valid_option = active_terms.select { |s| s["id"].downcase.gsub(/[^a-z0-9\s]/i, '') == normalized_csv_term }.try(:first)
     return valid_option["id"] if valid_option
     raise "Invalid administrative_unit value: #{csv_term}"
+  end
+
+  # Map pcdm_use to the values on FileSet
+  # Set FileSet::Primary when the value is blank
+  def pcdm_use
+    csv_term = @metadata["pcdm_use"]
+    return FileSet::PRIMARY unless csv_term # return the default is value is nil
+    normalized_csv_term = csv_term.downcase.gsub(/[^a-z0-9\s]/i, '')
+    valid_option = pcdm_value(normalized_csv_term)
+    return valid_option if valid_option
+    raise "Invalid PCDM use value: #{csv_term}"
+  end
+
+  def pcdm_value(normalized_csv_term)
+    case normalized_csv_term
+    when ''
+      FileSet::PRIMARY
+    when 'primary content'
+      FileSet::PRIMARY
+    when 'supplemental content'
+      FileSet::SUPPLEMENTAL
+    when 'supplemental preservation'
+      FileSet::PRESERVATION
+    end
   end
 
   # Iterate through all values for data_classifications and ensure they are all
