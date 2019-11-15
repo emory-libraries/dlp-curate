@@ -7,7 +7,6 @@ class ModularImporter
               :user_id, :row
 
   attr_accessor :csv_import_detail
-
   DEDUPLICATION_FIELD = 'deduplication_key'
 
   def initialize(csv_import)
@@ -36,20 +35,13 @@ class ModularImporter
       pre_ingest_work = create_pre_ingest_work(type: record.mapper.metadata['type'],
                                                csv_import_detail_id: csv_import_detail.id,
                                                deduplication_key: record.mapper.metadata['deduplication_key'])
-
-      if record.mapper.metadata['preservation_master_file']
-        @row += 1
+      Curate::FILE_TYPES.each do |file_type|
+        next unless record.mapper.metadata[file_type]
+        @row += 1 if file_type == 'preservation_master_file'
         pre_ingest_file = Zizia::PreIngestFile.new(row_number: @row,
                                                    pre_ingest_work: pre_ingest_work,
-                                                   filename: record.mapper.metadata['preservation_master_file'],
-                                                   size: pre_ingest_file_size(record: record, type: 'preservation_master_file'))
-        pre_ingest_file.save
-      end
-      if record.mapper.metadata['intermediate_file']
-        pre_ingest_file = Zizia::PreIngestFile.new(row_number: @row,
-                                                   pre_ingest_work: pre_ingest_work,
-                                                   filename: record.mapper.metadata['intermediate_file'],
-                                                   size: pre_ingest_file_size(record: record, type: 'intermediate_file'))
+                                                   filename: record.mapper.metadata[file_type],
+                                                   size: pre_ingest_file_size(record: record, type: file_type))
         pre_ingest_file.save
       end
       pre_ingest_work.save
