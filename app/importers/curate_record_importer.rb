@@ -44,7 +44,7 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
                                      service_file: open_files[:service_file],
                                      extracted_text: open_files[:extracted],
                                      transcript: open_files[:transcript_file],
-                                     fileset_use: filenames[:filename].metadata['pcdm_use'],
+                                     fileset_use: filenames[:filename].pcdm_use,
                                      file: filenames[:filename].metadata['fileset_label']) # this is the label
     Curate::FILE_TYPES.each do |file_type|
       open_files[file_type]&.close
@@ -60,9 +60,11 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
 
     attrs = record.attributes.merge(additional_attrs)
     attrs = attrs.merge(member_of_collections_attributes: { '0' => { id: collection_id } }) if collection_id
+    attrs.delete(:pcdm_use)
 
     # Ensure nothing is passed in the files field,
     # since this is reserved for Hyrax and is where uploaded_files will be attached
+
     attrs.delete(:files)
     attrs.delete(:remote_files)
     based_near = attrs.delete(:based_near)

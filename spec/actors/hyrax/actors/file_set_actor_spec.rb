@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'redlock'
 
-RSpec.describe Hyrax::Actors::FileSetActor do
+RSpec.describe Hyrax::Actors::FileSetActor, :clean do
   include ActionDispatch::TestProcess
 
   let(:user)          { FactoryBot.create(:user) }

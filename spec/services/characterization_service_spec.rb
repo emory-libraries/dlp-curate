@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'support/file_set_helper'
 
-describe Hydra::Works::CharacterizationService do
+describe Hydra::Works::CharacterizationService, :clean do
   describe "integration test for characterizing from path on disk." do
     let(:filename)     { 'sample-file.pdf' }
     let(:path_on_disk) { File.join(fixture_path, filename) }

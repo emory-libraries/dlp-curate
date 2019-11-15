@@ -27,6 +27,7 @@ RSpec.describe 'Importing records with a bad file attachment', :perform_jobs, :c
 
       click_on 'Preview Import'
 
+      expect(page).to have_content('The field name "filename" is not supported')
       expect(page).to have_content "row 2: Unable to find"
       expect(page).to have_content "ARCH.tif"
     end

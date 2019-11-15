@@ -29,6 +29,7 @@ class CurateMapper < Zizia::HashMapper
     legacy_rights: "legacy_rights",
     local_call_number: "local_call_number",
     notes: "notes",
+    pcdm_use: "pcdm_use",
     place_of_production: "place_of_production",
     primary_language: "primary_language",
     publisher: "publisher",
@@ -59,7 +60,7 @@ class CurateMapper < Zizia::HashMapper
 
   # What columns are allowed in the CSV
   def self.allowed_headers
-    CURATE_TERMS_MAP.values + ['filename', 'type', 'intermediate_file', 'fileset_label', 'preservation_master_file', 'service_file', 'extracted', 'transcript_file', 'pcdm_use']
+    CURATE_TERMS_MAP.values + ['type', 'intermediate_file', 'fileset_label', 'preservation_master_file', 'service_file', 'extracted', 'transcript_file', 'pcdm_use']
   end
 
   # Given a field name, return the CSV header
@@ -73,9 +74,8 @@ class CurateMapper < Zizia::HashMapper
     common_fields
   end
 
-  # Zizia expects files to return an Array
   def files
-    [@metadata["Filename"]]
+    []
   end
 
   # Samvera generally assumes that all fields are multi-valued. Curate, however,
@@ -138,16 +138,16 @@ class CurateMapper < Zizia::HashMapper
   # Map pcdm_use to the values on FileSet
   # Set FileSet::Primary when the value is blank
   def pcdm_use
-    csv_term = @metadata["pcdm_use"]
-    return FileSet::PRIMARY unless csv_term # return the default is value is nil
-    normalized_csv_term = csv_term.downcase.gsub(/[^a-z0-9\s]/i, '')
+    csv_term = metadata["pcdm_use"]
+    normalized_csv_term = csv_term&.downcase&.gsub(/[^a-z0-9\s]/i, '')
     valid_option = pcdm_value(normalized_csv_term)
-    return valid_option if valid_option
-    raise "Invalid PCDM use value: #{csv_term}"
+    valid_option
   end
 
   def pcdm_value(normalized_csv_term)
     case normalized_csv_term
+    when nil
+      FileSet::PRIMARY
     when ''
       FileSet::PRIMARY
     when 'primary content'
