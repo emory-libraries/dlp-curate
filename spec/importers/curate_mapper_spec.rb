@@ -28,6 +28,7 @@ RSpec.describe CurateMapper do
       "other_identifiers" => "dams:152815|MSS1218_B001_I002",
       "local_call_number" => "MSS 1218",
       "notes" => "This is a note.",
+      "pcdm_use" => nil,
       "place_of_production" => "London",
       "primary_language" => "English",
       "publisher" => "Gutenberg",
@@ -250,6 +251,56 @@ RSpec.describe CurateMapper do
   context "#notes" do
     it "maps the notes field" do
       expect(mapper.notes).to eq ["This is a note."]
+    end
+  end
+
+  context "#pcdm_use" do
+    context "primary content" do
+      let(:metadata) do
+        {
+          "pcdm_use" => "Primary Content"
+        }
+      end
+      it "maps pcdm_use to FileSet:PRIMARY" do
+        expect(mapper.pcdm_use).to eq(FileSet::PRIMARY)
+      end
+    end
+    context "supplemental" do
+      let(:metadata) do
+        {
+          "pcdm_use" => "supplemental Content"
+        }
+      end
+      it "maps pcdm_use to FileSet::SUPPLEMENTAL" do
+        expect(mapper.pcdm_use).to eq(FileSet::SUPPLEMENTAL)
+      end
+    end
+    context "supplemental preservation" do
+      let(:metadata) do
+        {
+          "pcdm_use" => "Supplemental preservation"
+        }
+      end
+      it "maps pcdm_use to FileSet::PRESERVATION" do
+        expect(mapper.pcdm_use).to eq(FileSet::PRESERVATION)
+      end
+    end
+
+    context "nil" do
+      it "maps pcdm_use to primary content" do
+        expect(mapper.pcdm_use).to eq(FileSet::PRIMARY)
+      end
+    end
+
+    context "empty string" do
+      let(:metadata) do
+        {
+          "pcdm_use" => ""
+        }
+      end
+      it "maps pcdm_use to primary content" do
+        expect(mapper.pcdm_use).to eq(FileSet::PRIMARY)
+      end
     end
   end
 
