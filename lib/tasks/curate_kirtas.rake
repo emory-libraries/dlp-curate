@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 namespace :curate do
-  desc "Langmuir preprocessing"
+  desc "Kirtas preprocessing"
   task kirtas: :environment do
     pull_list_csv = ENV['CSV'] || ENV['csv'] || ''
     alma_xml = ENV['XML'] || ENV['xml'] || ''
