@@ -35,6 +35,7 @@ class ModularImporter
       pre_ingest_work = create_pre_ingest_work(type: record.mapper.metadata['type'],
                                                csv_import_detail_id: csv_import_detail.id,
                                                deduplication_key: record.mapper.metadata['deduplication_key'])
+      pre_ingest_work.pre_ingest_files.each(&:delete) if record.mapper.metadata['type'] == 'work'
       Curate::FILE_TYPES.each do |file_type|
         next unless record.mapper.metadata[file_type]
         @row += 1 if file_type == 'preservation_master_file'
@@ -79,7 +80,7 @@ class ModularImporter
       # Create a PreIngestWork if the type in the CSV is work
       when 'work'
         @row += 1
-        pre_ingest_work = Zizia::PreIngestWork.new(csv_import_detail_id: csv_import_detail_id, deduplication_key: deduplication_key)
+        pre_ingest_work = Zizia::PreIngestWork.where(csv_import_detail_id: csv_import_detail_id, deduplication_key: deduplication_key).first_or_create
       # Use an existing PreIngestWork if the type is fileset in the CSV
       when 'fileset'
         pre_ingest_work = Zizia::PreIngestWork.where(csv_import_detail_id: csv_import_detail_id, deduplication_key: deduplication_key).first
