@@ -31,10 +31,11 @@ RSpec.describe Hyrax::Actors::CurateGenericWorkActor do
         expect(Hyrax.config.callback).to receive(:run)
           .with(:after_create_concern, curation_concern, user)
         middleware.create(env)
-        expect(curation_concern.preservation_event.pluck(:event_type)).to include ['Object Validation (Work created)']
+        expect(curation_concern.preservation_event.pluck(:event_type)).to include ['Validation']
         expect(curation_concern.preservation_event.first.outcome).to eq ['Success']
         expect(curation_concern.preservation_event.first.initiating_user).to eq [user.uid]
-        expect(curation_concern.preservation_event.count).to eq 3
+        expect(curation_concern.preservation_event.pluck(:event_details)).to include ['Policy was assigned. Visibility/access controls assigned: restricted']
+        expect(curation_concern.preservation_event.count).to eq 2
       end
     end
   end

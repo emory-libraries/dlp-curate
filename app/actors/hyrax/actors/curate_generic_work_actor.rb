@@ -29,18 +29,15 @@ module Hyrax
         event_start = DateTime.current # record event_start timestamp
         apply_creation_data_to_curation_concern(env)
         apply_save_data_to_curation_concern(env)
-        # Create our three required events
-        work_creation = { 'type' => 'Object Validation (Work created)', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Valid submission package submitted',
-                          'software_version' => 'Curate v.1', 'user' => env.user.uid }
-        work_policy = { 'type' => 'Policy Assignment', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Policy was assigned', 'software_version' => 'Curate v.1',
-                        'user' => env.user.uid }
-        work_metadata = { 'type' => 'Metadata Extraction', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Descriptive, Rights, and Administrative metadata extracted from CSV',
-                          'software_version' => 'Curate v.1', 'user' => env.user.uid }
         save(env) && next_actor.create(env) && run_callbacks(:after_create_concern, env)
+        # Create our three required events
+        work_creation = { 'type' => 'Validation', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Submission package validated',
+                          'software_version' => 'Curate v.1', 'user' => env.user.uid }
+        work_policy = { 'type' => 'Policy Assignment', 'start' => event_start, 'outcome' => 'Success',
+                        'details' => "Policy was assigned. Visibility/access controls assigned: #{env.curation_concern.visibility}", 'software_version' => 'Curate v.1', 'user' => env.user.uid }
         # Create preservation events
         create_preservation_event(env.curation_concern, work_creation)
         create_preservation_event(env.curation_concern, work_policy)
-        create_preservation_event(env.curation_concern, work_metadata)
       end
     end
   end
