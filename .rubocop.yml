@@ -73,6 +73,7 @@ Metrics/MethodLength:
         - app/controllers/hyrax/file_sets_controller.rb
         - app/jobs/create_work_job.rb
         - app/importers/modular_importer.rb
+        - app/jobs/characterize_job.rb
 
 Layout/AlignHash:
     Exclude:
