@@ -32,4 +32,60 @@ class SolrDocument
   def pcdm_use
     self['pcdm_use_tesim']
   end
+
+  def file_name
+    self['file_name_ssim']
+  end
+
+  def file_path
+    self['file_path_ssim']
+  end
+
+  def file_size
+    self['file_size_ssim']
+  end
+
+  def created
+    self['date_created_ssim']
+  end
+
+  def valid
+    self['valid_ssim']
+  end
+
+  def well_formed
+    self['well_formed_ssim']
+  end
+
+  def creating_application_name
+    self['creating_application_name_ssim']
+  end
+
+  def puid
+    self['puid_ssim']
+  end
+
+  def character_set
+    self['character_set_ssim']
+  end
+
+  def byte_order
+    self['byte_order_ssim']
+  end
+
+  def color_space
+    self['color_space_ssim']
+  end
+
+  def compression
+    self['compression_ssim']
+  end
+
+  def profile_name
+    self['profile_name_ssim']
+  end
+
+  def profile_version
+    self['profile_version_ssim']
+  end
 end
