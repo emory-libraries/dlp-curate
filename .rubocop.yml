@@ -76,6 +76,7 @@ Metrics/MethodLength:
         - app/jobs/create_work_job.rb
         - app/importers/modular_importer.rb
         - app/indexers/curate/file_set_indexer.rb
+        - app/jobs/characterize_job.rb
 
 Layout/AlignHash:
     Exclude:

@@ -84,17 +84,6 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(page).to have_css('li#required-metadata.complete')
     end
 
-    scenario "url fields are validated" do
-      new_cgw_form.visit_new_page.metadata_fill_in_with.attach_files.check_visibility
-
-      click_link('Additional descriptive fields')
-      fill_in "curate_generic_work[final_published_versions][]", with: "teststring"
-
-      click_on('Save')
-
-      expect(page).to have_content("is not a valid URL")
-    end
-
     scenario "custom terms show up as dynamic option for external vocab fields", js: true do
       new_cgw_form.visit_new_page
 
@@ -104,12 +93,52 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(find('div.ui-menu-item-wrapper', match: :first).text).to eq 'Test3'
     end
 
+    scenario "work visibility uses expected labels", js: true do
+      visit("/concern/curate_generic_works/#{cgw.id}/edit")
+
+      # Private / Restricted
+      private_input = find("ul.visibility").find("input#curate_generic_work_visibility_restricted")
+      private_label = private_input.sibling("span").text
+      expect(private_label).to eq "Private"
+      private_text = private_input.find(:xpath, "..").text.split("\n")[1]
+      expect(private_text).to eq "Administrator and Owner access only"
+
+      # Public Low View
+      public_low_view_input = find("ul.visibility").find("input#curate_generic_work_visibility_low_res")
+      public_low_view_label = public_low_view_input.sibling("span").text
+      expect(public_low_view_label).to eq "Public Low View"
+      public_low_view_text = public_low_view_input.find(:xpath, "..").text.split("\n")[1]
+      expect(public_low_view_text).to eq "Public access with restricted resolution view-only"
+
+      # Emory High Download
+      emory_high_network_input = find("ul.visibility").find("input#curate_generic_work_visibility_authenticated")
+      emory_high_network_label = emory_high_network_input.sibling("span").text
+      expect(emory_high_network_label).to eq "Emory High Download"
+      emory_high_network_text = emory_high_network_input.find(:xpath, "..").text.split("\n")[1]
+      expect(emory_high_network_text).to eq "Emory users with full resolution view & download"
+
+      # Emory Low Download
+      emory_low_input = find("ul.visibility").find("input#curate_generic_work_visibility_emory_low")
+      emory_low_label = emory_low_input.sibling("span").text
+      expect(emory_low_label).to eq "Emory Low Download"
+      emory_low_text = emory_low_input.find(:xpath, "..").text.split("\n")[1]
+      expect(emory_low_text).to eq "Emory users with restricted resolution view & download"
+
+      # Rose High View
+      rose_high_input = find("ul.visibility").find("input#curate_generic_work_visibility_rose_high")
+      rose_high_label = rose_high_input.sibling("span").text
+      expect(rose_high_label).to eq "Rose High View"
+      rose_high_text = rose_high_input.find(:xpath, "..").text.split("\n")[1]
+      expect(rose_high_text).to eq "Rose Library reading room access only"
+    end
+
     scenario "verify work visibility can be edited" do
       expect(cgw.visibility).to eq 'restricted'
 
       visit("/concern/curate_generic_works/#{cgw.id}/edit")
 
       find('body').click
+
       choose('curate_generic_work_visibility_low_res')
       choose('curate_generic_work_visibility_emory_low')
       choose('curate_generic_work_visibility_rose_high')

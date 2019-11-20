@@ -12,7 +12,6 @@ RSpec.describe 'Importing preprocessed langmuir', :clean, perform_enqueued: [Att
     import
   end
   let(:importer) { ModularImporter.new(csv_import) }
-
   before(:all) do
     ENV['IMPORT_PATH'] = File.join(fixture_path, 'fake_images')
   end
@@ -22,6 +21,7 @@ RSpec.describe 'Importing preprocessed langmuir', :clean, perform_enqueued: [Att
       importer.import
       expect(CurateGenericWork.count).to eq(5)
       expect(FileSet.count).to eq(12)
+      expect(FileSet.all.map(&:pcdm_use)).to include('Primary Content', 'Supplemental Content', 'Supplemental Preservation')
       expect(CurateGenericWork.first.file_sets.size).to eq(2)
       expect(CurateGenericWork.first.ordered_members.to_a.first.title).to eq(['Front'])
       expect(CurateGenericWork.first.ordered_members.to_a.last.title).to eq(['Back'])
@@ -29,7 +29,7 @@ RSpec.describe 'Importing preprocessed langmuir', :clean, perform_enqueued: [Att
       expect(CurateGenericWork.where(title: '*frisky*').first.representative.title).to eq(['Side 1'])
       expect(CurateGenericWork.where(title: '*frisky*').first.ordered_members.to_a.last.title).to eq(['Side 4'])
       expect(Zizia::PreIngestWork.count).to eq(5)
-      expect(Zizia::PreIngestFile.count).to eq(24)
+      expect(Zizia::PreIngestFile.count).to eq(60)
       expect(Zizia::PreIngestFile.last.row_number).to eq(18)
       expect(Zizia::PreIngestWork.last['deduplication_key']).to be_kind_of(String)
     end

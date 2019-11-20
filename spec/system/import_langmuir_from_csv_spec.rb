@@ -57,6 +57,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       expect(page).not_to have_content('The field name "intermediate_file" is not supported')
       expect(page).not_to have_content('The field name "fileset_label" is not supported')
       expect(page).not_to have_content('The field name "preservation_master_file" is not supported')
+      expect(page).not_to have_content('The field name "pcdm_use" is not supported')
 
       # After reading the warnings, the user decides
       # to continue with the import.

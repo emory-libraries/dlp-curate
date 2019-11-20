@@ -2,6 +2,7 @@
 
 class CurateRecordImporter < Zizia::HyraxRecordImporter
   attr_accessor :csv_file
+
   def initialize(attributes: {})
     super
     @csv_file = attributes[:csv_file]
@@ -21,25 +22,33 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     uploaded_file_ids = []
     files_to_attach.each do |filename|
       next if filename.metadata['type'] == 'work'
-      uploaded_prod_file = create_hyrax_uploaded_file(preservation_master_file: filename.metadata['preservation_master_file'],
-                                                      intermediate_file: filename.metadata['intermediate_file'],
-                                                      filename: filename)
+      filenames = {}
+      Curate::FILE_TYPES.each do |file_type|
+        filenames[file_type] = filename.metadata[file_type] if filename.metadata[file_type]
+      end
+      filenames[:filename] = filename
+      uploaded_prod_file = create_hyrax_uploaded_file(filenames)
       uploaded_file_ids << uploaded_prod_file.id
     end
     uploaded_file_ids
   end
 
-  def create_hyrax_uploaded_file(preservation_master_file:, intermediate_file:, filename:)
-    open_preservation_master_file = File.open(find_file_path(preservation_master_file)) if File.exist?(find_file_path(preservation_master_file))
-    open_intermediate_file = File.open(find_file_path(intermediate_file)) if File.exist?(find_file_path(preservation_master_file))
-
+  def create_hyrax_uploaded_file(filenames)
+    open_files = {}
+    Curate::FILE_TYPES.each do |file_type|
+      open_files[file_type.to_sym] = File.open(find_file_path(filenames[file_type])) if File.exist?(find_file_path(filenames[file_type]))
+    end
     huf = Hyrax::UploadedFile.create(user: @depositor,
-                                     preservation_master_file: open_preservation_master_file,
-                                     intermediate_file: open_intermediate_file,
-                                     fileset_use: FileSet::PRIMARY,
-                                     file: filename.metadata['fileset_label']) # this is the label
-    open_preservation_master_file.close
-    open_intermediate_file.close
+                                     preservation_master_file: open_files[:preservation_master_file],
+                                     intermediate_file: open_files[:intermediate_file],
+                                     service_file: open_files[:service_file],
+                                     extracted_text: open_files[:extracted],
+                                     transcript: open_files[:transcript_file],
+                                     fileset_use: filenames[:filename].pcdm_use,
+                                     file: filenames[:filename].metadata['fileset_label']) # this is the label
+    Curate::FILE_TYPES.each do |file_type|
+      open_files[file_type]&.close
+    end
     huf
   end
 
@@ -51,9 +60,11 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
 
     attrs = record.attributes.merge(additional_attrs)
     attrs = attrs.merge(member_of_collections_attributes: { '0' => { id: collection_id } }) if collection_id
+    attrs.delete(:pcdm_use)
 
     # Ensure nothing is passed in the files field,
     # since this is reserved for Hyrax and is where uploaded_files will be attached
+
     attrs.delete(:files)
     attrs.delete(:remote_files)
     based_near = attrs.delete(:based_near)
@@ -66,6 +77,7 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
   # This will need to be updated for other collections if their files do not
   # follow the same organizational system.
   def find_file_path(filename)
+    return '' unless filename
     File.join(ENV['IMPORT_PATH'], filename)
   end
 
