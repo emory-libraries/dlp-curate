@@ -54,18 +54,5 @@ RSpec.describe Hyrax::Actors::FileSetActor, :clean do
         expect(file_set.label).to eql(label)
       end
     end
-
-    context 'when a fileset is saved' do
-      before do
-        actor.create_content(file)
-      end
-
-      it 'adds a new preservation_event for fileset creation' do
-        expect(file_set.preservation_event.first.event_type).to eq ['Replication (FileSet created)']
-        expect(file_set.preservation_event.first.outcome).to eq ['Success']
-        expect(file_set.preservation_event.first.initiating_user).to eq [user.uid]
-        expect(file_set.preservation_event.count).to eq 1
-      end
-    end
   end
 end
