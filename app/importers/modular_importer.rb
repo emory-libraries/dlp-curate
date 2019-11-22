@@ -35,7 +35,7 @@ class ModularImporter
       pre_ingest_work = create_pre_ingest_work(type: record.mapper.metadata['type'],
                                                csv_import_detail_id: csv_import_detail.id,
                                                deduplication_key: record.mapper.metadata['deduplication_key'])
-      pre_ingest_work.pre_ingest_files.each(&:delete) if record.mapper.metadata['type'] == 'work'
+      Zizia::PreIngestFile.where(pre_ingest_work_id: pre_ingest_work.id).delete_all if record.mapper.metadata['type'] == 'work'
       Curate::FILE_TYPES.each do |file_type|
         next unless record.mapper.metadata[file_type]
         @row += 1 if file_type == 'preservation_master_file'
