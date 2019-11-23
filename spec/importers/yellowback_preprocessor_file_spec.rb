@@ -79,4 +79,9 @@ RSpec.describe YellowbackPreprocessor do
     expect(shakespeare_pdf['preservation_master_file']).to eq('/Yellowbacks/lsdi2/ocm04416480-2987/ocm04416480/Images/Output/Output.pdf')
     expect(twain_pdf['preservation_master_file']).to eq('/Yellowbacks/lsdi/diesel/lts_new/ocm05922290-1895/ocm05922290/Output/Output.pdf')
   end
+
+  it 'sets the visibility value', :aggregate_failures do
+    expect(import_rows[0]['visibility']).to eq('Emory Network') # Edge cases
+    expect(import_rows[shakespeare_start]['visibility']).to eq('Public') # Shakespeare's comedy of The merchant of Venice
+  end
 end
