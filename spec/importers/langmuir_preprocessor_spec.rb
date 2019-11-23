@@ -15,14 +15,16 @@ RSpec.describe LangmuirPreprocessor do
   end
 
   # each test inspects the output of the pre-processor, read into the import_rows CSV::Table object
-  let(:import_rows) { CSV.read(File.join(fixture_path, 'csv_import', 'before_processing', 'langmuir-unprocessed-processed.csv'), headers: true).by_row! }
+  let(:processed_csv) { File.join(fixture_path, 'csv_import', 'before_processing', 'langmuir-unprocessed-processed.csv') }
+  let(:import_rows) { CSV.read(processed_csv, headers: true).by_row! }
+  let(:unparsed_rows) { File.read(processed_csv) }
 
   it 'outputs the expected number of rows' do
     expect(import_rows.length).to eq(17)
   end
 
   # this just repeats the csv data, but shows the testing pattern and titles used in subsequent tests
-  it 'processes the expected works' do
+  it 'processes the expected works', :aggregate_failures do
     expect(import_rows[0]['title']).to eq('City gates, St. Augustine, Florida') # City gates, St. Augustine, Florida
     expect(import_rows[3]['title']).to eq('A disappearing mode of transportation, Palm Beach, Florida') # A disappearing mode of transportation, Palm Beach, Florida
     expect(import_rows[6]['title']).to eq('The old city gate, St. Augustine, Fla.') # The old city gate, St. Augustine, Fla.
@@ -60,6 +62,14 @@ RSpec.describe LangmuirPreprocessor do
     expect(import_rows[16]['fileset_label']).to eq('Image 4') # Advertising : Rafael's, gay 'n frisky
   end
 
+  it 'has the expected row length', :aggregate_failures do
+    header_fields = import_rows.headers
+    metadata_row_fields = CSV.parse(unparsed_rows.lines[13]).first # Advertising : Rafael's, gay 'n frisky
+    fileset_row_fields = CSV.parse(unparsed_rows.lines[14]).first
+    expect(metadata_row_fields.size).to eq(header_fields.size)
+    expect(fileset_row_fields.size).to eq(header_fields.size)
+  end
+
   it 'attaches the ARCH file as the preservation_master_file' do
     expect(import_rows[2]['preservation_master_file']).to match(/ARCH/) # City gates, St. Augustine, Florida
   end
@@ -68,7 +78,7 @@ RSpec.describe LangmuirPreprocessor do
     expect(import_rows[2]['intermediate_file']).to match(/PROD/) # City gates, St. Augustine, Florida
   end
 
-  it 'attaches the expected files to the expected filesets in the expected order' do # Advertising : Rafael's, gay 'n frisky
+  it 'attaches the expected files to the expected filesets in the expected order', :aggregate_failures do # Advertising : Rafael's, gay 'n frisky
     expect(import_rows[14]['fileset_label']).to eq('Image 2') # P0002
     expect(import_rows[14]['preservation_master_file']).to match('MSS1218_B028_I091_P0002_ARCH.tif') # ARCH
     expect(import_rows[15]['fileset_label']).to eq('Image 3') # P0003
