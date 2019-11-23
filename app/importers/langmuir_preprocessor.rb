@@ -17,6 +17,7 @@ class LangmuirPreprocessor
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
     @processed_csv = File.join(directory, filename + "-processed.csv")
+    @merged_headers = additional_headers + @source_csv.headers
     @tree = {}
   end
 
@@ -54,8 +55,7 @@ class LangmuirPreprocessor
 
   def output_work_tree
     merge_csv = CSV.open(@processed_csv, 'w+', headers: true, write_headers: true)
-    original_headers = @source_csv.headers
-    merge_csv << additional_headers + original_headers
+    merge_csv << @merged_headers
     @tree.each_value do |work|
       merge_csv << work[:metadata]
       two_sided = work[:filesets].count <= 2
@@ -73,7 +73,7 @@ class LangmuirPreprocessor
     sequence_number, target_file, metadata_row = extract_structure(row)
     @tree[deduplication_key] ||= { metadata: nil, filesets: {} } # create a placeholder if we don't have one for this key
     @tree[deduplication_key][:metadata] = extract_metadata(row, source_row_num) if metadata_row
-    @tree[deduplication_key][:filesets][sequence_number] ||= CSV::Row.new(additional_headers, [source_row_num, deduplication_key, 'fileset'])
+    @tree[deduplication_key][:filesets][sequence_number] ||= CSV::Row.new(@merged_headers, [source_row_num, deduplication_key, 'fileset'])
     @tree[deduplication_key][:filesets][sequence_number][target_file] = relative_path_to_file(row)
   end
 
