@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'csv'
+require 'ruby-progressbar'
 
 ##
 # Utility service and methods that merge metadata from a CSV Pull List and MARCXml records
@@ -74,15 +75,16 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
   def merge
     merge_csv = CSV.open(@processed_csv, 'w+', headers: true, write_headers: true)
     merge_csv << HEADER_FIELDS
+    progressbar = ProgressBar.create(title: "Processing Rows", total: @pull_list.size, format: '%t: |%B| %p%  ')
     @pull_list.each.with_index do |row, csv_index|
-      mmsid = row['ALMA MMSID']
-      record = @marc_records.xpath("//record/controlfield[@tag='001'][text()='#{mmsid}']/ancestor::record").first
+      record = @marc_records.xpath("//record/controlfield[@tag='001'][text()='#{row['ALMA MMSID']}']/ancestor::record").first
       new_row = context_fields(csv_index, row, 'work')
       new_row += pull_list_mappings(row)
       new_row += alma_mappings(record, row)
       new_row += file_placeholder
       merge_csv << new_row
       add_file_rows(csv_index, merge_csv, row)
+      progressbar.increment
     end
     merge_csv.close
   end
