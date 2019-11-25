@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'csv'
+require 'ruby-progressbar'
 
 ##
 # Utility service and methods that merge metadata from a CSV Pull List and MARCXml records
@@ -48,14 +49,17 @@ class LangmuirPreprocessor
   end
 
   def process_source_rows
+    progressbar = ProgressBar.create(title: "Processing Source", total: @source_csv.size, format: '%t: |%B| %p%   ')
     @source_csv.each.with_index do |row, row_num|
       process_row(row, row_num + 2) if row['Digital Object - Parent Identifier'] # skip blank rows in the source csv
+      progressbar.increment
     end
   end
 
   def output_work_tree
     merge_csv = CSV.open(@processed_csv, 'w+', headers: true, write_headers: true)
     merge_csv << @merged_headers
+    progressbar = ProgressBar.create(title: "Writing works", total: @tree.size, format: '%t: |%B| %p%   ')
     @tree.each_value do |work|
       merge_csv << work[:metadata]
       two_sided = work[:filesets].count <= 2
@@ -64,6 +68,7 @@ class LangmuirPreprocessor
         fileset['fileset_label'] = make_label(fileset_index, two_sided)
         merge_csv << fileset
       end
+      progressbar.increment
     end
     merge_csv.close
   end
