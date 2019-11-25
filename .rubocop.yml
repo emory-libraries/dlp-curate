@@ -78,6 +78,10 @@ Metrics/MethodLength:
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
 
+Metrics/ModuleLength:
+    Exclude:
+        - app/lib/metadata_definitions.rb
+
 Layout/AlignHash:
     Exclude:
         - app/models/curate_generic_work.rb
