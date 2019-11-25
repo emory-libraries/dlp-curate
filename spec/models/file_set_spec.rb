@@ -88,16 +88,13 @@ RSpec.describe FileSet, :perform_enqueued, :clean do
 
   # This spec is borrowed and modified from `Hydra::Works::VirusCheck`
   context "with ClamAV" do
-    # We create an empty file_set and walk through virus-checking
-    let :file_set do
-      FileSet.new
-    end
     let(:file) do
       Hydra::PCDM::File.new do |f|
         f.content = File.new(File.join(fixture_path, 'sample-file.pdf'))
         f.original_name = 'sample-file.pdf'
       end
     end
+    let(:file_set)         { FileSet.new } # We create an empty file_set and walk through virus-checking
     let(:file_set_with_id) { FactoryBot.create(:file_set) } # We save the preservation_events on this file_set object
 
     before do
@@ -121,9 +118,6 @@ RSpec.describe FileSet, :perform_enqueued, :clean do
     end
 
     context 'with a clean file' do
-      before do
-      end
-
       it 'does not detect viruses' do
         expect(Hydra::Works::VirusCheckerService).to receive(:file_has_virus?).and_return(false)
         expect(file_set).not_to be_viruses
