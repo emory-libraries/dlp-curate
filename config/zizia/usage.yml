@@ -93,4 +93,5 @@ title:                  "The name of the resource being described. The title may
 transcript: "Path to a file that contains a transcript"
 transfer_engineer:      "Name of the person who digitized/reformatted the master files for the object (not necessarily the additional/supplemental files)"
 uniform_title:          "The standardized version of a title, established when a work has been issued under varying names"
+visibility: "The desired visiblity setting for the work and it's files. You can use: Private, Restricted, Authenticated, Registered, Emory, Emory Network, Open, Public, Public Low View, Emory Low Download, or Rose High View."
 volume:                 "The volume indication for the material"

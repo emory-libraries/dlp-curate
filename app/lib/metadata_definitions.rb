@@ -98,4 +98,18 @@ module MetadataDefinitions
       usage: Zizia::MetadataUsage.instance.usage['pcdm_use']
     }
   end
+
+  def visibility_definition
+    {
+      attribute:  'visibility',
+      predicate:  'n/a',
+      multiple: 	'false',
+      type:       'String',
+      validator: 	'Required, must exist in the application\'s controlled vocabulary for visiblity levels.',
+      label: 	    'Visibility',
+      csv_header: 'visibility',
+      required_on_form: 	'true',
+      usage: Zizia::MetadataUsage.instance.usage['visibility']
+    }
+  end
 end

@@ -5,16 +5,16 @@ class MetadataDetails
   include Singleton
   include MetadataDefinitions
 
+  ADDITIONAL_DETAILS = [:intermediate_file_definition, :service_file_definition, :extracted_definition,
+                        :pcdm_use_definition, :fileset_label_definition, :transcript_definition,
+                        :visibility_definition].freeze
+
   def details(work_attributes:)
     validators = work_attributes.validators
     detail_list = work_attributes.properties.sort.map { |p| definition_hash_for(p, validators) }
     detail_list << preservation_master_file_definition
-    detail_list << intermediate_file_definition
-    detail_list << service_file_definition
-    detail_list << extracted_definition
-    detail_list << transcript_definition
-    detail_list << pcdm_use_definition
-    detail_list << fileset_label_definition
+    ADDITIONAL_DETAILS.each { |detail| detail_list << send(detail) }
+    detail_list
   end
 
   def to_csv(work_attributes:)
