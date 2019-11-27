@@ -977,6 +977,7 @@ GEM
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
     childprocess (3.0.0)
+    clamby (1.6.2)
     clipboard-rails (1.7.1)
     coderay (1.1.2)
     coffee-rails (4.2.2)
@@ -1702,6 +1703,7 @@ DEPENDENCIES
   capistrano-rails-collection
   capistrano-sidekiq
   capybara
+  clamby
   coffee-rails (~> 4.2)
   coveralls
   devise

@@ -9,6 +9,7 @@ end
 
 gem 'bootsnap', require: false
 gem 'bootstrap-sass', '~> 3.0'
+gem 'clamby'
 gem 'coffee-rails', '~> 4.2'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
