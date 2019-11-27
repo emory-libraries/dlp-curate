@@ -1,4 +1,5 @@
 set :stage, :TEST
+set :honeybadger_env, "Curate-Test"
 ec2_role [:web, :app, :db, :redhatapp, :collection],
          user: 'deploy',
          ssh_options: {
