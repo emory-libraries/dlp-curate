@@ -9,6 +9,7 @@ end
 
 gem 'bootsnap', require: false
 gem 'bootstrap-sass', '~> 3.0'
+gem 'clamby'
 gem 'coffee-rails', '~> 4.2'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
@@ -32,7 +33,7 @@ gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '~> 4.x'
-gem 'zizia', '~> 5.2.0'
+gem 'zizia', '~> 5.3.0'
 
 group :development do
   gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2'
@@ -42,7 +43,7 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'capistrano-rails-collection'
-  gem 'capistrano-sidekiq', '~> 0.20.0'
+  gem 'capistrano-sidekiq'
   gem 'fcrepo_wrapper'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'solr_wrapper', '>= 0.3'

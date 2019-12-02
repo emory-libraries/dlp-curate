@@ -27,6 +27,7 @@ Metrics/AbcSize:
     - app/importers/curate_collection_importer.rb
     - app/importers/curate_record_importer.rb
     - app/lib/metadata_details.rb
+    - app/indexers/curate/file_set_indexer.rb
 
 Metrics/BlockLength:
     Exclude:
@@ -56,6 +57,8 @@ Metrics/CyclomaticComplexity:
       - app/importers/curate_record_importer.rb
       - config/prepends/custom_visibility.rb
       - config/initializers/file_actor.rb
+      - app/indexers/curate/file_set_indexer.rb
+
 Metrics/LineLength:
     Exclude:
         - spec/importers/curate_mapper_spec.rb
@@ -74,6 +77,12 @@ Metrics/MethodLength:
         - app/controllers/hyrax/file_sets_controller.rb
         - app/jobs/create_work_job.rb
         - app/importers/modular_importer.rb
+        - app/indexers/curate/file_set_indexer.rb
+        - app/jobs/characterize_job.rb
+
+Metrics/ModuleLength:
+    Exclude:
+        - app/lib/metadata_definitions.rb
 
 Layout/AlignHash:
     Exclude:
@@ -110,3 +119,8 @@ RSpec/MessageChain:
     Exclude:
         - 'spec/services/characterization_service_spec.rb'
         - 'spec/actors/hyrax/actors/file_actor_spec.rb'
+        - 'spec/system/show_file_spec.rb'
+
+RSpec/AnyInstance:
+    Exclude:
+        - 'spec/models/job_io_wrapper_spec.rb'

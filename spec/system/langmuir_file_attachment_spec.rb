@@ -29,7 +29,7 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
 
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
-      expect(page).to have_content 'This import will create or update 17 records.'
+      expect(page).to have_content('This import will process 17 row(s).')
 
       # There is a link so the user can cancel.
       expect(page).to have_link 'Cancel', href: '/csv_imports/new?locale=en'
@@ -51,12 +51,12 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
 
       # Ensure two files get attached to the same work, when the second one doesn't have all the metadata
       # (i.e., ensure attaching the second file doesn't remove the metadata from the first file)
-      work = CurateGenericWork.where(title: "*Augustine").first
+      work = CurateGenericWork.where(local_call_number: 'MSS 1218').first
       expect(work.title.first).to match(/Augustine/)
       expect(work.content_type).to eq "http://id.loc.gov/vocabulary/resourceTypes/img"
       expect(work.file_sets.count).to eq 2
       expect(work.file_sets.map { |a| a.title.first }).to contain_exactly("Front", "Back")
-      expect(work.file_sets.first.pcdm_use).to eq "Primary Content"
+      expect(work.file_sets.map(&:pcdm_use)).to eq ["Primary Content", "Primary Content"]
 
       # Ensure two files get attached to the same work, when the first one doesn't have all the metadata
       # (i.e., if the first one is blank, it should get stub metadata and the second one should write over its metadata)

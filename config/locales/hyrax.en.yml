@@ -188,19 +188,24 @@ en:
           transfer_engineer: "transfer_engineer (Transfer Engineer)"
   hyrax:
     visibility:
-      public:
-        note_html: 'Public access high resolution'
-        text: 'Public high resolution'
+      open:
+        note_html: 'Public access with full resolution view & download'
+        text: 'Public'
       low_res:
-        note_html: 'LowRes'
-        text: 'LowRes'
+        note_html: 'Public access with restricted resolution view-only'
+        text: 'Public Low View'
       emory_low:
-        note_html: 'Emory Low Resolution'
-        text: 'Emory Low'
+        note_html: 'Emory users with restricted resolution view & download'
+        text: 'Emory Low Download'
       rose_high:
-        note_html: 'Rose High Resolution'
-        text: 'Rose High Resolution'
-
+        note_html: 'Rose Library reading room access only'
+        text: 'Rose High View'
+      authenticated:
+        note_html: 'Emory users with full resolution view & download'
+        text: 'Emory High Download'
+      restricted:
+        note_html: 'Administrator and Owner access only'
+        text: 'Private'
 
     relationships_parent_row:
       label: "In Parent Work:"

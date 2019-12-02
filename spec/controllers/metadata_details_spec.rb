@@ -59,6 +59,55 @@ RSpec.describe MetadataDetailsController, type: :controller do
       expect(title_definition.field('usage')).to include 'name of the resource being described' # match text extracted from ./config/emory/usage.yml
     end
 
+    it 'includes preservation_master_file' do
+      get :profile
+      profile_table = CSV.parse(response.body, headers: :first_row)
+      definition = profile_table.find { |r| r.field('attribute') == 'preservation_master_file' }
+      expect(definition.field('usage')).to include 'Path to a file to be used as the preservation master'
+    end
+
+    it 'includes intermediate_file' do
+      get :profile
+      profile_table = CSV.parse(response.body, headers: :first_row)
+      definition = profile_table.find { |r| r.field('attribute') == 'intermediate_file' }
+      expect(definition.field('usage')).to include 'Path to an intermediate file'
+    end
+
+    it 'includes service_file' do
+      get :profile
+      profile_table = CSV.parse(response.body, headers: :first_row)
+      definition = profile_table.find { |r| r.field('attribute') == 'service_file' }
+      expect(definition.field('usage')).to include 'Path to a service file'
+    end
+
+    it 'includes extracted' do
+      get :profile
+      profile_table = CSV.parse(response.body, headers: :first_row)
+      definition = profile_table.find { |r| r.field('attribute') == 'extracted' }
+      expect(definition.field('usage')).to include 'Path to a file that contains extracted text'
+    end
+
+    it 'includes transcript' do
+      get :profile
+      profile_table = CSV.parse(response.body, headers: :first_row)
+      definition = profile_table.find { |r| r.field('attribute') == 'transcript' }
+      expect(definition.field('usage')).to include 'Path to a file that contains a transcript'
+    end
+
+    it 'includes visibility' do
+      get :profile
+      profile_table = CSV.parse(response.body, headers: :first_row)
+      definition = profile_table.find { |r| r.field('attribute') == 'visibility' }
+      expect(definition.field('usage')).to include "Private, Restricted, Authenticated, Registered, Emory, Emory Network, Open, Public, Public Low View, Emory Low Download, or Rose High View."
+    end
+
+    it 'includes fileset_label' do
+      get :profile
+      profile_table = CSV.parse(response.body, headers: :first_row)
+      definition = profile_table.find { |r| r.field('attribute') == 'fileset_label' }
+      expect(definition.field('usage')).to include 'A label for the FileSet'
+    end
+
     it 'includes a date in the filename' do
       todays_date = "Wed, 03 Jul 1985".to_date
       allow(Date).to receive(:current) { todays_date }

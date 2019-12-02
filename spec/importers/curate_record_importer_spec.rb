@@ -16,4 +16,8 @@ RSpec.describe CurateRecordImporter do
 
     ENV['IMPORT_PATH'] = cached_import_path
   end
+
+  it 'returns an empty string if a filename is missing' do
+    expect(importer.find_file_path(nil)).to eq('')
+  end
 end

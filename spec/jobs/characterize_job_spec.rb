@@ -73,6 +73,7 @@ RSpec.describe CharacterizeJob, :clean do
     it "adds a new preservation event for fileset characterization" do
       expect(file_set.preservation_event.first.event_type).to eq ['Characterization']
       expect(file_set.preservation_event.first.outcome).to eq ['Success']
+      expect(file_set.preservation_event.first.event_details).to eq ['preservation_master_file: picture.png - Technical metadata extracted from file, format identified, and file validated']
     end
   end
 end

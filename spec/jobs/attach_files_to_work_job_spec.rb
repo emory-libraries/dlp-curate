@@ -101,4 +101,20 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
       end
     end
   end
+
+  context "virus checking" do
+    before do
+      # Comment out these Clamby lines, and the ones in rails_helper.rb to really test virus scanning
+      class_double("Clamby").as_stubbed_const
+      allow(Clamby).to receive(:virus?).and_return(true)
+      virus_file_path = "#{::Rails.root}/spec/fixtures/virus_checking/virus_check.txt"
+      upload = File.open(virus_file_path) do |virus_file|
+        Hyrax::UploadedFile.create(user: user, preservation_master_file: virus_file)
+      end
+      described_class.perform_now(generic_work, [upload])
+    end
+    it 'does not upload file' do
+      expect(generic_work.file_sets.first.files.size).to eq 0
+    end
+  end
 end

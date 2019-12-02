@@ -32,6 +32,7 @@ class FileSet < ActiveFedora::Base
   end
 
   include ::Hyrax::FileSetBehavior
+  include PreservationEvents
   self.indexer = Curate::FileSetIndexer
 
   directly_contains_one :preservation_master_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#PreservationMasterFile'), class_name: 'Hydra::PCDM::File'
@@ -49,6 +50,25 @@ class FileSet < ActiveFedora::Base
        Array(attrs[key]).all?(&:blank?)
      end
   }
+
+  # We override this method which comes from Hydra::Works::VirusCheck and
+  # is mixed-in through ::Hyrax::FileSetBehavior on L#34
+  def viruses?
+    return false unless preservation_master_file&.new_record? # We have a new file to check
+    event_start = DateTime.current
+    result = Hydra::Works::VirusCheckerService.file_has_virus?(preservation_master_file)
+    file_set = FileSet.find(preservation_master_file.id&.partition("/files")&.first)
+    event = { 'type' => 'Virus Check', 'start' => event_start, 'outcome' => result, 'software_version' => 'Curate v.1', 'user' => file_set.depositor }
+    if result == false
+      event['details'] = 'No viruses found'
+      event['outcome'] = 'Success'
+    else
+      event['details'] = "Virus was found in file: #{preservation_master_file&.original_name}"
+      event['outcome'] = 'Failure'
+    end
+    create_preservation_event(file_set, event)
+    result
+  end
 
   private
 

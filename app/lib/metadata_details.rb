@@ -3,22 +3,18 @@ require 'csv'
 
 class MetadataDetails
   include Singleton
+  include MetadataDefinitions
+
+  ADDITIONAL_DETAILS = [:intermediate_file_definition, :service_file_definition, :extracted_definition,
+                        :pcdm_use_definition, :fileset_label_definition, :transcript_definition,
+                        :visibility_definition].freeze
 
   def details(work_attributes:)
     validators = work_attributes.validators
-    work_attributes.properties.sort.map do |p|
-      Hash[
-        attribute: p[0],
-        predicate: p[1].predicate.to_s,
-        multiple: p[1].try(:multiple?).to_s,
-        type: type_to_s(p[1].type),
-        validator: validator_to_string(validator: validators[p[0].to_sym][0]),
-        label: I18n.t("simple_form.labels.defaults.#{p[0]}"),
-        csv_header: csv_header(p[0]),
-        required_on_form: required_on_form_to_s(p[0]),
-        usage: METADATA_USAGE[p[0]]
-      ]
-    end
+    detail_list = work_attributes.properties.sort.map { |p| definition_hash_for(p, validators) }
+    detail_list << preservation_master_file_definition
+    ADDITIONAL_DETAILS.each { |detail| detail_list << send(detail) }
+    detail_list
   end
 
   def to_csv(work_attributes:)
@@ -64,5 +60,19 @@ class MetadataDetails
       else
         'No validation present in the model.'
       end
+    end
+
+    def definition_hash_for(field_properties, validators)
+      Hash[
+        attribute: field_properties[0],
+        predicate: field_properties[1].predicate.to_s,
+        multiple: field_properties[1].try(:multiple?).to_s,
+        type: type_to_s(field_properties[1].type),
+        validator: validator_to_string(validator: validators[field_properties[0].to_sym][0]),
+        label: I18n.t("simple_form.labels.defaults.#{field_properties[0]}"),
+        csv_header: csv_header(field_properties[0]),
+        required_on_form: required_on_form_to_s(field_properties[0]),
+        usage: Zizia::MetadataUsage.instance.usage[field_properties[0]]
+      ]
     end
 end

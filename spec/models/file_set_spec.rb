@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe FileSet, :perform_enqueued do
+RSpec.describe FileSet, :perform_enqueued, :clean do
   describe '#related_files' do
     let!(:f1) { FactoryBot.create(:file_set, content: File.open(Rails.root.join('spec', 'fixtures', 'world.png'))) }
 
@@ -83,6 +83,47 @@ RSpec.describe FileSet, :perform_enqueued do
 
     it 'has a preservation event which is a PreservationEvent object' do
       expect(file_set.preservation_event.build).to be_instance_of PreservationEvent
+    end
+  end
+
+  # This spec is borrowed and modified from `Hydra::Works::VirusCheck`
+  context "with ClamAV" do
+    let(:file) do
+      Hydra::PCDM::File.new do |f|
+        f.content = File.new(File.join(fixture_path, 'sample-file.pdf'))
+        f.original_name = 'sample-file.pdf'
+      end
+    end
+    let(:file_set)         { FileSet.new } # We create an empty file_set and walk through virus-checking
+    let(:file_set_with_id) { FactoryBot.create(:file_set) } # We save the preservation_events on this file_set object
+
+    before do
+      allow(file_set).to receive(:preservation_master_file) { file } # this is necessary since we are not performing any ingest
+      allow(FileSet).to receive(:find).and_return(file_set_with_id) # this is mocked because we need a file_set with an ID
+      # on L#60 in the FileSet model.
+    end
+
+    context 'with an infected file' do
+      before do
+        expect(Hydra::Works::VirusCheckerService).to receive(:file_has_virus?).and_return(true)
+      end
+      it 'fails to save' do
+        expect(file_set.save).to eq false
+        expect(file_set_with_id.preservation_event.first.event_details).to eq ['Virus was found in file: sample-file.pdf']
+        expect(file_set_with_id.preservation_event.first.outcome).to eq ['Failure']
+      end
+      it 'fails to validate' do
+        expect(file_set.validate).to eq false
+      end
+    end
+
+    context 'with a clean file' do
+      it 'does not detect viruses' do
+        expect(Hydra::Works::VirusCheckerService).to receive(:file_has_virus?).and_return(false)
+        expect(file_set).not_to be_viruses
+        expect(file_set_with_id.preservation_event.first.event_details).to eq ['No viruses found']
+        expect(file_set_with_id.preservation_event.first.outcome).to eq ['Success']
+      end
     end
   end
 end

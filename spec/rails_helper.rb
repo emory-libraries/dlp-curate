@@ -11,7 +11,6 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 require 'noid/rails/rspec'
 # Add additional requires below this line. Rails is not loaded until this point!
-
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -57,6 +56,11 @@ RSpec.configure do |config|
     admin_set_id = AdminSet.find_or_create_default_admin_set_id
     Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id)
     Hyrax::CollectionType.find_or_create_default_collection_type
+  end
+
+  config.before do
+    class_double("Clamby").as_stubbed_const
+    allow(Clamby).to receive(:virus?).and_return(false)
   end
 
   # include Noid::Rails::RSpec

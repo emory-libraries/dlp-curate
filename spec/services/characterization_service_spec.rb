@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'support/file_set_helper'
 
-describe Hydra::Works::CharacterizationService do
+describe Hydra::Works::CharacterizationService, :clean do
   describe "integration test for characterizing from path on disk." do
     let(:filename)     { 'sample-file.pdf' }
     let(:path_on_disk) { File.join(fixture_path, filename) }
@@ -286,10 +286,12 @@ describe Hydra::Works::CharacterizationService do
       end
 
       it 'creates a success preservation event on fileset' do
-        expect(file_set.preservation_event.first.event_type).to eq ['Message Digest Calculation']
-        expect(file_set.preservation_event.first.event_details).to include 'urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a'
-        expect(file_set.preservation_event.first.initiating_user).to eq [user.uid]
-        expect(file_set.preservation_event.first.outcome).to eq ['Success']
+        expect(file_set.preservation_event.pluck(:event_type)).to include ['Message Digest Calculation']
+        expect(file_set.preservation_event.pluck(:event_details)).to include ["urn:sha1:efdadf049446295f4bd6e73e2a79dd114c4f4791",
+                                                                              "urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a",
+                                                                              "urn:md5:3a1735b5b30c4adc3f92c70004ae53ed"]
+        expect(file_set.preservation_event.pluck(:initiating_user)).to include [user.uid]
+        expect(file_set.preservation_event.pluck(:outcome)).to include ['Success']
       end
     end
 
@@ -301,9 +303,9 @@ describe Hydra::Works::CharacterizationService do
       end
 
       it 'creates a failure preservation event on fileset' do
-        expect(file_set.preservation_event.first.event_type).to eq ['Message Digest Calculation']
-        expect(file_set.preservation_event.first.event_details).not_to include 'urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a'
-        expect(file_set.preservation_event.first.outcome).to eq ['Failure']
+        expect(file_set.preservation_event.pluck(:event_type)).to include ['Message Digest Calculation']
+        expect(file_set.preservation_event.pluck(:event_details)).not_to include 'urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a'
+        expect(file_set.preservation_event.pluck(:outcome)).to include ['Failure']
       end
     end
   end

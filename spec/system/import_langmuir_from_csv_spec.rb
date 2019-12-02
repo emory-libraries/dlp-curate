@@ -47,7 +47,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
     def start_import(page)
       # We expect to see the title of the collection on the page
       expect(page).to have_content 'Testing Collection'
-      expect(page).to have_content(/This import will create or update (17|20) records./)
+      expect(page).to have_content(/This import will process (17|20) row/)
       # There is a link so the user can cancel.
       expect(page).to have_link 'Cancel', href: '/csv_imports/new?locale=en'
 
@@ -57,6 +57,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       expect(page).not_to have_content('The field name "intermediate_file" is not supported')
       expect(page).not_to have_content('The field name "fileset_label" is not supported')
       expect(page).not_to have_content('The field name "preservation_master_file" is not supported')
+      expect(page).not_to have_content('The field name "pcdm_use" is not supported')
 
       # After reading the warnings, the user decides
       # to continue with the import.

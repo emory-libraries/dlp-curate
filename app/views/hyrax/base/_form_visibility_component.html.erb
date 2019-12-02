@@ -6,6 +6,8 @@
     <fieldset>
       <legend class="legend-save-work"><%= t('.visibility') %></legend>
       <ul class="visibility">
+
+        <!-- Public -->
         <li class="radio">
           <label>
             <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, data: { 'target': '#collapsePublic' } %>
@@ -17,14 +19,58 @@
             </div>
           </label>
         </li>
+
+        <!-- Public Low View -->
+        <li class="radio">
+          <label>
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES %>
+            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES) %>
+            <br />
+            <%= t('hyrax.visibility.low_res.note_html') %>
+          </label>
+        </li>
+
+        <!-- Authenticated / Emory High Download -->
         <li class="radio">
           <label>
             <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED %>
             <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED) %>
             <br />
-            <%= t('hyrax.visibility.authenticated.note_html', institution: institution_name) %>
+            <%= t('hyrax.visibility.authenticated.note_html') %>
           </label>
         </li>
+
+        <!-- Emory Low Download -->
+        <li class="radio">
+          <label>
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW %>
+            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW) %>
+            <br />
+            <%= t('hyrax.visibility.emory_low.note_html') %>
+          </label>
+        </li>
+
+        <!-- Rose High Resolution -->
+        <li class="radio">
+          <label>
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH %>
+            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH) %>
+            <br />
+            <%= t('hyrax.visibility.rose_high.note_html') %>
+          </label>
+        </li>
+
+        <!-- Restricted / Private -->
+        <li class="radio">
+          <label>
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE %>
+            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) %>
+            <br >
+            <%= t('hyrax.visibility.restricted.note_html') %>
+          </label>
+        </li>
+
+        <!-- Embargo -->
         <li class="radio">
           <label>
             <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO, data: { 'target': '#collapseEmbargo' } %>
@@ -41,6 +87,8 @@
             </div>
           </label>
         </li>
+
+        <!-- Lease -->
         <li class="radio">
           <label>
             <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE, data: { 'target': '#collapseLease' } %>
@@ -55,38 +103,6 @@
                 <%= f.input :visibility_after_lease, wrapper: :inline, collection: visibility_options(:restrict), include_blank: false %>
               </div>
             </div>
-          </label>
-        </li>
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE %>
-            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) %>
-            <br >
-            <%= t('hyrax.visibility.restricted.note_html') %>
-          </label>
-        </li>
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES %>
-            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES) %>
-            <br />
-            <%= t('hyrax.visibility.low_res.note_html') %>
-          </label>
-        </li>
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW %>
-            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW) %>
-            <br />
-            <%= t('hyrax.visibility.emory_low.note_html') %>
-          </label>
-        </li>
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH %>
-            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH) %>
-            <br />
-            <%= t('hyrax.visibility.rose_high.note_html') %>
           </label>
         </li>
       </ul>
