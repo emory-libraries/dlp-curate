@@ -55,6 +55,7 @@ Metrics/CyclomaticComplexity:
     Exclude:
       - app/importers/curate_record_importer.rb
       - config/prepends/custom_visibility.rb
+      - config/initializers/file_actor.rb
 Metrics/LineLength:
     Exclude:
         - spec/importers/curate_mapper_spec.rb

@@ -55,15 +55,27 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       actor.file_set.permissions_attributes = work_permissions
       actor.create_metadata(uploaded_file.fileset_use, metadata)
       actor.fileset_name(uploaded_file.file.to_s) if uploaded_file.file.present?
-      actor.create_content(uploaded_file.preservation_master_file, :preservation_master_file)
-      actor.create_content(uploaded_file.intermediate_file, :intermediate_file) if uploaded_file.intermediate_file.present?
-      actor.create_content(uploaded_file.service_file, :service_file) if uploaded_file.service_file.present?
-      actor.create_content(uploaded_file.extracted_text, :extracted) if uploaded_file.extracted_text.present?
-      actor.create_content(uploaded_file.transcript, :transcript_file) if uploaded_file.transcript.present?
+      preferred = preferred_file(uploaded_file)
+      actor.create_content(uploaded_file.preservation_master_file, preferred, :preservation_master_file)
+      actor.create_content(uploaded_file.intermediate_file, preferred, :intermediate_file) if uploaded_file.intermediate_file.present?
+      actor.create_content(uploaded_file.service_file, preferred, :service_file) if uploaded_file.service_file.present?
+      actor.create_content(uploaded_file.extracted_text, preferred, :extracted) if uploaded_file.extracted_text.present?
+      actor.create_content(uploaded_file.transcript, preferred, :transcript_file) if uploaded_file.transcript.present?
 
       work.ordered_members << actor.file_set
       work.save
       actor.file_set.save
       actor.attach_to_work(work)
+    end
+
+    def preferred_file(uploaded_file)
+      preferred = if uploaded_file.service_file.present?
+                    :service_file
+                  elsif uploaded_file.intermediate_file.present?
+                    :intermediate_file
+                  else
+                    :preservation_master_file
+                  end
+      preferred
     end
 end
