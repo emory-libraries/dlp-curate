@@ -34,7 +34,7 @@ RSpec.describe Hyrax::Actors::CurateGenericWorkActor do
         expect(curation_concern.preservation_event.pluck(:event_type)).to include ['Validation']
         expect(curation_concern.preservation_event.first.outcome).to eq ['Success']
         expect(curation_concern.preservation_event.first.initiating_user).to eq [user.uid]
-        expect(curation_concern.preservation_event.pluck(:event_details)).to include ['Policy was assigned. Visibility/access controls assigned: restricted']
+        expect(curation_concern.preservation_event.pluck(:event_details)).to include ['Visibility/access controls assigned: restricted']
         expect(curation_concern.preservation_event.count).to eq 2
       end
     end

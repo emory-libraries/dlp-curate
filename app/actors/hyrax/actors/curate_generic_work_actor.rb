@@ -34,7 +34,7 @@ module Hyrax
         work_creation = { 'type' => 'Validation', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Submission package validated',
                           'software_version' => 'Curate v.1', 'user' => env.user.uid }
         work_policy = { 'type' => 'Policy Assignment', 'start' => event_start, 'outcome' => 'Success',
-                        'details' => "Policy was assigned. Visibility/access controls assigned: #{env.curation_concern.visibility}", 'software_version' => 'Curate v.1', 'user' => env.user.uid }
+                        'details' => "Visibility/access controls assigned: #{env.curation_concern.visibility}", 'software_version' => 'Curate v.1', 'user' => env.user.uid }
         # Create preservation events
         create_preservation_event(env.curation_concern, work_creation)
         create_preservation_event(env.curation_concern, work_policy)
