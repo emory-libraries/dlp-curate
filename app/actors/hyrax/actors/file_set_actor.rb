@@ -25,7 +25,6 @@ module Hyrax
         file_set.label ||= label_for(file)
         file_set.title = [file_set.label] if file_set.title.blank?
         return false unless file_set.save # Need to save to get an id
-        file_set_preservation_event(file_set, event_start)
         file_actor = build_file_actor(relation)
         io_wrapper = wrapper!(file: file, relation: relation, preferred: preferred)
         if from_url
