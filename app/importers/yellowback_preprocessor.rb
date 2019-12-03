@@ -12,9 +12,13 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
   # Initialize a preprocessor instance by supplying
   # @param [String] csv the path to a CSV file containing the expectd Pull List metadata
   # @param [String] marcxml the path to an XML file containing one or more MARCXml records
-  def initialize(csv, marcxml)
+  # @param [String] replacement_path AWS target path to replace 'Volumes' in source data
+  # @param [String] digitization the fileset mappings to use (:limb or :kirtas)
+  def initialize(csv, marcxml, replacement_path = 'Yellowbacks', workflow = :kirtas)
     @pull_list = CSV.read(csv, headers: true)
     @marc_records = Nokogiri::XML(File.open(marcxml))
+    @workflow = workflow
+    @replacement_path = replacement_path
     directory = File.dirname(csv)
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
@@ -140,38 +144,71 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       ]
     end
 
-    def add_file_rows(csv_index, merge_csv, row)
-      merge_csv << pdf_row(csv_index, row) if row['PDF_Cnt'] == '1'
+    def add_file_rows(csv_index, merge_csv, row) # rubocop:disable Metrics/CyclomaticComplexity
+      merge_csv << pdf_row(csv_index, row) if row['PDF_Path'].present? && row['PDF_Cnt'] == '1'
 
-      merge_csv << ocr_row(csv_index, row) if row['OCR_Cnt'] == '1'
+      merge_csv << ocr_row(csv_index, row) if row['OCR_Path'].present? && row['OCR_Cnt'] == '1'
+
+      merge_csv << mets_row(csv_index, row) if row['METS_Path'].present? && row['METS_Cnt'] == '1'
 
       pages = row['Disp_Cnt'].to_i
-      relative_path = row['Disp_Path'].sub("Volumes", "Yellowbacks") + '/'
 
       (1..pages).each do |page|
-        merge_csv << file_row(csv_index, row, page, relative_path)
+        merge_csv << file_row(csv_index, row, page)
       end
     end
 
     def pdf_row(csv_index, row)
-      pdf = row['PDF_Path'].sub("Volumes", "Yellowbacks")
+      case @workflow
+      when :kirtas
+        pdf = row['PDF_Path'].sub("Volumes", @replacement_path)
+      when :limb
+        pdf = File.join(row['PDF_Path'].sub("Volumes", @replacement_path), "#{row['Barcode']}.pdf")
+      end
       new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
       new_row + file_mappings(fileset_label: 'PDF for volume', preservation_master_file: pdf)
     end
 
     def ocr_row(csv_index, row)
-      ocr = row['OCR_Path'].sub("Volumes", "Yellowbacks")
+      ocr = row['OCR_Path'].sub("Volumes", @replacement_path)
       new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
       new_row + file_mappings(fileset_label: 'OCR Output for Volume', preservation_master_file: ocr, pcdm_use: ::FileSet::SUPPLEMENTAL)
     end
 
-    def file_row(csv_index, row, page, relative_path)
-      page_number = page.to_s.rjust(4, '0')
-      image = relative_path + page_number + '.tif'
-      extract = relative_path + page_number + '.pos'
-      trans = relative_path + page_number + '.txt'
+    def mets_row(csv_index, row)
+      case @workflow
+      when :kirtas
+        mets = row['METS_Path'].sub("Volumes", @replacement_path)
+      when :limb
+        mets = File.join(row['METS_Path'].sub("Volumes", @replacement_path), "#{row['Barcode']}.mets.xml")
+      end
       new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
-      new_row + file_mappings(fileset_label: "Page #{page}", preservation_master_file: image, transcript_file: trans, extracted: extract)
+      new_row + file_mappings(fileset_label: 'METS File', preservation_master_file: mets, pcdm_use: ::FileSet::SUPPLEMENTAL)
+    end
+
+    def file_row(csv_index, row, page) # rubocop:disable Metrics/MethodLength
+      case @workflow
+      when :kirtas
+        page_number = format("%04d", page)
+        extract_field = 'POS_Path'
+        extract_extension = 'pos'
+      when :limb
+        page_number = format("%08d", page)
+        extract_field = 'ALTO_Path'
+        extract_extension = 'xml'
+      end
+
+      image       = relative_filename(row['Disp_Path'],   page_number, 'tif')
+      transcript  = relative_filename(row['Txt_Path'],    page_number, 'txt')
+      extract     = relative_filename(row[extract_field], page_number, extract_extension)
+
+      new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
+      new_row + file_mappings(fileset_label: "Page #{page}", preservation_master_file: image, transcript_file: transcript, extracted: extract)
+    end
+
+    def relative_filename(source_path, page_number, extension)
+      path = source_path.sub("Volumes", @replacement_path)
+      File.join(path, "#{page_number}.#{extension}")
     end
 
     def file_mappings(args = {})
@@ -297,7 +334,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       alma_title = title_segments.map(&:text).join(" ").chomp("/").strip # join title segments with a space, then remove any trailing / or whitespace
       enumeration = csv_row["Enumeration"]
       if enumeration
-        alma_title + " [#{enumeration}]"
+        alma_title + " [#{enumeration.strip}]"
       else
         alma_title
       end

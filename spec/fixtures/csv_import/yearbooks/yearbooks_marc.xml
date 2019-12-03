@@ -1,0 +1,292 @@
+<?xml version="1.0"?>
+<collection>
+  <record>
+    <controlfield tag="008"> eng </controlfield>
+    <controlfield tag="001">990030187270302486</controlfield>
+    <datafield tag="245" ind1="0" ind2="0">
+      <subfield code="a">Emocad.</subfield>
+    </datafield>
+    <datafield tag="264" ind1=" " ind2="1">
+      <subfield code="a">Oxford, Georgia :</subfield>
+      <subfield code="b">
+  Published by the Students of Emory University Academy
+  </subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">volumes :</subfield>
+      <subfield code="b">illustrations ;</subfield>
+      <subfield code="c">28 cm</subfield>
+    </datafield>
+    <datafield tag="583" ind1="1" ind2=" ">
+      <subfield code="c">20170131</subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+  The online edition of this book in the public domain, i.e., not protected by copyright, has been produced by the Emory University Digital library Publications Program
+  </subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">
+  "Emory University Academy ... was established in fall 1915"--In Senior class history, pg. [16], 1919.
+  </subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory University Academy (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="650" ind1=" " ind2="0">
+      <subfield code="a">College yearbooks</subfield>
+      <subfield code="z">Georgia</subfield>
+      <subfield code="z">Oxford.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory University Archives.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory University Academy (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="1">
+      <subfield code="3">1921</subfield>
+      <subfield code="u">http://pid.emory.edu/ark:/25593/rwtxr/HT</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="1">
+      <subfield code="3">1919</subfield>
+      <subfield code="u">http://pid.emory.edu/ark:/25593/rwvwq/HT</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="1">
+      <subfield code="3">1920</subfield>
+      <subfield code="u">http://pid.emory.edu/ark:/25593/rwvxv/HT</subfield>
+    </datafield>
+  </record>
+  <record>
+    <controlfield tag="008"> eng </controlfield>
+    <controlfield tag="001">990030163530302486</controlfield>
+    <datafield tag="110" ind1="2" ind2=" ">
+      <subfield code="a">Emory Junior College and Academy.</subfield>
+    </datafield>
+    <datafield tag="245" ind1="1" ind2="0">
+      <subfield code="a">Memory /</subfield>
+      <subfield code="c">Emory Junior College and Academy.</subfield>
+    </datafield>
+    <datafield tag="264" ind1=" " ind2="1">
+      <subfield code="a">Oxford :</subfield>
+      <subfield code="b">
+  Published by the students of Emory Junior College and Academy
+  </subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">volumes :</subfield>
+      <subfield code="b">illustrations (some color) ;</subfield>
+      <subfield code="c">28 cm</subfield>
+    </datafield>
+    <datafield tag="583" ind1="1" ind2=" ">
+      <subfield code="c">20140801</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Description based on: 1932.</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Latest issue consulted: 1987.</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory Junior College (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory Junior College (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory Junior College (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory University Academy (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory University Academy (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory University Academy (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory at Oxford</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory at Oxford</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory at Oxford</subfield>
+    </datafield>
+    <datafield tag="650" ind1=" " ind2="0">
+      <subfield code="a">College yearbooks</subfield>
+      <subfield code="z">Georgia</subfield>
+      <subfield code="z">Oxford.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory Junior College (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory University Academy (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory at Oxford.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory University Archives.</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="1">
+      <subfield code="u">http://pid.emory.edu/ark:/25593/gsw5f</subfield>
+    </datafield>
+  </record>
+  <record>
+    <controlfield tag="008"> eng </controlfield>
+    <controlfield tag="001">990030163530302486</controlfield>
+    <datafield tag="110" ind1="2" ind2=" ">
+      <subfield code="a">Emory Junior College and Academy.</subfield>
+    </datafield>
+    <datafield tag="245" ind1="1" ind2="0">
+      <subfield code="a">Memory /</subfield>
+      <subfield code="c">Emory Junior College and Academy.</subfield>
+    </datafield>
+    <datafield tag="264" ind1=" " ind2="1">
+      <subfield code="a">Oxford :</subfield>
+      <subfield code="b">
+  Published by the students of Emory Junior College and Academy
+  </subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">volumes :</subfield>
+      <subfield code="b">illustrations (some color) ;</subfield>
+      <subfield code="c">28 cm</subfield>
+    </datafield>
+    <datafield tag="583" ind1="1" ind2=" ">
+      <subfield code="c">20140801</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Description based on: 1932.</subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Latest issue consulted: 1987.</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory Junior College (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory University Academy (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory at Oxford</subfield>
+    </datafield>
+    <datafield tag="650" ind1=" " ind2="0">
+      <subfield code="a">College yearbooks</subfield>
+      <subfield code="z">Georgia</subfield>
+      <subfield code="z">Oxford.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory Junior College (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory University Academy (Oxford, Ga.)</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory at Oxford.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory University Archives.</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2="1">
+      <subfield code="u">http://pid.emory.edu/ark:/25593/gsw5f</subfield>
+    </datafield>
+  </record>
+  <record>
+    <controlfield tag="008"> eng</controlfield>
+    <controlfield tag="001">990027977720302486</controlfield>
+    <datafield tag="245" ind1="1" ind2="4">
+      <subfield code="a">The campus.</subfield>
+    </datafield>
+    <datafield tag="264" ind1=" " ind2="1">
+      <subfield code="a">Atlanta, Ga. :</subfield>
+      <subfield code="b">Student Council of Emory University,</subfield>
+      <subfield code="c">-[1991]</subfield>
+    </datafield>
+    <datafield tag="264" ind1=" " ind2="4">
+      <subfield code="c">&#xA9;1926-</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">54 volumes :</subfield>
+      <subfield code="b">illustrations ;</subfield>
+      <subfield code="c">28 cm</subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+  Emory University does not control copyright for this work. This online edition is made available for individual viewing and reference for educational purposes only, such as personal study, preparation for teaching, and research. Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law or other applicable privilege is at your own risk. It is your sole responsibility to investigate the copyright status of a work and obtain permission when needed.
+  </subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">
+  Some vols. called Emory campus; some issues called Emory University campus.
+  </subfield>
+    </datafield>
+    <datafield tag="500" ind1=" " ind2=" ">
+      <subfield code="a">Publisher varies.</subfield>
+    </datafield>
+    <datafield tag="583" ind1="1" ind2=" ">
+      <subfield code="c">2010</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory University</subfield>
+    </datafield>
+    <datafield tag="650" ind1=" " ind2="0">
+      <subfield code="a">College yearbooks</subfield>
+      <subfield code="z">Georgia</subfield>
+      <subfield code="z">Atlanta.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory University.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory University Archives.</subfield>
+    </datafield>
+  </record>
+  <record>
+    <controlfield tag="008"> eng</controlfield>
+    <controlfield tag="001">990026049520302486</controlfield>
+    <datafield tag="245" ind1="0" ind2="4">
+      <subfield code="a">The Kinema.</subfield>
+    </datafield>
+    <datafield tag="264" ind1=" " ind2="1">
+      <subfield code="a">[Atlanta, Ga.?] :</subfield>
+      <subfield code="b">
+  Collegiate, Theological and Academic Departments of Emory University,
+  </subfield>
+      <subfield code="c">[1916?]</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">1 volume :</subfield>
+      <subfield code="b">illustrations ;</subfield>
+      <subfield code="c">29 cm</subfield>
+    </datafield>
+    <datafield tag="583" ind1=" " ind2=" ">
+      <subfield code="c">2010</subfield>
+    </datafield>
+    <datafield tag="590" ind1=" " ind2=" ">
+      <subfield code="a">
+  The online edition of this book in the public domain, i.e., not protected by copyright, has been produced by the Emory University Digital Library Publications Program.
+  </subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory University</subfield>
+    </datafield>
+    <datafield tag="610" ind1="2" ind2="0">
+      <subfield code="a">Emory University</subfield>
+    </datafield>
+    <datafield tag="650" ind1=" " ind2="0">
+      <subfield code="a">College yearbooks</subfield>
+      <subfield code="z">Georgia</subfield>
+      <subfield code="z">Atlanta.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory University.</subfield>
+    </datafield>
+    <datafield tag="710" ind1="2" ind2=" ">
+      <subfield code="a">Emory University Archives.</subfield>
+    </datafield>
+  </record>
+</collection>
