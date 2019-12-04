@@ -139,8 +139,14 @@ Hyrax.config do |config|
 
   # If we have an external IIIF server, use it for image requests; else, use riiif
   config.iiif_image_url_builder = lambda do |file_id, base_url, size|
+    builder_service = IiifUrlBuilderService.new(file_set_id: file_id, size: size)
     if ENV['IIIF_SERVER_URL'].present?
-      iiif_url = ENV['IIIF_SERVER_URL'] + file_id.gsub('/', '%2F') + "/full/" + size + "/0/default.jpg"
+      iiif_url = if ENV.fetch('FEDORA_ADAPTER', 'default') == 's3' ||
+                    ENV.fetch('FEDORA_ADAPTER', 'default') == 'S3'
+                   builder_service.sha1_url
+                 else
+                   builder_service.file_set_id_url
+                 end
       Rails.logger.debug "event: iiif_image_request: #{iiif_url}"
       iiif_url
     else
@@ -150,8 +156,16 @@ Hyrax.config do |config|
 
   # If we have an external IIIF server, use it for info.json; else, use riiif
   config.iiif_info_url_builder = lambda do |file_id, base_url|
+    builder_service = IiifUrlBuilderService.new(file_set_id: file_id, size: '')
     if ENV['IIIF_SERVER_URL'].present?
-      ENV['IIIF_SERVER_URL'] + file_id.gsub('/', '%2F')
+      iiif_info_url = if ENV.fetch('FEDORA_ADAPTER', 'default') == 's3' ||
+                         ENV.fetch('FEDORA_ADAPTER', 'default') == 'S3'
+                        builder_service.sha1_info_url
+                      else
+                        builder_service.file_id_info_url
+                      end
+      Rails.logger.debug "event: iiif_info_request: #{iiif_info_url}"
+      iiif_info_url
     else
       uri = Riiif::Engine.routes.url_helpers.info_url(file_id, host: base_url)
       uri.sub(%r{/info\.json\Z}, '')
