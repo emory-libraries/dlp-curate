@@ -42,4 +42,15 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
       expect(find('#fileset-category').text).to include('Primary Content')
     end
   end
+
+  context 'when fixity check is run' do
+    before do
+      visit hyrax_file_set_path(file_set)
+      click_on 'Run Fixity check'
+    end
+
+    it 'shows result of fixity check' do
+      expect(page).to have_content 'passed 3 Files with 3 total versions checked'
+    end
+  end
 end
