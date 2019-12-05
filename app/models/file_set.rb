@@ -58,7 +58,7 @@ class FileSet < ActiveFedora::Base
     event_start = DateTime.current
     result = Hydra::Works::VirusCheckerService.file_has_virus?(preservation_master_file)
     file_set = FileSet.find(preservation_master_file.id&.partition("/files")&.first)
-    event = { 'type' => 'Virus Check', 'start' => event_start, 'outcome' => result, 'software_version' => 'Curate v.1', 'user' => file_set.depositor }
+    event = { 'type' => 'Virus Check', 'start' => event_start, 'outcome' => result, 'software_version' => 'ClamAV 0.101.4', 'user' => file_set.depositor }
     if result == false
       event['details'] = 'No viruses found'
       event['outcome'] = 'Success'
