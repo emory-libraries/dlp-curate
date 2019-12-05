@@ -24,7 +24,7 @@ RSpec.describe JobIoWrapper, type: :model do
       file_set.reload
     end
 
-    xit "saves preservation_events with proper outcomes" do
+    it "saves preservation_events with proper outcomes" do
       expect(file_set.preservation_event.count).to eq 3
       expect(file_set.preservation_event.pluck(:event_details)).to include ['0003_intermediate.jp2 could not be submitted for preservation storage']
       expect(file_set.preservation_event.pluck(:event_details)).to include ['0003_preservation_master.tif submitted for preservation storage']
