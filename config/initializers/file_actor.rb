@@ -19,5 +19,11 @@ Hyrax::Actors::FileActor.class_eval do
     pathhint = io.uploaded_file.uploader.path if io.uploaded_file # in case next worker is on same filesystem
     # Perform characterize job only on preservation_master_file
     CharacterizeJob.perform_later(file_set, repository_file.id, pathhint || io.path) if relation == :preservation_master_file
+    file_path = pathhint || io.path
+    file_derivatives(file_set, file_path, repository_file) if io.preferred == io.relation
+  end
+
+  def file_derivatives(file_set, file_path, repository_file)
+    CreateDerivativesJob.perform_later(file_set, repository_file.id, file_path)
   end
 end

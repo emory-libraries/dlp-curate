@@ -12,7 +12,7 @@ RSpec.describe Hyrax::Actors::FileSetActor, :clean do
   let(:actor)         { described_class.new(file_set, user) }
   let(:relation)      { :original_file }
   let(:file_actor)    { Hyrax::Actors::FileActor.new(file_set, relation, user) }
-
+  let(:preferred)     { :preservation_master_file }
   describe '#create_content' do
     before do
       expect(JobIoWrapper).to receive(:create_with_varied_file_handling!).with(any_args).and_return(JobIoWrapper.new)
@@ -28,7 +28,7 @@ RSpec.describe Hyrax::Actors::FileSetActor, :clean do
 
       before do
         allow(file_set).to receive(:label).and_return(short_name)
-        actor.create_content(file)
+        actor.create_content(file, preferred)
       end
 
       it "retains the object's short name" do
@@ -47,7 +47,7 @@ RSpec.describe Hyrax::Actors::FileSetActor, :clean do
       let(:actor) { described_class.new(file_set, user) }
 
       before do
-        actor.create_content(file)
+        actor.create_content(file, preferred)
       end
 
       it "retains the object's original label" do

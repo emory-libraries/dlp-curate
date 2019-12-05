@@ -13,7 +13,7 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
   let(:actor)    { described_class.new(file_set, relation, user) }
   let(:fixture)  { fixture_file_upload('/image.png', 'image/png') }
   let(:huf) { Hyrax::UploadedFile.new(user: user, file_set_uri: file_set.uri, preservation_master_file: fixture) }
-  let(:io) { JobIoWrapper.new(file_set_id: file_set.id, user: user, path: fixture.path, relation: relation) }
+  let(:io) { JobIoWrapper.new(file_set_id: file_set.id, user: user, path: fixture.path, relation: relation, preferred: relation) }
   let(:pcdmfile) do
     Hydra::PCDM::File.new.tap do |f|
       f.content = File.open(fixture.path).read
@@ -41,6 +41,7 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
     it 'uses the relation from the actor' do
       expect(CharacterizeJob).not_to receive(:perform_later)
       actor.ingest_file(io)
+      expect(CreateDerivativesJob).not_to receive(:perform_later).with(file_set, pcdmfile.id, fixture.path)
       expect(file_set.reload.remastered.mime_type).to eq 'image/png'
     end
   end
@@ -87,6 +88,7 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
   describe '#ingest_file' do
     before do
       expect(Hydra::Works::AddFileToFileSet).to receive(:call).with(file_set, io, relation, versioning: false)
+      allow(CreateDerivativesJob).to receive(:perform_later).with(file_set, pcdmfile.id, fixture.path)
     end
     it 'when the file is available' do
       allow(file_set).to receive(:save).and_return(true)

@@ -153,6 +153,7 @@ ActiveRecord::Schema.define(version: 201901241536542) do
     t.string "relation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "preferred"
     t.index ["uploaded_file_id"], name: "index_job_io_wrappers_on_uploaded_file_id"
     t.index ["user_id"], name: "index_job_io_wrappers_on_user_id"
   end

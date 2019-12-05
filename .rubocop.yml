@@ -39,6 +39,7 @@ Metrics/BlockLength:
         - app/importers/curate_collection_importer.rb
         - lib/tasks/curate_collections.rake
         - config/initializers/characterization_service.rb
+        - config/initializers/job_io_wrapper.rb
 
 Metrics/ClassLength:
     Exclude:
@@ -56,7 +57,9 @@ Metrics/CyclomaticComplexity:
     Exclude:
       - app/importers/curate_record_importer.rb
       - config/prepends/custom_visibility.rb
+      - config/initializers/file_actor.rb
       - app/indexers/curate/file_set_indexer.rb
+
 Metrics/LineLength:
     Exclude:
         - spec/importers/curate_mapper_spec.rb
