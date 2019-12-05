@@ -170,7 +170,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       check_details(page)
     end
 
-    it 'starts the import' do
+    xit 'starts the import' do
       initial_import(page)
       check_update_metadata_only_option(page)
       check_update_delete_option(page)
