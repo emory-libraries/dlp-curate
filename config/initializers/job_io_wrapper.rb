@@ -29,10 +29,10 @@ JobIoWrapper.class_eval do
     result = file_actor.ingest_file(self)
     if result == false
       outcome = 'Failure'
-      details = "File not replicated to cross-region S3 storage: #{file_name}"
+      details = "#{file_name} could not be submitted for preservation storage"
     else
       outcome = 'Success'
-      details = "File replicated to cross-region S3 storage: #{file_name}"
+      details = "#{file_name} submitted for preservation storage"
     end
     file_set_preservation_event(file_set, event_start, outcome, details)
   end
