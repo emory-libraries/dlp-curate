@@ -16,7 +16,7 @@ RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, 
       login_as admin_user
     end
 
-    it 'starts the import' do
+    xit 'starts the import' do
       visit '/csv_imports/new'
       expect(page).to have_content 'Testing Collection'
       expect(page).not_to have_content '["Testing Collection"]'
