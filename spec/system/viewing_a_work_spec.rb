@@ -11,7 +11,7 @@ RSpec.describe 'viewing the importer guide', type: :system do
     work.reload
   end
 
-  it 'has all the labels' do
+  it 'has all the labels', clean: true do
     visit "/concern/curate_generic_works/#{work.id}"
 
     expect(page).to have_content 'abstract (Description/Abstract)'
