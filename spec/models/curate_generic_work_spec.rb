@@ -1325,13 +1325,15 @@ RSpec.describe CurateGenericWork do
       { title: ['Example Title'],
         primary_language: 'English',
         abstract: 'This is point number 1',
-        copyright_date: Date.new(2018, 1, 12) }
+        copyright_date: Date.new(2018, 1, 12),
+        content_type: 'http://id.loc.gov/vocabulary/resourceTypes/txt'
+       }
     end
     let(:curate_generic_work) { FactoryBot.build(:work, **params) }
     let(:solr_doc) { curate_generic_work.to_solr }
 
     it "returns the SolrDoc with metadata" do
-      expect(solr_doc.keys).to include('title_tesim', 'primary_language_tesim', 'abstract_tesim', 'copyright_date_dtsim')
+      expect(solr_doc.keys).to include('title_tesim', 'primary_language_tesim', 'abstract_tesim', 'copyright_date_dtsim', 'content_type_tesim')
 
       # Check title (multi-valued)
       expect(solr_doc['title_tesim']).to match_array params[:title]
@@ -1344,6 +1346,12 @@ RSpec.describe CurateGenericWork do
 
       # Check a date
       expect(solr_doc['copyright_date_dtsim']).to contain_exactly params[:copyright_date].strftime('%FT%TZ')
+
+      # Check content_type_tesim also saved as url
+      expect(solr_doc['content_type_tesim']).to contain_exactly params[:content_type]
+
+      # Check content_type_tesim also saved as human_readable_content_type
+      expect(solr_doc['human_readable_content_type_tesim']).to eq ['Text']
     end
   end
 
