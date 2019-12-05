@@ -1,4 +1,5 @@
 set :stage, :ARCH
+set :honeybadger_env, "Curate-Arch"
 ec2_role [:web, :app, :db, :redhatapp, :collection],
          user: 'deploy',
          ssh_options: {
