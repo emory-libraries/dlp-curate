@@ -88,4 +88,8 @@ class SolrDocument
   def profile_version
     self['profile_version_ssim']
   end
+
+  def human_readable_content_type
+    self['human_readable_content_type_tesim']
+  end
 end
