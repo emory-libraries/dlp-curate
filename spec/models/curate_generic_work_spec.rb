@@ -1326,8 +1326,7 @@ RSpec.describe CurateGenericWork do
         primary_language: 'English',
         abstract: 'This is point number 1',
         copyright_date: Date.new(2018, 1, 12),
-        content_type: 'http://id.loc.gov/vocabulary/resourceTypes/txt'
-       }
+        content_type: 'http://id.loc.gov/vocabulary/resourceTypes/txt' }
     end
     let(:curate_generic_work) { FactoryBot.build(:work, **params) }
     let(:solr_doc) { curate_generic_work.to_solr }
