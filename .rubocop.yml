@@ -28,6 +28,7 @@ Metrics/AbcSize:
     - app/importers/curate_record_importer.rb
     - app/lib/metadata_details.rb
     - app/indexers/curate/file_set_indexer.rb
+    - app/importers/preservation_workflow_importer.rb
 
 Metrics/BlockLength:
     Exclude:

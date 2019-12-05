@@ -1,0 +1,3 @@
+deduplication_key,type,Ingest.workflow_notes,Ingest.workflow_rights_basis,Ingest.workflow_rights_basis_date,Ingest.rights_basis_reviewer,Ingest.workflow_rights_basis_note,Accession.workflow_rights_basis,Accession.workflow_rights_basis_date,Accession.workflow_rights_basis_reviewer,Accession.workflow_rights_basis_note,preservation_master_file,intermediate_file
+MSS1218_B071_I205,work,"Migrated to Cor repository from Extensis Portfolio DAMS during Phase 1 Migrations, 2019",Administrative Signoff,2016-03-01,Scholarly Communications Office,This is a sample note. This field isn't always populated.,Administrative Signoff,2016-03-01,LTDS,This is a sample note for Accession workflow rights reviews.,,
+MSS1218_B071_I205,work,,,,,,,,,,,
