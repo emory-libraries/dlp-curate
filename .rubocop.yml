@@ -41,6 +41,7 @@ Metrics/BlockLength:
         - lib/tasks/curate_collections.rake
         - config/initializers/characterization_service.rb
         - config/initializers/job_io_wrapper.rb
+        - lib/tasks/derivatives.rake
 
 Metrics/ClassLength:
     Exclude:
