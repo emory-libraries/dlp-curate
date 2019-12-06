@@ -115,8 +115,8 @@ RSpec.describe YellowbackPreprocessor do
 
   it 'extracts contributors information from Alma' do
     expect(import_rows[shakespeare_start]['contributors']).to eq('Gollancz, Israel, 1864-1930.|' + # Shakespeare's comedy of The merchant of Venice
-                                                'Hughes, Ted, 1930-1998, former owner. GEU|' +
-                                                'Ted Hughes Library (Emory University. General Libraries) GEU')
+                                                'Hughes, Ted, 1930-1998, former owner.|' +
+                                                'Ted Hughes Library (Emory University. General Libraries)')
   end
 
   it 'extracts creator information from Alma' do

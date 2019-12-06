@@ -59,7 +59,6 @@
     <datafield tag="700" ind1="1" ind2=" ">
       <subfield code="a">Topp, Chester W.,</subfield>
       <subfield code="e">collector.</subfield>
-      <subfield code="5">GEU</subfield>
     </datafield>
     <datafield tag="710" ind1="2" ind2=" ">
       <subfield code="a">Chatto &amp; Windus (Firm),</subfield>
@@ -173,13 +172,11 @@
     <datafield tag="700" ind1="1" ind2=" ">
       <subfield code="a">Topp, Chester W.,</subfield>
       <subfield code="e">collector.</subfield>
-      <subfield code="5">GEU</subfield>
     </datafield>
     <datafield tag="710" ind1="2" ind2=" ">
       <subfield code="a">
         Chester W. Topp collection of Victorian yellowbacks and paperbacks (Emory University. MARBL)
       </subfield>
-      <subfield code="5">GEU</subfield>
     </datafield>
     <datafield tag="830" ind1=" " ind2="0">
       <subfield code="a">Books for the country.</subfield>
@@ -340,13 +337,11 @@
       <subfield code="a">Hughes, Ted,</subfield>
       <subfield code="d">1930-1998,</subfield>
       <subfield code="e">former owner.</subfield>
-      <subfield code="5">GEU</subfield>
     </datafield>
     <datafield tag="710" ind1="2" ind2=" ">
       <subfield code="a">
         Ted Hughes Library (Emory University. General Libraries)
       </subfield>
-      <subfield code="5">GEU</subfield>
     </datafield>
     <datafield tag="856" ind1="4" ind2="1">
       <subfield code="u">http://pid.emory.edu/ark:/25593/7stsg/IA</subfield>
