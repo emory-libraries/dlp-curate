@@ -19,13 +19,8 @@ module Hyrax
     #     }
     def create
       # render json: fixity_check_service.fixity_check
-      result = fixity_check_service.fixity_check
-      notice = if result.values.first[0]['passed'] == true
-                 'Ran fixity check successfully'
-               else
-                 'There was an issue running fixity check'
-               end
-      redirect_to main_app.hyrax_file_set_path(params[:file_set_id]), notice: notice
+      fixity_check_service.fixity_check
+      redirect_to main_app.hyrax_file_set_path(params[:file_set_id]), notice: 'Ran fixity check'
     end
 
     private

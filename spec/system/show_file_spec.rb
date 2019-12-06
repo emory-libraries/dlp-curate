@@ -12,7 +12,7 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
 
   before do
     login_as user
-    Hydra::Works::AddFileToFileSet.call(file_set, file, :original_file)
+    Hydra::Works::AddFileToFileSet.call(file_set, file, :preservation_master_file)
     Hydra::Works::AddFileToFileSet.call(file_set, file1, :service_file)
     Hydra::Works::AddFileToFileSet.call(file_set, file2, :intermediate_file)
     work.ordered_members << file_set
@@ -43,7 +43,7 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
     end
   end
 
-  context 'when fixity check is run' do
+  context 'when fixity check passes' do
     before do
       visit hyrax_file_set_path(file_set)
       click_on 'Run Fixity check'
@@ -51,6 +51,19 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
 
     it 'shows result of fixity check' do
       expect(page).to have_content 'passed 3 Files with 3 total versions checked'
+    end
+  end
+
+  context 'when fixity check fails' do
+    before do
+      ChecksumAuditLog.create!(passed: true, file_set_id: file_set.id, file_id: file_set.preservation_master_file.id)
+      ChecksumAuditLog.create!(passed: true, file_set_id: file_set.id, file_id: file_set.intermediate_file.id)
+      ChecksumAuditLog.create!(passed: false, file_set_id: file_set.id, file_id: file_set.service_file.id)
+      visit hyrax_file_set_path(file_set)
+    end
+
+    it 'shows result of fixity check' do
+      expect(page).to have_content 'FAIL 3 Files with 3 total versions checked'
     end
   end
 end
