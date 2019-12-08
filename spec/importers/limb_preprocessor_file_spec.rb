@@ -11,7 +11,7 @@ RSpec.describe YellowbackPreprocessor do
   end
 
   after :all do
-    test_csv = File.join(fixture_path, 'csv_import', 'yellowbacks', 'yellowbacks_pull_list-merged.csv')
+    test_csv = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-merged.csv')
     File.delete(test_csv) if File.exist?(test_csv)
   end
 
@@ -45,8 +45,8 @@ RSpec.describe YellowbackPreprocessor do
   end
 
   it 'provides a deduplication key', :aggregate_failures do
-    expect(import_rows[memory_1981_start]['deduplication_key']).to eq('gsw5f') # Memory '81
-    expect(import_rows[campus_1985_start]['deduplication_key']).to eq('bcg1p') # The Campus '85
+    expect(import_rows[memory_1981_start]['deduplication_key']).to eq('050000087539') # Memory '81
+    expect(import_rows[campus_1985_start]['deduplication_key']).to eq('000011909908') # The Campus '85
   end
 
   it 'adds filesets for PDFs', :aggregate_failures do

@@ -97,7 +97,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
 
     def context_fields(csv_index, row, type)
       [
-        row['emory_ark'], # deduplication_key
+        row['deduplication_key'], # deduplication_key
         csv_index + 2, # pl_row  (original row number from pull list)
         row['CSV Title'], # title
         type # row type (work | fileset)
