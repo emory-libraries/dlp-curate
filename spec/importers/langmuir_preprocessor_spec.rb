@@ -4,18 +4,18 @@ require 'rails_helper'
 RSpec.describe LangmuirPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results
-    langmuir_sample = File.join(fixture_path, 'csv_import', 'before_processing', 'langmuir-unprocessed.csv')
+    langmuir_sample = File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed.csv')
     preprocessor = described_class.new(langmuir_sample)
     preprocessor.merge
   end
 
   after :all do
-    test_csv = File.join(fixture_path, 'csv_import', 'before_processing', 'langmuir-unprocessed-processed.csv')
+    test_csv = File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed-processed.csv')
     File.delete(test_csv) if File.exist?(test_csv)
   end
 
   # each test inspects the output of the pre-processor, read into the import_rows CSV::Table object
-  let(:processed_csv) { File.join(fixture_path, 'csv_import', 'before_processing', 'langmuir-unprocessed-processed.csv') }
+  let(:processed_csv) { File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed-processed.csv') }
   let(:import_rows) { CSV.read(processed_csv, headers: true).by_row! }
   let(:unparsed_rows) { File.read(processed_csv) }
 

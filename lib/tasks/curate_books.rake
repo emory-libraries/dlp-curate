@@ -9,8 +9,8 @@ namespace :curate do
     valid_args = \
       ARGV.length > 4 &&
       File.extname(pull_list_csv) == '.csv' &&
-      File.extname(alma_xml) == '.xml'
-    ['kirtas', 'limb'].include?(digitization.downcase)
+      File.extname(alma_xml) == '.xml' &&
+      ['kirtas', 'limb'].include?(digitization.downcase)
     if valid_args
       preprocessor = YellowbackPreprocessor.new(pull_list_csv, alma_xml, replacement_path, digitization.downcase.to_sym)
       preprocessor.merge
