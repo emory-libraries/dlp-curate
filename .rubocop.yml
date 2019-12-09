@@ -42,6 +42,7 @@ Metrics/BlockLength:
         - config/initializers/characterization_service.rb
         - config/initializers/job_io_wrapper.rb
         - lib/tasks/derivatives.rake
+        - config/initializers/file_set_fixity_check_service.rb
 
 Metrics/ClassLength:
     Exclude:
@@ -82,6 +83,7 @@ Metrics/MethodLength:
         - app/importers/modular_importer.rb
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
+        - config/initializers/file_set_fixity_check_service.rb
 
 Metrics/ModuleLength:
     Exclude:
