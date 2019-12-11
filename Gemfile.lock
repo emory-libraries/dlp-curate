@@ -1,4 +1,16 @@
 GIT
+  remote: https://github.com/curationexperts/zizia.git
+  revision: d3cf9bcacf8239ae9df41154a1cd30a26532dfbc
+  ref: d3cf9bc
+  specs:
+    zizia (5.5.0)
+      active-fedora
+      carrierwave
+      kaminari
+      rails (~> 5, < 5.3)
+      rails-controller-testing
+
+GIT
   remote: https://github.com/emory-libraries/cap-ec2.git
   revision: aa48832ed4a33944b8e5498b43af0a9c4866fca1
   specs:
@@ -1678,12 +1690,6 @@ GEM
       nokogiri (~> 1.8)
     xray-rails (0.3.2)
       rails (>= 3.1.0)
-    zizia (5.3.0)
-      active-fedora
-      carrierwave
-      kaminari
-      rails (~> 5.1.4)
-      rails-controller-testing
 
 PLATFORMS
   ruby
@@ -1742,7 +1748,7 @@ DEPENDENCIES
   webdrivers (~> 3.0)
   webpacker (~> 4.x)
   xray-rails
-  zizia (~> 5.3.0)
+  zizia!
 
 RUBY VERSION
    ruby 2.5.5p157
