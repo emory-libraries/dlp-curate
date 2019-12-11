@@ -1327,7 +1327,7 @@ RSpec.describe CurateGenericWork do
         abstract: 'This is point number 1',
         copyright_date: Date.new(2018, 1, 12),
         content_type: 'http://id.loc.gov/vocabulary/resourceTypes/txt',
-        rights_statement: 'http://rightsstatements.org/vocab/InC/1.0/',
+        rights_statement: ['http://rightsstatements.org/vocab/InC/1.0/'],
         re_use_license: 'https://creativecommons.org/licenses/by/4.0/' }
     end
     let(:curate_generic_work) { FactoryBot.build(:work, **params) }
@@ -1356,7 +1356,7 @@ RSpec.describe CurateGenericWork do
       expect(solr_doc['human_readable_content_type_tesim']).to eq ['Text']
 
       # Check rights_statement_tesim also saved as url
-      expect(solr_doc['rights_statement_tesim']).to contain_exactly params[:rights_statement]
+      expect(solr_doc['rights_statement_tesim']).to contain_exactly params[:rights_statement].first
 
       # Check rights_statement_tesim also saved as human_readable_rights_statement
       expect(solr_doc['human_readable_rights_statement_tesim']).to eq ['In Copyright']

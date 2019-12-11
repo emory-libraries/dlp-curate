@@ -28,12 +28,12 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   end
 
   def human_readable_rights_statement
-    return unless object.rights_statement
-    FormatLabelService.instance.label(uri: object.rights_statement)
+    return [] if object.rights_statement.empty?
+    RightsStatementLabelService.instance.label(uri: object.rights_statement.first)
   end
 
   def human_readable_re_use_license
     return unless object.re_use_license
-    FormatLabelService.instance.label(uri: object.re_use_license)
+    LicensesLabelService.instance.label(uri: object.re_use_license)
   end
 end
