@@ -1326,13 +1326,16 @@ RSpec.describe CurateGenericWork do
         primary_language: 'English',
         abstract: 'This is point number 1',
         copyright_date: Date.new(2018, 1, 12),
-        content_type: 'http://id.loc.gov/vocabulary/resourceTypes/txt' }
+        content_type: 'http://id.loc.gov/vocabulary/resourceTypes/txt',
+        rights_statement: 'http://rightsstatements.org/vocab/InC/1.0/',
+        re_use_license: 'https://creativecommons.org/licenses/by/4.0/' }
     end
     let(:curate_generic_work) { FactoryBot.build(:work, **params) }
     let(:solr_doc) { curate_generic_work.to_solr }
 
     it "returns the SolrDoc with metadata" do
-      expect(solr_doc.keys).to include('title_tesim', 'primary_language_tesim', 'abstract_tesim', 'copyright_date_dtsim', 'content_type_tesim')
+      expect(solr_doc.keys).to include('title_tesim', 'primary_language_tesim',
+      'abstract_tesim', 'copyright_date_dtsim', 'content_type_tesim', 'rights_statement_tesim', 're_use_license_tesim')
 
       # Check title (multi-valued)
       expect(solr_doc['title_tesim']).to match_array params[:title]
@@ -1351,6 +1354,18 @@ RSpec.describe CurateGenericWork do
 
       # Check content_type_tesim also saved as human_readable_content_type
       expect(solr_doc['human_readable_content_type_tesim']).to eq ['Text']
+
+      # Check rights_statement_tesim also saved as url
+      expect(solr_doc['rights_statement_tesim']).to contain_exactly params[:rights_statement]
+
+      # Check rights_statement_tesim also saved as human_readable_rights_statement
+      expect(solr_doc['human_readable_rights_statement_tesim']).to eq ['In Copyright']
+
+      # Check re_use_license_tesim also saved as url
+      expect(solr_doc['re_use_license_tesim']).to contain_exactly params[:re_use_license]
+
+      # Check re_use_license_tesim also saved as human_readable_re_use_license
+      expect(solr_doc['human_readable_re_use_license_tesim']).to eq ['Creative Commons BY Attribution 4.0 International']
     end
   end
 

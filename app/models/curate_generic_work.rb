@@ -120,7 +120,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :grant_information, predicate: "http://metadata.emory.edu/vocab/cor-terms#grantOrFundingNote"
+  property :grant_information, predicate: "http://metadata.emory.edu/vocab/cor-terms#grantOrFundingNote" do |index|
+    index.as :stored_searchable
+  end
 
   property :holding_repository, predicate: "http://id.loc.gov/vocabulary/relators/rps", multiple: false do |index|
     index.as :stored_searchable, :facetable
@@ -142,7 +144,9 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :issue, predicate: "http://purl.org/ontology/bibo/issue", multiple: false
+  property :issue, predicate: "http://purl.org/ontology/bibo/issue", multiple: false do |index|
+    index.as :stored_searchable
+  end
 
   property :keywords, predicate: "http://schema.org/keywords" do |index|
     index.as :stored_searchable
