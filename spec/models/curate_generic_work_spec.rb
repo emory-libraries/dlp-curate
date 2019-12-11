@@ -1334,8 +1334,10 @@ RSpec.describe CurateGenericWork do
     let(:solr_doc) { curate_generic_work.to_solr }
 
     it "returns the SolrDoc with metadata" do
-      expect(solr_doc.keys).to include('title_tesim', 'primary_language_tesim',
-      'abstract_tesim', 'copyright_date_dtsim', 'content_type_tesim', 'rights_statement_tesim', 're_use_license_tesim')
+      expect(solr_doc.keys).to include(
+        'title_tesim', 'primary_language_tesim', 'abstract_tesim', 'copyright_date_dtsim',
+        'content_type_tesim', 'rights_statement_tesim', 're_use_license_tesim'
+      )
 
       # Check title (multi-valued)
       expect(solr_doc['title_tesim']).to match_array params[:title]
