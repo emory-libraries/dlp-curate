@@ -88,7 +88,7 @@ FactoryBot.define do
       primary_repository_ID { 'http://example.com' }
       publisher { 'emory' }
       publisher_version { '1' }
-      re_use_license { 'true' }
+      re_use_license { 'https://creativecommons.org/licenses/by/4.0/' }
       related_datasets { ['http://example.com'] }
       related_material_notes { ['More stuff'] }
       related_publications { ['https://example.com'] }
