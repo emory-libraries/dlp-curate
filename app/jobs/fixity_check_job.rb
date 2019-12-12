@@ -68,16 +68,18 @@ class FixityCheckJob < Hyrax::ApplicationJob
     end
 
     def file_set_preservation_event(log, file_set_id, file_id, event_start)
+      @logger = Logger.new(STDOUT)
       fixity_file_set = ::FileSet.find(file_set_id)
       fixity_file = Hydra::PCDM::File.find(file_id)
-      event = { 'type' => 'Fixity Check', 'start' => event_start,
-                'software_version' => 'Fedora v4.7.5', 'user' => fixity_file_set.depositor }
+      event = { 'type' => 'Fixity Check', 'start' => event_start, 'software_version' => 'Fedora v4.7.5', 'user' => fixity_file_set.depositor }
       if log.passed == true
         event['outcome'] = 'Success'
         event['details'] = "Fixity intact for file: #{fixity_file&.original_name}: sha1:#{fixity_file&.checksum&.value}"
+        @logger.info "Ran fixity check successfully on #{fixity_file&.original_name}"
       else
         event['outcome'] = 'Failure'
         event['details'] = "Fixity check failed for: #{fixity_file&.original_name}: sha1:#{fixity_file&.checksum&.value}"
+        @logger.error "Fixity check failure: Fixity failed for #{fixity_file&.original_name}"
       end
       create_preservation_event(fixity_file_set, event)
     end

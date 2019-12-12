@@ -3,7 +3,7 @@
 # Adds tests for fixity_check preservation_event
 require 'rails_helper'
 
-RSpec.describe FixityCheckJob do
+RSpec.describe FixityCheckJob, :clean do
   let(:user) { FactoryBot.create(:user) }
 
   let(:file_set) do
