@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ClambyScanner < Hydra::Works::VirusScanner
   def infected?
     result = Clamby.virus?(file)

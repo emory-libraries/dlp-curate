@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax-overwrite] Attaching multiple files to single fileset
 # Converts UploadedFiles into FileSets and attaches them to works.
 class AttachFilesToWorkJob < Hyrax::ApplicationJob

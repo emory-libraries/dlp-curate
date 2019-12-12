@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 include Warden::Test::Helpers
 
@@ -41,8 +43,8 @@ RSpec.describe 'Admin dashboard', integration: true, clean: true, type: :system 
     # TODO: Add more admin tests, for eg: stats page, when work is created
 
     # scenario 'view the statistics page' do
-    # 	click_on 'Reports'
-    # 	expect(page).to have_content ''
+    #   click_on 'Reports'
+    #   expect(page).to have_content ''
     # end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 # Goal: Easily create Collection objects that follow the template laid out by this

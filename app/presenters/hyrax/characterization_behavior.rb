@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax overwrite]
 # Adds additional fields to characterization_terms
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Hyrax::SensitiveMaterialService do
   before do
     # Configure QA to use fixtures

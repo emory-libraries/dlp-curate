@@ -26,23 +26,23 @@ class ModularImporter
 
     attrs = {
       csv_import_detail: csv_import_detail,
-      csv_file: file
+      csv_file:          file
     }
 
     log_start_import
     importer = Zizia::Importer.new(parser: Zizia::CsvParser.new(file: file), record_importer: CurateRecordImporter.new(attributes: attrs))
     importer.records.each do |record|
-      pre_ingest_work = create_pre_ingest_work(type: record.mapper.metadata['type'],
+      pre_ingest_work = create_pre_ingest_work(type:                 record.mapper.metadata['type'],
                                                csv_import_detail_id: csv_import_detail.id,
-                                               deduplication_key: record.mapper.metadata['deduplication_key'])
+                                               deduplication_key:    record.mapper.metadata['deduplication_key'])
       Zizia::PreIngestFile.where(pre_ingest_work_id: pre_ingest_work.id).delete_all if record.mapper.metadata['type'] == 'work'
       Curate::FILE_TYPES.each do |file_type|
         next unless record.mapper.metadata[file_type]
         @row += 1 if file_type == 'preservation_master_file'
-        pre_ingest_file = Zizia::PreIngestFile.new(row_number: @row,
+        pre_ingest_file = Zizia::PreIngestFile.new(row_number:      @row,
                                                    pre_ingest_work: pre_ingest_work,
-                                                   filename: record.mapper.metadata[file_type],
-                                                   size: pre_ingest_file_size(record: record, type: file_type))
+                                                   filename:        record.mapper.metadata[file_type],
+                                                   size:            pre_ingest_file_size(record: record, type: file_type))
         pre_ingest_file.save
       end
       pre_ingest_work.save

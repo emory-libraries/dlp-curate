@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LogFormatter
   def call(severity, time, progname, msg = '')
     return '' if msg.blank?

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MetadataDetailsHelper
   def css_class(value)
     return "missing" if value == "not configured"

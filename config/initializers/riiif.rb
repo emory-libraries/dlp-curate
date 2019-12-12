@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Riiif::Image.file_resolver = Riiif::HTTPFileResolver.new
 Riiif::Image.info_service = lambda do |id, _file|
   # id will look like a path to a pcdm:file

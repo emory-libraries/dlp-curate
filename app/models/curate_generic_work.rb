@@ -320,24 +320,27 @@ class CurateGenericWork < ActiveFedora::Base
   # the properties are declared because it calls resource_class,
   # which finalizes the propery declarations.
   # See https://github.com/projecthydra/active_fedora/issues/847
+
+  # rubocop:disable Layout/AlignHash
   accepts_nested_attributes_for :preservation_workflow, allow_destroy: true,
-  reject_if: proc { |attrs|
-    ['workflow_type', 'workflow_notes', 'workflow_rights_basis',
-     'workflow_rights_basis_note', 'workflow_rights_basis_date',
-     'workflow_rights_basis_reviewer', 'workflow_rights_basis_uri'].all? do |key|
-       Array(attrs[key]).all?(&:blank?)
-     end
-  }
+    reject_if:  proc { |attrs|
+                  ['workflow_type', 'workflow_notes', 'workflow_rights_basis',
+                   'workflow_rights_basis_note', 'workflow_rights_basis_date',
+                   'workflow_rights_basis_reviewer', 'workflow_rights_basis_uri'].all? do |key|
+                     Array(attrs[key]).all?(&:blank?)
+                   end
+                }
 
   accepts_nested_attributes_for :preservation_event, allow_destroy: true,
-  reject_if: proc { |attrs|
-    ['event_id', 'event_type', 'work_id',
-     'initiating_user', 'event_start',
-     'event_end', 'outcome', 'fileset_id',
-     'software_version', 'workflow_id', 'event_details'].all? do |key|
-       Array(attrs[key]).all?(&:blank?)
-     end
-  }
+    reject_if:  proc { |attrs|
+                  ['event_id', 'event_type', 'work_id',
+                   'initiating_user', 'event_start',
+                   'event_end', 'outcome', 'fileset_id',
+                   'software_version', 'workflow_id', 'event_details'].all? do |key|
+                     Array(attrs[key]).all?(&:blank?)
+                   end
+                }
+  # rubocop:enable Layout/AlignHash
 
   private
 

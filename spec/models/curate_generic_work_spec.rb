@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Generated via
 #  `rails generate hyrax:work CurateGenericWork`
 require 'rails_helper'
@@ -1322,17 +1324,17 @@ RSpec.describe CurateGenericWork do
 
   context "saves metadata in SolrDoc" do
     let(:params) do
-      { title: ['Example Title'],
-        primary_language: 'English',
-        abstract: 'This is point number 1',
-        content_type: 'http://id.loc.gov/vocabulary/resourceTypes/txt',
-        rights_statement: ['http://rightsstatements.org/vocab/InC/1.0/'],
-        re_use_license: 'https://creativecommons.org/licenses/by/4.0/',
-        date_created: 'XXXX-09-07',
-        date_issued: '193X',
+      { title:                 ['Example Title'],
+        primary_language:      'English',
+        abstract:              'This is point number 1',
+        content_type:          'http://id.loc.gov/vocabulary/resourceTypes/txt',
+        rights_statement:      ['http://rightsstatements.org/vocab/InC/1.0/'],
+        re_use_license:        'https://creativecommons.org/licenses/by/4.0/',
+        date_created:          'XXXX-09-07',
+        date_issued:           '193X',
         data_collection_dates: ['XXXX'],
-        conference_dates: '194X/195X',
-        copyright_date: '1942?/1944?' }
+        conference_dates:      '194X/195X',
+        copyright_date:        '1942?/1944?' }
     end
     let(:curate_generic_work) { FactoryBot.build(:work, **params) }
     let(:solr_doc) { curate_generic_work.to_solr }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax-collections-factory]
 FactoryBot.define do
   # Tests that create a Fedora Object are very slow.  This factory lets you control which parts of the object ecosystem
@@ -312,11 +314,11 @@ FactoryBot.define do
     def self.process_with_nesting_attributes(collection, evaluator)
       return unless evaluator.with_nesting_attributes.present? && collection.nestable?
       Hyrax::Adapters::NestingIndexAdapter.add_nesting_attributes(
-        solr_doc: solr_document_with_permissions(collection, evaluator),
-        ancestors: evaluator.with_nesting_attributes[:ancestors],
+        solr_doc:   solr_document_with_permissions(collection, evaluator),
+        ancestors:  evaluator.with_nesting_attributes[:ancestors],
         parent_ids: evaluator.with_nesting_attributes[:parent_ids],
-        pathnames: evaluator.with_nesting_attributes[:pathnames],
-        depth: evaluator.with_nesting_attributes[:depth]
+        pathnames:  evaluator.with_nesting_attributes[:pathnames],
+        depth:      evaluator.with_nesting_attributes[:depth]
       )
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PreservationUri
   # This is required else the URI generated for the
   # nested attribute will have a different parent

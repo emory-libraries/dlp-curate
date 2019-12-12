@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hydra-works-overwrite]
 module FileSetHelper
   # Mocking out the Hydra::Works::FileSet sufficiently to add original_file

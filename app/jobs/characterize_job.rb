@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax-overwrite]
 # Adds preservation event for fileset characterization
 

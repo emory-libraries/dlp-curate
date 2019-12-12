@@ -176,7 +176,7 @@ module Zizia
           next if filename.nil?
           filepath = filename_to_full_path(filename)
           next if File.exist?(filepath)
-          FileExistsWarningAppender.new(index: i,
+          FileExistsWarningAppender.new(index:    i,
                                         filepath: filename,
                                         warnings: @warnings).check
         end

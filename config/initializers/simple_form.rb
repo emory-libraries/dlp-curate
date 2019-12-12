@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # NOTE: This is a modified version of simple_form's default config file.
 #       The only changes were to move the input to after the hint and error.
 
@@ -8,8 +10,8 @@ SimpleForm.setup do |config|
   # wrapper, change the order or even add your own to the
   # stack. The options given below are used to wrap the
   # whole input.
-  config.wrappers :default, class: :input,
-                            hint_class: :field_with_hint,
+  config.wrappers :default, class:       :input,
+                            hint_class:  :field_with_hint,
                             error_class: :field_with_errors do |b|
     ## Extensions enabled by default
     # Any of these extensions can be disabled for a

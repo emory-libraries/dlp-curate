@@ -64,15 +64,15 @@ class MetadataDetails
 
     def definition_hash_for(field_properties, validators)
       Hash[
-        attribute: field_properties[0],
-        predicate: field_properties[1].predicate.to_s,
-        multiple: field_properties[1].try(:multiple?).to_s,
-        type: type_to_s(field_properties[1].type),
-        validator: validator_to_string(validator: validators[field_properties[0].to_sym][0]),
-        label: I18n.t("simple_form.labels.defaults.#{field_properties[0]}"),
-        csv_header: csv_header(field_properties[0]),
+        attribute:        field_properties[0],
+        predicate:        field_properties[1].predicate.to_s,
+        multiple:         field_properties[1].try(:multiple?).to_s,
+        type:             type_to_s(field_properties[1].type),
+        validator:        validator_to_string(validator: validators[field_properties[0].to_sym][0]),
+        label:            I18n.t("simple_form.labels.defaults.#{field_properties[0]}"),
+        csv_header:       csv_header(field_properties[0]),
         required_on_form: required_on_form_to_s(field_properties[0]),
-        usage: Zizia::MetadataUsage.instance.usage[field_properties[0]]
+        usage:            Zizia::MetadataUsage.instance.usage[field_properties[0]]
       ]
     end
 end

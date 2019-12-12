@@ -29,9 +29,9 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       # Grant the user access to deposit into the admin set.
       Hyrax::PermissionTemplateAccess.create!(
         permission_template_id: permission_template.id,
-        agent_type: 'user',
-        agent_id: user.user_key,
-        access: 'deposit'
+        agent_type:             'user',
+        agent_id:               user.user_key,
+        access:                 'deposit'
       )
       login_as user
     end

@@ -10,20 +10,20 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
   let(:tf)  { File.open(fixture_path + '/book_page/0003_transcript.txt') }
   let(:uploaded_file1) do
     FactoryBot.build(:uploaded_file,
-                     file: 'Example title',
+                     file:                     'Example title',
                      preservation_master_file: pmf,
-                     intermediate_file: inf,
-                     service_file: sf,
-                     extracted_text: et,
-                     transcript: tf,
-                     fileset_use: 'primary')
+                     intermediate_file:        inf,
+                     service_file:             sf,
+                     extracted_text:           et,
+                     transcript:               tf,
+                     fileset_use:              'primary')
   end
   let(:uploaded_file2) do
     FactoryBot.build(:uploaded_file,
                      preservation_master_file: pmf,
-                     service_file: sf,
-                     transcript: tf,
-                     fileset_use: 'supplementary')
+                     service_file:             sf,
+                     transcript:               tf,
+                     fileset_use:              'supplementary')
   end
   let(:generic_work) { FactoryBot.create(:public_generic_work) }
   let(:user) { FactoryBot.create(:user) }

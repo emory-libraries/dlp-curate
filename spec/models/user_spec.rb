@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 RSpec.describe User, :clean do
   before do
     # User must exists before tests can run
-    described_class.create(provider: 'shibboleth',
-                           uid: 'brianbboys1967',
-                           ppid: 'P0000001',
+    described_class.create(provider:     'shibboleth',
+                           uid:          'brianbboys1967',
+                           ppid:         'P0000001',
                            display_name: 'Brian Wilson')
   end
 
   let(:auth_hash) do
     OmniAuth::AuthHash.new(
       provider: 'shibboleth',
-      uid: "P0000001",
-      info: {
+      uid:      "P0000001",
+      info:     {
         display_name: "Brian Wilson",
-        uid: 'brianbboys1967'
+        uid:          'brianbboys1967'
       }
     )
   end
@@ -39,10 +41,10 @@ RSpec.describe User, :clean do
     let(:updated_auth_hash) do
       OmniAuth::AuthHash.new(
         provider: 'shibboleth',
-        uid: "P0000002",
-        info: {
+        uid:      "P0000002",
+        info:     {
           display_name: "Boaty McBoatface",
-          uid: 'brianbboys1967'
+          uid:          'brianbboys1967'
         }
       )
     end
@@ -73,10 +75,10 @@ RSpec.describe User, :clean do
     let(:new_auth_hash) do
       OmniAuth::AuthHash.new(
         provider: 'shibboleth',
-        uid: 'P0000003',
-        info: {
+        uid:      'P0000003',
+        info:     {
           display_name: 'Fake Person',
-          uid: 'egnetid'
+          uid:          'egnetid'
         }
       )
     end
@@ -95,10 +97,10 @@ RSpec.describe User, :clean do
     let(:invalid_auth_hash) do
       OmniAuth::AuthHash.new(
         provider: 'shibboleth',
-        uid: '',
-        info: {
+        uid:      '',
+        info:     {
           display_name: '',
-          uid: ''
+          uid:          ''
         }
       )
     end

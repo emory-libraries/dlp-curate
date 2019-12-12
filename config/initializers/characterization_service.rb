@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hydra-works-overwrite] CharacterizationService in Hydra::Works
 # Adds 'append_original_checksum' method for adding three types of checksums
 # to the hashValue predicate

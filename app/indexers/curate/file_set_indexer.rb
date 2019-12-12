@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Curate
   class FileSetIndexer < Hyrax::FileSetIndexer
     def generate_solr_document

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :curate do
   namespace :collections do
     desc 'Make migration collections'

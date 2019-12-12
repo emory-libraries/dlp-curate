@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Zizia
   class FileExistsWarningAppender < WarningAppender
     attr_accessor :index, :filepath

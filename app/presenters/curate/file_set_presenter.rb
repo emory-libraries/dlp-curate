@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Curate
   class FileSetPresenter < Hyrax::FileSetPresenter
     delegate :pcdm_use, :file_name, :file_path, :file_size, :created, :valid, :well_formed,

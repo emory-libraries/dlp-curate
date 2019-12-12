@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Load the Rails application.
 require_relative 'application'
 
@@ -10,11 +12,11 @@ Rails.logger.level = Logger::INFO
 Hyrax::PermissionBadge.send(:remove_const, :VISIBILITY_LABEL_CLASS)
 Hyrax::PermissionBadge::VISIBILITY_LABEL_CLASS = {
   authenticated: "label-info",
-  embargo: "label-warning",
-  lease: "label-warning",
-  open: "label-success",
-  restricted: "label-danger",
-  low_res: "label-success",
-  emory_low: "label-info",
-  rose_high: "label-warning"
+  embargo:       "label-warning",
+  lease:         "label-warning",
+  open:          "label-success",
+  restricted:    "label-danger",
+  low_res:       "label-success",
+  emory_low:     "label-info",
+  rose_high:     "label-warning"
 }.freeze
