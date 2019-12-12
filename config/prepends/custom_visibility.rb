@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CustomVisibility
   def visibility=(value)
     return if value.nil?

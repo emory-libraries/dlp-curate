@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax-overwrite]
 require 'rails_helper'
 
@@ -76,10 +78,10 @@ RSpec.describe Hyrax::Forms::CollectionForm do
   end
 
   describe "#member_ids" do
+    subject { form.member_ids }
     before do
       allow(collection).to receive(:member_ids).and_return(['9999'])
     end
-    subject { form.member_ids }
 
     it { is_expected.to eq ['9999'] }
   end

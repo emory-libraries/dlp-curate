@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax-overwrite]
 
 json.files [@upload] do |uploaded_file|

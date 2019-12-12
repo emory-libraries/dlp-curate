@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 # [Hyrax-overwrite]
 module Hyrax
   class UploadsController < ApplicationController
     load_and_authorize_resource class: Hyrax::UploadedFile
 
     def create
-      @upload.attributes = { file: params[:file_name],
+      @upload.attributes = { file:                     params[:file_name],
                              preservation_master_file: params[:preservation_master_file],
-                             intermediate_file: params[:intermediate_file],
-                             service_file: params[:service_file],
-                             extracted_text: params[:extracted_text],
-                             transcript: params[:transcript],
-                             fileset_use: params[:fileset_use],
-                             user: current_user }
+                             intermediate_file:        params[:intermediate_file],
+                             service_file:             params[:service_file],
+                             extracted_text:           params[:extracted_text],
+                             transcript:               params[:transcript],
+                             fileset_use:              params[:fileset_use],
+                             user:                     current_user }
       @upload.save!
     end
 

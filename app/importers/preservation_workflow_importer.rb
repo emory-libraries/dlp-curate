@@ -26,19 +26,19 @@ class PreservationWorkflowImporter
       end
 
       def update_ingest_workflow(work, workflow_attrs)
-        work.preservation_workflow_attributes = [{ workflow_type: 'Ingest',
-                                                   workflow_notes: workflow_attrs['Ingest.workflow_notes'],
-                                                   workflow_rights_basis: workflow_attrs['Ingest.workflow_rights_basis'],
-                                                   workflow_rights_basis_note: workflow_attrs['Ingest.workflow_rights_basis_note'],
-                                                   workflow_rights_basis_date: workflow_attrs['Ingest.workflow_rights_basis_date'],
+        work.preservation_workflow_attributes = [{ workflow_type:                  'Ingest',
+                                                   workflow_notes:                 workflow_attrs['Ingest.workflow_notes'],
+                                                   workflow_rights_basis:          workflow_attrs['Ingest.workflow_rights_basis'],
+                                                   workflow_rights_basis_note:     workflow_attrs['Ingest.workflow_rights_basis_note'],
+                                                   workflow_rights_basis_date:     workflow_attrs['Ingest.workflow_rights_basis_date'],
                                                    workflow_rights_basis_reviewer: workflow_attrs['Ingest.rights_basis_reviewer'] }]
       end
 
       def update_accession_workflow(work, workflow_attrs)
-        work.preservation_workflow_attributes = [{ workflow_type: 'Accession',
-                                                   workflow_rights_basis: workflow_attrs['Accession.workflow_rights_basis'],
-                                                   workflow_rights_basis_note: workflow_attrs['Accession.workflow_rights_basis_note'],
-                                                   workflow_rights_basis_date: workflow_attrs['Accession.workflow_rights_basis_date'],
+        work.preservation_workflow_attributes = [{ workflow_type:                  'Accession',
+                                                   workflow_rights_basis:          workflow_attrs['Accession.workflow_rights_basis'],
+                                                   workflow_rights_basis_note:     workflow_attrs['Accession.workflow_rights_basis_note'],
+                                                   workflow_rights_basis_date:     workflow_attrs['Accession.workflow_rights_basis_date'],
                                                    workflow_rights_basis_reviewer: workflow_attrs['Accession.workflow_rights_basis_reviewer'] }]
       end
   end

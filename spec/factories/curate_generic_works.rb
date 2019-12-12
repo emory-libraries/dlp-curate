@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :work, aliases: [:generic_work, :private_generic_work], class: CurateGenericWork do
     transient do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax-overwrite] Change `characterization_proxy`
 # This module points the FileSet to the location of the technical metdata.
 # By default, the file holding the metadata is :preservation_master_file and the terms

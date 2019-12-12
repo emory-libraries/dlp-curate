@@ -10,16 +10,16 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
 
   let(:collection_attrs) do
     {
-      title: ['Robert Langmuir African American Photograph Collection'],
-      institution: 'Emory University',
-      creator: ['Langmuir, Robert, collector.'],
-      holding_repository: ['Stuart A. Rose Manuscript, Archives, and Rare Book Library'],
+      title:               ['Robert Langmuir African American Photograph Collection'],
+      institution:         'Emory University',
+      creator:             ['Langmuir, Robert, collector.'],
+      holding_repository:  ['Stuart A. Rose Manuscript, Archives, and Rare Book Library'],
       administrative_unit: ['Stuart A. Rose Manuscript, Archives, and Rare Book Library'],
       contact_information: 'Woodruff Library',
-      abstract: 'Collection of photographs depicting African American life and culture collected by Robert Langmuir.',
-      primary_language: 'English',
-      local_call_number: 'MSS1218',
-      keywords: ['keyword1', 'keyword2']
+      abstract:            'Collection of photographs depicting African American life and culture collected by Robert Langmuir.',
+      primary_language:    'English',
+      local_call_number:   'MSS1218',
+      keywords:            ['keyword1', 'keyword2']
     }
   end
 

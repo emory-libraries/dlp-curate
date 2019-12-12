@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CsvImportDetailsController < ApplicationController
   def index
     @csv_import_details = Zizia::CsvImportDetail.all

@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 set :stage, :TEST
 set :honeybadger_env, "Curate-Test"
 ec2_role [:web, :app, :db, :redhatapp, :collection],
-         user: 'deploy',
+         user:        'deploy',
          ssh_options: {
-           keys: ENV['SSH_EC2_KEY_FILE'],
-           forward_agent: true,
+           keys:            ENV['SSH_EC2_KEY_FILE'],
+           forward_agent:   true,
            verify_host_key: :never
          }
 # server 'PRIVATE_IP_Address', user: 'deploy', roles: [:web, :app, :db, :redhatapp, :collection]

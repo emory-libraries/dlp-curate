@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Opens FitsDocument class from Hydra::Works::Characterization
 # and adds fits mapping for extra technical metadata
 Hydra::Works::Characterization::FitsDocument.class_eval do

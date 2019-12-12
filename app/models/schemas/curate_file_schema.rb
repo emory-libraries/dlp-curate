@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Schemas
   class CurateFileSchema < ActiveTriples::Schema
     property :file_path, predicate: ::RDF::URI.new('http://metadata.emory.edu/vocab/cor-terms#filePath')

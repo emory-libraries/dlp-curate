@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Hyrax.config do |config|
   # Injected via `rails g hyrax:work CurateGenericWork`
   config.register_curation_concern :curate_generic_work
@@ -38,8 +40,8 @@ Hyrax.config do |config|
   # Options to control the file uploader
   config.uploader = {
     limitConcurrentUploads: 6,
-    maxNumberOfFiles: 100,
-    maxFileSize: 2500.megabytes
+    maxNumberOfFiles:       100,
+    maxFileSize:            2500.megabytes
   }
 
   # Enable displaying usage statistics in the UI

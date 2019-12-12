@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Curate
   class CollectionType < Hyrax::CollectionType
-    USER_COLLECTION_DEFAULT_TITLE = 'Library Collection'.freeze
+    USER_COLLECTION_DEFAULT_TITLE = 'Library Collection'
 
     # If a Curate::CollectionType already exists, ensure it adheres to expectations and return it.
     # Otherwise, make a new one and return that.

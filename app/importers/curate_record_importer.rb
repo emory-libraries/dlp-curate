@@ -38,14 +38,14 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     Curate::FILE_TYPES.each do |file_type|
       open_files[file_type.to_sym] = File.open(find_file_path(filenames[file_type])) if File.exist?(find_file_path(filenames[file_type]))
     end
-    huf = Hyrax::UploadedFile.create(user: @depositor,
+    huf = Hyrax::UploadedFile.create(user:                     @depositor,
                                      preservation_master_file: open_files[:preservation_master_file],
-                                     intermediate_file: open_files[:intermediate_file],
-                                     service_file: open_files[:service_file],
-                                     extracted_text: open_files[:extracted],
-                                     transcript: open_files[:transcript_file],
-                                     fileset_use: filenames[:filename].pcdm_use,
-                                     file: filenames[:filename].metadata['fileset_label']) # this is the label
+                                     intermediate_file:        open_files[:intermediate_file],
+                                     service_file:             open_files[:service_file],
+                                     extracted_text:           open_files[:extracted],
+                                     transcript:               open_files[:transcript_file],
+                                     fileset_use:              filenames[:filename].pcdm_use,
+                                     file:                     filenames[:filename].metadata['fileset_label']) # this is the label
     Curate::FILE_TYPES.each do |file_type|
       open_files[file_type]&.close
     end
@@ -55,7 +55,7 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
   def process_attrs(record:)
     additional_attrs = {
       uploaded_files: create_upload_files(record),
-      depositor: depositor.user_key
+      depositor:      depositor.user_key
     }
 
     attrs = record.attributes.merge(additional_attrs)
@@ -95,20 +95,20 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     updater = case csv_import_detail.update_actor_stack
               when 'HyraxMetadataOnly'
                 Zizia::HyraxMetadataOnlyUpdater.new(csv_import_detail: csv_import_detail,
-                                                    existing_record: existing_record,
-                                                    update_record: update_record,
-                                                    attrs: process_attrs(record: update_record))
+                                                    existing_record:   existing_record,
+                                                    update_record:     update_record,
+                                                    attrs:             process_attrs(record: update_record))
               when 'HyraxDelete'
                 Zizia::HyraxDeleteFilesUpdater.new(csv_import_detail: csv_import_detail,
-                                                   existing_record: existing_record,
-                                                   update_record: update_record,
-                                                   attrs: process_attrs(record: update_record))
+                                                   existing_record:   existing_record,
+                                                   update_record:     update_record,
+                                                   attrs:             process_attrs(record: update_record))
               when 'HyraxOnlyNew'
                 return unless existing_record[deduplication_field] != update_record.try(deduplication_field)
                 Zizia::HyraxDefaultUpdater.new(csv_import_detail: csv_import_detail,
-                                               existing_record: existing_record,
-                                               update_record: update_record,
-                                               attrs: process_attrs(record: update_record))
+                                               existing_record:   existing_record,
+                                               update_record:     update_record,
+                                               attrs:             process_attrs(record: update_record))
               end
     updater.update
   end

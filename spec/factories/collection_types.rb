@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax-collection-types-factory]
 FactoryBot.define do
   factory :collection_type, class: Hyrax::CollectionType do
@@ -25,33 +27,33 @@ FactoryBot.define do
     after(:create) do |collection_type, evaluator|
       if evaluator.creator_user
         attributes = { hyrax_collection_type_id: collection_type.id,
-                       access: Hyrax::CollectionTypeParticipant::CREATE_ACCESS,
-                       agent_id: evaluator.creator_user,
-                       agent_type: Hyrax::CollectionTypeParticipant::USER_TYPE }
+                       access:                   Hyrax::CollectionTypeParticipant::CREATE_ACCESS,
+                       agent_id:                 evaluator.creator_user,
+                       agent_type:               Hyrax::CollectionTypeParticipant::USER_TYPE }
         create(:collection_type_participant, attributes)
       end
 
       if evaluator.creator_group
         attributes = { hyrax_collection_type_id: collection_type.id,
-                       access: Hyrax::CollectionTypeParticipant::CREATE_ACCESS,
-                       agent_id: evaluator.creator_group,
-                       agent_type: Hyrax::CollectionTypeParticipant::GROUP_TYPE }
+                       access:                   Hyrax::CollectionTypeParticipant::CREATE_ACCESS,
+                       agent_id:                 evaluator.creator_group,
+                       agent_type:               Hyrax::CollectionTypeParticipant::GROUP_TYPE }
         create(:collection_type_participant, attributes)
       end
 
       if evaluator.manager_user
         attributes = { hyrax_collection_type_id: collection_type.id,
-                       access: Hyrax::CollectionTypeParticipant::MANAGE_ACCESS,
-                       agent_id: evaluator.manager_user,
-                       agent_type: Hyrax::CollectionTypeParticipant::USER_TYPE }
+                       access:                   Hyrax::CollectionTypeParticipant::MANAGE_ACCESS,
+                       agent_id:                 evaluator.manager_user,
+                       agent_type:               Hyrax::CollectionTypeParticipant::USER_TYPE }
         create(:collection_type_participant, attributes)
       end
 
       if evaluator.manager_group
         attributes = { hyrax_collection_type_id: collection_type.id,
-                       access: Hyrax::CollectionTypeParticipant::MANAGE_ACCESS,
-                       agent_id: evaluator.manager_group,
-                       agent_type: Hyrax::CollectionTypeParticipant::GROUP_TYPE }
+                       access:                   Hyrax::CollectionTypeParticipant::MANAGE_ACCESS,
+                       agent_id:                 evaluator.manager_group,
+                       agent_type:               Hyrax::CollectionTypeParticipant::GROUP_TYPE }
         create(:collection_type_participant, attributes)
       end
     end

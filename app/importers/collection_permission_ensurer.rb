@@ -34,9 +34,9 @@ class CollectionPermissionEnsurer
     def group_rights_exists?(hyrax_permission_template:, access_permission:, group:)
       existing_hpta = Hyrax::PermissionTemplateAccess.where(
         permission_template_id: hyrax_permission_template.id,
-        agent_type: AGENT_TYPE,
-        agent_id: group,
-        access: access_permission
+        agent_type:             AGENT_TYPE,
+        agent_id:               group,
+        access:                 access_permission
       ).count
       return true if existing_hpta.positive?
       false

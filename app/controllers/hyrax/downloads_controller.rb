@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax-overwrite] Changes :og to :pmf as default_content and adds content_path method for
 # fetching `use` for additional files
 module Hyrax
@@ -85,7 +87,7 @@ module Hyrax
       def dereference_file(file_reference)
         return false if file_reference.nil?
         association = asset.association(file_reference.to_sym)
-        association if association && association.is_a?(ActiveFedora::Associations::SingularAssociation)
+        association if association&.is_a?(ActiveFedora::Associations::SingularAssociation)
       end
   end
 end

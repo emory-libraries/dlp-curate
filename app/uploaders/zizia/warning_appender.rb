@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Zizia
   class WarningAppender
     attr_accessor :row, :warnings

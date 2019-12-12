@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OmniauthController < Devise::SessionsController
   def new
     # Rails.logger.debug "SessionsController#new: request.referer = #{request.referer}"

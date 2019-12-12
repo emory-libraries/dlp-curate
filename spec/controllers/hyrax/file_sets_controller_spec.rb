@@ -81,12 +81,12 @@ RSpec.describe Hyrax::FileSetsController, :clean do
         it "spawns a content update event job" do
           expect(ContentUpdateEventJob).to receive(:perform_later).with(file_set, user)
           post :update, params: {
-            id: file_set,
+            id:       file_set,
             file_set: {
-              title: ['new_title'],
-              keyword: [''],
-              permissions_attributes: [{ type: 'person',
-                                         name: 'archivist1',
+              title:                  ['new_title'],
+              keyword:                [''],
+              permissions_attributes: [{ type:   'person',
+                                         name:   'archivist1',
                                          access: 'edit' }]
             }
           }
@@ -162,8 +162,8 @@ RSpec.describe Hyrax::FileSetsController, :clean do
 
       it "adds new groups and users" do
         post :update, params: {
-          id: file_set,
-          file_set: { keyword: [''],
+          id:       file_set,
+          file_set: { keyword:                [''],
                       permissions_attributes: [
                         { type: 'person', name: 'user1', access: 'edit' },
                         { type: 'group', name: 'group1', access: 'read' }
@@ -178,8 +178,8 @@ RSpec.describe Hyrax::FileSetsController, :clean do
         file_set.edit_groups = ['group3']
         file_set.save
         post :update, params: {
-          id: file_set,
-          file_set: { keyword: [''],
+          id:       file_set,
+          file_set: { keyword:                [''],
                       permissions_attributes: [
                         { id: file_set.permissions.last.id, type: 'group', name: 'group3', access: 'read' }
                       ] }
@@ -262,7 +262,7 @@ RSpec.describe Hyrax::FileSetsController, :clean do
         let(:work) do
           FactoryBot.create(:generic_work, :public,
                             title: ['test title'],
-                            user: user)
+                            user:  user)
         end
 
         before do

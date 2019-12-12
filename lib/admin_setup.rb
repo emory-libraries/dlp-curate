@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # Set up admin users
 require 'yaml'
 
 # Set up application's initial state: load required roles and users
 class AdminSetup
   attr_accessor :admins_config
-  DEFAULT_ADMIN_CONFIG = "#{::Rails.root}/config/emory/groups/admins.yml".freeze
+  DEFAULT_ADMIN_CONFIG = "#{::Rails.root}/config/emory/groups/admins.yml"
 
   # Set up the parameters for
   # @param [String] admins_config a file containing the email addresses of the application's admin users
@@ -58,9 +60,9 @@ class AdminSetup
     AdminSet.all.each do |admin_set|
       next if Hyrax::PermissionTemplateAccess
               .find_by(permission_template_id: admin_set.permission_template.id,
-                       agent_id:   'registered',
-                       access:     'deposit',
-                       agent_type: 'group')
+                       agent_id:               'registered',
+                       access:                 'deposit',
+                       agent_type:             'group')
 
       admin_set.permission_template.access_grants.create(agent_type: 'group', agent_id: 'registered', access: 'deposit')
       deposit = Sipity::Role.find_by!(name: 'depositing')

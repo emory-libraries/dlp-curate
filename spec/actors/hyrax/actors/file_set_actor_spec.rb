@@ -2,6 +2,7 @@
 # [Hyrax-overwrite]
 # Tests for mime-type have been removed.
 # We are not testing `from_url: true`
+
 require 'rails_helper'
 
 RSpec.describe Hyrax::Actors::FileSetActor, :clean do

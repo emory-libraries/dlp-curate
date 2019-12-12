@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax-overwrite] FileActor ingest_file method in Hyrax::Actors
 # Perform characterize job only on preservation_master_file
 Hyrax::Actors::FileActor.class_eval do

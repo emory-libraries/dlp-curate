@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [Hyrax-overwrite]
 module Hyrax
   module Forms
@@ -144,9 +146,9 @@ module Hyrax
         end
 
         def member_presenters(member_ids)
-          PresenterFactory.build_for(ids: member_ids,
+          PresenterFactory.build_for(ids:             member_ids,
                                      presenter_class: WorkShowPresenter,
-                                     presenter_args: [nil])
+                                     presenter_args:  [nil])
         end
     end
     # rubocop:enable ClassLength
