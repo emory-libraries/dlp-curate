@@ -92,4 +92,12 @@ class SolrDocument
   def human_readable_content_type
     self['human_readable_content_type_tesim']
   end
+
+  def human_readable_rights_statement
+    self['human_readable_rights_statement_tesim']
+  end
+
+  def human_readable_re_use_license
+    self['human_readable_re_use_license_tesim']
+  end
 end
