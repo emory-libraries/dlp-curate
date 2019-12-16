@@ -100,4 +100,24 @@ class SolrDocument
   def human_readable_re_use_license
     self['human_readable_re_use_license_tesim']
   end
+
+  def human_readable_date_created
+    self['human_readable_date_created_tesim']
+  end
+
+  def human_readable_date_issued
+    self['human_readable_date_issued_tesim']
+  end
+
+  def human_readable_data_collection_dates
+    self['human_readable_data_collection_dates_tesim']
+  end
+
+  def human_readable_conference_dates
+    self['human_readable_conference_dates_tesim']
+  end
+
+  def human_readable_copyright_date
+    self['human_readable_copyright_date_tesim']
+  end
 end
