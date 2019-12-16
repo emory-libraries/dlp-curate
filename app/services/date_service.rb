@@ -4,12 +4,19 @@ class DateService
   include Singleton
 
   def human_readable_date(date)
-    return "unknown" if date == "XXXX"
-    return handle_date_range(date) if date.include?("\/")
-    return handle_ymd_format(date) if date.include?("-")
-    return handle_unspecified_digit(date) if date.end_with?("X")
-    return handle_uncertain_year(date) if date.end_with?("?")
-    date
+    if date == "XXXX"
+      "unknown"
+    elsif date.include?("\/")
+      handle_date_range(date)
+    elsif date.include?("-")
+      handle_ymd_format(date)
+    elsif date.end_with?("X")
+      handle_unspecified_digit(date)
+    elsif date.end_with?("?")
+      handle_uncertain_year(date)
+    else
+      date
+    end
   end
 
   def handle_date_range(date)
