@@ -15,6 +15,11 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['human_readable_content_type_tesim'] = [human_readable_content_type]
       solr_doc['human_readable_rights_statement_tesim'] = [human_readable_rights_statement]
       solr_doc['human_readable_re_use_license_tesim'] = [human_readable_re_use_license]
+      solr_doc['human_readable_date_created_tesim'] = [human_readable_date_created]
+      solr_doc['human_readable_date_issued_tesim'] = [human_readable_date_issued]
+      solr_doc['human_readable_data_collection_dates_tesim'] = human_readable_data_collection_dates
+      solr_doc['human_readable_conference_dates_tesim'] = [human_readable_conference_dates]
+      solr_doc['human_readable_copyright_date_tesim'] = [human_readable_copyright_date]
     end
   end
 
@@ -35,5 +40,30 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   def human_readable_re_use_license
     return unless object.re_use_license
     LicensesLabelService.instance.label(uri: object.re_use_license)
+  end
+
+  def human_readable_date_created
+    return unless object.date_created
+    DateService.instance.human_readable_date(object.date_created)
+  end
+
+  def human_readable_date_issued
+    return unless object.date_issued
+    DateService.instance.human_readable_date(object.date_issued)
+  end
+
+  def human_readable_data_collection_dates
+    return [] if object.data_collection_dates.empty?
+    object.data_collection_dates.map { |date| DateService.instance.human_readable_date(date) }
+  end
+
+  def human_readable_conference_dates
+    return unless object.conference_dates
+    DateService.instance.human_readable_date(object.conference_dates)
+  end
+
+  def human_readable_copyright_date
+    return unless object.copyright_date
+    DateService.instance.human_readable_date(object.copyright_date)
   end
 end

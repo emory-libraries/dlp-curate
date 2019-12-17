@@ -1325,18 +1325,23 @@ RSpec.describe CurateGenericWork do
       { title: ['Example Title'],
         primary_language: 'English',
         abstract: 'This is point number 1',
-        copyright_date: Date.new(2018, 1, 12),
         content_type: 'http://id.loc.gov/vocabulary/resourceTypes/txt',
         rights_statement: ['http://rightsstatements.org/vocab/InC/1.0/'],
-        re_use_license: 'https://creativecommons.org/licenses/by/4.0/' }
+        re_use_license: 'https://creativecommons.org/licenses/by/4.0/',
+        date_created: 'XXXX-09-07',
+        date_issued: '193X',
+        data_collection_dates: ['XXXX'],
+        conference_dates: '194X/195X',
+        copyright_date: '1942?/1944?' }
     end
     let(:curate_generic_work) { FactoryBot.build(:work, **params) }
     let(:solr_doc) { curate_generic_work.to_solr }
 
     it "returns the SolrDoc with metadata" do
       expect(solr_doc.keys).to include(
-        'title_tesim', 'primary_language_tesim', 'abstract_tesim', 'copyright_date_dtsim',
-        'content_type_tesim', 'rights_statement_tesim', 're_use_license_tesim'
+        'title_tesim', 'primary_language_tesim', 'abstract_tesim', 'content_type_tesim',
+        'rights_statement_tesim', 're_use_license_tesim', 'date_created_tesim', 'date_issued_tesim',
+        'data_collection_dates_tesim', 'conference_dates_tesim', 'copyright_date_tesim'
       )
 
       # Check title (multi-valued)
@@ -1347,9 +1352,6 @@ RSpec.describe CurateGenericWork do
 
       # Check abstract (single-valued, stored-searchable)
       expect(solr_doc['abstract_tesim']).to contain_exactly params[:abstract]
-
-      # Check a date
-      expect(solr_doc['copyright_date_dtsim']).to contain_exactly params[:copyright_date].strftime('%FT%TZ')
 
       # Check content_type_tesim also saved as url
       expect(solr_doc['content_type_tesim']).to contain_exactly params[:content_type]
@@ -1368,6 +1370,36 @@ RSpec.describe CurateGenericWork do
 
       # Check re_use_license_tesim also saved as human_readable_re_use_license
       expect(solr_doc['human_readable_re_use_license_tesim']).to eq ['Creative Commons BY Attribution 4.0 International']
+
+      # Check date_created_tesim also saved as date entered
+      expect(solr_doc['date_created_tesim']).to contain_exactly params[:date_created]
+
+      # Check date_created_tesim also saved as human_readable_date_created_tesim
+      expect(solr_doc['human_readable_date_created_tesim']).to eq ['September 7, year unknown']
+
+      # Check date_issued_tesim also saved as date entered
+      expect(solr_doc['date_issued_tesim']).to contain_exactly params[:date_issued]
+
+      # Check date_issued_tesim also saved as human_readable_date_issued_tesim
+      expect(solr_doc['human_readable_date_issued_tesim']).to eq ['1930s']
+
+      # Check data_collection_dates_tesim also saved as date entered
+      expect(solr_doc['data_collection_dates_tesim']).to contain_exactly params[:data_collection_dates].first
+
+      # Check data_collection_dates_tesim also saved as human_readable_data_collection_dates_tesim
+      expect(solr_doc['human_readable_data_collection_dates_tesim']).to eq ['unknown']
+
+      # Check conference_dates_tesim also saved as date entered
+      expect(solr_doc['conference_dates_tesim']).to contain_exactly params[:conference_dates]
+
+      # Check conference_dates_tesim also saved as human_readable_conference_dates_tesim
+      expect(solr_doc['human_readable_conference_dates_tesim']).to eq ['within the 1940s or 1950s']
+
+      # Check copyright_date_tesim also saved as date entered
+      expect(solr_doc['copyright_date_tesim']).to contain_exactly params[:copyright_date]
+
+      # Check copyright_date_tesim also saved as human_readable_copyright_date_tesim
+      expect(solr_doc['human_readable_copyright_date_tesim']).to eq ['between 1942 and 1944']
     end
   end
 
