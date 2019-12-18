@@ -99,7 +99,7 @@ module Hyrax
           actor.revert_content(params[:revision])
         elsif params.key?(:file_set)
           if params[:file_set].key?(:files)
-            actor.update_content(params[:file_set][:files].first)
+            actor.update_content(params[:file_set][:files].first, preferred: preferred_file)
           else
             update_metadata
           end
@@ -204,6 +204,17 @@ module Hyrax
         @if = @file_set.intermediate_file unless @file_set.intermediate_file.nil?
         @et = @file_set.extracted unless @file_set.extracted.nil?
         @tf = @file_set.transcript_file unless @file_set.transcript_file.nil?
+      end
+
+      def preferred_file
+        preferred = if @sf
+                      :service_file
+                    elsif @if
+                      :intermediate_file
+                    else
+                      :preservation_master_file
+                    end
+        preferred
       end
   end
 end
