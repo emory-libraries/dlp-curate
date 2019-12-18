@@ -20,7 +20,7 @@ module Hyrax
       # @param [Hyrax::UploadedFile, File] file the file uploaded by the user
       # @param [Symbol, #to_s] relation
       # @return [IngestJob, FalseClass] false on failure, otherwise the queued job
-      def create_content(file, preferred, relation = :original_file, from_url: false)
+      def create_content(file, preferred, relation = :preservation_master_file, from_url: false)
         # If the file set doesn't have a title or label assigned, set a default.
         file_set.label ||= label_for(file)
         file_set.title = [file_set.label] if file_set.title.blank?
@@ -50,8 +50,8 @@ module Hyrax
       # @param [Hyrax::UploadedFile, File, ActionDigest::HTTP::UploadedFile] file the file uploaded by the user
       # @param [Symbol, #to_s] relation
       # @return [IngestJob] the queued job
-      def update_content(file, relation = :original_file)
-        IngestJob.perform_later(wrapper!(file: file, relation: relation), notification: true)
+      def update_content(file, preferred, relation = :preservation_master_file)
+        IngestJob.perform_later(wrapper!(file: file, relation: relation, preferred: preferred), notification: true)
       end
 
       # @!endgroup

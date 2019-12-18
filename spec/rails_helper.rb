@@ -104,4 +104,8 @@ RSpec.configure do |config|
   end
 
   config.include Devise::Test::ControllerHelpers, type: :controller
+
+  def main_app
+    Rails.application.class.routes.url_helpers
+  end
 end

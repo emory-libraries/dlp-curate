@@ -113,6 +113,7 @@ RSpec/MessageSpies:
 RSpec/NestedGroups:
     Exclude:
         - 'spec/controllers/hyrax/downloads_controller_spec.rb'
+        - 'spec/controllers/hyrax/file_sets_controller_spec.rb'
 
 RSpec/InstanceVariable:
     Exclude:

@@ -73,7 +73,7 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
       actor2.ingest_file(io2)
     end
 
-    it 'has two versions' do
+    xit 'has two versions' do
       expect(versions.all.count).to eq 2
       # the current version
       expect(Hyrax::VersioningService.latest_version_of(file_set.reload.original_file).label).to eq 'version2'
