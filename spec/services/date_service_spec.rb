@@ -36,5 +36,9 @@ RSpec.describe DateService do
     it 'provides a string for dates with known day and month but unknown year' do
       expect(service.human_readable_date('XXXX-09-07')).to eq('September 7, year unknown')
     end
+
+    it 'provides a string for dates with unexpected YMD formatting' do
+      expect(service.human_readable_date('2019-XX-07')).to eq('2019-XX-07')
+    end
   end
 end

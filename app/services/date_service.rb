@@ -26,11 +26,12 @@ class DateService
   end
 
   def handle_ymd_format(date)
-    return Date.edtf(date).humanize unless date.start_with?("X")
+    return Date.edtf(date).humanize unless date.start_with?("X") || Date.edtf(date).nil?
     date_units = date.split("-")
     # The edtf-humanize gem expects a valid 4-digit year when handling dates in YMD format
     placeholder_date = Date.edtf("0000-#{date_units[1]}-#{date_units[2]}")
-    placeholder_date.humanize[/[^,]+/] + ", year unknown"
+    return placeholder_date.humanize[/[^,]+/] + ", year unknown" unless placeholder_date.nil?
+    date
   end
 
   def handle_unspecified_digit(date)
