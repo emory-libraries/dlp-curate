@@ -89,7 +89,7 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :date_issued, predicate: "http://purl.org/dc/terms/issued", multiple: false do |index|
-    index.as :stored_searchable, :dateable, :facetable
+    index.as :stored_searchable, :dateable, :facetable, :sortable
   end
 
   property :edition, predicate: "http://id.loc.gov/ontologies/bibframe/editionStatement", multiple: false do |index|
