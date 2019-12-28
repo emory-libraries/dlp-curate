@@ -1389,7 +1389,7 @@ RSpec.describe CurateGenericWork do
       expect(solr_doc['human_readable_date_issued_tesim']).to eq ['1930s']
 
       # Check date_issued_tesim also saved as year_issued_isim
-      expect(solr_doc['year_issued_isim']).to eq ['1930']
+      expect(solr_doc['year_issued_isim']).to eq [1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939]
 
       # Check data_collection_dates_tesim also saved as date entered
       expect(solr_doc['data_collection_dates_tesim']).to contain_exactly params[:data_collection_dates].first

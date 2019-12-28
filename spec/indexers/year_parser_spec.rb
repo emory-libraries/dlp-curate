@@ -50,6 +50,11 @@ RSpec.describe YearParser do
       it { is_expected.to eq [1937, 1938, 1939, 1942, 1943] }
     end
 
+    context 'with a known decade, uncertain year' do
+      let(:dates) { ['193X'] }
+      it { is_expected.to eq [1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939] }
+    end
+
     context 'date ranges that aren\'t just years' do
       let(:dates) { '1934-06/1934-07' }
       it { is_expected.to eq [1934] }

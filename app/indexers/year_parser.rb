@@ -9,15 +9,22 @@ class YearParser
     end.compact.uniq.sort
   end
 
-  # If this string doesn't have 4 numbers in a row, it doesn't contain a 4-digit year.
+  # 4 numbers in a row is a four digit year.
+  # 3 numbers in a row then an X indicates a known decade, with an uncertain year
   def self.maybe_contains_a_year?(input_string)
     four_digit_year = %r{\d{4}}
-    input_string.match?(four_digit_year)
+    input_string.match?(four_digit_year) or input_string.match?(known_decade_uncertain_year)
+  end
+
+  def self.known_decade_uncertain_year
+    %r{^\d{3}X} #Three integers and a capital X (e.g. 193X)
   end
 
   def self.years(input_string)
     if date_range?(input_string)
       expand_date(input_string)
+    elsif date_decade?(input_string)
+      expand_decade(input_string)
     else
       parse_year(input_string)
     end
@@ -46,6 +53,23 @@ class YearParser
 
     (starting_year..ending_year).to_a
   end
+
+  # If the string has a known decade but an uncertain year within that decade
+  # expand the range into an array of values including each year in that decade
+  def self.date_decade?(input_string)
+    input_string.match?(known_decade_uncertain_year)
+  end
+
+  def self.expand_decade(input_string)
+    range_base = input_string.match(known_decade_uncertain_year).to_s
+    range_start = range_base.gsub('X', '0')
+    range_end = range_base.gsub('X', '9')
+
+    starting_year = parse_year(range_start)
+    ending_year = parse_year(range_end)
+    (starting_year..ending_year).to_a
+  end
+
 
   def self.parse_year(date_string)
     Date.strptime(date_string, '%Y').year

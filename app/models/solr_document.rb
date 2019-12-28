@@ -120,4 +120,12 @@ class SolrDocument
   def human_readable_copyright_date
     self['human_readable_copyright_date_tesim']
   end
+
+  def year_created
+    self['year_created_isim']
+  end
+
+  def year_issued
+    self['year_issued_isim']
+  end
 end
