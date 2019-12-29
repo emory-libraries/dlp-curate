@@ -72,14 +72,14 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   end
 
   def year_created
-   integer_years = YearParser.integer_years(object.date_created)
-   return nil if integer_years.blank?
-   integer_years
+    integer_years = YearParser.integer_years(object.date_created)
+    return nil if integer_years.blank?
+    integer_years
   end
 
   def year_issued
-   integer_years = YearParser.integer_years(object.date_issued)
-   return nil if integer_years.blank?
-   integer_years
+    integer_years = YearParser.integer_years(object.date_issued)
+    return nil if integer_years.blank?
+    integer_years
   end
 end

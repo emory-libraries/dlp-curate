@@ -13,11 +13,11 @@ class YearParser
   # 3 numbers in a row then an X indicates a known decade, with an uncertain year
   def self.maybe_contains_a_year?(input_string)
     four_digit_year = %r{\d{4}}
-    input_string.match?(four_digit_year) or input_string.match?(known_decade_uncertain_year)
+    input_string.match?(four_digit_year) || input_string.match?(known_decade_uncertain_year)
   end
 
   def self.known_decade_uncertain_year
-    %r{^\d{3}X} #Three integers and a capital X (e.g. 193X)
+    %r{^\d{3}X} # Three integers and a capital X (e.g. 193X)
   end
 
   def self.years(input_string)
@@ -62,14 +62,13 @@ class YearParser
 
   def self.expand_decade(input_string)
     range_base = input_string.match(known_decade_uncertain_year).to_s
-    range_start = range_base.gsub('X', '0')
-    range_end = range_base.gsub('X', '9')
+    range_start = range_base.tr('X', '0')
+    range_end = range_base.tr('X', '9')
 
     starting_year = parse_year(range_start)
     ending_year = parse_year(range_end)
     (starting_year..ending_year).to_a
   end
-
 
   def self.parse_year(date_string)
     Date.strptime(date_string, '%Y').year

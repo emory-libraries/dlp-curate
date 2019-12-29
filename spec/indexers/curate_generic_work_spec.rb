@@ -6,12 +6,11 @@ RSpec.describe CurateGenericWorkIndexer do
   let(:work) { CurateGenericWork.new(attributes) }
   let(:indexer) { described_class.new(work) }
 
-
   describe 'integer years created for date slider facet' do
     context 'with a date_created' do
       let(:attributes) do
         {
-          id: '123',
+          id:           '123',
           date_created: '1940-10-15'
         }
       end
@@ -38,7 +37,7 @@ RSpec.describe CurateGenericWorkIndexer do
     context 'with a date_issued' do
       let(:attributes) do
         {
-          id: '123',
+          id:          '123',
           date_issued: '1940-10-15'
         }
       end
