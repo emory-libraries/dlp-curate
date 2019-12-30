@@ -14,11 +14,13 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   def generate_solr_document
     super.tap do |solr_doc|
       solr_doc['preservation_workflow_terms_sim'] = preservation_workflow_terms
-      solr_doc['human_readable_content_type_tesim'] = [human_readable_content_type]
-      solr_doc['human_readable_rights_statement_tesim'] = [human_readable_rights_statement]
-      solr_doc['human_readable_re_use_license_tesim'] = [human_readable_re_use_license]
+      solr_doc['human_readable_content_type_ssim'] = [human_readable_content_type]
+      solr_doc['human_readable_rights_statement_ssim'] = [human_readable_rights_statement]
+      solr_doc['human_readable_re_use_license_ssim'] = [human_readable_re_use_license]
+      solr_doc['year_created_isim'] = year_created
       solr_doc['human_readable_date_created_tesim'] = [human_readable_date_created]
       solr_doc['human_readable_date_issued_tesim'] = [human_readable_date_issued]
+      solr_doc['year_issued_isim'] = year_issued
       solr_doc['human_readable_data_collection_dates_tesim'] = human_readable_data_collection_dates
       solr_doc['human_readable_conference_dates_tesim'] = [human_readable_conference_dates]
       solr_doc['human_readable_copyright_date_tesim'] = [human_readable_copyright_date]
@@ -67,5 +69,17 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   def human_readable_copyright_date
     return unless object.copyright_date
     DateService.instance.human_readable_date(object.copyright_date)
+  end
+
+  def year_created
+    integer_years = YearParser.integer_years(object.date_created)
+    return nil if integer_years.blank?
+    integer_years
+  end
+
+  def year_issued
+    integer_years = YearParser.integer_years(object.date_issued)
+    return nil if integer_years.blank?
+    integer_years
   end
 end

@@ -1359,19 +1359,19 @@ RSpec.describe CurateGenericWork do
       expect(solr_doc['content_type_tesim']).to contain_exactly params[:content_type]
 
       # Check content_type_tesim also saved as human_readable_content_type
-      expect(solr_doc['human_readable_content_type_tesim']).to eq ['Text']
+      expect(solr_doc['human_readable_content_type_ssim']).to eq ['Text']
 
       # Check rights_statement_tesim also saved as url
       expect(solr_doc['rights_statement_tesim']).to contain_exactly params[:rights_statement].first
 
       # Check rights_statement_tesim also saved as human_readable_rights_statement
-      expect(solr_doc['human_readable_rights_statement_tesim']).to eq ['In Copyright']
+      expect(solr_doc['human_readable_rights_statement_ssim']).to eq ['In Copyright']
 
       # Check re_use_license_tesim also saved as url
       expect(solr_doc['re_use_license_tesim']).to contain_exactly params[:re_use_license]
 
       # Check re_use_license_tesim also saved as human_readable_re_use_license
-      expect(solr_doc['human_readable_re_use_license_tesim']).to eq ['Creative Commons BY Attribution 4.0 International']
+      expect(solr_doc['human_readable_re_use_license_ssim']).to eq ['Creative Commons BY Attribution 4.0 International']
 
       # Check date_created_tesim also saved as date entered
       expect(solr_doc['date_created_tesim']).to contain_exactly params[:date_created]
@@ -1379,11 +1379,17 @@ RSpec.describe CurateGenericWork do
       # Check date_created_tesim also saved as human_readable_date_created_tesim
       expect(solr_doc['human_readable_date_created_tesim']).to eq ['September 7, year unknown']
 
+      # Check date_created_tesim also saved as year_created_isim
+      expect(solr_doc['year_created_isim']).to be_nil
+
       # Check date_issued_tesim also saved as date entered
       expect(solr_doc['date_issued_tesim']).to contain_exactly params[:date_issued]
 
       # Check date_issued_tesim also saved as human_readable_date_issued_tesim
       expect(solr_doc['human_readable_date_issued_tesim']).to eq ['1930s']
+
+      # Check date_issued_tesim also saved as year_issued_isim
+      expect(solr_doc['year_issued_isim']).to eq [1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939]
 
       # Check data_collection_dates_tesim also saved as date entered
       expect(solr_doc['data_collection_dates_tesim']).to contain_exactly params[:data_collection_dates].first

@@ -33,7 +33,7 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :conference_dates, predicate: "http://rdaregistry.info/Elements/u/P60526", multiple: false do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :dateable, :facetable
   end
 
   property :conference_name, predicate: "http://purl.org/dc/terms/relation#conferenceOrMeeting", multiple: false do |index|
@@ -57,11 +57,11 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :copyright_date, predicate: "http://purl.org/dc/terms/dateCopyrighted", multiple: false do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :dateable, :facetable
   end
 
   property :creator, predicate: "http://purl.org/dc/elements/1.1/creator" do |index|
-    index.as :stored_searchable, :facetable
+    index.as :stored_searchable, :facetable, :sortable
   end
 
   property :data_classifications, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataClassification" do |index|
@@ -69,7 +69,7 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :data_collection_dates, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataCollectionDates" do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :dateable, :facetable
   end
 
   property :data_producers, predicate: "http://id.loc.gov/vocabulary/relators/prv" do |index|
@@ -81,15 +81,15 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :date_created, predicate: "http://purl.org/dc/terms/created", multiple: false do |index|
-    index.as :stored_searchable, :facetable
+    index.as :stored_searchable, :facetable, :dateable, :sortable
   end
 
   property :date_digitized, predicate: "http://metadata.emory.edu/vocab/cor-terms#dateDigitized", multiple: false do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :dateable, :facetable
   end
 
   property :date_issued, predicate: "http://purl.org/dc/terms/issued", multiple: false do |index|
-    index.as :stored_searchable, :facetable
+    index.as :stored_searchable, :dateable, :facetable, :sortable
   end
 
   property :edition, predicate: "http://id.loc.gov/ontologies/bibframe/editionStatement", multiple: false do |index|
