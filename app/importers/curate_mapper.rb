@@ -206,10 +206,6 @@ class CurateMapper < Zizia::HashMapper
     raise "Invalid sensitive_material value: #{csv_term}"
   end
 
-  def content_genres
-    Array.wrap(@metadata['content_genres'])
-  end
-
   # If we get a URI for content_type, check that it matches a URI in the questioning
   # authority config, and return it if so.
   # If we get a string for contenttype, (e.g., 'still image'), transform it into its
