@@ -21,11 +21,9 @@ RSpec.describe AdminSetup, :clean do
     expect((w.admin_role.users.map(&:uid).include? admin_user_uid)).to eq true
   end
   it "returns all admins" do
+    w.load_admins
     s = %w[admin1 admin2 admin3]
-    s.each do |t|
-      w.make_admin(t)
-    end
-    expect(w.admins.count).to eq 3
+    expect { s.each { |t| w.make_admin(t) } }.to change { w.admins.count }.by(3)
     expect(w.admins.pluck(:uid).include?(s.first)).to be true
   end
 end
