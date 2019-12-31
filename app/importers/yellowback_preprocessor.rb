@@ -15,7 +15,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
   # @param [String] marcxml the path to an XML file containing one or more MARCXml records
   # @param [String] replacement_path AWS target path to replace 'Volumes' in source data
   # @param [String] digitization the fileset mappings to use (:limb or :kirtas)
-  def initialize(csv, marcxml, replacement_path = 'Yellowbacks', workflow = :kirtas)
+  def initialize(csv, marcxml, replacement_path = 'Yellowbacks', workflow = :kirtas, start_page = 1)
     @pull_list = CSV.read(csv, headers: true)
     @marc_records = Nokogiri::XML(File.open(marcxml))
     @workflow = workflow
@@ -24,6 +24,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
     @processed_csv = File.join(directory, filename + "-merged.csv")
+    @base_offset = 1 - start_page
   end
 
   HEADER_FIELDS = [
@@ -191,11 +192,11 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     def file_row(csv_index, row, page) # rubocop:disable Metrics/MethodLength
       case @workflow
       when :kirtas
-        page_number = format("%04d", page)
+        page_number = format("%04d", page - @base_offset)
         extract_field = 'POS_Path'
         extract_extension = 'pos'
       when :limb
-        page_number = format("%08d", page)
+        page_number = format("%08d", page - @base_offset)
         extract_field = 'ALTO_Path'
         extract_extension = 'xml'
       end
@@ -205,7 +206,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       extract     = relative_filename(row[extract_field], page_number, extract_extension)
 
       new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
-      new_row + file_mappings(fileset_label: "Page #{page}", preservation_master_file: image, transcript_file: transcript, extracted: extract)
+      new_row + file_mappings(fileset_label: "Page #{page - @base_offset}", preservation_master_file: image, transcript_file: transcript, extracted: extract)
     end
 
     def relative_filename(source_path, page_number, extension)
