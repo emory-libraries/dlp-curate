@@ -11,8 +11,10 @@ RSpec.describe YellowbackPreprocessor do
   end
 
   after :all do
-    test_csv = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-merged.csv')
-    File.delete(test_csv) if File.exist?(test_csv)
+    test1_csv = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-merged.csv')
+    File.delete(test1_csv) if File.exist?(test1_csv)
+    test0_csv = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-0-merged.csv')
+    File.delete(test0_csv) if File.exist?(test0_csv)
   end
 
   # each test inspects the output of the pre-processor, read into the import_rows CSV::Table object
@@ -89,5 +91,26 @@ RSpec.describe YellowbackPreprocessor do
     expect(last_page['preservation_master_file']).to eq('/Yearbooks/Emory/lsdi2/ftp/000011743488/TIFF/00000304.tif')
     expect(last_page['extracted']).to eq('/Yearbooks/Emory/lsdi2/ftp/000011743488/ALTO/00000304.xml')
     expect(last_page['transcript_file']).to eq('/Yearbooks/Emory/lsdi2/ftp/000011743488/OCR/00000304.txt')
+  end
+
+  it 'adds handles base-0 numbered works correctly', :aggregate_failures do
+    yearbook_pull_list_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-0.csv')
+    alma_export_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'yearbooks_marc.xml')
+    base0_preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, 'Yearbooks/Emory', :limb, 0)
+    base0_preprocessor.merge
+    base0_import_rows = CSV.read(File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-0-merged.csv'), headers: true).by_row!
+
+    first_page = base0_import_rows[emocad_1924_start + pages_offset + 1] # Emocad '24
+    expect(first_page['type']).to eq('fileset')
+    expect(first_page['fileset_label']).to eq('Page 0')
+    expect(first_page['preservation_master_file']).to eq('/Yearbooks/Emory/lsdi2/ftp/050000084033/TIFF/00000000.tif')
+    expect(first_page['extracted']).to eq('/Yearbooks/Emory/lsdi2/ftp/050000084033/ALTO/00000000.xml')
+    expect(first_page['transcript_file']).to eq('/Yearbooks/Emory/lsdi2/ftp/050000084033/OCR/00000000.txt')
+    last_page = base0_import_rows[emocad_1924_start + pages_offset + 5]
+    expect(last_page['type']).to eq('fileset')
+    expect(last_page['fileset_label']).to eq('Page 4')
+    expect(last_page['preservation_master_file']).to eq('/Yearbooks/Emory/lsdi2/ftp/050000084033/TIFF/00000004.tif')
+    expect(last_page['extracted']).to eq('/Yearbooks/Emory/lsdi2/ftp/050000084033/ALTO/00000004.xml')
+    expect(last_page['transcript_file']).to eq('/Yearbooks/Emory/lsdi2/ftp/050000084033/OCR/00000004.txt')
   end
 end
