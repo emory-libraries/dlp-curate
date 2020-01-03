@@ -21,6 +21,10 @@ RSpec.describe DateService do
       expect(service.human_readable_date('1934?')).to eq('1934 approx.')
     end
 
+    it 'provides a string for known year ranges' do
+      expect(service.human_readable_date('1981/1985')).to eq('1981 to 1985')
+    end
+
     it 'provides a string for year ranges with unspecified digits' do
       expect(service.human_readable_date('194X/195X')).to eq('within the 1940s or 1950s')
     end
@@ -37,7 +41,15 @@ RSpec.describe DateService do
       expect(service.human_readable_date('XXXX-09-07')).to eq('September 7, year unknown')
     end
 
-    it 'provides a string for dates with unexpected YMD formatting' do
+    it 'provides a string for dates with known month and year but unknown day' do
+      expect(service.human_readable_date('1962-02')).to eq('February 1962')
+    end
+
+    it 'provides a string for dates uncertain month and year but unknown day' do
+      expect(service.human_readable_date('1940-02~')).to eq('February 1940 approx.')
+    end
+
+    it 'leaves dates with unexpected formatting unaltered' do
       expect(service.human_readable_date('2019-XX-07')).to eq('2019-XX-07')
     end
   end
