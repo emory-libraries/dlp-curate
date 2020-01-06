@@ -4,6 +4,8 @@
   - [batch, 2]
   - [default, 1]
 
+:timeout: 300
+
 test: # n/a
   :concurrency: 1
 
