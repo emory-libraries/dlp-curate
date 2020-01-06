@@ -1,14 +1,14 @@
 ---
-  :queues:
-    - [ingest, 4]
-    - [batch, 2]
-    - [default, 1]
+:queues:
+  - [ingest, 4]
+  - [batch, 2]
+  - [default, 1]
 
-  test: # n/a
-    :concurrency: 1
+test: # n/a
+  :concurrency: 1
 
-  development:
-    :concurrency: <%= ENV['SIDEKIQ_WORKERS'] || 1 %>
+development:
+  :concurrency: 2
 
-  production:
-    :concurrency: <%= ENV['SIDEKIQ_WORKERS'] || 5 %>
+production:
+  :concurrency: 25
