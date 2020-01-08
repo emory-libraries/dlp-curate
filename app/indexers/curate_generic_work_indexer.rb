@@ -21,6 +21,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['human_readable_date_created_tesim'] = [human_readable_date_created]
       solr_doc['human_readable_date_issued_tesim'] = [human_readable_date_issued]
       solr_doc['year_issued_isim'] = year_issued
+      solr_doc['year_for_lux_isim'] = year_for_lux
       solr_doc['human_readable_data_collection_dates_tesim'] = human_readable_data_collection_dates
       solr_doc['human_readable_conference_dates_tesim'] = [human_readable_conference_dates]
       solr_doc['human_readable_copyright_date_tesim'] = [human_readable_copyright_date]
@@ -81,5 +82,11 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
     integer_years = YearParser.integer_years(object.date_issued)
     return nil if integer_years.blank?
     integer_years
+  end
+
+  def year_for_lux
+    years = [year_created, year_issued].flatten.compact.uniq.sort
+    return nil if years.empty?
+    years
   end
 end
