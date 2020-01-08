@@ -128,4 +128,8 @@ class SolrDocument
   def year_issued
     self['year_issued_isim']
   end
+
+  def year_for_lux
+    self['year_for_lux_isim']
+  end
 end
