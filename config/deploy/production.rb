@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 set :stage, :PROD
-set :honeybadger_env, "Curate-Prod"
+set :honeybadger_env, "curate"
 ec2_role [:web, :app, :db, :redhatapp, :collection],
          user:        'deploy',
          ssh_options: {

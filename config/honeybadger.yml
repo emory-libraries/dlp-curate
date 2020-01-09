@@ -1,1 +1,6 @@
+---
 api_key: <%= ENV['HONEYBADGER_API_KEY'] %>
+env: <% ENV['HOSTNAME'].partition('.')[0] %>
+
+breadcrumbs:
+    enabled: true
