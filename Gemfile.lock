@@ -1732,6 +1732,7 @@ DEPENDENCIES
   pry
   pry-byebug
   puma (~> 3.12)
+  rack-proxy
   rails (~> 5.1)
   rails-controller-testing
   riiif (~> 2.0)

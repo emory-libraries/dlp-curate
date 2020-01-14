@@ -5,6 +5,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
+  mount RailsProxy.new => '/iiif'
 
   get 'importer_documentation/guide', to: 'metadata_details#show'
   get 'importer_documentation/profile', to: 'metadata_details#profile'
