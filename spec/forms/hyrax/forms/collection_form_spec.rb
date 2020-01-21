@@ -14,7 +14,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
                          :subject_names, :subject_geo, :subject_time_periods, :notes,
                          :rights_documentation, :sensitive_material, :internal_rights_note,
                          :contact_information, :staff_notes, :system_of_record_ID, :emory_ark,
-                         :visibility]
+                         :visibility, :thumbnail_id]
     end
   end
 
@@ -94,7 +94,7 @@ RSpec.describe Hyrax::Forms::CollectionForm do
                          :abstract, :primary_language, :finding_aid_link, :institution, :local_call_number, { keywords: [] },
                          { subject_topics: [] }, { subject_names: [] }, { subject_geo: [] }, { subject_time_periods: [] },
                          { notes: [] }, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
-                         { staff_notes: [] }, :system_of_record_ID, { emory_ark: [] }, :visibility,
+                         { staff_notes: [] }, :system_of_record_ID, { emory_ark: [] }, :visibility, :thumbnail_id,
                          { permissions_attributes: [:type, :name, :access, :id, :_destroy] }]
     end
   end
