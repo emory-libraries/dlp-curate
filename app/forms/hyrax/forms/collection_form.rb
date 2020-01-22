@@ -29,7 +29,7 @@ module Hyrax
                     :subject_names, :subject_geo, :subject_time_periods, :notes,
                     :rights_documentation, :sensitive_material, :internal_rights_note,
                     :contact_information, :staff_notes, :system_of_record_ID, :emory_ark,
-                    :visibility]
+                    :visibility, :thumbnail_id]
 
       self.required_fields = [:title, :holding_repository, :creator, :abstract]
 
