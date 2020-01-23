@@ -43,6 +43,28 @@ namespace :deploy do
   end
 end
 
+namespace :sidekiq do
+
+  task :restart do
+    invoke 'sidekiq:stop'
+    invoke 'sidekiq:start'
+  end
+
+  before 'deploy:finished', 'sidekiq:restart'
+
+  task :stop do
+    on roles(:redhatapp) do
+      execute :sudo, :systemctl, :stop, :sidekiq
+    end
+  end
+
+  task :start do
+    on roles(:redhatapp) do
+      execute :sudo, :systemctl, :start, :sidekiq
+    end
+  end
+end
+
 # Restart apache on Ubuntu
 namespace :deploy do
   after :finishing, :restart_apache do
