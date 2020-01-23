@@ -2,7 +2,6 @@
 
 set :stage, :PROD
 set :honeybadger_env, "curate"
-set :init_system, :systemd
 
 ec2_role [:web, :app, :db, :redhatapp, :collection],
          user:        'deploy',

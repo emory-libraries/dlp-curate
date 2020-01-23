@@ -2,7 +2,6 @@
 
 set :stage, :ARCH
 set :honeybadger_env, "curate-arch"
-set :init_system, :systemd
 
 ec2_role [:web, :app, :db, :redhatapp, :collection],
          user:        'deploy',

@@ -2,7 +2,6 @@
 
 set :stage, :TEST
 set :honeybadger_env, "curate-test"
-set :init_system, :systemd
 
 ec2_role [:web, :app, :db, :redhatapp, :collection],
          user:        'deploy',
