@@ -105,4 +105,18 @@ RSpec.describe CurateGenericWorkIndexer do
       end
     end
   end
+
+  describe 'sort fields' do
+    let(:attributes) do
+      {
+        id:      '123',
+        title:   ['A title'],
+        creator: ['A creator']
+      }
+    end
+    it 'indexes sort fields for title and creator' do
+      expect(solr_document['title_ssi']).to eq 'A title'
+      expect(solr_document['creator_ssi']).to eq 'A creator'
+    end
+  end
 end

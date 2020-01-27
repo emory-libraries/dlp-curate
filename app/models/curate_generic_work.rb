@@ -61,7 +61,7 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :creator, predicate: "http://purl.org/dc/elements/1.1/creator" do |index|
-    index.as :stored_searchable, :facetable, :sortable
+    index.as :stored_searchable, :facetable, :sortable, :stored_sortable
   end
 
   property :data_classifications, predicate: "http://metadata.emory.edu/vocab/cor-terms#dataClassification" do |index|
