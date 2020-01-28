@@ -123,8 +123,8 @@ RSpec.describe CurateGenericWorkIndexer do
     context 'when title has a leading article' do
       let(:attributes) do
         {
-          id:      '123',
-          title:   ['A title']
+          id:    '123',
+          title: ['A title']
         }
       end
 
