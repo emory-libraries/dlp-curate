@@ -21,9 +21,11 @@ RSpec.describe CreateManifest, :clean do
   before do
     allow(CurateGenericWork).to receive(:all).and_return([generic_work])
     allow(SolrDocument).to receive(:find).and_return(solr_document)
+    FileUtils.rm_f("./tmp/2019-11-11_18-20-32_888888")
   end
 
   it 'creates manifest and saves to tmp' do
+    expect(File).not_to exist("./tmp/2019-11-11_18-20-32_888888")
     described_class.process
     expect(File).to exist("./tmp/2019-11-11_18-20-32_888888")
   end
