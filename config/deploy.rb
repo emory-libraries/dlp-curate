@@ -13,7 +13,7 @@ set :migration_role, :app
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
 
-append :linked_dirs, "log", "public/assets", "tmp/pids", "tmp/cache", "tmp/sockets", "config/emory/groups"
+append :linked_dirs, "log", "public/assets", "tmp/pids", "tmp/cache", "tmp/sockets", "config/emory/groups", "tmp/csv_uploads", "tmp/csv_uploads_cache"
 append :linked_files, ".env.production", "config/secrets.yml"
 
 set :default_env,
