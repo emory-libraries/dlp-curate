@@ -25,7 +25,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['human_readable_data_collection_dates_tesim'] = human_readable_data_collection_dates
       solr_doc['human_readable_conference_dates_tesim'] = [human_readable_conference_dates]
       solr_doc['human_readable_copyright_date_tesim'] = [human_readable_copyright_date]
-      solr_doc['title_ssi'] = object.title.first
+      solr_doc['title_ssi'] = sort_title
     end
   end
 
@@ -89,5 +89,10 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
     years = [year_created, year_issued].flatten.compact.uniq.sort
     return nil if years.empty?
     years
+  end
+
+  def sort_title
+    return unless object.title.first
+    object.title.first.gsub(/^(an?|the)\s/i, '')
   end
 end
