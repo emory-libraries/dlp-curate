@@ -13,4 +13,4 @@ development:
   :concurrency: 2
 
 production:
-  :concurrency: 25
+  :concurrency: <%= ENV['SIDEKIQ_WORKERS'] || 10 %>
