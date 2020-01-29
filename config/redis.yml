@@ -1,12 +1,11 @@
-default: &default
+development:
   host: <%= ENV['REDIS_HOST'] || 'localhost' %>
   port: <%= ENV['REDIS_POST'] || 6379 %>
 
-development:
-  <<: *default
-
 test:
-  <<: *default
+  host: <%= ENV['REDIS_HOST'] || 'localhost' %>
+  port: <%= ENV['REDIS_POST'] || 6379 %>
 
 production:
-  <<: *default
+  host: <%= ENV['REDIS_HOST'] || 'localhost' %>
+  port: <%= ENV['REDIS_POST'] || 6379 %>
