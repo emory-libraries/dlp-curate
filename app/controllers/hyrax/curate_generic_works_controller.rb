@@ -41,5 +41,38 @@ module Hyrax
         end
       end
     end
+
+    def manifest
+      headers['Access-Control-Allow-Origin'] = '*'
+      manifest_builder
+    end
+
+    private
+
+      def manifest_builder
+        solr_doc = ::SolrDocument.find(params[:id])
+        date_modified = solr_doc[:date_modified_dtsi] || solr_doc[:system_create_dtsi]
+        key = date_modified.to_datetime.strftime('%Y-%m-%d_%H-%M-%S') + '_' + solr_doc[:id]
+
+        if File.exist?(Rails.root.join('tmp', key))
+          render_manifest_file(key: key)
+        else
+          manifest_hash = ::IIIFManifest::ManifestFactory.new(presenter).to_h
+          persist_manifest(key: key, manifest_hash: manifest_hash)
+          render json: manifest_hash.to_json
+        end
+      end
+
+      def render_manifest_file(key:)
+        manifest_file = File.open(Rails.root.join('tmp', key))
+        render json: manifest_file.read
+        manifest_file.close
+      end
+
+      def persist_manifest(key:, manifest_hash:)
+        File.open(Rails.root.join('tmp', key), 'w+') do |f|
+          f.write(manifest_hash.to_json)
+        end
+      end
   end
 end

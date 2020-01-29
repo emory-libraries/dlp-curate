@@ -132,4 +132,8 @@ class SolrDocument
   def year_for_lux
     self['year_for_lux_isim']
   end
+
+  def sort_title
+    self['title_ssi']
+  end
 end
