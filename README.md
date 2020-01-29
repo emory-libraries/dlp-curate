@@ -28,3 +28,11 @@ In order to set up your dev environment for database authentication, you will ne
 Run the test suite with `bin/rails ci`
 
 For our CI we are using CircleCI that we adopted from hyrax project: [Hyrax CircleCI Config](https://github.com/samvera/hyrax/blob/master/.circleci/config.yml)
+
+# Caching manifests with localhost
+
+In a development environment, rake task creates and caches manifests with
+`base_url` as `localhost:3000`.
+
+In order to run the rake task locally and see cached manifests properly,
+please use port 3000 with localhost.
