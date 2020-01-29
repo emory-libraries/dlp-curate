@@ -53,13 +53,13 @@ namespace :sidekiq do
   before 'deploy:finished', 'sidekiq:restart'
 
   task :stop do
-    on roles(:redhatapp) do
+    on roles(:app) do
       execute :sudo, :systemctl, :stop, :sidekiq
     end
   end
 
   task :start do
-    on roles(:redhatapp) do
+    on roles(:app) do
       execute :sudo, :systemctl, :start, :sidekiq
     end
   end
