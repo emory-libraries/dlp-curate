@@ -7,10 +7,10 @@
 :timeout: 300
 
 test: # n/a
-  :concurrency: 1
+  :concurrency: <%= ENV['SIDEKIQ_WORKERS'] || 1 %>
 
 development:
-  :concurrency: 2
+  :concurrency: <%= ENV['SIDEKIQ_WORKERS'] || 2 %>
 
 production:
-  :concurrency: <%= ENV['SIDEKIQ_WORKERS'] || 10 %>
+  :concurrency: <%= ENV['SIDEKIQ_WORKERS'] || 15 %>
