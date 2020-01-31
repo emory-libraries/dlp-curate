@@ -9,6 +9,7 @@ set :deploy_to, '/opt/dlp-curate'
 set :rails_env, 'production'
 set :assets_prefix, "#{shared_path}/public/assets"
 set :migration_role, :app
+set :service_unit_name, "sidekiq.service"
 
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
@@ -38,6 +39,27 @@ namespace :deploy do
   after :finishing, :restart_apache do
     on roles(:redhatapp) do
       execute :sudo, :systemctl, :restart, :httpd
+    end
+  end
+end
+
+namespace :sidekiq do
+  task :restart do
+    invoke 'sidekiq:stop'
+    invoke 'sidekiq:start'
+  end
+
+  before 'deploy:finished', 'sidekiq:restart'
+
+  task :stop do
+    on roles(:app) do
+      execute :sudo, :systemctl, :stop, :sidekiq
+    end
+  end
+
+  task :start do
+    on roles(:app) do
+      execute :sudo, :systemctl, :start, :sidekiq
     end
   end
 end
