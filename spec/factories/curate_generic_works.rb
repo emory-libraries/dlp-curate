@@ -115,8 +115,10 @@ FactoryBot.define do
       transfer_engineer { 'yes' }
       uniform_title { 'More uniform title' }
       volume { '1234' }
-      preservation_workflow_terms ['{"workflow_type":"example","workflow_notes":"notes","workflow_rights_basis":"basis","workflow_rights_basis_note":"note",
+      preservation_workflow_terms do
+        ['{"workflow_type":"example","workflow_notes":"notes","workflow_rights_basis":"basis","workflow_rights_basis_note":"note",
                                    "workflow_rights_basis_date":"02/02/2012","workflow_rights_basis_reviewer":"reviewer","workflow_rights_basis_uri":"uri"}']
+      end
     end
 
     factory :public_generic_work, aliases: [:public_work], traits: [:public]

@@ -1739,6 +1739,7 @@ DEPENDENCIES
   rspec-its
   rspec-rails
   rspec_junit_formatter
+  rubocop-rspec
   sass-rails (~> 5.0)
   selenium-webdriver
   sidekiq (~> 5.2)
