@@ -1011,6 +1011,8 @@ GEM
       devise
     diff-lcs (1.3)
     docile (1.3.2)
+    domain_name (0.5.20190701)
+      unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.5)
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
@@ -1091,6 +1093,9 @@ GEM
       ruby-progressbar
     ffaker (2.13.0)
     ffi (1.11.2)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
     flipflop (2.6.0)
       activesupport (>= 4.0)
     flot-rails (0.0.7)
@@ -1127,6 +1132,16 @@ GEM
     hiredis (0.6.3)
     honeybadger (4.5.2)
     htmlentities (4.3.4)
+    http (4.3.0)
+      addressable (~> 2.3)
+      http-cookie (~> 1.0)
+      http-form_data (~> 2.2)
+      http-parser (~> 1.2.0)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
+    http-form_data (2.2.0)
+    http-parser (1.2.1)
+      ffi-compiler (>= 1.0, < 2.0)
     http_logger (0.5.1)
     httparty (0.17.1)
       mime-types (~> 3.0)
@@ -1424,6 +1439,11 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.3.0)
       loofah (~> 2.3)
+    rails-reverse-proxy (0.9.1)
+      addressable
+      rack
+      rack-proxy
+      rails
     rails_autolink (1.1.6)
       rails (> 3.1)
     railties (5.1.7)
@@ -1662,6 +1682,9 @@ GEM
     uber (0.1.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.6)
     unicode-display_width (1.4.1)
     warden (1.2.8)
       rack (>= 2.0.6)
@@ -1721,6 +1744,7 @@ DEPENDENCIES
   fcrepo_wrapper
   ffaker
   honeybadger (~> 4.0)
+  http
   hydra-role-management
   hyrax (= 3.0.0.pre.beta1)
   jbuilder (~> 2.5)
@@ -1734,6 +1758,7 @@ DEPENDENCIES
   puma (~> 3.12)
   rails (~> 5.1)
   rails-controller-testing
+  rails-reverse-proxy
   riiif (~> 2.0)
   rsolr (>= 1.0)
   rspec-its
