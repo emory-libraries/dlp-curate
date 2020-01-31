@@ -49,6 +49,7 @@ group :development do
   gem 'capistrano-sidekiq'
   gem 'fcrepo_wrapper'
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'rubocop-rspec'
   gem 'solr_wrapper', '>= 0.3'
   gem 'web-console', '>= 3.3.0'
   gem 'xray-rails'
