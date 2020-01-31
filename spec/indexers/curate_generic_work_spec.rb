@@ -116,8 +116,8 @@ RSpec.describe CurateGenericWorkIndexer do
     end
 
     it 'indexes sort fields for title and creator' do
-      expect(solr_document['title_ssi']).to eq 'Some title'
-      expect(solr_document['creator_ssi']).to eq 'Some creator'
+      expect(solr_document['title_ssort']).to eq 'Some title'
+      expect(solr_document['creator_ssort']).to eq 'Some creator'
     end
 
     context 'when title has a leading article' do
@@ -129,7 +129,7 @@ RSpec.describe CurateGenericWorkIndexer do
       end
 
       it 'indexes title sort field without leading articles' do
-        expect(solr_document['title_ssi']).to eq 'title'
+        expect(solr_document['title_ssort']).to eq 'title'
       end
     end
   end

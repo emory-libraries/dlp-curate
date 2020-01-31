@@ -134,6 +134,10 @@ class SolrDocument
   end
 
   def sort_title
-    self['title_ssi']
+    self['title_ssort']
+  end
+
+  def sort_creator
+    self['creator_ssort']
   end
 end
