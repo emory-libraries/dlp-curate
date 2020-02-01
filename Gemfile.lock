@@ -1439,11 +1439,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.3.0)
       loofah (~> 2.3)
-    rails-reverse-proxy (0.9.1)
-      addressable
-      rack
-      rack-proxy
-      rails
     rails_autolink (1.1.6)
       rails (> 3.1)
     railties (5.1.7)
@@ -1758,7 +1753,6 @@ DEPENDENCIES
   puma (~> 3.12)
   rails (~> 5.1)
   rails-controller-testing
-  rails-reverse-proxy
   riiif (~> 2.0)
   rsolr (>= 1.0)
   rspec-its
