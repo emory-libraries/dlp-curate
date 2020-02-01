@@ -2,9 +2,13 @@
 
 class IiifController < ApplicationController
   def show
-    puts params
-    @iiif_url = "http://127.0.0.1:8182/iiif/2/#{identifier}/#{region}/#{size}/#{rotation}/#{quality}.#{format}"
+    @iiif_url = iiif_url
     send_data HTTP.get(@iiif_url).body, type: 'image/jpeg', x_sendfile: true, disposition: 'inline'
+  end
+
+  def iiif_url
+    raise "PROXIED_IIIF_SERVER_URL must be set" unless ENV['PROXIED_IIIF_SERVER_URL']
+    "#{ENV['PROXIED_IIIF_SERVER_URL']}/#{identifier}/#{region}/#{size}/#{rotation}/#{quality}.#{format}"
   end
 
   def identifier
