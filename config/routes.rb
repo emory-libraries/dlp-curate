@@ -3,11 +3,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  # get 'iiif/show'
   get '/iiif/2/:identifier/:region/:size/:rotation/:quality.:format', to: 'iiif#show'
-
-  # match '/iiif/2/:identifier/*path' => 'iiif#show', via: [:get]
-  # match '/iiif/2/:identifier/:region/:size/:rotation/:quality.:format' => 'iiif#show', via: [:get]
 
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
