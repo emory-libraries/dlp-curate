@@ -109,15 +109,34 @@ RSpec.describe CurateGenericWorkIndexer do
   describe 'sort fields' do
     let(:attributes) do
       {
-        id:      '123',
-        title:   ['Some title'],
-        creator: ['Some creator']
+        id:           '123',
+        title:        ['Some title'],
+        creator:      ['Some creator'],
+        date_created: '1940-10-15',
+        date_issued:  '1941-01-15'
       }
     end
 
     it 'indexes sort fields for title and creator' do
       expect(solr_document['title_ssort']).to eq 'Some title'
       expect(solr_document['creator_ssort']).to eq 'Some creator'
+    end
+
+    it 'indexes sort field for date containing earliest year' do
+      expect(solr_document['year_for_lux_isi']).to eq 1940
+    end
+
+    context 'when year for lux is not indexed' do
+      let(:attributes) do
+        {
+          id:    '123',
+          title: ['Some title']
+        }
+      end
+
+      it 'doesn\'t index a sort field for date' do
+        expect(solr_document['year_for_lux_isi']).to eq nil
+      end
     end
 
     context 'when title has a leading article' do
