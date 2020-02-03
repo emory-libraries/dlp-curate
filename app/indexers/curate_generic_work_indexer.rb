@@ -27,6 +27,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['human_readable_copyright_date_tesim'] = [human_readable_copyright_date]
       solr_doc['title_ssort'] = sort_title
       solr_doc['creator_ssort'] = object.creator.first
+      solr_doc['year_for_lux_isi'] = sort_year
     end
   end
 
@@ -95,5 +96,9 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   def sort_title
     return unless object.title.first
     object.title.first.gsub(/^(an?|the)\s/i, '')
+  end
+
+  def sort_year
+    year_for_lux.nil? ? nil : year_for_lux.first
   end
 end

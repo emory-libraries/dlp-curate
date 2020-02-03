@@ -140,4 +140,8 @@ class SolrDocument
   def sort_creator
     self['creator_ssort']
   end
+
+  def sort_year
+    self['year_for_lux_isi']
+  end
 end
