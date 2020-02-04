@@ -74,6 +74,17 @@ class FileSet < ActiveFedora::Base
     result
   end
 
+  def preferred_file
+    preferred = if service_file.present?
+                  :service_file
+                elsif intermediate_file.present?
+                  :intermediate_file
+                else
+                  :preservation_master_file
+                end
+    preferred
+  end
+
   private
 
     def service
