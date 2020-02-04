@@ -115,7 +115,7 @@ RSpec/MessageChain:
         - 'spec/services/characterization_service_spec.rb'
         - 'spec/actors/hyrax/actors/file_actor_spec.rb'
         - 'spec/system/show_file_spec.rb'
-        - 'spec/lib/index_file_set_spec.rb'
+        - 'spec/jobs/file_set_clean_up_job_spec.rb'
 
 RSpec/AnyInstance:
     Exclude:
