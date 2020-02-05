@@ -97,6 +97,10 @@ Metrics/PerceivedComplexity:
         - app/importers/curate_record_importer.rb
         - app/forms/hyrax/curate_generic_work_form.rb
 
+RSpec/DescribeClass:
+    Exclude:
+        - 'spec/models/lux_visibility_spec.rb'
+
 RSpec/ExampleLength:
     Exclude:
         - 'spec/**/*'

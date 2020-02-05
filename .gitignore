@@ -89,3 +89,4 @@ flycheck_*.el
 ## Environment normalization:
 /.bundle
 /vendor/bundle
+.env.development
