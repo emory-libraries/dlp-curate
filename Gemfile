@@ -70,6 +70,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'sqlite3', '~> 1.3.7'
   gem 'webdrivers', '~> 3.0'
+  gem 'webmock'
 end
 
 group :test do

@@ -37,6 +37,11 @@ RSpec.describe IiifController, type: :controller do
     end
 
     it "does not alter the iiif request" do
+      stub_request(:any, expected_iiif_url).to_return(
+        :body => "SUCCESS",
+        :status => 200,
+        :headers => { 'Content-Length' => 3 }
+      )
       get :show, params: params
       expect(assigns(:iiif_url)).to eq expected_iiif_url
     end
