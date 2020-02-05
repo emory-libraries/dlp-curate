@@ -18,6 +18,7 @@ gem 'devise-guests', '~> 0.6'
 gem 'dotenv-rails'
 gem 'edtf-humanize'
 gem 'honeybadger', '~> 4.0'
+gem 'http'
 gem 'hydra-role-management'
 gem 'hyrax', '3.0.0-beta1'
 gem 'jbuilder', '~> 2.5'
@@ -68,6 +69,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'sqlite3', '~> 1.3.7'
   gem 'webdrivers', '~> 3.0'
+  gem 'webmock'
 end
 
 group :test do

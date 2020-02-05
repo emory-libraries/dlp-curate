@@ -1,4 +1,13 @@
 # rename to either .env.development or .env.production
+
+# Curate provides a proxy for iiif requests.
+# This is the url of the IIIF server we are proxying
+PROXIED_IIIF_SERVER_URL=
+
+# This is the iiif url for THIS application, which is used for displaying
+# images in views, etc.
+IIIF_SERVER_URL=
+
 SIDEKIQ_WORKERS=
 
 RAILS_HOST=
