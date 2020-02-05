@@ -127,12 +127,21 @@ FactoryBot.define do
       visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
     end
 
+    factory :public_low_work do
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES }
+    end
+
     factory :private_work do
       visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
     end
 
+    # The "Emory High Download" category in the UI is the repurposed "Authenticated" category for registered users
+    factory :emory_high_work do
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+    end
+
     factory :emory_low_work do
-      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES }
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW }
     end
 
     factory :registered_generic_work do
