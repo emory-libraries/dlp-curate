@@ -27,21 +27,11 @@ class IndexFileSet
       end
 
       def regenerate_derivatives(file_set, csv)
-        preferred_file_uri = preferred_file(file_set)
+        preferred_file_symbol = file_set.preferred_file
+        preferred_file_uri = file_set.send(preferred_file_symbol).uri.to_s
         asset_path = preferred_file_uri[preferred_file_uri.index(file_set.id.to_s)..-1]
         CreateDerivativesJob.perform_later(file_set, asset_path)
         csv << [file_set.id, "Thumbnail_path mismatch in solr_doc", "Queued"]
-      end
-
-      def preferred_file(file_set)
-        preferred = if file_set.service_file.present?
-                      file_set.service_file.uri.to_s
-                    elsif file_set.intermediate_file.present?
-                      file_set.intermediate_file.uri.to_s
-                    else
-                      file_set.preservation_master_file.uri.to_s
-                    end
-        preferred
       end
   end
 end

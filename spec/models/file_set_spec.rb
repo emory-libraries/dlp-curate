@@ -128,4 +128,44 @@ RSpec.describe FileSet, :perform_enqueued, :clean do
       end
     end
   end
+
+  describe "#preferred_file" do
+    let(:file_set) { FactoryBot.create(:file_set) }
+    let(:pmf)      { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
+    let(:sf)       { File.open(fixture_path + '/book_page/0003_service.jpg') }
+    let(:imf)      { File.open(fixture_path + '/book_page/0003_intermediate.jp2') }
+
+    context 'when service_file is present' do
+      before do
+        Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
+        Hydra::Works::AddFileToFileSet.call(file_set, sf, :service_file)
+        Hydra::Works::AddFileToFileSet.call(file_set, imf, :intermediate_file)
+      end
+
+      it 'returns service_file symbol' do
+        expect(file_set.preferred_file).to eq(:service_file)
+      end
+    end
+
+    context 'when service_file is absent but intermediate_file is present' do
+      before do
+        Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
+        Hydra::Works::AddFileToFileSet.call(file_set, imf, :intermediate_file)
+      end
+
+      it 'returns intermediate_file symbol' do
+        expect(file_set.preferred_file).to eq(:intermediate_file)
+      end
+    end
+
+    context 'when only the preservation is present' do
+      before do
+        Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
+      end
+
+      it 'returns preservation_master_file symbol' do
+        expect(file_set.preferred_file).to eq(:preservation_master_file)
+      end
+    end
+  end
 end
