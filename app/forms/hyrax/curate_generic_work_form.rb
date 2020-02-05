@@ -67,7 +67,8 @@ module Hyrax
                     :lease_expiration_date,
                     :visibility_after_lease,
                     :visibility,
-                    { ordered_member_ids: [] }]
+                    { ordered_member_ids: [] },
+                    { rendering_ids: [] }]
       permitted << { preservation_workflow_attributes: [:id,
                                                         { workflow_type: [] }, { workflow_notes: [] },
                                                         { workflow_rights_basis: [] }, { workflow_rights_basis_note: [] },

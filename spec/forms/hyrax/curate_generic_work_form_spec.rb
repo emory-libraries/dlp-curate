@@ -46,7 +46,9 @@ RSpec.describe Hyrax::CurateGenericWorkForm do
 
     context "without mediated deposit" do
       it {
-        is_expected.to include(:representative_id,
+        is_expected.to include({ ordered_member_ids: [] },
+                               { rendering_ids:      [] },
+                               :representative_id,
                                :thumbnail_id,
                                :admin_set_id,
                                :visibility_during_embargo,
@@ -55,8 +57,7 @@ RSpec.describe Hyrax::CurateGenericWorkForm do
                                :visibility_during_lease,
                                :lease_expiration_date,
                                :visibility_after_lease,
-                               :visibility,
-                               ordered_member_ids: [])
+                               :visibility)
       }
     end
   end
@@ -72,13 +73,15 @@ RSpec.describe Hyrax::CurateGenericWorkForm do
         representative_id:  '456',
         thumbnail_id:       '789',
         rights_statement:   'http://rightsstatements.org/vocab/InC-EDU/1.0/',
-        ordered_member_ids: ['123', '456'] }
+        ordered_member_ids: ['123', '456'],
+        rendering_ids:      ['123', '456'] }
     end
 
     it 'permits parameters' do
       expect(permitted_params['visibility']).to eq 'open'
       expect(permitted_params['rights_statement']).to eq 'http://rightsstatements.org/vocab/InC-EDU/1.0/'
       expect(permitted_params['ordered_member_ids']).to eq ['123', '456']
+      expect(permitted_params['rendering_ids']).to eq ['123', '456']
     end
   end
 end
