@@ -131,6 +131,10 @@ FactoryBot.define do
       visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
     end
 
+    factory :emory_low_work do
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES }
+    end
+
     factory :registered_generic_work do
       read_groups { ["registered"] }
     end

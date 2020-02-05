@@ -30,4 +30,15 @@ RSpec.describe "visibility and access restrictions for lux", :clean do
       expect(work.to_solr["read_access_group_ssim"]).to contain_exactly "public"
     end
   end
+
+# This is the badge called "Emory Low Download"
+  context "when an object is marked as Emory Low Download in Curate" do
+    let(:work)       { FactoryBot.build(:emory_low_work) }
+    it "has a Solr field" do
+      actor_stack_work
+      work.reload
+      expect(work.to_solr["edit_access_group_ssim"]).to contain_exactly "admin"
+      expect(work.to_solr["read_access_group_ssim"]).to contain_exactly "registered"
+    end
+  end
 end

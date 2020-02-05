@@ -41,7 +41,7 @@ module CustomVisibility
   def low_res_visibility!
     visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
     remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES]
-    set_read_groups([Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES], remove_groups)
+    set_read_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED], remove_groups)
   end
 
   def emory_low_visibility!
