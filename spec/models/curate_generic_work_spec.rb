@@ -1418,10 +1418,10 @@ RSpec.describe CurateGenericWork do
       # Check copyright_date_tesim also saved as human_readable_copyright_date_tesim
       expect(solr_doc['human_readable_copyright_date_tesim']).to eq ['between 1942 and 1944']
 
-      # Check that no ids for CurateGenericWorks are indexed for simple objects
+      # Check that ids for child CurateGenericWorks are not indexed for simple objects
       expect(solr_doc['child_work_ids_tesim']).to eq nil
 
-      # Check that no titles for CurateGenericWorks are indexed for simple objects
+      # Check that titles for child CurateGenericWorks are not indexed for simple objects
       expect(solr_doc['child_work_titles_tesim']).to eq nil
     end
   end
