@@ -1,123 +1,123 @@
 inherit_gem:
-  bixby: bixby_default.yml
+    bixby: bixby_default.yml
 
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.5
-  Exclude:
-    - "bin/**/*"
-    - "db/**/*"
-    - "tmp/**/*"
-    - "vendor/**/*"
-    - "node_modules/**/*"
-    - lib/tasks/sample_data.rake
+    TargetRubyVersion: 2.5
+    Exclude:
+        - "bin/**/*"
+        - "db/**/*"
+        - "tmp/**/*"
+        - "vendor/**/*"
+        - "node_modules/**/*"
+        - lib/tasks/sample_data.rake
 
 Layout/AlignHash:
-  EnforcedColonStyle: table
+    EnforcedColonStyle: table
 
 RSpec/MessageSpies:
-  EnforcedStyle: receive
+    EnforcedStyle: receive
 
 Lint/NonLocalExitFromIterator:
-  Exclude:
-    - app/importers/collection_permission_ensurer.rb
+    Exclude:
+        - app/importers/collection_permission_ensurer.rb
 
 Metrics/AbcSize:
-  Exclude:
-    - app/importers/modular_importer.rb
-    - spec/system/import_langmuir_from_csv_spec.rb
-    - app/importers/curate_collection_importer.rb
-    - app/importers/curate_record_importer.rb
-    - app/lib/metadata_details.rb
-    - app/indexers/curate/file_set_indexer.rb
-    - app/importers/preservation_workflow_importer.rb
+    Exclude:
+        - app/importers/modular_importer.rb
+        - spec/system/import_langmuir_from_csv_spec.rb
+        - app/importers/curate_collection_importer.rb
+        - app/importers/curate_record_importer.rb
+        - app/lib/metadata_details.rb
+        - app/indexers/curate/file_set_indexer.rb
+        - app/importers/preservation_workflow_importer.rb
 
 Metrics/BlockLength:
-  Exclude:
-    - "spec/**/*"
-    - "config/routes.rb"
-    - "config/initializers/simple_form_bootstrap.rb"
-    - "app/controllers/catalog_controller.rb"
-    - "config/initializers/hyrax.rb"
-    - app/importers/curate_collection_importer.rb
-    - lib/tasks/curate_collections.rake
-    - lib/tasks/curate_books.rake
-    - config/initializers/characterization_service.rb
-    - config/initializers/job_io_wrapper.rb
-    - lib/tasks/derivatives.rake
+    Exclude:
+        - "spec/**/*"
+        - "config/routes.rb"
+        - "config/initializers/simple_form_bootstrap.rb"
+        - "app/controllers/catalog_controller.rb"
+        - "config/initializers/hyrax.rb"
+        - app/importers/curate_collection_importer.rb
+        - lib/tasks/curate_collections.rake
+        - lib/tasks/curate_books.rake
+        - config/initializers/characterization_service.rb
+        - config/initializers/job_io_wrapper.rb
+        - lib/tasks/derivatives.rake
 
 Metrics/ClassLength:
-  Exclude:
-    - "spec/**/*"
-    - "app/models/curate_generic_work.rb"
-    - "app/controllers/catalog_controller.rb"
-    - "app/actors/hyrax/actors/file_set_actor.rb"
-    - "app/forms/hyrax/forms/collection_form.rb"
-    - app/uploaders/zizia/csv_manifest_validator.rb
-    - app/presenters/hyrax/collection_presenter.rb
-    - app/importers/curate_mapper.rb
-    - app/importers/curate_record_importer.rb
-    - app/models/solr_document.rb
+    Exclude:
+        - "spec/**/*"
+        - "app/models/curate_generic_work.rb"
+        - "app/controllers/catalog_controller.rb"
+        - "app/actors/hyrax/actors/file_set_actor.rb"
+        - "app/forms/hyrax/forms/collection_form.rb"
+        - app/uploaders/zizia/csv_manifest_validator.rb
+        - app/presenters/hyrax/collection_presenter.rb
+        - app/importers/curate_mapper.rb
+        - app/importers/curate_record_importer.rb
+        - app/models/solr_document.rb
 
 Metrics/CyclomaticComplexity:
-  Exclude:
-    - app/importers/curate_record_importer.rb
-    - config/prepends/custom_visibility.rb
-    - config/initializers/file_actor.rb
-    - app/indexers/curate/file_set_indexer.rb
+    Exclude:
+        - app/importers/curate_record_importer.rb
+        - config/prepends/custom_visibility.rb
+        - config/initializers/file_actor.rb
+        - app/indexers/curate/file_set_indexer.rb
 
 Metrics/LineLength:
-  Exclude:
-    - spec/importers/curate_mapper_spec.rb
-    - app/importers/curate_record_importer.rb
+    Exclude:
+        - spec/importers/curate_mapper_spec.rb
+        - app/importers/curate_record_importer.rb
 
 Metrics/MethodLength:
-  Exclude:
-    - app/uploaders/zizia/csv_manifest_validator.rb
-    - app/importers/curate_collection_importer.rb
-    - app/presenters/hyrax/curate_collection_presenter.rb
-    - app/presenters/hyrax/collection_presenter.rb
-    - app/importers/curate_mapper.rb
-    - app/forms/hyrax/curate_generic_work_form.rb
-    - app/importers/curate_record_importer.rb
-    - config/prepends/custom_visibility.rb
-    - app/controllers/hyrax/file_sets_controller.rb
-    - app/jobs/create_work_job.rb
-    - app/importers/modular_importer.rb
-    - app/indexers/curate/file_set_indexer.rb
-    - app/jobs/characterize_job.rb
-    - app/indexers/curate_generic_work_indexer.rb
+    Exclude:
+        - app/uploaders/zizia/csv_manifest_validator.rb
+        - app/importers/curate_collection_importer.rb
+        - app/presenters/hyrax/curate_collection_presenter.rb
+        - app/presenters/hyrax/collection_presenter.rb
+        - app/importers/curate_mapper.rb
+        - app/forms/hyrax/curate_generic_work_form.rb
+        - app/importers/curate_record_importer.rb
+        - config/prepends/custom_visibility.rb
+        - app/controllers/hyrax/file_sets_controller.rb
+        - app/jobs/create_work_job.rb
+        - app/importers/modular_importer.rb
+        - app/indexers/curate/file_set_indexer.rb
+        - app/jobs/characterize_job.rb
+        - app/indexers/curate_generic_work_indexer.rb
 
 Metrics/ModuleLength:
-  Exclude:
-    - app/lib/metadata_definitions.rb
+    Exclude:
+        - app/lib/metadata_definitions.rb
 
 Metrics/PerceivedComplexity:
-  Exclude:
-    - app/importers/curate_record_importer.rb
-    - app/forms/hyrax/curate_generic_work_form.rb
+    Exclude:
+        - app/importers/curate_record_importer.rb
+        - app/forms/hyrax/curate_generic_work_form.rb
 
 RSpec/ExampleLength:
-  Exclude:
-    - "spec/**/*"
+    Exclude:
+        - "spec/**/*"
 
 RSpec/NestedGroups:
-  Exclude:
-    - "spec/controllers/hyrax/downloads_controller_spec.rb"
-    - "spec/controllers/hyrax/file_sets_controller_spec.rb"
+    Exclude:
+        - "spec/controllers/hyrax/downloads_controller_spec.rb"
+        - "spec/controllers/hyrax/file_sets_controller_spec.rb"
 
 RSpec/InstanceVariable:
-  Exclude:
-    - "spec/services/characterization_service_spec.rb"
+    Exclude:
+        - "spec/services/characterization_service_spec.rb"
 
 RSpec/MessageChain:
-  Exclude:
-    - "spec/services/characterization_service_spec.rb"
-    - "spec/actors/hyrax/actors/file_actor_spec.rb"
-    - "spec/system/show_file_spec.rb"
-    - "spec/jobs/file_set_clean_up_job_spec.rb"
+    Exclude:
+        - "spec/services/characterization_service_spec.rb"
+        - "spec/actors/hyrax/actors/file_actor_spec.rb"
+        - "spec/system/show_file_spec.rb"
+        - "spec/jobs/file_set_clean_up_job_spec.rb"
 
 RSpec/AnyInstance:
-  Exclude:
-    - "spec/models/job_io_wrapper_spec.rb"
+    Exclude:
+        - "spec/models/job_io_wrapper_spec.rb"
