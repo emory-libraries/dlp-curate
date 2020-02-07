@@ -6,11 +6,11 @@ inherit_from: .rubocop_todo.yml
 AllCops:
     TargetRubyVersion: 2.5
     Exclude:
-        - "bin/**/*"
-        - "db/**/*"
-        - "tmp/**/*"
-        - "vendor/**/*"
-        - "node_modules/**/*"
+        - 'bin/**/*'
+        - 'db/**/*'
+        - 'tmp/**/*'
+        - 'vendor/**/*'
+        - 'node_modules/**/*'
         - lib/tasks/sample_data.rake
 
 Layout/AlignHash:
@@ -35,11 +35,11 @@ Metrics/AbcSize:
 
 Metrics/BlockLength:
     Exclude:
-        - "spec/**/*"
-        - "config/routes.rb"
-        - "config/initializers/simple_form_bootstrap.rb"
-        - "app/controllers/catalog_controller.rb"
-        - "config/initializers/hyrax.rb"
+        - 'spec/**/*'
+        - 'config/routes.rb'
+        - 'config/initializers/simple_form_bootstrap.rb'
+        - 'app/controllers/catalog_controller.rb'
+        - 'config/initializers/hyrax.rb'
         - app/importers/curate_collection_importer.rb
         - lib/tasks/curate_collections.rake
         - lib/tasks/curate_books.rake
@@ -49,11 +49,11 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
     Exclude:
-        - "spec/**/*"
-        - "app/models/curate_generic_work.rb"
-        - "app/controllers/catalog_controller.rb"
-        - "app/actors/hyrax/actors/file_set_actor.rb"
-        - "app/forms/hyrax/forms/collection_form.rb"
+        - 'spec/**/*'
+        - 'app/models/curate_generic_work.rb'
+        - 'app/controllers/catalog_controller.rb'
+        - 'app/actors/hyrax/actors/file_set_actor.rb'
+        - 'app/forms/hyrax/forms/collection_form.rb'
         - app/uploaders/zizia/csv_manifest_validator.rb
         - app/presenters/hyrax/collection_presenter.rb
         - app/importers/curate_mapper.rb
@@ -100,24 +100,24 @@ Metrics/PerceivedComplexity:
 
 RSpec/ExampleLength:
     Exclude:
-        - "spec/**/*"
+        - 'spec/**/*'
 
 RSpec/NestedGroups:
     Exclude:
-        - "spec/controllers/hyrax/downloads_controller_spec.rb"
-        - "spec/controllers/hyrax/file_sets_controller_spec.rb"
+        - 'spec/controllers/hyrax/downloads_controller_spec.rb'
+        - 'spec/controllers/hyrax/file_sets_controller_spec.rb'
 
 RSpec/InstanceVariable:
     Exclude:
-        - "spec/services/characterization_service_spec.rb"
+        - 'spec/services/characterization_service_spec.rb'
 
 RSpec/MessageChain:
     Exclude:
-        - "spec/services/characterization_service_spec.rb"
-        - "spec/actors/hyrax/actors/file_actor_spec.rb"
-        - "spec/system/show_file_spec.rb"
-        - "spec/jobs/file_set_clean_up_job_spec.rb"
+        - 'spec/services/characterization_service_spec.rb'
+        - 'spec/actors/hyrax/actors/file_actor_spec.rb'
+        - 'spec/system/show_file_spec.rb'
+        - 'spec/jobs/file_set_clean_up_job_spec.rb'
 
 RSpec/AnyInstance:
     Exclude:
-        - "spec/models/job_io_wrapper_spec.rb"
+        - 'spec/models/job_io_wrapper_spec.rb'
