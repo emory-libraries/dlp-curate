@@ -1418,7 +1418,7 @@ RSpec.describe CurateGenericWork do
       expect(solr_doc['human_readable_copyright_date_tesim']).to eq ['between 1942 and 1944']
 
       # Check that ids and titles for child CurateGenericWorks are not indexed for simple objects
-      expect(solr_doc['child_works_tesim']).to eq nil
+      expect(solr_doc['child_works_for_lux_tesim']).to eq nil
     end
   end
 
