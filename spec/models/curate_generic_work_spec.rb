@@ -11,6 +11,7 @@ RSpec.describe CurateGenericWork do
     let(:work3)       { FactoryBot.build(:work, id: 'wk3', title: ['Work 3']) }
     let(:fileset1)    { FactoryBot.build(:file_set, id: 'fs1', title: ['Fileset 1']) }
     let(:fileset2)    { FactoryBot.build(:file_set, id: 'fs2', title: ['Fileset 2']) }
+    let(:solr_doc)    { work1.to_solr }
 
     before do
       work1.members = [work2, work3, fileset1, fileset2]
@@ -41,6 +42,10 @@ RSpec.describe CurateGenericWork do
 
     it "checks assign id" do
       expect(work1.assign_id).to match(/\d{3}[A-z0-9]{7}-cor/)
+    end
+
+    it "saves ids and titles of child works in Solr document in alphabetical order by title" do
+      expect(solr_doc['child_works_for_lux_tesim']).to eq [["wk2", ["Work 2"]], ["wk3", ["Work 3"]]]
     end
   end
 
@@ -1411,6 +1416,9 @@ RSpec.describe CurateGenericWork do
 
       # Check copyright_date_tesim also saved as human_readable_copyright_date_tesim
       expect(solr_doc['human_readable_copyright_date_tesim']).to eq ['between 1942 and 1944']
+
+      # Check that ids and titles for child CurateGenericWorks are not indexed for simple objects
+      expect(solr_doc['child_works_for_lux_tesim']).to eq nil
     end
   end
 

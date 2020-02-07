@@ -58,6 +58,7 @@ Metrics/ClassLength:
         - app/presenters/hyrax/collection_presenter.rb
         - app/importers/curate_mapper.rb
         - app/importers/curate_record_importer.rb
+        - app/models/solr_document.rb
 
 Metrics/CyclomaticComplexity:
     Exclude:

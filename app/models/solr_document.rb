@@ -144,4 +144,8 @@ class SolrDocument
   def sort_year
     self['year_for_lux_isi']
   end
+
+  def child_works_for_lux
+    self['child_works_for_lux_tesim']
+  end
 end
