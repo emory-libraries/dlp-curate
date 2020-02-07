@@ -146,10 +146,10 @@ class SolrDocument
   end
 
   def child_work_ids
-    self['child_ids_tesim']
+    self['child_work_ids_tesim']
   end
 
   def child_work_titles
-    self['child_titles_tesim']
+    self['child_work_titles_tesim']
   end
 end
