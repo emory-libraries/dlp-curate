@@ -145,11 +145,7 @@ class SolrDocument
     self['year_for_lux_isi']
   end
 
-  def child_work_ids
-    self['child_work_ids_tesim']
-  end
-
-  def child_work_titles
-    self['child_work_titles_tesim']
+  def child_works_for_lux
+    self['child_works_for_lux_tesim']
   end
 end
