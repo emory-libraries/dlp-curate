@@ -28,6 +28,8 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['title_ssort'] = sort_title
       solr_doc['creator_ssort'] = object.creator.first
       solr_doc['year_for_lux_isi'] = sort_year
+      solr_doc['child_work_ids_tesim'] = child_work_ids
+      solr_doc['child_work_titles_tesim'] = child_work_titles
     end
   end
 
@@ -100,5 +102,17 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
 
   def sort_year
     year_for_lux.nil? ? nil : year_for_lux.first
+  end
+
+  def child_work_ids
+    ids = object.child_works.map(&:id)
+    return nil if ids.empty?
+    ids
+  end
+
+  def child_work_titles
+    titles = object.child_works.map(&:title)
+    return nil if titles.empty?
+    titles
   end
 end
