@@ -101,7 +101,7 @@ module Hyrax
           actor.revert_content(params[:revision])
         elsif params.key?(:file_set)
           if params[:file_set].key?(:files)
-            actor.update_content(params[:file_set][:files].first, preferred: @file_set.preferred_file)
+            actor.update_content(params[:file_set][:files].first, @file_set.preferred_file)
           else
             update_metadata
           end
