@@ -3,6 +3,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  get '/iiif/2/:identifier/info.json', to: 'iiif#info'
   get '/iiif/2/:identifier/:region/:size/:rotation/:quality.:format', to: 'iiif#show'
 
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?

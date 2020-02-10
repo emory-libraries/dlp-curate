@@ -3,12 +3,25 @@
 class IiifController < ApplicationController
   def show
     @iiif_url = iiif_url
+    Rails.logger.info("Trying to proxy image from #{@iiif_url}")
     send_data HTTP.get(@iiif_url).body, type: 'image/jpeg', x_sendfile: true, disposition: 'inline'
+  end
+
+  def info
+    @iiif_url = "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/info.json"
+    Rails.logger.info("Trying to proxy info from #{@iiif_url}")
+    send_data HTTP.get(@iiif_url).body, type: 'application/json', x_sendfile: true, disposition: 'inline'
   end
 
   def iiif_url
     raise "PROXIED_IIIF_SERVER_URL must be set" unless ENV['PROXIED_IIIF_SERVER_URL']
-    "#{ENV['PROXIED_IIIF_SERVER_URL']}/#{identifier}/#{region}/#{size}/#{rotation}/#{quality}.#{format}"
+    "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/#{region}/#{size}/#{rotation}/#{quality}.#{format}"
+  end
+
+  # IIIF URLS really do not like extra slashes. Ensure that we only add a slash after the
+  # PROXIED_IIIF_SERVER_URL value if it is needed
+  def trailing_slash_fix
+    '/' unless ENV['PROXIED_IIIF_SERVER_URL'].last == '/'
   end
 
   def identifier

@@ -29,6 +29,31 @@ RSpec.describe IiifController, type: :controller do
     end
   end
 
+  describe "a request for info.json" do
+    let(:params) do
+      {
+        identifier: identifier,
+        info:       "info",
+        format:     "json"
+      }
+    end
+    let(:expected_iiif_url) { 'http://127.0.0.1:8182/iiif/2/abc123/info.json' }
+
+    before do
+      ENV['PROXIED_IIIF_SERVER_URL'] = 'http://127.0.0.1:8182/iiif/2'
+    end
+
+    it "returns as json" do
+      stub_request(:any, expected_iiif_url).to_return(
+        body:    "SUCCESS",
+        status:  200,
+        headers: { 'Content-Length' => 3 }
+      )
+      get :info, params: params
+      expect(assigns(:iiif_url)).to eq expected_iiif_url
+    end
+  end
+
   describe "a request for a public object" do
     let(:expected_iiif_url) { 'http://127.0.0.1:8182/iiif/2/abc123/full/full/0/default.jpg' }
 
