@@ -23,6 +23,6 @@ RSpec.describe "routes for iiif", type: :routing do
         "controller" => "iiif",
         "action" => "info",
         "identifier" => "a0f9219f14f071be7e3b872186f3507cfeccd5bf"
-        )
+      )
   end
 end
