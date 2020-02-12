@@ -142,10 +142,10 @@ RSpec.describe CurateGenericWorkIndexer do
     context 'when year for lux is unknown' do
       let(:attributes) do
         {
-          id:    '123',
-          title: ['Some title'],
+          id:           '123',
+          title:        ['Some title'],
           date_created: 'XXXX',
-          date_issued: 'XXXX'
+          date_issued:  'XXXX'
         }
       end
 
