@@ -27,7 +27,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['human_readable_copyright_date_tesim'] = [human_readable_copyright_date]
       solr_doc['title_ssort'] = sort_title
       solr_doc['creator_ssort'] = object.creator.first
-      solr_doc['year_for_lux_isi'] = sort_year
+      solr_doc['year_for_lux_ssi'] = sort_year
       solr_doc['child_works_for_lux_tesim'] = child_works_for_lux
     end
   end

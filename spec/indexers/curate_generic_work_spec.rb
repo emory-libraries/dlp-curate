@@ -123,7 +123,7 @@ RSpec.describe CurateGenericWorkIndexer do
     end
 
     it 'indexes sort field for date containing earliest year' do
-      expect(solr_document['year_for_lux_isi']).to eq 1940
+      expect(solr_document['year_for_lux_ssi']).to eq 1940
     end
 
     context 'when year for lux is not indexed' do
@@ -135,7 +135,22 @@ RSpec.describe CurateGenericWorkIndexer do
       end
 
       it 'doesn\'t index a sort field for date' do
-        expect(solr_document['year_for_lux_isi']).to eq nil
+        expect(solr_document['year_for_lux_ssi']).to eq nil
+      end
+    end
+
+    context 'when year for lux is unknown' do
+      let(:attributes) do
+        {
+          id:           '123',
+          title:        ['Some title'],
+          date_created: 'XXXX',
+          date_issued:  'XXXX'
+        }
+      end
+
+      it 'doesn\'t index a sort field for date' do
+        expect(solr_document['year_for_lux_ssi']).to eq nil
       end
     end
 
