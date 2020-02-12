@@ -142,7 +142,7 @@ class SolrDocument
   end
 
   def sort_year
-    self['year_for_lux_isi']
+    self['year_for_lux_ssi']
   end
 
   def child_works_for_lux

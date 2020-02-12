@@ -64,9 +64,15 @@ RSpec.describe YearParser do
       let(:dates) { ['1934-06/1935-07', '1934-06-01', '1934'] }
       let(:parsed_dates) { subject }
 
-      it 'removes duplcates from the list' do
+      it 'removes duplicates from the list' do
         expect(parsed_dates).to eq [1934, 1935]
       end
+    end
+
+    context 'unknown year' do
+      let(:dates) { ['XXXX'] }
+
+      it { is_expected.to eq [] }
     end
   end
 end
