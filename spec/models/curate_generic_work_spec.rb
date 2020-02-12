@@ -44,8 +44,11 @@ RSpec.describe CurateGenericWork do
       expect(work1.assign_id).to match(/\d{3}[A-z0-9]{7}-cor/)
     end
 
-    it "saves ids and titles of child works in Solr document in alphabetical order by title" do
-      expect(solr_doc['child_works_for_lux_tesim']).to eq [["wk2", ["Work 2"]], ["wk3", ["Work 3"]]]
+    it "saves ids, thumbnail paths, and titles of child works in Solr document in alphabetical order by title" do
+      expect(solr_doc['child_works_for_lux_tesim']).to eq [
+        "wk2, /assets/work-ff055336041c3f7d310ad69109eda4a887b16ec501f35afc0a547c4adb97ee72.png, Work 2",
+        "wk3, /assets/work-ff055336041c3f7d310ad69109eda4a887b16ec501f35afc0a547c4adb97ee72.png, Work 3"
+      ]
     end
   end
 
@@ -1417,7 +1420,7 @@ RSpec.describe CurateGenericWork do
       # Check copyright_date_tesim also saved as human_readable_copyright_date_tesim
       expect(solr_doc['human_readable_copyright_date_tesim']).to eq ['between 1942 and 1944']
 
-      # Check that ids and titles for child CurateGenericWorks are not indexed for simple objects
+      # Check that metadata for child CurateGenericWorks is not indexed for simple objects
       expect(solr_doc['child_works_for_lux_tesim']).to eq nil
     end
   end

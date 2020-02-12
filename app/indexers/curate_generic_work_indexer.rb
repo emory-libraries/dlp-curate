@@ -104,10 +104,13 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   end
 
   def child_works_for_lux
-    children = object.child_works
+    children = object.child_works.sort_by { |c| c.title.first }
     return nil if children.empty?
-    ids_and_titles = children.map { |c| [c.id, c.title] }
-    # Sort child works' id and title pairs alphabetically by title
-    ids_and_titles.sort_by { |w| w[1][0] }
+    children.map do |c|
+      id = c.id
+      title = c.title.first
+      thumbnail_path = c.to_solr["thumbnail_path_ss"]
+      "#{id}, #{thumbnail_path}, #{title}"
+    end
   end
 end
