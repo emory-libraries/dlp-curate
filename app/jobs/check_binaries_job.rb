@@ -21,7 +21,7 @@ class CheckBinariesJob < Hyrax::ApplicationJob
     def check_binary(file_set, csv)
       file_set.files.each do |file|
         next if file.digest.empty? || check_existence_in_s3(file)
-        csv << [file_set.member_of_work_ids.join(','), file_set.id, file&.id, @sha1]
+        csv << [file_set.member_of_work_ids.join('|'), file_set.id, file&.id, @sha1]
       end
     end
 

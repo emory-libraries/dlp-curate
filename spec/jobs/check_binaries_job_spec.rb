@@ -2,14 +2,17 @@
 require 'rails_helper'
 
 RSpec.describe CheckBinariesJob, :clean do
-  let(:csv)          { IO.read(File.join("config/emory/check_binaries_results.csv")) }
-  let(:file)         { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
-  let(:file_set)     { FactoryBot.create(:file_set) }
-  let(:generic_work) { FactoryBot.create(:public_work) }
+  let(:csv)           { IO.read(File.join("config/emory/check_binaries_results.csv")) }
+  let(:file)          { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
+  let(:file_set)      { FactoryBot.create(:file_set) }
+  let(:generic_work)  { FactoryBot.create(:public_work) }
+  let(:generic_work2) { FactoryBot.create(:public_work) }
 
   before do
     generic_work.ordered_members << file_set
     generic_work.save
+    generic_work2.ordered_members << file_set
+    generic_work2.save
   end
 
   context "file is present in s3" do
@@ -32,7 +35,7 @@ RSpec.describe CheckBinariesJob, :clean do
     end
 
     it "cannot find file in s3 and adds to csv" do
-      expect(csv).to include("#{generic_work.id},#{file_set.id},#{file_set.files.first.id},#{file_set.files.first.digest.first.to_s.partition('urn:sha1:').last}")
+      expect(csv).to include("#{generic_work.id}|#{generic_work2.id},#{file_set.id},#{file_set.files.first.id},#{file_set.files.first.digest.first.to_s.partition('urn:sha1:').last}")
     end
   end
 end
