@@ -3,6 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe Collection do
+  context "Solr document for collections" do
+    let(:collection)     { FactoryBot.build(:collection_lw) }
+    let(:work1)          { FactoryBot.build(:work, id: 'wk1', title: ['Work 1']) }
+    let(:work2)          { FactoryBot.build(:work, id: 'wk2', title: ['Work 2']) }
+    let(:work3)          { FactoryBot.build(:work, id: 'wk3', title: ['Work 3']) }
+    let(:solr_doc)       { collection.to_solr }
+
+    it "indexes a count of 0 child works for empty collections" do
+      expect(solr_doc['member_works_count_isi']).to eq 0
+    end
+
+    it "indexes the correct count of child works for populated collections" do
+      works = [work1, work2, work3]
+      works.each { |w| collection.ordered_members << w }
+      collection.save!
+      collection.reload
+      expect(solr_doc['member_works_count_isi']).to eq 3
+    end
+  end
+
   describe "#holding_repository" do
     subject { described_class.new }
     let(:holding_repository) { ['Woodruff'] }

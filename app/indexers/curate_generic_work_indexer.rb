@@ -29,6 +29,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['creator_ssort'] = object.creator.first
       solr_doc['year_for_lux_ssi'] = sort_year
       solr_doc['child_works_for_lux_tesim'] = child_works_for_lux
+      solr_doc['parent_work_for_lux_tesim'] = parent_work_for_lux
     end
   end
 
@@ -112,5 +113,13 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       thumbnail_path = c.to_solr["thumbnail_path_ss"]
       "#{id}, #{thumbnail_path}, #{title}"
     end
+  end
+
+  def parent_work_for_lux
+    parent = object.parent_works.first
+    return nil if parent.nil?
+    id = parent.id
+    title = parent.title.first
+    ["#{id}, #{title}"]
   end
 end
