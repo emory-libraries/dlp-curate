@@ -51,6 +51,7 @@ RSpec.describe IiifController, type: :controller do
       )
       get :info, params: params
       expect(assigns(:iiif_url)).to eq expected_iiif_url
+      expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
     end
   end
 
@@ -69,6 +70,7 @@ RSpec.describe IiifController, type: :controller do
       )
       get :show, params: params
       expect(assigns(:iiif_url)).to eq expected_iiif_url
+      expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
     end
   end
 end

@@ -4,12 +4,14 @@ class IiifController < ApplicationController
   def show
     @iiif_url = iiif_url
     Rails.logger.info("Trying to proxy image from #{@iiif_url}")
+    response.set_header('Access-Control-Allow-Origin', '*')
     send_data HTTP.get(@iiif_url).body, type: 'image/jpeg', x_sendfile: true, disposition: 'inline'
   end
 
   def info
     @iiif_url = "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/info.json"
     Rails.logger.info("Trying to proxy info from #{@iiif_url}")
+    response.set_header('Access-Control-Allow-Origin', '*')
     send_data HTTP.get(@iiif_url).body, type: 'application/json', x_sendfile: true, disposition: 'inline'
   end
 
