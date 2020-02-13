@@ -15,11 +15,12 @@ module Hyrax
     def display_image
       return nil unless ::FileSet.exists?(id) && solr_document.image? && current_ability.can?(:read, id)
       # @todo this is slow, find a better way (perhaps index iiif url):
-      original_file = ::FileSet.find(id).original_file
+      file_set = ::FileSet.find(id)
+      preferred_file = file_set.send(file_set.preferred_file)
       @request_base_url = request_base_url
 
       url = Hyrax.config.iiif_image_url_builder.call(
-        original_file.id,
+        preferred_file.id,
         @request_base_url,
         Hyrax.config.iiif_image_size_default
       )
@@ -27,7 +28,7 @@ module Hyrax
       IIIFManifest::DisplayImage.new(url,
                                      width:         640,
                                      height:        480,
-                                     iiif_endpoint: iiif_endpoint(original_file.id))
+                                     iiif_endpoint: iiif_endpoint(preferred_file.id))
     end
 
     private
