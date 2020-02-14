@@ -121,6 +121,7 @@ RSpec/MessageChain:
         - 'spec/actors/hyrax/actors/file_actor_spec.rb'
         - 'spec/system/show_file_spec.rb'
         - 'spec/jobs/file_set_clean_up_job_spec.rb'
+        - 'spec/jobs/check_binaries_job_spec.rb'
 
 RSpec/AnyInstance:
     Exclude:
