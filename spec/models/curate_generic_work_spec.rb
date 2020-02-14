@@ -11,7 +11,8 @@ RSpec.describe CurateGenericWork do
     let(:work3)       { FactoryBot.build(:work, id: 'wk3', title: ['Work 3']) }
     let(:fileset1)    { FactoryBot.build(:file_set, id: 'fs1', title: ['Fileset 1']) }
     let(:fileset2)    { FactoryBot.build(:file_set, id: 'fs2', title: ['Fileset 2']) }
-    let(:solr_doc)    { work1.to_solr }
+    let(:solr_doc1)   { work1.to_solr }
+    let(:solr_doc2)   { work2.to_solr }
 
     before do
       work1.members = [work2, work3, fileset1, fileset2]
@@ -45,10 +46,16 @@ RSpec.describe CurateGenericWork do
     end
 
     it "saves ids, thumbnail paths, and titles of child works in Solr document in alphabetical order by title" do
-      expect(solr_doc['child_works_for_lux_tesim']).to eq [
+      expect(solr_doc1['child_works_for_lux_tesim']).to eq [
         "wk2, /assets/work-ff055336041c3f7d310ad69109eda4a887b16ec501f35afc0a547c4adb97ee72.png, Work 2",
         "wk3, /assets/work-ff055336041c3f7d310ad69109eda4a887b16ec501f35afc0a547c4adb97ee72.png, Work 3"
       ]
+      expect(solr_doc2['child_works_for_lux_tesim']).to eq nil
+    end
+
+    it 'saves id and title of parent work in Solr document' do
+      expect(solr_doc1['parent_work_for_lux_tesim']).to eq nil
+      expect(solr_doc2['parent_work_for_lux_tesim']).to eq ["wk1, Work 1"]
     end
   end
 
