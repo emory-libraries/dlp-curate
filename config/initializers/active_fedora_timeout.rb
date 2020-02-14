@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# [Overwrite - ActiveFedora ~> 11.5.4]
 # We are adding request options (timeouts) when creating a new Faraday connection.
 # This is added in ActiveFedora 12+ and this file can be removed once we upgrade
 # AF. Refer: https://github.com/samvera/active_fedora/pull/1271
