@@ -33,7 +33,6 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       # the next two fields are for display and search, not for security
       solr_doc['visibility_group_ssi'] = visibility_group_for_lux
       solr_doc['human_readable_visibility_ssi'] = human_readable_visibility
-
     end
   end
 
@@ -140,8 +139,6 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       "Log In Required"
     when "rose_high"
       "Reading Room Specific"
-    else
-      nil
     end
   end
 
@@ -160,8 +157,6 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       "Rose High View"
     when "restricted"
       "Private"
-    else
-      nil
     end
   end
 end
