@@ -30,6 +30,10 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['year_for_lux_ssi'] = sort_year
       solr_doc['child_works_for_lux_tesim'] = child_works_for_lux
       solr_doc['parent_work_for_lux_tesim'] = parent_work_for_lux
+      # the next two fields are for display and search, not for security
+      solr_doc['visibility_group_ssi'] = visibility_group_for_lux
+      solr_doc['human_readable_visibility_ssi'] = human_readable_visibility
+
     end
   end
 
@@ -121,5 +125,43 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
     id = parent.id
     title = parent.title.first
     ["#{id}, #{title}"]
+  end
+
+  # This field is for display and search, not to determine security
+  def visibility_group_for_lux
+    case object.visibility
+    when "open"
+      "Public"
+    when "low_res"
+      "Public"
+    when "emory_low"
+      "Log In Required"
+    when "authenticated"
+      "Log In Required"
+    when "rose_high"
+      "Reading Room Specific"
+    else
+      nil
+    end
+  end
+
+  # This field is for display and search, not to determine security
+  def human_readable_visibility
+    case object.visibility
+    when "open"
+      "Public"
+    when "low_res"
+      "Public Low View"
+    when "emory_low"
+      "Emory Low Download"
+    when "authenticated"
+      "Emory High Download"
+    when "rose_high"
+      "Rose High View"
+    when "restricted"
+      "Private"
+    else
+      nil
+    end
   end
 end

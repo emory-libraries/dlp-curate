@@ -18,8 +18,10 @@ RSpec.describe "visibility and access restrictions for lux", :clean do
       actor_stack_work
       work.reload
       expect(work.to_solr["visibility_ssi"]).to eq "restricted"
+      expect(work.to_solr["human_readable_visibility_ssi"]).to eq "Private"
       expect(work.to_solr["edit_access_group_ssim"]).to contain_exactly "admin"
       expect(work.to_solr["read_access_group_ssim"]).to eq nil
+      expect(work.to_solr["visibility_group_ssi"]).to eq nil
     end
   end
 
@@ -30,8 +32,10 @@ RSpec.describe "visibility and access restrictions for lux", :clean do
       actor_stack_work
       work.reload
       expect(work.to_solr["visibility_ssi"]).to eq "open"
+      expect(work.to_solr["human_readable_visibility_ssi"]).to eq "Public"
       expect(work.to_solr["edit_access_group_ssim"]).to contain_exactly "admin"
       expect(work.to_solr["read_access_group_ssim"]).to contain_exactly "public"
+      expect(work.to_solr["visibility_group_ssi"]).to eq "Public"
     end
   end
 
@@ -42,8 +46,10 @@ RSpec.describe "visibility and access restrictions for lux", :clean do
       actor_stack_work
       work.reload
       expect(work.to_solr["visibility_ssi"]).to eq "low_res"
+      expect(work.to_solr["human_readable_visibility_ssi"]).to eq "Public Low View"
       expect(work.to_solr["edit_access_group_ssim"]).to contain_exactly "admin"
       expect(work.to_solr["read_access_group_ssim"]).to contain_exactly "low_res"
+      expect(work.to_solr["visibility_group_ssi"]).to eq "Public"
     end
   end
 
@@ -54,8 +60,10 @@ RSpec.describe "visibility and access restrictions for lux", :clean do
       actor_stack_work
       work.reload
       expect(work.to_solr["visibility_ssi"]).to eq "emory_low"
+      expect(work.to_solr["human_readable_visibility_ssi"]).to eq "Emory Low Download"
       expect(work.to_solr["edit_access_group_ssim"]).to contain_exactly "admin"
       expect(work.to_solr["read_access_group_ssim"]).to contain_exactly "emory_low"
+      expect(work.to_solr["visibility_group_ssi"]).to eq "Log In Required"
     end
   end
 
@@ -66,8 +74,10 @@ RSpec.describe "visibility and access restrictions for lux", :clean do
       actor_stack_work
       work.reload
       expect(work.to_solr["visibility_ssi"]).to eq "authenticated"
+      expect(work.to_solr["human_readable_visibility_ssi"]).to eq "Emory High Download"
       expect(work.to_solr["edit_access_group_ssim"]).to contain_exactly "admin"
       expect(work.to_solr["read_access_group_ssim"]).to contain_exactly "registered"
+      expect(work.to_solr["visibility_group_ssi"]).to eq "Log In Required"
     end
   end
 
@@ -79,8 +89,10 @@ RSpec.describe "visibility and access restrictions for lux", :clean do
       actor_stack_work
       work.reload
       expect(work.to_solr["visibility_ssi"]).to eq "rose_high"
+      expect(work.to_solr["human_readable_visibility_ssi"]).to eq "Rose High View"
       expect(work.to_solr["edit_access_group_ssim"]).to contain_exactly "admin"
       expect(work.to_solr["read_access_group_ssim"]).to contain_exactly "rose_high"
+      expect(work.to_solr["visibility_group_ssi"]).to eq "Reading Room Specific"
     end
   end
 end
