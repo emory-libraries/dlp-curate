@@ -8,6 +8,10 @@ PROXIED_IIIF_SERVER_URL=
 # images in views, etc.
 IIIF_SERVER_URL=
 
+# This variable will contain the path to the directory where manifests get
+# cached. Path will need to end with a '/'. Eg: "full/path/to/directory/"
+IIIF_MANIFEST_CACHE=
+
 SIDEKIQ_WORKERS=
 
 RAILS_HOST=
