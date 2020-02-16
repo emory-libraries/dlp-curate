@@ -129,13 +129,9 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   # This field is for display and search, not to determine security
   def visibility_group_for_lux
     case object.visibility
-    when "open"
+    when "open", "low_res"
       "Public"
-    when "low_res"
-      "Public"
-    when "emory_low"
-      "Log In Required"
-    when "authenticated"
+    when "emory_low", "authenticated"
       "Log In Required"
     when "rose_high"
       "Reading Room Specific"
