@@ -11,7 +11,7 @@ class CheckBinariesJob < Hyrax::ApplicationJob
         fs = FileSet.find(file_set_id)
         check_binary(fs, csv)
       else
-        check_all_file_sets
+        check_all_file_sets(csv)
       end
     end
   end
@@ -25,7 +25,7 @@ class CheckBinariesJob < Hyrax::ApplicationJob
       end
     end
 
-    def check_all_file_sets
+    def check_all_file_sets(csv)
       FileSet.all.each do |file_set|
         check_binary(file_set, csv) unless file_set.files.empty?
       end
