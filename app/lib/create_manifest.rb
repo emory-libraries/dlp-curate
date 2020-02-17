@@ -20,14 +20,14 @@ class CreateManifest
         date_modified = solr_doc[:date_modified_dtsi] || solr_doc[:system_create_dtsi]
         key = date_modified.to_datetime.strftime('%Y-%m-%d_%H-%M-%S') + '_' + solr_doc[:id]
 
-        return if File.exist?(ENV['IIIF_MANIFEST_CACHE'] + key)
+        return if File.exist?(File.join(ENV['IIIF_MANIFEST_CACHE'], key))
         presenter = Hyrax::CurateGenericWorkPresenter.new(solr_doc, ManifestAbility.new)
         manifest_hash = ::IIIFManifest::ManifestFactory.new(presenter).to_h
         persist_manifest(key: key, manifest_hash: manifest_hash)
       end
 
       def persist_manifest(key:, manifest_hash:)
-        File.open(ENV['IIIF_MANIFEST_CACHE'] + key, 'w+') do |f|
+        File.open(File.join(ENV['IIIF_MANIFEST_CACHE'], key), 'w+') do |f|
           f.write(manifest_hash.to_json)
         end
       end

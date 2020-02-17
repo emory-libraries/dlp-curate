@@ -7,7 +7,7 @@ RSpec.describe 'viewing an IIIF manifest', type: :system, clean: true do
   let(:attributes) { {} }
   let(:env)        { Hyrax::Actors::Environment.new(work, ability, attributes) }
   let(:actor_stack_work) do
-    ENV['IIIF_MANIFEST_CACHE'] = "./tmp/"
+    ENV['IIIF_MANIFEST_CACHE'] = "./tmp"
     Hyrax::CurationConcern.actor.create(env)
   end
 
