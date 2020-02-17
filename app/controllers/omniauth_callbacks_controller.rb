@@ -5,7 +5,10 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     @user = User.from_omniauth(request.env["omniauth.auth"])
 
     if @user.persisted?
-      sign_in_and_redirect @user
+      sign_in @user
+      # This will help the user go back to where they came.
+      # Refer: https://github.com/omniauth/omniauth/wiki/Saving-User-Location
+      redirect_to request.env["omniauth.origin"] || '/dashboard'
       set_flash_message(:notice, :success, kind: "Shibboleth")
     else
       redirect_to root_path
