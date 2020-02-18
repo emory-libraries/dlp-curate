@@ -20,6 +20,11 @@ class IiifController < ApplicationController
     "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/#{region}/#{size}/#{rotation}/#{quality}.#{format}"
   end
 
+  def manifest
+    headers['Access-Control-Allow-Origin'] = '*'
+    render json: ManifestBuilderService.build_manifest(identifier)
+  end
+
   # IIIF URLS really do not like extra slashes. Ensure that we only add a slash after the
   # PROXIED_IIIF_SERVER_URL value if it is needed
   def trailing_slash_fix

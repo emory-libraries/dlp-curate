@@ -25,4 +25,13 @@ RSpec.describe "routes for iiif", type: :routing do
         "identifier" => "a0f9219f14f071be7e3b872186f3507cfeccd5bf"
       )
   end
+
+  it "routes manifest requests to the iiif#manifest controller" do
+    expect(get("/iiif/508hdr7srq-cor/manifest"))
+      .to route_to(
+        "controller" => "iiif",
+        "action" => "manifest",
+        "identifier" => "508hdr7srq-cor"
+      )
+  end
 end
