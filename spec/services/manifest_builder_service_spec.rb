@@ -7,10 +7,10 @@ RSpec.describe ManifestBuilderService do
   let(:user) { FactoryBot.create(:user) }
   let(:work) { FactoryBot.create(:public_generic_work, id: identifier) }
   let(:solr_document) { SolrDocument.new(attributes) }
-  # let(:manifest_file) { IO.read(fixture_path + '/manifest_fixture.json') }
+  let(:cache_file) { Rails.root.join('tmp', "2019-11-11_18-20-32_#{identifier}") }
   let(:attributes) do
     { "id" => identifier,
-      "title_tesim" => ['foo', 'bar'],
+      "title_tesim" => [work.title.first],
       "human_readable_type_tesim" => ["Curate Generic Work"],
       "has_model_ssim" => ["CurateGenericWork"],
       "date_created_tesim" => ['an unformatted date'],
@@ -21,6 +21,11 @@ RSpec.describe ManifestBuilderService do
   context "returning a iiif manifest" do
     before do
       allow(SolrDocument).to receive(:find).and_return(solr_document)
+      File.delete(cache_file) if File.exist?(cache_file)
+    end
+
+    after do
+      File.delete(cache_file) if File.exist?(cache_file)
     end
 
     it 'generates a iiif presentation manifest' do
@@ -31,6 +36,24 @@ RSpec.describe ManifestBuilderService do
     it 'can be called at the class level' do
       response_values = JSON.parse(described_class.build_manifest(identifier))
       expect(response_values["@context"]).to include "http://iiif.io/api/presentation/2/context.json"
+    end
+
+    it "saves manifest file in a cache" do
+      expect(File).not_to exist(cache_file)
+      response_values = JSON.parse(described_class.build_manifest(identifier))
+      expect(response_values).to_s.match(identifier)
+      expect(File).to exist(cache_file)
+
+      response_values = JSON.parse(File.open(cache_file).read)
+
+      expect(response_values).to include "@context"
+      expect(response_values["@context"]).to include "http://iiif.io/api/presentation/2/context.json"
+      expect(response_values).to include "@type"
+      expect(response_values["@type"]).to include "sc:Manifest"
+      expect(response_values).to include "@id"
+      expect(response_values["@id"]).to include "/concern/curate_generic_works/#{work.id}/manifest"
+      expect(response_values).to include "label"
+      expect(response_values["label"]).to include work.title.first.to_s
     end
   end
 end
