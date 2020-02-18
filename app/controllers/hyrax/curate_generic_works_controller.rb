@@ -43,11 +43,6 @@ module Hyrax
       end
     end
 
-    def index
-      headers['Access-Control-Allow-Origin'] = '*'
-      render json: ManifestBuilderService.build_manifest(params[:id])
-    end
-
     def manifest
       headers['Access-Control-Allow-Origin'] = '*'
       render json: ManifestBuilderService.build_manifest(params[:id])
