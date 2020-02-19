@@ -34,7 +34,7 @@ RSpec.describe OmniauthCallbacksController do
   context "when origin is missing" do
     it "redirects to dashboard" do
       post :shibboleth
-      expect(response.redirect_url).to eq 'http://test.host/dashboard'
+      expect(response.redirect_url).to include 'http://test.host/dashboard'
     end
   end
 end
