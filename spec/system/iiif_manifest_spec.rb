@@ -2,7 +2,7 @@
 require 'rails_helper'
 require 'iiif_manifest'
 
-RSpec.describe 'viewing an IIIF manifest', type: :system do
+RSpec.describe 'viewing an IIIF manifest', type: :system, clean: true do
   let(:ability)    { ::Ability.new(FactoryBot.create(:user)) }
   let(:attributes) { {} }
   let(:env)        { Hyrax::Actors::Environment.new(work, ability, attributes) }
@@ -10,13 +10,14 @@ RSpec.describe 'viewing an IIIF manifest', type: :system do
     Hyrax::CurationConcern.actor.create(env)
   end
 
-  context "when an object is marked as Public in Curate" do
+  context "public works" do
     let(:work) { FactoryBot.build(:public_work) }
     it "has a well-formed manifest" do
       actor_stack_work
       work.reload
 
-      visit "/concern/curate_generic_works/#{work.id}/manifest"
+      # visit "/concern/curate_generic_works/#{work.id}/manifest"
+      visit "/iiif/#{work.id}/manifest"
 
       expect(page.response_headers["Content-Type"]).to eq "application/json; charset=utf-8"
 
@@ -33,6 +34,18 @@ RSpec.describe 'viewing an IIIF manifest', type: :system do
 
       # for continued work: per the 2.1 Presentation API, the manifest must include sequences,
       # and the sequences must include canvases
+    end
+  end
+
+  context "public_low_work" do
+    let(:work) { FactoryBot.build(:public_low_work) }
+    it 'allows everyone to see the manifest even if they are not authenticated' do
+      actor_stack_work
+      work.reload
+      visit "/iiif/#{work.id}/manifest"
+      expect(page.response_headers["Content-Type"]).to eq "application/json; charset=utf-8"
+      response_values = JSON.parse(page.body)
+      expect(response_values).to include "@context"
     end
   end
 end
