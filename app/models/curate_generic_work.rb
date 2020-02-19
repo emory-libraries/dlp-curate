@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CurateGenericWork < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
-  include Identifier
+  include CurateIdentifier
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
   self.indexer = CurateGenericWorkIndexer

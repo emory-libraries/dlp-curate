@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Identifier
+module CurateIdentifier
   def assign_id
     CurateNoid.new.mint
   end

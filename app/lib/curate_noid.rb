@@ -11,6 +11,6 @@ class CurateNoid < Noid::Rails::Service
   private
 
     def identifier_in_use?(pid)
-      Noid::Rails.config.identifier_in_use.call(pid)
+      ActiveFedora::Base.exists?(pid) || ActiveFedora::Base.gone?(pid)
     end
 end
