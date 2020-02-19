@@ -5,10 +5,6 @@ class CurateGenericWork < ActiveFedora::Base
   # self.valid_child_concerns = []
   self.indexer = CurateGenericWorkIndexer
 
-  def assign_id
-    service.mint + Rails.configuration.x.curate_template
-  end
-
   validates :title, presence: { message: 'Your work must have a title.' }
   validates :final_published_versions, url: true, if: -> { final_published_versions.present? }
   validates :related_publications, url: true, if: -> { related_publications.present? }
@@ -341,10 +337,4 @@ class CurateGenericWork < ActiveFedora::Base
                    end
                 }
   # rubocop:enable Layout/AlignHash
-
-  private
-
-    def service
-      @service ||= Noid::Rails::Service.new
-    end
 end

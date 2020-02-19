@@ -59,6 +59,29 @@ RSpec.describe CurateGenericWork do
     end
   end
 
+  describe 'noid integration' do
+    context 'when noid exists', :clean do
+      let(:service)  { instance_double(::Noid::Rails::Service, mint: noid2) }
+      let(:noid2)    { 'wd3763096-cor' }
+      let(:work2)    { FactoryBot.build(:public_generic_work, title: ['work2']) }
+
+      before do
+        allow(::Noid::Rails::Service).to receive(:new).and_return(service)
+      end
+
+      context "after saving" do
+        before do
+          expect(work2.id).not_to eq noid2
+          work2.save!
+        end
+
+        it 'returns the expected identifier' do
+          expect(work2.id).to eq noid2
+        end
+      end
+    end
+  end
+
   describe "#institution" do
     subject { described_class.new }
     let(:institution) { 'Emory University' }
