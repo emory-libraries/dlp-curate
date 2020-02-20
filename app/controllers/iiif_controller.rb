@@ -22,7 +22,8 @@ class IiifController < ApplicationController
 
   def manifest
     headers['Access-Control-Allow-Origin'] = '*'
-    render json: ManifestBuilderService.build_manifest(identifier)
+    solr_doc = SolrDocument.find(identifier)
+    render json: ManifestBuilderService.build_manifest(identifier, presenter(solr_doc))
   end
 
   # IIIF URLS really do not like extra slashes. Ensure that we only add a slash after the
@@ -54,4 +55,12 @@ class IiifController < ApplicationController
   def format
     params["format"]
   end
+
+  private
+
+    # @param [SolrDocument] document
+    def presenter(document)
+      ability = Ability.new(current_user)
+      Hyrax::CurateGenericWorkPresenter.new(document, ability)
+    end
 end

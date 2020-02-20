@@ -3,8 +3,9 @@
 require 'iiif_manifest'
 
 class ManifestBuilderService
-  def initialize(identifier)
+  def initialize(identifier, presenter)
     @identifier = identifier
+    @presenter = presenter
   end
 
   def manifest
@@ -12,8 +13,8 @@ class ManifestBuilderService
   end
 
   # ManifestBuilderService.build_manifest(identifier)
-  def self.build_manifest(identifier)
-    service = ManifestBuilderService.new(identifier)
+  def self.build_manifest(identifier, presenter)
+    service = ManifestBuilderService.new(identifier, presenter)
     service.manifest
   end
 
@@ -27,16 +28,10 @@ class ManifestBuilderService
       if File.exist?(Rails.root.join('tmp', key))
         render_manifest_file(key: key)
       else
-        manifest_hash = ::IIIFManifest::ManifestFactory.new(presenter(solr_doc)).to_h
+        manifest_hash = ::IIIFManifest::ManifestFactory.new(@presenter).to_h
         persist_manifest(key: key, manifest_hash: manifest_hash)
         manifest_hash.to_json
       end
-    end
-
-    # @param [SolrDocument] document
-    def presenter(document)
-      ability = Ability.new(::User.new)
-      Hyrax::CurateGenericWorkPresenter.new(document, ability)
     end
 
     def render_manifest_file(key:)

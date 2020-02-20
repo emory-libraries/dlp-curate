@@ -22,9 +22,9 @@ module Hyrax
 
     def manifest_url
       if request.nil?
-        manifest_helper.polymorphic_url([:manifest, self], host: "http://#{ENV['HOSTNAME'] || 'localhost:3000'}")
+        manifest_helper.polymorphic_url([:iiif_manifest], identifier: id, host: "http://#{ENV['HOSTNAME'] || 'localhost:3000'}")
       else
-        manifest_helper.polymorphic_url([:manifest, self])
+        manifest_helper.polymorphic_url([:iiif_manifest], identifier: id)
       end
     end
   end
