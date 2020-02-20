@@ -60,7 +60,7 @@ class IiifController < ApplicationController
 
     # @param [SolrDocument] document
     def presenter(document)
-      ability = Ability.new(current_user)
+      ability = ManifestAbility.new
       Hyrax::CurateGenericWorkPresenter.new(document, ability)
     end
 end
