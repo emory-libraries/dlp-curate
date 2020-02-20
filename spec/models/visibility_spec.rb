@@ -92,7 +92,7 @@ RSpec.describe "visibility and access restrictions for lux", :clean do
       expect(work.to_solr["human_readable_visibility_ssi"]).to eq "Rose High View"
       expect(work.to_solr["edit_access_group_ssim"]).to contain_exactly "admin"
       expect(work.to_solr["read_access_group_ssim"]).to contain_exactly "rose_high"
-      expect(work.to_solr["visibility_group_ssi"]).to eq "Reading Room Specific"
+      expect(work.to_solr["visibility_group_ssi"]).to eq "Reading Room Only"
     end
   end
 end
