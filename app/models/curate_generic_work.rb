@@ -50,7 +50,7 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :contributors, predicate: "http://purl.org/dc/elements/1.1/contributor" do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   property :copyright_date, predicate: "http://purl.org/dc/terms/dateCopyrighted", multiple: false do |index|
@@ -146,7 +146,7 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :keywords, predicate: "http://schema.org/keywords" do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   property :legacy_rights, predicate: "http://metadata.emory.edu/vocab/cor-terms#legacyRights", multiple: false do |index|
