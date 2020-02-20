@@ -134,7 +134,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
     when "emory_low", "authenticated"
       "Log In Required"
     when "rose_high"
-      "Reading Room Specific"
+      "Reading Room Only"
     end
   end
 
