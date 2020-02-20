@@ -45,7 +45,7 @@ module Hyrax
 
     def manifest
       headers['Access-Control-Allow-Origin'] = '*'
-      render json: ManifestBuilderService.build_manifest(params[:id])
+      render json: ManifestBuilderService.build_manifest(params[:id], presenter)
     end
   end
 end

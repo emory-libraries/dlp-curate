@@ -28,7 +28,7 @@ RSpec.describe 'viewing an IIIF manifest', type: :system, clean: true do
       expect(response_values).to include "@type"
       expect(response_values["@type"]).to include "sc:Manifest"
       expect(response_values).to include "@id"
-      expect(response_values["@id"]).to include "/concern/curate_generic_works/#{work.id}/manifest"
+      expect(response_values["@id"]).to include "/iiif/#{work.id}/manifest"
       expect(response_values).to include "label"
       expect(response_values["label"]).to include work.title.first.to_s
 

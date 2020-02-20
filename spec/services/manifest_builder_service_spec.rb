@@ -3,7 +3,10 @@ require 'rails_helper'
 
 RSpec.describe ManifestBuilderService do
   let(:identifier) { '508hdr7srq-cor' }
-  let(:service) { described_class.new(identifier) }
+  let(:service) { described_class.new(identifier, presenter) }
+  let(:ability) { instance_double(Ability) }
+  let(:request) { instance_double(ActionDispatch::Request, base_url: 'example.com') }
+  let(:presenter) { Hyrax::CurateGenericWorkPresenter.new(solr_document, ability, request) }
   let(:user) { FactoryBot.create(:user) }
   let(:work) { FactoryBot.create(:public_generic_work, id: identifier) }
   let(:solr_document) { SolrDocument.new(attributes) }
@@ -34,13 +37,13 @@ RSpec.describe ManifestBuilderService do
     end
 
     it 'can be called at the class level' do
-      response_values = JSON.parse(described_class.build_manifest(identifier))
+      response_values = JSON.parse(described_class.build_manifest(identifier, presenter))
       expect(response_values["@context"]).to include "http://iiif.io/api/presentation/2/context.json"
     end
 
     it "saves manifest file in a cache" do
       expect(File).not_to exist(cache_file)
-      response_values = JSON.parse(described_class.build_manifest(identifier))
+      response_values = JSON.parse(described_class.build_manifest(identifier, presenter))
       expect(response_values).to_s.match(identifier)
       expect(File).to exist(cache_file)
 
@@ -51,7 +54,7 @@ RSpec.describe ManifestBuilderService do
       expect(response_values).to include "@type"
       expect(response_values["@type"]).to include "sc:Manifest"
       expect(response_values).to include "@id"
-      expect(response_values["@id"]).to include "/concern/curate_generic_works/#{work.id}/manifest"
+      expect(response_values["@id"]).to include "/iiif/#{work.id}/manifest"
       expect(response_values).to include "label"
       expect(response_values["label"]).to include work.title.first.to_s
     end
