@@ -23,7 +23,7 @@ class Collection < ActiveFedora::Base
   end
 
   property :contributors, predicate: 'http://purl.org/dc/elements/1.1/contributor' do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   property :creator, predicate: 'http://purl.org/dc/elements/1.1/creator' do |index|
@@ -51,7 +51,7 @@ class Collection < ActiveFedora::Base
   end
 
   property :keywords, predicate: 'http://schema.org/keywords' do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   property :local_call_number, predicate: 'http://metadata.emory.edu/vocab/cor-terms#localCallNumber', multiple: false do |index|
