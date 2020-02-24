@@ -87,7 +87,9 @@ RSpec.describe IiifController, type: :controller do
         "has_model_ssim" => ["CurateGenericWork"],
         "date_created_tesim" => ['an unformatted date'],
         "date_modified_dtsi" => "2019-11-11T18:20:32Z",
-        "depositor_tesim" => 'example_user' }
+        "depositor_tesim" => 'example_user',
+        "holding_repository_tesim" => ["test holding repo"],
+        "rights_statement_tesim" => ["example.com"] }
     end
 
     before do
@@ -113,6 +115,13 @@ RSpec.describe IiifController, type: :controller do
       expect(response_values["@id"]).to include "/iiif/#{work.id}/manifest"
       expect(response_values).to include "label"
       expect(response_values["label"]).to include work.title.first.to_s
+      expect(response_values).to include "metadata"
+      expect(response_values["metadata"][0]["label"]).to eq "identifier"
+      expect(response_values["metadata"][0]["value"]).to eq work.id
+      expect(response_values["metadata"][1]["label"]).to eq "Provided by"
+      expect(response_values["metadata"][1]["value"]).to eq ["test holding repo"]
+      expect(response_values["metadata"][2]["label"]).to eq "Rights status"
+      expect(response_values["metadata"][2]["value"]).to eq ["example.com"]
       expect(response_values).to include "sequences"
       expect(response_values["sequences"].first["@type"]).to include "sc:Sequence"
       expect(response_values["sequences"].first["@id"]).to include "/iiif/#{work.id}/manifest/sequence/normal"
