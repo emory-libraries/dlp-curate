@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 class IiifController < ApplicationController
+  def self.max_pixels_for_low_res
+    ENV['MAX_PIXELS_FOR_LOW_RES'] || 400
+  end
+
   def show
-    @iiif_url = iiif_url
+    @iiif_url ||= iiif_url
     Rails.logger.info("Trying to proxy image from #{@iiif_url}")
     response.set_header('Access-Control-Allow-Origin', '*')
     send_data HTTP.get(@iiif_url).body, type: 'image/jpeg', x_sendfile: true, disposition: 'inline'
@@ -41,7 +45,12 @@ class IiifController < ApplicationController
   end
 
   def size
-    params["size"]
+    case visibility
+    when "open"
+      params["size"]
+    else
+      ",#{IiifController.max_pixels_for_low_res}"
+    end
   end
 
   def rotation
@@ -54,6 +63,19 @@ class IiifController < ApplicationController
 
   def format
     params["format"]
+  end
+
+  def visibility
+    @visibility ||= fetch_visibility
+  end
+
+  # Sometimes we will need to look up visibility from solr.
+  # If this goes wrong for any reason, default to "restricted"
+  def fetch_visibility
+    response = Blacklight.default_index.connection.get 'select', params: { q: "id:#{identifier}" }
+    response["response"]["docs"][0]["visibility_ssi"]
+  rescue
+    ["restricted"]
   end
 
   private
