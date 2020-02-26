@@ -53,6 +53,6 @@ RSpec.describe Hyrax::CurateGenericWorkPresenter do
     subject { presenter.manifest_metadata }
     let(:presenter) { described_class.new(solr_document, ability) }
 
-    it { is_expected.to eq [{ "label" => "identifier", "value" => "888888" }, { "label" => "Provided by", "value" => ["test holding repo"] }, { "label" => "Rights status", "value" => ["empl.com"] }] }
+    it { is_expected.to eq [{ "label" => "Provided by", "value" => ["test holding repo"] }, { "label" => "Rights Status", "value" => ["empl.com"] }, { "label" => "Identifier", "value" => "888888" }] }
   end
 end

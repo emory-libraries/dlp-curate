@@ -30,9 +30,9 @@ module Hyrax
 
     def manifest_metadata
       [
-        { "label" => "identifier", "value" => id },
         { "label" => "Provided by", "value" => holding_repository },
-        { "label" => "Rights status", "value" => rights_statement }
+        { "label" => "Rights Status", "value" => rights_statement },
+        { "label" => "Identifier", "value" => id }
       ]
     end
   end
