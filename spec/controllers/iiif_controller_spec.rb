@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe IiifController, type: :controller do
+RSpec.describe IiifController, type: :controller, clean: true do
   let(:identifier) { "508hdr7srt-cor" }
   let(:region) { "full" }
   let(:size) { "full" }
@@ -56,13 +56,47 @@ RSpec.describe IiifController, type: :controller do
   end
 
   describe "a request for a public object" do
-    let(:expected_iiif_url) { 'http://127.0.0.1:8182/iiif/2/508hdr7srt-cor/full/full/0/default.jpg' }
-
+    let(:identifier) { "508hdr7srt-cor" }
+    let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/full/0/default.jpg" }
+    let(:attributes) do
+      { "id" => identifier,
+        "visibility_ssi" => "open" }
+    end
     before do
       ENV['PROXIED_IIIF_SERVER_URL'] = 'http://127.0.0.1:8182/iiif/2'
+      solr = Blacklight.default_index.connection
+      solr.add([attributes])
+      solr.commit
     end
 
     it "does not alter the iiif request" do
+      stub_request(:any, expected_iiif_url).to_return(
+        body:    "SUCCESS",
+        status:  200,
+        headers: { 'Content-Length' => 3 }
+      )
+      get :show, params: params
+      expect(assigns(:iiif_url)).to eq expected_iiif_url
+      expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+    end
+  end
+
+  describe "a request for a public low view object" do
+    let(:identifier) { "508hdr7srt-cor" }
+    let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/,400/0/default.jpg" }
+    let(:attributes) do
+      { "id" => identifier,
+        "visibility_ssi" => "low_res" }
+    end
+
+    before do
+      ENV['PROXIED_IIIF_SERVER_URL'] = 'http://127.0.0.1:8182/iiif/2'
+      solr = Blacklight.default_index.connection
+      solr.add([attributes])
+      solr.commit
+    end
+
+    it "alters the iiif request to ensure a low resolution image" do
       stub_request(:any, expected_iiif_url).to_return(
         body:    "SUCCESS",
         status:  200,
