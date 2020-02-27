@@ -20,6 +20,15 @@ RSpec.describe IiifController, type: :controller, clean: true do
     }
   end
 
+  before do
+    ENV['PROXIED_IIIF_SERVER_URL'] = 'http://127.0.0.1:8182/iiif/2'
+    stub_request(:any, /127.0.0.1:8182/).to_return(
+      body:    "SUCCESS",
+      status:  200,
+      headers: { 'Content-Length' => 3 }
+    )
+  end
+
   describe 'a request without the IIIF_SERVER_URL set' do
     before do
       ENV['PROXIED_IIIF_SERVER_URL'] = nil
@@ -38,17 +47,7 @@ RSpec.describe IiifController, type: :controller, clean: true do
       }
     end
     let(:expected_iiif_url) { 'http://127.0.0.1:8182/iiif/2/508hdr7srt-cor/info.json' }
-
-    before do
-      ENV['PROXIED_IIIF_SERVER_URL'] = 'http://127.0.0.1:8182/iiif/2'
-    end
-
     it "returns as json" do
-      stub_request(:any, expected_iiif_url).to_return(
-        body:    "SUCCESS",
-        status:  200,
-        headers: { 'Content-Length' => 3 }
-      )
       get :info, params: params
       expect(assigns(:iiif_url)).to eq expected_iiif_url
       expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
@@ -63,18 +62,12 @@ RSpec.describe IiifController, type: :controller, clean: true do
         "visibility_ssi" => "open" }
     end
     before do
-      ENV['PROXIED_IIIF_SERVER_URL'] = 'http://127.0.0.1:8182/iiif/2'
       solr = Blacklight.default_index.connection
       solr.add([attributes])
       solr.commit
     end
 
     it "does not alter the iiif request" do
-      stub_request(:any, expected_iiif_url).to_return(
-        body:    "SUCCESS",
-        status:  200,
-        headers: { 'Content-Length' => 3 }
-      )
       get :show, params: params
       expect(assigns(:iiif_url)).to eq expected_iiif_url
       expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
@@ -90,18 +83,12 @@ RSpec.describe IiifController, type: :controller, clean: true do
     end
 
     before do
-      ENV['PROXIED_IIIF_SERVER_URL'] = 'http://127.0.0.1:8182/iiif/2'
       solr = Blacklight.default_index.connection
       solr.add([attributes])
       solr.commit
     end
 
     it "alters the iiif request to ensure a low resolution image" do
-      stub_request(:any, expected_iiif_url).to_return(
-        body:    "SUCCESS",
-        status:  200,
-        headers: { 'Content-Length' => 3 }
-      )
       get :show, params: params
       expect(assigns(:iiif_url)).to eq expected_iiif_url
       expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
