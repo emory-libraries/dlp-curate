@@ -6,6 +6,7 @@ module Hyrax
     include PresentsAttributes
     include ActionView::Helpers::NumberHelper
     include ActionView::Helpers::TagHelper
+    include CuratePurl
     attr_accessor :solr_document, :current_ability, :request
     attr_reader :subcollection_count
     attr_accessor :parent_collections # This is expected to be a Blacklight::Solr::Response with all of the parent collections

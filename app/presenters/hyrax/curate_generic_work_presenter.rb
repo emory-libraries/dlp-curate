@@ -8,6 +8,8 @@ module Hyrax
       delegate key.to_sym, to: :solr_document
     end
 
+    include CuratePurl
+
     # [Hyrax-overwrite] We might not always have a request and a `base_url`,
     # therfore, we are using our CurateManifestHelper and passing in a hardcoded
     # host for creation of manifest_url
@@ -32,7 +34,8 @@ module Hyrax
       [
         { "label" => "Provided by", "value" => holding_repository },
         { "label" => "Rights Status", "value" => rights_statement },
-        { "label" => "Identifier", "value" => id }
+        { "label" => "Identifier", "value" => id },
+        { "label" => "Persistent URL", "value" => "<a href=\"http://#{purl}\">#{purl}</a>" }
       ]
     end
   end

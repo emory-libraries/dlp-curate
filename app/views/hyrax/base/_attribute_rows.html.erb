@@ -1,3 +1,11 @@
+<!-- Persistent URL block start -->
+<div>
+  Persistent URL
+  <ul class="tabular">
+    <li><a href="http://<%= presenter.purl %>" target="_blank"><%= presenter.purl %></a></li>
+  </ul>
+</div>
+<!-- Persistent URL block end -->
 <% CurateGenericWorkAttributes.instance.attributes.each do |key| %>
   <% case key
      when 'content_type' %>

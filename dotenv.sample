@@ -12,6 +12,9 @@ IIIF_SERVER_URL=
 # cached. Eg: "/full/path/to/directory"
 IIIF_MANIFEST_CACHE=
 
+# This variable will contain Lux's base URL. Eg: 'digital-test.library.emory.edu'
+LUX_BASE_URL=
+
 SIDEKIQ_WORKERS=
 
 RAILS_HOST=

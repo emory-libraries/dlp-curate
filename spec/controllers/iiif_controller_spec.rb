@@ -144,6 +144,7 @@ RSpec.describe IiifController, type: :controller, clean: true do
       work.ordered_members << file_set
       work.save!
       allow(SolrDocument).to receive(:find).and_return(solr_document)
+      ENV['LUX_BASE_URL'] = 'empl.com'
     end
 
     it "saves manifest file in a cache" do
@@ -169,6 +170,8 @@ RSpec.describe IiifController, type: :controller, clean: true do
       expect(response_values["metadata"][1]["value"]).to eq ["example.com"]
       expect(response_values["metadata"][2]["label"]).to eq "Identifier"
       expect(response_values["metadata"][2]["value"]).to eq work.id
+      expect(response_values["metadata"][3]["label"]).to eq "Persistent URL"
+      expect(response_values["metadata"][3]["value"]).to eq "<a href=\"http://empl.com/purl/#{work.id}\">empl.com/purl/#{work.id}</a>"
       expect(response_values).to include "sequences"
       expect(response_values["sequences"].first["@type"]).to include "sc:Sequence"
       expect(response_values["sequences"].first["@id"]).to include "/iiif/#{work.id}/manifest/sequence/normal"
