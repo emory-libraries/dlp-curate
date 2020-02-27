@@ -44,13 +44,25 @@ class IiifController < ApplicationController
     params["region"]
   end
 
+  # Calculate the size parameter to pass along to Cantaloupe
+  # For any object with low resolution requirements, check that the requested size is smaller than the configured max size
   def size
-    case visibility
-    when "open"
+    return params["size"] if visibility == "open"
+    if visibility == "low_res"
+      return ",#{IiifController.max_pixels_for_low_res}" if size_requested_larger_than_allowed?
       params["size"]
-    else
-      ",#{IiifController.max_pixels_for_low_res}"
     end
+    params["size"]
+  end
+
+  def size_requested_larger_than_allowed?
+    return true if params["size"] == "full"
+    dimensions = params["size"].split(",")
+    dimensions = dimensions.reject(&:empty?).map(&:to_i).map { |c| c > IiifController.max_pixels_for_low_res }
+    return true if dimensions.include?(true)
+    false
+  rescue
+    true
   end
 
   def rotation
