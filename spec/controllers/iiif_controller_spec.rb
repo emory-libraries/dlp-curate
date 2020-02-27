@@ -89,6 +89,27 @@ RSpec.describe IiifController, type: :controller, clean: true do
 
     context "a request for full size" do
       let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/,400/0/default.jpg" }
+      let(:size) { "full" }
+      it "alters a full size iiif request to ensure a low resolution image" do
+        get :show, params: params
+        expect(assigns(:iiif_url)).to eq expected_iiif_url
+        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+      end
+    end
+
+    context "a request for anything smaller than the full size" do
+      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/,300/0/default.jpg" }
+      let(:size) { ",300" }
+      it "does not alter the iiif request" do
+        get :show, params: params
+        expect(assigns(:iiif_url)).to eq expected_iiif_url
+        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+      end
+    end
+
+    context "a request for anything larger than max size" do
+      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/,400/0/default.jpg" }
+      let(:size) { "800," }
       it "alters a full size iiif request to ensure a low resolution image" do
         get :show, params: params
         expect(assigns(:iiif_url)).to eq expected_iiif_url
