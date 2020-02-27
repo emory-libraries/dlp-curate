@@ -76,7 +76,6 @@ RSpec.describe IiifController, type: :controller, clean: true do
 
   describe "a request for a public low view object" do
     let(:identifier) { "508hdr7srt-cor" }
-    let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/,400/0/default.jpg" }
     let(:attributes) do
       { "id" => identifier,
         "visibility_ssi" => "low_res" }
@@ -88,10 +87,13 @@ RSpec.describe IiifController, type: :controller, clean: true do
       solr.commit
     end
 
-    it "alters the iiif request to ensure a low resolution image" do
-      get :show, params: params
-      expect(assigns(:iiif_url)).to eq expected_iiif_url
-      expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+    context "a request for full size" do
+      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/,400/0/default.jpg" }
+      it "alters a full size iiif request to ensure a low resolution image" do
+        get :show, params: params
+        expect(assigns(:iiif_url)).to eq expected_iiif_url
+        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+      end
     end
   end
 
