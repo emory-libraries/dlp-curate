@@ -59,53 +59,6 @@ RSpec.describe CurateGenericWork do
     end
   end
 
-  describe 'noid integration' do
-    context 'when noid does not exist' do
-      let(:service)  { instance_double(CurateNoid, mint: noid) }
-      let(:noid)     { 'wd3763094-cor' }
-      let(:work1)    { FactoryBot.build(:public_generic_work, title: ['work1']) }
-
-      before do
-        allow(CurateNoid).to receive(:new).and_return(service)
-        allow(ActiveFedora::Base).to receive(:exists?).and_return(false)
-      end
-
-      context "after saving" do
-        before do
-          work1.assign_id
-          work1.save!
-        end
-
-        it 'returns the expected identifier' do
-          expect(work1.id).to eq noid
-        end
-      end
-    end
-
-    context 'when noid exists' do
-      let(:service)  { instance_double(CurateNoid, mint: noid2) }
-      let(:noid2)    { 'wd3763096-cor' }
-      let(:work2)    { FactoryBot.build(:public_generic_work, title: ['work2']) }
-
-      before do
-        allow(ActiveFedora::Base).to receive(:exists?).and_return(true, false)
-        allow(CurateNoid).to receive(:new).and_return(service)
-      end
-
-      context "after saving" do
-        before do
-          expect(work2.id).not_to eq noid2
-          work2.assign_id
-          work2.save!
-        end
-
-        it 'returns the expected identifier' do
-          expect(work2.id).to eq noid2
-        end
-      end
-    end
-  end
-
   describe "#institution" do
     subject { described_class.new }
     let(:institution) { 'Emory University' }
