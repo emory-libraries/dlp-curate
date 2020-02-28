@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 require 'iiif_manifest'
-RSpec.describe Hyrax::FileSetPresenter do
+RSpec.describe Hyrax::FileSetPresenter, :clean do
   let(:file_set) { FactoryBot.create(:file_set) }
   let(:pmf)      { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   let(:sf)       { File.open(fixture_path + '/book_page/0003_service.jpg') }
