@@ -15,7 +15,9 @@ RSpec.describe Hyrax::CurateGenericWorkPresenter do
       "human_readable_type_tesim" => ["Curate Generic Work"],
       "has_model_ssim" => ["CurateGenericWork"],
       "date_created_tesim" => ['an unformatted date'],
-      "depositor_tesim" => user_key }
+      "depositor_tesim" => user_key,
+      "holding_repository_tesim" => ["test holding repo"],
+      "rights_statement_tesim" => ["empl.com"] }
   end
 
   describe '#manifest_url' do
@@ -45,5 +47,12 @@ RSpec.describe Hyrax::CurateGenericWorkPresenter do
 
       it { is_expected.to eq "http://example-curate/iiif/888888/manifest" }
     end
+  end
+
+  describe "#manifest_metadata" do
+    subject { presenter.manifest_metadata }
+    let(:presenter) { described_class.new(solr_document, ability) }
+
+    it { is_expected.to eq [{ "label" => "Provided by", "value" => ["test holding repo"] }, { "label" => "Rights Status", "value" => ["empl.com"] }, { "label" => "Identifier", "value" => "888888" }] }
   end
 end

@@ -27,5 +27,13 @@ module Hyrax
         manifest_helper.polymorphic_url([:iiif_manifest], identifier: id)
       end
     end
+
+    def manifest_metadata
+      [
+        { "label" => "Provided by", "value" => holding_repository },
+        { "label" => "Rights Status", "value" => rights_statement },
+        { "label" => "Identifier", "value" => id }
+      ]
+    end
   end
 end
