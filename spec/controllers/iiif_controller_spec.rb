@@ -119,6 +119,26 @@ RSpec.describe IiifController, type: :controller, clean: true do
         expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
       end
     end
+
+    context "a request for anything larger than max region" do
+      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/0,0,800,800/,400/0/default.jpg" }
+      let(:region) { "0,0,600,600" }
+      it "alters the iiif request to what is permitted" do
+        get :show, params: params
+        expect(assigns(:iiif_url)).to eq expected_iiif_url
+        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+      end
+    end
+
+    context "a request for anything smaller than max region" do
+      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/12,12,800,800/,400/0/default.jpg" }
+      let(:region) { "12,12,200,250" }
+      it "does not alter the iiif region param" do
+        get :show, params: params
+        expect(assigns(:iiif_url)).to eq expected_iiif_url
+        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+      end
+    end
   end
 
   describe "#manifest" do
