@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe IiifController, type: :controller, clean: true do
   let(:identifier) { "508hdr7srt-cor" }
+  let(:image_sha) { "d28c5b20cf9b9663181d02b5ce90fac59fa666d7" }
   let(:region) { "full" }
   let(:size) { "full" }
   let(:rotation) { 0 }
@@ -11,7 +12,7 @@ RSpec.describe IiifController, type: :controller, clean: true do
   let(:format) { "jpg" }
   let(:params) do
     {
-      identifier: identifier,
+      identifier: image_sha,
       region:     region,
       size:       size,
       rotation:   rotation,
@@ -21,6 +22,7 @@ RSpec.describe IiifController, type: :controller, clean: true do
   end
 
   before do
+    ENV['IIIF_MANIFEST_CACHE'] = Rails.root.join('tmp').to_s
     ENV['PROXIED_IIIF_SERVER_URL'] = 'http://127.0.0.1:8182/iiif/2'
     stub_request(:any, /127.0.0.1:8182/).to_return(
       body:    "SUCCESS",
@@ -55,10 +57,10 @@ RSpec.describe IiifController, type: :controller, clean: true do
   end
 
   describe "a request for a public object" do
-    let(:identifier) { "508hdr7srt-cor" }
-    let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/full/0/default.jpg" }
+    let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/full/0/default.jpg" }
     let(:attributes) do
-      { "id" => identifier,
+      { "id" => "85370rxwg2-cor",
+        "digest_ssim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "open" }
     end
     before do
@@ -77,7 +79,8 @@ RSpec.describe IiifController, type: :controller, clean: true do
   describe "a request for a public low view object" do
     let(:identifier) { "508hdr7srt-cor" }
     let(:attributes) do
-      { "id" => identifier,
+      { "id" => "85370rxwg2-cor",
+        "digest_ssim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "low_res" }
     end
 
@@ -88,7 +91,7 @@ RSpec.describe IiifController, type: :controller, clean: true do
     end
 
     context "a request for full size" do
-      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/,400/0/default.jpg" }
+      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/,400/0/default.jpg" }
       let(:size) { "full" }
       it "alters a full size iiif request to ensure a low resolution image" do
         get :show, params: params
@@ -98,7 +101,7 @@ RSpec.describe IiifController, type: :controller, clean: true do
     end
 
     context "a request for anything smaller than the full size" do
-      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/,300/0/default.jpg" }
+      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/,300/0/default.jpg" }
       let(:size) { ",300" }
       it "does not alter the iiif request" do
         get :show, params: params
@@ -108,7 +111,7 @@ RSpec.describe IiifController, type: :controller, clean: true do
     end
 
     context "a request for anything larger than max size" do
-      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{identifier}/full/,400/0/default.jpg" }
+      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/,400/0/default.jpg" }
       let(:size) { "800," }
       it "alters a full size iiif request to ensure a low resolution image" do
         get :show, params: params
