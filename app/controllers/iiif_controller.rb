@@ -41,7 +41,28 @@ class IiifController < ApplicationController
   end
 
   def region
-    params["region"]
+    return params["region"] if visibility == "open"
+    return params["region"] if params["region"] == "full"
+    if visibility == "low_res"
+      return params["region"] unless region_requested_larger_than_allowed?
+      coordinates = params["region"].split(',')
+      x = coordinates[0]
+      y = coordinates[1]
+      return "#{x},#{y},#{IiifController.max_pixels_for_low_res},#{IiifController.max_pixels_for_low_res}"
+    end
+  rescue
+    "0,0,#{IiifController.max_pixels_for_low_res},#{IiifController.max_pixels_for_low_res}"
+  end
+
+  def region_requested_larger_than_allowed?
+    coordinates = params["region"].split(',')
+    xsize = coordinates[2]
+    ysize = coordinates[3]
+    return true if xsize.to_i > IiifController.max_pixels_for_low_res
+    return true if ysize.to_i > IiifController.max_pixels_for_low_res
+    false
+  rescue
+    true
   end
 
   # Calculate the size parameter to pass along to Cantaloupe
@@ -53,6 +74,8 @@ class IiifController < ApplicationController
       params["size"]
     end
     params["size"]
+  rescue
+    IiifController.max_pixels_for_low_res
   end
 
   def size_requested_larger_than_allowed?
