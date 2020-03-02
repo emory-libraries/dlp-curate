@@ -83,9 +83,12 @@ class IiifController < ApplicationController
 
   # Sometimes we will need to look up visibility from solr.
   # If this goes wrong for any reason, default to "restricted"
+  # Note that Emory's cantaloupe is using SHA1 checksums to look up images, NOT work IDs
   def fetch_visibility
-    response = Blacklight.default_index.connection.get 'select', params: { q: "id:#{identifier}" }
-    response["response"]["docs"][0]["visibility_ssi"]
+    response = Blacklight.default_index.connection.get 'select', params: { q: "digest_ssim:urn:sha1:#{identifier}" }
+    visibility = response["response"]["docs"][0]["visibility_ssi"]
+    return visibility unless visibility.nil? || visibility.empty?
+    ["restricted"]
   rescue
     ["restricted"]
   end
