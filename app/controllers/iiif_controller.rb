@@ -5,6 +5,10 @@ class IiifController < ApplicationController
     ENV['MAX_PIXELS_FOR_LOW_RES'] || 400
   end
 
+  def self.min_tile_size_for_low_res
+    ENV['MIN_TILE_SIZE_FOR_LOW_RES'] || 800
+  end
+
   def show
     @iiif_url ||= iiif_url
     Rails.logger.info("Trying to proxy image from #{@iiif_url}")
@@ -41,7 +45,30 @@ class IiifController < ApplicationController
   end
 
   def region
-    params["region"]
+    return params["region"] if visibility == "open"
+    return params["region"] if params["region"] == "full"
+    low_res_adjusted_region if visibility == "low_res"
+  rescue
+    "0,0,#{IiifController.min_tile_size_for_low_res},#{IiifController.min_tile_size_for_low_res}"
+  end
+
+  def low_res_adjusted_region
+    return params["region"] unless region_requested_larger_than_allowed?
+    coordinates = params["region"].split(',')
+    x = coordinates[0]
+    y = coordinates[1]
+    "#{x},#{y},#{IiifController.min_tile_size_for_low_res},#{IiifController.min_tile_size_for_low_res}"
+  end
+
+  def region_requested_larger_than_allowed?
+    coordinates = params["region"].split(',')
+    xsize = coordinates[2]
+    ysize = coordinates[3]
+    return true if xsize.to_i < IiifController.min_tile_size_for_low_res
+    return true if ysize.to_i < IiifController.min_tile_size_for_low_res
+    false
+  rescue
+    true
   end
 
   # Calculate the size parameter to pass along to Cantaloupe
@@ -53,6 +80,8 @@ class IiifController < ApplicationController
       params["size"]
     end
     params["size"]
+  rescue
+    IiifController.max_pixels_for_low_res
   end
 
   def size_requested_larger_than_allowed?
