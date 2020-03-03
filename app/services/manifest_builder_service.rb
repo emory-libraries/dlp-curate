@@ -3,6 +3,10 @@
 require 'iiif_manifest'
 
 class ManifestBuilderService
+  def self.iiif_manifest_cache
+    ENV['IIIF_MANIFEST_CACHE'] || Rails.root.join("tmp").to_s
+  end
+
   def initialize(identifier, presenter)
     @identifier = identifier
     @presenter = presenter
@@ -25,7 +29,7 @@ class ManifestBuilderService
       date_modified = solr_doc[:date_modified_dtsi] || solr_doc[:system_create_dtsi]
       key = date_modified.to_datetime.strftime('%Y-%m-%d_%H-%M-%S') + '_' + solr_doc[:id]
 
-      if File.exist?(File.join(ENV['IIIF_MANIFEST_CACHE'], key))
+      if File.exist?(File.join(ManifestBuilderService.iiif_manifest_cache, key))
         render_manifest_file(key: key)
       else
         manifest_hash = ::IIIFManifest::ManifestFactory.new(@presenter).to_h
@@ -35,14 +39,14 @@ class ManifestBuilderService
     end
 
     def render_manifest_file(key:)
-      manifest_file = File.open(File.join(ENV['IIIF_MANIFEST_CACHE'], key))
+      manifest_file = File.open(File.join(ManifestBuilderService.iiif_manifest_cache, key))
       manifest = manifest_file.read
       manifest_file.close
       manifest
     end
 
     def persist_manifest(key:, manifest_hash:)
-      File.open(File.join(ENV['IIIF_MANIFEST_CACHE'], key), 'w+') do |f|
+      File.open(File.join(ManifestBuilderService.iiif_manifest_cache, key), 'w+') do |f|
         f.write(manifest_hash.to_json)
       end
     end
