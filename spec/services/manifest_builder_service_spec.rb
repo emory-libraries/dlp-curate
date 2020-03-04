@@ -27,12 +27,12 @@ RSpec.describe ManifestBuilderService, :clean do
   let(:sf) { File.open(fixture_path + '/book_page/0003_service.jpg') }
 
   before do
-    ENV['IIIF_MANIFEST_CACHE'] = "./tmp"
     allow(SolrDocument).to receive(:find).and_return(solr_document)
-    File.delete(cache_file) if File.exist?(cache_file)
   end
 
-  after do
+  around do |example|
+    File.delete(cache_file) if File.exist?(cache_file)
+    example.run
     File.delete(cache_file) if File.exist?(cache_file)
   end
 
@@ -106,12 +106,10 @@ RSpec.describe ManifestBuilderService, :clean do
       end
 
       context "for iiif_server" do
-        before do
+        around do |example|
           ENV['IIIF_SERVER_URL'] = 'example.com/iiif/2/'
           ENV['FEDORA_ADAPTER'] = 's3'
-        end
-
-        after do
+          example.run
           ENV['IIIF_SERVER_URL'] = nil
           ENV['FEDORA_ADAPTER'] = nil
         end

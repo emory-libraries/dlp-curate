@@ -12,8 +12,9 @@ RSpec.describe "manifest/manifest", type: :view do
   let(:request)         { instance_double(ActionDispatch::Request, base_url: 'example.com') }
   let(:presenter)       { Hyrax::CurateGenericWorkPresenter.new(solr_document, ability, request) }
   let(:solr_document)   { SolrDocument.new(attributes) }
-  let(:file_set)        { FactoryBot.create(:file_set, title: ['foo']) }
+  let(:file_set)        { FactoryBot.create(:file_set, id: '608hdr7qrt-cor', title: ['foo']) }
   let(:pmf)             { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
+  let(:manifest_output) { File.read(fixture_path + '/manifest_json_output.json') }
   let(:attributes) do
     { "id" => identifier,
       "title_tesim" => [work.title.first],
@@ -32,8 +33,6 @@ RSpec.describe "manifest/manifest", type: :view do
   end
 
   before do
-    ENV['IIIF_SERVER_URL'] = 'example.com/iiif/2/'
-    ENV['FEDORA_ADAPTER'] = 's3'
     Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
     work.ordered_members << file_set
     work.save!
@@ -43,55 +42,17 @@ RSpec.describe "manifest/manifest", type: :view do
     assign(:root_url, root_url)
   end
 
-  after do
+  around do |example|
+    ENV['IIIF_SERVER_URL'] = 'example.com/iiif/2/'
+    ENV['FEDORA_ADAPTER'] = 's3'
+    example.run
     ENV['IIIF_SERVER_URL'] = nil
     ENV['FEDORA_ADAPTER'] = nil
   end
 
   it "displays a valid IIIF Presentation API manifest" do
     render
-    doc = <<~HEREDOC
-{
-  "@context": "http://iiif.io/api/presentation/2/context.json",
-  "@type": "sc:Manifest",
-  "@id": "http://example.com/iiif/#{work.id}/manifest",
-  "label": "#{work.title.first}",
-  "metadata": [],
-  "sequences": [
-    {
-      "@type": "sc:Sequence",
-      "@id": "http://example.com/iiif/#{work.id}/manifest/sequence/normal",
-      "canvases": [
-        {
-          "@id": "http://example.com/iiif/#{work.id}/manifest/canvas/#{file_set.id}",
-          "@type": "sc:Canvas",
-          "label": "#{file_set.title.first}",
-          "width": 640,
-          "height": 480,
-          "images": [
-            {
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "resource": {
-                "@type": "dctypes:Image",
-                "@id": "example.com/iiif/2/fba6a26214287bb0c50ecb2e4922041dcb84b256/full/600,/0/default.jpg",
-                "width": 640,
-                "height": 480,
-                "service": {
-                  "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "example.com/iiif/2/fba6a26214287bb0c50ecb2e4922041dcb84b256",
-                  "profile": "http://iiif.io/api/image/2/level2.json"
-                }
-              },
-              "on": "http://example.com/iiif/#{work.id}/manifest/canvas/#{file_set.id}"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-HEREDOC
+    doc = manifest_output
     expect(JSON.parse(rendered)).to eq(JSON.parse(doc))
   end
 end

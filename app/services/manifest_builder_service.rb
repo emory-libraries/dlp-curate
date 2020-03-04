@@ -3,9 +3,7 @@
 require 'iiif_manifest'
 
 class ManifestBuilderService
-  def self.iiif_manifest_cache
-    ENV['IIIF_MANIFEST_CACHE'] || Rails.root.join("tmp").to_s
-  end
+  include IiifManifestCache
 
   def initialize(presenter: nil, curation_concern:)
     @presenter = presenter
@@ -44,7 +42,7 @@ class ManifestBuilderService
       date_modified = solr_doc[:date_modified_dtsi] || solr_doc[:system_create_dtsi]
       key = date_modified.to_datetime.strftime('%Y-%m-%d_%H-%M-%S') + '_' + solr_doc[:id]
 
-      if File.exist?(File.join(ManifestBuilderService.iiif_manifest_cache, key))
+      if File.exist?(File.join(iiif_manifest_cache, key))
         render_manifest_file(key: key)
       else
         manifest_json = ApplicationController.render(template: 'manifest/manifest.json', assigns: { solr_doc:          solr_doc,
@@ -57,19 +55,14 @@ class ManifestBuilderService
     end
 
     def render_manifest_file(key:)
-      manifest_file = File.open(File.join(ManifestBuilderService.iiif_manifest_cache, key))
+      manifest_file = File.open(File.join(iiif_manifest_cache, key))
       manifest = manifest_file.read
       manifest_file.close
       manifest
     end
 
-<<<<<<< HEAD
-    def persist_manifest(key:, manifest_hash:)
-      File.open(File.join(ManifestBuilderService.iiif_manifest_cache, key), 'w+') do |f|
-        f.write(manifest_hash.to_json)
-=======
     def persist_manifest(key:, manifest_json:)
-      File.open(File.join(ENV['IIIF_MANIFEST_CACHE'], key), 'w+') do |f|
+      File.open(File.join(iiif_manifest_cache, key), 'w+') do |f|
         f.write(manifest_json)
       end
     end
@@ -80,7 +73,6 @@ class ManifestBuilderService
         []
       else
         ordered_members
->>>>>>> Adds manifest json builder
       end
     end
 

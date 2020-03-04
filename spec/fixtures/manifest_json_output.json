@@ -1,0 +1,40 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@type": "sc:Manifest",
+  "@id": "http://example.com/iiif/508hdr7srq-cor/manifest",
+  "label": "Test title",
+  "metadata": [],
+  "sequences": [
+    {
+      "@type": "sc:Sequence",
+      "@id": "http://example.com/iiif/508hdr7srq-cor/manifest/sequence/normal",
+      "canvases": [
+        {
+          "@id": "http://example.com/iiif/508hdr7srq-cor/manifest/canvas/608hdr7qrt-cor",
+          "@type": "sc:Canvas",
+          "label": "foo",
+          "width": 640,
+          "height": 480,
+          "images": [
+            {
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@type": "dctypes:Image",
+                "@id": "example.com/iiif/2/fba6a26214287bb0c50ecb2e4922041dcb84b256/full/600,/0/default.jpg",
+                "width": 640,
+                "height": 480,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "example.com/iiif/2/fba6a26214287bb0c50ecb2e4922041dcb84b256",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              },
+              "on": "http://example.com/iiif/508hdr7srq-cor/manifest/canvas/608hdr7qrt-cor"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
