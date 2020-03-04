@@ -4,6 +4,6 @@
 # for works and collections
 module CuratePurl
   def purl
-    "#{ENV['LUX_BASE_URL'] || ''}/purl/#{id}"
+    "#{ENV['LUX_BASE_URL'] || 'localhost:3000'}/purl/#{id}"
   end
 end
