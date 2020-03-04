@@ -17,6 +17,10 @@ RSpec.describe IiifUrlBuilderService, :clean do
     ENV['IIIF_SERVER_URL'] = 'http://localhost:3000/cantaloupe/iiif/2/'
   end
 
+  after do
+    ENV['IIIF_SERVER_URL'] = nil
+  end
+
   let(:original_checksum) do
     ['urn:md5:da674abf5cc0750158ebe9f8fdb83faf',
      'urn:sha1:fba6a26214287bb0c50ecb2e4922041dcb84b256',
