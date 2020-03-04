@@ -41,14 +41,28 @@ RSpec.describe IiifController, type: :controller, clean: true do
   end
 
   describe "a request for info.json" do
+    before do
+      ENV['IIIF_MANIFEST_CACHE'] = Rails.root.join('tmp').to_s
+      ENV['PROXIED_IIIF_SERVER_URL'] = 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2'
+      stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json")
+        .with(
+          headers: {
+            'Connection' => 'close',
+            'Host' => 'iiif-cor-arch.library.emory.edu',
+            'User-Agent' => 'http.rb/4.3.0'
+          }
+        )
+        .to_return(status: 200, body: "", headers: {})
+    end
+    let(:image_sha) { "7f15795a197b389f6f2b0cb28362f777e1378f6f" }
     let(:params) do
       {
-        identifier: identifier,
+        identifier: image_sha,
         info:       "info",
         format:     "json"
       }
     end
-    let(:expected_iiif_url) { 'http://127.0.0.1:8182/iiif/2/508hdr7srt-cor/info.json' }
+    let(:expected_iiif_url) { 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json' }
     it "returns as json" do
       get :info, params: params
       expect(assigns(:iiif_url)).to eq expected_iiif_url

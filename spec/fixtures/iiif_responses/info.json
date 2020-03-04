@@ -1,0 +1,95 @@
+{
+  "@context": "http://iiif.io/api/image/2/context.json",
+  "@id": "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f",
+  "protocol": "http://iiif.io/api/image",
+  "width": 11344,
+  "height": 4313,
+  "sizes": [
+    {
+      "width": 177,
+      "height": 67
+    },
+    {
+      "width": 355,
+      "height": 135
+    },
+    {
+      "width": 709,
+      "height": 270
+    },
+    {
+      "width": 1418,
+      "height": 539
+    },
+    {
+      "width": 2836,
+      "height": 1078
+    },
+    {
+      "width": 5672,
+      "height": 2157
+    },
+    {
+      "width": 11344,
+      "height": 4313
+    }
+  ],
+  "tiles": [
+    {
+      "width": 1418,
+      "height": 540,
+      "scaleFactors": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64
+      ]
+    }
+  ],
+  "profile": [
+    "http://iiif.io/api/image/2/level2.json",
+    {
+      "formats": [
+        "jpg",
+        "tif",
+        "bmp",
+        "gif",
+        "png",
+        "webp",
+        "jp2"
+      ],
+      "maxArea": 400000000,
+      "qualities": [
+        "bitonal",
+        "default",
+        "gray",
+        "color"
+      ],
+      "supports": [
+        "regionByPx",
+        "sizeByW",
+        "sizeByWhListed",
+        "cors",
+        "regionSquare",
+        "sizeByDistortedWh",
+        "sizeAboveFull",
+        "canonicalLinkHeader",
+        "sizeByConfinedWh",
+        "sizeByPct",
+        "jsonldMediaType",
+        "regionByPct",
+        "rotationArbitrary",
+        "sizeByH",
+        "baseUriRedirect",
+        "rotationBy90s",
+        "profileLinkHeader",
+        "sizeByForcedWh",
+        "sizeByWh",
+        "mirroring"
+      ]
+    }
+  ]
+}
