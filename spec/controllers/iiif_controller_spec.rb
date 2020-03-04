@@ -52,7 +52,11 @@ RSpec.describe IiifController, type: :controller, clean: true do
             'User-Agent' => 'http.rb/4.3.0'
           }
         )
-        .to_return(status: 200, body: "", headers: {})
+        .to_return(
+          status:  200,
+          body:    info_dot_json_from_cantaloupe,
+          headers: {}
+        )
     end
     let(:image_sha) { "7f15795a197b389f6f2b0cb28362f777e1378f6f" }
     let(:params) do
@@ -62,11 +66,21 @@ RSpec.describe IiifController, type: :controller, clean: true do
         format:     "json"
       }
     end
+    let(:info_dot_json_from_cantaloupe) do
+      File.open(Rails.root.join("spec", "fixtures", "iiif_responses", "info.json")).read
+    end
     let(:expected_iiif_url) { 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json' }
-    it "returns as json" do
+    it "constructs the info.json url correctly" do
       get :info, params: params
       expect(assigns(:iiif_url)).to eq expected_iiif_url
       expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+    end
+
+    it "returns valid json" do
+      get :info, params: params
+      expect(assigns(:info_original)).not_to be nil
+      foo_parsed = JSON.parse(assigns(:info_original))
+      expect(foo_parsed["@id"]).to eq 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f'
     end
   end
 
