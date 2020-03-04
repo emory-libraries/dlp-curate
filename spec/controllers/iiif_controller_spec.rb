@@ -41,18 +41,54 @@ RSpec.describe IiifController, type: :controller, clean: true do
   end
 
   describe "a request for info.json" do
+    before do
+      ENV['IIIF_MANIFEST_CACHE'] = Rails.root.join('tmp').to_s
+      ENV['PROXIED_IIIF_SERVER_URL'] = 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2'
+      ENV['IIIF_SERVER_URL'] = 'https://curate.library.emory.edu/iiif/2'
+      stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json")
+        .with(
+          headers: {
+            'Connection' => 'close',
+            'Host' => 'iiif-cor-arch.library.emory.edu',
+            'User-Agent' => 'http.rb/4.3.0'
+          }
+        )
+        .to_return(
+          status:  200,
+          body:    info_dot_json_from_cantaloupe,
+          headers: {}
+        )
+    end
+    let(:image_sha) { "7f15795a197b389f6f2b0cb28362f777e1378f6f" }
     let(:params) do
       {
-        identifier: identifier,
+        identifier: image_sha,
         info:       "info",
         format:     "json"
       }
     end
-    let(:expected_iiif_url) { 'http://127.0.0.1:8182/iiif/2/508hdr7srt-cor/info.json' }
-    it "returns as json" do
+    let(:info_dot_json_from_cantaloupe) do
+      File.open(Rails.root.join("spec", "fixtures", "iiif_responses", "info.json")).read
+    end
+    let(:expected_iiif_url) { 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json' }
+    it "constructs the info.json url correctly" do
       get :info, params: params
       expect(assigns(:iiif_url)).to eq expected_iiif_url
       expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+    end
+
+    it "returns valid json" do
+      get :info, params: params
+      expect(assigns(:info_original)).not_to be nil
+      parsed_json_orig = JSON.parse(assigns(:info_original))
+      expect(parsed_json_orig["@id"]).to eq 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f'
+    end
+
+    it "changes json from Cantaloupe to have the public iiif url" do
+      get :info, params: params
+      expect(assigns(:info_public_iiif)).not_to be nil
+      parsed_json_public = JSON.parse(assigns(:info_public_iiif))
+      expect(parsed_json_public["@id"]).to eq 'https://curate.library.emory.edu/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f'
     end
   end
 

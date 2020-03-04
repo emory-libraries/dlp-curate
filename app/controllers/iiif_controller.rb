@@ -20,7 +20,16 @@ class IiifController < ApplicationController
     @iiif_url = "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/info.json"
     Rails.logger.info("Trying to proxy info from #{@iiif_url}")
     response.set_header('Access-Control-Allow-Origin', '*')
-    send_data HTTP.get(@iiif_url).body, type: 'application/json', x_sendfile: true, disposition: 'inline'
+    @info_original = HTTP.get(@iiif_url).to_s
+    @info_public_iiif = rewrite_iiif_base_uri(@info_original)
+    send_data @info_public_iiif, type: 'application/json', x_sendfile: true, disposition: 'inline'
+  end
+
+  def rewrite_iiif_base_uri(info_original)
+    parsed_json = JSON.parse(info_original)
+    public_base_uri = "#{ENV['IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}"
+    parsed_json["@id"] = public_base_uri
+    JSON.generate(parsed_json)
   end
 
   def iiif_url
