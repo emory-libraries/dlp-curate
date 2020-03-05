@@ -68,11 +68,11 @@ class ManifestBuilderService
     end
 
     def image_concerns
-      ordered_members = @curation_concern.ordered_members.to_a
-      if ordered_members.empty?
+      file_set_ids = @curation_concern.ordered_member_ids - @curation_concern.child_work_ids
+      if file_set_ids.empty?
         []
       else
-        ordered_members
+        file_set_ids
       end
     end
 

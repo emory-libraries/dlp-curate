@@ -13,15 +13,16 @@ end
 json.sequences [''] do
   json.set! :@type, 'sc:Sequence'
   json.set! :@id, "#{@root_url}/sequence/normal"
-  json.canvases @image_concerns do |child|
-    child_iiif_service = ManifestBuilderService.new(curation_concern: child)
-    canvas_uri = "#{@root_url}/canvas/#{child.id}"
+  json.canvases @image_concerns do |child_id|
+    file_set = FileSet.find(child_id)
+    child_iiif_service = ManifestBuilderService.new(curation_concern: file_set)
+    canvas_uri = "#{@root_url}/canvas/#{child_id}"
     json.set! :@id, canvas_uri
     json.set! :@type, 'sc:Canvas'
-    json.label child.title.first
+    json.label file_set.title.first
     json.width 640
     json.height 480
-    json.images [child] do
+    json.images [file_set] do
       json.set! :@type, 'oa:Annotation'
       json.motivation 'sc:painting'
       json.resource do

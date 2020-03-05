@@ -22,7 +22,8 @@ RSpec.describe ManifestBuilderService, :clean do
       "holding_repository_tesim" => ["test holding repo"],
       "rights_statement_tesim" => ["example.com"] }
   end
-  let(:file_set) { FactoryBot.create(:file_set) }
+  let(:file_set)  { FactoryBot.create(:file_set) }
+  let(:file_set2) { FactoryBot.create(:file_set) }
   let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   let(:sf) { File.open(fixture_path + '/book_page/0003_service.jpg') }
 
@@ -52,7 +53,9 @@ RSpec.describe ManifestBuilderService, :clean do
     before do
       Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
       Hydra::Works::AddFileToFileSet.call(file_set, sf, :service_file)
+      Hydra::Works::AddFileToFileSet.call(file_set2, pmf, :preservation_master_file)
       work.ordered_members << file_set
+      work.ordered_members << file_set2
       work.save!
     end
 
@@ -88,9 +91,13 @@ RSpec.describe ManifestBuilderService, :clean do
         expect(response_values).to include "sequences"
         expect(response_values["sequences"].first["@type"]).to include "sc:Sequence"
         expect(response_values["sequences"].first["@id"]).to include "/iiif/#{work.id}/manifest/sequence/normal"
-        expect(response_values["sequences"].first["canvases"].first["@id"]).to include "/iiif/#{work.id}/manifest/canvas/#{file_set.id}"
-        expect(response_values["sequences"].first["canvases"].first["images"].first["resource"]["@id"]).to include(
+        expect(response_values["sequences"][0]["canvases"][0]["@id"]).to include "/iiif/#{work.id}/manifest/canvas/#{file_set.id}"
+        expect(response_values["sequences"][0]["canvases"][0]["images"][0]["resource"]["@id"]).to include(
           "/images/#{file_set.id}%2Ffiles%2F#{file_set.service_file.id.split('/').last}/full/600,/0/default.jpg"
+        )
+        expect(response_values["sequences"][0]["canvases"][1]["@id"]).to include "/iiif/#{work.id}/manifest/canvas/#{file_set2.id}"
+        expect(response_values["sequences"][0]["canvases"][1]["images"][0]["resource"]["@id"]).to include(
+          "/images/#{file_set2.id}%2Ffiles%2F#{file_set2.preservation_master_file.id.split('/').last}/full/600,/0/default.jpg"
         )
       end
     end
@@ -118,6 +125,18 @@ RSpec.describe ManifestBuilderService, :clean do
           expect(service.iiif_url).to include "example.com/iiif/2/"
           expect(service.info_url).to include "example.com/iiif/2/"
         end
+      end
+    end
+
+    context "#image_concerns instance method" do
+      let(:child_work) { FactoryBot.create(:public_generic_work) }
+      before do
+        work.ordered_members << child_work
+        work.save!
+      end
+
+      it "returns file_set_ids" do
+        expect(service.send(:image_concerns)).to match_array [file_set.id, file_set2.id]
       end
     end
   end
