@@ -23,7 +23,6 @@ RSpec.describe ManifestBuilderService do
 
   context "returning a iiif manifest" do
     before do
-      ENV['IIIF_MANIFEST_CACHE'] = "./tmp"
       allow(SolrDocument).to receive(:find).and_return(solr_document)
       File.delete(cache_file) if File.exist?(cache_file)
     end
