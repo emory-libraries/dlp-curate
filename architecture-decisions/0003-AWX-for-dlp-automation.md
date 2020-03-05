@@ -4,7 +4,7 @@
 * Date: 2020-03-05
 
 ## Context
-The team has been developing Ansible roles for a wide varity of issues. They govern everything from building the EC2s to backing up individual componets of DLP. We need a neutral platform to run these roles on. This platform would need to be able to run the playbooks on demand or scheduled. Red Hat provides two solutions: AWX and Ansible Tower. 
+The team has been developing Ansible roles for a wide variety of issues. They govern everything from building the EC2s to backing up individual components of DLP. We need a neutral platform to run these roles on. This platform would need to be able to run the playbooks on demand or scheduled. RedHat provides two solutions: AWX and Ansible Tower. 
 
 ## Decision
 AWX is the upline, free version of Ansible Tower. It is available primary as docker images. AWX is capable of running playbooks as required.
