@@ -1,4 +1,4 @@
-# 4. Create an ADR Template
+# 4. IIIF Manifest Caching
 
 * Status: Accepted
 * Date: 2020-03-06
