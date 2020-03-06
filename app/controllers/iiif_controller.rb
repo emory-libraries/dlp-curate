@@ -40,7 +40,7 @@ class IiifController < ApplicationController
   def manifest
     headers['Access-Control-Allow-Origin'] = '*'
     solr_doc = SolrDocument.find(identifier)
-    render json: ManifestBuilderService.build_manifest(identifier, presenter(solr_doc))
+    render json: ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: CurateGenericWork.find(identifier))
   end
 
   # IIIF URLS really do not like extra slashes. Ensure that we only add a slash after the

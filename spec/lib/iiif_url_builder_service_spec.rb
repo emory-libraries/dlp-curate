@@ -13,8 +13,10 @@ RSpec.describe IiifUrlBuilderService, :clean do
     FactoryBot.create(:file_set, user: user, title: ['Some title'])
   end
 
-  before do
+  around do |example|
     ENV['IIIF_SERVER_URL'] = 'http://localhost:3000/cantaloupe/iiif/2/'
+    example.run
+    ENV['IIIF_SERVER_URL'] = nil
   end
 
   let(:original_checksum) do

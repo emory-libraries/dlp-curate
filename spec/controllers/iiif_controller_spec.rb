@@ -194,6 +194,16 @@ RSpec.describe IiifController, type: :controller, clean: true do
         "holding_repository_tesim" => ["test holding repo"],
         "rights_statement_tesim" => ["example.com"] }
     end
+    let(:params) do
+      {
+        identifier: identifier,
+        region:     region,
+        size:       size,
+        rotation:   rotation,
+        quality:    quality,
+        format:     format
+      }
+    end
 
     before do
       Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)

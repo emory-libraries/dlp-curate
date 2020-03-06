@@ -47,6 +47,7 @@ Metrics/BlockLength:
         - config/initializers/characterization_service.rb
         - config/initializers/job_io_wrapper.rb
         - lib/tasks/derivatives.rake
+        - app/views/manifest/manifest.json.jbuilder
 
 Metrics/ClassLength:
     Exclude:
@@ -130,3 +131,4 @@ RSpec/MessageChain:
 RSpec/AnyInstance:
     Exclude:
         - 'spec/models/job_io_wrapper_spec.rb'
+        - spec/views/manifest/manifest.json.jbuilder_spec.rb
