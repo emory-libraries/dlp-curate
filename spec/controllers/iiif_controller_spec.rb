@@ -112,6 +112,42 @@ RSpec.describe IiifController, type: :controller, clean: true do
     end
   end
 
+  describe "a request for an Emory High Download object" do
+    let(:user) { FactoryBot.build(:user) }
+    let(:identifier) { "508hdr7srt-cor" }
+    let(:attributes) do
+      { "id" => "85370rxwg2-cor",
+        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "visibility_ssi" => "authenticated" }
+    end
+
+    before do
+      solr = Blacklight.default_index.connection
+      solr.add([attributes])
+      solr.commit
+    end
+
+    context "as an authenticated user" do
+      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/full/0/default.jpg" }
+
+      it "requests the url" do
+        get :show, params: params
+        expect(assigns(:iiif_url)).to eq expected_iiif_url
+        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+      end
+    end
+
+    context "as an unauthenticated user" do
+      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/full/0/default.jpg" }
+
+      it "requests the url" do
+        get :show, params: params
+        expect(assigns(:iiif_url)).to eq expected_iiif_url
+        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+      end
+    end
+  end
+
   describe "a request for a public low view object" do
     let(:identifier) { "508hdr7srt-cor" }
     let(:attributes) do

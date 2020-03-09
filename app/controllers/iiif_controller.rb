@@ -10,6 +10,7 @@ class IiifController < ApplicationController
   end
 
   def show
+    return head :forbidden if visibility == "authenticated" && current_user.nil?
     @iiif_url ||= iiif_url
     Rails.logger.info("Trying to proxy image from #{@iiif_url}")
     response.set_header('Access-Control-Allow-Origin', '*')
