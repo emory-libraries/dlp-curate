@@ -10,6 +10,12 @@ class IiifController < ApplicationController
   end
 
   def show
+    Rails.logger.info "--------- cookie detection -------------------"
+    # jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    Rails.logger.info cookies["bearer_token"]
+    Rails.logger.info cookies.inspect
+    Rails.logger.info "--------- cookie detection -------------------"
+
     @iiif_url ||= iiif_url
     Rails.logger.info("Trying to proxy image from #{@iiif_url}")
     response.set_header('Access-Control-Allow-Origin', '*')
