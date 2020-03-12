@@ -13,7 +13,7 @@ class IiifController < ApplicationController
     @iiif_url ||= iiif_url
     Rails.logger.info("Trying to proxy image from #{@iiif_url}")
     response.set_header('Access-Control-Allow-Origin', '*')
-    send_data HTTP.get(@iiif_url).body, type: 'image/jpeg', x_sendfile: true, disposition: 'inline'
+    stream_response(response)
   end
 
   def info
@@ -132,6 +132,19 @@ class IiifController < ApplicationController
   end
 
   private
+
+  def stream_response(response)
+    response.headers["Last-Modified"] = Time.now.httpdate.to_s     
+    response.headers["Content-Type"] = 'image/jpeg'
+    response.headers["Content-Disposition"] = 'inline'
+    begin
+      HTTP.get(@iiif_url).body.each do |buffer|
+        response.stream.write(buffer)
+      end
+    ensure
+      response.stream.close
+    end
+  end
 
     # @param [SolrDocument] document
     def presenter(document)
