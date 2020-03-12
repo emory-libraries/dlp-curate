@@ -133,18 +133,18 @@ class IiifController < ApplicationController
 
   private
 
-  def stream_response(response)
-    response.headers["Last-Modified"] = Time.now.httpdate.to_s     
-    response.headers["Content-Type"] = 'image/jpeg'
-    response.headers["Content-Disposition"] = 'inline'
-    begin
-      HTTP.get(@iiif_url).body.each do |buffer|
-        response.stream.write(buffer)
+    def stream_response(response)
+      response.headers["Last-Modified"] = Time.now.httpdate.to_s
+      response.headers["Content-Type"] = 'image/jpeg'
+      response.headers["Content-Disposition"] = 'inline'
+      begin
+        HTTP.get(@iiif_url).body.each do |buffer|
+          response.stream.write(buffer)
+        end
+      ensure
+        response.stream.close
       end
-    ensure
-      response.stream.close
     end
-  end
 
     # @param [SolrDocument] document
     def presenter(document)
