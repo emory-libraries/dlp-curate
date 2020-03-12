@@ -13,7 +13,7 @@ class IiifUrlBuilderService
   end
 
   def sha1
-    sha1_with_urn = file_set.original_checksum.to_a.select { |sum| sum if sum.starts_with?('urn:sha1') }.fetch(0, 'urn:sha1:unknown')
+    sha1_with_urn = file_set&.send(file_set.preferred_file)&.checksum&.value || 'urn:sha1:unknown'
     sha1_with_urn.gsub('urn:sha1:', '')
   end
 

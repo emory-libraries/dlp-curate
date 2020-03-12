@@ -21,7 +21,18 @@ module Curate
           solr_doc['profile_name_ssim'] = object.preservation_master_file.profile_name
           solr_doc['profile_version_ssim'] = object.preservation_master_file.profile_version
         end
+        add_sha1(solr_doc)
       end
     end
+
+    private
+
+      def add_sha1(solr_doc)
+        solr_doc['sha1_tesim'] = [object&.preservation_master_file&.checksum&.uri&.to_s,
+                                  object&.intermediate_file&.checksum&.uri&.to_s,
+                                  object&.service_file&.checksum&.uri&.to_s,
+                                  object&.extracted&.checksum&.uri&.to_s,
+                                  object&.transcript_file&.checksum&.uri&.to_s]
+      end
   end
 end

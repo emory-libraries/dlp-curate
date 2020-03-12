@@ -93,6 +93,7 @@ Metrics/MethodLength:
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
         - app/indexers/curate_generic_work_indexer.rb
+        - spec/fixtures/manifest_output.rb
 
 Metrics/ModuleLength:
     Exclude:
