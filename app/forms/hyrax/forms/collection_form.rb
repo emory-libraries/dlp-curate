@@ -132,7 +132,7 @@ module Hyrax
       private
 
         def all_files_with_access
-          member_presenters(member_work_ids).flat_map(&:file_set_presenters).map { |x| [x.to_s, x.id] }
+          member_presenters(member_work_ids).flat_map(&:file_set_presenters).map { |x| [x.id.to_s, x.id] }
         end
 
         # Override this method if you have a different way of getting the member's ids
