@@ -64,15 +64,21 @@ RSpec.describe "IIIF requests", :clean, type: :request do
           "digest_ssim" => ["urn:sha1:#{image_sha}"],
           "visibility_ssi" => "authenticated" }
       end
-      let(:key) { Rails.application.secrets.shared_cookie_key }
-      let(:crypt) { ActiveSupport::MessageVerifier.new(key) }
+      # let(:key) { Rails.application.secrets.shared_cookie_key }
+      let(:key) { "y8W9gASeJKAO906o2wwUVRDqZQgERrsH" }
+      let(:crypt) { ActiveSupport::MessageEncryptor.new(key) }
+      let(:user) { User.from_omniauth(auth_hash) }
+      let(:cookie_name) { "bearer_token" }
+      let(:encrypted_cookie_value) { "43BB3AA86080214273B978723D70DE6894DB9DEAC93FB27C79799EAD405B3FE8" }
+      let(:cookie) { Rack::Test::Cookie.new("#{cookie_name}=#{encrypted_cookie_value}") }
 
       before do
         solr = Blacklight.default_index.connection
         solr.add([attributes])
         solr.commit
-        cookies[@cookies] = { "bearer_token" => "BAhJIiNUaGlzIHVzZXIgYXV0aGVudGljYXRlZCBpbiBMdXgGOgZFVA==--2cf86cbc97dd0047935010fd4e1f28b67a32251d" }
+        cookies << cookie
       end
+
       it "has cookies" do
         stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/79276774f3dbfbd977d39065eec14aa185b5213d/full/full/0/default.jpg")
           .with(
@@ -85,16 +91,18 @@ RSpec.describe "IIIF requests", :clean, type: :request do
           .to_return(status: 200, body: "", headers: {})
         get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}")
         expect(response.status).to eq 200
-        expect(cookies[@cookies]).to include "bearer_token"
-        expect(ActiveSupport::MessageVerifier.new(key).verify(cookies[@cookies])).to eq "This user authenticated in Lux"
+        expect(cookies.to_hash["bearer_token"]).to eq encrypted_cookie_value
+        expect(decrypt_string(cookies.to_hash["bearer_token"])).to eq "This is a test token value"
       end
     end
   end
-  # describe "GET manifest" do
-  #   context "with a public object" do
-  #     it "responds with a success status" do
-  #       get "/iiif/"
-  #     end
-  #   end
-  # end
+
+  def decrypt_string(encrypted_str)
+    cipher_salt1 = 'some-random-salt-'
+    cipher_salt2 = 'another-random-salt-'
+    cipher = OpenSSL::Cipher.new('AES-128-ECB').decrypt
+    cipher.key = OpenSSL::PKCS5.pbkdf2_hmac_sha1(cipher_salt1, cipher_salt2, 20_000, cipher.key_len)
+    decrypted = [encrypted_str].pack('H*').unpack('C*').pack('c*')
+    cipher.update(decrypted) + cipher.final
+  end
 end
