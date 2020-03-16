@@ -22,6 +22,13 @@ class IiifController < ApplicationController
     send_data HTTP.get(@iiif_url).body, type: 'image/jpeg', x_sendfile: true, disposition: 'inline'
   end
 
+  # def cookie_verifier
+  #   unless @verifier
+  #     @verifier = ActiveSupport::MessageVerifier.new(Rails.application.secrets.shared_cookie_key)
+  #   end
+  #   @verifier
+  # end
+
   def info
     @iiif_url = "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/info.json"
     Rails.logger.info("Trying to proxy info from #{@iiif_url}")
