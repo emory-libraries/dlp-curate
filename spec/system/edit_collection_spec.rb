@@ -42,7 +42,7 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
   context 'logged in as an admin user' do
     before { login_as admin }
 
-    scenario 'successfully edits the work' do
+    scenario 'successfully edits the collection' do
       visit "/dashboard/collections/#{collection.id}/edit"
       expect(find_field('title (Title)').value).to eq 'Robert Langmuir African American Photograph Collection'
       expect(find_field('holding_repository (Library)').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
@@ -60,6 +60,16 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
       # Now the form should have the new values
       expect(page).to have_content 'New Title'
       expect(page).to have_content file_set.id
+    end
+
+    scenario 'successfully uploads a banner image' do
+      visit "/dashboard/collections/#{collection.id}/edit"
+      expect(page).to have_link('Branding', href: '#branding')
+      click_on 'Branding'
+      attach_file("collection_banner", (fixture_path + '/balloon.jpeg'), visible: false)
+      expect(find("input[name='banner_files[]']", visible: false).value).to eq '1'
+      click_on 'Save changes'
+      expect(page).to have_content 'balloon.jpeg'
     end
   end
 end

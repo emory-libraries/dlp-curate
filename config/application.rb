@@ -22,5 +22,8 @@ module DlpCurate
     # -- all .rb files in that directory are automatically loaded.
     config.active_job.queue_adapter = :sidekiq
     config.autoload_paths += %W[#{config.root}/lib]
+    config.to_prepare do
+      Hyrax::Dashboard::CollectionsController.prepend Hyrax::Dashboard::CollectionsControllerOverride
+    end
   end
 end

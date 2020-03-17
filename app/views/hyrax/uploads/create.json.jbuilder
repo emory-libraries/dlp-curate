@@ -11,6 +11,7 @@ json.files [@upload] do |uploaded_file|
   # TODO: implement these
   # json.url  "/uploads/#{uploaded_file.id}"
   # json.thumbnail_url uploaded_file.id
+  json.name uploaded_file.collection_banner.file.filename if uploaded_file.collection_banner.file.present?
   json.deleteUrl hyrax.uploaded_file_path(uploaded_file)
   json.deleteType 'DELETE'
 end
