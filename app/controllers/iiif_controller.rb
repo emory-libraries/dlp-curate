@@ -10,6 +10,7 @@ class IiifController < ApplicationController
   end
 
   def show
+    byebug
     Rails.logger.info "--------- cookie detection -------------------"
     # jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     Rails.logger.info cookies["bearer_token"]
@@ -21,13 +22,6 @@ class IiifController < ApplicationController
     response.set_header('Access-Control-Allow-Origin', '*')
     stream_response(response)
   end
-
-  # def cookie_verifier
-  #   unless @verifier
-  #     @verifier = ActiveSupport::MessageVerifier.new(Rails.application.secrets.shared_cookie_key)
-  #   end
-  #   @verifier
-  # end
 
   def info
     @iiif_url = "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/info.json"
