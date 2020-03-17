@@ -10,17 +10,22 @@ class IiifController < ApplicationController
   end
 
   def show
-    byebug
-    Rails.logger.info "--------- cookie detection -------------------"
-    # jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
-    Rails.logger.info cookies["bearer_token"]
-    Rails.logger.info cookies.inspect
-    Rails.logger.info "--------- cookie detection -------------------"
+    if has_valid_cookie?
+      @iiif_url ||= iiif_url
+      Rails.logger.info("Trying to proxy image from #{@iiif_url}")
+      response.set_header('Access-Control-Allow-Origin', '*')
+      stream_response(response)
+    else
+      return head :forbidden if visibility == "authenticated"
+    end
+  end
 
-    @iiif_url ||= iiif_url
-    Rails.logger.info("Trying to proxy image from #{@iiif_url}")
-    response.set_header('Access-Control-Allow-Origin', '*')
-    stream_response(response)
+  def has_valid_cookie?
+    if IiifAuthService.decrypt_cookie(cookies["bearer_token"]) == "This is a test token value"
+      true
+    else
+      false
+    end
   end
 
   def info
