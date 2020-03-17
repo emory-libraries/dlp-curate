@@ -132,3 +132,7 @@ RSpec/AnyInstance:
     Exclude:
         - 'spec/models/job_io_wrapper_spec.rb'
         - spec/views/manifest/manifest.json.jbuilder_spec.rb
+
+Style/IfInsideElse:
+    Exclude:
+        - 'app/controllers/iiif_controller.rb'

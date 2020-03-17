@@ -8,11 +8,11 @@ RSpec.describe IiifAuthService do
 
   describe 'decrypting cookie values' do
     it 'can decrypt a valid cookie string' do
-      expect(IiifAuthService.decrypt_cookie(encrypted_cookie_value)).to eq "This is a test token value"
+      expect(described_class.decrypt_cookie(encrypted_cookie_value)).to eq "This is a test token value"
     end
 
     it 'does not raise an exception when trying to decrypt an invalid cookie string' do
-      expect{ IiifAuthService.decrypt_cookie(spoofed_cookie_value) }.not_to raise_exception
+      expect { described_class.decrypt_cookie(spoofed_cookie_value) }.not_to raise_exception
     end
   end
 end

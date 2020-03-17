@@ -18,14 +18,15 @@ RSpec.describe 'iiif access controls', type: :system do
 
   before do
     ENV['PROXIED_IIIF_SERVER_URL'] = 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2'
-    stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/79276774f3dbfbd977d39065eec14aa185b5213d/full/full/0/default.jpg").
-      with(
+    stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/79276774f3dbfbd977d39065eec14aa185b5213d/full/full/0/default.jpg")
+      .with(
         headers: {
-       'Connection'=>'close',
-       'Host'=>'iiif-cor-arch.library.emory.edu',
-       'User-Agent'=>'http.rb/4.3.0'
-        }).
-      to_return(status: 200, body: "", headers: {})
+          'Connection' => 'close',
+          'Host' => 'iiif-cor-arch.library.emory.edu',
+          'User-Agent' => 'http.rb/4.3.0'
+        }
+      )
+      .to_return(status: 200, body: "", headers: {})
   end
   context "for Emory High Download objects" do
     let(:attributes) do
@@ -38,7 +39,6 @@ RSpec.describe 'iiif access controls', type: :system do
       solr.add([attributes])
       solr.commit
     end
-
 
     context "As a user who has authenticated to Lux" do
       before do

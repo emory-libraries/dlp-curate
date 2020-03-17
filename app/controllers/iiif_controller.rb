@@ -10,7 +10,7 @@ class IiifController < ApplicationController
   end
 
   def show
-    if has_valid_cookie?
+    if valid_cookie?
       @iiif_url ||= iiif_url
       Rails.logger.info("Trying to proxy image from #{@iiif_url}")
       response.set_header('Access-Control-Allow-Origin', '*')
@@ -20,7 +20,7 @@ class IiifController < ApplicationController
     end
   end
 
-  def has_valid_cookie?
+  def valid_cookie?
     if IiifAuthService.decrypt_cookie(cookies["bearer_token"]) == "This is a test token value"
       true
     else

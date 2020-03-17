@@ -40,8 +40,7 @@ end
 ActiveJob::Base.queue_adapter = :test
 
 RSpec.configure do |config|
-
-  config.include ShowMeTheCookies, :type => :system
+  config.include ShowMeTheCookies, type: :system
 
   config.before(:suite) do
     # Compile our JavaScript
