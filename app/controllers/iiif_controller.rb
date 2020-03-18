@@ -12,27 +12,23 @@ class IiifController < ApplicationController
   def show
     case visibility
     when "open", "low_res"
-      return_image
-    when "authenticated", "emory_low"
-      decline_image unless valid_cookie?
-      return_image
+      return send_image
+    when "authenticated", "emory_low" #authenticated is also called "Emory High Download"
+      return head :forbidden unless valid_cookie?
+      return send_image
     when "restricted"
-      decline_image unless current_user&.admin?
-      return_image
+      return head :forbidden unless current_user&.admin?
+      return send_image
     else
-      decline_image
+      return head :forbidden
     end
   end
 
-  def return_image
+  def send_image
     @iiif_url ||= iiif_url
     Rails.logger.info("Trying to proxy image from #{@iiif_url}")
     response.set_header('Access-Control-Allow-Origin', '*')
     stream_response(response)
-  end
-
-  def decline_image
-    return head :forbidden
   end
 
   def valid_cookie?

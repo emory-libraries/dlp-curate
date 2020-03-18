@@ -24,7 +24,7 @@ RSpec.describe 'iiif access controls', type: :system do
           'User-Agent' => 'http.rb/4.3.0'
         }
       )
-      .to_return(status: 200, body: "", headers: {})
+      .to_return(status: 200, body: "I am returning an image, but for now I'm words", headers: {})
     solr = Blacklight.default_index.connection
     solr.add([attributes])
     solr.commit
@@ -78,6 +78,7 @@ RSpec.describe 'iiif access controls', type: :system do
       it 'visits a iiif_url', clean: true do
         visit iiif_url
         expect(page).to have_http_status(403)
+        expect(page.body).to be_empty
       end
     end
   end
@@ -104,6 +105,7 @@ RSpec.describe 'iiif access controls', type: :system do
       it 'visits a iiif_url', clean: true do
         visit iiif_url
         expect(page).to have_http_status(403)
+        expect(page.body).to be_empty
       end
     end
   end
@@ -118,6 +120,7 @@ RSpec.describe 'iiif access controls', type: :system do
     it 'visits a iiif_url', clean: true do
       visit iiif_url
       expect(page).to have_http_status(403)
+      expect(page.body).to be_empty
     end
   end
 
@@ -132,6 +135,7 @@ RSpec.describe 'iiif access controls', type: :system do
       it 'visits a iiif_url', clean: true do
         visit iiif_url
         expect(page).to have_http_status(403)
+        expect(page.body).to be_empty
       end
     end
 
@@ -143,6 +147,7 @@ RSpec.describe 'iiif access controls', type: :system do
       it 'visits a iiif_url', clean: true do
         visit iiif_url
         expect(page).to have_http_status(403)
+        expect(page.body).to be_empty
       end
     end
 
@@ -163,6 +168,7 @@ RSpec.describe 'iiif access controls', type: :system do
         login_as user
         visit iiif_url
         expect(page).to have_http_status(403)
+        expect(page.body).to be_empty
       end
     end
   end

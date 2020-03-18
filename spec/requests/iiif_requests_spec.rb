@@ -77,12 +77,12 @@ RSpec.describe "IIIF requests", :clean, type: :request do
 
       context "a user who has authenticated in Lux" do
         before do
-          cookies << cookie
-          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}")
+          # cookies << cookie
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: {"HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}"})
         end
 
         it "returns an image" do
-          expect(cookies.to_hash["bearer_token"]).to eq encrypted_cookie_value
+          expect(request.cookies["bearer_token"]).to eq encrypted_cookie_value
           expect(response.status).to eq 200
         end
       end
@@ -93,7 +93,7 @@ RSpec.describe "IIIF requests", :clean, type: :request do
         end
 
         it "does not return an image" do
-          expect(response.status).not_to eq 200
+          expect(response.status).to eq 403
         end
       end
     end
