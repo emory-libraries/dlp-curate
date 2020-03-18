@@ -14,17 +14,11 @@ class IiifController < ApplicationController
     when "open", "low_res"
       return_image
     when "authenticated", "emory_low"
-      if valid_cookie?
-        return_image
-      else
-        decline_image
-      end
+      decline_image unless valid_cookie?
+      return_image
     when "restricted"
-      if current_user&.admin?
-        return_image
-      else
-        decline_image
-      end
+      decline_image unless current_user&.admin?
+      return_image
     else
       decline_image
     end

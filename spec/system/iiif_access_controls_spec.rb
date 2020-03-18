@@ -25,9 +25,9 @@ RSpec.describe 'iiif access controls', type: :system do
         }
       )
       .to_return(status: 200, body: "", headers: {})
-      solr = Blacklight.default_index.connection
-      solr.add([attributes])
-      solr.commit
+    solr = Blacklight.default_index.connection
+    solr.add([attributes])
+    solr.commit
   end
 
   context "Public objects" do
@@ -165,6 +165,5 @@ RSpec.describe 'iiif access controls', type: :system do
         expect(page).to have_http_status(403)
       end
     end
-
   end
 end
