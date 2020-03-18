@@ -10,6 +10,25 @@ class IiifController < ApplicationController
   end
 
   def show
+    case visibility
+    when "open"
+      @iiif_url ||= iiif_url
+      Rails.logger.info("Trying to proxy image from #{@iiif_url}")
+      response.set_header('Access-Control-Allow-Origin', '*')
+      stream_response(response)
+    when "authenticated"
+      if valid_cookie?
+        @iiif_url ||= iiif_url
+        Rails.logger.info("Trying to proxy image from #{@iiif_url}")
+        response.set_header('Access-Control-Allow-Origin', '*')
+        stream_response(response)
+      else
+        return head :forbidden
+      end
+    else
+      return head :forbidden
+    end
+
     if valid_cookie?
       @iiif_url ||= iiif_url
       Rails.logger.info("Trying to proxy image from #{@iiif_url}")

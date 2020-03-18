@@ -3,9 +3,7 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 RSpec.describe 'iiif access controls', type: :system do
-  let(:public_work_id) { "658pc866ww-cor" }
   let(:work_id) { "436tx95xcc-cor" }
-  let(:public_image_sha) { "465c0075481fe4badc58c76fba42161454a18d1f" }
   let(:image_sha) { "79276774f3dbfbd977d39065eec14aa185b5213d" }
   let(:region) { "full" }
   let(:size) { "full" }
@@ -27,17 +25,37 @@ RSpec.describe 'iiif access controls', type: :system do
         }
       )
       .to_return(status: 200, body: "", headers: {})
+      solr = Blacklight.default_index.connection
+      solr.add([attributes])
+      solr.commit
   end
+
+  context "Public objects" do
+    let(:attributes) do
+      { "id" => work_id,
+        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "visibility_ssi" => "open" }
+    end
+    
+    it 'visits a iiif_url', clean: true do
+      visit iiif_url
+      expect(page).to have_http_status(200)
+    end
+  end
+
+  context "Public low view object" do
+
+  end
+
+  context "Emory low view objects" do
+
+  end
+
   context "for Emory High Download objects" do
     let(:attributes) do
       { "id" => work_id,
         "digest_ssim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "authenticated" }
-    end
-    before do
-      solr = Blacklight.default_index.connection
-      solr.add([attributes])
-      solr.commit
     end
 
     context "As a user who has authenticated to Lux" do
@@ -57,5 +75,13 @@ RSpec.describe 'iiif access controls', type: :system do
         expect(page).to have_http_status(403)
       end
     end
+  end
+
+  context "Rose High View objects" do
+
+  end
+
+  context "Private objects" do
+
   end
 end
