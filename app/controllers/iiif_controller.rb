@@ -13,14 +13,14 @@ class IiifController < ApplicationController
     case visibility
     when "open", "low_res"
       return send_image
-    when "authenticated", "emory_low" #authenticated is also called "Emory High Download"
+    when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
       return head :forbidden unless valid_cookie?
       return send_image
     when "restricted"
       return head :forbidden unless current_user&.admin?
-      return send_image
+      send_image
     else
-      return head :forbidden
+      head :forbidden
     end
   end
 

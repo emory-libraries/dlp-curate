@@ -78,7 +78,7 @@ RSpec.describe "IIIF requests", :clean, type: :request do
       context "a user who has authenticated in Lux" do
         before do
           # cookies << cookie
-          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: {"HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}"})
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}" })
         end
 
         it "returns an image" do
