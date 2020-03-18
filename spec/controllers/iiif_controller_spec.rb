@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe IiifController, type: :controller, clean: true do
   let(:identifier) { "508hdr7srt-cor" }
+  let(:work_id) { "508hdr7srt-cor" }
   let(:image_sha) { "d28c5b20cf9b9663181d02b5ce90fac59fa666d7" }
   let(:region) { "full" }
   let(:size) { "full" }
@@ -20,6 +21,11 @@ RSpec.describe IiifController, type: :controller, clean: true do
       format:     format
     }
   end
+  let(:attributes) do
+    { "id" => work_id,
+      "digest_ssim" => ["urn:sha1:#{image_sha}"],
+      "visibility_ssi" => "open" }
+  end
 
   before do
     ENV['IIIF_MANIFEST_CACHE'] = Rails.root.join('tmp').to_s
@@ -29,6 +35,9 @@ RSpec.describe IiifController, type: :controller, clean: true do
       status:  200,
       headers: { 'Content-Length' => 3 }
     )
+    solr = Blacklight.default_index.connection
+    solr.add([attributes])
+    solr.commit
   end
 
   describe 'a request without the IIIF_SERVER_URL set' do

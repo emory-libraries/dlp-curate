@@ -10,10 +10,33 @@ class IiifController < ApplicationController
   end
 
   def show
+    case visibility
+    when "open", "low_res"
+      return send_image
+    when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
+      return head :forbidden unless valid_cookie?
+      return send_image
+    when "restricted"
+      return head :forbidden unless current_user&.admin?
+      send_image
+    else
+      head :forbidden
+    end
+  end
+
+  def send_image
     @iiif_url ||= iiif_url
     Rails.logger.info("Trying to proxy image from #{@iiif_url}")
     response.set_header('Access-Control-Allow-Origin', '*')
     stream_response(response)
+  end
+
+  def valid_cookie?
+    if IiifAuthService.decrypt_cookie(cookies["bearer_token"]) == "This is a test token value"
+      true
+    else
+      false
+    end
   end
 
   def info
