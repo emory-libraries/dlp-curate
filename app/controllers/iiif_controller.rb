@@ -32,7 +32,7 @@ class IiifController < ApplicationController
   end
 
   def decline_image
-    head :forbidden
+    return head :forbidden
   end
 
   def valid_cookie?
