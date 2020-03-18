@@ -12,6 +12,7 @@ module Hyrax
     mount_uploader :intermediate_file, UploadedFileUploader
     mount_uploader :extracted_text, UploadedFileUploader
     mount_uploader :transcript, UploadedFileUploader
+    mount_uploader :collection_banner, UploadedFileUploader
     # mount_uploader :file, UploadedFileUploader
     # alias uploader file
     has_many :job_io_wrappers,

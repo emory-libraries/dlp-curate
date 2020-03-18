@@ -497,6 +497,7 @@ ActiveRecord::Schema.define(version: 201901241536542) do
     t.string "extracted_text"
     t.string "transcript"
     t.string "fileset_use"
+    t.string "collection_banner"
     t.index ["file_set_uri"], name: "index_uploaded_files_on_file_set_uri"
     t.index ["user_id"], name: "index_uploaded_files_on_user_id"
   end
