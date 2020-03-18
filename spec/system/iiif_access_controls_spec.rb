@@ -107,7 +107,7 @@ RSpec.describe 'iiif access controls', type: :system do
       end
     end
   end
-
+  # TODO: This is a holding pattern until we can really implement Rose Reading Room IPs
   context "Rose High View objects" do
     let(:attributes) do
       { "id" => work_id,
@@ -155,7 +155,7 @@ RSpec.describe 'iiif access controls', type: :system do
         expect(page).to have_http_status(200)
       end
     end
-    
+
     context "for a Curate user who is not an admin" do
       let(:user) { FactoryBot.create(:user) }
 
