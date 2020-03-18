@@ -122,6 +122,49 @@ RSpec.describe 'iiif access controls', type: :system do
   end
 
   context "Private objects" do
+    let(:attributes) do
+      { "id" => work_id,
+        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "visibility_ssi" => "restricted" }
+    end
+
+    context "for a completely unauthenticated user" do
+      it 'visits a iiif_url', clean: true do
+        visit iiif_url
+        expect(page).to have_http_status(403)
+      end
+    end
+
+    context "for a regular Emory user (authenticated via Lux)" do
+      before do
+        create_cookie("bearer_token", encrypted_cookie_value)
+      end
+
+      it 'visits a iiif_url', clean: true do
+        visit iiif_url
+        expect(page).to have_http_status(403)
+      end
+    end
+
+    context "for a Curate admin user" do
+      let(:admin_user) { FactoryBot.create(:admin) }
+
+      it 'visits a iiif_url', clean: true do
+        login_as admin_user
+        visit iiif_url
+        expect(page).to have_http_status(200)
+      end
+    end
+    
+    context "for a Curate user who is not an admin" do
+      let(:user) { FactoryBot.create(:user) }
+
+      it 'visits a iiif_url', clean: true do
+        login_as user
+        visit iiif_url
+        expect(page).to have_http_status(403)
+      end
+    end
 
   end
 end
