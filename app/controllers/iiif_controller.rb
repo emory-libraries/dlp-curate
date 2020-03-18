@@ -25,6 +25,20 @@ class IiifController < ApplicationController
       else
         return head :forbidden
       end
+    when "low_res"
+      @iiif_url ||= iiif_url
+      Rails.logger.info("Trying to proxy image from #{@iiif_url}")
+      response.set_header('Access-Control-Allow-Origin', '*')
+      stream_response(response)
+    when "emory_low"
+      if valid_cookie?
+        @iiif_url ||= iiif_url
+        Rails.logger.info("Trying to proxy image from #{@iiif_url}")
+        response.set_header('Access-Control-Allow-Origin', '*')
+        stream_response(response)
+      else
+        return head :forbidden
+      end
     else
       return head :forbidden
     end

@@ -16,7 +16,7 @@ RSpec.describe 'iiif access controls', type: :system do
 
   before do
     ENV['PROXIED_IIIF_SERVER_URL'] = 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2'
-    stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/79276774f3dbfbd977d39065eec14aa185b5213d/full/full/0/default.jpg")
+    stub_request(:any, /iiif-cor-arch.library.emory.edu/)
       .with(
         headers: {
           'Connection' => 'close',
@@ -36,7 +36,7 @@ RSpec.describe 'iiif access controls', type: :system do
         "digest_ssim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "open" }
     end
-    
+
     it 'visits a iiif_url', clean: true do
       visit iiif_url
       expect(page).to have_http_status(200)
@@ -44,11 +44,42 @@ RSpec.describe 'iiif access controls', type: :system do
   end
 
   context "Public low view object" do
+    let(:attributes) do
+      { "id" => work_id,
+        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "visibility_ssi" => "low_res" }
+    end
 
+    it 'visits a iiif_url', clean: true do
+      visit iiif_url
+      expect(page).to have_http_status(200)
+    end
   end
 
-  context "Emory low view objects" do
+  context "Emory Low Download objects" do
+    let(:attributes) do
+      { "id" => work_id,
+        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "visibility_ssi" => "emory_low" }
+    end
 
+    context "As a user who has authenticated to Lux" do
+      before do
+        create_cookie("bearer_token", encrypted_cookie_value)
+      end
+
+      it 'visits a iiif_url', clean: true do
+        visit iiif_url
+        expect(page).to have_http_status(200)
+      end
+    end
+
+    context "As a user who has *not* authenticated to Lux" do
+      it 'visits a iiif_url', clean: true do
+        visit iiif_url
+        expect(page).to have_http_status(403)
+      end
+    end
   end
 
   context "for Emory High Download objects" do
@@ -78,7 +109,16 @@ RSpec.describe 'iiif access controls', type: :system do
   end
 
   context "Rose High View objects" do
+    let(:attributes) do
+      { "id" => work_id,
+        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "visibility_ssi" => "rose_high" }
+    end
 
+    it 'visits a iiif_url', clean: true do
+      visit iiif_url
+      expect(page).to have_http_status(403)
+    end
   end
 
   context "Private objects" do
