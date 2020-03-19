@@ -21,6 +21,11 @@ RSpec.describe Collection do
       collection.reload
       expect(solr_doc['member_works_count_isi']).to eq 3
     end
+
+    it 'bytes returns a hard-coded integer and issues a deprecation warning' do
+      expect(Deprecation).to receive(:warn).once
+      expect(collection.bytes).to eq(0)
+    end
   end
 
   describe "#holding_repository" do
@@ -434,6 +439,46 @@ RSpec.describe Collection do
         end
       end
       its(:primary_repository_ID) { is_expected.to eq primary_repository_ID }
+    end
+  end
+
+  describe "#members_objects", clean_repo: true do
+    let(:collection) { FactoryBot.create(:collection_lw) }
+
+    it "is empty by default" do
+      expect(collection.member_objects).to match_array []
+    end
+
+    context "when adding members" do
+      let(:work1) { FactoryBot.create(:work) }
+      let(:work2) { FactoryBot.create(:work) }
+      let(:work3) { FactoryBot.create(:work) }
+
+      it "allows multiple files to be added" do
+        collection.add_member_objects [work1.id, work2.id]
+        collection.save!
+        expect(collection.reload.member_objects).to match_array [work1, work2]
+      end
+
+      context 'when multiple membership checker returns a non-nil value' do
+        before do
+          allow(Hyrax::MultipleMembershipChecker).to receive(:new).with(item: work1).and_return(nil_checker)
+          allow(Hyrax::MultipleMembershipChecker).to receive(:new).with(item: work2).and_return(checker)
+          allow(Hyrax::MultipleMembershipChecker).to receive(:new).with(item: work3).and_return(nil_checker)
+          allow(nil_checker).to receive(:check).and_return(nil)
+          allow(checker).to receive(:check).and_return(error_message)
+        end
+
+        let(:checker) { double }
+        let(:nil_checker) { double }
+        let(:error_message) { 'Error: foo bar' }
+
+        it 'fails to add the member' do
+          collection.add_member_objects [work1.id, work2.id, work3.id]
+          collection.save!
+          expect(collection.reload.member_objects).to match_array [work1, work3]
+        end
+      end
     end
   end
 end

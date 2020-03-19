@@ -10,6 +10,7 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
       solr_doc['member_works_count_isi'] = object.child_works.count
       solr_doc['title_ssort'] = sort_title
       solr_doc['creator_ssort'] = object.creator.first
+      solr_doc['generic_type_sim'] = ["Collection"]
     end
   end
 

@@ -52,20 +52,6 @@ RSpec.describe CharacterizeJob, :clean do
     end
   end
 
-  context "when the file set's work is in a collection" do
-    let(:work)       { FactoryBot.build(:generic_work) }
-    let(:collection) { FactoryBot.build(:collection_lw) }
-
-    before do
-      allow(file_set).to receive(:parent).and_return(work)
-      allow(work).to receive(:in_collections).and_return([collection])
-    end
-    it "reindexes the collection" do
-      expect(collection).to receive(:update_index)
-      described_class.perform_now(file_set, file.id)
-    end
-  end
-
   context "when performed" do
     before do
       described_class.perform_now(file_set, file.id)
