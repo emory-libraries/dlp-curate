@@ -3,7 +3,7 @@
 require "rails_helper"
 include Warden::Test::Helpers
 
-RSpec.describe "IIIF requests", :clean, type: :request do
+RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
   let(:public_work_id) { "658pc866ww-cor" }
   let(:work_id) { "436tx95xcc-cor" }
   let(:public_image_sha) { "465c0075481fe4badc58c76fba42161454a18d1f" }
@@ -57,8 +57,7 @@ RSpec.describe "IIIF requests", :clean, type: :request do
 
       let(:user) { User.from_omniauth(auth_hash) }
       let(:cookie_name) { "bearer_token" }
-      let(:encrypted_cookie_value) { "43BB3AA86080214273B978723D70DE6894DB9DEAC93FB27C79799EAD405B3FE8" }
-      let(:cookie) { Rack::Test::Cookie.new("#{cookie_name}=#{encrypted_cookie_value}") }
+      let(:encrypted_cookie_value) { "BE0F7323469F3E7DF86CF9CA95B8ADD5D17753DA4F00BB67F2A9E8EC93E6A370" }
 
       before do
         solr = Blacklight.default_index.connection

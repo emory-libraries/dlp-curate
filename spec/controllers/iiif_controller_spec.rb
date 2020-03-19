@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe IiifController, type: :controller, clean: true do
+RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
   let(:identifier) { "508hdr7srt-cor" }
   let(:work_id) { "508hdr7srt-cor" }
   let(:image_sha) { "d28c5b20cf9b9663181d02b5ce90fac59fa666d7" }
@@ -11,7 +11,6 @@ RSpec.describe IiifController, type: :controller, clean: true do
   let(:rotation) { 0 }
   let(:quality) { "default" }
   let(:format) { "jpg" }
-  let(:encrypted_cookie_value) { "43BB3AA86080214273B978723D70DE6894DB9DEAC93FB27C79799EAD405B3FE8" }
   let(:params) do
     {
       identifier: image_sha,
@@ -180,72 +179,6 @@ RSpec.describe IiifController, type: :controller, clean: true do
       let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/12,12,800,800/,400/0/default.jpg" }
       let(:region) { "12,12,200,250" }
       it "does not alter the iiif region param" do
-        get :show, params: params
-        expect(assigns(:iiif_url)).to eq expected_iiif_url
-        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
-      end
-    end
-  end
-
-  describe "a request for an Emory low download object" do
-    let(:identifier) { "508hdr7srt-cor" }
-    let(:attributes) do
-      { "id" => "85370rxwg2-cor",
-        "digest_ssim" => ["urn:sha1:#{image_sha}"],
-        "visibility_ssi" => "emory_low" }
-    end
-
-    before do
-      solr = Blacklight.default_index.connection
-      solr.add([attributes])
-      solr.commit
-      create_cookie("bearer_token", encrypted_cookie_value)
-    end
-
-    context "a request for full size" do
-      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/,400/0/default.jpg" }
-      let(:size) { "full" }
-      it "alters a full size iiif request to ensure a low resolution image" do
-        get :show, params: params
-        expect(assigns(:iiif_url)).to eq expected_iiif_url
-        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
-      end
-    end
-
-    context "a request for anything smaller than the full size" do
-      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/,300/0/default.jpg" }
-      let(:size) { ",300" }
-      it "does not alter the iiif request" do
-        get :show, params: params
-        expect(assigns(:iiif_url)).to eq expected_iiif_url
-        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
-      end
-    end
-
-    context "a request for anything larger than max size" do
-      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/,400/0/default.jpg" }
-      let(:size) { "800," }
-      xit "alters a full size iiif request to ensure a low resolution image" do
-        get :show, params: params
-        expect(assigns(:iiif_url)).to eq expected_iiif_url
-        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
-      end
-    end
-
-    context "a request for anything larger than max region" do
-      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/0,0,800,800/,400/0/default.jpg" }
-      let(:region) { "0,0,600,600" }
-      xit "alters the iiif request to what is permitted" do
-        get :show, params: params
-        expect(assigns(:iiif_url)).to eq expected_iiif_url
-        expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
-      end
-    end
-
-    context "a request for anything smaller than max region" do
-      let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/12,12,800,800/,400/0/default.jpg" }
-      let(:region) { "12,12,200,250" }
-      xit "does not alter the iiif region param" do
         get :show, params: params
         expect(assigns(:iiif_url)).to eq expected_iiif_url
         expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
