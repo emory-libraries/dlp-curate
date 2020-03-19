@@ -53,7 +53,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
       context "a request for anything larger than max size" do
         let(:expected_iiif_url) { "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/#{image_sha}/full/#{size}/0/default.jpg" }
         let(:size) { "800," }
-        it "alters a full size iiif request to ensure a low resolution image" do
+        it "does not alter a full size iiif request to ensure a high resolution image" do
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}")
           expect(assigns(:iiif_url)).to eq expected_iiif_url
           expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
@@ -209,7 +209,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
       context "a request for anything larger than max size" do
         let(:expected_iiif_url) { "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/#{image_sha}/full/#{size}/0/default.jpg" }
         let(:size) { "800," }
-        it "alters a full size iiif request to ensure a low resolution image" do
+        it "does not alter a full size iiif request to ensure a high resolution image" do
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}" })
           expect(assigns(:iiif_url)).to eq expected_iiif_url
           expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
