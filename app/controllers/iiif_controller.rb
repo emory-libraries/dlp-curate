@@ -79,7 +79,7 @@ class IiifController < ApplicationController
   def region
     return params["region"] if visibility == "open"
     return params["region"] if params["region"] == "full"
-    low_res_adjusted_region if visibility == "low_res"
+    low_res_adjusted_region if visibility == "low_res" || visibility == "emory_low"
   rescue
     "0,0,#{IiifController.min_tile_size_for_low_res},#{IiifController.min_tile_size_for_low_res}"
   end
@@ -107,7 +107,7 @@ class IiifController < ApplicationController
   # For any object with low resolution requirements, check that the requested size is smaller than the configured max size
   def size
     return params["size"] if visibility == "open"
-    if visibility == "low_res"
+    if visibility == "low_res" || visibility == "emory_low"
       return ",#{IiifController.max_pixels_for_low_res}" if size_requested_larger_than_allowed?
       params["size"]
     end
