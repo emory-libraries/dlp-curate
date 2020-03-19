@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe IiifController, type: :controller, clean: true do
+RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
   let(:identifier) { "508hdr7srt-cor" }
   let(:work_id) { "508hdr7srt-cor" }
   let(:image_sha) { "d28c5b20cf9b9663181d02b5ce90fac59fa666d7" }
