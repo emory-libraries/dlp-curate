@@ -27,6 +27,5 @@ class CharacterizeJob < Hyrax::ApplicationJob
     Rails.logger.debug "Ran characterization on #{file.id} (#{file.mime_type})"
     file.save!
     file_set.update_index
-    file_set.parent&.in_collections&.each(&:update_index)
   end
 end

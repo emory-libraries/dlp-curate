@@ -97,6 +97,7 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
     Exclude:
         - app/lib/metadata_definitions.rb
+        - app/models/concerns/hyrax/collection_behavior.rb
 
 Metrics/PerceivedComplexity:
     Exclude:
