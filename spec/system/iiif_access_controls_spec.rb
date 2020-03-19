@@ -2,7 +2,7 @@
 require 'rails_helper'
 include Warden::Test::Helpers
 
-RSpec.describe 'iiif access controls', type: :system do
+RSpec.describe 'iiif access controls', type: :system, iiif: true do
   let(:work_id) { "436tx95xcc-cor" }
   let(:image_sha) { "79276774f3dbfbd977d39065eec14aa185b5213d" }
   let(:region) { "full" }
@@ -10,7 +10,7 @@ RSpec.describe 'iiif access controls', type: :system do
   let(:rotation) { 0 }
   let(:quality) { "default" }
   let(:format) { "jpg" }
-  let(:encrypted_cookie_value) { "43BB3AA86080214273B978723D70DE6894DB9DEAC93FB27C79799EAD405B3FE8" }
+  let(:encrypted_cookie_value) { "BE0F7323469F3E7DF86CF9CA95B8ADD5D17753DA4F00BB67F2A9E8EC93E6A370" }
 
   let(:iiif_url) { "/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}" }
 
