@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable RSpec/AnyInstance
 
 require 'rails_helper'
 
