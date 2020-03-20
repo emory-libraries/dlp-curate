@@ -223,7 +223,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
     context "with a Rose High View object" do
       let(:attributes) do
         { "id" => work_id,
-          "digest_ssim" => ["urn:sha1:#{image_sha}"],
+          "sha1_tesim" => ["urn:sha1:#{image_sha}"],
           "visibility_ssi" => "rose_high" }
       end
 
