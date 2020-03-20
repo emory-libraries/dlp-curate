@@ -23,7 +23,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
   end
   let(:attributes) do
     { "id" => work_id,
-      "digest_ssim" => ["urn:sha1:#{image_sha}"],
+      "sha1_tesim" => ["urn:sha1:#{image_sha}"],
       "visibility_ssi" => "open" }
   end
 
@@ -53,7 +53,6 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     before do
       ENV['IIIF_MANIFEST_CACHE'] = Rails.root.join('tmp').to_s
       ENV['PROXIED_IIIF_SERVER_URL'] = 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2'
-      ENV['IIIF_SERVER_URL'] = 'https://curate.library.emory.edu/iiif/2'
       stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json")
         .with(
           headers: {
@@ -67,6 +66,11 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
           body:    info_dot_json_from_cantaloupe,
           headers: {}
         )
+    end
+    around do |example|
+      ENV['IIIF_SERVER_URL'] = 'https://curate.library.emory.edu/iiif/2'
+      example.run
+      ENV['IIIF_SERVER_URL'] = nil
     end
     let(:image_sha) { "7f15795a197b389f6f2b0cb28362f777e1378f6f" }
     let(:params) do
@@ -105,7 +109,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/full/0/default.jpg" }
     let(:attributes) do
       { "id" => "85370rxwg2-cor",
-        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "sha1_tesim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "open" }
     end
     before do
@@ -125,7 +129,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     let(:identifier) { "508hdr7srt-cor" }
     let(:attributes) do
       { "id" => "85370rxwg2-cor",
-        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "sha1_tesim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "low_res" }
     end
 
@@ -190,6 +194,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     let(:work)          { FactoryBot.create(:public_generic_work, id: identifier) }
     let(:file_set)      { FactoryBot.create(:file_set) }
     let(:pmf)           { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
+    let(:sf)            { File.open(fixture_path + '/book_page/0003_service.jpg') }
     let(:solr_document) { SolrDocument.new(attributes) }
     let(:cache_file)    { Rails.root.join('tmp', "2019-11-11_18-20-32_#{identifier}") }
     let(:attributes) do
@@ -216,6 +221,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
 
     before do
       Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
+      Hydra::Works::AddFileToFileSet.call(file_set, sf, :service_file)
       work.ordered_members << file_set
       work.save!
       allow(SolrDocument).to receive(:find).and_return(solr_document)
@@ -251,8 +257,9 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
       expect(response_values["sequences"].first["@type"]).to include "sc:Sequence"
       expect(response_values["sequences"].first["@id"]).to include "/iiif/#{work.id}/manifest/sequence/normal"
       expect(response_values["sequences"].first["canvases"].first["@id"]).to include "/iiif/#{work.id}/manifest/canvas/#{file_set.id}"
-      expect(response_values["sequences"].first["canvases"].first["images"].first["resource"]["@id"]).to include
-      "/images/#{file_set.id}%2Ffiles%2F#{file_set.files.first.id.split('/').last}/full/600,/0/default.jpg"
+      expect(response_values["sequences"].first["canvases"].first["images"].first["resource"]["@id"]).to include(
+        "/images/#{file_set.id}%2Ffiles%2F#{file_set.service_file.id.split('/').last}/full/600,/0/default.jpg"
+      )
     end
   end
 end

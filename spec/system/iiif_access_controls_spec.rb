@@ -33,7 +33,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
   context "Public objects" do
     let(:attributes) do
       { "id" => work_id,
-        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "sha1_tesim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "open" }
     end
 
@@ -46,7 +46,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
   context "Public low view object" do
     let(:attributes) do
       { "id" => work_id,
-        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "sha1_tesim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "low_res" }
     end
 
@@ -59,7 +59,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
   context "Emory Low Download objects" do
     let(:attributes) do
       { "id" => work_id,
-        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "sha1_tesim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "emory_low" }
     end
 
@@ -86,7 +86,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
   context "for Emory High Download objects" do
     let(:attributes) do
       { "id" => work_id,
-        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "sha1_tesim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "authenticated" }
     end
 
@@ -113,7 +113,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
   context "Rose High View objects" do
     let(:attributes) do
       { "id" => work_id,
-        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "sha1_tesim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "rose_high" }
     end
 
@@ -127,7 +127,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
   context "Private objects" do
     let(:attributes) do
       { "id" => work_id,
-        "digest_ssim" => ["urn:sha1:#{image_sha}"],
+        "sha1_tesim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "restricted" }
     end
 

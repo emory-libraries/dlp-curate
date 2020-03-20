@@ -49,7 +49,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
     context "with a Public object" do
       let(:attributes) do
         { "id" => work_id,
-          "digest_ssim" => ["urn:sha1:#{image_sha}"],
+          "sha1_tesim" => ["urn:sha1:#{image_sha}"],
           "visibility_ssi" => "open" }
       end
 
@@ -67,7 +67,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
     context "with a Public Low View object" do
       let(:attributes) do
         { "id" => work_id,
-          "digest_ssim" => ["urn:sha1:#{image_sha}"],
+          "sha1_tesim" => ["urn:sha1:#{image_sha}"],
           "visibility_ssi" => "low_res" }
       end
 
@@ -125,7 +125,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
     context "with an Emory Low Download object" do
       let(:attributes) do
         { "id" => work_id,
-          "digest_ssim" => ["urn:sha1:#{image_sha}"],
+          "sha1_tesim" => ["urn:sha1:#{image_sha}"],
           "visibility_ssi" => "emory_low" }
       end
 
@@ -205,7 +205,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
     context "with an Emory High Download object" do
       let(:attributes) do
         { "id" => work_id,
-          "digest_ssim" => ["urn:sha1:#{image_sha}"],
+          "sha1_tesim" => ["urn:sha1:#{image_sha}"],
           "visibility_ssi" => "authenticated" }
       end
 
@@ -223,7 +223,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
     context "with a Rose High View object" do
       let(:attributes) do
         { "id" => work_id,
-          "digest_ssim" => ["urn:sha1:#{image_sha}"],
+          "sha1_tesim" => ["urn:sha1:#{image_sha}"],
           "visibility_ssi" => "rose_high" }
       end
 

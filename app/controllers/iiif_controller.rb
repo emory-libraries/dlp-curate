@@ -166,7 +166,7 @@ class IiifController < ApplicationController
   # If this goes wrong for any reason, default to "restricted"
   # Note that Emory's cantaloupe is using SHA1 checksums to look up images, NOT work IDs
   def fetch_visibility
-    response = Blacklight.default_index.connection.get 'select', params: { q: "digest_ssim:urn:sha1:#{identifier}" }
+    response = Blacklight.default_index.connection.get 'select', params: { q: "sha1_tesim:urn:sha1:#{identifier}" }
     visibility = response["response"]["docs"][0]["visibility_ssi"]
     return visibility unless visibility.nil? || visibility.empty?
     ["restricted"]

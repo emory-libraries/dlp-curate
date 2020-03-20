@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-require "rails_helper"
-require 'cgi'
+require 'rails_helper'
+require_relative '../../fixtures/manifest_output.rb'
 
 RSpec.describe "manifest/manifest", type: :view do
   let(:identifier)      { '508hdr7srq-cor' }
@@ -14,7 +14,9 @@ RSpec.describe "manifest/manifest", type: :view do
   let(:solr_document)   { SolrDocument.new(attributes) }
   let(:file_set)        { FactoryBot.create(:file_set, id: '608hdr7qrt-cor', title: ['foo']) }
   let(:pmf)             { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
-  let(:manifest_output) { File.read(fixture_path + '/manifest_json_output.json') }
+  let(:sf)              { File.open(fixture_path + '/book_page/0003_service.jpg') }
+  let(:imf)             { File.open(fixture_path + '/book_page/0003_intermediate.jp2') }
+  let(:manifest)        { ManifestOutput.new }
   let(:attributes) do
     { "id" => identifier,
       "title_tesim" => [work.title.first],
@@ -26,17 +28,13 @@ RSpec.describe "manifest/manifest", type: :view do
       "holding_repository_tesim" => ["test holding repo"],
       "rights_statement_tesim" => ["example.com"] }
   end
-  let(:original_checksum) do
-    ['urn:md5:da674abf5cc0750158ebe9f8fdb83faf',
-     'urn:sha1:fba6a26214287bb0c50ecb2e4922041dcb84b256',
-     'urn:sha256:7399acb3f34ec4cb06a55b0ca79e637fee3552cc599d7cd2eb6b17e3a2db94e7']
-  end
 
   before do
     Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
+    Hydra::Works::AddFileToFileSet.call(file_set, sf, :service_file)
+    Hydra::Works::AddFileToFileSet.call(file_set, imf, :intermediate_file)
     work.ordered_members << file_set
     work.save!
-    allow_any_instance_of(FileSet).to receive(:original_checksum).and_return(original_checksum)
     assign(:solr_doc, solr_document)
     assign(:image_concerns, image_concerns)
     assign(:root_url, root_url)
@@ -52,7 +50,7 @@ RSpec.describe "manifest/manifest", type: :view do
 
   it "displays a valid IIIF Presentation API manifest" do
     render
-    doc = manifest_output
+    doc = manifest.manifest_output(work, file_set).to_json
     expect(JSON.parse(rendered)).to eq(JSON.parse(doc))
   end
 end

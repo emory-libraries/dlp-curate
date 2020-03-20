@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable RSpec/AnyInstance
 
 require 'rails_helper'
 
@@ -12,6 +11,10 @@ RSpec.describe IiifUrlBuilderService, :clean do
   let(:file_set) do
     FactoryBot.create(:file_set, user: user, title: ['Some title'])
   end
+  let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
+  before do
+    Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
+  end
 
   around do |example|
     ENV['IIIF_SERVER_URL'] = 'http://localhost:3000/cantaloupe/iiif/2/'
@@ -19,34 +22,27 @@ RSpec.describe IiifUrlBuilderService, :clean do
     ENV['IIIF_SERVER_URL'] = nil
   end
 
-  let(:original_checksum) do
-    ['urn:md5:da674abf5cc0750158ebe9f8fdb83faf',
-     'urn:sha1:fba6a26214287bb0c50ecb2e4922041dcb84b256',
-     'urn:sha256:7399acb3f34ec4cb06a55b0ca79e637fee3552cc599d7cd2eb6b17e3a2db94e7']
-  end
   context 'when using the s3 Fedora adapter' do
-    let(:sha1_url) { 'http://localhost:3000/cantaloupe/iiif/2/fba6a26214287bb0c50ecb2e4922041dcb84b256/full/260,/0/default.jpg' }
-    let(:sha1_info_url) { "http://localhost:3000/cantaloupe/iiif/2/fba6a26214287bb0c50ecb2e4922041dcb84b256" }
+    let(:checksum_value) { file_set.preservation_master_file.checksum.value }
+    let(:sha1_url) { "http://localhost:3000/cantaloupe/iiif/2/#{checksum_value}/full/260,/0/default.jpg" }
+    let(:sha1_info_url) { "http://localhost:3000/cantaloupe/iiif/2/#{checksum_value}" }
 
     context 'when given a fileset id' do
       it 'returns a sha1' do
-        allow_any_instance_of(FileSet).to receive(:original_checksum).and_return(original_checksum)
-        expect(iiif_builder_service.sha1).to eq('fba6a26214287bb0c50ecb2e4922041dcb84b256')
+        expect(iiif_builder_service.sha1).to eq(checksum_value.gsub('urn:sha1:', ''))
       end
       it 'returns a full url with the sha1' do
-        allow_any_instance_of(FileSet).to receive(:original_checksum).and_return(original_checksum)
         expect(iiif_builder_service.sha1_url).to eq(sha1_url)
       end
 
       it 'returns a full info url with the sha1' do
-        allow_any_instance_of(FileSet).to receive(:original_checksum).and_return(original_checksum)
         expect(iiif_builder_service.sha1_info_url).to eq(sha1_info_url)
       end
     end
 
     context 'when given a fileset without the proper checksums' do
       it 'returns unknown' do
-        allow(file_set).to receive(:original_checksum).and_return([])
+        file_set.preservation_master_file = nil
         expect(iiif_builder_service.sha1).to eq('unknown')
       end
     end
