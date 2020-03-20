@@ -19,9 +19,29 @@ class IiifController < ApplicationController
     when "restricted"
       return head :forbidden unless current_user&.admin?
       send_image
+    when "rose_high"
+      return head :forbidden unless check_ip
+      send_image
     else
       head :forbidden
     end
+  end
+
+  def check_ip
+    user_ip = request.headers["REMOTE_ADDR"]
+    rose_reading_room_ips.include? user_ip
+  end
+
+  def rose_reading_room_ips
+    reading_room_ips["all_reading_room_ips"]["rose_reading_room_ip_list"]
+  end
+
+  def reading_room_ips
+    @reading_room_ips ||= reading_room_ips_yaml.with_indifferent_access
+  end
+
+  def reading_room_ips_yaml
+    YAML.safe_load(ERB.new(File.read(Rails.root.join("config", "reading_room_ips.yml"))).result, [], [], true)
   end
 
   def send_image

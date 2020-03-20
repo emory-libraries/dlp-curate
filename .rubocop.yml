@@ -71,6 +71,7 @@ Metrics/CyclomaticComplexity:
         - config/initializers/file_actor.rb
         - app/indexers/curate/file_set_indexer.rb
         - app/indexers/curate_generic_work_indexer.rb
+        - app/controllers/iiif_controller.rb
 
 Metrics/LineLength:
     Exclude:
@@ -93,6 +94,7 @@ Metrics/MethodLength:
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
         - app/indexers/curate_generic_work_indexer.rb
+        - app/controllers/iiif_controller.rb
 
 Metrics/ModuleLength:
     Exclude:
