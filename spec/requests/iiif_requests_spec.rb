@@ -240,6 +240,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
         it "does not return the image for a work with 'Rose High View' visibility" do
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": non_reading_room_ip })
           expect(response.status).to eq 403
+          expect(response.body).to be_empty
         end
       end
 
