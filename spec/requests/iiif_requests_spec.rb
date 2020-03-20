@@ -21,8 +21,11 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
       format:     format
     }
   end
+
   let(:cookie_name) { "bearer_token" }
   let(:encrypted_cookie_value) { "BE0F7323469F3E7DF86CF9CA95B8ADD5D17753DA4F00BB67F2A9E8EC93E6A370" }
+  let(:non_reading_room_ip) { '198.51.100.255' }
+  let(:reading_room_ip) { '192.0.0.255' }
 
   before do
     ENV['IIIF_MANIFEST_CACHE'] = Rails.root.join('tmp').to_s
@@ -213,6 +216,40 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}" })
           expect(assigns(:iiif_url)).to eq expected_iiif_url
           expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+        end
+      end
+    end
+
+    context "with a Rose High View object" do
+      let(:attributes) do
+        { "id" => work_id,
+          "digest_ssim" => ["urn:sha1:#{image_sha}"],
+          "visibility_ssi" => "rose_high" }
+      end
+
+      context "within the Rose Reading Room" do
+        it "returns the image for a work with 'Rose High View' visibility" do
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": reading_room_ip })
+
+          expect(request.headers["REMOTE_ADDR"]).to eq reading_room_ip
+          expect(response.status).to eq 200
+        end
+      end
+
+      context "not in the Rose Reading Room" do
+        it "does not return the image for a work with 'Rose High View' visibility" do
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": non_reading_room_ip })
+          expect(response.status).to eq 403
+        end
+      end
+
+      context "a Curate admin not in the Rose reading room" do
+        let(:admin_user) { FactoryBot.create(:admin) }
+
+        it "does return the image for a work with 'Rose High View' visibility" do
+          login_as admin_user
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": non_reading_room_ip })
+          expect(response.status).to eq 200
         end
       end
     end
