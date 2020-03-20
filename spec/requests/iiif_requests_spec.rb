@@ -246,7 +246,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
       context "a Curate admin not in the Rose reading room" do
         let(:admin_user) { FactoryBot.create(:admin) }
 
-        it "does not return the image for a work with 'Rose High View' visibility" do
+        it "does return the image for a work with 'Rose High View' visibility" do
           login_as admin_user
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": non_reading_room_ip })
           expect(response.status).to eq 200
