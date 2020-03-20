@@ -20,7 +20,7 @@ class IiifController < ApplicationController
       return head :forbidden unless current_user&.admin?
       send_image
     when "rose_high"
-      return head :forbidden unless check_ip
+      return head :forbidden unless check_ip || current_user&.admin?
       send_image
     else
       head :forbidden
