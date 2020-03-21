@@ -107,7 +107,7 @@ namespace :deploy do
       if symblink_path != 'unset'
         execute "ln -sf #{symblink_path} #{release_path}/public"
       else
-        logger.debug "branding_symblink_path is unset, skipping task"
+        puts "branding_symblink_path is unset, skipping task *create_branding_path_symblink*"
       end
     end
   end
