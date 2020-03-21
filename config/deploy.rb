@@ -99,11 +99,13 @@ namespace :deploy do
   end
 end
 
-namespace :deploy do
-  desc "Add symblink for branding folder when variable is defined"
-  after :finishing, :create_branding_path_symblink do
-    on roles(:app) do
-      execute "ln -sf #{fetch(:branding_symblink_path)} #{release_path}/public"
+if exists?(:branding_symblink_path)
+  namespace :deploy do
+    desc "Add symblink for branding folder when variable is defined"
+    before :finishing, :create_branding_path_symblink do
+      on roles(:app) do
+        execute "ln -sf #{fetch(:branding_symblink_path)} #{release_path}/public"
+      end
     end
   end
 end
