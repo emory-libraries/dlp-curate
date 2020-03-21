@@ -99,16 +99,20 @@ namespace :deploy do
   end
 end
 
-if fetch(:branding_symblink_path)
-  namespace :deploy do
-    desc "Add symblink for branding folder when variable is defined"
-    before :finishing, :create_branding_path_symblink do
-      on roles(:app) do
-        execute "ln -sf #{fetch(:branding_symblink_path)} #{release_path}/public"
+namespace :deploy do
+  desc "Add symblink for branding folder when variable is defined"
+  before :finishing, :create_branding_path_symblink do
+    on roles(:app) do
+      symblink_path = fetch(:branding_symblink_path, 'unset')
+      if symblink_path != 'unset'
+        execute "ln -sf #{symblink_path} #{release_path}/public"
+      else
+        logger.debug "branding_symblink_path is unset, skipping task"
       end
     end
   end
 end
+
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
