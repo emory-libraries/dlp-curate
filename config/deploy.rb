@@ -99,7 +99,7 @@ namespace :deploy do
   end
 end
 
-if exists?(:branding_symblink_path)
+if fetch(:branding_symblink_path)
   namespace :deploy do
     desc "Add symblink for branding folder when variable is defined"
     before :finishing, :create_branding_path_symblink do
