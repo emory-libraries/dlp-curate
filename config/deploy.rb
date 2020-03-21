@@ -99,6 +99,13 @@ namespace :deploy do
   end
 end
 
+namespace :deploy do
+  desc "Add symblink for branding folder when variable is defined"
+  after :finishing do
+    execute "ln -sf #{branding_symblink_path} #{release_path}/public"
+  end
+end
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
