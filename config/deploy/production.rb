@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 set :stage, :PROD
-set :honeybadger_env, "curate"
+set :honeybadger_env, 'curate'
+set :branding_symblink_path, '/mnt/prod_efs/uploads/dlp-curate/branding/'
 
 ec2_role [:web, :app, :db, :redhatapp, :collection],
          user:        'deploy',
