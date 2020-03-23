@@ -101,14 +101,14 @@ namespace :deploy do
 end
 
 namespace :deploy do
-  desc "Add symblink for branding folder when variable is defined"
-  before :finishing, :create_branding_path_symblink do
+  desc "Add symlink for branding folder when variable is defined"
+  before :finishing, :create_branding_path_symlink do
     on roles(:app) do
-      symblink_path = fetch(:branding_symblink_path, 'unset')
-      if symblink_path != 'unset'
-        execute "ln -sf #{symblink_path} #{release_path}/public"
+      symlink_path = fetch(:branding_symlink_path, 'unset')
+      if symlink_path != 'unset'
+        execute "ln -sf #{symlink_path} #{release_path}/public"
       else
-        puts "branding_symblink_path is unset, skipping task *create_branding_path_symblink*"
+        puts "branding_symlink_path is unset, skipping task *create_branding_path_symlink*"
       end
     end
   end

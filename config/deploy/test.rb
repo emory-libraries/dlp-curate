@@ -2,7 +2,7 @@
 
 set :stage, :TEST
 set :honeybadger_env, 'curate-test'
-set :branding_symblink_path, '/mnt/test_efs/uploads/dlp-curate/branding'
+set :branding_symlink_path, '/mnt/test_efs/uploads/dlp-curate/branding'
 
 ec2_role [:web, :app, :db, :redhatapp, :collection],
          user:        'deploy',
