@@ -28,8 +28,15 @@ class IiifController < ApplicationController
   end
 
   def check_ip
-    user_ip = request.headers["REMOTE_ADDR"]
     rose_reading_room_ips.include? user_ip
+  end
+
+  def user_ip
+    if request.headers["X-Forwarded-For"]
+      request.headers["X-Forwarded-For"]
+    elsif request.headers["REMOTE_ADDR"]
+      request.headers["REMOTE_ADDR"]
+    end
   end
 
   def rose_reading_room_ips
