@@ -10,6 +10,11 @@ class IiifController < ApplicationController
   end
 
   def show
+    Rails.logger.info "-----------------------------------------------------------------------------------"
+    Rails.logger.info visibility
+    Rails.logger.info request.headers
+    Rails.logger.info "-----------------------------------------------------------------------------------"
+
     case visibility
     when "open", "low_res"
       return send_image
