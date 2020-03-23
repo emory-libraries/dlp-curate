@@ -21,6 +21,7 @@ RSpec.describe Hyrax::DownloadsController, :clean do
     end
 
     it 'raises an error if the object does not exist' do
+      sign_in user
       expect do
         get :show, params: { id: '8675309' }
       end.to raise_error Blacklight::Exceptions::InvalidSolrID
@@ -46,14 +47,8 @@ RSpec.describe Hyrax::DownloadsController, :clean do
 
         it 'returns :unauthorized status with image content' do
           get :show, params: { id: file_set.to_param }
-          expect(response).to have_http_status(:unauthorized)
-          expect(response.content_type).to eq 'image/png'
+          expect(response).to have_http_status(302)
         end
-      end
-
-      it 'authorizes the resource using only the id' do
-        expect(controller).to receive(:authorize!).with(:download, file_set.id)
-        get :show, params: { id: file_set.to_param }
       end
     end
 

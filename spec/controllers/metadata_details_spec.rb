@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe MetadataDetailsController, type: :controller do
+  let(:user) { FactoryBot.create(:user) }
+  before do
+    sign_in user
+  end
   describe 'GET show' do
     it 'has 200 code for show' do
       get :show

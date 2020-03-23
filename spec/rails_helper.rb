@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 require 'rspec/its'
+require 'support/controller_helpers'
 
 ENV['RAILS_ENV'] ||= 'test'
 
@@ -40,6 +41,8 @@ end
 ActiveJob::Base.queue_adapter = :test
 
 RSpec.configure do |config|
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include ControllerHelpers, type: :controller
   config.include ShowMeTheCookies, type: :system
 
   config.before(:suite) do
