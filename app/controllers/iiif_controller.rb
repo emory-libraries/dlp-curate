@@ -32,6 +32,14 @@ class IiifController < ApplicationController
   end
 
   def user_ip
+    Rails.logger.info "-----------------------------------------------------------------------------------"
+    Rails.logger.info "X-Forwarded-For"
+    Rails.logger.info request.headers["X-Forwarded-For"]
+    Rails.logger.info "REMOTE_ADDR"
+    Rails.logger.info request.headers["REMOTE_ADDR"]
+    Rails.logger.info request.headers
+    Rails.logger.info "-----------------------------------------------------------------------------------"
+
     if request.headers["X-Forwarded-For"]
       request.headers["X-Forwarded-For"]
     elsif request.headers["REMOTE_ADDR"]
