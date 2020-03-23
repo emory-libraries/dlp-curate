@@ -20,14 +20,22 @@ class IiifController < ApplicationController
       return head :forbidden unless current_user&.admin?
       send_image
     when "rose_high"
-      return head :forbidden unless check_ip || current_user&.admin?
+      Rails.logger.info "-----------------------------------------------------------------------------------"
+      Rails.logger.info "X-Forwarded-For"
+      Rails.logger.info request.headers["X-Forwarded-For"]
+      Rails.logger.info "REMOTE_ADDR"
+      Rails.logger.info request.headers["REMOTE_ADDR"]
+      Rails.logger.info request.headers
+      Rails.logger.info "-----------------------------------------------------------------------------------"
+
+      return head :forbidden unless user_ip_rose_reading_room? # || current_user&.admin?
       send_image
     else
       head :forbidden
     end
   end
 
-  def check_ip
+  def user_ip_rose_reading_room?
     rose_reading_room_ips.include? user_ip
   end
 
