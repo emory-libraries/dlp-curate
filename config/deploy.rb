@@ -108,7 +108,7 @@ namespace :deploy do
       if symlink_path != 'unset'
         execute "ln -sf #{symlink_path} #{release_path}/public"
       else
-        puts "branding_symlink_path is unset, skipping task *create_branding_path_symlink*"
+        Rails.logger.debug "branding_symlink_path is unset, skipping task *create_branding_path_symlink*"
       end
     end
   end
