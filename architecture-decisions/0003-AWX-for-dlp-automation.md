@@ -1,7 +1,7 @@
 # 3. AWX For DLP Automation
 
 * Status: Accepted
-* Date: 2020-03-07
+* Date: 2020-03-25
 
 ## Context
 
@@ -37,3 +37,10 @@ This section briefly outlines the alternatives we could have taken, with PRO's a
 * PRO: Using Jenkins to orchestrate, AWX to execute is a popular setup
 * PRO: Jenkins may be a better tool for CloudFormation
 * CON: Increases complexity, AWX can also orchestrate
+
+### Use Capistrano
+
+* PRO: Simpler setup, no additional tool needed
+* CON: Would still need to provision a server to run capistrano tasks
+* CON: Would require writing a large number of custom capistrano tasks
+* CON: Capistrano not as flexible as a tool an other options
