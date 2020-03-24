@@ -10,11 +10,6 @@ class IiifController < ApplicationController
   end
 
   def show
-    Rails.logger.info "-----------------------------------------------------------------------------------"
-    Rails.logger.info visibility
-    Rails.logger.info request.headers
-    Rails.logger.info "-----------------------------------------------------------------------------------"
-
     case visibility
     when "open", "low_res"
       return send_image
@@ -25,15 +20,7 @@ class IiifController < ApplicationController
       return head :forbidden unless current_user&.admin?
       send_image
     when "rose_high"
-      Rails.logger.info "-----------------------------------------------------------------------------------"
-      Rails.logger.info "X-Forwarded-For"
-      Rails.logger.info request.headers["X-Forwarded-For"]
-      Rails.logger.info "REMOTE_ADDR"
-      Rails.logger.info request.headers["REMOTE_ADDR"]
-      Rails.logger.info request.headers
-      Rails.logger.info "-----------------------------------------------------------------------------------"
-
-      return head :forbidden unless user_ip_rose_reading_room? # || current_user&.admin?
+      return head :forbidden unless user_ip_rose_reading_room? || current_user&.admin?
       send_image
     else
       head :forbidden
@@ -45,14 +32,6 @@ class IiifController < ApplicationController
   end
 
   def user_ip
-    Rails.logger.info "-----------------------------------------------------------------------------------"
-    Rails.logger.info "X-Forwarded-For"
-    Rails.logger.info request.headers["X-Forwarded-For"]
-    Rails.logger.info "REMOTE_ADDR"
-    Rails.logger.info request.headers["REMOTE_ADDR"]
-    Rails.logger.info request.headers
-    Rails.logger.info "-----------------------------------------------------------------------------------"
-
     if request.headers["X-Forwarded-For"]
       request.headers["X-Forwarded-For"]
     elsif request.headers["REMOTE_ADDR"]

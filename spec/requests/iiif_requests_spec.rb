@@ -228,14 +228,14 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
       end
 
       context "within the Rose Reading Room" do
-        it "returns the image for a work with 'Rose High View' visibility" do
+        it "returns the image for a work with 'Rose High View' visibility with Remote Address" do
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": reading_room_ip })
 
           expect(request.headers["REMOTE_ADDR"]).to eq reading_room_ip
           expect(response.status).to eq 200
         end
 
-        it "returns the image for a work with 'Rose High View' visibility" do
+        it "returns the image for a work with 'Rose High View' visibility with X-Forwarded-For" do
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "X-Forwarded-For": reading_room_ip })
 
           expect(request.headers["X-Forwarded-For"]).to eq reading_room_ip
@@ -244,13 +244,13 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
       end
 
       context "not in the Rose Reading Room" do
-        it "does not return the image for a work with 'Rose High View' visibility" do
+        it "does not return the image for a work with 'Rose High View' visibility with Remote Address" do
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": non_reading_room_ip })
           expect(response.status).to eq 403
           expect(response.body).to be_empty
         end
 
-        it "does not return the image for a work with 'Rose High View' visibility" do
+        it "does not return the image for a work with 'Rose High View' visibility with X-Forwarded-For" do
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "X-Forwarded-For": non_reading_room_ip })
           expect(response.status).to eq 403
           expect(response.body).to be_empty
@@ -260,7 +260,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
       context "a Curate admin not in the Rose reading room" do
         let(:admin_user) { FactoryBot.create(:admin) }
 
-        it "does return the image for a work with 'Rose High View' visibility" do
+        it "does return the image for a work with 'Rose High View' visibility with Remote Address" do
           login_as admin_user
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": non_reading_room_ip })
           expect(response.status).to eq 200
