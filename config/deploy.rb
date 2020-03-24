@@ -10,6 +10,7 @@ set :rails_env, 'production'
 set :assets_prefix, "#{shared_path}/public/assets"
 set :migration_role, :app
 set :service_unit_name, "sidekiq.service"
+set :passenger_restart_with_touch, true
 
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
@@ -99,6 +100,19 @@ namespace :deploy do
   end
 end
 
+namespace :deploy do
+  desc "Add symlink for branding folder when variable is defined"
+  before :finishing, :create_branding_path_symlink do
+    on roles(:app) do
+      symlink_path = fetch(:branding_symlink_path, 'unset')
+      if symlink_path != 'unset'
+        execute "ln -sf #{symlink_path} #{release_path}/public"
+      else
+        info "branding_symlink_path is unset, skipping task *create_branding_path_symlink*"
+      end
+    end
+  end
+end
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 

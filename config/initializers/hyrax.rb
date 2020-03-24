@@ -208,6 +208,9 @@ Hyrax.config do |config|
   # If you use a multi-server architecture, this MUST be a shared volume
   config.derivatives_path = ENV['DERIVATIVES_PATH'] || Rails.root.join('tmp', 'derivatives')
 
+  # Location where collection banner images will be saved after upload
+  config.branding_path = ENV['BRANDING_PATH'] || Rails.root.join('public', 'branding')
+
   # Should schema.org microdata be displayed?
   # config.display_microdata = true
 

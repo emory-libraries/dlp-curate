@@ -91,3 +91,6 @@ flycheck_*.el
 /vendor/bundle
 
 .env.development
+
+# ignore branding path
+public/branding
