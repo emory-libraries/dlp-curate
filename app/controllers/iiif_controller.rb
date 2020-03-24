@@ -29,14 +29,13 @@ class IiifController < ApplicationController
 
   def user_ip_rose_reading_room?
     rose_reading_room_ips.include? user_ip
+  rescue
+    false
   end
 
   def user_ip
-    if request.headers["X-Forwarded-For"]
-      request.headers["X-Forwarded-For"]
-    elsif request.headers["REMOTE_ADDR"]
-      request.headers["REMOTE_ADDR"]
-    end
+    return request.headers["X-Forwarded-For"] if request.headers["X-Forwarded-For"]
+    return request.headers["REMOTE_ADDR"] if request.headers["REMOTE_ADDR"]
   end
 
   def rose_reading_room_ips
