@@ -4,6 +4,7 @@ include Warden::Test::Helpers
 
 RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
   let(:admin_user) { FactoryBot.build(:admin) }
+  let(:user) { FactoryBot.build(:user) }
   let(:collections_csv) { File.join(fixture_path, 'csv_import', 'collections', 'collections.csv') }
   let(:collection) do
     CurateCollectionImporter.new.import(collections_csv, "/dev/null")
@@ -46,6 +47,7 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
   end
 
   it 'has all the expected metadata fields' do
+    login_as user
     visit "/collections/#{collection.id}"
     expect(page).to have_content("empl.com/purl/#{collection.id}")
     expect(page).to have_content 'Robert Langmuir African American Photograph Collection'

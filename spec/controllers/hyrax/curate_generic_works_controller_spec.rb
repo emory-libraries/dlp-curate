@@ -4,10 +4,13 @@ require 'rails_helper'
 
 RSpec.describe Hyrax::CurateGenericWorksController do
   let(:work) { FactoryBot.create(:public_generic_work, id: '888889') }
+  let(:user) { FactoryBot.create(:user) }
+
   describe "GET #manifest" do
     before { ENV['IIIF_MANIFEST_CACHE'] = "./tmp" }
 
     it "returns http success" do
+      sign_in user
       get :manifest, params: { id: work.id, format: 'json' }
       expect(response).to have_http_status(:success)
     end

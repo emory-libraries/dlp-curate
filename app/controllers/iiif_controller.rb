@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class IiifController < ApplicationController
+  skip_before_action :authenticate_user!
+
   def self.max_pixels_for_low_res
     ENV['MAX_PIXELS_FOR_LOW_RES'] || 400
   end
