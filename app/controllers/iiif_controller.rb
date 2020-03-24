@@ -22,16 +22,22 @@ class IiifController < ApplicationController
       return head :forbidden unless current_user&.admin?
       send_image
     when "rose_high"
-      return head :forbidden unless check_ip || current_user&.admin?
+      return head :forbidden unless user_ip_rose_reading_room? || current_user&.admin?
       send_image
     else
       head :forbidden
     end
   end
 
-  def check_ip
-    user_ip = request.headers["REMOTE_ADDR"]
+  def user_ip_rose_reading_room?
     rose_reading_room_ips.include? user_ip
+  rescue
+    false
+  end
+
+  def user_ip
+    return request.headers["X-Forwarded-For"] if request.headers["X-Forwarded-For"]
+    return request.headers["REMOTE_ADDR"] if request.headers["REMOTE_ADDR"]
   end
 
   def rose_reading_room_ips
