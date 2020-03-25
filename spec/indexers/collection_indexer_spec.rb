@@ -32,5 +32,29 @@ RSpec.describe CurateCollectionIndexer do
         expect(solr_document['title_ssort']).to eq 'title'
       end
     end
+
+    it 'returns nil when collection has no banner attached' do
+      expect(solr_document['banner_path_ss']).to be_falsey
+    end
+
+    context 'when collection has banner attached' do
+      let(:filename) { '/world.png' }
+      let(:file)     { fixture_file_upload(filename, 'image/png') }
+
+      it 'indexes the banner path for each collection' do
+        banner_info = CollectionBrandingInfo.new(
+          collection_id: collection.id, filename: filename,
+          role: "banner", target_url: ""
+        )
+        banner_info.save file.local_path
+
+        expect(solr_document['banner_path_ss']).to eq(
+          '/branding/' +
+          collection.id.to_s +
+          '/banner' +
+          filename
+        )
+      end
+    end
   end
 end
