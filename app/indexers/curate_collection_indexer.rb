@@ -22,7 +22,7 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
 
   def banner_path
     cbi = branding_details
-    cbi.nil? || cbi&.local_path&.nil? ? '' : path_sanitized(cbi.local_path)
+    path_sanitized(cbi.local_path) unless cbi.nil? || cbi&.local_path&.nil?
   end
 
   def branding_details
@@ -30,6 +30,12 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
   end
 
   def path_sanitized(path)
-    path.gsub ::Rails.root.to_s + '/public', ''
+    if ENV['BRANDING_PATH'].present? && path.include?(ENV['BRANDING_PATH'].to_s)
+      path.gsub ENV['BRANDING_PATH'], '/branding'
+    elsif path.include? Rails.root.join('public', 'branding').to_s
+      path.gsub Rails.root.join('public').to_s, ''
+    else
+      path
+    end
   end
 end

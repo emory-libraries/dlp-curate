@@ -34,7 +34,7 @@ RSpec.describe CurateCollectionIndexer do
     end
 
     it 'returns nil when collection has no banner attached' do
-      expect(solr_document['banner_path_ss']).to be_empty
+      expect(solr_document['banner_path_ss']).to be_falsey
     end
 
     context 'when collection has banner attached' do
