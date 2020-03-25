@@ -49,10 +49,10 @@ RSpec.describe CurateCollectionIndexer do
         banner_info.save file.local_path
 
         expect(solr_document['banner_path_ss']).to eq(
-            '/branding/' +
-            collection.id.to_s +
-            '/banner' +
-            filename
+          '/branding/' +
+          collection.id.to_s +
+          '/banner' +
+          filename
         )
       end
     end
