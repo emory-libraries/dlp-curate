@@ -22,10 +22,14 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
 
   def banner_path
     cbi = branding_details
-    cbi.nil? || cbi&.local_path&.nil? ? '' : cbi.local_path
+    cbi.nil? || cbi&.local_path&.nil? ? '' : path_sanitized(cbi.local_path)
   end
 
   def branding_details
     CollectionBrandingInfo.find_by_collection_id_and_role object.id, 'banner'
+  end
+
+  def path_sanitized(path)
+    path.gsub ::Rails.root.to_s + '/public', ''
   end
 end

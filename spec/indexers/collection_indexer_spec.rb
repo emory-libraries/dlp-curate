@@ -33,6 +33,10 @@ RSpec.describe CurateCollectionIndexer do
       end
     end
 
+    it 'returns nil when collection has no banner attached' do
+      expect(solr_document['banner_path_ss']).to be_empty
+    end
+
     context 'when collection has banner attached' do
       let(:filename) { '/world.png' }
       let(:file)     { fixture_file_upload(filename, 'image/png') }
@@ -45,8 +49,7 @@ RSpec.describe CurateCollectionIndexer do
         banner_info.save file.local_path
 
         expect(solr_document['banner_path_ss']).to eq(
-          ::Rails.root.to_s +
-            '/public/branding/' +
+            '/branding/' +
             collection.id.to_s +
             '/banner' +
             filename
