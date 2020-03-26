@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Curate::FileSetIndexer do
+RSpec.describe Curate::FileSetIndexer, clean: true do
   let(:file_set) do
     FileSet.new(
       id:    '508hdr7srq-cor',
