@@ -1437,14 +1437,14 @@ RSpec.describe CurateGenericWork do
 
     let(:curate_generic_work) { FactoryBot.build(:work, institution: institution) }
 
-    it "selects custom term and saves it" do
+    it "selects custom term and saves it", clean: true do
       curate_generic_work.save
 
       expect(curate_generic_work.institution).to eq institution
     end
   end
 
-  context "validates url for work creation" do
+  context "validates url for work creation", clean: true do
     let(:bad_url) { 'teststring' }
     let(:curate_generic_work) { FactoryBot.build(:work, final_published_versions: [bad_url]) }
 
