@@ -81,6 +81,16 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
         expect(page.body).to be_empty
       end
     end
+
+    context "As a Curate user" do
+      let(:user) { FactoryBot.create(:user) }
+
+      it 'visits a iiif_url', clean: true do
+        login_as user
+        visit iiif_url
+        expect(page).to have_http_status(200)
+      end
+    end
   end
 
   context "for Emory High Download objects" do
@@ -167,8 +177,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
       it 'visits a iiif_url', clean: true do
         login_as user
         visit iiif_url
-        expect(page).to have_http_status(403)
-        expect(page.body).to be_empty
+        expect(page).to have_http_status(200)
       end
     end
   end
