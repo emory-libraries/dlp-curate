@@ -12,20 +12,24 @@ class IiifController < ApplicationController
   end
 
   def show
-    case visibility
-    when "open", "low_res"
-      return send_image
-    when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
-      return head :forbidden unless valid_cookie?
-      return send_image
-    when "restricted"
-      return head :forbidden unless current_user&.admin?
-      send_image
-    when "rose_high"
-      return head :forbidden unless user_ip_rose_reading_room? || current_user&.admin?
+    case user_signed_in?
+    when true
       send_image
     else
-      head :forbidden
+      case visibility
+      when "open", "low_res"
+        return send_image
+      when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
+        return head :forbidden unless valid_cookie?
+        return send_image
+      when "restricted"
+        head :forbidden
+      when "rose_high"
+        return head :forbidden unless user_ip_rose_reading_room?
+        send_image
+      else
+        head :forbidden
+      end
     end
   end
 
