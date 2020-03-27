@@ -26,6 +26,7 @@ class IiifController < ApplicationController
         head :forbidden
       when "rose_high"
         return head :forbidden unless user_ip_rose_reading_room?
+        send_image
       else
         head :forbidden
       end
