@@ -47,7 +47,8 @@ RSpec.describe Hyrax::DownloadsController, :clean do
 
         it 'returns :unauthorized status with image content' do
           get :show, params: { id: file_set.to_param }
-          expect(response).to have_http_status(302)
+          expect(response).to have_http_status(:unauthorized)
+          expect(response.content_type).to eq 'image/png'
         end
       end
     end
@@ -140,7 +141,7 @@ RSpec.describe Hyrax::DownloadsController, :clean do
           end
         end
 
-        context "that isn't persisted" do
+        context "that isn't persisted", clean: true do
           it "raises an error if the requested file does not exist" do
             expect do
               get :show, params: { id: file_set, file: 'thumbnail' }
