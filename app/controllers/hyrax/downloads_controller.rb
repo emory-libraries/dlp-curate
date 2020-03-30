@@ -6,6 +6,7 @@ module Hyrax
   class DownloadsController < ApplicationController
     include Hydra::Controller::DownloadBehavior
     include Hyrax::LocalFileDownloadsControllerBehavior
+    skip_before_action :authenticate_user!
 
     def self.default_content_path
       :preservation_master_file

@@ -5,62 +5,48 @@ include Warden::Test::Helpers
 
 RSpec.describe "download requests", :clean, type: :request, iiif: true do
   let(:user) { FactoryBot.create(:user) }
-  let(:work_id) { "436tx95xcc-cor" }
-  let(:image_sha) { "79276774f3dbfbd977d39065eec14aa185b5213d" }
-  let(:region) { "full" }
-  let(:size) { "full" }
-  let(:rotation) { 0 }
-  let(:quality) { "default" }
-  let(:format) { "jpg" }
-  let(:params) do
-    {
-      identifier: image_sha,
-      region:     region,
-      size:       size,
-      rotation:   rotation,
-      quality:    quality,
-      format:     format
-    }
-  end
-
-  let(:cookie_name) { "bearer_token" }
-  let(:encrypted_cookie_value) { "BE0F7323469F3E7DF86CF9CA95B8ADD5D17753DA4F00BB67F2A9E8EC93E6A370" }
-  let(:non_reading_room_ip) { '198.51.100.255' }
-  let(:reading_room_ip) { '192.0.0.255' }
+  # This currently points to a real object in Max's development environment
+  let(:work_id) { "26663xsj41-cor" }
+  let(:file_set_id) { "747dr7sqvt-cor" }
 
   before do
-    ENV['IIIF_MANIFEST_CACHE'] = Rails.root.join('tmp').to_s
-    ENV['PROXIED_IIIF_SERVER_URL'] = 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2'
-    ENV['LUX_BASE_URL'] = "127.0.0.1:3001"
     solr = Blacklight.default_index.connection
-    solr.add([attributes])
+    solr.add([work_attributes, file_set_attributes])
     solr.commit
-    stub_request(:any, /iiif-cor-arch.library.emory.edu/)
-      .with(
-        headers: {
-          'Connection' => 'close',
-          'Host' => 'iiif-cor-arch.library.emory.edu',
-          'User-Agent' => 'http.rb/4.3.0'
-        }
-      )
-      .to_return(status: 200, body: "I am returning an image, but for now I'm words", headers: {})
   end
 
   describe "GET thumbnail" do
     context "with a Public object" do
-      let(:attributes) do
+      let(:work_attributes) do
         { "id" => work_id,
-          "sha1_tesim" => ["urn:sha1:#{image_sha}"],
-          "thumbnail_path_ss" => "/downloads/#{work_id}?file=thumbnail",
+          "hasRelatedMediaFragment_ssim" => [file_set_id],
+          "hasRelatedImage_ssim" => [file_set_id],
+          "thumbnail_path_ss" => "/downloads/#{file_set_id}?file=thumbnail",
+          "member_ids_ssim" => [file_set_id],
+          "file_set_ids_ssim" => [file_set_id],
           "visibility_ssi" => "open",
-          "read_access_group_ssim" => ["public"]  
+          "read_access_group_ssim" => ["public"]
+        }
+      end
+      let(:file_set_attributes) do
+        { "id" => file_set_id,
+          "has_model_ssim" => "FileSet",
+          "member_ids_ssim" => [file_set_id],
+          "file_set_ids_ssim" => [file_set_id],
+          "visibility_ssi" => "open",
+          "read_access_group_ssim" => ["public"]
         }
       end
 
-      context "a request for anything larger than max " do
-        it "does not alter a full size iiif request to ensure a high resolution image" do
+      context "a request for a thumbnail" do
+        it "returns a thumbnail for a logged in user" do
           login_as user
-          get("/downloads/#{work_id}?file=thumbnail")
+          get("/downloads/#{file_set_id}?file=thumbnail")
+          expect(response.status).to eq 200
+        end
+
+        it "returns a thumbnail for a not-logged-in user" do
+          get("/downloads/#{file_set_id}?file=thumbnail")
           expect(response.status).to eq 200
         end
       end
