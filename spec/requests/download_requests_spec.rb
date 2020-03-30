@@ -47,7 +47,7 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
         end
 
         it "returns a thumbnail for a not-logged-in user" do
-          get("/downloads/#{file_set_id}?file=thumbnail")
+          get("/downloads/#{file_set_id}?file=thumbnail", params: { format: :image })
           expect(response.status).to eq 200
         end
       end
