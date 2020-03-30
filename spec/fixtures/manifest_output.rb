@@ -16,8 +16,8 @@ class ManifestOutput
               "@id":    "http://example.com/iiif/#{work.id}/manifest/canvas/#{file_set.id}",
               "@type":  "sc:Canvas",
               "label":  file_set.title.first,
-              "width":  640,
-              "height": 480,
+              "width":  file_set.original_file.width,
+              "height": file_set.original_file.height,
               "images": [
                 {
                   "@type":      "oa:Annotation",

@@ -20,8 +20,8 @@ json.sequences [''] do
     json.set! :@id, canvas_uri
     json.set! :@type, 'sc:Canvas'
     json.label file_set.title.first
-    json.width 640
-    json.height 480
+    json.width file_set.original_file.width
+    json.height file_set.original_file.height
     json.images [file_set] do
       json.set! :@type, 'oa:Annotation'
       json.motivation 'sc:painting'
