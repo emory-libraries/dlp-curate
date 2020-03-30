@@ -25,8 +25,7 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
           "member_ids_ssim" => [file_set_id],
           "file_set_ids_ssim" => [file_set_id],
           "visibility_ssi" => "open",
-          "read_access_group_ssim" => ["public"]
-        }
+          "read_access_group_ssim" => ["public"] }
       end
       let(:file_set_attributes) do
         { "id" => file_set_id,
@@ -34,14 +33,16 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
           "member_ids_ssim" => [file_set_id],
           "file_set_ids_ssim" => [file_set_id],
           "visibility_ssi" => "open",
-          "read_access_group_ssim" => ["public"]
-        }
+          "read_access_group_ssim" => ["public"] }
       end
 
       context "a request for a thumbnail" do
+        before do
+          allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).with(any_args).and_return("#{fixture_path}/balloon.jpeg")
+        end
         it "returns a thumbnail for a logged in user" do
           login_as user
-          get("/downloads/#{file_set_id}?file=thumbnail")
+          get("/downloads/#{file_set_id}?file=thumbnail", params: { format: :image })
           expect(response.status).to eq 200
         end
 
