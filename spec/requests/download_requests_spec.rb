@@ -85,7 +85,6 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
           get("/downloads/#{public_low_view_file_set_id}", params: { file: :preservation_master_file, id: public_low_view_file_set_id })
           expect(response.status).to eq 200
         end
-
         it "fails for public users for public low view" do
           get("/downloads/#{public_low_view_file_set_id}", params: { file: :preservation_master_file, id: public_low_view_file_set_id })
           expect(response.status).to eq 401
