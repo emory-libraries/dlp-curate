@@ -18,8 +18,7 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       "member_ids_ssim" => [public_low_view_file_set_id],
       "file_set_ids_ssim" => [public_low_view_file_set_id],
       "visibility_ssi" => "low_res",
-      "read_access_group_ssim" => ["low_res"],
-      "download_access_group_ssim" => ["low_res"] }
+      "read_access_group_ssim" => ["low_res"] }
   end
   let(:public_low_view_file_set_attributes) do
     { "id" => public_low_view_file_set_id,
@@ -27,8 +26,7 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       "member_ids_ssim" => [public_low_view_file_set_id],
       "file_set_ids_ssim" => [public_low_view_file_set_id],
       "visibility_ssi" => "low_res",
-      "read_access_group_ssim" => ["low_res"],
-      "download_access_group_ssim" => ["low_res"] }
+      "read_access_group_ssim" => ["low_res"] }
   end
   let(:public_work_attributes) do
     { "id" => public_work_id,
@@ -74,7 +72,6 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
           get("/downloads/#{public_low_view_file_set_id}?file=thumbnail", params: { file: :thumbnail, id: public_low_view_file_set_id })
           expect(response.status).to eq 200
           expect(response.body).not_to be_empty
-          expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
         end
       end
     end

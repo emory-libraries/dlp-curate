@@ -25,15 +25,10 @@ module Hyrax
         super
       when String
         # For derivatives stored on the local file system
-        set_header
         send_local_content
       else
         raise ActiveFedora::ObjectNotFoundError
       end
-    end
-
-    def set_header
-      response.set_header('Access-Control-Allow-Origin', '*')
     end
 
     private
