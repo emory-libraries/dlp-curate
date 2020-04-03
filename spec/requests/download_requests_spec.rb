@@ -10,6 +10,8 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
   let(:public_file_set_id) { "747dr7sqvt-cor" }
   let(:public_low_view_work_id) { "7956djh9wj-cor" }
   let(:public_low_view_file_set_id) { "955m905qgg-cor" }
+  let(:restricted_work_id) { "restricted-id" }
+  let(:restricted_file_set_id) { "restricted-fileset-id" }
   let(:public_low_view_work_attributes) do
     { "id" => public_low_view_work_id,
       "hasRelatedMediaFragment_ssim" => [public_low_view_file_set_id],
@@ -47,13 +49,33 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       "visibility_ssi" => "open",
       "read_access_group_ssim" => ["public"] }
   end
+  let(:restricted_work_attributes) do
+    { "id" => restricted_work_id,
+      "hasRelatedMediaFragment_ssim" => [restricted_file_set_id],
+      "hasRelatedImage_ssim" => [restricted_file_set_id],
+      "thumbnail_path_ss" => "/downloads/#{restricted_file_set_id}?file=thumbnail",
+      "member_ids_ssim" => [restricted_file_set_id],
+      "file_set_ids_ssim" => [restricted_file_set_id],
+      "visibility_ssi" => "private",
+      "read_access_group_ssim" => ["private"] }
+  end
+  let(:restricted_file_set_attributes) do
+    { "id" => restricted_file_set_id,
+      "has_model_ssim" => "FileSet",
+      "member_ids_ssim" => [restricted_file_set_id],
+      "file_set_ids_ssim" => [restricted_file_set_id],
+      "visibility_ssi" => "private",
+      "read_access_group_ssim" => ["private"] }
+  end
 
   before do
     solr = Blacklight.default_index.connection
     solr.add([public_low_view_work_attributes,
               public_low_view_file_set_attributes,
               public_work_attributes,
-              public_file_set_attributes])
+              public_file_set_attributes,
+              restricted_work_attributes,
+              restricted_file_set_attributes])
     solr.commit
   end
 
@@ -107,6 +129,22 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
           get("/downloads/#{public_file_set_id}?file=thumbnail", params: { format: :image })
           expect(response.status).to eq 200
         end
+      end
+    end
+
+    context "with a Restricted object" do
+      before do
+        allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).with(any_args).and_return("#{fixture_path}/balloon.jpeg")
+      end
+      it "as an admin user, I can download the full size image" do
+        login_as admin
+        get("/downloads/#{restricted_file_set_id}", params: { file: :preservation_master_file, id: restricted_file_set_id })
+        expect(response.status).to eq 200
+      end
+
+      it "fails for public users for restricted objects" do
+        get("/downloads/#{restricted_file_set_id}", params: { file: :preservation_master_file, id: restricted_file_set_id })
+        expect(response.status).to eq 401
       end
     end
   end
