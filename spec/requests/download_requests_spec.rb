@@ -8,8 +8,8 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
 
   let(:public_work_id) { "26663xsj41-cor" }
   let(:public_file_set_id) { "747dr7sqvt-cor" }
-  let(:public_low_view_work_id) { "Joe" }
-  let(:public_low_view_file_set_id) { "Frances" }
+  let(:public_low_view_work_id) { "7956djh9wj-cor" }
+  let(:public_low_view_file_set_id) { "955m905qgg-cor" }
   let(:public_low_view_work_attributes) do
     { "id" => public_low_view_work_id,
       "hasRelatedMediaFragment_ssim" => [public_low_view_file_set_id],
@@ -26,7 +26,8 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       "member_ids_ssim" => [public_low_view_file_set_id],
       "file_set_ids_ssim" => [public_low_view_file_set_id],
       "visibility_ssi" => "low_res",
-      "read_access_group_ssim" => ["low_res"] }
+      "read_access_group_ssim" => ["low_res"],
+      "file_path_ssim" => ["/Users/max/projects/dlp-curate/tmp/uploads/hyrax/uploaded_file/preservation_master_file/31/many_pictures_augusta_georgia.jpg"] }
   end
   let(:public_work_attributes) do
     { "id" => public_work_id,
@@ -56,8 +57,8 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
     solr.commit
   end
 
-  describe "GET thumbnail" do
-    context "with a Public Low View object" do
+  describe "GET" do
+    context "a Public Low View object" do
       context "a request for a thumbnail" do
         before do
           allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).with(any_args).and_return("#{fixture_path}/balloon.jpeg")
@@ -72,6 +73,22 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
           get("/downloads/#{public_low_view_file_set_id}?file=thumbnail", params: { file: :thumbnail, id: public_low_view_file_set_id })
           expect(response.status).to eq 200
           expect(response.body).not_to be_empty
+        end
+      end
+
+      context "a request for a full resolution, full size file" do
+        before do
+          allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).with(any_args).and_return("#{fixture_path}/balloon.jpeg")
+        end
+        it "as an admin user, I can download the full size image" do
+          login_as admin
+          get("/downloads/#{public_low_view_file_set_id}", params: { file: :preservation_master_file, id: public_low_view_file_set_id })
+          expect(response.status).to eq 200
+        end
+
+        it "fails for public users for public low view" do
+          get("/downloads/#{public_low_view_file_set_id}", params: { file: :preservation_master_file, id: public_low_view_file_set_id })
+          expect(response.status).to eq 401
         end
       end
     end
