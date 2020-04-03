@@ -1599,6 +1599,8 @@ GEM
       rdf-xsd (>= 2.2, < 4.0)
       sparql (>= 2.2, < 4.0)
       sxp (~> 1.0)
+    shoulda-callback-matchers (1.1.4)
+      activesupport (>= 3)
     show_me_the_cookies (5.0.0)
       capybara (>= 2, < 4)
     sidekiq (5.2.7)
@@ -1767,6 +1769,7 @@ DEPENDENCIES
   rubocop-rspec
   sass-rails (~> 5.0)
   selenium-webdriver
+  shoulda-callback-matchers (~> 1.1.1)
   show_me_the_cookies
   sidekiq (~> 5.2)
   solr_wrapper (>= 0.3)
