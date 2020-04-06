@@ -22,7 +22,7 @@ class ManifestBuilderService
 
   def iiif_url
     Hyrax.config.iiif_image_url_builder.call(
-      preferred_file.id,
+      preferred_file_id,
       request_base_url,
       Hyrax.config.iiif_image_size_default
     )
@@ -30,7 +30,7 @@ class ManifestBuilderService
 
   def info_url
     Hyrax.config.iiif_info_url_builder.call(
-      preferred_file.id,
+      preferred_file_id,
       request_base_url
     )
   end
@@ -81,6 +81,14 @@ class ManifestBuilderService
     end
 
     def preferred_file
-      @curation_concern.send(@curation_concern.preferred_file)
+      @curation_concern.send(@curation_concern&.preferred_file)
+    end
+
+    def preferred_file_id
+      if preferred_file
+        preferred_file.id
+      else
+        @curation_concern.id
+      end
     end
 end
