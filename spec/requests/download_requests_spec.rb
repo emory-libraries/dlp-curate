@@ -80,8 +80,8 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
   end
 
   describe "GET" do
-    context "a Public Low View object" do
-      context "a request for a thumbnail" do
+    context "a Public Low View" do
+      context "thumbnail" do
         before do
           allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).with(any_args).and_return("#{fixture_path}/balloon.jpeg")
         end
@@ -98,24 +98,24 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
         end
       end
 
-      context "a request for a full resolution, full size file" do
+      context "full resolution, full size file" do
         before do
           allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).with(any_args).and_return("#{fixture_path}/balloon.jpeg")
         end
-        it "as an admin user, I can download the full size image" do
+        it "can download the full size image as an admin user" do
           login_as admin
           get("/downloads/#{public_low_view_file_set_id}", params: { file: :preservation_master_file, id: public_low_view_file_set_id })
           expect(response.status).to eq 200
         end
-        it "fails for public users for public low view" do
+        it "cannot download the full size image as a non-logged-in-user" do
           get("/downloads/#{public_low_view_file_set_id}", params: { file: :preservation_master_file, id: public_low_view_file_set_id })
           expect(response.status).to eq 401
         end
       end
     end
 
-    context "with a Public object" do
-      context "a request for a thumbnail" do
+    context "a Public object" do
+      context "thumbnail" do
         before do
           allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).with(any_args).and_return("#{fixture_path}/balloon.jpeg")
         end
@@ -132,7 +132,7 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       end
     end
 
-    context "with a Restricted object" do
+    context "a Restricted object" do
       before do
         allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).with(any_args).and_return("#{fixture_path}/balloon.jpeg")
       end
@@ -142,7 +142,7 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
         expect(response.status).to eq 200
       end
 
-      it "fails for public users for restricted objects" do
+      it "cannot download the full size image as a non-logged-in-user" do
         get("/downloads/#{restricted_file_set_id}", params: { file: :preservation_master_file, id: restricted_file_set_id })
         expect(response.status).to eq 401
       end

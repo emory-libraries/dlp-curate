@@ -5,10 +5,6 @@ class Ability
   include Hyrax::Ability
   self.ability_logic += [:everyone_can_create_curation_concerns]
 
-  def default_user_groups
-    ['public', 'low_res']
-  end
-
   # Define any customized permissions here.
   def custom_permissions
     # Limits deleting objects to a the admin user

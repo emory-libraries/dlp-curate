@@ -50,7 +50,6 @@ module Hyrax
       # that files are in a LDP basic container, and thus, included in the asset's uri.
       def authorize_download!
         if params["file"] != "thumbnail"
-          byebug
           authorize! :download, params[asset_param_key]
         end
       rescue CanCan::AccessDenied
