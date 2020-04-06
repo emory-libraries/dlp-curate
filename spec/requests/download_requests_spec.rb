@@ -5,7 +5,10 @@ include Warden::Test::Helpers
 RSpec.describe "download requests", :clean, type: :request, iiif: true do
   let(:user) { FactoryBot.create(:user) }
   let(:admin) { FactoryBot.create(:admin) }
+  let(:cookie_name) { "bearer_token" }
+  let(:encrypted_cookie_value) { "BE0F7323469F3E7DF86CF9CA95B8ADD5D17753DA4F00BB67F2A9E8EC93E6A370" }
   let(:public_file_set_id) { "747dr7sqvt-cor" }
+  let(:emory_low_file_set_id) { "emory-low-cor" }
   let(:public_low_view_file_set_id) { "955m905qgg-cor" }
   let(:restricted_file_set_id) { "restricted-fileset-id" }
   let(:public_low_view_file_set_attributes) do
@@ -20,6 +23,12 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       "visibility_ssi" => "open",
       "read_access_group_ssim" => ["public"] }
   end
+  let(:emory_low_file_set_attributes) do
+    { "id" => emory_low_file_set_id,
+      "has_model_ssim" => "FileSet",
+      "visibility_ssi" => "emory_low",
+      "read_access_group_ssim" => ["emory_low"] }
+  end
   let(:restricted_file_set_attributes) do
     { "id" => restricted_file_set_id,
       "has_model_ssim" => "FileSet",
@@ -30,7 +39,8 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
     solr = Blacklight.default_index.connection
     solr.add([public_low_view_file_set_attributes,
               public_file_set_attributes,
-              restricted_file_set_attributes])
+              restricted_file_set_attributes,
+              emory_low_file_set_attributes])
     solr.commit
     allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).with(any_args).and_return("#{fixture_path}/balloon.jpeg")
   end
@@ -95,11 +105,18 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       context "thumbnail" do
         it "returns a thumbnail for an admin user" do
           login_as admin
-          get("/downloads/#{public_low_view_file_set_id}?file=thumbnail", params: { file: :thumbnail, id: public_low_view_file_set_id })
+          get("/downloads/#{emory_low_file_set_id}?file=thumbnail", params: { file: :thumbnail, id: emory_low_file_set_id })
           expect(response.status).to eq 200
         end
-        xit "does not return a thumbnail for a not-logged-in user" do
-          get("/downloads/#{public_low_view_file_set_id}?file=thumbnail", params: { file: :thumbnail, id: public_low_view_file_set_id })
+        it "returns a thumbnail for a user authenticated through Lux" do
+          get(
+            "/downloads/#{emory_low_file_set_id}?file=thumbnail",
+            headers: { "HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}" },
+            params: { file: :thumbnail, id: emory_low_file_set_id }
+          )
+        end
+        it "does not return a thumbnail for a not-logged-in user" do
+          get("/downloads/#{emory_low_file_set_id}?file=thumbnail", params: { file: :thumbnail, id: emory_low_file_set_id })
           expect(response.status).to eq 401
           expect(response.body).to be_empty
         end
