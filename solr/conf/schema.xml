@@ -314,6 +314,9 @@
       </analyzer>
     </fieldType>
 
+<!-- SolrSuggest disabled due to performance penalties -->
+<!--
+
     <fieldType class="solr.TextField" name="textSuggest" positionIncrementGap="100">
        <analyzer>
           <tokenizer class="solr.KeywordTokenizerFactory"/>
@@ -322,6 +325,7 @@
           <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
        </analyzer>
     </fieldType>
+-->
 
     <!-- charFilter + WhitespaceTokenizer  -->
     <!--
@@ -529,7 +533,10 @@
    <dynamicField name="*_sort" type="alphaOnlySort" indexed="true" stored="false" multiValued="false" />
    <dynamicField name="*_unstem_search" type="text_general" indexed="true" stored="false" multiValued="true" />
    <dynamicField name="*spell" type="textSpell" indexed="true" stored="false" multiValued="true" />
+<!-- SolrSuggest disabled due to performance penalties -->
+<!--
    <dynamicField name="*suggest" type="textSuggest" indexed="true" stored="false" multiValued="true" />
+-->
 
    <!-- uncomment the following to ignore any fields that don't already match an existing
         field name or dynamic field, rather than reporting them as an error.
@@ -596,9 +603,12 @@
    <copyField source="subject_t" dest="opensearch_display"/>
    <copyField source="subject_addl_t" dest="opensearch_display"/>
 
+<!-- SolrSuggest disabled due to performance penalties -->
    <!-- for suggestions -->
+<!--
    <copyField source="*_t" dest="suggest"/>
    <copyField source="*_facet" dest="suggest"/>
+-->
 
    <!-- Above, multiple source fields are copied to the [text] field.
 	  Another way to map multiple source fields to the same
