@@ -7,9 +7,9 @@ namespace :curate do
     task create_manifest: :environment do
       work = ENV['work']
       if work.present?
-        CreateManifest.process(work)
+        CreateManifestJob.perform_now(work)
       else
-        CreateManifest.process
+        CreateManifestJob.perform_later
       end
     end
   end
