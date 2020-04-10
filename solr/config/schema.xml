@@ -165,6 +165,8 @@
       </analyzer>
     </fieldType>
 
+<!-- SolrSuggest disabled due to performance penalties -->
+<!--
     <fieldType class="solr.TextField" name="textSuggest" positionIncrementGap="100">
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory"/>
@@ -173,6 +175,7 @@
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldType>
+-->
   </types>
 
 
@@ -320,8 +323,10 @@
     <dynamicField name="*_llsm" type="location" stored="true" indexed="false" multiValued="true"/>
     <dynamicField name="*_llsi" type="location" stored="true" indexed="true" multiValued="false"/>
     <dynamicField name="*_llsim" type="location" stored="true" indexed="true" multiValued="true"/>
-
+<!-- SolrSuggest disabled due to performance penalties -->
+<!--
     <dynamicField name="*suggest" type="textSuggest" indexed="true" stored="false" multiValued="true" />
+-->
 
     <!-- you must define copyField source and dest fields explicity or schemaBrowser doesn't work -->
     <field name="all_text_timv" type="text" stored="false" indexed="true" multiValued="true" termVectors="true" termPositions="true" termOffsets="true"/>
@@ -345,9 +350,12 @@
     copyField also supports a maxChars to copy setting.  -->
 
    <!-- <copyField source="*_tesim" dest="all_text_timv" maxChars="3000"/> -->
+<!-- SolrSuggest disabled due to performance penalties -->
    <!-- for suggestions -->
+<!--
    <copyField source="*_tesim" dest="suggest"/>
    <copyField source="*_ssim" dest="suggest"/>
+-->
 
  <!-- Similarity is the scoring routine for each document vs. a query.
       A custom similarity may be specified here, but the default is fine
