@@ -7,7 +7,7 @@ namespace :curate do
       csv_file = Rails.root.join('config', 'reindex', 'reindex_objects.csv')
       CSV.foreach(csv_file, headers: true) do |row|
         r = row.to_h
-        ReindexObjectsJob.perform_later(r['id'])
+        ReindexObjectJob.perform_later(r['id'])
       end
     end
   end

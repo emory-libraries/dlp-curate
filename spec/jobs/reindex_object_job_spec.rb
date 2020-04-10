@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe ReindexObjectsJob, :clean do
+RSpec.describe ReindexObjectJob, :clean do
   let(:fs1) { FactoryBot.create(:file_set, id: '97634tmpgs-cor', title: ['foo']) }
 
   it 'reindexes file_sets' do
