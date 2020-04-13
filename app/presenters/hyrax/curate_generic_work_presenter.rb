@@ -35,7 +35,7 @@ module Hyrax
         { "label" => "Provided by", "value" => holding_repository },
         { "label" => "Rights Status", "value" => rights_statement },
         { "label" => "Identifier", "value" => id },
-        { "label" => "Persistent URL", "value" => "<a href=\"http://#{purl}\">#{purl}</a>" }
+        { "label" => "Persistent URL", "value" => "<a href=\"#{purl}\">#{purl}</a>" }
       ]
     end
   end
