@@ -98,22 +98,20 @@ class IiifController < ApplicationController
     render json: ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: CurateGenericWork.find(identifier))
   end
 
+# The identifier that is provided in the URL is the file set ID for the representative image
   def thumbnail
     response.set_header('Access-Control-Allow-Origin', '*')
     response.headers["Last-Modified"] = Time.now.httpdate.to_s
     response.headers["Content-Type"] = 'image/jpeg'
     response.headers["Content-Disposition"] = 'inline'
-    work = CurateGenericWork.find(identifier)
-    representative_id = work.representative_id
-    fs = FileSet.find(representative_id)
-    path = Hyrax::DerivativePath.derivative_path_for_reference(fs, 'thumbnail')
-    # begin
-    #   IO.foreach(path).each do |buffer|
-    #     response.stream.write(buffer)
-    #   end
-    # ensure
-    #   response.stream.close
-    # end
+    path = Hyrax::DerivativePath.derivative_path_for_reference(identifier, 'thumbnail')
+    begin
+      IO.foreach(path).each do |buffer|
+        response.stream.write(buffer)
+      end
+    ensure
+      response.stream.close
+    end
   end
 
   # IIIF URLS really do not like extra slashes. Ensure that we only add a slash after the
