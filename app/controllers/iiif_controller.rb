@@ -98,7 +98,7 @@ class IiifController < ApplicationController
     render json: ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: CurateGenericWork.find(identifier))
   end
 
-# The identifier that is provided in the URL is the file set ID for the representative image
+  # The identifier that is provided in the URL is the file set ID for the representative image
   def thumbnail
     case user_signed_in?
     when true
@@ -110,6 +110,9 @@ class IiifController < ApplicationController
       when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
         return head :forbidden unless valid_cookie?
         return send_thumbnail
+      when "rose_high"
+        return head :forbidden unless user_ip_rose_reading_room?
+        send_thumbnail
       else
         head :forbidden
       end
@@ -219,6 +222,7 @@ class IiifController < ApplicationController
   def visibility
     @visibility ||= fetch_visibility
   end
+
   # Sometimes we will need to look up visibility from solr.
   # If this goes wrong for any reason, default to "restricted"
   # Note that Emory's cantaloupe is using SHA1 checksums to look up images, NOT work IDs

@@ -41,28 +41,8 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
   end
 
   describe 'a request for a thumbnail' do
-    let(:file_set){FactoryBot.create(:file_with_work, id:"2085hqbzkn-cor")}
-    let(:work) {FactoryBot.create(:work_with_files, representative_id:file_set.id)}
-    let(:params) do
-      {
-        identifier: work.id,
-        format:     format
-      }
-    end
-    let(:fake_image) {}
-    # https://curate-arch.library.emory.edu//downloads/238w9ghx4p-cor?file=thumbnail
-    # https://curate-arch.library.emory.edu/iiif/238w9ghx4p-cor/thumbnail
-    # it "routes thumbnail requests to the iiif#thumbnail controller" do
-    #   expect(get("/iiif/508hdr7srq-cor/thumbnail"))
-    #     .to route_to(
-    #       "controller" => "iiif",
-    #       "action" => "thumbnail",
-    #       "identifier" => "508hdr7srq-cor"
-    #     )
-    # end
-    it "fetches a thumbnail" do
-      get :thumbnail, params: params
-      expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
+    it "returns thumbnails as expected" do
+      skip # Note that thumbnails are tested in spec/requests/thumbnail_requests_spec.rb
     end
   end
   describe 'a request without the IIIF_SERVER_URL set' do
@@ -287,5 +267,4 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
       )
     end
   end
-
 end
