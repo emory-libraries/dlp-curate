@@ -1713,6 +1713,7 @@ GEM
       nokogiri (~> 1.8)
     xray-rails (0.3.2)
       rails (>= 3.1.0)
+    yard (0.9.24)
     zizia (5.3.0)
       active-fedora
       carrierwave
@@ -1783,6 +1784,7 @@ DEPENDENCIES
   webmock
   webpacker (~> 4.x)
   xray-rails
+  yard
   zizia (~> 5.3.0)
 
 RUBY VERSION

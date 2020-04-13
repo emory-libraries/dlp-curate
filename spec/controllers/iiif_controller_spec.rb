@@ -40,6 +40,11 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     solr.commit
   end
 
+  describe 'a request for a thumbnail' do
+    it "returns thumbnails as expected" do
+      skip("Note that thumbnails are tested in spec/requests/thumbnail_requests_spec.rb")
+    end
+  end
   describe 'a request without the IIIF_SERVER_URL set' do
     before do
       ENV['PROXIED_IIIF_SERVER_URL'] = nil

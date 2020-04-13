@@ -34,4 +34,13 @@ RSpec.describe "routes for iiif", type: :routing do
         "identifier" => "508hdr7srq-cor"
       )
   end
+
+  it "routes thumbnail requests to the iiif#thumbnail controller" do
+    expect(get("/iiif/508hdr7srq-cor/thumbnail"))
+      .to route_to(
+        "controller" => "iiif",
+        "action" => "thumbnail",
+        "identifier" => "508hdr7srq-cor"
+      )
+  end
 end

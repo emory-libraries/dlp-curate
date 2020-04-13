@@ -4,6 +4,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   get '/iiif/:identifier/manifest', to: 'iiif#manifest', as: :iiif_manifest
+  get '/iiif/:identifier/thumbnail', to: 'iiif#thumbnail', as: :iiif_thumbnail
   get '/iiif/2/:identifier/:region/:size/:rotation/:quality.:format', to: 'iiif#show'
   get '/iiif/2/:identifier/info.json', to: 'iiif#info'
 

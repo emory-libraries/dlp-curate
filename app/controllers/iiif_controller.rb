@@ -1,4 +1,13 @@
 # frozen_string_literal: true
+# @markup markdown
+# The IIIF Controller
+# 1. Proxies image requests to the Cantaloupe IIIF server in order to enforce Emory's visibility requirements. It does so by
+#  a. Allowing or denying image requests, based on the user's authentication and the image's visibility.
+#  b. For images with low resolution visibility, e.g. Public Low Res and Emory Low Download, the IIIF Controller rewrites
+# the IIIF requests, to limit the maximum size for full size images and for a given region of an image.
+#
+# 2. Provides a thumbnail path for Lux, which also enforces Emory visibility requirements.
+# 3. Proxies the info.json and the manifest for Curate.
 
 class IiifController < ApplicationController
   skip_before_action :authenticate_user!
@@ -12,24 +21,66 @@ class IiifController < ApplicationController
   end
 
   def show
-    case user_signed_in?
-    when true
+    if user_signed_in?
       send_image
     else
-      case visibility
-      when "open", "low_res"
-        return send_image
-      when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
-        return head :forbidden unless valid_cookie?
-        return send_image
-      when "restricted"
-        head :forbidden
-      when "rose_high"
-        return head :forbidden unless user_ip_rose_reading_room?
-        send_image
-      else
-        head :forbidden
+      evaluate_visibility
+    end
+  end
+
+  def evaluate_visibility
+    case visibility
+    when "open", "low_res"
+      send_image
+    when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
+      return head :forbidden unless valid_cookie?
+      send_image
+    when "restricted"
+      head :forbidden
+    when "rose_high"
+      return head :forbidden unless user_ip_rose_reading_room?
+      send_image
+    else
+      head :forbidden
+    end
+  end
+
+  def evalute_thumbnail_visibility
+    case thumbnail_visibility
+    when "open", "low_res"
+      send_thumbnail
+    when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
+      return head :forbidden unless valid_cookie?
+      send_thumbnail
+    when "rose_high"
+      return head :forbidden unless user_ip_rose_reading_room?
+      send_thumbnail
+    else
+      head :forbidden
+    end
+  end
+
+  # The identifier that is provided in the URL is the file set ID for the representative image
+  def thumbnail
+    if user_signed_in?
+      send_thumbnail
+    else
+      evalute_thumbnail_visibility
+    end
+  end
+
+  def send_thumbnail
+    response.set_header('Access-Control-Allow-Origin', '*')
+    response.headers["Last-Modified"] = Time.now.httpdate.to_s
+    response.headers["Content-Type"] = 'image/jpeg'
+    response.headers["Content-Disposition"] = 'inline'
+    path = Hyrax::DerivativePath.derivative_path_for_reference(identifier, 'thumbnail')
+    begin
+      IO.foreach(path).each do |buffer|
+        response.stream.write(buffer)
       end
+    ensure
+      response.stream.close
     end
   end
 
@@ -168,6 +219,19 @@ class IiifController < ApplicationController
 
   def format
     params["format"]
+  end
+
+  def thumbnail_visibility
+    @thumbnail_visibility ||= fetch_thumbnail_visibility
+  end
+
+  def fetch_thumbnail_visibility
+    response = Blacklight.default_index.connection.get 'select', params: { q: "id:#{identifier}" }
+    visibility = response["response"]["docs"][0]["visibility_ssi"]
+    return visibility unless visibility.nil? || visibility.empty?
+    ["restricted"]
+  rescue
+    ["restricted"]
   end
 
   def visibility
