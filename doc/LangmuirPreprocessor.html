@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: LangmuirPreprocessor
+  
+    &mdash; Documentation by YARD 0.9.24
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "LangmuirPreprocessor";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (L)</a> &raquo;
+    
+    
+    <span class="title">LangmuirPreprocessor</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: LangmuirPreprocessor
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">LangmuirPreprocessor</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>app/importers/langmuir_preprocessor.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Utility service and methods that merge metadata from a CSV Pull List and
+MARCXml records into a format suitable for ingest by the curate CSV
+importer</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#processed_csv-instance_method" title="#processed_csv (instance method)">#<strong>processed_csv</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute processed_csv.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#additional_headers-instance_method" title="#additional_headers (instance method)">#<strong>additional_headers</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#extract_metadata-instance_method" title="#extract_metadata (instance method)">#<strong>extract_metadata</strong>(row, source_row_num)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#extract_structure-instance_method" title="#extract_structure (instance method)">#<strong>extract_structure</strong>(row)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(csv)  &#x21d2; LangmuirPreprocessor </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Initialize a preprocessor instance by supplying.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#make_label-instance_method" title="#make_label (instance method)">#<strong>make_label</strong>(side, two_sided)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#merge-instance_method" title="#merge (instance method)">#<strong>merge</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>process_source_rows builds and output_work_tree writes a hash of hashes: {
+work_id =&gt; {      :metadata = CSV::Row,      :filesets =&gt; {          
+index1 =&gt; CSV::Row,            index2 =&gt; CSV::Row,            etc.
+for remaining sides/pages            }      } }.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#output_work_tree-instance_method" title="#output_work_tree (instance method)">#<strong>output_work_tree</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#process_row-instance_method" title="#process_row (instance method)">#<strong>process_row</strong>(row, source_row_num)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#process_source_rows-instance_method" title="#process_source_rows (instance method)">#<strong>process_source_rows</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#record_count-instance_method" title="#record_count (instance method)">#<strong>record_count</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#relative_path_to_file-instance_method" title="#relative_path_to_file (instance method)">#<strong>relative_path_to_file</strong>(row)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(csv)  &#x21d2; <tt><span class='object_link'><a href="" title="LangmuirPreprocessor (class)">LangmuirPreprocessor</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Initialize a preprocessor instance by supplying</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>csv</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the path to a CSV file containing the expectd Pull List metadata</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_csv'>csv</span><span class='rparen'>)</span>
+  <span class='ivar'>@source_csv</span> <span class='op'>=</span> <span class='const'>CSV</span><span class='period'>.</span><span class='id identifier rubyid_read'>read</span><span class='lparen'>(</span><span class='id identifier rubyid_csv'>csv</span><span class='comma'>,</span> <span class='label'>headers:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_directory'>directory</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_dirname'>dirname</span><span class='lparen'>(</span><span class='id identifier rubyid_csv'>csv</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_extension'>extension</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_extname'>extname</span><span class='lparen'>(</span><span class='id identifier rubyid_csv'>csv</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_filename'>filename</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_basename'>basename</span><span class='lparen'>(</span><span class='id identifier rubyid_csv'>csv</span><span class='comma'>,</span> <span class='id identifier rubyid_extension'>extension</span><span class='rparen'>)</span>
+  <span class='ivar'>@processed_csv</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_directory'>directory</span><span class='comma'>,</span> <span class='id identifier rubyid_filename'>filename</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-processed.csv</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='ivar'>@merged_headers</span> <span class='op'>=</span> <span class='id identifier rubyid_additional_headers'>additional_headers</span> <span class='op'>+</span> <span class='ivar'>@source_csv</span><span class='period'>.</span><span class='id identifier rubyid_headers'>headers</span>
+  <span class='ivar'>@tree</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="processed_csv=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="processed_csv-instance_method">
+  
+    #<strong>processed_csv</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute processed_csv.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_processed_csv'>processed_csv</span>
+  <span class='ivar'>@processed_csv</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="additional_headers-instance_method">
+  
+    #<strong>additional_headers</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29
+30
+31</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 29</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_additional_headers'>additional_headers</span>
+  <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>source_row</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>deduplication_key</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>type</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>fileset_label</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>preservation_master_file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>intermediate_file</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="extract_metadata-instance_method">
+  
+    #<strong>extract_metadata</strong>(row, source_row_num)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+93
+94
+95
+96
+97</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 93</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_extract_metadata'>extract_metadata</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_source_row_num'>source_row_num</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_deduplication_key'>deduplication_key</span> <span class='op'>=</span> <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Digital Object - Parent Identifier</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_processed_row'>processed_row</span> <span class='op'>=</span> <span class='const'>CSV</span><span class='op'>::</span><span class='const'>Row</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_additional_headers'>additional_headers</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='id identifier rubyid_source_row_num'>source_row_num</span><span class='comma'>,</span> <span class='id identifier rubyid_deduplication_key'>deduplication_key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>work</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_processed_row'>processed_row</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_to_hash'>to_hash</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="extract_structure-instance_method">
+  
+    #<strong>extract_structure</strong>(row)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+85
+86
+87
+88
+89
+90
+91</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 85</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_extract_structure'>extract_structure</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_filename'>filename</span> <span class='op'>=</span> <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Filename</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_p_number'>p_number</span> <span class='op'>=</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>P0+(\d+)_(ARCH|PROD)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+  <span class='id identifier rubyid_target_file'>target_file</span> <span class='op'>=</span> <span class='id identifier rubyid_filename'>filename</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ARCH</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>preservation_master_file</span><span class='tstring_end'>&#39;</span></span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>intermediate_file</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_metadata_row'>metadata_row</span> <span class='op'>=</span> <span class='id identifier rubyid_p_number'>p_number</span> <span class='op'>==</span> <span class='int'>1</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_target_file'>target_file</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>preservation_master_file</span><span class='tstring_end'>&#39;</span></span>
+  <span class='lbracket'>[</span><span class='id identifier rubyid_p_number'>p_number</span><span class='comma'>,</span> <span class='id identifier rubyid_target_file'>target_file</span><span class='comma'>,</span> <span class='id identifier rubyid_metadata_row'>metadata_row</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="make_label-instance_method">
+  
+    #<strong>make_label</strong>(side, two_sided)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+105
+106
+107
+108
+109
+110
+111</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 105</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_make_label'>make_label</span><span class='lparen'>(</span><span class='id identifier rubyid_side'>side</span><span class='comma'>,</span> <span class='id identifier rubyid_two_sided'>two_sided</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_two_sided'>two_sided</span>
+    <span class='id identifier rubyid_side'>side</span> <span class='op'>==</span> <span class='int'>1</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Front</span><span class='tstring_end'>&#39;</span></span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Back</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>else</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Image </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_side'>side</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="merge-instance_method">
+  
+    #<strong>merge</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>process_source_rows builds and output_work_tree writes a hash of hashes: {
+work_id =&gt; {</p>
+
+<pre class="code ruby"><code class="ruby">:metadata = CSV::Row,
+:filesets =&gt; {
+      index1 =&gt; CSV::Row,
+      index2 =&gt; CSV::Row,
+      etc. for remaining sides/pages
+      }
+}
+</code></pre>
+
+<p>}</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+46
+47
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 46</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_merge'>merge</span>
+  <span class='id identifier rubyid_process_source_rows'>process_source_rows</span>
+  <span class='id identifier rubyid_output_work_tree'>output_work_tree</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="output_work_tree-instance_method">
+  
+    #<strong>output_work_tree</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_output_work_tree'>output_work_tree</span>
+  <span class='id identifier rubyid_merge_csv'>merge_csv</span> <span class='op'>=</span> <span class='const'>CSV</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='ivar'>@processed_csv</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>w+</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>headers:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>write_headers:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_merge_csv'>merge_csv</span> <span class='op'>&lt;&lt;</span> <span class='ivar'>@merged_headers</span>
+  <span class='id identifier rubyid_progressbar'>progressbar</span> <span class='op'>=</span> <span class='const'>ProgressBar</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='label'>title:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Writing works</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>total:</span> <span class='ivar'>@tree</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='comma'>,</span> <span class='label'>format:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>%t: |%B| %p%   </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='ivar'>@tree</span><span class='period'>.</span><span class='id identifier rubyid_each_value'>each_value</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_work'>work</span><span class='op'>|</span>
+    <span class='id identifier rubyid_merge_csv'>merge_csv</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_work'>work</span><span class='lbracket'>[</span><span class='symbol'>:metadata</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_two_sided'>two_sided</span> <span class='op'>=</span> <span class='id identifier rubyid_work'>work</span><span class='lbracket'>[</span><span class='symbol'>:filesets</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>&lt;=</span> <span class='int'>2</span>
+    <span class='id identifier rubyid_work'>work</span><span class='lbracket'>[</span><span class='symbol'>:filesets</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_fileset_index'>fileset_index</span><span class='op'>|</span>
+      <span class='id identifier rubyid_fileset'>fileset</span> <span class='op'>=</span> <span class='id identifier rubyid_work'>work</span><span class='lbracket'>[</span><span class='symbol'>:filesets</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_fileset_index'>fileset_index</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_fileset'>fileset</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>fileset_label</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_make_label'>make_label</span><span class='lparen'>(</span><span class='id identifier rubyid_fileset_index'>fileset_index</span><span class='comma'>,</span> <span class='id identifier rubyid_two_sided'>two_sided</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_merge_csv'>merge_csv</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_fileset'>fileset</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_progressbar'>progressbar</span><span class='period'>.</span><span class='id identifier rubyid_increment'>increment</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_merge_csv'>merge_csv</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="process_row-instance_method">
+  
+    #<strong>process_row</strong>(row, source_row_num)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+76
+77
+78
+79
+80
+81
+82
+83</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 76</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_process_row'>process_row</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_source_row_num'>source_row_num</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_deduplication_key'>deduplication_key</span> <span class='op'>=</span> <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Digital Object - Parent Identifier</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_sequence_number'>sequence_number</span><span class='comma'>,</span> <span class='id identifier rubyid_target_file'>target_file</span><span class='comma'>,</span> <span class='id identifier rubyid_metadata_row'>metadata_row</span> <span class='op'>=</span> <span class='id identifier rubyid_extract_structure'>extract_structure</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
+  <span class='ivar'>@tree</span><span class='lbracket'>[</span><span class='id identifier rubyid_deduplication_key'>deduplication_key</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbrace'>{</span> <span class='label'>metadata:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>filesets:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span> <span class='rbrace'>}</span> <span class='comment'># create a placeholder if we don&#39;t have one for this key
+</span>  <span class='ivar'>@tree</span><span class='lbracket'>[</span><span class='id identifier rubyid_deduplication_key'>deduplication_key</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:metadata</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_extract_metadata'>extract_metadata</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_source_row_num'>source_row_num</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_metadata_row'>metadata_row</span>
+  <span class='ivar'>@tree</span><span class='lbracket'>[</span><span class='id identifier rubyid_deduplication_key'>deduplication_key</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:filesets</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_sequence_number'>sequence_number</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='const'>CSV</span><span class='op'>::</span><span class='const'>Row</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='ivar'>@merged_headers</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='id identifier rubyid_source_row_num'>source_row_num</span><span class='comma'>,</span> <span class='id identifier rubyid_deduplication_key'>deduplication_key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>fileset</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='ivar'>@tree</span><span class='lbracket'>[</span><span class='id identifier rubyid_deduplication_key'>deduplication_key</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:filesets</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_sequence_number'>sequence_number</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_target_file'>target_file</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_relative_path_to_file'>relative_path_to_file</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="process_source_rows-instance_method">
+  
+    #<strong>process_source_rows</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+51
+52
+53
+54
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 51</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_process_source_rows'>process_source_rows</span>
+  <span class='id identifier rubyid_progressbar'>progressbar</span> <span class='op'>=</span> <span class='const'>ProgressBar</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='label'>title:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Processing Source</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>total:</span> <span class='ivar'>@source_csv</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='comma'>,</span> <span class='label'>format:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>%t: |%B| %p%   </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='ivar'>@source_csv</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='period'>.</span><span class='id identifier rubyid_with_index'>with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_row_num'>row_num</span><span class='op'>|</span>
+    <span class='id identifier rubyid_process_row'>process_row</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_row_num'>row_num</span> <span class='op'>+</span> <span class='int'>2</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Digital Object - Parent Identifier</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='comment'># skip blank rows in the source csv
+</span>    <span class='id identifier rubyid_progressbar'>progressbar</span><span class='period'>.</span><span class='id identifier rubyid_increment'>increment</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="record_count-instance_method">
+  
+    #<strong>record_count</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25
+26
+27</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 25</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_record_count'>record_count</span>
+  <span class='ivar'>@source_csv</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="relative_path_to_file-instance_method">
+  
+    #<strong>relative_path_to_file</strong>(row)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+99
+100
+101
+102
+103</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/langmuir_preprocessor.rb', line 99</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_relative_path_to_file'>relative_path_to_file</span><span class='lparen'>(</span><span class='id identifier rubyid_row'>row</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_absolute_path'>absolute_path</span> <span class='op'>=</span> <span class='id identifier rubyid_row'>row</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Path</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='comment'># e.g. &quot;::nasn2dmz.cc.emory.edu:dmfiles:MARBL:Manuscripts:MSS_1218_Langmuir:ARCH:B071:MSS1218_B071_I205_P0001_ARCH.tif&quot;
+</span>  <span class='id identifier rubyid_relative_path'>relative_path</span> <span class='op'>=</span> <span class='id identifier rubyid_absolute_path'>absolute_path</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>::(\w+\.)*\w+:</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'># remove any initial ::hostname.domain: prefix
+</span>  <span class='id identifier rubyid_relative_path'>relative_path</span><span class='period'>.</span><span class='id identifier rubyid_tr'>tr</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'># convert path segment separators from colons to forward slashes
+</span><span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Apr 13 15:57:02 2020 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.24 (ruby-2.5.3).
+</div>
+
+    </div>
+  </body>
+</html>

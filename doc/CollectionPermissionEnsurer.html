@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: CollectionPermissionEnsurer
+  
+    &mdash; Documentation by YARD 0.9.24
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "CollectionPermissionEnsurer";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (C)</a> &raquo;
+    
+    
+    <span class="title">CollectionPermissionEnsurer</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: CollectionPermissionEnsurer
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">CollectionPermissionEnsurer</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>app/importers/collection_permission_ensurer.rb</dd>
+  </dl>
+  
+</div>
+
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="AGENT_TYPE-constant" class="">AGENT_TYPE =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>group</span><span class='tstring_end'>&#39;</span></span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(collection:, access_permissions:)  &#x21d2; CollectionPermissionEnsurer </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of CollectionPermissionEnsurer.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(collection:, access_permissions:)  &#x21d2; <tt><span class='object_link'><a href="" title="CollectionPermissionEnsurer (class)">CollectionPermissionEnsurer</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of CollectionPermissionEnsurer.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/importers/collection_permission_ensurer.rb', line 6</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>collection:</span><span class='comma'>,</span> <span class='label'>access_permissions:</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_access_permissions'>access_permissions</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_access_permission'>access_permission</span><span class='comma'>,</span> <span class='id identifier rubyid_groups'>groups</span><span class='op'>|</span>
+    <span class='id identifier rubyid_hpt'>hpt</span> <span class='op'>=</span> <span class='id identifier rubyid_find_or_create_permission_template'>find_or_create_permission_template</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_groups'>groups</span><span class='period'>.</span><span class='id identifier rubyid_select!'>select!</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_group'>group</span><span class='op'>|</span> <span class='const'>Role</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_group'>group</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+    <span class='id identifier rubyid_groups'>groups</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_group'>group</span><span class='op'>|</span>
+      <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_group_rights_exists?'>group_rights_exists?</span><span class='lparen'>(</span><span class='label'>hyrax_permission_template:</span> <span class='id identifier rubyid_hpt'>hpt</span><span class='comma'>,</span> <span class='label'>access_permission:</span> <span class='id identifier rubyid_access_permission'>access_permission</span><span class='comma'>,</span> <span class='label'>group:</span> <span class='id identifier rubyid_group'>group</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_hpta'>hpta</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Hyrax.html" title="Hyrax (module)">Hyrax</a></span></span><span class='op'>::</span><span class='const'>PermissionTemplateAccess</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+      <span class='id identifier rubyid_hpta'>hpta</span><span class='period'>.</span><span class='id identifier rubyid_permission_template_id'>permission_template_id</span> <span class='op'>=</span> <span class='id identifier rubyid_hpt'>hpt</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+      <span class='id identifier rubyid_hpta'>hpta</span><span class='period'>.</span><span class='id identifier rubyid_agent_type'>agent_type</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="#AGENT_TYPE-constant" title="CollectionPermissionEnsurer::AGENT_TYPE (constant)">AGENT_TYPE</a></span></span>
+      <span class='id identifier rubyid_hpta'>hpta</span><span class='period'>.</span><span class='id identifier rubyid_agent_id'>agent_id</span> <span class='op'>=</span> <span class='id identifier rubyid_group'>group</span>
+      <span class='id identifier rubyid_hpta'>hpta</span><span class='period'>.</span><span class='id identifier rubyid_access'>access</span> <span class='op'>=</span> <span class='id identifier rubyid_access_permission'>access_permission</span>
+      <span class='id identifier rubyid_hpta'>hpta</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_update_collection'>update_collection</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='comma'>,</span> <span class='id identifier rubyid_hpt'>hpt</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Apr 13 15:57:03 2020 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.24 (ruby-2.5.3).
+</div>
+
+    </div>
+  </body>
+</html>

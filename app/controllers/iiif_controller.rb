@@ -1,4 +1,12 @@
 # frozen_string_literal: true
+# @markup markdown
+# The IIIF Controller
+#1. Proxies image requests to the Cantaloupe IIIF server in order to enforce Emory's visibility requirements. It does so by
+#  a. Allowing or denying image requests, based on the user's authentication and the image's visibility.
+#  b. For images with low resolution visibility, e.g. Public Low Res and Emory Low Download, the IIIF Controller rewrites the IIIF requests, to limit the maximum size for full size images and for a given region of an image.
+#
+#2. Provides a thumbnail path for Lux, which also enforces Emory visibility requirements.
+#3. Proxies the info.json and the manifest for Curate.
 
 class IiifController < ApplicationController
   skip_before_action :authenticate_user!
@@ -22,15 +30,30 @@ class IiifController < ApplicationController
   def evaluate_visibility
     case visibility
     when "open", "low_res"
-      return send_image
+      send_image
     when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
       return head :forbidden unless valid_cookie?
-      return send_image
+      send_image
     when "restricted"
       head :forbidden
     when "rose_high"
       return head :forbidden unless user_ip_rose_reading_room?
       send_image
+    else
+      head :forbidden
+    end
+  end
+
+  def evalute_thumbnail_visibility
+    case thumbnail_visibility
+    when "open", "low_res"
+      send_thumbnail
+    when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
+      return head :forbidden unless valid_cookie?
+      send_thumbnail
+    when "rose_high"
+      return head :forbidden unless user_ip_rose_reading_room?
+      send_thumbnail
     else
       head :forbidden
     end
@@ -42,21 +65,6 @@ class IiifController < ApplicationController
       send_thumbnail
     else
       evalute_thumbnail_visibility
-    end
-  end
-
-  def evalute_thumbnail_visibility
-    case thumbnail_visibility
-    when "open", "low_res"
-      send_thumbnail
-    when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
-      return head :forbidden unless valid_cookie?
-      return send_thumbnail
-    when "rose_high"
-      return head :forbidden unless user_ip_rose_reading_room?
-      send_thumbnail
-    else
-      head :forbidden
     end
   end
 
