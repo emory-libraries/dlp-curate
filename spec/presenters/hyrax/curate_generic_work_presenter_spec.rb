@@ -53,7 +53,7 @@ RSpec.describe Hyrax::CurateGenericWorkPresenter do
     let(:presenter) { described_class.new(solr_document, ability) }
 
     before do
-      ENV['LUX_BASE_URL'] = "empl.com"
+      ENV['LUX_BASE_URL'] = "https://example.com"
     end
 
     describe "#manifest_metadata" do
@@ -61,13 +61,14 @@ RSpec.describe Hyrax::CurateGenericWorkPresenter do
 
       it {
         is_expected.to eq [{ "label" => "Provided by", "value" => ["test holding repo"] }, { "label" => "Rights Status", "value" => ["empl.com"] },
-                           { "label" => "Identifier", "value" => "888888" }, { "label" => "Persistent URL", "value" => "<a href=\"http://empl.com/purl/888888\">empl.com/purl/888888</a>" }]
+                           { "label" => "Identifier", "value" => "888888" },
+                           { "label" => "Persistent URL", "value" => "<a href=\"https://example.com/purl/888888\">https://example.com/purl/888888</a>" }]
       }
     end
 
     describe "#purl" do
       subject { presenter.purl }
-      it { is_expected.to eq "empl.com/purl/888888" }
+      it { is_expected.to eq "https://example.com/purl/888888" }
     end
   end
 end
