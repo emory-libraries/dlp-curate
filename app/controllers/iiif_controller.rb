@@ -100,6 +100,18 @@ class IiifController < ApplicationController
 
 # The identifier that is provided in the URL is the file set ID for the representative image
   def thumbnail
+    case user_signed_in?
+    when true
+      send_thumbnail
+    else
+      case thumbnail_visibility
+      when "open", "low_res"
+        send_thumbnail
+      end
+    end
+  end
+
+  def send_thumbnail
     response.set_header('Access-Control-Allow-Origin', '*')
     response.headers["Last-Modified"] = Time.now.httpdate.to_s
     response.headers["Content-Type"] = 'image/jpeg'
@@ -186,10 +198,22 @@ class IiifController < ApplicationController
     params["format"]
   end
 
+  def thumbnail_visibility
+    @thumbnail_visibility ||= fetch_thumbnail_visibility
+  end
+
+  def fetch_thumbnail_visibility
+    response = Blacklight.default_index.connection.get 'select', params: { q: "id:#{identifier}" }
+    visibility = response["response"]["docs"][0]["visibility_ssi"]
+    return visibility unless visibility.nil? || visibility.empty?
+    ["restricted"]
+  rescue
+    ["restricted"]
+  end
+
   def visibility
     @visibility ||= fetch_visibility
   end
-
   # Sometimes we will need to look up visibility from solr.
   # If this goes wrong for any reason, default to "restricted"
   # Note that Emory's cantaloupe is using SHA1 checksums to look up images, NOT work IDs

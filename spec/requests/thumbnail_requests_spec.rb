@@ -55,21 +55,9 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
         end
 
         it "returns a thumbnail for a not-logged-in user" do
-          get("/downloads/#{public_low_view_file_set_id}?file=thumbnail", params: { file: :thumbnail, id: public_low_view_file_set_id })
+          get("/iiif/#{public_low_view_file_set_id}/thumbnail", params: { format: :image })
           expect(response.status).to eq 200
           expect(response.body).not_to be_empty
-        end
-      end
-
-      context "full resolution, full size file" do
-        it "can download the full size image as an admin user" do
-          login_as admin
-          get("/downloads/#{public_low_view_file_set_id}", params: { file: :preservation_master_file, id: public_low_view_file_set_id })
-          expect(response.status).to eq 200
-        end
-        it "cannot download the full size image as a non-logged-in-user" do
-          get("/downloads/#{public_low_view_file_set_id}", params: { file: :preservation_master_file, id: public_low_view_file_set_id })
-          expect(response.status).to eq 401
         end
       end
     end
@@ -78,25 +66,26 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       context "thumbnail" do
         it "returns a thumbnail for a logged in user" do
           login_as user
-          get("/iiif/#{public_file_set_id}/thumbnail", params: { format: :image })
+          get("/iiif/#{public_file_set_id}/thumbnail")
           expect(response.status).to eq 200
         end
 
         it "returns a thumbnail for a not-logged-in user" do
-          get("/downloads/#{public_file_set_id}?file=thumbnail", params: { format: :image })
+          get("/iiif/#{public_file_set_id}/thumbnail")
           expect(response.status).to eq 200
         end
       end
     end
 
-    context "a Restricted object" do
-      it "as an admin user, I can download the full size image" do
+# A restricted object is a Private object, and only Curate admins can see it
+    context "a Private/Restricted object" do
+      it "as an admin user, I can download the thumbnail" do
         login_as admin
-        get("/downloads/#{restricted_file_set_id}", params: { file: :preservation_master_file, id: restricted_file_set_id })
+        get("/iiif/#{restricted_file_set_id}/thumbnail")
         expect(response.status).to eq 200
       end
-      it "cannot download the full size image as a non-logged-in-user" do
-        get("/downloads/#{restricted_file_set_id}", params: { file: :preservation_master_file, id: restricted_file_set_id })
+      it "cannot download the thumbnail as a non-logged-in-user" do
+        get("/iiif/#{restricted_file_set_id}/thumbnail")
         expect(response.status).to eq 401
       end
     end
