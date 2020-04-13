@@ -94,3 +94,7 @@ flycheck_*.el
 
 # ignore branding path
 public/branding
+
+# yard documentation
+/doc
+/.yardoc/**
