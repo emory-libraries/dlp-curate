@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 # @markup markdown
 # The IIIF Controller
-#1. Proxies image requests to the Cantaloupe IIIF server in order to enforce Emory's visibility requirements. It does so by
+# 1. Proxies image requests to the Cantaloupe IIIF server in order to enforce Emory's visibility requirements. It does so by
 #  a. Allowing or denying image requests, based on the user's authentication and the image's visibility.
-#  b. For images with low resolution visibility, e.g. Public Low Res and Emory Low Download, the IIIF Controller rewrites the IIIF requests, to limit the maximum size for full size images and for a given region of an image.
+#  b. For images with low resolution visibility, e.g. Public Low Res and Emory Low Download, the IIIF Controller rewrites
+# the IIIF requests, to limit the maximum size for full size images and for a given region of an image.
 #
-#2. Provides a thumbnail path for Lux, which also enforces Emory visibility requirements.
-#3. Proxies the info.json and the manifest for Curate.
+# 2. Provides a thumbnail path for Lux, which also enforces Emory visibility requirements.
+# 3. Proxies the info.json and the manifest for Curate.
 
 class IiifController < ApplicationController
   skip_before_action :authenticate_user!
