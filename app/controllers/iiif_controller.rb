@@ -12,24 +12,66 @@ class IiifController < ApplicationController
   end
 
   def show
-    case user_signed_in?
-    when true
+    if user_signed_in?
       send_image
     else
-      case visibility
-      when "open", "low_res"
-        return send_image
-      when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
-        return head :forbidden unless valid_cookie?
-        return send_image
-      when "restricted"
-        head :forbidden
-      when "rose_high"
-        return head :forbidden unless user_ip_rose_reading_room?
-        send_image
-      else
-        head :forbidden
+      evaluate_visibility
+    end
+  end
+
+  def evaluate_visibility
+    case visibility
+    when "open", "low_res"
+      return send_image
+    when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
+      return head :forbidden unless valid_cookie?
+      return send_image
+    when "restricted"
+      head :forbidden
+    when "rose_high"
+      return head :forbidden unless user_ip_rose_reading_room?
+      send_image
+    else
+      head :forbidden
+    end
+  end
+
+  # The identifier that is provided in the URL is the file set ID for the representative image
+  def thumbnail
+    if user_signed_in?
+      send_thumbnail
+    else
+      evalute_thumbnail_visibility
+    end
+  end
+
+  def evalute_thumbnail_visibility
+    case thumbnail_visibility
+    when "open", "low_res"
+      send_thumbnail
+    when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
+      return head :forbidden unless valid_cookie?
+      return send_thumbnail
+    when "rose_high"
+      return head :forbidden unless user_ip_rose_reading_room?
+      send_thumbnail
+    else
+      head :forbidden
+    end
+  end
+
+  def send_thumbnail
+    response.set_header('Access-Control-Allow-Origin', '*')
+    response.headers["Last-Modified"] = Time.now.httpdate.to_s
+    response.headers["Content-Type"] = 'image/jpeg'
+    response.headers["Content-Disposition"] = 'inline'
+    path = Hyrax::DerivativePath.derivative_path_for_reference(identifier, 'thumbnail')
+    begin
+      IO.foreach(path).each do |buffer|
+        response.stream.write(buffer)
       end
+    ensure
+      response.stream.close
     end
   end
 
@@ -96,42 +138,6 @@ class IiifController < ApplicationController
     headers['Access-Control-Allow-Origin'] = '*'
     solr_doc = SolrDocument.find(identifier)
     render json: ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: CurateGenericWork.find(identifier))
-  end
-
-  # The identifier that is provided in the URL is the file set ID for the representative image
-  def thumbnail
-    case user_signed_in?
-    when true
-      send_thumbnail
-    else
-      case thumbnail_visibility
-      when "open", "low_res"
-        send_thumbnail
-      when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
-        return head :forbidden unless valid_cookie?
-        return send_thumbnail
-      when "rose_high"
-        return head :forbidden unless user_ip_rose_reading_room?
-        send_thumbnail
-      else
-        head :forbidden
-      end
-    end
-  end
-
-  def send_thumbnail
-    response.set_header('Access-Control-Allow-Origin', '*')
-    response.headers["Last-Modified"] = Time.now.httpdate.to_s
-    response.headers["Content-Type"] = 'image/jpeg'
-    response.headers["Content-Disposition"] = 'inline'
-    path = Hyrax::DerivativePath.derivative_path_for_reference(identifier, 'thumbnail')
-    begin
-      IO.foreach(path).each do |buffer|
-        response.stream.write(buffer)
-      end
-    ensure
-      response.stream.close
-    end
   end
 
   # IIIF URLS really do not like extra slashes. Ensure that we only add a slash after the
