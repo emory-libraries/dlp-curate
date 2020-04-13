@@ -107,6 +107,11 @@ class IiifController < ApplicationController
       case thumbnail_visibility
       when "open", "low_res"
         send_thumbnail
+      when "authenticated", "emory_low" # authenticated is also called "Emory High Download"
+        return head :forbidden unless valid_cookie?
+        return send_thumbnail
+      else
+        head :forbidden
       end
     end
   end

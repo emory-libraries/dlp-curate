@@ -55,7 +55,7 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
         end
 
         it "returns a thumbnail for a not-logged-in user" do
-          get("/iiif/#{public_low_view_file_set_id}/thumbnail", params: { format: :image })
+          get("/iiif/#{public_low_view_file_set_id}/thumbnail")
           expect(response.status).to eq 200
           expect(response.body).not_to be_empty
         end
@@ -86,7 +86,8 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       end
       it "cannot download the thumbnail as a non-logged-in-user" do
         get("/iiif/#{restricted_file_set_id}/thumbnail")
-        expect(response.status).to eq 401
+        expect(response.status).to eq 403
+        expect(response.body).to be_empty
       end
     end
 
@@ -94,19 +95,19 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       context "thumbnail" do
         it "returns a thumbnail for an admin user" do
           login_as admin
-          get("/downloads/#{emory_low_file_set_id}?file=thumbnail", params: { file: :thumbnail, id: emory_low_file_set_id })
+          get("/iiif/#{emory_low_file_set_id}/thumbnail")
           expect(response.status).to eq 200
         end
         it "returns a thumbnail for a user authenticated through Lux" do
           get(
-            "/downloads/#{emory_low_file_set_id}?file=thumbnail",
-            headers: { "HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}" },
-            params: { file: :thumbnail, id: emory_low_file_set_id }
+            "/iiif/#{emory_low_file_set_id}/thumbnail",
+            headers: { "HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}" }
           )
+          expect(response.status).to eq 200
         end
         it "does not return a thumbnail for a not-logged-in user" do
-          get("/downloads/#{emory_low_file_set_id}?file=thumbnail", params: { file: :thumbnail, id: emory_low_file_set_id })
-          expect(response.status).to eq 401
+          get("/iiif/#{emory_low_file_set_id}/thumbnail")
+          expect(response.status).to eq 403
           expect(response.body).to be_empty
         end
       end
