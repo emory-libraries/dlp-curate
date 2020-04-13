@@ -107,13 +107,13 @@ class IiifController < ApplicationController
     representative_id = work.representative_id
     fs = FileSet.find(representative_id)
     path = Hyrax::DerivativePath.derivative_path_for_reference(fs, 'thumbnail')
-    begin
-      IO.foreach(path).each do |buffer|
-        response.stream.write(buffer)
-      end
-    ensure
-      response.stream.close
-    end
+    # begin
+    #   IO.foreach(path).each do |buffer|
+    #     response.stream.write(buffer)
+    #   end
+    # ensure
+    #   response.stream.close
+    # end
   end
 
   # IIIF URLS really do not like extra slashes. Ensure that we only add a slash after the

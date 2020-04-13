@@ -45,7 +45,8 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     let(:work) {FactoryBot.create(:work_with_files, representative_id:file_set.id)}
     let(:params) do
       {
-        identifier: work.id
+        identifier: work.id,
+        format:     format
       }
     end
     let(:fake_image) {}
@@ -62,7 +63,6 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     it "fetches a thumbnail" do
       get :thumbnail, params: params
       expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
-      byebug
     end
   end
   describe 'a request without the IIIF_SERVER_URL set' do
