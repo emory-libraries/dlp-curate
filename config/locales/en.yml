@@ -31,3 +31,12 @@
 
 en:
   hello: "Hello world"
+  hyrax:
+    dashboard:
+      my:
+        action:
+          heading:
+            type: Type
+            visibility: Visibility
+            collection:
+              visibility: Visibility of Collection

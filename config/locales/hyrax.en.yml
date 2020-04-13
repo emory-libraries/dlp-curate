@@ -186,7 +186,6 @@ en:
           technical_note: "technical_note (Technical Note)"
           title: "title (Title)"
           transfer_engineer: "transfer_engineer (Transfer Engineer)"
-  hyrax:
     visibility:
       open:
         note_html: 'Public access with full resolution view & download'
