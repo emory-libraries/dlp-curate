@@ -43,13 +43,13 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
   before do
     private_work.member_of_collections = [collection]
     private_work.save!
-    ENV['LUX_BASE_URL'] = 'empl.com'
+    ENV['LUX_BASE_URL'] = 'https://example.com'
   end
 
   it 'has all the expected metadata fields' do
     login_as user
     visit "/collections/#{collection.id}"
-    expect(page).to have_content("empl.com/purl/#{collection.id}")
+    expect(page).to have_content("https://example.com/purl/#{collection.id}")
     expect(page).to have_content 'Robert Langmuir African American Photograph Collection'
     expect(page).to have_content 'Created by: Langmuir, Robert, collector'
     expect(page).to have_content 'Rose Library'
