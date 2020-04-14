@@ -187,14 +187,6 @@ en:
           title: "title (Title)"
           transfer_engineer: "transfer_engineer (Transfer Engineer)"
   hyrax:
-    dashboard:
-      my:
-        action:
-          heading:
-            type: Type
-            visibility: Visibility
-            collection:
-              visibility: Visibility of Collection
     visibility:
       open:
         note_html: 'Public access with full resolution view & download'
