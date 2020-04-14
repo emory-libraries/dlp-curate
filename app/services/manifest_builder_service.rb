@@ -38,17 +38,18 @@ class ManifestBuilderService
   private
 
     def manifest_builder
-      solr_doc = ::SolrDocument.find(@curation_concern.id)
+      solr_doc = query_for_rendering(@curation_concern.id)
       date_modified = solr_doc[:date_modified_dtsi] || solr_doc[:system_create_dtsi]
       key = date_modified.to_datetime.strftime('%Y-%m-%d_%H-%M-%S') + '_' + solr_doc[:id]
 
       if File.exist?(File.join(iiif_manifest_cache, key))
         render_manifest_file(key: key)
       else
-        manifest_json = ApplicationController.render(template: 'manifest/manifest.json', assigns: { solr_doc:          solr_doc,
-                                                                                                    root_url:          @presenter.manifest_url,
-                                                                                                    manifest_metadata: @presenter.manifest_metadata,
-                                                                                                    image_concerns:    image_concerns })
+        manifest_json = ApplicationController.render(template: 'manifest/manifest.json', assigns: { solr_doc:           solr_doc,
+                                                                                                    root_url:           @presenter.manifest_url,
+                                                                                                    manifest_metadata:  @presenter.manifest_metadata,
+                                                                                                    manifest_rendering: sequence_rendering,
+                                                                                                    image_concerns:     image_concerns })
         persist_manifest(key: key, manifest_json: manifest_json)
         manifest_json
       end
@@ -90,5 +91,22 @@ class ManifestBuilderService
       else
         @curation_concern.id
       end
+    end
+
+    #
+    # @return [Array] array of rendering hashes
+    def sequence_rendering
+      renderings = []
+      solr_doc = query_for_rendering(@curation_concern.id)
+      if solr_doc.rendering_ids.present?
+        solr_doc.rendering_ids.each do |file_set_id|
+          renderings << @presenter.manifest_helper.build_rendering(file_set_id)
+        end
+      end
+      renderings.flatten
+    end
+
+    def query_for_rendering(id)
+      ::SolrDocument.find(id)
     end
 end

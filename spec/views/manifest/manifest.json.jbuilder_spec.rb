@@ -8,6 +8,7 @@ RSpec.describe "manifest/manifest", type: :view do
   let(:builder_service) { ManifestBuilderService.new(curation_concern: work) }
   let(:image_concerns)  { builder_service.send(:image_concerns) }
   let(:root_url)        { presenter.manifest_url }
+  let(:renderings)      { rendering_output }
   let(:ability)         { instance_double(Ability) }
   let(:request)         { instance_double(ActionDispatch::Request, base_url: 'example.com') }
   let(:presenter)       { Hyrax::CurateGenericWorkPresenter.new(solr_document, ability, request) }
@@ -30,7 +31,23 @@ RSpec.describe "manifest/manifest", type: :view do
       "date_modified_dtsi" => "2019-11-11T18:20:32Z",
       "depositor_tesim" => 'example_user',
       "holding_repository_tesim" => ["test holding repo"],
-      "rights_statement_tesim" => ["example.com"] }
+      "rights_statement_tesim" => ["example.com"],
+      "hasFormat_ssim" => ["608hdr7srt-cor", "608hdr7rrt-cor"] }
+  end
+
+  let(:rendering_output) do
+    [
+      {
+        "@id" => "http://localhost:3000/downloads/#{file_set1.id}",
+        "format" => file_set1.mime_type,
+        "label" => "Download whole resource: #{file_set1.title.first}"
+      },
+      {
+        "@id" => "http://localhost:3000/downloads/#{file_set2.id}",
+        "format" => file_set2.mime_type,
+        "label" => "Download whole resource: #{file_set2.title.first}"
+      }
+    ]
   end
 
   before do
@@ -46,6 +63,7 @@ RSpec.describe "manifest/manifest", type: :view do
     assign(:solr_doc, solr_document)
     assign(:image_concerns, image_concerns)
     assign(:root_url, root_url)
+    assign(:manifest_rendering, renderings)
   end
 
   around do |example|

@@ -13,6 +13,11 @@ end
 json.sequences [''] do
   json.set! :@type, 'sc:Sequence'
   json.set! :@id, "#{@root_url}/sequence/normal"
+  json.rendering @manifest_rendering do |child|
+    json.set! :@id, child['@id']
+    json.format child['format']
+    json.label child['label']
+  end
   json.canvases @image_concerns do |child_id|
     file_set = FileSet.find(child_id)
     mime_types = ['pdf', 'xml']

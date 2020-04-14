@@ -20,12 +20,15 @@ RSpec.describe ManifestBuilderService, :clean do
       "date_modified_dtsi" => "2019-11-11T18:20:32Z",
       "depositor_tesim" => user.uid,
       "holding_repository_tesim" => ["test holding repo"],
-      "rights_statement_tesim" => ["example.com"] }
+      "rights_statement_tesim" => ["example.com"],
+      "hasFormat_ssim" => ["608hdr7srt-cor"] }
   end
   let(:file_set)  { FactoryBot.create(:file_set) }
   let(:file_set2) { FactoryBot.create(:file_set) }
+  let(:file_set3) { FactoryBot.create(:file_set, id: '608hdr7srt-cor') }
   let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   let(:sf) { File.open(fixture_path + '/book_page/0003_service.jpg') }
+  let(:pdf) { File.open(fixture_path + '/sample-file.pdf') }
 
   before do
     allow(SolrDocument).to receive(:find).and_return(solr_document)
@@ -54,8 +57,10 @@ RSpec.describe ManifestBuilderService, :clean do
       Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
       Hydra::Works::AddFileToFileSet.call(file_set, sf, :service_file)
       Hydra::Works::AddFileToFileSet.call(file_set2, pmf, :preservation_master_file)
+      Hydra::Works::AddFileToFileSet.call(file_set3, pdf, :preservation_master_file)
       work.ordered_members << file_set
       work.ordered_members << file_set2
+      work.ordered_members << file_set3
       work.save!
     end
 
@@ -136,7 +141,13 @@ RSpec.describe ManifestBuilderService, :clean do
       end
 
       it "returns file_set_ids" do
-        expect(service.send(:image_concerns)).to match_array [file_set.id, file_set2.id]
+        expect(service.send(:image_concerns)).to match_array [file_set.id, file_set2.id, file_set3.id]
+      end
+    end
+
+    context "#sequence_rendering" do
+      it "something here" do
+        expect(service.send(:sequence_rendering).first["@id"]).to eq("http://example.com/downloads/508hdr7srq-cor")
       end
     end
   end
