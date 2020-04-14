@@ -98,3 +98,6 @@ public/branding
 # yard documentation
 /doc
 /.yardoc/**
+
+# fits artifacts
+fits.log
