@@ -2,7 +2,8 @@
 require 'rails_helper'
 
 RSpec.describe CheckBinariesJob, :clean do
-  let(:csv)           { IO.read(File.join("config/emory/check_binaries_results.csv")) }
+  let(:csv_path) { File.join("config/emory/check_binaries_results.csv") }
+  let(:csv)           { IO.read(csv_path) }
   let(:file)          { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   let(:file_set)      { FactoryBot.create(:file_set) }
   let(:file_set2)     { FactoryBot.create(:file_set) }
@@ -16,6 +17,10 @@ RSpec.describe CheckBinariesJob, :clean do
     generic_work2.save
     generic_work.ordered_members << file_set2
     generic_work.save
+  end
+
+  after do
+    File.delete(csv_path) if File.exist?(csv_path)
   end
 
   context "file is present in s3" do
