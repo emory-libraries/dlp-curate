@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Collection do
+RSpec.describe Collection, clean: true do
   context "Solr document for collections" do
     let(:collection)     { FactoryBot.build(:collection_lw) }
     let(:work1)          { FactoryBot.build(:work, id: 'wk1', title: ['Work 1']) }

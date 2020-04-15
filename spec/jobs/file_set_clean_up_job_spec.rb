@@ -2,9 +2,14 @@
 require 'rails_helper'
 
 RSpec.describe FileSetCleanUpJob, :clean do
-  let(:csv)         { IO.read(File.join("config/emory/index_file_set_results.csv")) }
+  let(:csv_path)    { File.join("config/emory/index_file_set_results.csv") }
+  let(:csv)         { IO.read(csv_path) }
   let(:file)        { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   let(:file_set)    { FactoryBot.create(:file_set) }
+
+  after do
+    File.delete(csv_path) if File.exist?(csv_path)
+  end
 
   context 'file_set is indexed incorrectly' do
     before do
