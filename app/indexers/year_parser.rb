@@ -21,7 +21,9 @@ class YearParser
   end
 
   def self.years(input_string)
-    if date_range?(input_string)
+    if date_range?(input_string) && date_decade?(input_string)
+      expand_multiple_decades(input_string)
+    elsif date_range?(input_string)
       expand_date(input_string)
     elsif date_decade?(input_string)
       expand_decade(input_string)
@@ -41,6 +43,13 @@ class YearParser
     %r{\/} # a forward slash
   end
 
+  def self.years_to_array(range_start, range_end)
+    starting_year = parse_year(range_start)
+    ending_year = parse_year(range_end)
+
+    (starting_year..ending_year).to_a
+  end
+
   # If the string is a range of dates instead of a
   # single date, expand the range into an array of
   # values.
@@ -48,10 +57,16 @@ class YearParser
     range_start = input_string.match(/^(.*)#{range_separator}/).captures.first
     range_end = input_string.match(/^.*#{range_separator}(.*)/).captures.first
 
-    starting_year = parse_year(range_start)
-    ending_year = parse_year(range_end)
+    years_to_array(range_start, range_end)
+  end
 
-    (starting_year..ending_year).to_a
+  def self.expand_multiple_decades(input_string)
+    first_decade = input_string.match(/^(.*)#{range_separator}/).captures.first
+    second_decade = input_string.match(/^.*#{range_separator}(.*)/).captures.first
+    range_start = first_decade.tr('X', '0')
+    range_end = second_decade.tr('X', '9')
+
+    years_to_array(range_start, range_end)
   end
 
   # If the string has a known decade but an uncertain year within that decade
@@ -65,9 +80,7 @@ class YearParser
     range_start = range_base.tr('X', '0')
     range_end = range_base.tr('X', '9')
 
-    starting_year = parse_year(range_start)
-    ending_year = parse_year(range_end)
-    (starting_year..ending_year).to_a
+    years_to_array(range_start, range_end)
   end
 
   def self.parse_year(date_string)
