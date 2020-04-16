@@ -9,9 +9,21 @@ class ManifestOutput
       "metadata":  [],
       "sequences": [
         {
-          "@type":    "sc:Sequence",
-          "@id":      "http://example.com/iiif/#{work.id}/manifest/sequence/normal",
-          "canvases": [
+          "@type":     "sc:Sequence",
+          "@id":       "http://example.com/iiif/#{work.id}/manifest/sequence/normal",
+          "rendering": [
+            {
+              "@id":    "http://localhost:3000/downloads/608hdr7srt-cor",
+              "format": "application/pdf",
+              "label":  "Download whole resource: foo1"
+            },
+            {
+              "@id":    "http://localhost:3000/downloads/608hdr7rrt-cor",
+              "format": "application/xml",
+              "label":  "Download whole resource: foo2"
+            }
+          ],
+          "canvases":  [
             {
               "@id":    "http://example.com/iiif/#{work.id}/manifest/canvas/#{file_set.id}",
               "@type":  "sc:Canvas",
