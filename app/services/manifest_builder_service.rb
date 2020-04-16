@@ -38,7 +38,7 @@ class ManifestBuilderService
   private
 
     def manifest_builder
-      solr_doc = query_for_rendering(@curation_concern.id)
+      solr_doc = ::SolrDocument.find(@curation_concern.id)
       date_modified = solr_doc[:date_modified_dtsi] || solr_doc[:system_create_dtsi]
       key = date_modified.to_datetime.strftime('%Y-%m-%d_%H-%M-%S') + '_' + solr_doc[:id]
 
@@ -97,16 +97,12 @@ class ManifestBuilderService
     # @return [Array] array of rendering hashes
     def sequence_rendering
       renderings = []
-      solr_doc = query_for_rendering(@curation_concern.id)
+      solr_doc = ::SolrDocument.find(@curation_concern.id)
       if solr_doc.rendering_ids.present?
         solr_doc.rendering_ids.each do |file_set_id|
           renderings << @presenter.manifest_helper.build_rendering(file_set_id)
         end
       end
       renderings.flatten
-    end
-
-    def query_for_rendering(id)
-      ::SolrDocument.find(id)
     end
 end
