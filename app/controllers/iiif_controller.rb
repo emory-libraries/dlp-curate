@@ -115,7 +115,7 @@ class IiifController < ApplicationController
   end
 
   def valid_cookie?
-    if IiifAuthService.decrypt_cookie(cookies["bearer_token"]) == "This is a token value"
+    if IiifAuthService.decrypt_cookie(cookies["bearer_token"])
       true
     else
       false
