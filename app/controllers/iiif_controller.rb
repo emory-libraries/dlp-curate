@@ -115,11 +115,20 @@ class IiifController < ApplicationController
   end
 
   def valid_cookie?
-    if IiifAuthService.decrypt_cookie(cookies["bearer_token"])
-      true
+    if (decrypted_cookie_value = IiifAuthService.decrypt_cookie(cookies["bearer_token"]))
+      cookie_date = decrypted_cookie_value.to_datetime
+      if cookie_date.between?(DateTime.now.utc, 1.day.from_now)
+        true
+      else
+        false
+      end
     else
       false
     end
+  rescue ArgumentError
+    error_message = 'Cookie value is not a date'
+    Rails.logger.error error_message
+    false
   end
 
   def info

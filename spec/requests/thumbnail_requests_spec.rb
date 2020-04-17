@@ -6,7 +6,8 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
   let(:user) { FactoryBot.create(:user) }
   let(:admin) { FactoryBot.create(:admin) }
   let(:cookie_name) { "bearer_token" }
-  let(:encrypted_cookie_value) { "BE0F7323469F3E7DF86CF9CA95B8ADD5D17753DA4F00BB67F2A9E8EC93E6A370" }
+  let(:time_to_string) { 1.day.from_now.to_s }
+  let(:encrypted_cookie_value) { encrypt_string(time_to_string) }
   let(:non_reading_room_ip) { '198.51.100.255' }
   let(:reading_room_ip) { '192.0.0.255' }
   let(:public_file_set_id) { "747dr7sqvt-cor" }
@@ -202,5 +203,14 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
         end
       end
     end
+  end
+
+  def encrypt_string(str)
+    cipher_salt1 = ENV["IIIF_COOKIE_SALT_1"] || 'some-random-salt-'
+    cipher_salt2 = ENV["IIIF_COOKIE_SALT_2"] || 'another-random-salt-'
+    cipher = OpenSSL::Cipher.new('AES-128-ECB').encrypt
+    cipher.key = OpenSSL::PKCS5.pbkdf2_hmac_sha1(cipher_salt1, cipher_salt2, 20_000, cipher.key_len)
+    encrypted = cipher.update(str) + cipher.final
+    encrypted.unpack('H*')[0].upcase
   end
 end

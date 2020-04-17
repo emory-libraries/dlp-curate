@@ -10,7 +10,8 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
   let(:rotation) { 0 }
   let(:quality) { "default" }
   let(:format) { "jpg" }
-  let(:encrypted_cookie_value) { "BE0F7323469F3E7DF86CF9CA95B8ADD5D17753DA4F00BB67F2A9E8EC93E6A370" }
+  let(:time_to_string) { 1.day.from_now.to_s }
+  let(:encrypted_cookie_value) { encrypt_string(time_to_string) }
 
   let(:iiif_url) { "/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}" }
 
@@ -180,5 +181,14 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
         expect(page).to have_http_status(200)
       end
     end
+  end
+
+  def encrypt_string(str)
+    cipher_salt1 = ENV["IIIF_COOKIE_SALT_1"] || 'some-random-salt-'
+    cipher_salt2 = ENV["IIIF_COOKIE_SALT_2"] || 'another-random-salt-'
+    cipher = OpenSSL::Cipher.new('AES-128-ECB').encrypt
+    cipher.key = OpenSSL::PKCS5.pbkdf2_hmac_sha1(cipher_salt1, cipher_salt2, 20_000, cipher.key_len)
+    encrypted = cipher.update(str) + cipher.final
+    encrypted.unpack('H*')[0].upcase
   end
 end
