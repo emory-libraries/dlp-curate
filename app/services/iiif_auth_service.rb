@@ -2,6 +2,7 @@
 
 class IiifAuthService
   def self.decrypt_cookie(encrypted_cookie_value)
+    byebug
     cipher_salt1 = ENV["IIIF_COOKIE_SALT_1"] || 'some-random-salt-'
     cipher_salt2 = ENV["IIIF_COOKIE_SALT_2"] || 'another-random-salt-'
     cipher = OpenSSL::Cipher.new('AES-128-ECB').decrypt
