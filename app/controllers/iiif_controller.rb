@@ -116,12 +116,16 @@ class IiifController < ApplicationController
 
   def valid_cookie?
     if (decrypted_cookie_value = IiifAuthService.decrypt_cookie(cookies["bearer_token"]))
-      cookie_date = decrypted_cookie_value.to_datetime
-      if cookie_date.between?(DateTime.now.utc, 1.day.from_now)
-        true
-      else
-        false
-      end
+      valid_cookie_date?(decrypted_cookie_value)
+    else
+      false
+    end
+  end
+
+  def valid_cookie_date?(decrypted_cookie_value)
+    cookie_date = decrypted_cookie_value.to_datetime
+    if cookie_date.between?(DateTime.now.utc, 1.day.from_now)
+      true
     else
       false
     end
@@ -130,6 +134,7 @@ class IiifController < ApplicationController
     Rails.logger.error error_message
     false
   end
+
 
   def info
     @iiif_url = "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/info.json"
