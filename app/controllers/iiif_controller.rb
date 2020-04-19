@@ -135,7 +135,6 @@ class IiifController < ApplicationController
     false
   end
 
-
   def info
     @iiif_url = "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/info.json"
     Rails.logger.info("Trying to proxy info from #{@iiif_url}")
