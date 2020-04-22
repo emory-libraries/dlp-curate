@@ -33,7 +33,7 @@ export default class {
             }).length===0) {
               return {id:term, text:term};
             }
-          },
+          }
       })
   }
 }
