@@ -152,7 +152,7 @@ class IiifController < ApplicationController
       error_message = "Request to #{iiif_url} resulted in 404 Not Found response"
       # send error to Honeybadger
       Honeybadger.notify(error_message)
-      redirect_to :status => 404
+      redirect_to status: 404
     else
       error_message = "Request to #{iiif_url} resulted in #{response.status}"
       Honeybadger.notify(error_message)
