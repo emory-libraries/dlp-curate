@@ -139,22 +139,23 @@ class IiifController < ApplicationController
     @iiif_url = "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/info.json"
     Rails.logger.info("Trying to proxy info from #{@iiif_url}")
     response.set_header('Access-Control-Allow-Origin', '*')
-    @info_original = get_info(@iiif_url)
-    @info_public_iiif = rewrite_iiif_base_uri(@info_original)
-    send_data @info_public_iiif, type: 'application/json', x_sendfile: true, disposition: 'inline'
+    get_info(@iiif_url)
   end
 
   def get_info(iiif_url)
     response = HTTP.get(iiif_url)
     if response.status == 200
-      response.to_s
+      @info_original = response.to_s
+      @info_public_iiif = rewrite_iiif_base_uri(@info_original)
+      send_data @info_public_iiif, type: 'application/json', x_sendfile: true, disposition: 'inline'
     elsif response.status == 404
-    #   error_message = ""
-    #   # send error to Honeybadger
-    #   Honeybadger.notify(error_message)
-      redirect_to
-    # else
-    #   Honeybadger.notify(exception)
+      error_message = "Request to #{iiif_url} resulted in 404 Not Found response"
+      # send error to Honeybadger
+      Honeybadger.notify(error_message)
+      redirect_to :status => 404
+    else
+      error_message = "Request to #{iiif_url} resulted in #{response.status}"
+      Honeybadger.notify(error_message)
     end
   end
 
