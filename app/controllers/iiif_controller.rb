@@ -152,12 +152,16 @@ class IiifController < ApplicationController
       error_message = "Request to #{iiif_url} resulted in 404 Not Found response, likely a file missing in Fedora"
       # send error to Honeybadger
       Honeybadger.notify(error_message)
-      "{#{error_message}}"
+      render_404
     else
       error_message = "Request to #{iiif_url} resulted in #{response.status}"
       Honeybadger.notify(error_message)
-      "{#{error_message}}"
+      render_404
     end
+  end
+
+  def render_404
+    render "{404 not found}", layout: false, status: :not_found
   end
 
   def rewrite_iiif_base_uri(info_original)
