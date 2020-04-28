@@ -98,6 +98,12 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
         expect(assigns(:iiif_url)).to eq expected_iiif_url
         expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
       end
+
+      it "passes on the 404 redirect to Lux" do
+        get :info, params: params
+        expect(response.status).to eq 404
+        expect(response.body).to include "The page you were looking for doesn't exist"
+      end
     end
 
     context "with a successful cantaloupe request" do
