@@ -148,11 +148,11 @@ class IiifController < ApplicationController
     response = HTTP.get(iiif_url)
     if response.status == 200
       response.to_s
-    # elsif response.status == 404
+    elsif response.status == 404
     #   error_message = ""
     #   # send error to Honeybadger
     #   Honeybadger.notify(error_message)
-    #   redirect_to
+      redirect_to
     # else
     #   Honeybadger.notify(exception)
     end
