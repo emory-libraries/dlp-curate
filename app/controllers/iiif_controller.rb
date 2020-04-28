@@ -161,7 +161,7 @@ class IiifController < ApplicationController
   end
 
   def render_404
-    render "{404 not found}", layout: false, status: :not_found
+    render file: Rails.root.join("public", "404.json"), layout: false, status: :not_found
   end
 
   def rewrite_iiif_base_uri(info_original)
