@@ -156,6 +156,7 @@ class IiifController < ApplicationController
     else
       error_message = "Request to #{iiif_url} resulted in #{response.status}"
       Honeybadger.notify(error_message)
+      render_404
     end
   end
 
