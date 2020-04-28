@@ -139,10 +139,10 @@ class IiifController < ApplicationController
     @iiif_url = "#{ENV['PROXIED_IIIF_SERVER_URL']}#{trailing_slash_fix}#{identifier}/info.json"
     Rails.logger.info("Trying to proxy info from #{@iiif_url}")
     response.set_header('Access-Control-Allow-Origin', '*')
-    get_info(@iiif_url)
+    send_info(@iiif_url)
   end
 
-  def get_info(iiif_url)
+  def send_info(iiif_url)
     response = HTTP.get(iiif_url)
     if response.status == 200
       @info_original = response.to_s
