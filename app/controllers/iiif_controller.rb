@@ -12,14 +12,37 @@
 class IiifController < ApplicationController
   skip_before_action :authenticate_user!
 
+  ##
+  # Maximum number of pixels per side for low resolution images;
+  #   To decrease resolution, decrease this number.
+  # @return [Integer]
   def self.max_pixels_for_low_res
     ENV['MAX_PIXELS_FOR_LOW_RES'] || 400
   end
 
+  ##
+  # Limits the depth of zoom;
+  #   To decrease resolution, increase this number.
+  # @return [Integer]
   def self.min_tile_size_for_low_res
     ENV['MIN_TILE_SIZE_FOR_LOW_RES'] || 800
   end
 
+  ##
+  # Display an image; this method expects urls to conform to iiif 2.0 standards.
+  # Always serves the image for users signed in to Curate; otherwise evaluates access
+  # control requirements (see the evaluate_visibility method)
+  # @example this method expects urls to conform to iiif 2.0 standards.
+  #   a url like /iiif/2/a0f9219f14f071be7e3b872186f3507cfeccd5bf/full/600,/0/default.jpg
+  #   will route here and map the following parameters:
+  #      "action" => "show",
+  #      "identifier" => "a0f9219f14f071be7e3b872186f3507cfeccd5bf",
+  #      "region" => "full",
+  #      "size" => "600,",
+  #      "rotation" => "0",
+  #      "quality" => "default",
+  #      "format" => "jpg"
+  #   Note that region, size may be adjusted based on access control requirements
   def show
     if user_signed_in?
       send_image
@@ -28,6 +51,16 @@ class IiifController < ApplicationController
     end
   end
 
+  ##
+  # This method handles image requests from users not signed in to Curate.
+  # It checks for the visibility of the work based on the visibility_ssi from solr.
+  # Depending on the access restrictions of the work, checks either whether the user
+  # is logged in to Lux or the user's ip address.
+  # Public works (visibility open or low_res) are served to all users.  For works
+  # restricted to Emory users, i.e. emory_low or authenticated, a cookie
+  # set by Lux is checked.  For works restricted by reading room, i.e. rose_high,
+  # the user's ip address is checked against a list of allowed ips.  Restricted works
+  # are forbidden here. In case of failure, the default is forbidden.
   def evaluate_visibility
     case visibility
     when "open", "low_res"
@@ -45,7 +78,10 @@ class IiifController < ApplicationController
     end
   end
 
-  def evalute_thumbnail_visibility
+  ##
+  # This method handles thumbnail requests for users not signed in to Curate.
+  #
+  def evaluate_thumbnail_visibility
     case thumbnail_visibility
     when "open", "low_res"
       send_thumbnail
@@ -65,7 +101,7 @@ class IiifController < ApplicationController
     if user_signed_in?
       send_thumbnail
     else
-      evalute_thumbnail_visibility
+      evaluate_thumbnail_visibility
     end
   end
 
