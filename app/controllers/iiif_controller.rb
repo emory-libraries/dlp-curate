@@ -127,17 +127,30 @@ class IiifController < ApplicationController
     end
   end
 
+  ##
+  # Compares the user's IP address to the list of allowed Rose Reading Room ips
+  # to implement the rose_high access restriction.  Defaults to false.
+  # @return [Boolean]
   def user_ip_rose_reading_room?
     rose_reading_room_ips.include? user_ip
   rescue
     false
   end
 
+  ##
+  # Determine the user's source IP address to allow restrictions based on reading
+  # room location.  Depending on system configuration, X-Forwarded-For headers may
+  # represent the user's original IP address.
+  # @return [String]
   def user_ip
     return request.headers["X-Forwarded-For"] if request.headers["X-Forwarded-For"]
     return request.headers["REMOTE_ADDR"] if request.headers["REMOTE_ADDR"]
   end
 
+  ##
+  # From the ip lists imported from reading_room_ips.yml, returns the list of
+  # Rose Reading Room IP addresses.
+  # @return [Array<String>]
   def rose_reading_room_ips
     reading_room_ips["all_reading_room_ips"]["rose_reading_room_ip_list"]
   end
