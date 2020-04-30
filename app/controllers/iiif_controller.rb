@@ -242,26 +242,45 @@ class IiifController < ApplicationController
 
   ##
   # Adjusts the iiif region parameter from the original query if required by access
-  # controls.  Requests for any region of a public image are unmodified, as are requests
-  # for uncropped images.
+  # controls.  Requests for works with resolution restrictions (visibility low_res
+  # or emory_low) are adjusted to limit depth of zoom.
+  # @see low_res_adjusted_region
+  # The region value is unmodified for visibilities without resolution restrictions
+  # (open, rose_high, authenticated, restricted).
+  #
   # @return [String] a iiif region parameter
   def region
-    return params["region"] if visibility == "open" || visibility == "rose_high" || visibility == "authenticated" || visibility == "restricted"
-    return params["region"] if params["region"] == "full"
-    low_res_adjusted_region if visibility == "low_res" || visibility == "emory_low"
+    if params["region"] == "full"
+      params["region"]
+    else
+      case visibility
+        when "open", "rose_high", "authenticated", "restricted"
+          params["region"]
+        when "low_res", "emory_low"
+          low_res_adjusted_region
+        end
+      end
   rescue
     "0,0,#{IiifController.min_tile_size_for_low_res},#{IiifController.min_tile_size_for_low_res}"
   end
 
+  ##
+  # Adjusts region values to limit depth of zoom.  If either the width or the
+  # height is less than the minimum defined tile size, returns a region with the
+  # same starting coordinates and a width and height of the defined minimum tile size.
   def low_res_adjusted_region
-    return params["region"] unless region_requested_larger_than_allowed?
+    return params["region"] unless region_requested_smaller_than_allowed?
     coordinates = params["region"].split(',')
     x = coordinates[0]
     y = coordinates[1]
     "#{x},#{y},#{IiifController.min_tile_size_for_low_res},#{IiifController.min_tile_size_for_low_res}"
   end
 
-  def region_requested_larger_than_allowed?
+  ##
+  # Many small regions could be stitched together to reconstruct a high-resolution file.
+  # We limit the smallest regions that can be requested for objects with low resolution
+  # visibilities.
+  def region_requested_smaller_than_allowed?
     coordinates = params["region"].split(',')
     xsize = coordinates[2]
     ysize = coordinates[3]
@@ -274,6 +293,7 @@ class IiifController < ApplicationController
 
   # Calculate the size parameter to pass along to Cantaloupe
   # For any object with low resolution requirements, check that the requested size is smaller than the configured max size
+  # If the requested image is larger than the configured max size, give the configured max size as the image height.
   def size
     return params["size"] if visibility == "open"
     if visibility == "low_res" || visibility == "emory_low"
@@ -285,6 +305,10 @@ class IiifController < ApplicationController
     IiifController.max_pixels_for_low_res
   end
 
+  ##
+  # @return [Boolean] True for full-size images, or if the requested width or
+  #    height is greater than the configured maximum pixel size for low resolution
+  #    images
   def size_requested_larger_than_allowed?
     return true if params["size"] == "full"
     dimensions = params["size"].split(",")
@@ -307,12 +331,16 @@ class IiifController < ApplicationController
     params["format"]
   end
 
-  ##
-  #
+  # @see fetch_thumbnail_visibility
   def thumbnail_visibility
     @thumbnail_visibility ||= fetch_thumbnail_visibility
   end
 
+  ##
+  # Retrieves the visibility_ssi from solr.  The identifier in thumbnail requests
+  # is the fileset identifier (unlike iiif image requests)
+  # @return [String] the visibility_ssi from solr, or "restricted" if the visibility_ssi
+  #   is empty or unavailable.
   def fetch_thumbnail_visibility
     response = Blacklight.default_index.connection.get 'select', params: { q: "id:#{identifier}" }
     visibility = response["response"]["docs"][0]["visibility_ssi"]
@@ -322,6 +350,8 @@ class IiifController < ApplicationController
     ["restricted"]
   end
 
+  ##
+  # @see fetch_visibility
   def visibility
     @visibility ||= fetch_visibility
   end
