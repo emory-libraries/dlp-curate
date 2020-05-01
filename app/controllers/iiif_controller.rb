@@ -267,12 +267,12 @@ class IiifController < ApplicationController
       params["region"]
     else
       case visibility
-        when "open", "rose_high", "authenticated", "restricted"
-          params["region"]
-        when "low_res", "emory_low"
-          low_res_adjusted_region
-        end
+      when "open", "rose_high", "authenticated", "restricted"
+        params["region"]
+      when "low_res", "emory_low"
+        low_res_adjusted_region
       end
+    end
   rescue
     "0,0,#{IiifController.min_tile_size_for_low_res},#{IiifController.min_tile_size_for_low_res}"
   end
