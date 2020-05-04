@@ -227,6 +227,23 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
       end
     end
 
+    context "with a private object" do
+      let(:attributes) do
+        { "id" => work_id,
+          "sha1_tesim" => ["urn:sha1:#{image_sha}"],
+          "visibility_ssi" => "restricted" }
+      end
+      let(:region) { "100,100,800,800" }
+      let(:expected_iiif_url) { "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/#{image_sha}/#{region}/#{size}/0/default.jpg" }
+      let(:admin_user) { FactoryBot.create(:admin) }
+      context "as a Curate admin" do
+        it "does not alter the region" do
+          login_as admin_user
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}")
+          expect(assigns(:iiif_url)).to eq expected_iiif_url
+        end
+      end
+    end
     context "with an Emory High Download object" do
       let(:attributes) do
         { "id" => work_id,
@@ -243,6 +260,13 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
           expect(response.has_header?('Access-Control-Allow-Origin')).to be_truthy
         end
       end
+      context "a request for a specific region" do
+        let(:expected_iiif_url) { "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/#{image_sha}/100,100,800,800/#{size}/0/default.jpg" }
+        it "does not alter the region" do
+          get("/iiif/2/#{image_sha}/100,100,800,800/#{size}/#{rotation}/#{quality}.#{format}", headers: { "HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}" })
+          expect(assigns(:iiif_url)).to eq expected_iiif_url
+        end
+      end
     end
 
     context "with a Rose High View object" do
@@ -251,7 +275,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
           "sha1_tesim" => ["urn:sha1:#{image_sha}"],
           "visibility_ssi" => "rose_high" }
       end
-
+      let(:expected_iiif_url) { "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/#{image_sha}/100,100,800,800/#{size}/0/default.jpg" }
       context "within the Rose Reading Room" do
         it "returns the image for a work with 'Rose High View' visibility with Remote Address" do
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": reading_room_ip })
@@ -265,6 +289,11 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
 
           expect(request.headers["X-Forwarded-For"]).to eq reading_room_ip
           expect(response.status).to eq 200
+        end
+
+        it "does not change the region" do
+          get("/iiif/2/#{image_sha}/100,100,800,800/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": reading_room_ip })
+          expect(assigns(:iiif_url)).to eq expected_iiif_url
         end
       end
 
