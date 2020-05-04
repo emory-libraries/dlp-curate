@@ -38,5 +38,9 @@ module Hyrax
         { "label" => "Persistent URL", "value" => "<a href=\"#{purl}\">#{purl}</a>" }
       ]
     end
+
+    def visibility
+      solr_document.human_readable_visibility
+    end
   end
 end

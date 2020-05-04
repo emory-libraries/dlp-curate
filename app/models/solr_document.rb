@@ -148,4 +148,8 @@ class SolrDocument
   def child_works_for_lux
     self['child_works_for_lux_tesim']
   end
+
+  def human_readable_visibility
+    self['human_readable_visibility_ssi']
+  end
 end

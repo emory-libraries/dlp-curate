@@ -2,7 +2,7 @@
 require 'rails_helper'
 include Warden::Test::Helpers
 
-RSpec.describe 'viewing the importer guide', type: :system do
+RSpec.describe 'viewing the importer guide', type: :system, clean: true do
   let(:admin_user) { FactoryBot.build(:admin) }
   let(:work) { FactoryBot.build(:work_with_full_metadata) }
   before do
@@ -93,5 +93,67 @@ RSpec.describe 'viewing the importer guide', type: :system do
     expect(page).to have_content 'Workflow Rights Basis Date'
     expect(page).to have_content 'Workflow Rights Basis Reviewer'
     expect(page).to have_content 'Workflow Rights Basis Uri'
+  end
+
+  describe 'object visibility', :clean do
+    context 'public work (open)' do
+      let(:work) { FactoryBot.create(:public_generic_work) }
+
+      it "has public visibility metadata" do
+        visit("/concern/curate_generic_works/#{work.id}")
+
+        expect(page).to have_css("#visibility", text: 'Public')
+      end
+    end
+
+    context 'emory high download work (authenticated)' do
+      let(:work) { FactoryBot.create(:emory_high_work) }
+
+      it "has emory high download visibility metadata" do
+        visit("/concern/curate_generic_works/#{work.id}")
+
+        expect(page).to have_css("#visibility", text: 'Emory High Download')
+      end
+    end
+
+    context 'emory low download work (emory_low)' do
+      let(:work) { FactoryBot.create(:emory_low_work) }
+
+      it "has emory low download visibility metadata" do
+        visit("/concern/curate_generic_works/#{work.id}")
+
+        expect(page).to have_css("#visibility", text: 'Emory Low Download')
+      end
+    end
+
+    context 'public low view work (low_res)' do
+      let(:work) { FactoryBot.create(:public_low_work) }
+
+      it "has public low view visibility metadata" do
+        visit("/concern/curate_generic_works/#{work.id}")
+
+        expect(page).to have_css("#visibility", text: 'Public Low View')
+      end
+    end
+
+    context 'private work (restricted)' do
+      let(:work) { FactoryBot.create(:private_work) }
+
+      it "has private visibility metadata" do
+        visit("/concern/curate_generic_works/#{work.id}")
+
+        expect(page).to have_css("#visibility", text: 'Private')
+      end
+    end
+
+    context 'rose high download (rose_high)' do
+      let(:work) { FactoryBot.create(:rose_high_work) }
+
+      it "has rose high download visibility metadata" do
+        visit("/concern/curate_generic_works/#{work.id}")
+
+        expect(page).to have_css("#visibility", text: 'Rose High View')
+      end
+    end
   end
 end
