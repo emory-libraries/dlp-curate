@@ -32,6 +32,7 @@ gem 'riiif', '~> 2.0'
 gem 'rsolr', '>= 1.0'
 gem 'sass-rails', '~> 5.0'
 gem 'sidekiq', '~> 5.2'
+gem 'stackprof'
 gem 'turbolinks', '~> 5'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
