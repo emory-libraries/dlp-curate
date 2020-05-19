@@ -3,12 +3,16 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 RSpec.describe 'viewing the importer guide', type: :system, clean: true do
-  let(:admin_user) { FactoryBot.build(:admin) }
-  let(:work) { FactoryBot.build(:work_with_full_metadata) }
+  let(:admin_user) { FactoryBot.create(:admin) }
+  let(:work) { FactoryBot.build(:work_with_full_metadata, user: admin_user) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:user_work) { FactoryBot.build(:public_generic_work, user: user) }
   before do
     login_as admin_user
     work.save!
     work.reload
+    user_work.save!
+    user_work.reload
   end
 
   it 'has all the labels', clean: true do
@@ -93,6 +97,46 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
     expect(page).to have_content 'Workflow Rights Basis Date'
     expect(page).to have_content 'Workflow Rights Basis Reviewer'
     expect(page).to have_content 'Workflow Rights Basis Uri'
+  end
+
+  context 'when logged in as an admin' do
+    it 'has a delete button on the show page' do
+      login_as admin_user
+      visit "/concern/curate_generic_works/#{user_work.id}"
+      expect(page).to have_selector(:css, 'a[data-method="delete"]')
+    end
+
+    it 'has a delete action on the all works dashboard' do
+      login_as admin_user
+      visit "/dashboard/works"
+      expect(page).to have_selector(:css, 'a[data-method="delete"]')
+    end
+
+    it 'has a delete action on the my works dashboard' do
+      login_as admin_user
+      visit "/dashboard/my/works"
+      expect(page).to have_selector(:css, 'a[data-method="delete"]')
+    end
+  end
+
+  context 'when logged in as a non-admin user' do
+    it 'does not have a delete button on the show page' do
+      login_as user
+      visit "/concern/curate_generic_works/#{user_work.id}"
+      expect(page).not_to have_selector(:css, 'a[data-method="delete"]')
+    end
+
+    it 'does not have a delete action on the all works dashboard' do
+      login_as user
+      visit "/dashboard/works"
+      expect(page).not_to have_selector(:css, 'a[data-method="delete"]')
+    end
+
+    it 'does not have a delete action on the my works dashboard' do
+      login_as user
+      visit "/dashboard/my/works"
+      expect(page).not_to have_selector(:css, 'a[data-method="delete"]')
+    end
   end
 
   describe 'object visibility', :clean do
