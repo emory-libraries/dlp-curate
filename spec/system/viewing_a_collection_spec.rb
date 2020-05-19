@@ -43,13 +43,13 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
       expect(page).not_to have_selector(:css, 'a[title="Delete collection"]')
     end
 
-    it ' does not have a delete action on the all collections dashboard' do
+    it 'does not have a delete action on the all collections dashboard' do
       login_as user
       visit "/dashboard/collections"
       expect(page).not_to have_selector(:css, 'a[title="Delete collection"]')
     end
 
-    it 'has a delete action on the individual collection dashboard page' do
+    it 'does not have a delete action on the individual collection dashboard page' do
       login_as user
       visit "/dashboard/collections/#{user_collection.id}"
       expect(page).to have_selector(:css, 'a[title="Edit this collection"]')
