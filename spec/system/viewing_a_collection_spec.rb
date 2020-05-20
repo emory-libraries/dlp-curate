@@ -19,7 +19,7 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
     before do
       login_as admin_user
     end
-    
+
     it 'has a delete action on the my collections dashboard' do
       visit "/dashboard/my/collections"
       expect(page).to have_selector(:css, 'a[title="Delete collection"]')

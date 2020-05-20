@@ -124,7 +124,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
     before do
       login_as user
     end
-    
+
     it 'does not have a delete button on the show page' do
       visit "/concern/curate_generic_works/#{user_work.id}"
       expect(page).not_to have_selector(:css, 'a[data-method="delete"]')
