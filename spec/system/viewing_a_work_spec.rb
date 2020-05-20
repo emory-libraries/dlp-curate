@@ -100,40 +100,42 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
   end
 
   context 'when logged in as an admin' do
-    it 'has a delete button on the show page' do
+    before do
       login_as admin_user
+    end
+
+    it 'has a delete button on the show page' do
       visit "/concern/curate_generic_works/#{user_work.id}"
       expect(page).to have_selector(:css, 'a[data-method="delete"]')
     end
 
     it 'has a delete action on the all works dashboard' do
-      login_as admin_user
       visit "/dashboard/works"
       expect(page).to have_selector(:css, 'a[data-method="delete"]')
     end
 
     it 'has a delete action on the my works dashboard' do
-      login_as admin_user
       visit "/dashboard/my/works"
       expect(page).to have_selector(:css, 'a[data-method="delete"]')
     end
   end
 
   context 'when logged in as a non-admin user' do
-    it 'does not have a delete button on the show page' do
+    before do
       login_as user
+    end
+    
+    it 'does not have a delete button on the show page' do
       visit "/concern/curate_generic_works/#{user_work.id}"
       expect(page).not_to have_selector(:css, 'a[data-method="delete"]')
     end
 
     it 'does not have a delete action on the all works dashboard' do
-      login_as user
       visit "/dashboard/works"
       expect(page).not_to have_selector(:css, 'a[data-method="delete"]')
     end
 
     it 'does not have a delete action on the my works dashboard' do
-      login_as user
       visit "/dashboard/my/works"
       expect(page).not_to have_selector(:css, 'a[data-method="delete"]')
     end

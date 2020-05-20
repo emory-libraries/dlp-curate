@@ -16,41 +16,45 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
   end
 
   context 'when logged in as an admin' do
-    it 'has a delete action on the my collections dashboard' do
+    before do
       login_as admin_user
+    end
+    
+    it 'has a delete action on the my collections dashboard' do
       visit "/dashboard/my/collections"
       expect(page).to have_selector(:css, 'a[title="Delete collection"]')
     end
 
     it 'has a delete action on the all collections dashboard' do
-      login_as admin_user
       visit "/dashboard/collections"
       expect(page).to have_selector(:css, 'a[title="Delete collection"]')
     end
 
     it 'has a delete action on the individual collection dashboard page' do
-      login_as admin_user
       visit "/dashboard/collections/#{admin_collection.id}"
+      expect(page).to have_selector(:css, 'a[title="Delete this collection"]')
+      visit "/dashboard/collections/#{user_collection.id}"
       expect(page).to have_selector(:css, 'a[title="Delete this collection"]')
     end
   end
 
   context 'when logged in as a non-admin user' do
-    it 'does not have a delete action on the my collections dashboard' do
+    before do
       login_as user
+    end
+
+    it 'does not have a delete action on the my collections dashboard' do
       visit "/dashboard/my/collections"
       expect(page).to have_selector(:css, 'a[title="Edit collection"]')
       expect(page).not_to have_selector(:css, 'a[title="Delete collection"]')
     end
 
     it 'does not have a delete action on the all collections dashboard' do
-      login_as user
       visit "/dashboard/collections"
       expect(page).not_to have_selector(:css, 'a[title="Delete collection"]')
     end
 
     it 'does not have a delete action on the individual collection dashboard page' do
-      login_as user
       visit "/dashboard/collections/#{user_collection.id}"
       expect(page).to have_selector(:css, 'a[title="Edit this collection"]')
       expect(page).not_to have_selector(:css, 'a[title="Delete this collection"]')
