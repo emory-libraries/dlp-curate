@@ -202,4 +202,14 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       end
     end
   end
+
+  describe 'preservation status block' do
+    it 'has status block with details' do
+      visit "/concern/curate_generic_works/#{work.id}"
+      expect(page).to have_content('Preservation Status')
+      expect(page).to have_content('Date Uploaded')
+      expect(page).to have_content('Date Modified')
+      expect(page).to have_content('Depositor')
+    end
+  end
 end

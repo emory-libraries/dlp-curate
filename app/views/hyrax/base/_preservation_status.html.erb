@@ -1,0 +1,16 @@
+<!-- Preservation status block -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+      <div>
+        <b><%= t('hyrax.base.show.date_uploaded') %>: </b><%= presenter.date_uploaded %>
+      </div>
+      <div>
+        <b><%= t('hyrax.base.show.date_modified') %>: </b><%= presenter.date_modified %>
+      </div>
+      <div>
+        <b><%= t('hyrax.base.show.depositor') %>: </b><%= presenter.depositor.first %>
+      </div>
+    </div>
+  </div>
+</div>
