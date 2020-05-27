@@ -216,6 +216,11 @@ en:
         required_agreement: Check distribution license
       items:
         empty: 'This %{type} has no files associated with it. (If you just created this %{type}, it may take a few minutes for the files to display. Try refreshing the page again.) Otherwise, click edit to add more files.'
+      show:
+        preservation_status: "Preservation Status"
+        date_modified: "Date Modified"
+        date_uploaded: "Date Uploaded"
+        depositor: "Depositor"
     account_name: My Institution Account Id
     directory:
       suffix: "@example.org"

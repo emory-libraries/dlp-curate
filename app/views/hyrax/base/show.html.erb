@@ -44,6 +44,15 @@
 
     <div class="panel panel-default">
       <div class="panel-heading">
+        <h3 class="panel-title"><%= t('hyrax.base.show.preservation_status') %></h3>
+      </div>
+      <div class="panel-body">
+        <%= render 'preservation_status', presenter: @presenter %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
         <h3 class="panel-title"><%= t('hyrax.base.show.relationships') %></h3>
       </div>
       <div class="panel-body">
