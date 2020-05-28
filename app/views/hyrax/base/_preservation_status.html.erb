@@ -1,7 +1,7 @@
 <!-- Preservation status block -->
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
       <div>
         <b><%= t('hyrax.base.show.date_uploaded') %>: </b><%= presenter.date_uploaded %>
       </div>
@@ -10,6 +10,25 @@
       </div>
       <div>
         <b><%= t('hyrax.base.show.depositor') %>: </b><%= presenter.depositor.first %>
+      </div>
+      <div>
+        <% unless presenter.preservation_workflows.empty? %>
+          <% presenter.preservation_workflows.each do |pwf| %>
+            <b><%= pwf["workflow_type"] %>:</b>
+              <% if pwf.values.compact.count > 1 %>
+                <% pwf.each do |k, v| %> 
+                  <div><%= "#{k.split('_').map(&:capitalize).join(' ').remove('Workflow ')}: #{v}" if v && k != "workflow_type" %></div>
+                <% end %>
+              <% else %>
+                <div>No information supplied</div>
+              <% end %>
+          <% end %>
+        <% else %>
+          <b>Accession: </b>
+          <div>No information supplied</div>
+          <b>Ingest: </b>
+          <div>No information supplied</div>
+        <% end %>
       </div>
     </div>
   </div>

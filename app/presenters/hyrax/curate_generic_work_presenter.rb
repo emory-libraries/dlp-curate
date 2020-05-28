@@ -42,5 +42,13 @@ module Hyrax
     def visibility
       solr_document.human_readable_visibility
     end
+
+    def preservation_workflows
+      final = []
+      preservation_workflow_terms&.each do |pwf|
+        final << JSON.parse(pwf)
+      end
+      final
+    end
   end
 end
