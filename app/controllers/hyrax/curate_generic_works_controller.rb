@@ -47,5 +47,29 @@ module Hyrax
       headers['Access-Control-Allow-Origin'] = '*'
       render json: ManifestBuilderService.build_manifest(presenter: presenter, curation_concern: _curation_concern_type.find(params[:id]))
     end
+
+    # [Hyrax-overwrite-v3.0.0-beta1] Restrict deletion to admins only
+    def destroy
+      title = curation_concern.to_s
+      if current_user.admin?
+        env = Actors::Environment.new(curation_concern, current_ability, {})
+        return unless actor.destroy(env)
+        Hyrax.config.callback.run(:after_destroy, curation_concern.id, current_user, warn: false)
+        after_destroy_response(title)
+      else
+        after_destroy_error(title)
+      end
+    end
+
+    def after_destroy_error(title)
+      respond_to do |wants|
+        wants.html do
+          build_form
+          flash[:notice] = "#{title} could not be deleted"
+          render 'edit', status: :unprocessable_entity
+        end
+        wants.json { render_json_response(response_type: :unprocessable_entity, options: { errors: curation_concern.errors }) }
+      end
+    end
   end
 end
