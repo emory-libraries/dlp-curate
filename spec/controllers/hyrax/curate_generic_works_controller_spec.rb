@@ -25,6 +25,7 @@ RSpec.describe Hyrax::CurateGenericWorksController, :clean do
         expect(response).to have_http_status(:found)
         expect(response).to redirect_to(Hyrax::Engine.routes.url_helpers.my_works_path(locale: 'en'))
         expect(flash[:notice]).to eq "Deleted Test title"
+        expect(CurateGenericWork.count).to eq 0
       end
     end
 
@@ -35,6 +36,7 @@ RSpec.describe Hyrax::CurateGenericWorksController, :clean do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template(:edit)
         expect(flash[:notice]).to eq "Test title could not be deleted"
+        expect(CurateGenericWork.count).to eq 1
       end
     end
   end
