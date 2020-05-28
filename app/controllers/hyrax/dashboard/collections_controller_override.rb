@@ -18,7 +18,7 @@ module Hyrax
         banner_info.save f.collection_banner_url
       end
 
-      # [Hyrax-overwrite-v3.0.0-beta1] Restrict delete method to admins only
+      # [Hyrax-overwrite-v3.0.0-beta1] Restrict deletion to admins only
       def destroy
         if current_user.admin? && @collection.destroy
           after_destroy(params[:id])
