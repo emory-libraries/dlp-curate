@@ -217,7 +217,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
 
       it 'has no pwf information' do
         visit "/concern/curate_generic_works/#{work.id}"
-        expect(page).to have_content('No information supplied')
+        expect(page).to have_content('No information supplied').twice
       end
     end
 
@@ -231,7 +231,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         visit "/concern/curate_generic_works/#{work.id}"
         expect(page).to have_content('Ingest')
         expect(page).to have_content('Ingest notes')
-        expect(page).to have_content('No information supplied')
+        expect(page).to have_content('No information supplied').once
       end
     end
 
