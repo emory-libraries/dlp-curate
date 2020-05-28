@@ -43,6 +43,16 @@ module Hyrax
       end
     end
 
+    def destroy
+      if current_user.admin?
+        title = curation_concern.to_s
+        env = Actors::Environment.new(curation_concern, current_ability, {})
+        return unless actor.destroy(env)
+        Hyrax.config.callback.run(:after_destroy, curation_concern.id, current_user, warn: false)
+        after_destroy_response(title)
+      end
+    end
+
     def manifest
       headers['Access-Control-Allow-Origin'] = '*'
       render json: ManifestBuilderService.build_manifest(presenter: presenter, curation_concern: _curation_concern_type.find(params[:id]))
