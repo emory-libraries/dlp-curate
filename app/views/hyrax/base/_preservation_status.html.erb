@@ -1,7 +1,7 @@
 <!-- Preservation status block -->
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
       <div>
         <b><%= t('hyrax.base.show.date_uploaded') %>: </b><%= presenter.date_uploaded %>
       </div>
@@ -11,6 +11,21 @@
       <div>
         <b><%= t('hyrax.base.show.depositor') %>: </b><%= presenter.depositor.first %>
       </div>
+      <div>
+        <!-- iterate through workflows -->
+        <% presenter.preservation_workflows.each do |pwf| %>
+        <!-- display workflow type-->
+        <b><%= pwf["Type"] %>:</b>
+          <!-- display key value pairs only if workflow details exist -->
+          <% unless pwf.values.count > 1 %>
+            <div>No information supplied</div>
+          <% else %>
+            <% pwf.each do |key, value| %>
+              <!-- display all key value pairs except type to match display requirements -->
+              <div><%= "#{key}: #{value}" unless key == "Type" %></div>
+            <% end %>
+          <% end %>
+        <% end %>
     </div>
   </div>
 </div>
