@@ -183,11 +183,18 @@ RSpec.describe CurateGenericWorkIndexer do
     end
 
     context 'when preservation_event has failures' do
-      let(:work) { FactoryBot.create(:work_with_failed_preservation_event).to_solr }
+      let(:attributes) do
+        {
+          id:    '123',
+          title: ['A title'],
+          preservation_event_attributes: [{'event_type' => 'Yackety', 'event_start' => DateTime.current, 'outcome' => 'Failure',
+              'event_details' => "Smackety", 'software_version' => 'FITS v1.5.0', 'initiating_user' => "10"}]
+        }
+      end
 
       it 'returns an array of hashes' do
-        event_start = work['failed_preservation_events_ssim'].first[:event_start]
-        expect(work['failed_preservation_events_ssim']).to eq([{event_details: ["Smackety"], event_start: event_start}])
+        event_start = solr_document['failed_preservation_events_ssim'].first[:event_start]
+        expect(solr_document['failed_preservation_events_ssim']).to eq([{event_details: ["Smackety"], event_start: event_start}])
       end
     end
   end
