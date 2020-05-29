@@ -33,6 +33,10 @@ class SolrDocument
     self['pcdm_use_tesim']
   end
 
+  def failed_preservation_events
+    self['failed_preservation_events_ssim']
+  end
+
   def file_name
     self['file_name_ssim']
   end

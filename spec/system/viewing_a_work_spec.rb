@@ -210,6 +210,24 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       expect(page).to have_content('Date Uploaded')
       expect(page).to have_content('Date Modified')
       expect(page).to have_content('Depositor')
+      expect(page).to have_content('Notifications')
+    end
+
+    context 'when preservation_event has no failures' do
+      it 'displays the right message' do
+        visit "/concern/curate_generic_works/#{work.id}"
+        expect(page).to have_content('No Event failures noted.')
+      end
+    end
+
+    context 'when preservation_event has failures' do
+      let(:work) { CurateGenericWork.create(title: ['foo'], depositor: 'user1', preservation_event_attributes: [{'event_type' => 'Yackety', 'event_start' => DateTime.current, 'outcome' => 'Failure',
+              'event_details' => "Smackety", 'software_version' => 'FITS v1.5.0', 'initiating_user' => "10"}]) }
+
+      it 'displays the right message' do
+        visit "/concern/curate_generic_works/#{work.id}"
+        expect(page).to have_content('One or more recent events failed for this object:')
+      end
     end
   end
 end

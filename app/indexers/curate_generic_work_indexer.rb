@@ -14,6 +14,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   def generate_solr_document
     super.tap do |solr_doc|
       solr_doc['preservation_workflow_terms_sim'] = preservation_workflow_terms
+      solr_doc['failed_preservation_events_ssim'] = failed_preservation_events
       solr_doc['human_readable_content_type_ssim'] = [human_readable_content_type]
       solr_doc['human_readable_rights_statement_ssim'] = [human_readable_rights_statement]
       solr_doc['human_readable_re_use_license_ssim'] = [human_readable_re_use_license]
@@ -34,6 +35,12 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['visibility_group_ssi'] = visibility_group_for_lux
       solr_doc['human_readable_visibility_ssi'] = human_readable_visibility
     end
+  end
+
+  def failed_preservation_events
+    return unless object.preservation_event&.any?{|event| event.outcome == ["Failure"]}
+    needed_events = object.preservation_event.select {|event| event.outcome == ["Failure"]}
+    needed_events.map {|event| { event_details: event["event_details"], event_start: event["event_start"] }}
   end
 
   def preservation_workflow_terms

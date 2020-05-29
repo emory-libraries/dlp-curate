@@ -42,5 +42,9 @@ module Hyrax
     def visibility
       solr_document.human_readable_visibility
     end
+
+    def failed_preservation_events
+      solr_document.failed_preservation_events
+    end
   end
 end
