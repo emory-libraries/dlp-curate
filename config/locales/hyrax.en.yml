@@ -243,6 +243,15 @@ en:
     file_sets:
       form:
         pcdm_use: "FileSet use"
+    file_set:
+      show:
+        downloadable_content:
+          image_link: "Download Preservation Master File"
+          video_link: "Download Preservation Master File"
+          pdf_link: "Download Preservation Master File"
+          office_link: "Download Preservation Master File"
+          audio_link: "Download Preservation Master File"
+        download: "Download Preservation Master File"
   simple_form:
     hints:
       admin_set:
