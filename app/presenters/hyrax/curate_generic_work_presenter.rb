@@ -44,10 +44,6 @@ module Hyrax
       solr_document.human_readable_visibility
     end
 
-    def failed_preservation_events
-      solr_document.failed_preservation_events
-    end
-
     def preservation_workflows
       final = []
       preservation_workflow_terms&.each do |pwf|
