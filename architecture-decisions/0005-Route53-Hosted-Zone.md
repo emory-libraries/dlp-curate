@@ -21,7 +21,7 @@ Route 53, was blocked by AWS@Emory at the time the DLP project started, but has 
 
 Avoid using `/etc/hosts` for server-to-server communication by setting up DNS for our servers, using a Route 53 private hosted zone (.internal.emory.edu).
 Point the .env files of Curate to the internal.emory.edu address for Fedora and IIIF.
-Add *.internal.emory.edu as a ServerAlias for Fedora, IIIF, and Solr.
+Add <service>.internal.emory.edu as a ServerAlias for Fedora, IIIF, and Solr.
 Change the SOLR_HOST and ZK_HOST variables for Solr instances.
 Use the internal.emory.edu hostname for Zookeeper config, instead of an IP address value.
 
