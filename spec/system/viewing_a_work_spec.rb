@@ -221,8 +221,20 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
     end
 
     context 'when preservation_event has failures' do
-      let(:work) { CurateGenericWork.create(title: ['foo'], depositor: 'user1', preservation_event_attributes: [{'event_type' => 'Yackety', 'event_start' => DateTime.current, 'outcome' => 'Failure',
-              'event_details' => "Smackety", 'software_version' => 'FITS v1.5.0', 'initiating_user' => "10"}]) }
+      let(:work) do
+        CurateGenericWork.create(
+          title:                         ['foo'],
+          depositor:                     'user1',
+          preservation_event_attributes: [
+            { 'event_type' => 'Yackety',
+              'event_start' => DateTime.current,
+              'outcome' => 'Failure',
+              'event_details' => "Smackety",
+              'software_version' => 'FITS v1.5.0',
+              'initiating_user' => "10" }
+          ]
+        )
+      end
 
       it 'displays the right message' do
         visit "/concern/curate_generic_works/#{work.id}"

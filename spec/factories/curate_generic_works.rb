@@ -296,14 +296,4 @@ FactoryBot.define do
     title { ['Test title'] }
     depositor { create(:user).user_key }
   end
-
-  factory :work_with_failed_preservation_event, class: CurateGenericWork do
-    title { ['Test title'] }
-    depositor { create(:user).user_key }
-    after(:build) do |work, evaluator|
-      event = { 'event_type' => 'Yackety', 'event_start' => DateTime.current, 'outcome' => 'Failure',
-              'event_details' => "Smackety", 'software_version' => 'FITS v1.5.0', 'initiating_user' => "10" }
-      work.preservation_event_attributes = [event]
-    end
-  end
 end
