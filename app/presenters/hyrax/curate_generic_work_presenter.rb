@@ -46,5 +46,27 @@ module Hyrax
     def failed_preservation_events
       solr_document.failed_preservation_events
     end
+
+    def preservation_workflows
+      final = []
+      preservation_workflow_terms&.each do |pwf|
+        final << JSON.parse(pwf)
+      end
+      accession = final.select { |pwf| pwf["workflow_type"] == "Accession" }.first # get accession worfklow
+      accession_result = workflow_hash(accession.compact) if accession # make non nil value keys displayable
+      ingest = final.select { |pwf| pwf["workflow_type"] == "Ingest" }.first # get ingest workflow
+      ingest_result = workflow_hash(ingest.compact) if ingest # make non nil value keys displayable
+      [accession_result || { "Type" => "Accession" }, ingest_result || { "Type" => "Ingest" }] # send result or only type if a result is nil
+    end
+
+    private
+
+      def workflow_hash(wf)
+        wf_copy = wf.clone
+        wf.each_key do |key|
+          wf_copy[key.split('_').map(&:capitalize).join(' ').remove('Workflow ')] = wf_copy.delete(key) # alter keys as per display requirements
+        end
+        wf_copy
+      end
   end
 end

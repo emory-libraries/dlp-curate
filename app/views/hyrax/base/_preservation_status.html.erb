@@ -11,6 +11,21 @@
       <div>
         <b><%= t('hyrax.base.show.depositor') %>: </b><%= presenter.depositor.first %>
       </div>
+      <div>
+        <!-- iterate through workflows -->
+        <% presenter.preservation_workflows.each do |pwf| %>
+        <!-- display workflow type-->
+        <b><%= pwf["Type"] %>:</b>
+          <!-- display key value pairs only if workflow details exist -->
+          <% unless pwf.values.count > 1 %>
+            <div>No information supplied</div>
+          <% else %>
+            <% pwf.each do |key, value| %>
+              <!-- display all key value pairs except type to match display requirements -->
+              <div><%= "#{key}: #{value}" unless key == "Type" %></div>
+            <% end %>
+          <% end %>
+        <% end %>
     </div>
     <div class="col-xs-6">
       <div>
