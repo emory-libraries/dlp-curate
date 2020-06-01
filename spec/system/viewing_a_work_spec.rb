@@ -247,5 +247,42 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         expect(page).to have_content(DateTime.current.strftime("%F"))
       end
     end
+
+    context 'when no pwf is supplied' do
+      let(:work) { CurateGenericWork.create(title: ['foo'], depositor: 'example') }
+
+      it 'has no pwf information' do
+        visit "/concern/curate_generic_works/#{work.id}"
+        expect(page).to have_content('No information supplied').twice
+      end
+    end
+
+    context 'when only ingest pwf is supplied' do
+      let(:work) do
+        CurateGenericWork.create(title: ['foo'], depositor: 'example', preservation_workflow_attributes: [{ "workflow_type" => "Ingest", "workflow_notes" => "Ingest notes" },
+                                                                                                          { "workflow_type" => "Accession" }])
+      end
+
+      it 'has only ingest and no accession pwf information' do
+        visit "/concern/curate_generic_works/#{work.id}"
+        expect(page).to have_content('Ingest')
+        expect(page).to have_content('Ingest notes')
+        expect(page).to have_content('No information supplied').once
+      end
+    end
+
+    context 'when both pwf are supplied' do
+      let(:work) do
+        CurateGenericWork.create(title: ['foo'], depositor: 'example', preservation_workflow_attributes: [{ "workflow_type" => "Ingest", "workflow_rights_basis_date" => "02/02/2012" },
+                                                                                                          { "workflow_type" => "Accession", "workflow_rights_basis_note" => "Accession notes" }])
+      end
+
+      it 'has both pwf information' do
+        visit "/concern/curate_generic_works/#{work.id}"
+        expect(page).to have_content('Ingest')
+        expect(page).to have_content('Accession')
+        expect(page).to have_content('Accession notes')
+      end
+    end
   end
 end
