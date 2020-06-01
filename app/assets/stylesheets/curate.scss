@@ -26,3 +26,11 @@
 	padding: 0px;
 	height: 100%;
 }
+
+.preservation_failures_absent {
+  color: green;
+}
+
+.preservation_failures_present {
+  color: red;
+}

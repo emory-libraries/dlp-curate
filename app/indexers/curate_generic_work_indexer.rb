@@ -40,7 +40,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   def failed_preservation_events
     return unless object.preservation_event&.any?{|event| event.outcome == ["Failure"]}
     needed_events = object.preservation_event.select {|event| event.outcome == ["Failure"]}
-    needed_events.map {|event| { event_details: event["event_details"], event_start: event["event_start"] }}
+    needed_events.map {|event| "{ \"event_details\": \"#{event["event_details"].first}\", \"event_start\": \"#{event["event_start"].first.strftime("%F")}\" }"}
   end
 
   def preservation_workflow_terms

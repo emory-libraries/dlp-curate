@@ -17,17 +17,14 @@
         <b><%= t('hyrax.base.show.notifications') %>: </b>
       </div><br>
       <% if presenter.failed_preservation_events.nil? %>
-        <div>
-          <%= t('hyrax.base.show.no_failures') %>
-        </div>
+        <div class="preservation_failures_absent"><%= t('hyrax.base.show.no_failures') %></div>
       <% else %>
         <% presenter.failed_preservation_events.each do |event| %>
-          <div>
-            <%= t('hyrax.base.show.with_failures') %>:
-          </div>
+          <% parsed_event = JSON.parse(event) %>
+          <div class="preservation_failures_present"><%= t('hyrax.base.show.with_failures') %>:</div>
           <div class="row">
-            <div class="col-xs-6"><%= event["event_details"].first %></div>
-            <div class="col-xs-6"><%= event["event_start"].first.strftime("%F") %></div>
+            <div class="col-xs-6"><%= parsed_event["event_details"] %></div>
+            <div class="col-xs-6"><%= parsed_event["event_start"] %></div>
           </div>
         <% end %>
       <% end %>

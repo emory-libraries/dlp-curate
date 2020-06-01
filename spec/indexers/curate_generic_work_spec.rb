@@ -178,7 +178,7 @@ RSpec.describe CurateGenericWorkIndexer do
       end
 
       it 'returns empty array' do
-        expect(solr_document['failed_preservation_events_ssim']).to be_nil
+        expect(solr_document['failed_preservation_events_ssim']).to eq([nil])
       end
     end
 
@@ -193,8 +193,7 @@ RSpec.describe CurateGenericWorkIndexer do
       end
 
       it 'returns an array of hashes' do
-        event_start = solr_document['failed_preservation_events_ssim'].first[:event_start]
-        expect(solr_document['failed_preservation_events_ssim']).to eq([{event_details: ["Smackety"], event_start: event_start}])
+        expect(solr_document['failed_preservation_events_ssim'].first).to eq(["{ \"event_details\": \"Smackety\", \"event_start\": \"#{DateTime.current.strftime("%F")}\" }"])
       end
     end
   end

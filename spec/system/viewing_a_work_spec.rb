@@ -228,6 +228,12 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         visit "/concern/curate_generic_works/#{work.id}"
         expect(page).to have_content('One or more recent events failed for this object:')
       end
+
+      it 'displays the right details and dates' do
+        visit "/concern/curate_generic_works/#{work.id}"
+        expect(page).to have_content('Smackety')
+        expect(page).to have_content(DateTime.current.strftime("%F"))
+      end
     end
   end
 end
