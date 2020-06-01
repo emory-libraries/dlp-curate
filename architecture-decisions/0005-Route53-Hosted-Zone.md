@@ -1,23 +1,32 @@
 # 5. Route 53 Hosted Zone
 
 * Status: Accepted
-* Date: 2020-05/07/2020
+* Date: 2020-05-07
 
 ## Context
 
-The initial design of the DLP Project called for all server to server communication (e.g. Curate to Fedora) to go through an application load balancer (ALB). This proved unfeasible for the fedora to curate communication because the traffic caused 503 errors on the ALB. Middleware decided to avoid ALB for curate communications to fedora, iiif (Cantaloupe), and solr. Later on, solr traffic was redirected through the ALBs to enable load balancing of the solr cloud instances. Eventually iiif may be load balanced as well.
+Servers are often destroyed and rebuilt with a new private IP address, so a block of IP addresses is added into the `/etc/hosts` file of each server in a group when one is provisioned.
+This was an extension of work done for Solr Cloud that writes the IPs of the other Solr Cloud instances of a group.
+Recently, a Solr server experienced corruption of it's `/etc/hosts` file, which caused the instance to drop out of the cluster.
 
-To avoid the ALB the servers need direct communication. Since Route 53(AWS DNS) was completely disabled at the time, and since servers are often destroyed and rebuilt, each time with a new private IP address, Middleware developed an Ansible playbook that would insert a block of IP address into the /etc/hosts file of each server in a group. This was an extension of a solr cloud play that writes the IPs of the other solr cloud instances of a group. This setup worked without issue for months until a production solr instance had a corruption of its hosts file. This caused it to drop out of the cluster and fail. Additionally, at some point Route 53 private hosted zone was enabled in DLP's aws@emory account.
+Fedora produces 503 errors when under load, primarily during Curate imports.
+This causes the background jobs associated with the imports to go into retries, and sends error notifications to Honeybadger.
+Sometimes, the jobs do not succeed when they are retried, causing DPS team members to have to fix the affected works manually.
+
+Our theory at the moment is that something about using `/etc/hosts` (rather than a centralized DNS solution like AWS's Route 53) is the cause of Fedora's errors.
+
+Route 53, was blocked by AWS@Emory at the time the DLP project started, but has since been enabled.
 
 ## Decision
 
-Use Route 53 to create a private hosted zone of .internal.emory.edu and have each instance in the DLP account register an A record on creation of the EC2.
+Avoid using `/etc/hosts` for server-to-server communication by setting up DNS for our servers, using a Route 53 private hosted zone (.internal.emory.edu).
+Point the .env files of Curate to the internal.emory.edu address for Fedora and IIIF.
+Add *.internal.emory.edu as a ServerAlias for Fedora, IIIF, and Solr.
+Change the SOLR_HOST and ZK_HOST variables for Solr instances.
+Use the internal.emory.edu hostname for Zookeeper config, instead of an IP address value.
 
 ## Consequences
-
-The .env files of curate will point at the internal.emory.edu address for fedora and iiif. Fedora, iiif and Solr add *.internal.emory.edu as a ServerAlias, the solrs will need additional changes to their SOLR_HOST and ZK_HOST variables, and the zookeeper config must be changed to use the internal.emory.edu hostname instead of an IP address value.
-
-EC2 must re-register their new A-record on creation, so that Route 53 always has the latest ip address.
+All EC2s must re-register their new A-record in Route 53 when they are created, so that Route 53 always has the latest IP address.
 
 ## Alternatives
 
