@@ -15,23 +15,21 @@
       <%= render 'show_details' %>
       <div id="fileset-category"><strong >FileSet category:</strong> <%= @fileset_use %></div>
       <%= link_to "Parent Work", @parent, class: 'btn btn-link' %>
+      <table class="table table-striped table-bordered">
+        <thead>
+          <th>File name</th>
+          <th>Use</th>
+          <th>Uploaded</th>
+        </thead>
+        <tbody>
+          <%= render partial: 'file_details', locals: { use: "Preservation Master File", file: @pm } unless @pm.nil? %>
+          <%= render partial: 'file_details', locals: { use: "Service File", file: @sf } unless @sf.nil? %>
+          <%= render partial: 'file_details', locals: { use: "Intermediate File", file: @if } unless @if.nil? %>
+          <%= render partial: 'file_details', locals: { use: "Extracted Text", file: @et } unless @et.nil? %>
+          <%= render partial: 'file_details', locals: { use: "Transcript File", file: @tf } unless @tf.nil? %>
+        </tbody>
+      </table>
       <%= render 'hyrax/users/activity_log', events: @presenter.events %>
     </div><!-- /columns second -->
   </div> <!-- /.row -->
-  <div><h3>Additional Files</h3></div>
-  <div>
-    <table class="table table-striped table-bordered">
-      <thead>
-        <th>File name</th>
-        <th>Use</th>
-        <th>Uploaded</th>
-      </thead>
-      <tbody>
-        <%= render partial: 'file_details', locals: { use: "Service File", file: @sf } unless @sf.nil? %>
-        <%= render partial: 'file_details', locals: { use: "Intermediate File", file: @if } unless @if.nil? %>
-        <%= render partial: 'file_details', locals: { use: "Extracted Text", file: @et } unless @et.nil? %>
-        <%= render partial: 'file_details', locals: { use: "Transcript File", file: @tf } unless @tf.nil? %>
-      </tbody>
-    </table>
-  </div>
 </div><!-- /.container-fluid -->

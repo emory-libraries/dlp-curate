@@ -202,6 +202,7 @@ module Hyrax
       end
 
       def files
+        @pm = @file_set.preservation_master_file unless @file_set.preservation_master_file.nil?
         @sf = @file_set.service_file unless @file_set.service_file.nil?
         @if = @file_set.intermediate_file unless @file_set.intermediate_file.nil?
         @et = @file_set.extracted unless @file_set.extracted.nil?
