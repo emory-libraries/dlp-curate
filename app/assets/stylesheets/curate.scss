@@ -34,3 +34,13 @@
 .preservation_failures_present {
   color: red;
 }
+
+.dl-horizontal-override dt {
+  float: left;
+  width: unset;
+  clear: left;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
