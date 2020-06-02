@@ -31,8 +31,11 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
   end
 
   context 'on a fileset view page' do
-    it 'shows additional files' do
+    before do
       visit hyrax_file_set_path(file_set)
+    end
+
+    it 'shows additional files' do
       expect(page).to have_content('sun.png')
       expect(page).to have_content('Service File')
       expect(page).to have_content('image.jp2')
@@ -40,8 +43,11 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
     end
 
     it 'shows fileset category' do
-      visit hyrax_file_set_path(file_set)
       expect(find('#fileset-category').text).to include('Primary Content')
+    end
+
+    it 'shows pmf download link' do
+      expect(first('#file_download').text).to eq('Download Preservation Master File')
     end
   end
 

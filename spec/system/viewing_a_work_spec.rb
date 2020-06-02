@@ -89,14 +89,6 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
     expect(page).to have_content 'title (Title)'
     expect(page).to have_content 'transfer_engineer (Transfer Engineer)'
     expect(page).to have_content 'Volume'
-    # preservation workflow
-    expect(page).to have_content 'Workflow Type'
-    expect(page).to have_content 'Workflow Notes'
-    expect(page).to have_content 'Workflow Rights Basis'
-    expect(page).to have_content 'Workflow Rights Basis Note'
-    expect(page).to have_content 'Workflow Rights Basis Date'
-    expect(page).to have_content 'Workflow Rights Basis Reviewer'
-    expect(page).to have_content 'Workflow Rights Basis Uri'
   end
 
   context 'when logged in as an admin' do

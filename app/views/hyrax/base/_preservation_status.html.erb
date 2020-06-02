@@ -11,7 +11,7 @@
       <div>
         <b><%= t('hyrax.base.show.depositor') %>: </b><%= presenter.depositor.first %>
       </div>
-      <div>
+      <div><br>
         <!-- iterate through workflows -->
         <% presenter.preservation_workflows.each do |pwf| %>
         <!-- display workflow type-->
@@ -25,6 +25,7 @@
               <div><%= "#{key}: #{value}" unless key == "Type" %></div>
             <% end %>
           <% end %>
+          <br>
         <% end %>
       </div>
     </div>
