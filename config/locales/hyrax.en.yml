@@ -221,6 +221,9 @@ en:
         date_modified: "Date Modified"
         date_uploaded: "Date Uploaded"
         depositor: "Depositor"
+        notifications: "Notifications"
+        no_failures: "No Event failures noted."
+        with_failures: "One or more recent events failed for this object"
     account_name: My Institution Account Id
     directory:
       suffix: "@example.org"

@@ -167,4 +167,34 @@ RSpec.describe CurateGenericWorkIndexer do
       end
     end
   end
+
+  describe 'failed_preservation_events' do
+    context 'when preservation_event is empty' do
+      let(:attributes) do
+        {
+          id:    '123',
+          title: ['A title']
+        }
+      end
+
+      it 'returns empty array' do
+        expect(solr_document['failed_preservation_events_ssim']).to eq([nil])
+      end
+    end
+
+    context 'when preservation_event has failures' do
+      let(:attributes) do
+        {
+          id:                            '123',
+          title:                         ['A title'],
+          preservation_event_attributes: [{ 'event_type' => 'Yackety', 'event_start' => DateTime.current, 'outcome' => 'Failure',
+              'event_details' => "Smackety", 'software_version' => 'FITS v1.5.0', 'initiating_user' => "10" }]
+        }
+      end
+
+      it 'returns an array of hashes' do
+        expect(solr_document['failed_preservation_events_ssim'].first).to eq(["{ \"event_details\": \"Smackety\", \"event_start\": \"#{DateTime.current.strftime('%F')}\" }"])
+      end
+    end
+  end
 end
