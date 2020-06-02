@@ -48,6 +48,15 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
       expect(find('#fileset-category').text).to include('Primary Content')
     end
 
+    it 'shows a file details block' do
+      expect(page).to have_content('Preservation Master File Details')
+      expect(page).to have_content('Depositor')
+      expect(page).to have_content('Date Uploaded')
+      expect(page).to have_content('Date Modified')
+      expect(page).to have_content('Fixity Check')
+      expect(page).to have_content('Characterization')
+    end
+
     it 'shows pmf download link' do
       expect(first('#file_download').text).to eq('Download Preservation Master File')
     end
