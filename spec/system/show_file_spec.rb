@@ -36,6 +36,8 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
     end
 
     it 'shows additional files' do
+      expect(page).to have_content('world.png')
+      expect(page).to have_content('Preservation Master File')
       expect(page).to have_content('sun.png')
       expect(page).to have_content('Service File')
       expect(page).to have_content('image.jp2')
