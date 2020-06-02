@@ -35,12 +35,22 @@
   color: red;
 }
 
-.dl-horizontal-override dt {
-  float: left;
-  width: unset;
-  clear: left;
-  text-align: right;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+dl.file-show-details {
+  -moz-column-count: 1;
+  -webkit-column-count: 1;
+  column-count: 1;
+  -moz-column-width: unset;
+  -webkit-column-width: unset;
+  column-width: unset;
+  border-top: none;
+  padding-top: 0.70rem;
+
+  dt {
+    text-align: left;
+  }
+
+  dd {
+    padding-bottom: 0.70rem;
+  }
 }
+

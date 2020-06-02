@@ -246,6 +246,8 @@ en:
     file_sets:
       form:
         pcdm_use: "FileSet use"
+      show_details:
+        file_details: "Preservation Master File Details"
     file_set:
       show:
         downloadable_content:
