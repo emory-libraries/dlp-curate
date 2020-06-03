@@ -24,7 +24,7 @@
           <%= render partial: 'file_details', locals: { use: "Preservation Master File", file: @pm } unless @pm.nil? %>
           <%= render partial: 'file_details', locals: { use: "Service File", file: @sf } unless @sf.nil? %>
           <%= render partial: 'file_details', locals: { use: "Intermediate File", file: @if } unless @if.nil? %>
-          <%= render partial: 'file_details', locals: { use: "Extracted Text", file: @et } unless @et.nil? %>
+          <%= render partial: 'file_details', locals: { use: "Extracted", file: @et } unless @et.nil? %>
           <%= render partial: 'file_details', locals: { use: "Transcript File", file: @tf } unless @tf.nil? %>
         </tbody>
       </table>
