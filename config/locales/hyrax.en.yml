@@ -248,6 +248,7 @@ en:
         pcdm_use: "FileSet use"
       show_details:
         file_details: "Preservation Master File Details"
+        activity: "Activity"
     file_set:
       show:
         downloadable_content:

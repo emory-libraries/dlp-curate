@@ -57,6 +57,11 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
       expect(page).to have_content('Characterization')
     end
 
+    it 'shows an activity block' do
+      expect(first('.activity-header').text).to eq('Activity')
+      expect(page).to have_css('table#activity')
+    end
+
     it 'shows pmf download link' do
       expect(first('#file_download').text).to eq('Download Preservation Master File')
     end
