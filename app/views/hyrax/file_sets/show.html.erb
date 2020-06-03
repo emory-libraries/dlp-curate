@@ -28,8 +28,9 @@
           <%= render partial: 'file_details', locals: { use: "Transcript File", file: @tf } unless @tf.nil? %>
         </tbody>
       </table>
-      <%= render 'hyrax/users/activity_log', events: @presenter.events %>
     </div><!-- /columns second -->
   </div> <!-- /.row -->
   <%= render 'show_details' %>
+  <h2 class="activity-header"><%= t(".activity") %></h2><br>
+  <%= render 'hyrax/users/activity_log', events: @presenter.events %>
 </div><!-- /.container-fluid -->
