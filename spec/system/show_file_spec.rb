@@ -11,12 +11,14 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
   let(:file) { File.open(fixture_path + '/world.png') }
   let(:file1) { File.open(fixture_path + '/sun.png') }
   let(:file2) { File.open(fixture_path + '/image.jp2') }
+  let(:file3) { File.open(fixture_path + '/book_page/0003_extracted_text.pos') }
 
   before do
     login_as user
     Hydra::Works::AddFileToFileSet.call(file_set, file, :preservation_master_file)
     Hydra::Works::AddFileToFileSet.call(file_set, file1, :service_file)
     Hydra::Works::AddFileToFileSet.call(file_set, file2, :intermediate_file)
+    Hydra::Works::AddFileToFileSet.call(file_set, file3, :extracted)
     work.ordered_members << file_set
     work.save!
   end
@@ -74,7 +76,7 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
     end
 
     it 'shows result of fixity check' do
-      expect(page).to have_content 'passed 3 Files with 3 total versions checked'
+      expect(page).to have_content 'passed 4 Files with 4 total versions checked'
     end
   end
 
@@ -88,6 +90,15 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
 
     it 'shows result of fixity check' do
       expect(page).to have_content 'FAIL 3 Files with 3 total versions checked'
+    end
+  end
+
+  context 'when downloading files' do
+    it 'downloads extracted text file correctly' do
+      visit hyrax_file_set_path(file_set)
+      expect(page).to have_http_status(200)
+      click_on '0003_extracted_text.pos'
+      expect(page).to have_http_status(:success)
     end
   end
 end
