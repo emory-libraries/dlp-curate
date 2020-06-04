@@ -101,4 +101,14 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
       expect(page).to have_http_status(:success)
     end
   end
+
+  context 'social media share options are not present' do
+    it 'doesnt show share buttons' do
+      visit hyrax_file_set_path(file_set)
+      expect(page).not_to have_link(title: "Facebook", exact: true)
+      expect(page).not_to have_link(title: "Twitter", exact: true)
+      expect(page).not_to have_link(title: "Google+", exact: true)
+      expect(page).not_to have_link(title: "Tumblr", exact: true)
+    end
+  end
 end
