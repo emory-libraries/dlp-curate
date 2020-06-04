@@ -66,5 +66,37 @@ RSpec.describe PreservationEvent do
       preservation_event.event_details = [event_details]
       expect(preservation_event.event_details).to eq [event_details]
     end
+
+    context 'class methods' do
+      let(:different_event_start) { DateTime.current.strftime('%FT%T%:z') }
+      let(:preservation_event) do
+        work.preservation_event.build(
+          event_type:       event_type,
+          initiating_user:  initiating_user,
+          event_start:      different_event_start,
+          event_end:        event_end,
+          outcome:          outcome,
+          software_version: software_version,
+          event_details:    event_details
+        )
+      end
+
+      describe '#preservation_event_terms' do
+        it 'creates a hash of preservation_event key/values in json' do
+          expect(preservation_event.preservation_event_terms).to eq(
+            "{\"event_details\":\"#{event_details}\",\"event_end\":\"#{event_end}\",\"event_start\":\"#{different_event_start}\",\"event_type\":\"#{event_type}\"" \
+            ",\"initiating_user\":\"#{initiating_user}\",\"outcome\":\"#{outcome}\",\"software_version\":\"#{software_version}\"}"
+          )
+        end
+      end
+
+      describe '#failed_event_json' do
+        it 'creates a hash of needed key/values for failed events in json' do
+          expect(preservation_event.failed_event_json).to eq(
+            "{\"event_details\":\"#{event_details}\",\"event_start\":\"#{different_event_start}\"}"
+          )
+        end
+      end
+    end
   end
 end

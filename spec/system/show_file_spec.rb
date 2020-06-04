@@ -67,6 +67,36 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
     it 'shows pmf download link' do
       expect(first('#file_download').text).to eq('Download Preservation Master File')
     end
+
+    context 'within the preservation events block' do
+      it 'shows the right header' do
+        expect(page).to have_content('Preservation Events')
+      end
+
+      context 'when there are events' do
+        it 'shows a table with the right headers' do
+          table_headers = all('#fs-preservation-event-table th').map(&:text)
+
+          expect(table_headers).to eq(["Event", "Timestamp", "Outcome", "Detail", "User", "Software"])
+        end
+
+        it 'shows a table with the right values' do
+          table_values = all('#fs-preservation-event-table td').map(&:text)
+          preservation_event = file_set.preservation_event.first
+
+          expect(table_values).to eq(
+            [
+              preservation_event.event_type.first,
+              "Start: #{preservation_event.event_start.first} End: #{preservation_event.event_end.first}",
+              preservation_event.outcome.first,
+              preservation_event.event_details.first,
+              preservation_event.initiating_user.first,
+              preservation_event.software_version.first
+            ]
+          )
+        end
+      end
+    end
   end
 
   context 'when fixity check passes' do

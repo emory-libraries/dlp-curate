@@ -33,4 +33,5 @@
   <%= render 'show_details' %>
   <h2 class="activity-header"><%= t(".activity") %></h2><br>
   <%= render 'hyrax/users/activity_log', events: @presenter.events %>
+  <%= render 'preservation_events', presenter: @presenter %>
 </div><!-- /.container-fluid -->
