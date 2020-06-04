@@ -12,8 +12,10 @@
         <%= render 'file_set_title', presenter: @presenter %>
       </header>
       <%# TODO: render 'show_descriptions' See https://github.com/samvera/hyrax/issues/1481 %>
-      <div id="fileset-category"><strong >FileSet category:</strong> <%= @fileset_use %></div>
-      <%= link_to "Parent Work", @parent, class: 'btn btn-link' %>
+      <div id="fileset-id"><strong >FileSet ID:</strong> <%= @presenter.id %></div>
+      <div id="fileset-category"><strong >FileSet Category:</strong> <%= @fileset_use %></div>
+      <div id="fileset-parent"><strong>Is Part of:</strong> <%= link_to "Parent Work", @parent, class: 'btn-link' %></div>
+      <br />
       <table class="table table-striped table-bordered">
         <thead>
           <th>File name</th>

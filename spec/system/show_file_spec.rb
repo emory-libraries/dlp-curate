@@ -46,6 +46,10 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
       expect(page).to have_content('Intermediate File')
     end
 
+    it 'shows fileset id' do
+      expect(find('#fileset-id').text).to include("FileSet ID: #{file_set.id}")
+    end
+
     it 'shows fileset category' do
       expect(find('#fileset-category').text).to include('Primary Content')
     end
