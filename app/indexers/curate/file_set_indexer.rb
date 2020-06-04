@@ -8,6 +8,7 @@ module Curate
         solr_doc['file_path_ssim'] = object.file_path if object.file_path.present?
         solr_doc['creating_application_name_ssim'] = object.creating_application_name if object.creating_application_name.present?
         solr_doc['puid_ssim'] = object.puid if object.puid.present?
+        solr_doc['preservation_event_tesim'] = [object&.preservation_event&.map(&:preservation_event_terms)]
         if object.preservation_master_file.present?
           solr_doc['file_name_ssim'] = object.preservation_master_file.file_name
           solr_doc['file_size_ssim'] = object.preservation_master_file.file_size

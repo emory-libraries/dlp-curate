@@ -15,4 +15,19 @@ class PreservationEvent < ActiveTriples::Resource
   property :outcome, predicate: "http://metadata.emory.edu/vocab/cor-terms#eventOutcome", multiple: false
   property :software_version, predicate: "http://metadata.emory.edu/vocab/cor-terms#softwareVersion", multiple: false
   property :workflow_id, predicate: "http://metadata.emory.edu/vocab/cor-terms#workflowRelatedObject", multiple: false
+
+  def preservation_event_terms
+    attributes_map = { 'event_details' => event_details.first,
+                       'event_end' => event_end.first,
+                       'event_start' => event_start.first,
+                       'event_type' => event_type.first,
+                       'initiating_user' => initiating_user.first,
+                       'outcome' => outcome.first,
+                       'software_version' => software_version.first }
+    attributes_map.to_json
+  end
+
+  def failed_event_json
+    { "event_details" => event_details.first, "event_start" => event_start.first }.to_json
+  end
 end

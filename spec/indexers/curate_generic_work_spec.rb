@@ -183,17 +183,20 @@ RSpec.describe CurateGenericWorkIndexer do
     end
 
     context 'when preservation_event has failures' do
+      let(:different_event_start) { DateTime.current.strftime('%FT%T%:z') }
       let(:attributes) do
         {
           id:                            '123',
           title:                         ['A title'],
-          preservation_event_attributes: [{ 'event_type' => 'Yackety', 'event_start' => DateTime.current, 'outcome' => 'Failure',
+          preservation_event_attributes: [{ 'event_type' => 'Yackety', 'event_start' => different_event_start, 'outcome' => 'Failure',
               'event_details' => "Smackety", 'software_version' => 'FITS v1.5.0', 'initiating_user' => "10" }]
         }
       end
 
       it 'returns an array of hashes' do
-        expect(solr_document['failed_preservation_events_ssim'].first).to eq(["{ \"event_details\": \"Smackety\", \"event_start\": \"#{DateTime.current.strftime('%F')}\" }"])
+        expect(solr_document['failed_preservation_events_ssim'].first).to eq(
+          ["{\"event_details\":\"#{attributes[:preservation_event_attributes].first['event_details']}\",\"event_start\":\"#{different_event_start}\"}"]
+        )
       end
     end
   end

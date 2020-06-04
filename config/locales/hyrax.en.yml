@@ -249,6 +249,16 @@ en:
       show_details:
         file_details: "Preservation Master File Details"
         activity: "Activity"
+      preservation_events:
+        header: "Preservation Events"
+        no_events: "No Preservation Events found."
+        preservation_event_table:
+          event: "Event"
+          time: "Timestamp"
+          outcome: "Outcome"
+          detail: "Detail"
+          user: "User"
+          software: "Software"
     file_set:
       show:
         downloadable_content:
