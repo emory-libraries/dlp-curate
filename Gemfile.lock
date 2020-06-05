@@ -400,7 +400,6 @@ GEM
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv2 (~> 1.0)
     aws-sdk-inspector (1.27.1)
-      aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iot (1.51.1)
       aws-sdk-core (~> 3, >= 3.99.0)
