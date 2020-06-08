@@ -1,4 +1,4 @@
-<h2 class="fs-preservation-events-header"><%= t('.header') %></h2>
+<h2 class="fs-preservation-events-header"><%= t('.header') %></h2><br>
 <% if presenter.preservation_event.present? %>
   <table id="fs-preservation-event-table" class="table table-striped table-bordered">
     <thead>
@@ -12,18 +12,20 @@
     <tbody>
       <% presenter.preservation_event.each do |event| %>
         <% parsed_event = JSON.parse(event) %>
-        <td><%= parsed_event['event_type'] %></td>
-        <td>
-            Start: <%= DateTime.parse(parsed_event['event_start']).strftime('%FT%T%:z') %><br>
-            End: <%= DateTime.parse(parsed_event['event_end']).strftime('%FT%T%:z') %>
-        </td>
-        <td><%= parsed_event['outcome'] %></td>
-        <td><%= parsed_event['event_details'] %></td>
-        <td><%= parsed_event['initiating_user'] %></td>
-        <td><%= parsed_event['software_version'] %></td>
+        <tr>
+          <td><%= parsed_event['event_type'] %></td>
+          <td>
+              Start: <%= DateTime.parse(parsed_event['event_start']).strftime('%FT%T%:z') %><br>
+              End: <%= DateTime.parse(parsed_event['event_end']).strftime('%FT%T%:z') %>
+          </td>
+          <td><%= parsed_event['outcome'] %></td>
+          <td><%= parsed_event['event_details'] %></td>
+          <td><%= parsed_event['initiating_user'] %></td>
+          <td><%= parsed_event['software_version'] %></td>
+        </tr>
       <% end %>
     </tbody>
   </table>
 <% else %>
-  <p><%= t('.no_events') %></p>
+  <p class="no-preservation-events"><%= t('.no_events') %></p>
 <% end %>
