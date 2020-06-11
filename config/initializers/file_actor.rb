@@ -17,6 +17,7 @@ Hyrax::Actors::FileActor.class_eval do
                                         relation,
                                         versioning: false)
     return false unless file_set.save
+    # may cause error since new related_file method normalizes the relation, but may not if relation is always a symbol.
     repository_file = related_file
     Hyrax::VersioningService.create(repository_file, user)
     pathhint = io.uploaded_file.uploader.path if io.uploaded_file # in case next worker is on same filesystem
