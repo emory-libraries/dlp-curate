@@ -40,7 +40,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
 
     it 'visits a iiif_url', clean: true do
       visit iiif_url
-      expect(page).to have_http_status(200)
+      expect(page).to have_http_status(:ok)
     end
   end
 
@@ -53,7 +53,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
 
     it 'visits a iiif_url', clean: true do
       visit iiif_url
-      expect(page).to have_http_status(200)
+      expect(page).to have_http_status(:ok)
     end
   end
 
@@ -71,14 +71,14 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
 
       it 'visits a iiif_url', clean: true do
         visit iiif_url
-        expect(page).to have_http_status(200)
+        expect(page).to have_http_status(:ok)
       end
     end
 
     context "As a user who has *not* authenticated to Lux" do
       it 'visits a iiif_url', clean: true do
         visit iiif_url
-        expect(page).to have_http_status(403)
+        expect(page).to have_http_status(:forbidden)
         expect(page.body).to be_empty
       end
     end
@@ -89,7 +89,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
       it 'visits a iiif_url', clean: true do
         login_as user
         visit iiif_url
-        expect(page).to have_http_status(200)
+        expect(page).to have_http_status(:ok)
       end
     end
   end
@@ -108,14 +108,14 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
 
       it 'visits a iiif_url', clean: true do
         visit iiif_url
-        expect(page).to have_http_status(200)
+        expect(page).to have_http_status(:ok)
       end
     end
 
     context "As a user who has *not* authenticated to Lux" do
       it 'visits a iiif_url', clean: true do
         visit iiif_url
-        expect(page).to have_http_status(403)
+        expect(page).to have_http_status(:forbidden)
         expect(page.body).to be_empty
       end
     end
@@ -130,7 +130,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
 
     it 'visits a iiif_url', clean: true do
       visit iiif_url
-      expect(page).to have_http_status(403)
+      expect(page).to have_http_status(:forbidden)
       expect(page.body).to be_empty
     end
   end
@@ -145,7 +145,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
     context "for a completely unauthenticated user" do
       it 'visits a iiif_url', clean: true do
         visit iiif_url
-        expect(page).to have_http_status(403)
+        expect(page).to have_http_status(:forbidden)
         expect(page.body).to be_empty
       end
     end
@@ -157,7 +157,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
 
       it 'visits a iiif_url', clean: true do
         visit iiif_url
-        expect(page).to have_http_status(403)
+        expect(page).to have_http_status(:forbidden)
         expect(page.body).to be_empty
       end
     end
@@ -168,7 +168,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
       it 'visits a iiif_url', clean: true do
         login_as admin_user
         visit iiif_url
-        expect(page).to have_http_status(200)
+        expect(page).to have_http_status(:ok)
       end
     end
 
@@ -178,7 +178,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
       it 'visits a iiif_url', clean: true do
         login_as user
         visit iiif_url
-        expect(page).to have_http_status(200)
+        expect(page).to have_http_status(:ok)
       end
     end
   end

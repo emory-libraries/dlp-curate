@@ -23,7 +23,7 @@ module ModularImporterUpdateDecorator
       if existing_work.empty?
         super
       else
-        existing_work.first.update_attributes!(work_metadata)
+        existing_work.first.update!(work_metadata)
         @work_id = existing_work.first.id
       end
     when 'HyraxOnlyNew'

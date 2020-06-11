@@ -19,9 +19,9 @@ class PreservationWorkflowImporter
     private
 
       def check_workflow_exists?(work)
-        ingest = work.preservation_workflow.select { |w| w.workflow_type == ["Ingest"] }.first
+        ingest = work.preservation_workflow.find { |w| w.workflow_type == ["Ingest"] }
         work.preservation_workflow.delete(ingest) if ingest # we first delete existing workflow and then update
-        accession = work.preservation_workflow.select { |w| w.workflow_type == ["Accession"] }.first
+        accession = work.preservation_workflow.find { |w| w.workflow_type == ["Accession"] }
         work.preservation_workflow.delete(accession) if accession # we first delete existing workflow and then update
       end
 

@@ -151,6 +151,5 @@ module Hyrax
                                      presenter_args:  [nil])
         end
     end
-    # rubocop:enable ClassLength
   end
 end

@@ -14,16 +14,16 @@ RSpec.describe Curate::CollectionType, :clean, type: :model do
   let(:collection_type) { described_class.new }
 
   it "we can find or create it easily and it won't proliferate" do
-    expect(Curate::CollectionType.count).to eq 0
-    Curate::CollectionType.find_or_create_library_collection_type
-    expect(Curate::CollectionType.count).to eq 1
-    Curate::CollectionType.find_or_create_library_collection_type
-    expect(Curate::CollectionType.count).to eq 1
+    expect(described_class.count).to eq 0
+    described_class.find_or_create_library_collection_type
+    expect(described_class.count).to eq 1
+    described_class.find_or_create_library_collection_type
+    expect(described_class.count).to eq 1
   end
 
   it 'only allows users with the admin role to manage' do
     # It does not have Registered Users group in the Creators role
-    ct = Curate::CollectionType.find_or_create_library_collection_type
+    ct = described_class.find_or_create_library_collection_type
     collection_type_participants = Hyrax::CollectionTypeParticipant.where(hyrax_collection_type_id: ct.id)
     expect(collection_type_participants.size).to eq 1
     expect(collection_type_participants.first.agent_id).to eq "admin"
