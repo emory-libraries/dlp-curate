@@ -2,6 +2,7 @@
 
 # [Hyrax-overwrite] FileActor ingest_file method in Hyrax::Actors
 # Perform characterize job only on preservation_master_file
+require 'wings'
 Hyrax::Actors::FileActor.class_eval do
   # Persists file as part of file_set and spawns async job to characterize and create derivatives.
   # @param [JobIoWrapper] io the file to save in the repository, with mime_type and original_name
