@@ -92,7 +92,7 @@ module Hyrax
       end
 
       def collection_type_gid_document_field_name
-        Solrizer.solr_name('collection_type_gid', *index_collection_type_gid_as)
+        "collection_type_gid_ssim"
       end
     end
 
