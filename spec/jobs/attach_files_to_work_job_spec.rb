@@ -28,7 +28,7 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
   let(:generic_work) { FactoryBot.create(:public_generic_work) }
   let(:user) { FactoryBot.create(:user) }
 
-  shared_examples 'a file attacher', perform_enqueued: [AttachFilesToWorkJob, IngestJob] do
+  shared_examples 'a file attacher', perform_enqueued: [described_class, IngestJob] do
     it 'attaches files, copies visibility and permissions and updates the uploaded files' do
       expect(CharacterizeJob).to receive(:perform_later).once
       described_class.perform_now(generic_work, [uploaded_file1])

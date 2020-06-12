@@ -96,12 +96,12 @@ RSpec.describe FileSet, :perform_enqueued, :clean do
         f.original_name = 'sample-file.pdf'
       end
     end
-    let(:file_set)         { FileSet.new } # We create an empty file_set and walk through virus-checking
+    let(:file_set)         { described_class.new } # We create an empty file_set and walk through virus-checking
     let(:file_set_with_id) { FactoryBot.create(:file_set) } # We save the preservation_events on this file_set object
 
     before do
       allow(file_set).to receive(:preservation_master_file) { file } # this is necessary since we are not performing any ingest
-      allow(FileSet).to receive(:find).and_return(file_set_with_id) # this is mocked because we need a file_set with an ID
+      allow(described_class).to receive(:find).and_return(file_set_with_id) # this is mocked because we need a file_set with an ID
       # on L#60 in the FileSet model.
     end
 

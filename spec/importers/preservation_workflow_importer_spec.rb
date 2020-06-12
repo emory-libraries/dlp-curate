@@ -17,7 +17,7 @@ RSpec.describe PreservationWorkflowImporter, :clean do
         expect(generic_work.preservation_workflow.count).to eq 2
         expect(generic_work.preservation_workflow.pluck(:workflow_type)).to include ['Ingest']
         expect(generic_work.preservation_workflow.pluck(:workflow_type)).to include ['Accession']
-        expect(generic_work.preservation_workflow.select { |w| w.workflow_type == ['Accession'] }.first.workflow_rights_basis_reviewer).to eq ['Scholarly Communications Office']
+        expect(generic_work.preservation_workflow.find { |w| w.workflow_type == ['Accession'] }.workflow_rights_basis_reviewer).to eq ['Scholarly Communications Office']
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe PreservationWorkflowImporter, :clean do
 
       it "updates preservation_workflow" do
         expect(generic_work.preservation_workflow.count).to eq 2
-        expect(generic_work.preservation_workflow.select { |w| w.workflow_type == ['Accession'] }.first.workflow_rights_basis_reviewer).to eq ['LTDS']
+        expect(generic_work.preservation_workflow.find { |w| w.workflow_type == ['Accession'] }.workflow_rights_basis_reviewer).to eq ['LTDS']
       end
     end
   end

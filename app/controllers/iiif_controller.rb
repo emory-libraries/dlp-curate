@@ -377,7 +377,7 @@ class IiifController < ApplicationController
   def fetch_thumbnail_visibility
     response = Blacklight.default_index.connection.get 'select', params: { q: "id:#{identifier}" }
     visibility = response["response"]["docs"][0]["visibility_ssi"]
-    return visibility unless visibility.nil? || visibility.empty?
+    return visibility if visibility.present?
     ["restricted"]
   rescue
     ["restricted"]
@@ -396,7 +396,7 @@ class IiifController < ApplicationController
   def fetch_visibility
     response = Blacklight.default_index.connection.get 'select', params: { q: "sha1_tesim:urn:sha1:#{identifier}" }
     visibility = response["response"]["docs"][0]["visibility_ssi"]
-    return visibility unless visibility.nil? || visibility.empty?
+    return visibility if visibility.present?
     ["restricted"]
   rescue
     ["restricted"]

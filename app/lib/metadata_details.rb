@@ -47,7 +47,7 @@ class MetadataDetails
     end
 
     def type_to_s(type)
-      return 'Not specified' unless type.present?
+      return 'Not specified' if type.blank?
       type.to_s
     end
 
