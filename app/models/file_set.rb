@@ -35,6 +35,7 @@ class FileSet < ActiveFedora::Base
 
   include ::Hyrax::FileSetBehavior
   include PreservationEvents
+  include ::Hyrax::VirusCheckerService
   self.indexer = Curate::FileSetIndexer
 
   directly_contains_one :preservation_master_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#PreservationMasterFile'), class_name: 'Hydra::PCDM::File'
