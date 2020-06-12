@@ -46,8 +46,9 @@ module Hyrax
       _run_update_index_callbacks { super }
     end
 
+    # This method updated to match v3.0.0.pre.beta3
     def find_children_of(destroyed_id:)
-      ActiveFedora::SolrService.query(ActiveFedora::SolrQueryBuilder.construct_query(member_of_collection_ids_ssim: destroyed_id))
+      Hyrax::SolrService.query(Hyrax::SolrQueryBuilderService.construct_query(member_of_collection_ids_ssim: destroyed_id))
     end
 
     # Only models which include Hyrax::CollectionNesting will respond to this method.
