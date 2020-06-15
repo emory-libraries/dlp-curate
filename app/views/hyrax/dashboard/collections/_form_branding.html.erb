@@ -21,7 +21,7 @@ to Hyrax. -->
         <!-- The fileinput-button span is used to style the file input field as button -->
         <span class="btn btn-success fileinput-button">
           <span class="glyphicon glyphicon-plus"></span>
-          <span>Choose File</span>
+          <span><%= t('.choose_file') %></span>
           <input type="file" name="collection_banner" single />
         </span>
       </div> <!-- end col-xs-4 -->
@@ -53,10 +53,10 @@ to Hyrax. -->
               <div class="col-sm-2">
                 <button class="btn btn-danger delete branding-banner-remove" data-type="DELETE" data-url="/" onclick=$("#banner").remove();>
                   <span class="glyphicon glyphicon-remove"></span>
-                  <span class="controls-remove-text">Remove</span>
+                  <span class="controls-remove-text"><%= t('.remove') %></span>
                   <span class="sr-only">
-                    previous
-                    <span class="controls-field-name-text">Remove Current Banner</span>
+                    <%= t('.previous') %>
+                    <span class="controls-field-name-text"><%= t('.remove_current_banner') %></span>
                   </span>
                 </button>
               </div> <!-- end col-sm-2 -->
@@ -98,7 +98,7 @@ to Hyrax. -->
         <!-- The fileinput-button span is used to style the file input field as button -->
         <span class="btn btn-success fileinput-button">
           <span class="glyphicon glyphicon-plus"></span>
-          <span>Choose File</span>
+          <span><%= t('.choose_file') %></span>
           <input type="file" name="files[]" single />
         </span>
       </div> <!-- end col-xs-4 -->
@@ -128,10 +128,10 @@ to Hyrax. -->
               </div>
 
               <div class="col-sm-4 branding-logo-input">
-                <label for="linkurl_<%= i %>">Link URL:
+                <label for="linkurl_<%= i %>"><%= t('.link_url') %>
                   <input id="linkurl_<%= i %>" class="branding-logo-input" type="text" name="linkurl[]" value="<%= linfo[:linkurl] %>" />
                 </label>
-                <label for="alttext_<%= i %>">Alt Text:
+                <label for="alttext_<%= i %>"><%= t('.alt_text') %>
                   <input id="alttext_<%= i %>" class="branding-logo-input" type="text" name="alttext[]" value="<%= linfo[:alttext] %>" />
                 </label>
               </div>
@@ -139,10 +139,10 @@ to Hyrax. -->
               <div class="col-sm-2">
                 <button class="btn btn-danger delete branding-logo-remove" data-type="DELETE" data-url="/" onclick=$("#logorow_<%= i %>").remove();>
                   <span class="glyphicon glyphicon-remove"></span>
-                  <span class="controls-remove-text">Remove</span>
+                  <span class="controls-remove-text"><%= t('.remove') %></span>
                    <span class="sr-only">
-                    previous
-                    <span class="controls-field-name-text">Remove Logo <%= i + 1 %></span>
+                    <%= t('.previous') %>
+                    <span class="controls-field-name-text"><%= t('.remove_logo') %> <%= i + 1 %></span>
                   </span>
                 </button>
               </div> <!-- end col-sm-2 -->
