@@ -43,17 +43,15 @@ class FileSet < ActiveFedora::Base
   directly_contains_one :transcript_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#Transcript'), class_name: 'Hydra::PCDM::File'
   directly_contains_one :extracted, through: :files, type: ::RDF::URI('http://metadata.emory.edu/vocab/cor-terms#fileuseExtractedText'), class_name: 'Hydra::PCDM::File'
 
-  # rubocop:disable Layout/AlignHash
-  accepts_nested_attributes_for :preservation_event, allow_destroy: true,
-    reject_if:  proc { |attrs|
-                  ['event_id', 'event_type', 'work_id',
-                   'initiating_user', 'event_start',
-                   'event_end', 'outcome', 'fileset_id',
-                   'software_version', 'workflow_id', 'event_details'].all? do |key|
-                     Array(attrs[key]).all?(&:blank?)
-                   end
-                }
-  # rubocop:enable Layout/AlignHash
+  accepts_nested_attributes_for :preservation_event,
+                                allow_destroy: true,
+                                reject_if:     proc { |attrs|
+                                                 ['event_id', 'event_type', 'work_id', 'initiating_user',
+                                                  'event_start', 'event_end', 'outcome', 'fileset_id',
+                                                  'software_version', 'workflow_id', 'event_details'].all? do |key|
+                                                   Array(attrs[key]).all?(&:blank?)
+                                                 end
+                                               }
 
   # We override this method which comes from Hydra::Works::VirusCheck and
   # is mixed-in through ::Hyrax::FileSetBehavior on L#34

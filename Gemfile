@@ -58,7 +58,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'bixby' # bixby = rubocop rules for Hyrax apps
+  gem 'bixby', github: 'samvera-labs/bixby', ref: 'f39116f714cf54880864960c22f2f937149f2f48'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw] unless ENV['CI'] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'coveralls', require: false
   gem 'factory_bot_rails', '~> 4.11.1'

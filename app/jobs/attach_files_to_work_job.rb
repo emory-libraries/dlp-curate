@@ -50,7 +50,7 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
     # A work with files attached by a proxy user will set the depositor as the intended user
     # that the proxy was depositing on behalf of. See tickets #2764, #2902.
     def proxy_or_depositor(work)
-      work.on_behalf_of.blank? ? work.depositor : work.on_behalf_of
+      work.on_behalf_of.presence || work.depositor
     end
 
     def process_fileset(actor, work_permissions, metadata, uploaded_file, work) # rubocop:disable Metrics/AbcSize

@@ -13,8 +13,11 @@ AllCops:
         - 'node_modules/**/*'
         - lib/tasks/sample_data.rake
 
-Layout/AlignHash:
+Layout/HashAlignment:
     EnforcedColonStyle: table
+
+Layout/IndentationConsistency:
+    EnforcedStyle: indented_internal_methods
 
 RSpec/MessageSpies:
     EnforcedStyle: receive
@@ -73,7 +76,7 @@ Metrics/CyclomaticComplexity:
         - app/indexers/curate_generic_work_indexer.rb
         - app/controllers/iiif_controller.rb
 
-Metrics/LineLength:
+Layout/LineLength:
     Exclude:
         - spec/importers/curate_mapper_spec.rb
         - app/importers/curate_record_importer.rb

@@ -219,7 +219,7 @@ class CurateMapper < Zizia::HashMapper
     valid_uri_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
     return valid_uri_option["id"] if valid_uri_option && valid_uri_option["id"]
     # Check whether this is a string that can be easily matched to a valid URI
-    matching_term = active_terms.select { |s| s["label"].downcase.strip == csv_term.downcase.strip }.first
+    matching_term = active_terms.find { |s| s["label"].downcase.strip == csv_term.downcase.strip }
     raise "Invalid resource_type value: #{csv_term}" unless matching_term
     matching_term["id"]
   end

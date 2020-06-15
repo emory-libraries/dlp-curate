@@ -130,7 +130,7 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
   context 'when downloading files' do
     it 'downloads extracted text file correctly' do
       visit hyrax_file_set_path(file_set)
-      expect(page).to have_http_status(200)
+      expect(page).to have_http_status(:ok)
       click_on '0003_extracted_text.pos'
       expect(page).to have_http_status(:success)
     end

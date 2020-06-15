@@ -115,7 +115,7 @@ module Zizia
         @rows.each_with_index do |row, i|
           next if i.zero? # Skip the header row
           column_numbers.each_with_index do |column_number, j|
-            next unless row[column_number].blank?
+            next if row[column_number].present?
             @errors << "Missing required metadata in row #{i + 1}: \"#{required_headers[j]}\" field cannot be blank"
           end
         end

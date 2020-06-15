@@ -49,9 +49,9 @@ module Hyrax
       preservation_workflow_terms&.each do |pwf|
         final << JSON.parse(pwf)
       end
-      accession = final.select { |pwf| pwf["workflow_type"] == "Accession" }.first # get accession worfklow
+      accession = final.find { |pwf| pwf["workflow_type"] == "Accession" } # get accession worfklow
       accession_result = workflow_hash(accession.compact) if accession # make non nil value keys displayable
-      ingest = final.select { |pwf| pwf["workflow_type"] == "Ingest" }.first # get ingest workflow
+      ingest = final.find { |pwf| pwf["workflow_type"] == "Ingest" } # get ingest workflow
       ingest_result = workflow_hash(ingest.compact) if ingest # make non nil value keys displayable
       [accession_result || { "Type" => "Accession" }, ingest_result || { "Type" => "Ingest" }] # send result or only type if a result is nil
     end

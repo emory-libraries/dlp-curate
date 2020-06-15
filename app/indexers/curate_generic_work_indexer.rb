@@ -39,7 +39,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
 
   def failed_preservation_events
     failures = object.preservation_event.select { |event| event.outcome == ["Failure"] }
-    return unless failures.present?
+    return if failures.blank?
     failures.map(&:failed_event_json)
   end
 

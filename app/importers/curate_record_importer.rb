@@ -18,7 +18,7 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     files_to_attach = Zizia::CsvParser.new(file: @csv_file).records.map(&:mapper).select do |m|
       m.metadata['deduplication_key'] == record.mapper.metadata['deduplication_key']
     end.select(&:files)
-    return [] if files_to_attach.nil? || files_to_attach.empty?
+    return [] if files_to_attach.blank?
     uploaded_file_ids = []
     files_to_attach.each do |filename|
       next if filename.metadata['type'] == 'work'
@@ -68,7 +68,7 @@ class CurateRecordImporter < Zizia::HyraxRecordImporter
     attrs.delete(:files)
     attrs.delete(:remote_files)
     based_near = attrs.delete(:based_near)
-    attrs.merge(based_near_attributes: based_near_attributes(based_near)) unless based_near.nil? || based_near.empty?
+    attrs.merge(based_near_attributes: based_near_attributes(based_near)) if based_near.present?
     attrs
   end
 
