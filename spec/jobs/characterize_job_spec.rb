@@ -1,5 +1,5 @@
-# [Hyrax-overwrite]
 # frozen_string_literal: true
+# [Hyrax-3.0.0.pre.beta3-overwrite]
 require 'rails_helper'
 
 RSpec.describe CharacterizeJob, :clean do
@@ -24,6 +24,8 @@ RSpec.describe CharacterizeJob, :clean do
   before do
     allow(FileSet).to receive(:find).with(file_set_id).and_return(file_set)
     allow(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename)
+    # commenting out because we are doing this in file_actor and not characterize_job
+    # allow(CreateDerivativesJob).to receive(:perform_later).with(file_set, file.id, filename)
   end
 
   context 'with valid filepath param' do
@@ -41,6 +43,8 @@ RSpec.describe CharacterizeJob, :clean do
       expect(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename)
       expect(file).to receive(:save!)
       expect(file_set).to receive(:update_index)
+      # commenting out because we are doing this in file_actor and not characterize_job
+      # expect(CreateDerivativesJob).to receive(:perform_later).with(file_set, file.id, filename)
       described_class.perform_now(file_set, file.id)
     end
   end
