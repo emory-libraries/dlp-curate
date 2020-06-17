@@ -6,11 +6,10 @@ module Hyrax
     class CollectionForm
       include HydraEditor::Form
       include HydraEditor::Form::Permissions
-      include SingleValuedForm
       # Used by the search builder
       attr_reader :scope
 
-      delegate :id, :depositor, :permissions, :human_readable_type, :member_ids, :nestable?, :thumbnail_id, to: :model
+      delegate :id, :depositor, :permissions, :human_readable_type, :member_ids, :nestable?, :thumbnail_id, :alt_title, to: :model
 
       class_attribute :membership_service_class
 
@@ -29,11 +28,9 @@ module Hyrax
                     :subject_names, :subject_geo, :subject_time_periods, :notes,
                     :rights_documentation, :sensitive_material, :internal_rights_note,
                     :contact_information, :staff_notes, :system_of_record_ID, :emory_ark,
-                    :visibility, :thumbnail_id]
+                    :visibility, :thumbnail_id, :alt_title]
 
       self.required_fields = [:title, :holding_repository, :creator, :abstract]
-
-      self.single_valued_fields = [:title]
 
       ProxyScope = Struct.new(:current_ability, :repository, :blacklight_config) do
         def can?(*args)
@@ -47,6 +44,44 @@ module Hyrax
       def initialize(model, current_ability, repository)
         super(model)
         @scope = ProxyScope.new(current_ability, repository, blacklight_config)
+      end
+
+      # Cast back to multi-value when saving
+      # Reads from form
+      def self.model_attributes(attributes)
+        attrs = super
+        return attrs unless attributes[:title]
+
+        attrs[:title] = Array(attributes[:title])
+        return attrs if attributes[:alt_title].nil?
+        Array(attributes[:alt_title]).each do |value|
+          attrs["title"] << value if value != ""
+        end
+        attrs
+      end
+
+      # @param [Symbol] key the field to read
+      # @return the value of the form field.
+      # For display in edit page
+      def [](key)
+        return model.member_of_collection_ids if key == :member_of_collection_ids
+        if key == :title
+          @attributes["title"].each do |value|
+            @attributes["alt_title"] << value
+          end
+          @attributes["alt_title"].delete(@attributes["alt_title"].sort.first) unless @attributes["alt_title"].empty?
+          return @attributes["title"].sort.first unless @attributes["title"].empty?
+          return ""
+        end
+        super
+      end
+
+      def multiple?(field)
+        if [:title].include?(field.to_sym)
+          false
+        else
+          super
+        end
       end
 
       def permission_template
@@ -71,7 +106,8 @@ module Hyrax
         [:administrative_unit, :contributors, :primary_language, :finding_aid_link,
          :institution, :local_call_number, :keywords, :subject_topics, :subject_names,
          :subject_geo, :subject_time_periods, :notes, :rights_documentation, :sensitive_material,
-         :internal_rights_note, :contact_information, :staff_notes, :system_of_record_ID, :emory_ark]
+         :internal_rights_note, :contact_information, :staff_notes, :system_of_record_ID,
+         :emory_ark, :alt_title]
       end
 
       def banner_info

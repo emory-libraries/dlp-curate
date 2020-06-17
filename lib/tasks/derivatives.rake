@@ -20,7 +20,7 @@ namespace :derivatives do
     abort "ERROR: no work id specified, aborting" unless id
     abort "ERROR: cannot find work with id #{id}, aborting" unless ActiveFedora::Base.exists?(id)
 
-    work = ActiveFedora::Base.find(id)
+    work = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: id, use_valkyrie: false)
     regenerate_derivatives(work)
     puts "Queued background jobs to regenerate derivatives for record: #{id}"
   end
