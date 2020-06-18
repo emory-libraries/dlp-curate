@@ -64,7 +64,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
     expect(page).to have_content 'Re-Use License (re_use_license)'
     expect(page).to have_content 'Related Datasets (related_datasets)'
     expect(page).to have_content 'Related Material (related_material_notes)'
-    expect(page).to have_content 'Related publications'
+    expect(page).to have_content 'Related Publications (related_publications)'
     expect(page).to have_content 'Rights Documentation URL (rights_documentation)'
     expect(page).to have_content 'Rights Holder (rights_holders)'
     expect(page).to have_content 'Rights Statement - Controlled (rights_statement)'
