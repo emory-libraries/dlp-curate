@@ -44,18 +44,18 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
 
     scenario 'successfully edits the collection' do
       visit "/dashboard/collections/#{collection.id}/edit"
-      expect(find_field('title (Title)').value).to eq 'Robert Langmuir African American Photograph Collection'
-      expect(find_field('holding_repository (Library)').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
-      expect(find_field('creator (Creator)').value).to eq 'Langmuir, Robert, collector.'
-      expect(find_field('abstract (Description/Abstract)').value).to eq 'Collection of photographs depicting African American life and culture collected by Robert Langmuir.'
+      expect(find_field('Title (title)').value).to eq 'Robert Langmuir African American Photograph Collection'
+      expect(find_field('Library (holding_repository)').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
+      expect(find_field('Creator (creator)').value).to eq 'Langmuir, Robert, collector.'
+      expect(find_field('Description/Abstract (abstract)').value).to eq 'Collection of photographs depicting African American life and culture collected by Robert Langmuir.'
       click_on 'Additional fields'
-      expect(find_field('administrative_unit (Administrative Unit)').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
+      expect(find_field('Administrative Unit (administrative_unit)').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
       expect(page).to have_content 'Thumbnail'
       first('#s2id_collection_thumbnail_id', minimum: 1).click
       find('li.select2-result').click
       first('body').click
       # Edit some fields in the form
-      fill_in 'title (Title)', with: 'New Title'
+      fill_in 'Title (title)', with: 'New Title'
       click_on 'Save changes'
       # Now the form should have the new values
       expect(page).to have_content 'New Title'

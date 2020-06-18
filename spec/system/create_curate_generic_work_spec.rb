@@ -47,18 +47,18 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(page).to have_css('#metadata select#curate_generic_work_rights_statement')
 
       click_link('Additional descriptive fields')
-      expect(page).to have_content('Add another notes (Note)')
+      expect(page).to have_content('Add another Note (notes)')
 
       expect(page).to have_css('#metadata textarea#curate_generic_work_staff_notes')
-      expect(page).to have_content('Add another staff_notes (Staff Note)')
+      expect(page).to have_content('Add another Staff Note (staff_notes)')
     end
 
     scenario "repeating entries in the form", js: true do
       new_cgw_form.visit_new_page
-      expect(page).to have_content('creator (Creator)')
+      expect(page).to have_content('Creator (creator)')
       expect(page).to have_css('input#curate_generic_work_creator.multi_value')
       fill_in "curate_generic_work[creator][]", with: "first creator"
-      click_on 'Add another creator (Creator)'
+      click_on 'Add another Creator (creator)'
       expect(all("input[name='curate_generic_work[creator][]']").count).to eq(2)
       expect(page).not_to have_css('input#curate_generic_work_title.multi_value')
     end
