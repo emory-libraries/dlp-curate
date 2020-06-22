@@ -24,7 +24,7 @@ module Hyrax
           :format_label, :file_size, :height, :width, :filename, :well_formed,
           :page_count, :file_title, :last_modified, :original_checksum,
           :duration, :sample_rate, :file_path, :creating_application_name,
-          :creating_os, :puid
+          :creating_os, :puid, :alpha_channels
         ]
         self.characterization_proxy = :preservation_master_file
 
@@ -41,6 +41,13 @@ module Hyrax
         def mime_type
           @mime_type ||= characterization_proxy.mime_type
         end
+
+        # Add Alpha Channels to the Schema
+        class AlphaChannelsSchema < ActiveTriples::Schema
+          property :alpha_channels, predicate: ::RDF::URI.new('http://vocabulary.samvera.org/ns#alphaChannels')
+        end
+
+        ActiveFedora::WithMetadata::DefaultMetadataClassFactory.file_metadata_schemas << AlphaChannelsSchema
       end
 
       class NullCharacterizationProxy
