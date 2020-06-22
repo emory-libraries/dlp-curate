@@ -61,6 +61,16 @@ module Hyrax
 
         def mime_type; end
       end
+
+      # Added alpha channel support for iiif, if direction is needed on how to implement
+      # alpha channels, see the link below:
+      # https://github.com/samvera/hyrax/commit/83dc1ea89b7c512b8bd5b807809ca5f2da368434
+      # Add Alpha Channels to the Schema
+      class AlphaChannelsSchema < ActiveTriples::Schema
+        property :alpha_channels, predicate: ::RDF::URI.new('http://vocabulary.samvera.org/ns#alphaChannels')
+      end
+
+      ActiveFedora::WithMetadata::DefaultMetadataClassFactory.file_metadata_schemas << AlphaChannelsSchema
     end
   end
 end
