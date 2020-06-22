@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-model-overwrite]
+# [Hyrax-overwrite-v3.0.0.pre.beta3]
 # ingest_file method in the JobIoWrapper method is modified. We save the response
 # from the `file_actor.ingest_file` method call. If false is returned from L#16 in
 # `config/intializers/file_actor.rb` then a failure event is created, else success
@@ -35,6 +35,12 @@ JobIoWrapper.class_eval do
       details = "#{file_name} submitted for preservation storage"
     end
     file_set_preservation_event(file_set, event_start, outcome, details)
+  end
+
+  def size
+    return file.size.to_i if file.respond_to? :size
+    return file.stat.size.to_i if file.respond_to? :stat
+    nil # unable to determine
   end
 
   private
