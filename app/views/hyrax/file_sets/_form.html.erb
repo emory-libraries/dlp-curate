@@ -1,6 +1,6 @@
 <!-- [Hyrax-overwrite] -->
 <!-- Adding fileset use category#L9 -->
-<%= simple_form_for [main_app, curation_concern], html: { multipart: true } do |f| %>
+<%= simple_form_for [main_app, curation_concern], html: { multipart: true, class: 'nav-safety' } do |f| %>
   <fieldset class="required">
     <span class="control-label">
       <%= label_tag 'file_set[title][]', t('.title'),  class: "string optional" %>
