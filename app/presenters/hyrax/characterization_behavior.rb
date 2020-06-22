@@ -16,7 +16,7 @@ module Hyrax
           :color_space, :compression, :profile_name, :profile_version, :orientation,
           :color_map, :image_producer, :capture_device, :scanning_software,
           :gps_timestamp, :latitude, :longitude, :file_format, :duration,
-          :sample_rate, :filename
+          :sample_rate, :filename, :alpha_channels
         ]
       end
     end
