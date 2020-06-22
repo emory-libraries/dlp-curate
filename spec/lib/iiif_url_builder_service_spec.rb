@@ -4,6 +4,9 @@ require 'rails_helper'
 
 RSpec.describe IiifUrlBuilderService, :clean do
   let(:iiif_builder_service) { described_class.new(file_set_id: file_set.id, size: '260,') }
+  let(:file_set_alt) do
+    FactoryBot.create(:file_set, id: file_set_id_base, user: user, title: ['Some title'])
+  end
   let(:iiif_builder_service_with_alternate_id) { described_class.new(file_set_id: file_set_id, size: '260,') }
   let(:user) { FactoryBot.create(:admin) }
   let(:file_set_id) { '7956djh9wp-cor/files/efce22de-c771-469e-b0df-41094b21684c' }
@@ -14,6 +17,7 @@ RSpec.describe IiifUrlBuilderService, :clean do
   let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   before do
     Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
+    Hydra::Works::AddFileToFileSet.call(file_set_alt, pmf, :preservation_master_file)
   end
 
   around do |example|
