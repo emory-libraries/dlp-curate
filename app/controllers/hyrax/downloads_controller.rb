@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite] Changes :og to :pmf as default_content and adds content_path method for
+# [Hyrax-overwrite beta3] Changes :og to :pmf as default_content and adds content_path method for
 # fetching `use` for additional files
 module Hyrax
   class DownloadsController < ApplicationController
@@ -27,7 +27,7 @@ module Hyrax
         # For derivatives stored on the local file system
         send_local_content
       else
-        raise ActiveFedora::ObjectNotFoundError
+        raise Hyrax::ObjectNotFoundError
       end
     end
 
