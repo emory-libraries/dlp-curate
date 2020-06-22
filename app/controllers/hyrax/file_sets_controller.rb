@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# [Hyrax-overwrite-v3.0.0.pre.beta3]
 
 module Hyrax
   class FileSetsController < ApplicationController # rubocop:disable Metrics/ClassLength
