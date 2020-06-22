@@ -61,6 +61,10 @@ RSpec.describe IiifUrlBuilderService, :clean do
   end
 
   context 'when given the file_set_id in hyrax.rb' do
+    let(:file_set) do
+      FactoryBot.create(:file_set, user: user, id: file_set_id_base, title: ['Some title'])
+    end
+
     it 'returns only the base id' do
       expect(iiif_builder_service_with_alternate_id.file_set_id_base).to eq(file_set_id_base)
     end
