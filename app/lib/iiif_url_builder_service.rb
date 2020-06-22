@@ -6,7 +6,7 @@ class IiifUrlBuilderService
   def initialize(file_set_id:, size:)
     @file_set_id = file_set_id
     @file_set = begin FileSet.find(file_set_id_base)
-                rescue ActiveFedora::ObjectNotFoundError
+                rescue Hyrax::ObjectNotFoundError
                   nil
                 end
     @size = size
