@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite]
+# [Hyrax-3.0.0.pre.beta3-overwrite]
 # Adds preservation event for fileset characterization
 
 class CharacterizeJob < Hyrax::ApplicationJob
@@ -25,7 +24,20 @@ class CharacterizeJob < Hyrax::ApplicationJob
               'software_version' => 'FITS v1.5.0', 'user' => file_set.depositor }
     create_preservation_event(file_set, event)
     Rails.logger.debug "Ran characterization on #{file.id} (#{file.mime_type})"
+    file.alpha_channels = channels(filepath) if file_set.image? && Hyrax.config.iiif_image_server?
     file.save!
     file_set.update_index
+    # commenting this job call since we are doing this in the file_actor
+    # CreateDerivativesJob.perform_later(file_set, file_id, filepath)
   end
+
+  private
+
+    def channels(filepath)
+      ch = MiniMagick::Tool::Identify.new do |cmd|
+        cmd.format '%[channels]'
+        cmd << filepath
+      end
+      [ch]
+    end
 end
