@@ -28,6 +28,10 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :alt_title, predicate: ::RDF::Vocab::DC.alternative do |index|
+    index.as :stored_searchable
+  end
+
   property :author_notes, predicate: "http://metadata.emory.edu/vocab/cor-terms#authorNote", multiple: false do |index|
     index.as :stored_searchable
   end
