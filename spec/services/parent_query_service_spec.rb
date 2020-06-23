@@ -8,7 +8,7 @@ describe ParentQueryService do
   describe "#query_parents_for_id" do
     context "when a child work exists with a parent" do
       before do
-        allow(ActiveFedora::SolrService).to receive(:get).with("member_ids_ssim:#{child_id}", rows: 1000).and_return(parent_doc)
+        allow(Hyrax::SolrService).to receive(:get).with("member_ids_ssim:#{child_id}", rows: 1000).and_return(parent_doc)
       end
       it "returns the parent works" do
         expect(described_class.query_parents_for_id(child_id).length).to eq 1
@@ -16,7 +16,7 @@ describe ParentQueryService do
     end
     context "when a work exists without a parent" do
       before do
-        allow(ActiveFedora::SolrService).to receive(:get).with("member_ids_ssim:#{child_id}", rows: 1000).and_return(empty_results)
+        allow(Hyrax::SolrService).to receive(:get).with("member_ids_ssim:#{child_id}", rows: 1000).and_return(empty_results)
       end
       it "returns an empty array" do
         expect(described_class.query_parents_for_id(child_id).length).to eq 0
