@@ -42,7 +42,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
         headers: {
           'Connection' => 'close',
           'Host' => 'iiif-cor-arch.library.emory.edu',
-          'User-Agent' => 'http.rb/4.3.0'
+          'User-Agent' => 'http.rb/4.4.1'
         }
       )
       .to_return(status: 200, body: "I am returning an image, but for now I'm words", headers: {})
