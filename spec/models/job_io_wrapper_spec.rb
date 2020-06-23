@@ -38,40 +38,39 @@ RSpec.describe JobIoWrapper, type: :model do
   # which were previously strings in hyrax3-beta3. This is because we want our output
   # of the size method in job_io_wrapper to always be an integer.
   describe '#size' do
+    subject(:wrapper) { described_class.new(args) }
     let(:user) { FactoryBot.build(:user) }
     let(:path) { fixture_path + '/world.png' }
     let(:file_set_id) { 'bn999672v' }
     let(:args) { { file_set_id: file_set_id, user: user, path: path } }
 
-    subject(:wrapper) { described_class.new(args) }
-
     context 'when file responds to :size' do
       before do
-        allow(subject.file).to receive(:size).and_return(123)
-        allow(subject.file).to receive(:respond_to?).with(:size).and_return(true)
-        allow(subject.file).to receive(:respond_to?).with(:stat).and_return(false)
+        allow(wrapper.file).to receive(:size).and_return(123)
+        allow(wrapper.file).to receive(:respond_to?).with(:size).and_return(true)
+        allow(wrapper.file).to receive(:respond_to?).with(:stat).and_return(false)
       end
       it 'returns the size of the file' do
-        expect(subject.size).to eq(123)
+        expect(wrapper.size).to eq(123)
       end
     end
     context 'when file responds to :stat' do
       before do
-        allow(subject.file).to receive_message_chain(:stat, :size).and_return(456) # rubocop:disable RSpec/MessageChain
-        allow(subject.file).to receive(:respond_to?).with(:size).and_return(false)
-        allow(subject.file).to receive(:respond_to?).with(:stat).and_return(true)
+        allow(wrapper.file).to receive_message_chain(:stat, :size).and_return(456) # rubocop:disable RSpec/MessageChain
+        allow(wrapper.file).to receive(:respond_to?).with(:size).and_return(false)
+        allow(wrapper.file).to receive(:respond_to?).with(:stat).and_return(true)
       end
       it 'returns the size of the file' do
-        expect(subject.size).to eq(456)
+        expect(wrapper.size).to eq(456)
       end
     end
     context 'when file responds to neither :size nor :stat' do
       before do
-        allow(subject.file).to receive(:respond_to?).with(:size).and_return(false)
-        allow(subject.file).to receive(:respond_to?).with(:stat).and_return(false)
+        allow(wrapper.file).to receive(:respond_to?).with(:size).and_return(false)
+        allow(wrapper.file).to receive(:respond_to?).with(:stat).and_return(false)
       end
       it 'returns nil' do
-        expect(subject.size).to eq nil
+        expect(wrapper.size).to eq nil
       end
     end
   end
