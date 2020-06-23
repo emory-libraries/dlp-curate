@@ -13,7 +13,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
 
   def generate_solr_document
     super.tap do |solr_doc|
-      solr_doc['preservation_workflow_terms_sim'] = preservation_workflow_terms
+      solr_doc['preservation_workflow_terms_tesim'] = preservation_workflow_terms
       solr_doc['failed_preservation_events_ssim'] = [failed_preservation_events]
       solr_doc['human_readable_content_type_ssim'] = [human_readable_content_type]
       solr_doc['human_readable_rights_statement_ssim'] = [human_readable_rights_statement]
