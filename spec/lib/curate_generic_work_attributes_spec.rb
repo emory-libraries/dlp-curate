@@ -33,6 +33,6 @@ RSpec.describe CurateGenericWorkAttributes do
                                                        'date_digitized', 'transfer_engineer', 'other_identifiers',
                                                        'emory_ark', 'system_of_record_ID', 'primary_repository_ID',
                                                        're_use_license', 'publisher', 'date_created',
-                                                       'deduplication_key'])
+                                                       'deduplication_key', 'alt_title'])
   end
 end
