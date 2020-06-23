@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite] Adds tests for additional files
+# [Hyrax-overwrite-v3.0.0.pre.beta3] Adds tests for additional files
 require 'rails_helper'
 
 RSpec.describe Hyrax::DownloadsController, :clean do
@@ -145,7 +145,7 @@ RSpec.describe Hyrax::DownloadsController, :clean do
           it "raises an error if the requested file does not exist" do
             expect do
               get :show, params: { id: file_set, file: 'thumbnail' }
-            end.to raise_error ActiveFedora::ObjectNotFoundError
+            end.to raise_error Hyrax::ObjectNotFoundError
           end
         end
       end
@@ -153,7 +153,7 @@ RSpec.describe Hyrax::DownloadsController, :clean do
       it "raises an error if the requested association does not exist" do
         expect do
           get :show, params: { id: file_set, file: 'non-existant' }
-        end.to raise_error ActiveFedora::ObjectNotFoundError
+        end.to raise_error Hyrax::ObjectNotFoundError
       end
     end
   end
