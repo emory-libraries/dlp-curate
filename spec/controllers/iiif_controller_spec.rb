@@ -84,7 +84,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
             headers: {
               'Connection' => 'close',
               'Host' => 'iiif-cor-arch.library.emory.edu',
-              'User-Agent' => 'http.rb/4.3.0'
+              'User-Agent' => 'http.rb/4.4.1'
             }
           )
           .to_return(
@@ -113,7 +113,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
             headers: {
               'Connection' => 'close',
               'Host' => 'iiif-cor-arch.library.emory.edu',
-              'User-Agent' => 'http.rb/4.3.0'
+              'User-Agent' => 'http.rb/4.4.1'
             }
           )
           .to_return(
