@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite]
+# [Hyrax-overwrite-v3.0.0.pre.beta3]
 module Hyrax
   module CollectionBehavior
     extend ActiveSupport::Concern
