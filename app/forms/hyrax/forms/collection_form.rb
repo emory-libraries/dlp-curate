@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite]
+# [Hyrax-overwrite-v3.0.0.pre.beta3]
 module Hyrax
   module Forms
     class CollectionForm
@@ -74,14 +74,6 @@ module Hyrax
           return ""
         end
         super
-      end
-
-      def multiple?(field)
-        if [:title].include?(field.to_sym)
-          false
-        else
-          super
-        end
       end
 
       def permission_template
