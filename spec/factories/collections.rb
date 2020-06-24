@@ -110,7 +110,7 @@ FactoryBot.define do
       with_nesting_attributes { nil }
       with_solr_document { false }
     end
-    sequence(:title) { |n| ["Collection Title #{n}"] }
+    title { ['Testing Collection'] }
 
     after(:build) do |collection, evaluator|
       collection.apply_depositor_metadata(evaluator.user.user_key)
