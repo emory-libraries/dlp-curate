@@ -30,6 +30,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  event_details:
+    event_details:
+      header: View Preservation Details
   hello: "Hello world"
   hyrax:
     dashboard:
