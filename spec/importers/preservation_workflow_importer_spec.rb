@@ -14,10 +14,16 @@ RSpec.describe PreservationWorkflowImporter, :clean do
 
     context "with new preservation_workflow for the work" do
       it "creates new preservation_workflows" do
-        expect(generic_work.preservation_workflow.count).to eq 2
-        expect(generic_work.preservation_workflow.pluck(:workflow_type)).to include ['Ingest']
-        expect(generic_work.preservation_workflow.pluck(:workflow_type)).to include ['Accession']
-        expect(generic_work.preservation_workflow.find { |w| w.workflow_type == ['Accession'] }.workflow_rights_basis_reviewer).to eq ['Scholarly Communications Office']
+        expect(generic_work.preservation_workflow.count).to eq 4
+        expect(generic_work.preservation_workflow.pluck(:workflow_type)).to match_array described_class.workflow_types.map { |v| [v] }
+      end
+
+      ['Ingest', 'Accession'].each do |type|
+        include_examples 'check_basis_reviewer_for_text', type, 'Scholarly Communications Office'
+      end
+
+      ['Deletion', 'Decommission'].each do |type|
+        include_examples 'check_basis_reviewer_for_text', type, 'Woodruff Health Sciences Library Administration'
       end
     end
 
@@ -27,9 +33,10 @@ RSpec.describe PreservationWorkflowImporter, :clean do
       end
 
       it "updates preservation_workflow" do
-        expect(generic_work.preservation_workflow.count).to eq 2
-        expect(generic_work.preservation_workflow.find { |w| w.workflow_type == ['Accession'] }.workflow_rights_basis_reviewer).to eq ['LTDS']
+        expect(generic_work.preservation_workflow.count).to eq 4
       end
+
+      include_examples 'check_basis_reviewer_for_text', 'Accession', 'LTDS'
     end
   end
 end

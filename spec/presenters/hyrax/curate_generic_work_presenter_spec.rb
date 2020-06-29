@@ -18,9 +18,14 @@ RSpec.describe Hyrax::CurateGenericWorkPresenter do
       "depositor_tesim" => user_key,
       "holding_repository_tesim" => ["test holding repo"],
       "rights_statement_tesim" => ["empl.com"],
-      "preservation_workflow_terms_tesim" => ["{\"workflow_type\":\"Ingest\",\"workflow_notes\":\"Migrated to Cor repository from Extensis Portfolio\",
+      "preservation_workflow_terms_tesim" => [
+        "{\"workflow_type\":\"Ingest\",\"workflow_notes\":\"Migrated to Cor repository from Extensis Portfolio\",
         \"workflow_rights_basis\":\"Administrative Signo\",\"workflow_rights_basis_note\":\"Ingest note\",
-        \"workflow_rights_basis_date\":\"2016-03-01\",\"workflow_rights_basis_reviewer\":\"Scholarly Communications Office\",\"workflow_rights_basis_uri\":null}"] }
+        \"workflow_rights_basis_date\":\"2016-03-01\",\"workflow_rights_basis_reviewer\":\"Scholarly Communications Office\",\"workflow_rights_basis_uri\":null}",
+        "{\"workflow_type\":\"Deletion\",\"workflow_notes\":\"Did not want it no mo\",
+        \"workflow_rights_basis\":\"Administrative Signo\",\"workflow_rights_basis_note\":\"Deletion note\",
+        \"workflow_rights_basis_date\":\"2016-06-01\",\"workflow_rights_basis_reviewer\":\"Scholarly Communications Office\",\"workflow_rights_basis_uri\":null}"
+      ] }
   end
 
   describe '#manifest_url' do
@@ -80,7 +85,9 @@ RSpec.describe Hyrax::CurateGenericWorkPresenter do
       end
       it "returns preservation workflows" do
         expect(workflows.any? { |pwf| pwf['Rights Basis Note'] == 'Ingest note' }).to be_truthy
+        expect(workflows.any? { |pwf| pwf['Rights Basis Note'] == 'Deletion note' }).to be_truthy
         expect(workflows.any? { |pwf| pwf['Rights Basis Note'] == 'Accession note' }).to be_falsy
+        expect(workflows.any? { |pwf| pwf['Rights Basis Note'] == 'Decommission note' }).to be_falsy
       end
     end
   end
