@@ -9,12 +9,21 @@ RSpec.describe DateService do
       expect(service.human_readable_date('XXXX')).to eq('unknown')
     end
 
+    it 'provides a string for known month with unknown year' do
+      expect(service.human_readable_date('XXXX-10')).to eq('October (year unknown)')
+    end
+
     it 'provides a string for single years' do
       expect(service.human_readable_date('1934')).to eq('1934')
     end
 
-    it 'provides a string for years with an unspecified digit' do
+    it 'provides a string for years with a final unspecified digit' do
       expect(service.human_readable_date('193X')).to eq('1930s')
+    end
+
+    it 'provides a string for years with two final unspecified digits' do
+      expect(service.human_readable_date('20XX')).to eq('2000s')
+      expect(service.human_readable_date('19XX')).to eq('1900s')
     end
 
     it 'provides a string for uncertain years' do
@@ -47,6 +56,10 @@ RSpec.describe DateService do
 
     it 'provides a string for dates uncertain month and year but unknown day' do
       expect(service.human_readable_date('1940-02~')).to eq('February 1940 approx.')
+    end
+
+    it 'provides a string for dates with uncertain year but unknown month and day' do
+      expect(service.human_readable_date('1976~')).to eq('1976 approx.')
     end
 
     it 'leaves dates with unexpected formatting unaltered' do
