@@ -12,7 +12,7 @@ class DateService
       handle_ymd_format(date)
     elsif date.end_with?("X")
       handle_unspecified_digit(date)
-    elsif date.end_with?("?")
+    elsif date.end_with?("?", "~")
       handle_uncertain_year(date)
     else
       date
@@ -43,15 +43,26 @@ class DateService
       placeholder_date = Date.edtf(date.tr("~", ""))
       return placeholder_date.humanize + " approx." unless placeholder_date.nil?
     end
+    return handle_unknown_year_with_known_month(date) if date.start_with?("X")
     return Date.edtf(date).humanize unless Date.edtf(date).nil?
     date
   end
 
+  def handle_unknown_year_with_known_month(date)
+    date_units = date.split("-")
+    # The edtf-humanize gem expects a valid 4-digit year when handling dates in YM format
+    placeholder_date = Date.edtf("0000-#{date_units[1]}")
+    humanized_placeholder = placeholder_date.humanize
+    return "#{humanized_placeholder.split(' ').first} (year unknown)" unless humanized_placeholder.nil?
+    date
+  end
+
   def handle_unspecified_digit(date)
-    date.gsub("X", "0s")
+    # Check whether there is an unspecified decade or an unspecified year
+    date.end_with?("XX") ? date.gsub("XX", "00s") : date.gsub("X", "0s")
   end
 
   def handle_uncertain_year(date)
-    date.gsub("?", " approx.")
+    date.gsub(/[?~]/, " approx.")
   end
 end
