@@ -242,11 +242,11 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       it 'has no pwf information' do
         visit work_url
 
-        expect(page).to have_content('No information supplied').twice
+        expect(page).to have_content('No information supplied').exactly(4)
       end
     end
 
-    context 'when only ingest pwf is supplied' do
+    context 'when only one pwf is supplied' do
       before do
         work.preservation_workflow_attributes = [
           { "workflow_type" => "Ingest", "workflow_notes" => "Ingest notes" },
@@ -257,14 +257,14 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       end
 
       it 'has no accession pwf information' do
-        expect(page).to have_content('No information supplied').once
+        expect(page).to have_content('No information supplied').thrice
       end
       include_examples "check_page_for_multiple_text",
         ['Ingest', 'Ingest notes'],
         'has only ingest information'
     end
 
-    context 'when both pwf are supplied' do
+    context 'when two pwfs are supplied' do
       before do
         work.preservation_workflow_attributes = [
           { "workflow_type" => "Ingest", "workflow_rights_basis_date" => "02/02/2012" },
@@ -276,7 +276,28 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
 
       include_examples "check_page_for_multiple_text",
         ['Ingest', 'Accession', 'Accession notes'],
-        'has both pwf information'
+        'has two pwfs information'
+    end
+
+    context 'when all pwfs are supplied' do
+      before do
+        work.preservation_workflow_attributes = [
+          { "workflow_type" => "Ingest", "workflow_rights_basis_date" => "02/02/2012", "workflow_rights_basis_note" => "Ingest notes" },
+          { "workflow_type" => "Accession", "workflow_rights_basis_note" => "Accession notes" },
+          { "workflow_type" => "Deletion", "workflow_rights_basis_note" => "Deletion notes" },
+          { "workflow_type" => "Decommission", "workflow_rights_basis_note" => "Decommission notes" }
+        ]
+        work.save!
+        visit work_url
+      end
+
+      include_examples "check_page_for_multiple_text",
+        ['Ingest', 'Ingest notes', 'Accession', 'Accession notes', 'Deletion notes', 'Decommission notes'],
+        'has all four pwf information'
+
+      it 'will not have the no info warning' do
+        expect(page).to have_no_content('No information supplied')
+      end
     end
 
     context 'more details link' do

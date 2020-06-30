@@ -45,18 +45,25 @@ module Hyrax
     end
 
     def preservation_workflows
+      workflow_types = PreservationWorkflowImporter.workflow_types
       final = []
+      ret_arr = []
+
       preservation_workflow_terms&.each do |pwf|
         final << JSON.parse(pwf)
       end
-      accession = final.find { |pwf| pwf["workflow_type"] == "Accession" } # get accession worfklow
-      accession_result = workflow_hash(accession.compact) if accession # make non nil value keys displayable
-      ingest = final.find { |pwf| pwf["workflow_type"] == "Ingest" } # get ingest workflow
-      ingest_result = workflow_hash(ingest.compact) if ingest # make non nil value keys displayable
-      [accession_result || { "Type" => "Accession" }, ingest_result || { "Type" => "Ingest" }] # send result or only type if a result is nil
+
+      workflow_types.each { |type| workflow_formatter(type, final, ret_arr) }
+      ret_arr
     end
 
     private
+
+      def workflow_formatter(type, flow_arr, ret_arr)
+        workflow = flow_arr.find { |pwf| pwf["workflow_type"] == type } # get worfklow
+        ret_arr << workflow_hash(workflow.compact) if workflow # make non nil value keys displayable
+        ret_arr << { "Type" => type } unless workflow
+      end
 
       def workflow_hash(wf)
         wf_copy = wf.clone
