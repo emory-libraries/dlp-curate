@@ -35,11 +35,13 @@ en:
       header: View Preservation Details
   hello: "Hello world"
   hyrax:
+    collection_type:
+      default_title: Undefined
     dashboard:
       my:
-        action:
-          heading:
-            type: Type
-            visibility: Visibility
-            collection:
-              visibility: Visibility of Collection
+        heading:
+          collection_type: Collection Type
+          type: Type
+          visibility: Visibility
+          collection:
+            visibility: Visibility of Collection
