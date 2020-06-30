@@ -235,6 +235,7 @@ en:
         notifications: "Notifications"
         no_failures: "No Event failures noted."
         with_failures: "One or more recent events failed for this object"
+        preservation_events_work_level: "Preservation Events - Work-level"
     account_name: My Institution Account Id
     directory:
       suffix: "@example.org"
