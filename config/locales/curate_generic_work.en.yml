@@ -1,5 +1,8 @@
 en:
   hyrax:
+    base: 
+      preservation_status:
+        more_detail: More Event Detail
     icons:
       curate_generic_work:     'fa fa-file-text-o'
     select_type:
