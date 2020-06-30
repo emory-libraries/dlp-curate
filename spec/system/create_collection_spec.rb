@@ -14,12 +14,12 @@ RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: t
     it 'sucessfully creates a collection with the UI' do
       visit 'dashboard/collections/new'
       expect(page).to have_content 'New User Collection'
-      fill_in 'title (Title)', with: 'testing title'
-      fill_in 'holding_repository (Library)', with: 'testing library'
-      fill_in 'creator (Creator)', with: 'creator'
-      fill_in 'abstract (Description/Abstract)', with: 'test'
+      fill_in 'Title (title)', with: 'testing title'
+      fill_in 'Library (holding_repository)', with: 'testing library'
+      fill_in 'Creator (creator)', with: 'creator'
+      fill_in 'Description/Abstract (abstract)', with: 'test'
       click_link('Additional fields')
-      fill_in 'Finding aid link', with: 'https://example.org/collection'
+      fill_in 'Finding Aid Link (finding_aid_link)', with: 'https://example.org/collection'
       click_on 'Save'
       expect(page).to have_content 'Collection was successfully created'
     end
@@ -29,18 +29,18 @@ RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: t
       expect(page).to have_css("textarea#collection_title")
       click_link('Additional fields')
       expect(page).to have_css("input#collection_creator")
-      expect(page).to have_content("Add another creator (Creator)")
+      expect(page).to have_content("Add another Creator (creator)")
     end
 
     it "validates url fields" do
       visit 'dashboard/collections/new'
       expect(page).to have_content 'New User Collection'
-      fill_in 'title (Title)', with: 'testing title'
-      fill_in 'holding_repository (Library)', with: 'testing library'
-      fill_in 'creator (Creator)', with: 'creator'
-      fill_in 'abstract (Description/Abstract)', with: 'test'
+      fill_in 'Title (title)', with: 'testing title'
+      fill_in 'Library (holding_repository)', with: 'testing library'
+      fill_in 'Creator (creator)', with: 'creator'
+      fill_in 'Description/Abstract (abstract)', with: 'test'
       click_link('Additional fields')
-      fill_in 'Finding aid link', with: 'teststring'
+      fill_in 'Finding Aid Link (finding_aid_link)', with: 'teststring'
       click_on 'Save'
       click_link('Additional fields')
       expect(page).to have_content("is not a valid URL")

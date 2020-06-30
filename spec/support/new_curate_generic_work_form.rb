@@ -13,10 +13,10 @@ class NewCurateGenericWorkForm
     fill_in "curate_generic_work[title]", with: "Example title"
     fill_in "curate_generic_work[holding_repository]", with: "Woodruff"
     fill_in "curate_generic_work[date_created]", with: Date.new(2018, 1, 12)
-    select("Audio", from: "content_type (Content Type)")
-    select("In Copyright", from: "rights_statement (Rights Statement - Controlled)")
+    select("Audio", from: "Format (content_type)")
+    select("In Copyright", from: "Rights Statement - Controlled (rights_statement)")
     fill_in "curate_generic_work[emory_rights_statements][]", with: "Controlled Rights Statement"
-    select("Public", from: "data_classifications (Data Classification)")
+    select("Public", from: "Data Classification (data_classifications)")
 
     self
   end

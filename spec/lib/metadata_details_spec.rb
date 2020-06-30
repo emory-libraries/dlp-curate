@@ -15,7 +15,7 @@ RSpec.describe MetadataDetails do
     end
 
     it 'has a label' do
-      expect(title[:label]).to eq('title (Title)')
+      expect(title[:label]).to eq('Title (title)')
     end
 
     it 'has a type' do
@@ -54,6 +54,6 @@ RSpec.describe MetadataDetails do
 
   it 'can produce a CSV with the right data' do
     access_restriction_notes = metadata_details.to_csv(work_attributes: work_attributes).lines.find { |line| line.starts_with? 'access_restriction_notes' }
-    expect(access_restriction_notes).to include('access_restriction_notes (Access Restriction)', 'http://purl.org/dc/terms/accessRights')
+    expect(access_restriction_notes).to include('Access Restrictions (access_restriction_notes)', 'http://purl.org/dc/terms/accessRights')
   end
 end
