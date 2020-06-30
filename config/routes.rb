@@ -3,6 +3,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  get '/concern/curate_generic_works/:id/event_details', to: 'event_details#event_details', as: :event_details
   get '/iiif/:identifier/manifest', to: 'iiif#manifest', as: :iiif_manifest
   get '/iiif/:identifier/thumbnail', to: 'iiif#thumbnail', as: :iiif_thumbnail
   get '/iiif/2/:identifier/:region/:size/:rotation/:quality.:format', to: 'iiif#show'

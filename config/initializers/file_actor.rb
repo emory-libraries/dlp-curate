@@ -2,6 +2,7 @@
 
 # [Hyrax-overwrite] FileActor ingest_file method in Hyrax::Actors
 # Perform characterize job only on preservation_master_file
+require 'wings'
 Hyrax::Actors::FileActor.class_eval do
   # Persists file as part of file_set and spawns async job to characterize and create derivatives.
   # @param [JobIoWrapper] io the file to save in the repository, with mime_type and original_name
@@ -16,6 +17,7 @@ Hyrax::Actors::FileActor.class_eval do
                                         relation,
                                         versioning: false)
     return false unless file_set.save
+    # may cause error since new related_file method normalizes the relation, but may not if relation is always a symbol.
     repository_file = related_file
     Hyrax::VersioningService.create(repository_file, user)
     pathhint = io.uploaded_file.uploader.path if io.uploaded_file # in case next worker is on same filesystem

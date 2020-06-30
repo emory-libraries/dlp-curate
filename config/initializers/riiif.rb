@@ -25,4 +25,4 @@ Riiif::Image.authorization_service = Hyrax::IIIFAuthorizationService
 Riiif.not_found_image = Rails.root.join('app', 'assets', 'images', 'us_404.svg')
 Riiif.unauthorized_image = Rails.root.join('app', 'assets', 'images', 'us_404.svg')
 
-Riiif::Engine.config.cache_duration_in_days = 365
+Riiif::Engine.config.cache_duration = 365.days

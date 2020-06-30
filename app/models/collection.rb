@@ -22,6 +22,10 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :alt_title, predicate: ::RDF::Vocab::DC.alternative do |index|
+    index.as :stored_searchable
+  end
+
   property :contact_information, predicate: 'http://www.rdaregistry.info/Elements/u/#P60490', multiple: false do |index|
     index.as :stored_searchable
   end

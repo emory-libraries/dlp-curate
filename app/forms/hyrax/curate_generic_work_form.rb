@@ -2,10 +2,9 @@
 module Hyrax
   # Generated form for CurateGenericWork
   class CurateGenericWorkForm < Hyrax::Forms::WorkForm
-    include SingleValuedForm
     self.model_class = ::CurateGenericWork
-    self.terms = [:title, :institution, :holding_repository, :administrative_unit, :sublocation,
-                  :content_type, :content_genres, :abstract, :table_of_contents, :edition,
+    self.terms = [:title, :institution, :holding_repository, :administrative_unit, :sublocation, :access_right,
+                  :content_type, :content_genres, :abstract, :table_of_contents, :edition, :alt_title, :rights_notes,
                   :primary_language, :subject_topics, :subject_names, :subject_geo, :subject_time_periods,
                   :conference_name, :uniform_title, :series_title, :parent_title, :contact_information,
                   :publisher_version, :creator, :contributors, :sponsor, :data_producers, :grant_agencies, :grant_information,
@@ -19,8 +18,6 @@ module Hyrax
                   :transfer_engineer, :other_identifiers, :emory_ark, :system_of_record_ID, :primary_repository_ID]
 
     self.required_fields = REQUIRED_FIELDS_ON_FORM
-    # TODO: All single-valued fields should be configured this way.
-    self.single_valued_fields = [:title]
 
     def primary_descriptive_metadata_fields
       [:title, :holding_repository, :date_created, :content_type, :content_genres, :administrative_unit, :creator, :contributors,

@@ -6,6 +6,7 @@ module Hyrax
   # Store a file uploaded by a user. Eventually these files get
   # attached to FileSets and pushed into Fedora.
   class UploadedFile < ApplicationRecord
+    # removed before_destroy since it wasd deemed unnecessary in v3.0.0.pre.beta3
     self.table_name = 'uploaded_files'
     mount_uploader :service_file, UploadedFileUploader
     mount_uploader :preservation_master_file, UploadedFileUploader
@@ -20,7 +21,5 @@ module Hyrax
              class_name: 'JobIoWrapper',
              dependent:  :destroy
     belongs_to :user, class_name: '::User'
-
-    before_destroy :remove_file!
   end
 end

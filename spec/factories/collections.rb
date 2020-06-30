@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-collections-factory]
+# [Hyrax-v3.0.0.beta3-overwrite]
 FactoryBot.define do
   # Tests that create a Fedora Object are very slow.  This factory lets you control which parts of the object ecosystem
   # get built.
@@ -109,33 +109,8 @@ FactoryBot.define do
       with_permission_template { false }
       with_nesting_attributes { nil }
       with_solr_document { false }
-      collection_type { Hyrax::CollectionType.find_or_create_default_collection_type }
     end
-    # sequence(:title) { |n| ["Collection Title #{n}"] }
     title { ['Testing Collection'] }
-    holding_repository { ['Emory'] }
-    administrative_unit { ['Library'] }
-    creator { ['Someone'] }
-    contributors { ['Someone else'] }
-    abstract { 'A detailed abstract' }
-    primary_language { 'English' }
-    finding_aid_link { 'https://my-finding-aid.com' }
-    institution { 'Emory' }
-    local_call_number { '90210' }
-    keywords { ['test collection'] }
-    subject_topics { ['Topics'] }
-    subject_names { ['Someone'] }
-    subject_geo { ['Atlanta'] }
-    subject_time_periods { ['Anthropocene'] }
-    notes { ['a brief note'] }
-    rights_documentation { 'http://example.com/rights' }
-    sensitive_material { 'very sensitive' }
-    internal_rights_note { 'Do not publish' }
-    contact_information { 'telex' }
-    staff_notes { ['dictated but not read'] }
-    system_of_record_ID { '1' }
-    emory_ark { ['2'] }
-    primary_repository_ID { '3' }
 
     after(:build) do |collection, evaluator|
       collection.apply_depositor_metadata(evaluator.user.user_key)
@@ -330,7 +305,7 @@ FactoryBot.define do
     def self.process_with_solr_document(collection, evaluator)
       return unless evaluator.with_solr_document
       return if evaluator.with_nesting_attributes.present? && collection.nestable? # will create the solr document there instead
-      ActiveFedora::SolrService.add(solr_document_with_permissions(collection, evaluator), commit: true)
+      Hyrax::SolrService.add(solr_document_with_permissions(collection, evaluator), commit: true)
     end
 
     # Return the collection's solr document with permissions added, such that...

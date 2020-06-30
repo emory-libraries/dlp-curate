@@ -20,7 +20,7 @@ gem 'edtf-humanize'
 gem 'honeybadger', '~> 4.0'
 gem 'http'
 gem 'hydra-role-management'
-gem 'hyrax', '3.0.0-beta1'
+gem 'hyrax', '3.0.0.pre.beta3'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 gem 'mysql2', '~> 0.5'
@@ -28,6 +28,7 @@ gem 'noid-rails'
 gem 'omniauth-shibboleth', '~> 1.3'
 gem 'puma', '~> 3.12'
 gem 'rails', '~> 5.1'
+gem 'rdf-vocab', '<= 3.1.4'
 gem 'riiif', '~> 2.0'
 gem 'rsolr', '>= 1.0'
 gem 'sass-rails', '~> 5.0'
@@ -57,7 +58,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'bixby', github: 'samvera-labs/bixby', ref: 'f39116f714cf54880864960c22f2f937149f2f48'
+  gem 'bixby', "~> 3.0.1"
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw] unless ENV['CI'] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'coveralls', require: false
   gem 'factory_bot_rails', '~> 4.11.1'

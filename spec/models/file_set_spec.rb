@@ -107,7 +107,7 @@ RSpec.describe FileSet, :perform_enqueued, :clean do
 
     context 'with an infected file' do
       before do
-        expect(Hydra::Works::VirusCheckerService).to receive(:file_has_virus?).and_return(true)
+        expect(Hyrax::VirusCheckerService).to receive(:file_has_virus?).and_return(true)
       end
       it 'fails to save' do
         expect(file_set.save).to eq false
@@ -121,7 +121,7 @@ RSpec.describe FileSet, :perform_enqueued, :clean do
 
     context 'with a clean file' do
       it 'does not detect viruses' do
-        expect(Hydra::Works::VirusCheckerService).to receive(:file_has_virus?).and_return(false)
+        expect(Hyrax::VirusCheckerService).to receive(:file_has_virus?).and_return(false)
         expect(file_set).not_to be_viruses
         expect(file_set_with_id.preservation_event.first.event_details).to eq ['No viruses found']
         expect(file_set_with_id.preservation_event.first.outcome).to eq ['Success']
