@@ -27,11 +27,16 @@ RSpec.describe 'viewing a the event details page for a work', type: :system, cle
     visit "/concern/curate_generic_works/#{work.id}/event_details?locale=en"
   end
 
+  include_examples "check_page_for_multiple_text",
+    [
+      'View Preservation Details',
+      'Migrated to Cor repository from Extensis Portfolio DAMS',
+      'Scholarly Communications Office',
+      "This is a sample note. This field isn't always populated."
+    ],
+    'has preservation_workflow content'
+
   it "loads the page with a main title and details" do
-    expect(body).to have_content('View Preservation Details')
-    expect(body).to have_content('Migrated to Cor repository from Extensis Portfolio DAMS')
-    expect(body).to have_content('Scholarly Communications Office')
-    expect(body).to have_content("This is a sample note. This field isn't always populated.")
     table_headers = all('#fs-preservation-event-table th').map(&:text)
     expect(table_headers).to eq(["Event", "Timestamp", "Outcome", "Detail", "User", "Software"])
     table_values = all('#fs-preservation-event-table td').map(&:text)
