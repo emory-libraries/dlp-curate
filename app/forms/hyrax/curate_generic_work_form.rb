@@ -15,7 +15,7 @@ module Hyrax
                   :rights_statement, :rights_holders, :copyright_date, :re_use_license, :access_restriction_notes, :rights_documentation,
                   :scheduled_rights_review, :scheduled_rights_review_note, :internal_rights_note, :legacy_rights,
                   :data_classifications, :sensitive_material, :sensitive_material_note, :staff_notes, :date_digitized,
-                  :transfer_engineer, :other_identifiers, :emory_ark, :system_of_record_ID, :primary_repository_ID]
+                  :transfer_engineer, :other_identifiers, :emory_ark, :system_of_record_ID, :primary_repository_ID, :deduplication_key]
 
     self.required_fields = REQUIRED_FIELDS_ON_FORM
 
@@ -29,7 +29,7 @@ module Hyrax
        :geographic_unit, :subject_time_periods, :data_collection_dates, :notes, :parent_title, :uniform_title, :series_title,
        :related_publications, :related_datasets, :related_material_notes, :publisher, :final_published_versions, :publisher_version,
        :issue, :page_range_start, :page_range_end, :volume, :edition, :place_of_production, :issn, :isbn, :conference_dates,
-       :conference_name, :sponsor, :data_producers, :grant_agencies, :grant_information, :author_notes, :data_source_notes, :technical_note]
+       :conference_name, :sponsor, :data_producers, :grant_agencies, :grant_information, :author_notes, :data_source_notes, :technical_note, :deduplication_key]
     end
 
     def primary_rights_metadata_fields
