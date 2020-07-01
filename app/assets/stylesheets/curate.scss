@@ -54,3 +54,16 @@ dl.file-show-details {
   }
 }
 
+// Set bottom padding to 0px for user activity table
+// [Hyrax-overwrite-v3.0.0.pre.beta3]
+.activity-display {
+  max-height: 100%;
+  overflow: scroll;
+  padding-bottom: 0px !important; // adding important so it doesn't fall back on hyrax's styling
+  position: relative;
+
+  .activity-date {
+    padding-right: 130px;
+  }
+}
+
