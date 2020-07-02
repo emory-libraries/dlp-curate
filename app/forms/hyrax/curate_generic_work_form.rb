@@ -29,7 +29,7 @@ module Hyrax
        :geographic_unit, :subject_time_periods, :data_collection_dates, :notes, :parent_title, :uniform_title, :series_title,
        :related_publications, :related_datasets, :related_material_notes, :publisher, :final_published_versions, :publisher_version,
        :issue, :page_range_start, :page_range_end, :volume, :edition, :place_of_production, :issn, :isbn, :conference_dates,
-       :conference_name, :sponsor, :data_producers, :grant_agencies, :grant_information, :author_notes, :data_source_notes, :technical_note, :deduplication_key]
+       :conference_name, :sponsor, :data_producers, :grant_agencies, :grant_information, :author_notes, :data_source_notes, :technical_note]
     end
 
     def primary_rights_metadata_fields
@@ -39,7 +39,7 @@ module Hyrax
     end
 
     def primary_admin_metadata_fields
-      [:staff_notes, :system_of_record_ID, :other_identifiers, :emory_ark, :date_digitized, :transfer_engineer]
+      [:staff_notes, :system_of_record_ID, :other_identifiers, :emory_ark, :date_digitized, :transfer_engineer, :deduplication_key]
     end
 
     def preservation_workflow_metadata_fields
