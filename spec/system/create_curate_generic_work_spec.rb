@@ -213,6 +213,17 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(cgw.visibility).to eq 'open'
     end
 
+    scenario "user fills in deduplication key" do
+      visit("/concern/curate_generic_works/#{cgw.id}/edit")
+      find('body').click
+      click_link('Additional descriptive fields')
+      fill_in "curate_generic_work[deduplication_key]", with: 'abc12345-dedup_key'
+      click_on('Save')
+
+      visit("/concern/curate_generic_works/#{cgw.id}")
+      expect(page).to have_content 'abc12345-dedup_key'
+    end
+
     scenario "Create Curate Work" do
       visit '/concern/curate_generic_works/new'
 
