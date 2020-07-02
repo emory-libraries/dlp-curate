@@ -64,7 +64,7 @@ FactoryBot.define do
       date_uploaded { '2001' }
       deduplication_key { 'dedupestring' }
       edition { 'first' }
-      emory_ark { ['25'] }
+      emory_ark { ['255555'] }
       emory_rights_statements { ['This is my rights statement text'] }
       extent { 'A very large extent' }
       final_published_versions { ['http://example.com'] }
@@ -81,7 +81,7 @@ FactoryBot.define do
       legacy_rights { 'no' }
       local_call_number { '1234' }
       notes { ['Many found'] }
-      other_identifiers { ['1'] }
+      other_identifiers { ['184975'] }
       page_range_end { '1' }
       page_range_start { '0' }
       parent_title { 'A parent title' }
@@ -109,7 +109,7 @@ FactoryBot.define do
       subject_time_periods { ['Neolithic'] }
       subject_topics { ['Photographs'] }
       sublocation { 'Emory 2' }
-      system_of_record_ID { '1' }
+      system_of_record_ID { '1976578' }
       table_of_contents { '1. A Toc' }
       technical_note { '1mb' }
       transfer_engineer { 'yes' }
