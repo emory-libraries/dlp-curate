@@ -232,7 +232,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
 
   describe "#manifest" do
     let(:work)          { FactoryBot.create(:public_generic_work, id: identifier) }
-    let(:file_set)      { FactoryBot.create(:file_set) }
+    let(:file_set)      { FactoryBot.create(:file_set, read_groups: ['public']) }
     let(:pmf)           { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
     let(:sf)            { File.open(fixture_path + '/book_page/0003_service.jpg') }
     let(:solr_document) { SolrDocument.new(attributes) }

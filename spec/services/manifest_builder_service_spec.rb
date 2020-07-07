@@ -23,9 +23,9 @@ RSpec.describe ManifestBuilderService, :clean do
       "rights_statement_tesim" => ["example.com"],
       "hasFormat_ssim" => ["608hdr7srt-cor"] }
   end
-  let(:file_set)  { FactoryBot.create(:file_set) }
-  let(:file_set2) { FactoryBot.create(:file_set) }
-  let(:file_set3) { FactoryBot.create(:file_set, id: '608hdr7srt-cor') }
+  let(:file_set)  { FactoryBot.create(:file_set, read_groups: ['public']) }
+  let(:file_set2) { FactoryBot.create(:file_set, read_groups: ['public']) }
+  let(:file_set3) { FactoryBot.create(:file_set, id: '608hdr7srt-cor', read_groups: ['public']) }
   let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   let(:sf) { File.open(fixture_path + '/book_page/0003_service.jpg') }
   let(:pdf) { File.open(fixture_path + '/sample-file.pdf') }

@@ -21,7 +21,7 @@ json.sequences [''] do
   json.canvases @image_concerns do |child_id|
     file_set = FileSet.find(child_id)
     mime_types = ['pdf', 'xml']
-    unless mime_types.any? { |m| file_set.mime_type&.include?(m) }
+    unless mime_types.any? { |m| file_set.mime_type&.include?(m) } || file_set.visibility == 'restricted'
       child_iiif_service = ManifestBuilderService.new(curation_concern: file_set)
       canvas_uri = "#{@root_url}/canvas/#{child_id}"
       json.set! :@id, canvas_uri
