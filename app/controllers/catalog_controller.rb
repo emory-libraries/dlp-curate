@@ -42,17 +42,19 @@ class CatalogController < ApplicationController
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
-    config.add_facet_field solr_name("human_readable_type", :facetable), label: "Type", limit: 5
-    config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
-    config.add_facet_field solr_name("creator", :facetable), limit: 5
-    config.add_facet_field solr_name("contributors", :facetable), label: "Contributor", limit: 5
-    config.add_facet_field solr_name("keyword", :facetable), limit: 5
-    config.add_facet_field solr_name("subject", :facetable), limit: 5
-    config.add_facet_field solr_name("language", :facetable), limit: 5
-    config.add_facet_field solr_name("based_near_label", :facetable), limit: 5
-    config.add_facet_field solr_name("publisher", :facetable), limit: 5
-    config.add_facet_field solr_name("file_format", :facetable), limit: 5
-    config.add_facet_field solr_name('member_of_collection_ids', :symbol), limit: 5, label: 'Collections', helper_method: :collection_title_by_id
+    config.add_facet_field 'holding_repository_sim', limit: 5, label: 'Library'
+    config.add_facet_field 'member_of_collections_ssim', limit: 10, label: 'Collection'
+    config.add_facet_field 'creator_sim', limit: 10, label: 'Creator'
+    config.add_facet_field 'human_readable_content_type_ssim', limit: 10, label: 'Format'
+    config.add_facet_field 'content_genres_sim', limit: 10, label: 'Genre'
+    config.add_facet_field 'primary_language_sim', limit: 5, label: 'Language'
+    config.add_facet_field 'human_readable_date_created_tesim', label: 'Date'
+    config.add_facet_field 'human_readable_date_issued_tesim', label: 'Publication Date'
+    config.add_facet_field 'subject_topics_sim', limit: 10, label: 'Subject - Topics'
+    config.add_facet_field 'subject_names_sim', limit: 10, label: 'Subject - Names'
+    config.add_facet_field 'subject_geo_sim', limit: 10, label: 'Subject - Geographic'
+    config.add_facet_field 'human_readable_rights_statement_ssim', label: 'Rights Status'
+    config.add_facet_field 'visibility_group_ssi', label: 'Access'
 
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
