@@ -26,7 +26,7 @@ RSpec.describe CurateMapper do
       "date_created" => "1985-11-01",
       "date_issued" => "Unknown",
       "edition" => "2nd edition.",
-      "final_published_versions" => "5th edition",
+      "final_published_versions" => "https://www.someboguswebsite.gov",
       "geographic_unit" => "Florida",
       "grant_agencies" => "ASCAP",
       "grant_information" => "$1,000,000",
@@ -49,11 +49,11 @@ RSpec.describe CurateMapper do
       "primary_language" => "English",
       "primary_repository_ID" => "1",
       "publisher" => "Gutenberg",
-      "related_datasets" => "Dope Books",
+      "related_datasets" => "https://www.someboguswebsite.gov",
       "related_material_notes" => "Some pages are stained.",
-      "related_publications" => "The Bible|Dianetics",
+      "related_publications" => "https://www.someboguswebsite.gov",
       "re_use_license" => "https://creativecommons.org/licenses/by/4.0/",
-      "rights_documentation" => "rights@aol.com",
+      "rights_documentation" => "https://www.someboguswebsite.gov",
       "rights_holders" => "Unknown",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
       "emory_rights_statements" => "Emory University does not control copyright for this image.",
@@ -263,8 +263,8 @@ RSpec.describe CurateMapper do
   end
 
   context "#final_published_versions" do
-    it "maps the final_published_versions field" do
-      expect(mapper.final_published_versions).to contain_exactly "5th edition"
+    it "maps the final_published_versions field (which must be a url)" do
+      expect(mapper.final_published_versions).to contain_exactly "https://www.someboguswebsite.gov"
     end
   end
 
@@ -454,20 +454,20 @@ RSpec.describe CurateMapper do
   end
 
   context "#related_datasets" do
-    it "maps the related_datasets field" do
-      expect(mapper.related_datasets).to contain_exactly "Dope Books"
+    it "maps the related_datasets field (which must be a url)" do
+      expect(mapper.related_datasets).to contain_exactly "https://www.someboguswebsite.gov"
     end
   end
 
   context "#related_publications" do
-    it "maps the related_publications field" do
-      expect(mapper.related_publications).to contain_exactly "The Bible", "Dianetics"
+    it "maps the related_publications field (which must be a url)" do
+      expect(mapper.related_publications).to contain_exactly "https://www.someboguswebsite.gov"
     end
   end
 
   context "#re_use_license" do
     it "maps the re_use_license field" do
-      expect(mapper.re_use_license).to contain_exactly "https://creativecommons.org/licenses/by/4.0/"
+      expect(mapper.re_use_license).to eq "https://creativecommons.org/licenses/by/4.0/"
     end
 
     context "invalid re_use_license" do
@@ -494,8 +494,8 @@ RSpec.describe CurateMapper do
   end
 
   context "#rights_documentation" do
-    it "maps the rights_documentation field" do
-      expect(mapper.rights_documentation).to eq "rights@aol.com"
+    it "maps the rights_documentation field (which must be a url)" do
+      expect(mapper.rights_documentation).to eq "https://www.someboguswebsite.gov"
     end
   end
 

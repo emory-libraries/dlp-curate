@@ -267,7 +267,7 @@ class CurateMapper < Zizia::HashMapper
     active_terms = Qa::Authorities::Local.subauthority_for('licenses').all.select { |term| term[:active] }
     csv_term = @metadata["re_use_license"]
     valid_uri_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
-    return [csv_term] if valid_uri_option
+    return csv_term if valid_uri_option
     raise "Invalid rights_statement value: #{csv_term}"
   end
 end
