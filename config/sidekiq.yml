@@ -6,7 +6,7 @@
 
 :timeout: 300
 
-:max_retries: 1
+:max_retries: 3
 
 test: # n/a
   :concurrency: <%= ENV['SIDEKIQ_WORKERS'] || 1 %>
