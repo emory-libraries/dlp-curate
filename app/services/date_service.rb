@@ -22,7 +22,7 @@ class DateService
   def handle_date_range(date)
     years = date.split("\/")
     return date if years.length > 2
-    return "within the #{handle_unspecified_digit(years[0])} or #{handle_unspecified_digit(years[1])}" if date.end_with?("X")
+    return "#{handle_unspecified_digit(years[0])} to #{handle_unspecified_digit(years[1])}" if date.end_with?("X")
     return "between #{years[0].tr('?', '')} and #{years[1].tr('?', '')}" if date.end_with?("?")
     return Date.edtf(date).humanize unless Date.edtf(date).nil?
     date

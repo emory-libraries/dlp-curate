@@ -35,7 +35,7 @@ RSpec.describe DateService do
     end
 
     it 'provides a string for year ranges with unspecified digits' do
-      expect(service.human_readable_date('194X/195X')).to eq('within the 1940s or 1950s')
+      expect(service.human_readable_date('194X/195X')).to eq('1940s to 1950s')
     end
 
     it 'provides a string for uncertain year ranges' do
