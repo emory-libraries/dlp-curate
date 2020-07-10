@@ -8,8 +8,11 @@ RSpec.describe CurateMapper do
   let(:metadata) do
     {
       "abstract" => "Verso: Advertisting, High Boy Cigarettes. Photo by: Teenie Harris, staff (black) photographer for Pittsburg Courier",
+      "access_restriction_notes" => "Don't show this to anyone.",
       "administrative_unit" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
+      "author_notes" => "Written while intoxicated.",
       "conference_name" => "Exposition universelle de 1878 (Paris, France)",
+      "conference_dates" => "2015-01-08 TO 2015-01-13",
       "content_genres" => "black-and-white photographs|photographic negatives",
       "contact_information" => "Stuart A. Rose Manuscript, Archives and Rare Book Library rose.library@emory.edu",
       "content_type" => 'still image',
@@ -17,32 +20,58 @@ RSpec.describe CurateMapper do
       "copyright_date" => "1985-11-01",
       "creator" => "Harris, Teenie, 1908-1998.",
       "data_classifications" => "Confidential|Internal",
+      "data_collection_dates" => "2020-01-01",
+      "data_producers" => "Petrol",
+      "data_source_notes" => "Off the floor of a bathroom.",
       "date_created" => "1985-11-01",
       "date_issued" => "Unknown",
       "edition" => "2nd edition.",
+      "final_published_versions" => "https://www.someboguswebsite.gov",
+      "geographic_unit" => "Florida",
+      "grant_agencies" => "ASCAP",
+      "grant_information" => "$1,000,000",
       "holding_repository" => "Stuart A. Rose Manuscript, Archives and Rare Book Library",
       "institution" => "Emory University",
       "internal_rights_note" => "This is my internal rights note.",
+      "isbn" => "17728891-6",
+      "issn" => "105-196-560",
+      "issue" => "260",
       "keywords" => "Tangerine|Blueberry",
       "emory_ark" => "ark://abc/123",
       "other_identifiers" => "dams:152815|MSS1218_B001_I002",
       "local_call_number" => "MSS 1218",
       "notes" => "This is a note.",
+      "page_range_end" => "200",
+      "page_range_start" => "15",
+      "parent_title" => "An older, wiser title",
       "pcdm_use" => nil,
       "place_of_production" => "London",
       "primary_language" => "English",
+      "primary_repository_ID" => "1",
       "publisher" => "Gutenberg",
+      "related_datasets" => "https://www.someboguswebsite.gov",
+      "related_material_notes" => "Some pages are stained.",
+      "related_publications" => "https://www.someboguswebsite.gov",
+      "re_use_license" => "https://creativecommons.org/licenses/by/4.0/",
+      "rights_documentation" => "https://www.someboguswebsite.gov",
       "rights_holders" => "Unknown",
       "rights_statement" => "http://rightsstatements.org/vocab/InC/1.0/",
       "emory_rights_statements" => "Emory University does not control copyright for this image.",
+      "scheduled_rights_review" => "2021-01-02",
+      "scheduled_rights_review_note" => "Rip it off the site.",
       "series_title" => "Chatterbox library.",
+      "sponsor" => "Shell Oil",
+      "staff_notes" => "Got this one done.",
       "subject_geo" => "Ghana.|Africa.",
       "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
+      "subject_time_periods" => "Medieval Times",
       "subject_topics" => "Snowblowers.|Snow.|Air bases.|Towers.",
       "system_of_record_ID" => "990020982660302486",
       "table_of_contents" => "Thing 1. Thing 2.",
+      "technical_note" => "Use a Mac.",
       "title" => "what an awesome title",
       "uniform_title" => "Pittsburg courier.",
+      "volume" => "10",
       "visibility" => "Emory Network"
     }
   end
@@ -59,9 +88,27 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#access_restriction_notes" do
+    it "maps the access_restriction_notes field" do
+      expect(mapper.access_restriction_notes).to contain_exactly "Don't show this to anyone."
+    end
+  end
+
   context "#administrative_unit" do
     it "does its best to match the configured controlled vocabulary term" do
       expect(mapper.administrative_unit).to eq "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
+    end
+  end
+
+  context "#author_notes" do
+    it "maps the author_notes field" do
+      expect(mapper.author_notes).to eq "Written while intoxicated."
+    end
+  end
+
+  context "#conference_dates" do
+    it "maps the conference_dates field" do
+      expect(mapper.conference_dates).to eq "2015-01-08 TO 2015-01-13"
     end
   end
 
@@ -143,6 +190,24 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#data_collection_dates" do
+    it "maps the data_collection_dates field" do
+      expect(mapper.data_collection_dates).to contain_exactly "2020-01-01"
+    end
+  end
+
+  context "#data_producers" do
+    it "maps the data_producers field" do
+      expect(mapper.data_producers).to contain_exactly "Petrol"
+    end
+  end
+
+  context "#data_source_notes" do
+    it "maps the data_source_notes field" do
+      expect(mapper.data_source_notes).to contain_exactly "Off the floor of a bathroom."
+    end
+  end
+
   context "#date_created" do
     it "maps the date_created field" do
       expect(mapper.date_created).to eq "1985-11-01"
@@ -185,6 +250,42 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#isbn" do
+    it "maps the isbn field" do
+      expect(mapper.isbn).to eq "17728891-6"
+    end
+  end
+
+  context "#issn" do
+    it "maps the issn field" do
+      expect(mapper.issn).to eq "105-196-560"
+    end
+  end
+
+  context "#final_published_versions" do
+    it "maps the final_published_versions field (which must be a url)" do
+      expect(mapper.final_published_versions).to contain_exactly "https://www.someboguswebsite.gov"
+    end
+  end
+
+  context "#geographic_unit" do
+    it "maps the geographic_unit field" do
+      expect(mapper.geographic_unit).to eq "Florida"
+    end
+  end
+
+  context "#grant_agencies" do
+    it "maps the grant_agencies field" do
+      expect(mapper.grant_agencies).to contain_exactly "ASCAP"
+    end
+  end
+
+  context "#grant_information" do
+    it "maps the grant_information field" do
+      expect(mapper.grant_information).to contain_exactly "$1,000,000"
+    end
+  end
+
   context "#holding_repository" do
     it "maps the holding_repository field" do
       expect(mapper.holding_repository).to eq "Stuart A. Rose Manuscript, Archives and Rare Book Library"
@@ -200,6 +301,12 @@ RSpec.describe CurateMapper do
   context "#internal_rights_note" do
     it "maps the internal_rights_note field" do
       expect(mapper.internal_rights_note).to eq "This is my internal rights note."
+    end
+  end
+
+  context "#issue" do
+    it "maps the issue field" do
+      expect(mapper.issue).to eq "260"
     end
   end
 
@@ -242,15 +349,39 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#parent_title" do
+    it "maps the parent_title field" do
+      expect(mapper.parent_title).to eq "An older, wiser title"
+    end
+  end
+
   context "#place_of_production" do
     it "maps the place_of_production field" do
       expect(mapper.place_of_production).to eq "London"
     end
   end
 
+  context "#related_material_notes" do
+    it "maps the related_material_notes field" do
+      expect(mapper.related_material_notes).to contain_exactly "Some pages are stained."
+    end
+  end
+
   context "#notes" do
     it "maps the notes field" do
       expect(mapper.notes).to eq ["This is a note."]
+    end
+  end
+
+  context "#page_range_end" do
+    it "maps the page_range_end field" do
+      expect(mapper.page_range_end).to eq "200"
+    end
+  end
+
+  context "#page_range_start" do
+    it "maps the page_range_start field" do
+      expect(mapper.page_range_start).to eq "15"
     end
   end
 
@@ -310,9 +441,61 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#primary_repository_ID" do
+    it "maps the primary_repository_ID field" do
+      expect(mapper.primary_repository_ID).to eq "1"
+    end
+  end
+
   context "#publisher" do
     it "maps the publisher field" do
       expect(mapper.publisher).to eq "Gutenberg"
+    end
+  end
+
+  context "#related_datasets" do
+    it "maps the related_datasets field (which must be a url)" do
+      expect(mapper.related_datasets).to contain_exactly "https://www.someboguswebsite.gov"
+    end
+  end
+
+  context "#related_publications" do
+    it "maps the related_publications field (which must be a url)" do
+      expect(mapper.related_publications).to contain_exactly "https://www.someboguswebsite.gov"
+    end
+  end
+
+  context "#re_use_license" do
+    it "maps the re_use_license field" do
+      expect(mapper.re_use_license).to eq "https://creativecommons.org/licenses/by/4.0/"
+    end
+
+    context "invalid re_use_license" do
+      let(:metadata) do
+        {
+          "re_use_license" => "https://creativecommons.org/licenses/by/3.0/"
+        }
+      end
+      it "raises an exception when it isn't valid" do
+        expect { mapper.re_use_license }.to raise_error RuntimeError
+      end
+    end
+
+    context "inactive re_use_license" do
+      let(:metadata) do
+        {
+          "re_use_license" => "http://creativecommons.org/licenses/by-nc/3.0/us/"
+        }
+      end
+      it "raises an exception when it isn't valid" do
+        expect { mapper.re_use_license }.to raise_error RuntimeError
+      end
+    end
+  end
+
+  context "#rights_documentation" do
+    it "maps the rights_documentation field (which must be a url)" do
+      expect(mapper.rights_documentation).to eq "https://www.someboguswebsite.gov"
     end
   end
 
@@ -342,6 +525,18 @@ RSpec.describe CurateMapper do
       it "raises an exception when it isn't valid" do
         expect { mapper.rights_statement }.to raise_error RuntimeError
       end
+    end
+  end
+
+  context "#scheduled_rights_review" do
+    it "maps the scheduled_rights_review field" do
+      expect(mapper.scheduled_rights_review).to eq "2021-01-02"
+    end
+  end
+
+  context "#scheduled_rights_review_note" do
+    it "maps the scheduled_rights_review_note field" do
+      expect(mapper.scheduled_rights_review_note).to eq "Rip it off the site."
     end
   end
 
@@ -375,6 +570,18 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#sponsor" do
+    it "maps the sponsor field" do
+      expect(mapper.sponsor).to eq "Shell Oil"
+    end
+  end
+
+  context "#staff_notes" do
+    it "maps the staff_notes field" do
+      expect(mapper.staff_notes).to contain_exactly "Got this one done."
+    end
+  end
+
   context "#subject_geo" do
     it "maps the subject_geo field" do
       expect(mapper.subject_geo)
@@ -386,6 +593,13 @@ RSpec.describe CurateMapper do
     it "maps the subject_names field" do
       expect(mapper.subject_names)
         .to contain_exactly("Mouvement national congolais.", "Okito, Joseph.", "Lumumba, Patrice, 1925-1961.")
+    end
+  end
+
+  context "#subject_time_periods" do
+    it "maps the subject_time_periods field" do
+      expect(mapper.subject_time_periods)
+        .to contain_exactly("Medieval Times")
     end
   end
 
@@ -421,6 +635,12 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#technical_note" do
+    it "maps the technical_note field" do
+      expect(mapper.technical_note).to eq "Use a Mac."
+    end
+  end
+
   context "#title" do
     it "maps the required title field" do
       expect(mapper.map_field(:title))
@@ -444,6 +664,12 @@ RSpec.describe CurateMapper do
     it "maps the uniform_title field" do
       expect(mapper.uniform_title)
         .to eq "Pittsburg courier."
+    end
+  end
+
+  context "#volume" do
+    it "maps the volume field" do
+      expect(mapper.volume).to eq "10"
     end
   end
 
