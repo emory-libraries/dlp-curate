@@ -1419,7 +1419,7 @@ RSpec.describe CurateGenericWork do
       expect(solr_doc['conference_dates_tesim']).to contain_exactly params[:conference_dates]
 
       # Check conference_dates_tesim also saved as human_readable_conference_dates_tesim
-      expect(solr_doc['human_readable_conference_dates_tesim']).to eq ['within the 1940s or 1950s']
+      expect(solr_doc['human_readable_conference_dates_tesim']).to eq ['1940s to 1950s']
 
       # Check copyright_date_tesim also saved as date entered
       expect(solr_doc['copyright_date_tesim']).to contain_exactly params[:copyright_date]
