@@ -3,9 +3,9 @@
   "modules": {
     "footerPanel": {
       "options": {
-        "shareEnabled": false,
-        "downloadEnabled": false,
-        "fullscreenEnabled": false
+        "shareEnabled": true,
+        "downloadEnabled": true,
+        "fullscreenEnabled": true
       }
     },
     "pagingHeaderPanel": {
@@ -20,5 +20,3 @@
     }
   }
 }
-
-

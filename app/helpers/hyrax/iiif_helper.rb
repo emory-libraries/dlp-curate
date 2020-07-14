@@ -18,8 +18,15 @@ module Hyrax
       "#{request&.base_url}/uv/uv.html"
     end
 
-    def universal_viewer_config_url
-      "#{request&.base_url}/uv-emory-config.json"
+    def universal_viewer_config_url(work_presenter)
+      case work_presenter.solr_document['visibility_ssi']
+      when 'authenticated', 'open'
+        "#{request&.base_url}/uv-emory-config-liberal.json"
+      when 'emory_low'
+        "#{request&.base_url}/uv-emory-config-liberal-low.json"
+      else
+        "#{request&.base_url}/uv-emory-config.json"
+      end
     end
   end
 end

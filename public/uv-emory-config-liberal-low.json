@@ -1,0 +1,31 @@
+{
+  "options": { },
+  "modules": {
+    "footerPanel": {
+      "options": {
+        "shareEnabled": true,
+        "downloadEnabled": true,
+        "fullscreenEnabled": true
+      }
+    },
+    "pagingHeaderPanel": {
+      "options": {
+        "pagingToggleEnabled": true
+      }
+    },
+    "downloadDialogue": {
+      "options": {
+        "currentViewDisabledPercentage": 0,
+        "confinedImageSize": 100000
+      },
+      "content": {
+        "wholeImageHighRes": "Whole Image 400px"
+      }
+    },
+    "moreInfoRightPanel": {
+      "content": {
+        "manifestHeader": null
+      }
+    }
+  }
+}
