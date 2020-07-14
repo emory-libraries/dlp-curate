@@ -1,11 +1,13 @@
 {
-  "options": { },
+  "options": { 
+    "rightPanelEnabled": true
+  },
   "modules": {
     "footerPanel": {
       "options": {
         "shareEnabled": true,
-        "downloadEnabled": true,
-        "fullscreenEnabled": true
+        "fullscreenEnabled": true,
+        "downloadEnabled": true
       }
     },
     "pagingHeaderPanel": {
