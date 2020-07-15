@@ -18,8 +18,8 @@ module Hyrax
       "#{request&.base_url}/uv/uv.html"
     end
 
-    def universal_viewer_config_url
-      "#{request&.base_url}/uv-emory-config.json"
+    def universal_viewer_config_url(id)
+      "#{request&.base_url}/uv/config/#{id}"
     end
   end
 end

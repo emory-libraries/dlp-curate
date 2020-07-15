@@ -1,8 +1,9 @@
 <div class="view-wrapper">
   <iframe
-      width="100%"
-      height="480"
-      src="/uv/uv.html#?manifest=<%= main_app.polymorphic_url [main_app, :manifest, presenter], { locale: nil } %>&config=<%= universal_viewer_config_url %>"
+      class="universal-viewer-iframe"
+      width="1140px"
+      height="668px"
+      src="/uv/uv.html#?manifest=<%= main_app.polymorphic_url [main_app, :manifest, presenter], { locale: nil } %>&config=<%= universal_viewer_config_url(presenter.id) %>"
       allowfullscreen="true"
       frameborder="0"
   ></iframe>
