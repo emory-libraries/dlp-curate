@@ -31,6 +31,7 @@ RSpec.describe 'Importing preprocessed langmuir', :clean, perform_enqueued: [Att
       "page_range_start" => "15",
       "parent_title" => "An older, wiser title",
       "primary_repository_ID" => nil,
+      "publisher_version" => "Post-print, After Peer Review",
       "related_datasets" => "https://www.someboguswebsite.gov",
       "related_material_notes" => "Some pages are stained.",
       "related_publications" => "https://www.someboguswebsite.gov",

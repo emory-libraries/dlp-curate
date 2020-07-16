@@ -50,6 +50,7 @@ class CurateMapper < Zizia::HashMapper
     primary_language:             "primary_language",
     primary_repository_ID:        "primary_repository_ID",
     publisher:                    "publisher",
+    publisher_version:            "publisher_version",
     related_datasets:             "related_datasets",
     related_material_notes:       "related_material_notes",
     related_publications:         "related_publications",
@@ -268,6 +269,15 @@ class CurateMapper < Zizia::HashMapper
     csv_term = @metadata["re_use_license"]
     valid_uri_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
     return csv_term if valid_uri_option
-    raise "Invalid rights_statement value: #{csv_term}"
+    raise "Invalid re_use_license value: #{csv_term}"
+  end
+
+  def publisher_version
+    return nil unless @metadata["publisher_version"]
+    active_terms = Qa::Authorities::Local.subauthority_for('publisher_version').all
+    csv_term = @metadata["publisher_version"]
+    valid_uri_option = active_terms.select { |s| s["id"] == csv_term }.try(:first)
+    return csv_term if valid_uri_option
+    raise "Invalid publisher_version value: #{csv_term}"
   end
 end
