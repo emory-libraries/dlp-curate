@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite]
+# [Hyrax-overwrite-v3.0.0.pre.rc1]
 
 module Hyrax
   # Store a file uploaded by a user. Eventually these files get

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-3.0.0.pre.beta3-overwrite]
+# [Hyrax-overwrite-v3.0.0.pre.rc1]
 # Adds preservation event for fileset characterization
 
 class CharacterizeJob < Hyrax::ApplicationJob

@@ -1,4 +1,4 @@
-# [Hyrax-overwrite] Attaching multiple files to single fileset
+# [Hyrax-overwrite-v3.0.0.pre.rc1] Attaching multiple files to single fileset
 # frozen_string_literal: true
 require 'rails_helper'
 

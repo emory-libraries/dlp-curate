@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite]
+# [Hyrax-overwrite-v3.0.0.pre.rc1]
 # Tests for mime-type have been removed.
 # We are not testing `from_url: true`
 

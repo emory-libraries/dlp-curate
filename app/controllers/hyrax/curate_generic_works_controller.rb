@@ -40,7 +40,7 @@ module Hyrax
       render json: ManifestBuilderService.build_manifest(presenter: presenter, curation_concern: _curation_concern_type.find(params[:id]))
     end
 
-    # [Hyrax-overwrite-v3.0.0-beta1] Restrict deletion to admins only
+    # [Hyrax-overwrite-v3.0.0.pre.rc1] Restrict deletion to admins only
     def destroy
       title = curation_concern.to_s
       if current_user.admin?

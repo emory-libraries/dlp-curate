@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite] Adds tests for additional files
+# [Hyrax-overwrite-v3.0.0.pre.rc1] Adds tests for additional files
 require 'rails_helper'
 
 RSpec.describe MetadataDetailsController, type: :controller do
