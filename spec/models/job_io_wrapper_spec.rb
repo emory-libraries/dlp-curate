@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.beta3]
+# [Hyrax-overwrite-v3.0.0.pre.rc1]
 # We are only testing the `ingest_file` method here.
 
 require 'rails_helper'

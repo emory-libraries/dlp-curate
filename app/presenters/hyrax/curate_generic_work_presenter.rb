@@ -11,7 +11,7 @@ module Hyrax
 
     include CuratePurl
 
-    # [Hyrax-overwrite] We might not always have a request and a `base_url`,
+    # [Hyrax-overwrite-v3.0.0.pre.rc1] We might not always have a request and a `base_url`,
     # therfore, we are using our CurateManifestHelper and passing in a hardcoded
     # host for creation of manifest_url
 
