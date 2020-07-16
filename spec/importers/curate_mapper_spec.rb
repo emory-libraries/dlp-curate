@@ -49,6 +49,7 @@ RSpec.describe CurateMapper do
       "primary_language" => "English",
       "primary_repository_ID" => "1",
       "publisher" => "Gutenberg",
+      "publisher_version" => "Post-print, After Peer Review",
       "related_datasets" => "https://www.someboguswebsite.gov",
       "related_material_notes" => "Some pages are stained.",
       "related_publications" => "https://www.someboguswebsite.gov",
@@ -453,6 +454,23 @@ RSpec.describe CurateMapper do
     end
   end
 
+  context "#publisher_version" do
+    it "maps the publisher_version field" do
+      expect(mapper.publisher_version).to eq "Post-print, After Peer Review"
+    end
+
+    context "invalid publisher_version" do
+      let(:metadata) do
+        {
+          "publisher_version" => "Blah"
+        }
+      end
+      it "raises an exception when it isn't valid" do
+        expect { mapper.publisher_version }.to raise_error(RuntimeError, "Invalid publisher_version value: Blah")
+      end
+    end
+  end
+
   context "#related_datasets" do
     it "maps the related_datasets field (which must be a url)" do
       expect(mapper.related_datasets).to contain_exactly "https://www.someboguswebsite.gov"
@@ -477,7 +495,7 @@ RSpec.describe CurateMapper do
         }
       end
       it "raises an exception when it isn't valid" do
-        expect { mapper.re_use_license }.to raise_error RuntimeError
+        expect { mapper.re_use_license }.to raise_error(RuntimeError, "Invalid re_use_license value: https://creativecommons.org/licenses/by/3.0/")
       end
     end
 
@@ -488,7 +506,7 @@ RSpec.describe CurateMapper do
         }
       end
       it "raises an exception when it isn't valid" do
-        expect { mapper.re_use_license }.to raise_error RuntimeError
+        expect { mapper.re_use_license }.to raise_error(RuntimeError, "Invalid re_use_license value: http://creativecommons.org/licenses/by-nc/3.0/us/")
       end
     end
   end
