@@ -17,7 +17,7 @@ RSpec.describe Hyrax::CurateGenericWorkPresenter do
       "date_created_tesim" => ['an unformatted date'],
       "depositor_tesim" => user_key,
       "holding_repository_tesim" => ["test holding repo"],
-      "rights_statement_tesim" => ["empl.com"],
+      "rights_statement_tesim" => ["http://rightsstatements.org/vocab/InC/1.0/"],
       "preservation_workflow_terms_tesim" => [
         "{\"workflow_type\":\"Ingest\",\"workflow_notes\":\"Migrated to Cor repository from Extensis Portfolio\",
         \"workflow_rights_basis\":\"Administrative Signo\",\"workflow_rights_basis_note\":\"Ingest note\",
@@ -68,7 +68,8 @@ RSpec.describe Hyrax::CurateGenericWorkPresenter do
       subject { presenter.manifest_metadata }
 
       it {
-        is_expected.to eq [{ "label" => "Provided by", "value" => ["test holding repo"] }, { "label" => "Rights Status", "value" => ["empl.com"] },
+        is_expected.to eq [{ "label" => "Provided by", "value" => ["test holding repo"] },
+                           { "label" => "Rights Status", "value" => "<a href=\"http://rightsstatements.org/vocab/InC/1.0/\">In Copyright</a>" },
                            { "label" => "Identifier", "value" => "888888" },
                            { "label" => "Persistent URL", "value" => "<a href=\"https://example.com/purl/888888\">https://example.com/purl/888888</a>" }]
       }

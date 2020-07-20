@@ -20,7 +20,7 @@ RSpec.describe ManifestBuilderService, :clean do
       "date_modified_dtsi" => "2019-11-11T18:20:32Z",
       "depositor_tesim" => user.uid,
       "holding_repository_tesim" => ["test holding repo"],
-      "rights_statement_tesim" => ["example.com"],
+      "rights_statement_tesim" => "http://rightsstatements.org/vocab/InC/1.0/",
       "hasFormat_ssim" => ["608hdr7srt-cor"] }
   end
   let(:file_set)  { FactoryBot.create(:file_set, read_groups: ['public']) }
@@ -90,7 +90,7 @@ RSpec.describe ManifestBuilderService, :clean do
         expect(response_values["metadata"][0]["label"]).to eq "Provided by"
         expect(response_values["metadata"][0]["value"]).to eq ["test holding repo"]
         expect(response_values["metadata"][1]["label"]).to eq "Rights Status"
-        expect(response_values["metadata"][1]["value"]).to eq ["example.com"]
+        expect(response_values["metadata"][1]["value"]).to eq "<a href=\"http://rightsstatements.org/vocab/InC/1.0/\">In Copyright</a>"
         expect(response_values["metadata"][2]["label"]).to eq "Identifier"
         expect(response_values["metadata"][2]["value"]).to eq work.id
         expect(response_values).to include "sequences"
