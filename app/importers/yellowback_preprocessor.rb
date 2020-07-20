@@ -186,7 +186,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
         mets = File.join(row['METS_Path'].sub("Volumes", @replacement_path), "#{row['Barcode']}.mets.xml")
       end
       new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
-      new_row + file_mappings(fileset_label: 'METS File', preservation_master_file: mets, pcdm_use: ::FileSet::SUPPLEMENTAL)
+      new_row + file_mappings(fileset_label: 'METS File', preservation_master_file: mets, pcdm_use: ::FileSet::PRESERVATION)
     end
 
     def file_row(csv_index, row, page) # rubocop:disable Metrics/MethodLength
