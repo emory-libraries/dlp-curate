@@ -37,22 +37,23 @@ RSpec.describe CollectionFilesIngestedJob, :clean, perform_enqueued: [AttachFile
   end
 
   after do
-    File.delete("public/collection-counts-for-#{Time.now.strftime("%Y%m%dT%H%M")}.json") if File.exist?("public/collection-counts-for-#{Time.now.strftime("%Y%m%dT%H%M")}.json")
+    File.delete("config/emory/collection-counts-for-#{Time.current.strftime('%Y%m%dT%H%M')}.json") if File.exist?("config/emory/collection-counts-for-#{Time.current.strftime('%Y%m%dT%H%M')}.json")
   end
 
-  it 'produces a file in public folder' do
+  it 'produces a file in config/emory folder' do
     described_class.perform_now
-    expect(File).to exist("public/collection-counts-for-#{Time.now.strftime("%Y%m%dT%H%M")}.json")
+    expect(File).to exist("config/emory/collection-counts-for-#{Time.current.strftime('%Y%m%dT%H%M')}.json")
   end
 
   context "created file" do
     it 'has the right json' do
       described_class.perform_now
-      file = File.open("public/collection-counts-for-#{Time.now.strftime("%Y%m%dT%H%M")}.json")
+      file = File.open("config/emory/collection-counts-for-#{Time.current.strftime('%Y%m%dT%H%M')}.json")
       file_content = file.read
+      parsed_json = JSON.parse(file_content).first
 
-      expect(file_content).to eq(
-        "[{\"collection_id\":\"object_id_2\",\"collection_title\":\"Robert Langmuir African American Photograph Collection\",\"work_total\":1,\"fileset_total\":1,\"file_total\":1}]"
+      expect([parsed_json['collection_title'], parsed_json['work_total'], parsed_json['fileset_total'], parsed_json['file_total']]).to eq(
+        ["Robert Langmuir African American Photograph Collection", 1, 1, 1]
       )
     end
   end
