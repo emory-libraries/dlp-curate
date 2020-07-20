@@ -112,6 +112,11 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       visit "/dashboard/my/works"
       expect(page).to have_selector(:css, 'a[data-method="delete"]')
     end
+
+    it 'has a batch upload link on the works dashboard' do
+      visit "/dashboard/works"
+      expect(page).to have_link(href: /batch/)
+    end
   end
 
   context 'when logged in as a non-admin user' do
@@ -132,6 +137,11 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
     it 'does not have a delete action on the my works dashboard' do
       visit "/dashboard/my/works"
       expect(page).not_to have_selector(:css, 'a[data-method="delete"]')
+    end
+
+    it 'does not have a batch upload link on the works dashboard' do
+      visit "/dashboard/works"
+      expect(page).not_to have_link(href: /batch/)
     end
   end
 

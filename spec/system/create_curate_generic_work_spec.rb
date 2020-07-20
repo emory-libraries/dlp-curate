@@ -224,6 +224,12 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(page).to have_content 'abc12345-dedup_key'
     end
 
+    scenario "user cannot navigate to batch upload" do
+      visit '/concern/curate_generic_works/new'
+      expect(page).not_to have_css('.switch-upload-type')
+      expect(page).not_to have_link(href: /batch/)
+    end
+
     scenario "Create Curate Work" do
       visit '/concern/curate_generic_works/new'
 
