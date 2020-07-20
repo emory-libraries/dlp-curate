@@ -1,3 +1,4 @@
+<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Remove batch upload link L#17-18 %>
 <%= simple_form_for [main_app, @form],
                     html: {
                       data: { behavior: 'work-form',
@@ -13,11 +14,6 @@
       <%= render 'form_collections_error', f: f %>
       <%= render 'form_visibility_error', f: f %>
     </div>
-  <% end %>
-  <% if Flipflop.batch_upload? && f.object.new_record? %>
-    <% provide :metadata_tab do %>
-      <p class="switch-upload-type"><%= t('.batch_upload_hint') %> <%= link_to t('.batch_link'), hyrax.new_batch_upload_path %></p>
-    <% end %>
   <% end %>
   <%= render 'hyrax/base/guts4form', f: f %>
 <% end %>
