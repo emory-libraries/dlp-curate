@@ -6,6 +6,8 @@
       <%= render 'show_actions', presenter: @presenter %>
       <br>
       <div><%= button_to 'Run Fixity check', file_set_fixity_checks_path(file_set_id: @presenter.id), method: :post, class: 'btn btn-primary' %></div>
+      <br>
+      <div><%= button_to 'Regenerate derivative', "/concern/file_sets/#{@presenter.id}/clean_up", class: 'btn btn-primary' %></div>
       <%= render 'single_use_links', presenter: @presenter if @presenter.editor? %>
     </div>
     <div itemscope itemtype="<%= @presenter.itemtype %>" class="col-xs-12 col-sm-8">
