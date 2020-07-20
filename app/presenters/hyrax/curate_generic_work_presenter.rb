@@ -34,7 +34,7 @@ module Hyrax
     def manifest_metadata
       [
         { "label" => "Provided by", "value" => holding_repository },
-        { "label" => "Rights Status", "value" => rights_statement },
+        { "label" => "Rights Status", "value" => "<a href=\"#{rights_statement_authority[:id]}\">#{rights_statement_authority[:term]}</a>" },
         { "label" => "Identifier", "value" => id },
         { "label" => "Persistent URL", "value" => "<a href=\"#{purl}\">#{purl}</a>" }
       ]
@@ -71,6 +71,10 @@ module Hyrax
           wf_copy[key.split('_').map(&:capitalize).join(' ').remove('Workflow ')] = wf_copy.delete(key) # alter keys as per display requirements
         end
         wf_copy
+      end
+
+      def rights_statement_authority
+        Qa::Authorities::Local.subauthority_for('rights_statements').find(rights_statement.first)
       end
   end
 end
