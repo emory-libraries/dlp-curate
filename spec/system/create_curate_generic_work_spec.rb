@@ -230,6 +230,19 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(page).not_to have_link(href: /batch/)
     end
 
+    scenario "url fields are validated" do
+      visit("/concern/curate_generic_works/#{cgw.id}/edit")
+      find('body').click
+      click_link('Additional descriptive fields')
+      fill_in "curate_generic_work[final_published_versions][]", with: "teststring"
+      fill_in "curate_generic_work[related_publications][]", with: "test2string2"
+
+      click_on('Save')
+
+      expect(page).to have_content("Final published versions requires a valid URL") # shows up in the red error banner
+      expect(page).to have_content("Related publications requires a valid URL") # shows up in the red error banner
+    end
+
     scenario "Create Curate Work" do
       visit '/concern/curate_generic_works/new'
 
