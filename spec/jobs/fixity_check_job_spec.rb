@@ -14,7 +14,7 @@ RSpec.describe FixityCheckJob, :clean do
   let(:file_id) { file_set.preservation_master_file.id }
 
   describe "called with perform_now" do
-    let(:log_record) { described_class.perform_now(uri, file_set_id: file_set.id, file_id: file_id) }
+    let(:log_record) { described_class.perform_now(uri, file_set_id: file_set.id, file_id: file_id, initiating_user: user.uid) }
 
     describe 'fixity check the content' do
       let(:uri) { file_set.preservation_master_file.uri }

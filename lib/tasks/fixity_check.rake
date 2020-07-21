@@ -4,7 +4,7 @@ namespace :curate do
     desc "Perform fixity checking on file_sets"
     task fixity_check: :environment do
       FileSet.all.each do |file_set|
-        Hyrax::FileSetFixityCheckService.new(file_set, max_days_between_fixity_checks: 90).fixity_check
+        Hyrax::FileSetFixityCheckService.new(file_set, max_days_between_fixity_checks: 90, initiating_user: "Curate system").fixity_check
       end
     end
   end
