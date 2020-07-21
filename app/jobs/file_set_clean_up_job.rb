@@ -1,24 +1,32 @@
 # frozen_string_literal: true
 
 class FileSetCleanUpJob < Hyrax::ApplicationJob
-  def perform
+  def perform(file_set_id = nil)
     CSV.open("config/emory/index_file_set_results.csv", "w") do |csv|
-      FileSet.all.each do |file_set|
-        if file_set.mime_type.nil? # check if file_set is characterized
-          csv << [file_set.id, "Fileset not characterized", "Not fixed"]
-        else
-          solr_doc = SolrDocument.find(file_set.id)
-          if solr_doc.mime_type.nil? # when file_set is characterized but wasn't indexed properly
-            reindex_file_set(file_set, csv)
-          elsif solr_doc.thumbnail_path.to_s.start_with?("/assets/default-") # when file_set was characterized but thumbnail_path in solr doc is incorrect
-            regenerate_derivatives(file_set, csv)
-          end
+      if file_set_id.present?
+        process_fileset(::FileSet.find(file_set_id), csv)
+      else
+        FileSet.all.each do |file_set|
+          process_fileset(file_set, csv)
         end
       end
     end
   end
 
   private
+
+    def process_fileset(file_set, csv)
+      if file_set.mime_type.nil? # check if file_set is characterized
+        csv << [file_set.id, "Fileset not characterized", "Not fixed"]
+      else
+        solr_doc = SolrDocument.find(file_set.id)
+        if solr_doc.mime_type.nil? # when file_set is characterized but wasn't indexed properly
+          reindex_file_set(file_set, csv)
+        elsif solr_doc.thumbnail_path.to_s.start_with?("/assets/default-") # when file_set was characterized but thumbnail_path in solr doc is incorrect
+          regenerate_derivatives(file_set, csv)
+        end
+      end
+    end
 
     def reindex_file_set(file_set, csv)
       file_set.to_solr
