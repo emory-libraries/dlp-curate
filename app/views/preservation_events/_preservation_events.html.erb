@@ -9,7 +9,8 @@
       <th><%= t('.preservation_event_table.software') %></th>
     </thead>
     <tbody>
-      <% presenter.preservation_event.each do |event| %>
+      <% events = presenter.preservation_event.sort_by { |e| JSON.parse(e)["event_start"] }.reverse %>
+      <% events.each do |event| %>
         <% parsed_event = JSON.parse(event) %>
         <tr>
           <td><%= parsed_event['event_type'] %></td>
