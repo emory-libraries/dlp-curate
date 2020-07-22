@@ -6,7 +6,7 @@ namespace :curate do
     task process: :environment do
       collection_array = ENV['collections']&.split(' ')
 
-      CollectionFilesIngestedJob.perform_now(collection_array)
+      CollectionFilesIngestedJob.perform_later(collection_array)
       puts 'Collection(s) files metrics have been delivered to the public folder.'
     end
   end

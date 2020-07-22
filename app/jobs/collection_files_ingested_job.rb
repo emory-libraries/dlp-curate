@@ -50,7 +50,7 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
     end
 
     def filesets(ids)
-      ids.map { |id| FileSet.find(id)&.to_solr }
+      ids.map { |id| solr_service.query(query_builder.construct_query(id: id), rows: 1_000_000) }&.flatten
     end
 
     def filesets_file_count(filesets)

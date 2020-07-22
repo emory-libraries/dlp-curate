@@ -2,12 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe CollectionFilesIngestedJob, :clean, perform_enqueued: [AttachFilesToWorkJob] do
+RSpec.describe CollectionFilesIngestedJob, :clean do
   let(:collection) { FactoryBot.create(:collection_lw, user: admin) }
   let(:user) { FactoryBot.create(:user) }
   let(:work1) { FactoryBot.build(:work, user: admin) }
   let(:file_set) { FactoryBot.create(:file_set, user: admin, title: ["Test title"], pcdm_use: "Primary Content") }
   let(:file) { File.open(fixture_path + '/sun.png') }
+  let(:file2) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   let(:admin) { FactoryBot.create :admin }
 
   let(:collection_attrs) do
@@ -30,6 +31,7 @@ RSpec.describe CollectionFilesIngestedJob, :clean, perform_enqueued: [AttachFile
       collection.send((k.to_s + "=").to_sym, v)
     end
     Hydra::Works::AddFileToFileSet.call(file_set, file, :preservation_master_file)
+    Hydra::Works::AddFileToFileSet.call(file_set, file2, :intermediate_file)
     work1.ordered_members << file_set
     work1.member_of_collections << collection
     Curate::FileSetIndexer.new(file_set).generate_solr_document
@@ -53,7 +55,7 @@ RSpec.describe CollectionFilesIngestedJob, :clean, perform_enqueued: [AttachFile
       parsed_json = JSON.parse(file_content).first
 
       expect([parsed_json['collection_title'], parsed_json['work_total'], parsed_json['fileset_total'], parsed_json['file_total']]).to eq(
-        ["Robert Langmuir African American Photograph Collection", 1, 1, 1]
+        ["Robert Langmuir African American Photograph Collection", 1, 1, 2]
       )
     end
   end
