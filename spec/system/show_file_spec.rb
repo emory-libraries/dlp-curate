@@ -4,6 +4,8 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 RSpec.describe "Showing a file:", integration: true, clean: true, type: :system do
+  include PreservationEvents
+
   let(:user) { FactoryBot.create(:user) }
   let(:file_title) { 'Some kind of title' }
   let(:work) { FactoryBot.build(:work, user: user) }
@@ -12,6 +14,16 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
   let(:file1) { File.open(fixture_path + '/sun.png') }
   let(:file2) { File.open(fixture_path + '/image.jp2') }
   let(:file3) { File.open(fixture_path + '/book_page/0003_extracted_text.pos') }
+  let(:pe) do
+    {
+      'type' => 'Characterization',
+      'start' => 5.minutes.from_now,
+      'outcome' => 'Success',
+      'details' => 'Example details',
+      'software_version' => 'Curate v.1',
+      'user' => 'userexample'
+    }
+  end
 
   before do
     login_as user
@@ -98,6 +110,14 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
               preservation_event.software_version.first
             ]
           )
+        end
+
+        it 'displays preservation events in reverse chronological order' do
+          create_preservation_event(file_set, pe)
+          visit hyrax_file_set_path(file_set)
+          table_values = all('#fs-preservation-event-table td').map(&:text)
+          # Characterization event is hard-coded to start five minutes after Virus Check
+          expect(table_values.index("Characterization")).to be < table_values.index("Virus Check")
         end
       end
     end
