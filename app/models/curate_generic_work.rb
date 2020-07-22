@@ -10,10 +10,10 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   validates :title, presence: { message: 'Your work must have a title.' }
-  validates :final_published_versions, url: true, if: -> { final_published_versions.present? }
-  validates :related_publications, url: true, if: -> { related_publications.present? }
-  validates :related_datasets, url: true, if: -> { related_datasets.present? }
-  validates :rights_documentation, url: true, if: -> { rights_documentation.present? }
+  validates :final_published_versions, url: { message: 'requires a valid URL' }, if: -> { final_published_versions.present? }
+  validates :related_publications, url: { message: 'requires a valid URL' }, if: -> { related_publications.present? }
+  validates :related_datasets, url: { message: 'requires a valid URL' }, if: -> { related_datasets.present? }
+  validates :rights_documentation, url: { message: 'requires a valid URL' }, if: -> { rights_documentation.present? }
   before_save :index_preservation_workflow_terms
 
   property :abstract, predicate: "http://purl.org/dc/elements/1.1/description", multiple: false do |index|
