@@ -1,0 +1,8 @@
+<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Only display delete button for admins L#4 %>
+<div class="batch-info">
+  <div class="batch-toggle">
+    <% if current_user.admin? %>
+      <button id="delete-collections-button" class="btn btn-danger delete-collections-button"><%= t("hyrax.dashboard.my.action.delete_collections") %></button>
+    <% end %>
+  </div>
+</div>

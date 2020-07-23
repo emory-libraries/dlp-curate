@@ -36,6 +36,12 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
       visit "/dashboard/collections/#{user_collection.id}"
       expect(page).to have_selector(:css, 'a[title="Delete this collection"]')
     end
+
+    it 'has delete selected button' do
+      visit "dashboard/collections"
+      find("input[type='checkbox'][id='check_all']").set(true)
+      expect(page).to have_selector("button[id='delete-collections-button']")
+    end
   end
 
   context 'when logged in as a non-admin user' do
@@ -58,6 +64,12 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
       visit "/dashboard/collections/#{user_collection.id}"
       expect(page).to have_selector(:css, 'a[title="Edit this collection"]')
       expect(page).not_to have_selector(:css, 'a[title="Delete this collection"]')
+    end
+
+    it 'does not have delete selected button' do
+      visit "dashboard/collections"
+      find("input[type='checkbox'][id='check_all']").set(true)
+      expect(page).not_to have_selector("button[id='delete-collections-button']")
     end
   end
 end

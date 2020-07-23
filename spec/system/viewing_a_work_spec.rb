@@ -117,6 +117,12 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       visit "/dashboard/works"
       expect(page).to have_link(href: /batch/)
     end
+
+    it 'has delete selected and add to collections buttons' do
+      visit "dashboard/works"
+      find("input[type='checkbox'][id='check_all']").set(true)
+      expect(page).to have_selector("input[value='delete_all']", visible: false)
+    end
   end
 
   context 'when logged in as a non-admin user' do
@@ -142,6 +148,12 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
     it 'does not have a batch upload link on the works dashboard' do
       visit "/dashboard/works"
       expect(page).not_to have_link(href: /batch/)
+    end
+
+    it 'does not have delete selected and add to collections buttons' do
+      visit "dashboard/works"
+      find("input[type='checkbox'][id='check_all']").set(true)
+      expect(page).not_to have_selector("input[value='delete_all']")
     end
   end
 
