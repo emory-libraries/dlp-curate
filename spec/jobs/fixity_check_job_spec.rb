@@ -14,7 +14,7 @@ RSpec.describe FixityCheckJob, :clean do
   let(:file_id) { file_set.preservation_master_file.id }
 
   describe "called with perform_now" do
-    let(:log_record) { described_class.perform_now(uri, file_set_id: file_set.id, file_id: file_id) }
+    let(:log_record) { described_class.perform_now(uri, file_set_id: file_set.id, file_id: file_id, initiating_user: user.uid) }
 
     describe 'fixity check the content' do
       let(:uri) { file_set.preservation_master_file.uri }
@@ -62,13 +62,13 @@ RSpec.describe FixityCheckJob, :clean do
       before do
         Hydra::Works::AddFileToFileSet.call(file_set, file1, :service_file)
         Hydra::Works::AddFileToFileSet.call(file_set, file2, :intermediate_file)
-        described_class.perform_now(uri1, file_set_id: file_set.id, file_id: file_set.preservation_master_file.id)
-        described_class.perform_now(uri2, file_set_id: file_set.id, file_id: file_set.service_file.id)
+        described_class.perform_now(uri1, file_set_id: file_set.id, file_id: file_set.preservation_master_file.id, initiating_user: user.uid)
+        described_class.perform_now(uri2, file_set_id: file_set.id, file_id: file_set.service_file.id, initiating_user: user.uid)
       end
 
       context 'when all fixity_checks pass for a file_set' do
         before do
-          described_class.perform_now(uri3, file_set_id: file_set.id, file_id: file_set.intermediate_file.id)
+          described_class.perform_now(uri3, file_set_id: file_set.id, file_id: file_set.intermediate_file.id, initiating_user: user.uid)
           file_set.reload
         end
 
@@ -83,7 +83,7 @@ RSpec.describe FixityCheckJob, :clean do
         let(:cal) { ChecksumAuditLog.create!(passed: false, file_set_id: file_set.id, file_id: file_set.intermediate_file.id) }
         before do
           allow(ChecksumAuditLog).to receive(:create_and_prune!).and_return(cal)
-          described_class.perform_now(uri3, file_set_id: file_set.id, file_id: file_set.intermediate_file.id)
+          described_class.perform_now(uri3, file_set_id: file_set.id, file_id: file_set.intermediate_file.id, initiating_user: user.uid)
           file_set.reload
         end
 
