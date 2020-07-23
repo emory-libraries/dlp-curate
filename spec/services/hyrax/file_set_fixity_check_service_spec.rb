@@ -2,7 +2,7 @@
 # [Hyrax-overwrite-v3.0.0.pre.rc1]
 require 'rails_helper'
 
-RSpec.describe Hyrax::FileSetFixityCheckService do
+RSpec.describe Hyrax::FileSetFixityCheckService, :clean do
   let(:f) do
     FactoryBot.create(:file_set).tap do |file|
       Hydra::Works::AddFileToFileSet.call(file, File.open(fixture_path + '/world.png'), :preservation_master_file, versioning: true)
