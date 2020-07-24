@@ -54,6 +54,6 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
     end
 
     def filesets_file_count(filesets)
-      filesets.sum { |fs| fs['sha1_tesim']&.compact&.uniq&.size }
+      filesets.sum { |fs| fs['sha1_tesim']&.compact&.uniq&.size || 0 }
     end
 end
