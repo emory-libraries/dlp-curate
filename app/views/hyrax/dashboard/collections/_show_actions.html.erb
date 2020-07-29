@@ -7,12 +7,13 @@
                 class: 'btn btn-primary' %>
 <% end %>
 
-<% if presenter.collection_type_is_nestable? && presenter.user_can_nest_collection? %>
+<% if presenter.collection_type_is_nestable? && presenter.user_can_nest_collection? && current_user.admin? %>
 <!-- The user should have deposit access to the parent and read access to the child (the collection we are already showing, so no test is necessary). -->
     <%= button_tag '',
                   class: 'btn btn-primary add-to-collection',
                   title: t("hyrax.collection.actions.nested_subcollection.desc"),
                   type: 'button',
+                  id: 'add-to-collection-button',
                   data: { nestable: presenter.collection_type_is_nestable?,
                           hasaccess: true } do %>
                   <%= t('hyrax.collection.actions.nested_subcollection.button_label') %>

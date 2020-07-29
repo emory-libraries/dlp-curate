@@ -71,5 +71,20 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
       find("input[type='checkbox'][id='check_all']").set(true)
       expect(page).not_to have_selector("button[id='delete-collections-button']")
     end
+
+    it 'does not have add to collection button on a collection show page' do
+      visit "dashboard/collections/#{user_collection.id}"
+      expect(page).not_to have_selector("button[id='add-to-collection-button']")
+    end
+
+    it 'does not have add a subcollection button on a collection show page' do
+      visit "dashboard/collections/#{user_collection.id}"
+      expect(page).not_to have_selector("button[id='add-subcollection-button']")
+    end
+
+    it 'does not have create new collection as subcollection link on a collection show page' do
+      visit "dashboard/collections/#{user_collection.id}"
+      expect(page).not_to have_selector("a[id='create-new-collection-sub-link']")
+    end
   end
 end
