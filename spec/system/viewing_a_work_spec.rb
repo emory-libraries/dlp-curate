@@ -153,7 +153,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
     it 'does not have delete selected and add to collections buttons' do
       visit "dashboard/works"
       find("input[type='checkbox'][id='check_all']").set(true)
-      expect(page).not_to have_selector("input[value='delete_all']")
+      expect(page).not_to have_selector("input[value='delete_all']", visible: false)
     end
   end
 
