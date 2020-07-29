@@ -2,13 +2,14 @@
 # [Hyrax-overwrite-v3.0.0.pre.rc1]
 require 'rails_helper'
 
-RSpec.describe CreateDerivativesJob do
+RSpec.describe CreateDerivativesJob, :clean do
   around do |example|
     ffmpeg_enabled = Hyrax.config.enable_ffmpeg
     Hyrax.config.enable_ffmpeg = true
     example.run
     Hyrax.config.enable_ffmpeg = ffmpeg_enabled
   end
+  let(:logger) { instance_double(Logger) }
 
   context "with an audio file" do
     let(:id)       { '123' }
@@ -26,6 +27,7 @@ RSpec.describe CreateDerivativesJob do
       allow(FileSet).to receive(:find).with(id).and_return(file_set)
       allow(file_set).to receive(:id).and_return(id)
       allow(file_set).to receive(:mime_type).and_return('audio/x-wav')
+      allow(Logger).to receive(:new).and_return(logger)
     end
 
     context "with a file name" do
@@ -33,6 +35,7 @@ RSpec.describe CreateDerivativesJob do
         expect(Hydra::Derivatives::AudioDerivatives).to receive(:create)
         expect(file_set).to receive(:reload)
         expect(file_set).to receive(:update_index)
+        expect(logger).to receive(:info)
         described_class.perform_now(file_set, file.id)
       end
     end
@@ -50,6 +53,7 @@ RSpec.describe CreateDerivativesJob do
         it 'updates the index of the parent object' do
           expect(file_set).to receive(:reload)
           expect(parent).to receive(:update_index)
+          expect(logger).to receive(:info)
           described_class.perform_now(file_set, file.id)
         end
       end
@@ -60,6 +64,7 @@ RSpec.describe CreateDerivativesJob do
         it "doesn't update the parent's index" do
           expect(file_set).to receive(:reload)
           expect(parent).not_to receive(:update_index)
+          expect(logger).to receive(:info)
           described_class.perform_now(file_set, file.id)
         end
       end
@@ -90,6 +95,32 @@ RSpec.describe CreateDerivativesJob do
                                        url:    String,
                                        layer:  0 }])
       expect(Hydra::Derivatives::FullTextExtract).not_to receive(:create)
+      described_class.perform_now(file_set, file.id)
+    end
+  end
+
+  context "with a bad/missing file" do
+    let(:id)       { 'abc123' }
+    let(:file_set) { FactoryBot.create(:file_set) }
+    let(:filename) { Hyrax::WorkingDirectory.find_or_retrieve(file.id, file_set.id, nil) }
+
+    let(:file) do
+      Hydra::PCDM::File.new.tap do |f|
+        f.content = 'foo'
+        f.original_name = 'picture.png'
+        f.save!
+      end
+    end
+
+    before do
+      allow(file_set).to receive(:id).and_return(id)
+      allow(file_set).to receive(:create_derivatives).and_raise(MiniMagick::Error)
+      allow(Logger).to receive(:new).and_return(logger)
+    end
+
+    it "logs info and warn" do
+      expect(logger).to receive(:info).with("CreateDerivativesJob for #{filename} started at #{DateTime.current}")
+      expect(logger).to receive(:warn).with("Error occurred in CreateDerivativesJob for #{filename}")
       described_class.perform_now(file_set, file.id)
     end
   end
