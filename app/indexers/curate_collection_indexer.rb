@@ -30,12 +30,7 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
   end
 
   def path_sanitized(path)
-    if ENV['BRANDING_PATH'].present? && path.include?(ENV['BRANDING_PATH'].to_s)
-      path.gsub ENV['BRANDING_PATH'], '/branding'
-    elsif path.include? Rails.root.join('public', 'branding').to_s
-      path.gsub Rails.root.join('public').to_s, ''
-    else
-      path
-    end
+    return '/branding' + path.split('/branding').last if path&.include? '/branding'
+    path
   end
 end

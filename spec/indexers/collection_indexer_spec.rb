@@ -41,19 +41,29 @@ RSpec.describe CurateCollectionIndexer do
       let(:filename) { '/world.png' }
       let(:file)     { fixture_file_upload(filename, 'image/png') }
 
-      it 'indexes the banner path for each collection' do
+      before do
         banner_info = CollectionBrandingInfo.new(
           collection_id: collection.id, filename: filename,
           role: "banner", target_url: ""
         )
         banner_info.save file.local_path
+      end
 
+      it 'indexes the banner path for each collection' do
         expect(solr_document['banner_path_ss']).to eq(
           '/branding/' +
           collection.id.to_s +
           '/banner' +
           filename
         )
+      end
+
+      context 'banner path imported from different environment' do
+        it 'indexes the banner path correctly' do
+          sanitized_path = indexer.path_sanitized('/mnt/prod_efs/uploads/dlp-curate/branding/914nk98sfv-cor/banner/40644j0ztx-cor.jpg')
+
+          expect(sanitized_path).to eq('/branding/914nk98sfv-cor/banner/40644j0ztx-cor.jpg')
+        end
       end
     end
   end
