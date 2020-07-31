@@ -10,7 +10,7 @@ RSpec.describe 'viewing the homepage', type: :system do
       login_as user
       visit root_path
 
-      expect(page).to have_link('Contact', href: 'https://emory.libwizard.com/f/dlp-feedback')
+      expect(find_link('Contact')[:href]).to eq 'https://emory.libwizard.com/f/dlp-feedback'
       expect(find_link('Contact')[:target]).to eq '_blank'
     end
   end
