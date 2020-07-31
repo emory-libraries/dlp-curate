@@ -88,7 +88,6 @@ module Hyrax
         :sensitive_material,
         :internal_rights_note,
         :contact_information,
-        :size,
         :staff_notes,
         :system_of_record_ID,
         :emory_ark,
