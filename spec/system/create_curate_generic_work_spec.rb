@@ -254,6 +254,12 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(page).to have_css('textarea#curate_generic_work_title.required')
       click_link "Files" # switch tab
       expect(page).to have_content "Add files"
+      expect(page).to have_content 'Sensitive/Objectionable Material (sensitive_material)'
+      expect(page).to have_css('select#curate_generic_work_sensitive_material')
+      within('select#curate_generic_work_sensitive_material') do
+        expect(page).to have_css('option[value="true"][text()="Yes"]')
+        expect(page).to have_css('option[value="false"][text()="No"]')
+      end
       # expect(page).to have_content "Add folder"
       # within('span#addfiles') do
       #   attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/image.jp2", visible: false)

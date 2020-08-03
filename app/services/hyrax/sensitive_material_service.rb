@@ -5,5 +5,12 @@ module Hyrax
     def initialize
       super('sensitive_material')
     end
+
+    def select_active_options
+      active_elements.map do |e|
+        label = e[:id] == true ? "Yes" : "No"
+        [label, e[:id]]
+      end
+    end
   end
 end
