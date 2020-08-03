@@ -42,7 +42,7 @@ RSpec.describe 'viewing the search results page', type: :system, clean: true do
   end
 
   context 'result list item' do
-    it 'should have the right metadata labels' do
+    it 'has the right metadata labels' do
       expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Library:')
       expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Collection:')
       expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Visibility:')
