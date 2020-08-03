@@ -1,0 +1,8 @@
+<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Completely excises the dl structure %>
+<h2 class="sr-only"><%= t('.descriptions') %></h2>
+<div>
+  <% present_terms(@presenter, @presenter.terms_with_values) do |r, term| %>
+    <p><strong><%= r.label(term) %></strong><br>
+    <%= r.value(term) %></p>
+  <% end %>
+</div>

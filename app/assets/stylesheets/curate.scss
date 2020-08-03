@@ -54,8 +54,33 @@ dl.file-show-details {
   }
 }
 
+div.hyc-metadata {
+  dl {
+    border-top: none;
+  }
+
+  div {
+    border-bottom: none;
+  }
+
+  div.metadata-line {
+    border-bottom: 1px solid #ddd;
+    display: flow-root; 
+
+    div {
+      dt, dd { width: 100%; }
+      dt { flex-basis: 215px; }
+    }
+  }
+}
+
+div.row.hyc-body { 
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
 // Set bottom padding to 0px for user activity table
-// [Hyrax-overwrite-v3.0.0.pre.beta3]
+// [Hyrax-overwrite-v3.0.0.pre.rc1]
 .activity-display {
   max-height: 100%;
   overflow: scroll;

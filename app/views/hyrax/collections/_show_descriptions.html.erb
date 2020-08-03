@@ -1,17 +1,16 @@
 <% # [Hyrax-overwrite-v3.0.0.pre.rc1] %>
-<!-- Persistent URL block start -->
-<div>
-  <b>Persistent URL</b>
-  <ul class="tabular">
-    <li><a href="<%= @presenter.purl %>" target="_blank"><%= @presenter.purl %></a></li>
-  </ul>
-</div>
-<!-- Persistent URL block end -->
 <dl>
-  <% present_terms(@presenter, @presenter.terms_with_values) do |r, term| %>
-    <div>
-      <dt><%= r.label(term) %></dt>
-      <dd><%= r.value(term) %></dd>
-    </div>
-  <% end %>
+  <!-- Persistent URL block start -->
+  <div class='metadata-line'>
+    <div class='col-xs-12 col-sm-4'><dt >Persistent URL</dt></div>
+    <div class='col-xs-12 col-sm-8'><dd><a href="<%= @presenter.purl %>" target="_blank"><%= @presenter.purl %></a></dd></div>
+  </div>
+  <!-- Persistent URL block end -->
+    <% present_terms(@presenter, @presenter.terms_with_values) do |r, term| %>
+      <div class='metadata-line'>
+        <div class='col-xs-12 col-sm-4'><dt><%= r.label(term) %></dt></div>
+        <div class='col-xs-12 col-sm-8'><dd><%= r.value(term) %></dd></div>
+      </div>
+    <% end %>
+  </div>
 </dl>
