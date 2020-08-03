@@ -9,7 +9,7 @@ A repository application for digital curators (preservation, rights and metadata
 <br/><br/>
 
 [![CircleCI](https://circleci.com/gh/emory-libraries/dlp-curate.svg?style=svg)](https://circleci.com/gh/emory-libraries/dlp-curate)
-[![Coverage Status](https://coveralls.io/repos/github/emory-libraries/dlp-curate/badge.svg?branch=master)](https://coveralls.io/github/emory-libraries/dlp-curate?branch=master)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/93dcdd252e2378e18ecd/test_coverage)](https://codeclimate.com/github/emory-libraries/dlp-curate/test_coverage)
 [![User Stories](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://app.zenhub.com/workspaces/dlp-curate-5bf484ae4b5806bc2bf6875b)
 
 </td></tr>
