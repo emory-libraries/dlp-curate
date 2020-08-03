@@ -40,4 +40,12 @@ RSpec.describe 'viewing the search results page', type: :system, clean: true do
       expect(page).to have_selector('a.facet_select', count: 13)
     end
   end
+
+  context 'result list item' do
+    it 'should have the right metadata labels' do
+      expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Library:')
+      expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Collection:')
+      expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Visibility:')
+    end
+  end
 end
