@@ -276,7 +276,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       # its element
       find('body').click
       choose('curate_generic_work_visibility_open')
-      expect(page).to have_content('Please note, making something visible to the world (i.e. marking this as Public) may be viewed as publishing which could impact your ability to')
+      expect(page).not_to have_content('Please note, making something visible to the world (i.e. marking this as Public) may be viewed as publishing which could impact your ability to')
       check('agreement')
 
       # click_on('Save')
