@@ -272,7 +272,8 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     end
 
     def date_digitized(marc_record)
-      extract_datafields(marc_record, '583')
+      dd = extract_datafields(marc_record, '583')
+      extract_date_digitized(dd)
     end
 
     def date_issued(marc_record)
@@ -370,5 +371,11 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     #      "19th Cent."  --> nil
     def clean_marc_date(date_string)
       date_string.scan(/^\[?(\d{4})\D*/).flatten.first
+    end
+
+    def extract_date_digitized(datefields)
+      first_date = datefields&.split('|')&.first
+      return first_date[0..3] if !first_date.nil? && first_date.size >= 4
+      datefields
     end
 end

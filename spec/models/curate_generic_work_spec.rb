@@ -1229,9 +1229,12 @@ RSpec.describe CurateGenericWork do
     end
   end
 
+  # The standard going forward from 8/5/2020 is that date digitized should be a
+  # 4 digit year (per Emily Porter). The Yellowback Preprocessor has been modified
+  # to extract the year value from the supplied csv's EDTF string.
   describe "#date_digitized" do
     subject { described_class.new }
-    let(:date_digitized) { Date.new(2018, 1, 12) }
+    let(:date_digitized) { '2018' }
 
     context "with new CurateGenericWork work" do
       its(:date_digitized) { is_expected.to be_falsey }
