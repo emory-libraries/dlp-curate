@@ -13,6 +13,6 @@ module PreservationEvents
                                               initiating_user:  event['user'],
                                               outcome:          event['outcome'],
                                               software_version: event['software_version'] }]
-    object.save!
+    object.save! if object.errors.empty? # save object only if there aren't any errors, eg: validation errors
   end
 end
