@@ -131,8 +131,10 @@ RSpec.describe YellowbackPreprocessor do
     expect(import_rows[edge_cases]['date_created']).to eq('XXXX') # Edge Cases
   end
 
-  it 'extracts date_digitized from Alma' do
-    expect(import_rows[shakespeare_start]['date_digitized']).to eq('2009') # Shakespeare's comedy of The merchant of Venice
+  context 'date_digitized from Alma (20090101)' do
+    it 'converts EDTF date into pure year (2009)' do
+      expect(import_rows[shakespeare_start]['date_digitized']).to eq('2009') # Shakespeare's comedy of The merchant of Venice
+    end
   end
 
   it 'extracts date_issued from Alma' do

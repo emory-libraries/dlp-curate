@@ -215,15 +215,18 @@ RSpec.describe CurateMapper do
     end
   end
 
+  # The standard going forward from 8/5/2020 is that date digitized should be a
+  # 4 digit year (per Emily Porter). The Yellowback Preprocessor has been modified
+  # to extract the year value from the supplied csv's EDTF string.
   context "#date_digitized" do
     let(:metadata) do
       {
         "title" => "my title",
-        "date_digitized" => "1985-11-01"
+        "date_digitized" => "1985"
       }
     end
     it "maps the date_digitized field" do
-      expect(mapper.date_digitized).to eq "1985-11-01"
+      expect(mapper.date_digitized).to eq "1985"
     end
   end
 
