@@ -1,3 +1,5 @@
+
+
 # Curate Rake Tasks Tutorial
 # Prerequisites
 ## Every Rake Task: SSH
@@ -12,7 +14,7 @@ Before every rake task command, you must:
 4. You are now in the main folder of that environment's Rails application. Rake commands can be performed here.
 ## Certain Rake Tasks: SFTP
 Some Rake Tasks require file(s) to be uploaded to your chosen environment. This requires you to sign into the SFTP interface:
-1. From your terminal, within your desired folder, login to `tki`. Need help with this? See above link.
+1. From your terminal, within your desired folder, login to `tki`. Need help with this? See [above](#prerequisites) link.
 2. Choose your environment below and run the associated command:
     - Test Environment: `sftp-ec2-priv curate-test.library.emory.edu`
     - Arch Environment:`sftp-ec2-priv curate-arch.library.emory.edu`
@@ -32,12 +34,12 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
     3. `base`(start page): an integer also found in the request ticket.
 - The task produces a CSV file that must be delivered to the admin/manager shown on the ZenHub issue.
 ### Steps
-1. Start off by entering the SFTP environment denoted in the ticket (see Prerequisites).
+1. Start off by entering the SFTP environment denoted in the ticket (see [Prerequisites](#prerequisites)).
 2. Since the rake task is written so that the files needed to operate the command can live anywhere within the application folder, choose a folder to place the CSV and XML files. 
     - Recommendation: there is better chance that essential files will not be overwritten if you place these two files inside the `tmp` folder. 
 3. Use the `put` command to insert each file into the server. For example:
     - `put <full path to the file location on your computer> /opt/dlp-curate/current/tmp/<file's name with extension>`
-4. Once files are uploaded, `exit` the SFTP environment and log into the SSH environment (Prerequisites).
+4. Once files are uploaded, `exit` the SFTP environment and log into the SSH environment ([Prerequisites](#prerequisites)).
 5. Build the command using this template:
     - `RAILS_ENV=production bundle exec rails curate:books csv="/opt/dlp-curate/current/<folder you placed file in>/<file's name with extension>" xml="/opt/dlp-curate/current/<folder you placed file in>/<file's name with extension>" repl="<replacement path from ticket>" map=<symbolized workflow from ticket> base=<start page integer from ticket>`
     - For example: `RAILS_ENV=production bundle exec rails curate:books csv="/opt/dlp-curate/current/tmp/i_am_a.csv" xml="/opt/dlp-curate/current/tmp/i_am_a.xml" repl="Yellowbacks" map=:kirtas base=5`
@@ -49,7 +51,7 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 - There is one optional argument (`collections`) that accepts a string of ids separated by a space. 
 - The task produces a JSON file containing an array of (a) hash(es), each containing the needed Collection numbers.
 ### Steps
-1. Login to the needed SSH environment (see Prerequisites).
+1. Login to the needed SSH environment (see [Prerequisites](#prerequisites)).
 2. This procedure has two ways it can function:
     1. For a file with all Collections' hashes included, run:
         - `RAILS_ENV=production bundle exec rails curate:collection_files_ingested:process`
@@ -57,7 +59,7 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
         - `RAILS_ENV=production bundle exec rails curate:collection_files_ingested:process collections="<first collection id> <second collection id"`
 3. Watch for any errors after performing the command. If errors are detected, review the steps above.
 4. Pull the JSON file down from the server, when the Job is finished (check Sidekiq), by:
-    1. SFTPing into the right environment (Prerequisites above), 
+    1. SFTPing into the right environment ([Prerequisites](#prerequisites) above), 
     2. Change directory to `/config/emory/`,
     3. `ls` to see if the file is there (the name of the file will be `collection-counts-for-<todays date/time in the format YearMonthDateTHourMinutes>.json`),
     4. and running: `get /opt/dlp-curate/current/config/emory/<name of file found in the previous ls>`.
@@ -67,9 +69,9 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 - It does not require a CSV file to run correctly. 
 - The task can be operated two different ways, though:
     1. Ran without an argument assigned, every CurateGenericWork object will be checked to see if it has been changed since the object's manifest was created. If so, a newly created manifest will replace the old one. If the `date_modified` attribute of the object matches the date the manifest was created, a new manifest will not be created.
-    2. Processed with an `id` string in the `work` argument, the procedure only focuses on that listed object and creates just it's manifest.
+    2. Processed with an `id` string in the `work` argument, the procedure only focuses on that listed object and creates just its manifest.
 ### Steps For Creating Manifests For All Works
-1. Perform the Prerequisites for the needed SSH environment.
+1. Perform the [Prerequisites](#prerequisites) for the needed SSH environment.
 2. When creating new manifests for all of the site's Works, we need to delete all of the manifests that currently exist in the application:
     - First, run `rm /opt/uploads/dlp-curate/iiif_manifest_cache/*`. 
     - Then, `cd /opt/uploads/dlp-curate/iiif_manifest_cache/`
@@ -78,7 +80,7 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 4. Paste `RAILS_ENV=production bundle exec rails curate:works:create_manifest` and press enter.
 5. Monitor the output of the command for errors. Review the steps above if errors show.
 ### Steps For Creating Manifests For One Work
-1. Perform the Prerequisites for the needed SSH environment.
+1. Perform the [Prerequisites](#prerequisites) for the needed SSH environment.
 2. Before running the command, be aware we are passing a string of the Work `:id` to the rake task argument of `work`. Not declaring this key/value pair will kick off the steps to create manifests for all Works.
 3. Use the command `RAILS_ENV=production bundle exec rails curate:works:create_manifest work="<put id string here>"` .
 4. Check for errors. Review the steps above if errors show.
@@ -88,7 +90,7 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 - No additional arguments are needed or accepted.
 - It will produce a CSV file that will need to be passed along to the person requesting the process.
 ### Steps
-1. Sign into and prepare the SSH environment the ticket references (see Prerequisites).
+1. Sign into and prepare the SSH environment the ticket references (see [Prerequisites](#prerequisites)).
 2. From the Rails root folder, run the command below:
     - `RAILS_ENV=production bundle exec rails curate:file_sets:file_sets_cleanup`
 3. Watch for any errors after performing the command. If errors are detected, review the steps above.
@@ -101,7 +103,7 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 - This task does not accept arguments. 
 - Once the Job has begun successfully, there is nothing to return to the ticket creator.
 ### Steps
-1. Login to the needed SSH environment (see Prerequisites).
+1. Login to the needed SSH environment (see [Prerequisites](#prerequisites)).
 2. Run: `RAILS_ENV=production bundle exec rails curate:file_sets:fixity_check`.
 3. Watch for any errors after performing the command. If errors are detected, review the steps above.
 4. Notify the ticket creator the time that the Fixity Check Job has begun.
@@ -112,12 +114,12 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
     - A CSV file path (`csv`) provided by the ticket creator.
 - The task produces a CSV file that must be delivered to the admin/manager shown on the ZenHub issue.
 ### Steps
-1. Start off by entering the SFTP environment denoted in the ticket (see Prerequisites).
+1. Start off by entering the SFTP environment denoted in the ticket (see [Prerequisites](#prerequisites)).
 2. Since the rake task is written so that the file needed to operate the command can live anywhere within the application folder, choose a folder to place the CSV file. 
     - Recommendation: there is better chance that essential files will not be overwritten if you place this file inside the `tmp` folder. 
 3. Use the `put` command to insert the file into the server. For example:
     - `put <full path to the file location on your computer> /opt/dlp-curate/current/tmp/<file's name with extension>`
-4. Once file is uploaded, `exit` the SFTP environment and log into the SSH environment (Prerequisites).
+4. Once file is uploaded, `exit` the SFTP environment and log into the SSH environment ([Prerequisites](#prerequisites)).
 5. Build the command using this template:
     - `RAILS_ENV=production bundle exec rails curate:langmuir csv="/opt/dlp-curate/current/<folder you placed file in>/<file's name with extension>"`
     - For example: `RAILS_ENV=production bundle exec rails curate:langmuir csv="/opt/dlp-curate/current/tmp/i_am_a.csv"`
@@ -128,12 +130,12 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 - The CSV must be placed in the appropriate folder and be named correctly for the task to work.
 - No additional arguments are needed or accepted.
 ### Steps
-1. Sign into and prepare the SFTP environment needed (see Prerequisites).
+1. Sign into and prepare the SFTP environment needed (see [Prerequisites](#prerequisites)).
 2. The CSV file from the ticket must be placed in `config/preservation_workflow_metadata/` and named `preservation_workflows.csv`. The `preservation_workflow_metadata` folder may not be created yet, so please `cd` into the `config` folder and `ls` it's contents. If `preservation_workflow_metadata` isn't there, run: `mkdir preservation_workflow_metadata`.
 3. Once verifying the  `reindex` folder, perform:
     - `put /path/to/preservation_workflows_file/on/your/computer.csv /opt/dlp-curate/current/config/reindex/preservation_workflows.csv`
 4. Sign out of this SFTP environment (`exit`).
-5. Sign into and prepare the SSH side (for help, see Prerequisites).
+5. Sign into and prepare the SSH side (for help, see [Prerequisites](#prerequisites)).
 6. In the Rails root folder, run the command below:
     - `RAILS_ENV=production bundle exec rails curate:works:import_preservation_workflows`
 7. See if any errors arise after sending that command in the terminal. If errors are detected, review the steps above.
@@ -142,12 +144,12 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 - It requires a CSV file specifically named `reindex_objects.csv` to run correctly. This file is typically provided by Curate's administrators or managers in the ticket requesting this process to be run. If the file is not specifically named this way when placed into the correct folder, the process will produce errors. 
 - No additional arguments are needed or accepted.
 ### Steps
-1. Sign into and prepare the SFTP environment required (see above).
+1. Sign into and prepare the SFTP environment required (see [Prerequisites](#prerequisites)).
 2. The CSV file must be placed in `config/reindex/`. The `reindex` folder is most likely not created yet, so please `cd` into the `config` folder and `ls` it's contents. If `reindex` isn't there, run: `mkdir reindex`.
 3. Once the `reindex` folder exists, you can perform:
     - `put /path/to/reindex_objects_file/on/your/computer.csv /opt/dlp-curate/current/config/reindex/reindex_objects.csv`
 4. Sign out of this SFTP environment (`exit`).
-5. Sign into and prepare the SSH side (once again, see above).
+5. Sign into and prepare the SSH side (once again, see [Prerequisites](#prerequisites)).
 6. Once in the Rails root folder, run the command below:
     - `RAILS_ENV=production bundle exec rails curate:objects:reindex`
 7. Check for any errors that arise after firing that command in the terminal. If errors are detected, review the steps above.
@@ -164,7 +166,7 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
     3. Login with Open Emory details.
     4. Choose `S3`
     5. Compare the given name to the list and choose the best match.
-3. Follow the procedures in the Prerequisites above to prepare the right SSH environment.
+3. Follow the procedures in the [Prerequisites](#prerequisites) above to prepare the right SSH environment.
 4. This task has two ways it can function:
     1. For checking all FileSets' binaries, run:
         - `RAILS_ENV=production bundle exec rails curate:file_sets:check_binaries bucket="<bucket name verified in step 2>"`
