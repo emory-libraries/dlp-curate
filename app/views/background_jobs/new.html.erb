@@ -1,0 +1,74 @@
+<%= render '/flash_msg' %>
+<%= form_tag background_jobs_path, method: :post, multipart: true, class: "form-horizontal" do %>
+<h3>Background Jobs</h3>
+<table class="table table-striped">
+  <tr>
+    <th>Select Job</th>
+    <th>Select Input File</th>
+   
+  </tr>
+  
+    <tr>
+      <td>
+        <%= radio_button_tag :jobs, 'cleanup', false, id: 'cleanup' %>
+        <%= label :job_cleanup, 'FileSet Cleanup' %>
+        
+        
+      </td>
+      <td>
+        N/A
+      </td>
+      
+    </tr>
+
+    <tr>
+      <td>
+        <%= radio_button_tag :jobs, 'reindex', false, id: 'reindex' %>
+        <%= label :job_cleanup, 'Reindex Selected Files' %>
+        
+        
+      </td>
+      <td>
+        <%= file_field_tag 'reindex_csv', class: 'files', :accept => 'text/csv' %>
+      
+            
+      </td>
+      
+    </tr>
+    <tr>
+      <td>
+        <%= radio_button_tag :jobs, 'preservation', false, id: 'preservation' %>
+        <%= label :job_cleanup, 'Load Preservation Workflow Metadata' %>
+        
+        
+      </td>
+      <td>
+        <%= file_field_tag 'preservation_csv', class: 'files', :accept => 'text/csv' %>
+      </td>
+      
+    </tr>
+
+</table>
+<button class="btn btn-primary" type="submit" value="Submit">Start Job</button>
+<% end %>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("input[name='jobs']").on("click",function() {
+      $('.files').each(function(i) {
+         $(this).removeAttr('required');
+      });
+      
+        var val = $(this).val()
+        if(val !== 'cleanup'){
+          $("input[name='" + val + "_csv']").prop('required',true);
+
+        }
+
+
+    }); 
+});
+</script>

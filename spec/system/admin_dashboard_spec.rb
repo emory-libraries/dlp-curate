@@ -40,6 +40,14 @@ RSpec.describe 'Admin dashboard', integration: true, clean: true, type: :system 
       expect(page).to have_link 'Import Content From a CSV'
     end
 
+    scenario 'does have background jobs tab' do
+      expect(page).to have_link 'Background Jobs'
+    end
+
+    scenario 'view background jobs page' do
+      click_on 'Background Jobs'
+      expect(page).to have_content 'Select Job'
+    end
     # TODO: Add more admin tests, for eg: stats page, when work is created
 
     # scenario 'view the statistics page' do

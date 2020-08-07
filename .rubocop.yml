@@ -99,6 +99,7 @@ Metrics/MethodLength:
         - app/indexers/curate_generic_work_indexer.rb
         - spec/fixtures/manifest_output.rb
         - app/controllers/iiif_controller.rb
+        - app/controllers/background_jobs_controller.rb
 
 Metrics/ModuleLength:
     Exclude:

@@ -66,5 +66,6 @@ Rails.application.routes.draw do
 
   post "/concern/file_sets/:file_set_id/clean_up", to: "derivatives#clean_up"
 
+  resources :background_jobs, only: [:new, :create]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
