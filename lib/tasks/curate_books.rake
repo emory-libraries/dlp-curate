@@ -21,10 +21,10 @@ namespace :curate do
         Book preprocessor (Kirtas & LIMB digitization)
 
         USAGE:
-        rake curate:kirtas csv=pull_list.csv xml=alma.xml repl='path/to/substitute-for-Volumes' map={kirtas|limb} base={1|0}
+        rake curate:books csv=pull_list.csv xml=alma.xml repl='path/to/substitute-for-Volumes' map={kirtas|limb} base={1|0}
 
         RETURNS:
-        pull-list-merged.csv in the samve folder as pull-list.csv
+        pull-list-merged.csv in the same folder as pull-list.csv
       HEREDOC
     end
   end
