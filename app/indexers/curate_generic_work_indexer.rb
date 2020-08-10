@@ -32,6 +32,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['year_for_lux_ssi'] = sort_year
       solr_doc['child_works_for_lux_tesim'] = child_works_for_lux
       solr_doc['parent_work_for_lux_tesim'] = parent_work_for_lux
+      solr_doc['source_collection_title_ssim'] = source_collection
       # the next two fields are for display and search, not for security
       solr_doc['visibility_group_ssi'] = visibility_group_for_lux
       solr_doc['human_readable_visibility_ssi'] = human_readable_visibility
@@ -162,5 +163,10 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
     when "restricted"
       "Private"
     end
+  end
+
+  def source_collection
+    collection = Collection.find(object.source_collection_id) if object.source_collection_id
+    return collection.title unless collection.nil?
   end
 end

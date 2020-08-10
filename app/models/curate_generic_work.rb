@@ -260,6 +260,10 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :source_collection_id, predicate: "http://metadata.emory.edu/vocab/cor-terms#sourceCollectionID", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
   property :sponsor, predicate: "http://id.loc.gov/vocabulary/relators/spn", multiple: false do |index|
     index.as :stored_searchable
   end
