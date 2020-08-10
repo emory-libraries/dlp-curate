@@ -200,4 +200,39 @@ RSpec.describe CurateGenericWorkIndexer do
       end
     end
   end
+
+  describe 'save source_collection on work' do
+    context 'when source_collection_id is empty' do
+      let(:attributes) do
+        {
+          id:    '123',
+          title: ['A title']
+        }
+      end
+
+      it 'returns empty array' do
+        expect(solr_document['source_collection_id_tesim']).to eq(nil)
+      end
+    end
+
+    context 'when source_collection_id is present' do
+      let(:collection) { FactoryBot.create(:collection_lw, id: 'abc123', title: ['Test title collection123']) }
+      let(:attributes) do
+        {
+          id:                   '123',
+          title:                ['A title'],
+          source_collection_id: 'abc123'
+        }
+      end
+
+      before do
+        allow(Collection).to receive(:create).and_return(collection)
+      end
+
+      it 'returns correct collection ID and title' do
+        expect(solr_document['source_collection_id_tesim']).to eq(['abc123'])
+        expect(solr_document['source_collection_title_ssim']).to eq(['Test title collection123'])
+      end
+    end
+  end
 end
