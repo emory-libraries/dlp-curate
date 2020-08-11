@@ -1,9 +1,8 @@
 
-
 # Curate Rake Tasks Tutorial
 # Prerequisites
-## Every Rake Task: SSH
-Before every rake task command, you must:
+## Certain Rake Tasks: SSH
+Before some rake task commands, you must:
 1. Login to `tki`: 
     You must be able to sign into your tki from your terminal. To learn more on how to setup, please click [here](https://wiki.service.emory.edu/pages/viewpage.action?spaceKey=DLPP&title=Install+TKI+Client+and+Connect+to+DLP+EC2s) (Emory log-in required).
 2. SSH into your desired Curate environment. To do so, from the same terminal window/tab you ran `tki`, run one of the following commands: 
@@ -19,10 +18,9 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
     - Test Environment: `sftp-ec2-priv curate-test.library.emory.edu`
     - Arch Environment:`sftp-ec2-priv curate-arch.library.emory.edu`
     - Production Environment: `sftp-ec2-priv curate.library.emory.edu`
-3. `cd /opt/dlp-curate/current/`
-4. You are now in the root folder of that environment's Rails application.
 # Available Rake Tasks
 ## Books Preprocessor
+- To avoid tying up server resources, perform this rake task on local environment.
 - This procedure combines two documents with different formats into a CSV that the Curate application can ingest.
 - It requires a CSV and a XML file to run correctly. 
 - There are two arguments that are required for this:
@@ -34,17 +32,13 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
     3. `base`(start page): an integer also found in the request ticket.
 - The task produces a CSV file that must be delivered to the admin/manager shown on the ZenHub issue.
 ### Steps
-1. Start off by entering the SFTP environment denoted in the ticket (see [Prerequisites](#prerequisites)).
-2. Since the rake task is written so that the files needed to operate the command can live anywhere within the application folder, choose a folder to place the CSV and XML files. 
-    - Recommendation: there is better chance that essential files will not be overwritten if you place these two files inside the `tmp` folder. 
-3. Use the `put` command to insert each file into the server. For example:
-    - `put <full path to the file location on your computer> /opt/dlp-curate/current/tmp/<file's name with extension>`
-4. Once files are uploaded, `exit` the SFTP environment and log into the SSH environment ([Prerequisites](#prerequisites)).
-5. Build the command using this template:
-    - `RAILS_ENV=production bundle exec rails curate:books csv="/opt/dlp-curate/current/<folder you placed file in>/<file's name with extension>" xml="/opt/dlp-curate/current/<folder you placed file in>/<file's name with extension>" repl="<replacement path from ticket>" map=<symbolized workflow from ticket> base=<start page integer from ticket>`
-    - For example: `RAILS_ENV=production bundle exec rails curate:books csv="/opt/dlp-curate/current/tmp/i_am_a.csv" xml="/opt/dlp-curate/current/tmp/i_am_a.xml" repl="Yellowbacks" map=:kirtas base=5`
-6. The newly created CSV will be placed in the same folder that the other two files uploaded are and will have "-merged" added to the end of the original CSV file name. Just SFTP into the same server, and `get <fullpath to merged file>`
-7. Pass the downloaded file (in the same folder on your computer where you SFTPed from) to the ticket creator.
+1. Place the CSV and XML files into the same folder inside of `dlp-curate` (within `tmp` is recommended).
+2. Change directories in terminal to the Curate root folder, ensure that the branch is `main`, and that the code is up to date (`git pull`).
+3. Build the command using this template:
+    - `bundle exec rails curate:books csv="<path to csv file on local machine>" xml="<path to xml file on local machine>" repl="<replacement path from ticket>" map=<symbolized workflow from ticket> base=<start page integer from ticket>`
+    - For example: `bundle exec rails curate:books csv="tmp/i_am_a.csv" xml="tmp/i_am_a.xml" repl="Yellowbacks" map=:kirtas base=5`
+4. Run the command. The newly created CSV will be in the same folder that the other two files were placed and will have "-merged" added to the end of the original CSV file name. 
+5. Pass the new file to the ticket creator.
 ## Collection Files Ingested Count
 - This task counts the number of Works, FileSets, and Files ingested for Collections.
 - It does not requires a CSV file to run correctly. 
@@ -108,34 +102,30 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 3. Watch for any errors after performing the command. If errors are detected, review the steps above.
 4. Notify the ticket creator the time that the Fixity Check Job has begun.
 ## Langmuir Preprocessor
+- To avoid tying up server resources, perform this rake task on local environment.
 - This procedure uses one provided CSV to generate a properly formatted CSV file that the Curate application can ingest.
 - It requires a CSV file to run correctly. 
 - There is one argument that is required for this:
     - A CSV file path (`csv`) provided by the ticket creator.
 - The task produces a CSV file that must be delivered to the admin/manager shown on the ZenHub issue.
 ### Steps
-1. Start off by entering the SFTP environment denoted in the ticket (see [Prerequisites](#prerequisites)).
-2. Since the rake task is written so that the file needed to operate the command can live anywhere within the application folder, choose a folder to place the CSV file. 
-    - Recommendation: there is better chance that essential files will not be overwritten if you place this file inside the `tmp` folder. 
-3. Use the `put` command to insert the file into the server. For example:
-    - `put <full path to the file location on your computer> /opt/dlp-curate/current/tmp/<file's name with extension>`
-4. Once file is uploaded, `exit` the SFTP environment and log into the SSH environment ([Prerequisites](#prerequisites)).
-5. Build the command using this template:
-    - `RAILS_ENV=production bundle exec rails curate:langmuir csv="/opt/dlp-curate/current/<folder you placed file in>/<file's name with extension>"`
-    - For example: `RAILS_ENV=production bundle exec rails curate:langmuir csv="/opt/dlp-curate/current/tmp/i_am_a.csv"`
-6. The newly created CSV will be placed in the same folder that the file uploaded was and will be have "-processed" added to the name. Just SFTP into the same server, and `get <fullpath to merged file>`
-7. Pass the downloaded file to the ticket creator.
+1. Place the CSV file into a folder inside of `dlp-curate` (within `tmp` is recommended).
+2. Change directories in terminal to the Curate root folder, ensure that the branch is `main`, and that the code is up to date (`git pull`).
+3. Build the command using this template:
+    - `bundle exec rails curate:langmuir csv="<path to csv file on local machine>"`
+    - For example: `bundle exec rails curate:langmuir csv="tmp/i_am_a.csv"`
+4. Run the command. The newly created CSV will be placed in the same folder and will have "-processed" added to the name. 
+5. Pass the processed file to the ticket creator.
 ## Load Preservation Workflow Metadata
 - This procedure uploads metadata pulled from a provided CSV file.
 - The CSV must be placed in the appropriate folder and be named correctly for the task to work.
 - No additional arguments are needed or accepted.
 ### Steps
-1. Sign into and prepare the SFTP environment needed (see [Prerequisites](#prerequisites)).
+1. Sign into SSH environment needed (see [Prerequisites](#prerequisites)).
 2. The CSV file from the ticket must be placed in `config/preservation_workflow_metadata/` and named `preservation_workflows.csv`. The `preservation_workflow_metadata` folder may not be created yet, so please `cd` into the `config` folder and `ls` it's contents. If `preservation_workflow_metadata` isn't there, run: `mkdir preservation_workflow_metadata`.
-3. Once verifying the  `reindex` folder, perform:
+3. Once verifying the  `preservation_workflow_metadata` folder, log out of SSH, into the corresponding SFTP server and perform:
     - `put /path/to/preservation_workflows_file/on/your/computer.csv /opt/dlp-curate/current/config/reindex/preservation_workflows.csv`
-4. Sign out of this SFTP environment (`exit`).
-5. Sign into and prepare the SSH side (for help, see [Prerequisites](#prerequisites)).
+4. Sign out of this SFTP environment (`exit`) and into the SSH side (for help, see [Prerequisites](#prerequisites)).
 6. In the Rails root folder, run the command below:
     - `RAILS_ENV=production bundle exec rails curate:works:import_preservation_workflows`
 7. See if any errors arise after sending that command in the terminal. If errors are detected, review the steps above.
@@ -144,17 +134,16 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 - It requires a CSV file specifically named `reindex_objects.csv` to run correctly. This file is typically provided by Curate's administrators or managers in the ticket requesting this process to be run. If the file is not specifically named this way when placed into the correct folder, the process will produce errors. 
 - No additional arguments are needed or accepted.
 ### Steps
-1. Sign into and prepare the SFTP environment required (see [Prerequisites](#prerequisites)).
+1. Sign into SSH environment required (see [Prerequisites](#prerequisites)).
 2. The CSV file must be placed in `config/reindex/`. The `reindex` folder is most likely not created yet, so please `cd` into the `config` folder and `ls` it's contents. If `reindex` isn't there, run: `mkdir reindex`.
-3. Once the `reindex` folder exists, you can perform:
+3. Once the `reindex` folder exists, you can now log into the corresponding SFTP environment and perform:
     - `put /path/to/reindex_objects_file/on/your/computer.csv /opt/dlp-curate/current/config/reindex/reindex_objects.csv`
-4. Sign out of this SFTP environment (`exit`).
-5. Sign into and prepare the SSH side (once again, see [Prerequisites](#prerequisites)).
+4. Sign out of this SFTP environment (`exit`) and log into and prepare the SSH side.
 6. Once in the Rails root folder, run the command below:
     - `RAILS_ENV=production bundle exec rails curate:objects:reindex`
 7. Check for any errors that arise after firing that command in the terminal. If errors are detected, review the steps above.
 ## S3 Binaries Check
-- This rake task checks for the existence of a single or all FileSet(s) inside of a specific AWS S3 Bucket.
+- This rake task checks for the existence of a single or all binary(ies) inside of a specific AWS S3 Bucket by verifying their `sha1` values.
 - It does not requires a CSV file to run correctly. 
 - It does, however, have one argument that is required (`bucket`) and one that focuses the task on just one FileSet (`file_set`) that isn't required. 
 - And it produces a CSV file listing all of the FileSets without a binary in the S3 Bucket.
