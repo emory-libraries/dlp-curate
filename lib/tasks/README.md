@@ -1,4 +1,3 @@
-
 # Curate Rake Tasks Tutorial
 # Prerequisites
 ## Certain Rake Tasks: SSH
