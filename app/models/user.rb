@@ -37,6 +37,10 @@ class User < ApplicationRecord
     email
   end
 
+  def viewer?
+    roles.any? { |r| r.name.include? "viewer" }
+  end
+
   # When a user authenticates via shibboleth, find their User object or make
   # a new one. Populate it with data we get from shibboleth.
   # @param [OmniAuth::AuthHash] auth
