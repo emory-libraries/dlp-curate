@@ -66,6 +66,7 @@ class CurateMapper < Zizia::HashMapper
     series_title:                 "series_title",
     sponsor:                      "sponsor",
     staff_notes:                  "staff_notes",
+    source_collection_id:         "source_collection_id",
     subject_geo:                  "subject_geo",
     subject_names:                "subject_names",
     subject_time_periods:         "subject_time_periods",

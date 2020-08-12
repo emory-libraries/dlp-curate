@@ -63,6 +63,7 @@ RSpec.describe CurateMapper do
       "series_title" => "Chatterbox library.",
       "sponsor" => "Shell Oil",
       "staff_notes" => "Got this one done.",
+      "source_collection_id" => "1",
       "subject_geo" => "Ghana.|Africa.",
       "subject_names" => "Mouvement national congolais.|Okito, Joseph.|Lumumba, Patrice, 1925-1961.",
       "subject_time_periods" => "Medieval Times",
@@ -600,6 +601,12 @@ RSpec.describe CurateMapper do
   context "#staff_notes" do
     it "maps the staff_notes field" do
       expect(mapper.staff_notes).to contain_exactly "Got this one done."
+    end
+  end
+
+  context "#source_collection_id" do
+    it "maps the contact_information field" do
+      expect(mapper.source_collection_id).to eq "1"
     end
   end
 
