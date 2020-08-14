@@ -59,7 +59,7 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
     multi_fields.each do |fieldname|
       expect(page).to have_content collection.send(fieldname).first
     end
-    expect(page).to have_content '0 Items'
+    expect(page).to have_content '1 Item'
     expect(page).not_to have_content 'Works (1)'
     expect(page).not_to have_content 'Test title'
   end
