@@ -52,11 +52,11 @@ This is an overwrite of Hyrax' [CreateDerivativesJob](https://github.com/samvera
 - `#perform`: The generation of thumbnails using MiniMagick has proven problematic and the addition of error logging has been implemented because of it.
 ## Bulk Import Processing Sequence
 The following is each procedure in order of start to finish that a CSV uploaded to Curate Dashboard's "Import Content From a CSV" goes through.
-1. [Zizia::StartCsvImportJob](https://github.com/curationexperts/zizia/blob/v5.3.0/app/jobs/zizia/start_csv_import_job.rb)
+1. [`Zizia::StartCsvImportJob`](https://github.com/curationexperts/zizia/blob/v5.3.0/app/jobs/zizia/start_csv_import_job.rb)
     The CSV uploaded into the importer gets processed by the Zizia gem. This job is initiated and passes the CSV object to the
-2. [ModularImporter#import](https://github.com/curationexperts/zizia/blob/v5.3.0/app/importers/modular_importer.rb)
+2. [`ModularImporter#import`](https://github.com/curationexperts/zizia/blob/v5.3.0/app/importers/modular_importer.rb)
     That also resides inside the Zizia Gem. Here, the CSV is completely parsed into a single Rails object using the Gem's built-in parsing and importing tools. Each work parsed from the CSV is assigned to a `record` instance associated with the main Rails `importer` object. Each `record` has a deduplication key and relevant files attached to it, everything is saved, and then passed along. `Zizia::Importer#import` receives it next, which simply passes each record through to
-3. [RecordImporter#import](https://github.com/curationexperts/zizia/blob/v5.3.0/lib/zizia/record_importer.rb)
+3. [`RecordImporter#import`](https://github.com/curationexperts/zizia/blob/v5.3.0/lib/zizia/record_importer.rb)
     This is where the handoff between Zizia and Hyrax takes place. Each `record` (future `CurateGenericWork` object) is passed as an argument to the `#create` method of `Hyrax.config.curation_concerns.first`, which in our application, translates to the `ActiveSupport::Concern` of `CurateGenericWork`. Now in Hyrax, we move to the 
 4. [`Hyrax:Actors:CurateGenericWorkActor#create`](https://github.com/emory-libraries/dlp-curate/blob/main/app/actors/hyrax/actors/curate_generic_work_actor.rb)
     And we're now in the [Actor Stack](https://github.com/samvera/hyrax/blob/v3.0.0.pre.rc1/app/services/hyrax/default_middleware_stack.rb). The `record` object that was created in Zizia now exists inside of the `env` object. All of the data will stay inside of `env` object, too--even as every Actor in the stack makes any necessary manipulations, additions, or deletions they need to in order to persist the whole Work in the ActiveFedora system.
