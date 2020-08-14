@@ -86,5 +86,15 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
       visit "dashboard/collections/#{user_collection.id}"
       expect(page).not_to have_selector("a[id='create-new-collection-sub-link']")
     end
+
+    context 'Items table heading' do
+      it 'shows "Deposited Items", not "Items"' do
+        visit "dashboard/collections"
+        ths = find_all('table#collections-list-table thead tr th').map(&:text)
+
+        expect(ths.include? "Deposited Items").to be_truthy
+        expect(ths.include? "Items").to be_falsey
+      end
+    end
   end
 end
