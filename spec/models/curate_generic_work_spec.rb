@@ -1340,6 +1340,24 @@ RSpec.describe CurateGenericWork do
     end
   end
 
+  describe "#source_collection_id" do
+    subject { described_class.new }
+    let(:source_collection_id) { '123abc' }
+
+    context "with new CurateGenericWork work" do
+      its(:source_collection_id) { is_expected.to be_falsey }
+    end
+
+    context "with a CurateGenericWork work that has a source_collection_id" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.source_collection_id = source_collection_id
+        end
+      end
+      its(:source_collection_id) { is_expected.to eq source_collection_id }
+    end
+  end
+
   context "saves metadata in SolrDoc" do
     let(:params) do
       { title:                 ['Example Title'],
