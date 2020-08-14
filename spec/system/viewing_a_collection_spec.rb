@@ -92,8 +92,8 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
         visit "dashboard/collections"
         ths = find_all('table#collections-list-table thead tr th').map(&:text)
 
-        expect(ths.include? "Deposited Items").to be_truthy
-        expect(ths.include? "Items").to be_falsey
+        expect(ths.include?('Deposited Items')).to be_truthy
+        expect(ths.include?('Items')).to be_falsey
       end
     end
   end
