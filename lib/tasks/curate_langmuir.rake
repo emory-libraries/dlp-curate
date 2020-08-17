@@ -19,7 +19,7 @@ namespace :curate do
         rake curate:langmuir csv=manifest.csv
 
         RETURNS:
-        manifest-processed.csv in the samve folder as manifest.csv
+        manifest-processed.csv in the same folder as manifest.csv
 
       HEREDOC
     end
