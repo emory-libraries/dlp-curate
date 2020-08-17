@@ -258,6 +258,23 @@ en:
     file_sets:
       form:
         pcdm_use: "FileSet use"
+      show: 
+        activity: 'Activity'
+        extracted: 'Extracted'
+        file_name: 'File name'
+        file_set_category: 'FileSet Category'
+        file_set_id: 'FileSet ID'
+        fixity_check: 'Run Fixity check'
+        is_part_of: 'Is Part of'
+        intermediate_file: 'Intermediate File'
+        parent_work: 'Parent Work'
+        preservation_master_file: 'Preservation Master File'
+        recharacterize: 'Re-characterize FileSet'
+        regenerate_derivative: 'Regenerate derivative'
+        service_file: 'Service File'
+        transcript_file: 'Transcript File'
+        uploaded: 'Uploaded'
+        use: 'Use'
       show_details:
         file_details: "Preservation Master File Details"
         activity: "Activity"

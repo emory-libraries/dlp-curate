@@ -76,6 +76,7 @@ Metrics/CyclomaticComplexity:
         - app/indexers/curate/file_set_indexer.rb
         - app/indexers/curate_generic_work_indexer.rb
         - app/controllers/iiif_controller.rb
+        - app/jobs/characterize_job.rb
 
 Layout/LineLength:
     Exclude:
