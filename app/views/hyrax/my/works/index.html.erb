@@ -25,12 +25,14 @@
               class: 'btn btn-primary'
             ) %>
       <% end %>
-      <%= link_to(
-            t(:'helpers.action.work.new'),
-            '#',
-            data: { behavior: "select-work", target: "#worktypes-to-create", 'create-type' => 'single' },
-            class: 'btn btn-primary'
-          ) %>
+      <% unless current_user.viewer? %>
+        <%= link_to(
+              t(:'helpers.action.work.new'),
+              '#',
+              data: { behavior: "select-work", target: "#worktypes-to-create", 'create-type' => 'single' },
+              class: 'btn btn-primary'
+            ) %>
+      <% end %>
     <% else # simple link to the first work type %>
       <% if Flipflop.batch_upload? && current_user.admin? %>
         <%= link_to(
@@ -39,11 +41,13 @@
             class: 'btn btn-primary'
             ) %>
       <% end %>
-      <%= link_to(
-            t(:'helpers.action.work.new'),
-            new_polymorphic_path([main_app, @create_work_presenter.first_model]),
-            class: 'btn btn-primary'
-          ) %>
+      <% unless current_user.viewer? %>
+        <%= link_to(
+              t(:'helpers.action.work.new'),
+              new_polymorphic_path([main_app, @create_work_presenter.first_model]),
+              class: 'btn btn-primary'
+            ) %>
+      <% end %>
     <% end %>
   </div>
 <% end %>

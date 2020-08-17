@@ -155,6 +155,28 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       find("input[type='checkbox'][id='check_all']").set(true)
       expect(page).not_to have_selector("input[value='delete_all']", visible: false)
     end
+
+    context 'viewer role' do
+      let(:user) do
+        User.create(
+                uid:          'brianbboys1967',
+                ppid:         'P0000001',
+                display_name: 'Brian Wilson'
+              )
+      end
+
+      it 'has no Add new work button' do
+        user.roles = [Role.find_or_create_by(name: 'rose_viewer')]
+        user.save
+        visit "dashboard/works"
+
+        expect(page).not_to have_link "Add new work"
+
+        visit "dashboard/my/works"
+
+        expect(page).not_to have_link "Add new work"
+      end
+    end
   end
 
   describe 'object visibility', :clean do

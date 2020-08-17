@@ -131,4 +131,24 @@ RSpec.describe User, :clean do
       # TODO: test that the user does have the elevated privileges.
     end
   end
+
+  context '#viewer?' do
+    it "returns true if any of user's roles contains viewer" do
+      role = Role.find_or_create_by(name: 'health_sciences_viewer')
+      user.roles << role
+
+      expect(user.viewer?).to be_truthy
+    end
+
+    it "returns false is user has no roles" do
+      expect(user.viewer?).to be_falsey
+    end
+
+    it "returns false is user has roles but none containing viewer" do
+      role = Role.find_or_create_by(name: 'admin')
+      user.roles << role
+
+      expect(user.viewer?).to be_falsey
+    end
+  end
 end
