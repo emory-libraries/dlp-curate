@@ -62,9 +62,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :background_jobs, only: [:new, :create]
+
   get "/uv/config/:id", to: "application#uv_config", as: "uv_config", defaults: { format: :json }
 
   post "/concern/file_sets/:file_set_id/clean_up", to: "derivatives#clean_up"
-
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

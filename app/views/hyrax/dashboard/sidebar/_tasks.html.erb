@@ -23,6 +23,10 @@
   <%= menu.nav_link('/csv_imports/new',  data: { turbolinks: false }) do %>
     <span class="fa fa-upload"></span> <span class="sidebar-action-text">Import Content From a CSV</span>
   <% end %>
+
+  <%= menu.nav_link('/background_jobs/new',  data: { turbolinks: false }) do %>
+    <span class="fa fa-tasks"></span> <span class="sidebar-action-text">Background Jobs</span>
+  <% end %>
 <% end %>
 
 <%= render 'hyrax/dashboard/sidebar/menu_partials', menu: menu, section: :tasks %>
