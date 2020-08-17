@@ -84,8 +84,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(page).to have_css('li#required-metadata.complete')
     end
 
-    # TODO: Upgrade QA to 5.5.0+ to re-enable this test
-    scenario "custom terms show up as dynamic option for external vocab fields", js: true, skip: true do
+    scenario "custom terms show up as dynamic option for external vocab fields", js: true do
       new_cgw_form.visit_new_page
 
       click_link('Additional descriptive fields')
