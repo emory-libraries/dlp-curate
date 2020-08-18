@@ -40,8 +40,10 @@ en:
     dashboard:
       my:
         heading:
-          collection_type: Collection Type
-          type: Type
-          visibility: Visibility
           collection:
             visibility: Visibility of Collection
+          collection_type: Collection Type
+          items: Deposited Items
+          type: Type
+          visibility: Visibility
+          

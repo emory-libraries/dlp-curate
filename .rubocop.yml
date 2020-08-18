@@ -140,3 +140,7 @@ RSpec/AnyInstance:
     Exclude:
         - 'spec/models/job_io_wrapper_spec.rb'
         - spec/views/manifest/manifest.json.jbuilder_spec.rb
+
+RSpec/LetSetup:
+    Exclude:
+        - spec/presenters/collection_presenter_spec.rb
