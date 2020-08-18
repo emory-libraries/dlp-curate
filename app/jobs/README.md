@@ -33,7 +33,7 @@ This Actor inherits its methods from Hyrax' [BaseActor](https://github.com/samve
 
 ### [FileSetActor](https://github.com/emory-libraries/dlp-curate/blob/main/app/actors/hyrax/actors/file_set_actor.rb)
 This is an overwrite of Hyrax' [FileSetActor](https://github.com/samvera/hyrax/blob/v3.0.0.pre.rc1/app/actors/hyrax/actors/file_set_actor.rb). This actor attaches `FileSet`s to a `CurateGenericWork`. Changes that were needed are: 
-- `#create_content`, `#update_content`, and `#wrapper!`: a customized `FileSet` model was utilized, needing a different default `relation` argument set, as well as accepting a newly created argument (`preferred`) that denotes whether a file should be the first piece a user sees.
+- `#create_content`, `#update_content`, and `#wrapper!`: a customized `FileSet` model was utilized, needing a different default `relation` argument set, as well as accepting a newly created argument ([`preferred`](https://github.com/emory-libraries/dlp-curate/blob/main/app/models/file_set.rb#L76)) that denotes which file should be used as the primary.
 - `#create_metadata`: a new argument (`fileset_use`) was needed to distinguish how the file was to be used. This argument is passed into the `FileSet`'s Fedora object as the `pcdm_use` attribute.
 - `#attach_to_work`: passing this `file_set` into `work.ordered_members` is omitted because the `ordered_members` association is not utilized in this Actor, but rather in its Job relative.
 - `#fileset_name`: this method was added as a convenience when this Actor is used in other Jobs and RSpec. It makes assigning `FileSet`s `label`s and `title`s easier.
@@ -41,7 +41,7 @@ This is an overwrite of Hyrax' [FileSetActor](https://github.com/samvera/hyrax/b
 ### [AttachFilesToWorkJob](https://github.com/emory-libraries/dlp-curate/blob/main/app/jobs/attach_files_to_work_job.rb)
 This is an overwrite of Hyrax' [AttachFilesToWorkJob](https://github.com/samvera/hyrax/blob/v3.0.0.pre.rc1/app/jobs/attach_files_to_work_job.rb). The Job invokes the `FileSetActor` class so that the Actor is available out of the constraints of the Middleware Stack. The following changes were necessary for this Actor:
 - `#process_fileset`: `AttachFilesToWorkJob` had to accept multiple files into one `FileSet`, which Hyrax is not ready for out-of-the-box. This method was created so that multiple types of files could get attached, as well as the `preferred` attribute assigned.
-- `#perform`: the metadata and content creation methods have been moved to the `process_fileset` command which is called here.
+- `#perform`: the metadata and content creation calls that were originally in this method have been moved to `process_fileset`.
 - `#preferred_file`: provides logic for which file is deemed the preferred item.
 ### [CharacterizeJob](https://github.com/emory-libraries/dlp-curate/blob/main/app/jobs/characterize_job.rb)
 This is an overwrite of Hyrax' [CharacterizeJob](https://github.com/samvera/hyrax/blob/v3.0.0.pre.rc1/app/jobs/characterize_job.rb). This Job analyzes and provides details about a file attached to a `FileSet`. The needed changes are:
@@ -53,11 +53,11 @@ This is an overwrite of Hyrax' [CreateDerivativesJob](https://github.com/samvera
 ## Bulk Import Processing Sequence
 The following is each procedure in order of start to finish that a CSV uploaded to Curate Dashboard's "Import Content From a CSV" goes through.
 1. [`Zizia::StartCsvImportJob`](https://github.com/curationexperts/zizia/blob/v5.3.0/app/jobs/zizia/start_csv_import_job.rb)
-    The CSV uploaded into the importer gets processed by the Zizia gem. This job is initiated and passes the CSV object to the
+    The CSV uploaded into the importer gets processed by the Zizia gem. This job is initiated and passes the CSV object to the next method.
 2. [`ModularImporter#import`](https://github.com/curationexperts/zizia/blob/v5.3.0/app/importers/modular_importer.rb)
-    That also resides inside the Zizia Gem. Here, the CSV is completely parsed into a single Rails object using the Gem's built-in parsing and importing tools. Each work parsed from the CSV is assigned to a `record` instance associated with the main Rails `importer` object. Each `record` has a deduplication key and relevant files attached to it, everything is saved, and then passed along. `Zizia::Importer#import` receives it next, which simply passes each record through to
+    This also resides inside the Zizia Gem. Here, the CSV is completely parsed into a single Rails object using the Gem's built-in parsing and importing tools. Each work parsed from the CSV is assigned to a `record` instance associated with the main Rails `importer` object. Each `record` has a deduplication key and relevant files attached to it, everything is saved, and then passed along. `Zizia::Importer#import` receives it next, which simply sends each record through to following procedure.
 3. [`RecordImporter#import`](https://github.com/curationexperts/zizia/blob/v5.3.0/lib/zizia/record_importer.rb)
-    This is where the handoff between Zizia and Hyrax takes place. Each `record` (future `CurateGenericWork` object) is passed as an argument to the `#create` method of `Hyrax.config.curation_concerns.first`, which in our application, translates to the `ActiveSupport::Concern` of `CurateGenericWork`. Now in Hyrax, we move to the 
+    This is where the handoff between Zizia and Hyrax takes place. Each `record` (future `CurateGenericWork` object) is passed as an argument to the `#create` method of `Hyrax.config.curation_concerns.first`, which in our application, translates to the `ActiveSupport::Concern` of `CurateGenericWork`. Now in Hyrax, the next process is initiated. 
 4. [`Hyrax:Actors:CurateGenericWorkActor#create`](https://github.com/emory-libraries/dlp-curate/blob/main/app/actors/hyrax/actors/curate_generic_work_actor.rb)
     And we're now in the [Actor Stack](https://github.com/samvera/hyrax/blob/v3.0.0.pre.rc1/app/services/hyrax/default_middleware_stack.rb). The `record` object that was created in Zizia now exists inside of the `env` object. All of the data will stay inside of `env` object, too--even as every Actor in the stack makes any necessary manipulations, additions, or deletions they need to in order to persist the whole Work in the ActiveFedora system.
     
