@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# [Hyrax-overwrite-v3.0.0.pre.rc1] Brings in just the tests affected by the change
+# in behavior of the #total_viewable_items method.
 require 'rails_helper'
 
 RSpec.describe Hyrax::CollectionPresenter, :clean do
