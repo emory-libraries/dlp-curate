@@ -352,4 +352,29 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       end
     end
   end
+
+  describe 'object relations' do
+    context 'when source collection is present' do
+      let(:work) { FactoryBot.create(:public_generic_work) }
+      let(:collection) { FactoryBot.create(:collection_lw, title: ['Collection test']) }
+      before do
+        work.source_collection_id = collection.id
+        work.save!
+      end
+
+      it 'shows source collection under relations section' do
+        visit(work_url)
+
+        expect(page).to have_link('Collection test')
+      end
+    end
+
+    context 'when source collection is absent' do
+      it 'does not show source collection details' do
+        visit(work_url)
+
+        expect(page).not_to have_link('Collection test')
+      end
+    end
+  end
 end

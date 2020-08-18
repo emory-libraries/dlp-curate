@@ -13,3 +13,14 @@
     <%= render 'relationships_parent_row', type: type, items: items, presenter: presenter %>
   <% end %>
 <% end %>
+
+<% if presenter.source_collection_id %>
+  <% unless presenter.member_of_collection_ids.first == presenter.source_collection_id.first %>
+    <dt>Source Collection:</dt>
+    <dd>
+      <ul class="tabular">
+        <li><%= link_to presenter.source_collection_title.first, collection_path(presenter.source_collection_id.first) %></li>
+      </ul>
+    </dd>
+  <% end %>
+<% end %>

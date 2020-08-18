@@ -157,4 +157,8 @@ class SolrDocument
   def human_readable_visibility
     self['human_readable_visibility_ssi']
   end
+
+  def source_collection_title
+    self['source_collection_title_ssim']
+  end
 end

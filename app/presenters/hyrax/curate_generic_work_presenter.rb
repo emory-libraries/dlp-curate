@@ -7,7 +7,7 @@ module Hyrax
     CurateGenericWorkAttributes.instance.attributes.each do |key|
       delegate key.to_sym, to: :solr_document
     end
-    delegate :failed_preservation_events, to: :solr_document
+    delegate :failed_preservation_events, :source_collection_title, to: :solr_document
 
     include CuratePurl
 
