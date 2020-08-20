@@ -12,6 +12,8 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
       solr_doc['creator_ssort'] = object.creator.first
       solr_doc['generic_type_sim'] = ["Collection"]
       solr_doc['banner_path_ss'] = banner_path
+      solr_doc['source_collection_title_ssim'] = source_collection
+      solr_doc['deposit_collection_title_ssim'] = deposit_collection
     end
   end
 
@@ -32,5 +34,15 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
   def path_sanitized(path)
     return '/branding' + path.split('/branding').last if path&.include? '/branding'
     path
+  end
+
+  def source_collection
+    collection = Collection.find(object.source_collection_id) if object.source_collection_id
+    return collection.title unless collection.nil?
+  end
+
+  def deposit_collection
+    collection = Collection.find(object.deposit_collection_id) if object.deposit_collection_id
+    return collection.title unless collection.nil?
   end
 end

@@ -38,6 +38,10 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
+  property :deposit_collection_id, predicate: "http://metadata.emory.edu/vocab/cor-terms#depositCollectionID", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
   property :emory_ark, predicate: 'http://id.loc.gov/vocabulary/identifiers/local#ark' do |index|
     index.as :stored_searchable
   end
@@ -81,6 +85,10 @@ class Collection < ActiveFedora::Base
   property :rights_documentation, predicate: 'http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI', multiple: false
 
   property :sensitive_material, predicate: 'http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterial', multiple: false do |index|
+    index.as :stored_searchable
+  end
+
+  property :source_collection_id, predicate: "http://metadata.emory.edu/vocab/cor-terms#sourceCollectionID", multiple: false do |index|
     index.as :stored_searchable
   end
 
