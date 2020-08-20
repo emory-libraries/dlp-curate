@@ -84,6 +84,12 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
       expect(first('#file_download').text).to eq('Download Preservation Master File')
     end
 
+    it 'does not show Single-Use Links section' do
+      expect(page).not_to have_content('Single-Use Links')
+      expect(page).not_to have_css('table.table.table-striped.table-condensed.file_set.single-use-links')
+      expect(page).not_to have_link('Create Single-Use Link')
+    end
+
     context 'within the preservation events block' do
       it 'shows the right header' do
         expect(page).to have_content('Preservation Events')
