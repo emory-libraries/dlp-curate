@@ -16,6 +16,20 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
     user_work.reload
   end
 
+  context 'elements that should not be on page' do
+    before { visit work_url }
+
+    it 'does not show Citations button' do
+      expect(page).not_to have_css('button', text: 'Citations:')
+    end
+
+    it 'does not show social media buttons' do
+      social_media = page.find_all('a.resp-sharing-button__link')
+
+      expect(social_media.size).to eq(0)
+    end
+  end
+
   context 'page metadata labels' do
     before { visit work_url }
 
