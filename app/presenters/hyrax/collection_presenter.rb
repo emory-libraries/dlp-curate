@@ -39,30 +39,16 @@ module Hyrax
       delegate key.to_sym, to: :solr_document
     end
     # Metadata Methods
-    delegate :title, :description, :creator, :contributors, :subject, :publisher, :keyword, :language, :embargo_release_date,
-             :lease_expiration_date, :license, :date_created, :resource_type, :based_near, :related_url, :identifier, :thumbnail_path,
-             :title_or_label, :collection_type_gid, :create_date, :modified_date, :visibility, :edit_groups, :edit_people,
-             :holding_repository,
-             :administrative_unit,
-             :contributors,
-             :abstract,
-             :primary_language,
-             :finding_aid_link,
-             :institution,
-             :local_call_number,
-             :keywords,
-             :subject_topics,
-             :subject_names,
-             :subject_geo,
-             :subject_time_periods,
-             :notes,
-             :rights_documentation,
-             :sensitive_material,
-             :internal_rights_note,
-             :contact_information,
-             :staff_notes,
-             :system_of_record_ID,
-             :emory_ark,
+    delegate :title, :description, :creator, :contributors, :subject, :publisher,
+             :keyword, :language, :embargo_release_date, :lease_expiration_date,
+             :license, :date_created, :resource_type, :based_near, :related_url,
+             :identifier, :thumbnail_path, :title_or_label, :collection_type_gid,
+             :create_date, :modified_date, :visibility, :edit_groups, :edit_people,
+             :holding_repository, :administrative_unit, :contributors, :abstract,
+             :primary_language, :finding_aid_link, :institution, :local_call_number,
+             :keywords, :subject_topics, :subject_names, :subject_geo, :subject_time_periods,
+             :notes, :rights_documentation, :sensitive_material, :internal_rights_note,
+             :contact_information, :staff_notes, :system_of_record_ID, :emory_ark,
              :primary_repository_ID,
              to: :solr_document
 
@@ -237,6 +223,18 @@ module Hyrax
     def allow_batch?
       return true if current_ability.can?(:edit, solr_document)
       false
+    end
+
+    def deposit_collection?
+      source_coll_id.present? && source_coll_id[0] != id
+    end
+
+    def deposit_collection_link
+      tag.a solr_document['source_collection_title_ssim'][0], href: "/collections/#{source_coll_id[0]}"
+    end
+
+    def source_coll_id
+      solr_document['source_collection_id_tesim']
     end
   end
 end

@@ -96,5 +96,30 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
         expect(ths.include?('Items')).to be_falsey
       end
     end
+
+    context 'deposit/source element' do
+      before do
+        user_collection.source_collection_id = admin_collection.id
+        user_collection.save!
+        user_collection.reload
+      end
+
+      describe 'viewing deposit collection' do
+        it 'does have the Source Collection element' do
+          visit "/collections/#{user_collection.id}"
+
+          expect(page).to have_content "Source Collection"
+          expect(page).to have_link(admin_collection.title[0], href: "/collections/#{admin_collection.id}")
+        end
+      end
+
+      describe 'viewing source collection' do
+        it 'does not have the Source Collection element' do
+          visit "/collections/#{admin_collection.id}"
+
+          expect(page).not_to have_content "Source Collection"
+        end
+      end
+    end
   end
 end
