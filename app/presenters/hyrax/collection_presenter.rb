@@ -112,6 +112,9 @@ module Hyrax
       ActiveFedora::Base.where("member_of_collection_ids_ssim:#{id}").count
     end
 
+    # Product Owner preferred that the count not be restricted by user's ability to
+    # view the works when seeing the Deposited Items counts on the Collection Index
+    # page.
     def total_viewable_items
       total_items
     end
