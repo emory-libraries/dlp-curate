@@ -113,7 +113,7 @@ module Hyrax
     end
 
     def total_viewable_items
-      ActiveFedora::Base.where("member_of_collection_ids_ssim:#{id}").size
+      ActiveFedora::Base.where("member_of_collection_ids_ssim:#{id}").count
     end
 
     def total_viewable_works
