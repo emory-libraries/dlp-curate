@@ -37,6 +37,9 @@ en:
   hyrax:
     collection_type:
       default_title: Undefined
+    collections:
+      show: 
+        source_collection: Source Collection
     dashboard:
       my:
         heading:

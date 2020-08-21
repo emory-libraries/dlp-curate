@@ -53,4 +53,33 @@ RSpec.describe Hyrax::CollectionPresenter, :clean do
       it { is_expected.to eq 0 }
     end
   end
+
+  describe "#source/deposit related methods" do
+    let(:deposit_collection) { FactoryBot.build(:public_collection_lw, user: user, with_permission_template: true) }
+
+    before do
+      collection.save!
+      deposit_collection.source_collection_id = collection.id
+      deposit_collection.save!
+    end
+
+    context '#deposit_collection?' do
+      it 'provides right response based on source_collection_id' do
+        solr_doc = SolrDocument.new(deposit_collection.to_solr)
+        deposit_presenter = described_class.new(solr_doc, ability)
+
+        expect(deposit_presenter.deposit_collection?).to be_truthy
+        expect(presenter.deposit_collection?).to be_falsey
+      end
+    end
+
+    context '#deposit_collection_link' do
+      it 'provides link built from 2 solr_doc fields' do
+        solr_doc = SolrDocument.new(deposit_collection.to_solr)
+        deposit_presenter = described_class.new(solr_doc, ability)
+
+        expect(deposit_presenter.deposit_collection_link).to eq "<a href=\"/collections/#{collection.id}\">Testing Collection</a>"
+      end
+    end
+  end
 end

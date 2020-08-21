@@ -95,6 +95,17 @@
     </div>
   </div>
 
+  <!-- Source Collection -->
+  <% if @presenter.deposit_collection? %>
+    <div class="hyc-blacklight hyc-bl-title">
+      <h4><%= t('.source_collection') %></h4>
+    </div>
+    <div class="hyc-blacklight hyc-bl-source-link">
+      <%= @presenter.deposit_collection_link %>
+    </div>
+  <% end %>
+
+
   <!-- Subcollections -->
   <% if @presenter.collection_type_is_nestable? && @subcollection_count > 0 %>
       <div class="hyc-blacklight hyc-bl-title">
