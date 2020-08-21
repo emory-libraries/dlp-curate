@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe ManifestBuilderService, :clean do
+RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersistenceJob] do
   let(:identifier) { '508hdr7srq-cor' }
   let(:service) { described_class.new(presenter: presenter, curation_concern: work) }
   let(:ability) { instance_double(Ability) }
@@ -10,7 +10,7 @@ RSpec.describe ManifestBuilderService, :clean do
   let(:user) { FactoryBot.create(:user) }
   let(:work) { FactoryBot.create(:public_generic_work, id: identifier) }
   let(:solr_document) { SolrDocument.new(attributes) }
-  let(:cache_file) { Rails.root.join('tmp', "2019-11-11_18-20-32_#{identifier}") }
+  let(:cache_file) { Rails.root.join('tmp', "d28c5b20cf9b9663181d02b5ce90fac59fa666d7_#{identifier}") }
   let(:attributes) do
     { "id" => identifier,
       "title_tesim" => [work.title.first],
@@ -21,7 +21,8 @@ RSpec.describe ManifestBuilderService, :clean do
       "depositor_tesim" => user.uid,
       "holding_repository_tesim" => ["test holding repo"],
       "rights_statement_tesim" => "http://rightsstatements.org/vocab/InC/1.0/",
-      "hasFormat_ssim" => ["608hdr7srt-cor"] }
+      "hasFormat_ssim" => ["608hdr7srt-cor"],
+      "manifest_cache_key_tesim" => ["d28c5b20cf9b9663181d02b5ce90fac59fa666d7"] }
   end
   let(:file_set)  { FactoryBot.create(:file_set, read_groups: ['public']) }
   let(:file_set2) { FactoryBot.create(:file_set, read_groups: ['public']) }
@@ -130,18 +131,6 @@ RSpec.describe ManifestBuilderService, :clean do
           expect(service.iiif_url).to include "example.com/iiif/2/"
           expect(service.info_url).to include "example.com/iiif/2/"
         end
-      end
-    end
-
-    context "#image_concerns instance method" do
-      let(:child_work) { FactoryBot.create(:public_generic_work) }
-      before do
-        work.ordered_members << child_work
-        work.save!
-      end
-
-      it "returns file_set_ids" do
-        expect(service.send(:image_concerns)).to match_array [file_set.id, file_set2.id, file_set3.id]
       end
     end
 

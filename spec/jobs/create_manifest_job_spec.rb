@@ -14,7 +14,8 @@ RSpec.describe CreateManifestJob, :clean do
       "has_model_ssim" => ["CurateGenericWork"],
       "date_created_tesim" => ['an unformatted date'],
       "date_modified_dtsi" => "2019-11-11T18:20:32Z",
-      "depositor_tesim" => user_key }
+      "depositor_tesim" => user_key,
+      "manifest_cache_key_tesim" => ["d28c5b20cf9b9663181d02b5ce90fac59fa666d7"] }
   end
   let(:presenter) { described_class.new(solr_document, ability, request) }
 
@@ -23,12 +24,12 @@ RSpec.describe CreateManifestJob, :clean do
     allow(CurateGenericWork).to receive(:all).and_return([generic_work])
     allow(CurateGenericWork).to receive(:find).and_return(generic_work)
     allow(SolrDocument).to receive(:find).and_return(solr_document)
-    FileUtils.rm_f("./tmp/2019-11-11_18-20-32_888888")
+    FileUtils.rm_f("./tmp/d28c5b20cf9b9663181d02b5ce90fac59fa666d7_888888")
   end
 
-  it 'creates manifest and saves to tmp' do
-    expect(File).not_to exist("./tmp/2019-11-11_18-20-32_888888")
+  it 'creates manifest and saves to tmp', perform_enqueued: [ManifestPersistenceJob] do
+    expect(File).not_to exist("./tmp/d28c5b20cf9b9663181d02b5ce90fac59fa666d7_888888")
     described_class.perform_now
-    expect(File).to exist("./tmp/2019-11-11_18-20-32_888888")
+    expect(File).to exist("./tmp/d28c5b20cf9b9663181d02b5ce90fac59fa666d7_888888")
   end
 end

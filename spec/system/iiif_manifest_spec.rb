@@ -13,7 +13,7 @@ RSpec.describe 'viewing an IIIF manifest', type: :system, clean: true do
 
   context "public works" do
     let(:work) { FactoryBot.build(:public_work) }
-    it "has a well-formed manifest" do
+    it "has a well-formed manifest", perform_enqueued: [ManifestPersistenceJob] do
       actor_stack_work
       work.reload
 
@@ -21,6 +21,13 @@ RSpec.describe 'viewing an IIIF manifest', type: :system, clean: true do
       visit "/iiif/#{work.id}/manifest"
 
       expect(page.response_headers["Content-Type"]).to eq "application/json; charset=utf-8"
+
+      # need to visit page because the first time manifest placeholder will always show
+      # message to users to wait. This is because manifest generation has now been
+      # moved to a background job. Therefore, proper response will be shown to the user
+      # once bg job finishes and a manifest is generated.
+      # Refer for more info: https://github.com/emory-libraries/dlp-curate/pull/1429/
+      visit "/iiif/#{work.id}/manifest"
 
       response_values = JSON.parse(page.body)
 

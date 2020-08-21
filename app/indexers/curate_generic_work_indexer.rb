@@ -33,6 +33,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['child_works_for_lux_tesim'] = child_works_for_lux
       solr_doc['parent_work_for_lux_tesim'] = parent_work_for_lux
       solr_doc['source_collection_title_ssim'] = source_collection
+      solr_doc['manifest_cache_key_tesim'] = manifest_cache_key
       # the next two fields are for display and search, not for security
       solr_doc['visibility_group_ssi'] = visibility_group_for_lux
       solr_doc['human_readable_visibility_ssi'] = human_readable_visibility
@@ -168,5 +169,9 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   def source_collection
     collection = Collection.find(object.source_collection_id) if object.source_collection_id
     return collection.title unless collection.nil?
+  end
+
+  def manifest_cache_key
+    Digest::MD5.hexdigest(object.title.first.to_s + object.file_sets.count.to_s + object.holding_repository.to_s + object.rights_statement.first.to_s + object.rendering_ids.to_s)
   end
 end

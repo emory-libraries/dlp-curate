@@ -230,13 +230,13 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     end
   end
 
-  describe "#manifest" do
+  describe "#manifest", perform_enqueued: [ManifestPersistenceJob] do
     let(:work)          { FactoryBot.create(:public_generic_work, id: identifier) }
     let(:file_set)      { FactoryBot.create(:file_set, read_groups: ['public']) }
     let(:pmf)           { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
     let(:sf)            { File.open(fixture_path + '/book_page/0003_service.jpg') }
     let(:solr_document) { SolrDocument.new(attributes) }
-    let(:cache_file)    { Rails.root.join('tmp', "2019-11-11_18-20-32_#{identifier}") }
+    let(:cache_file)    { Rails.root.join('tmp', "d28c5b20cf9b9663181d02b5ce90fac59fa666d7_#{identifier}") }
     let(:attributes) do
       { "id" => identifier,
         "title_tesim" => [work.title.first],
@@ -246,7 +246,8 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
         "date_modified_dtsi" => "2019-11-11T18:20:32Z",
         "depositor_tesim" => 'example_user',
         "holding_repository_tesim" => ["test holding repo"],
-        "rights_statement_tesim" => ["http://rightsstatements.org/vocab/InC/1.0/"] }
+        "rights_statement_tesim" => ["http://rightsstatements.org/vocab/InC/1.0/"],
+        "manifest_cache_key_tesim" => ["d28c5b20cf9b9663181d02b5ce90fac59fa666d7"] }
     end
     let(:params) do
       {
