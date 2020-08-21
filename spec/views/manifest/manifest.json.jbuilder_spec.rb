@@ -6,7 +6,7 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
   let(:identifier)      { '508hdr7srq-cor' }
   let(:work)            { FactoryBot.create(:public_generic_work, id: identifier) }
   let(:builder_service) { ManifestBuilderService.new(curation_concern: work) }
-  let(:image_concerns)  { builder_service.send(:image_concerns) }
+  let(:image_concerns)  { ManifestPersistenceJob.new.send(:image_concerns, work) }
   let(:root_url)        { presenter.manifest_url }
   let(:renderings)      { rendering_output }
   let(:ability)         { instance_double(Ability) }

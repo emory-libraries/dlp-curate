@@ -100,6 +100,7 @@ Metrics/MethodLength:
         - spec/fixtures/manifest_output.rb
         - app/controllers/iiif_controller.rb
         - app/controllers/background_jobs_controller.rb
+        - spec/fixtures/placeholder_manifest_output.rb
 
 Metrics/ModuleLength:
     Exclude:
@@ -110,6 +111,10 @@ Metrics/PerceivedComplexity:
     Exclude:
         - app/importers/curate_record_importer.rb
         - app/forms/hyrax/curate_generic_work_form.rb
+
+Metrics/ParameterLists:
+    Exclude:
+        - app/jobs/manifest_persistence_job.rb
 
 RSpec/DescribeClass:
     Exclude:

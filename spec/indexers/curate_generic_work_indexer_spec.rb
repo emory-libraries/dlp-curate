@@ -234,5 +234,64 @@ RSpec.describe CurateGenericWorkIndexer do
         expect(solr_document['source_collection_title_ssim']).to eq(['Test title collection123'])
       end
     end
+
+    context 'when title is changed' do
+      let(:attributes) do
+        {
+          id:    '123',
+          title: ['Test title']
+        }
+      end
+
+      it 'returns manifest_cache_key' do
+        expect(Digest::MD5).to receive(:hexdigest).with('Test title0[]') # zero because number of file_sets attached to the work is zero
+        indexer.generate_solr_document
+      end
+    end
+
+    context 'when holding repo is changed' do
+      let(:attributes) do
+        {
+          id:                 '123',
+          title:              ['Test title'],
+          holding_repository: 'Library'
+        }
+      end
+
+      it 'returns manifest_cache_key' do
+        expect(Digest::MD5).to receive(:hexdigest).with('Test title0Library[]') # zero because number of file_sets attached to the work is zero
+        indexer.generate_solr_document
+      end
+    end
+
+    context 'when rights_statement is changed' do
+      let(:attributes) do
+        {
+          id:               '123',
+          title:            ['Test title'],
+          rights_statement: ['http://rightsstatements.org/vocab/InC/1.0/']
+        }
+      end
+
+      it 'returns manifest_cache_key' do
+        expect(Digest::MD5).to receive(:hexdigest).with("Test title0http://rightsstatements.org/vocab/InC/1.0/[]") # zero because number of file_sets attached to the work is zero
+        indexer.generate_solr_document
+      end
+    end
+
+    context 'when rendering_ids is changed' do
+      let(:attributes) do
+        {
+          id:            '123',
+          title:         ['Test title'],
+          rendering_ids: ['abc123']
+        }
+      end
+
+      it 'returns manifest_cache_key' do
+        expect(Digest::MD5).to receive(:hexdigest).with("Test title0[\"abc123\"]") # zero because number of file_sets attached to the work is zero
+        indexer.generate_solr_document
+      end
+    end
   end
 end
