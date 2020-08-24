@@ -8,7 +8,10 @@ class BackgroundJobsController < ApplicationController
       FileSetCleanUpJob.perform_later
       msg = "File Set Cleanup Job"
     elsif params[:jobs] == 'preservation'
-      PreservationWorkflowImporterJob.perform_later(params[:preservation_csv].path)
+      name = params[:preservation_csv].original_filename
+      path = File.join('tmp', 'uploads', name)
+      File.open(path, "wb") { |f| f.write(params[:preservation_csv].read) }
+      PreservationWorkflowImporterJob.perform_later(path)
       msg = "Preservation Workflow Importer Job"
     else
       CSV.foreach(params[:reindex_csv].path, headers: true) do |row|

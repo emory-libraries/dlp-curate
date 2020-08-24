@@ -36,6 +36,7 @@ Metrics/AbcSize:
         - app/indexers/curate/file_set_indexer.rb
         - app/importers/preservation_workflow_importer.rb
         - app/indexers/curate_generic_work_indexer.rb
+        - app/controllers/background_jobs_controller.rb
 
 Metrics/BlockLength:
     Exclude:
