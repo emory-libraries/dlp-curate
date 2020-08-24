@@ -1,0 +1,7 @@
+<%=
+  f.input :source_collection_id,
+  as: :select,
+  collection: Collection.all.map { |c| [c.title.first, c.id] },
+  include_blank: true, required: false,
+  input_html: { class: 'form-control' }
+%>
