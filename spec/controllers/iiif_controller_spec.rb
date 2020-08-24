@@ -232,7 +232,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
 
   describe "#manifest", perform_enqueued: [ManifestPersistenceJob] do
     let(:work)          { FactoryBot.create(:public_generic_work, id: identifier) }
-    let(:file_set)      { FactoryBot.create(:file_set, read_groups: ['public']) }
+    let(:file_set)      { FactoryBot.create(:file_set, id: "9010p2ngfn-cor", read_groups: ['public']) }
     let(:pmf)           { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
     let(:sf)            { File.open(fixture_path + '/book_page/0003_service.jpg') }
     let(:solr_document) { SolrDocument.new(attributes) }
@@ -270,7 +270,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     end
 
     it "saves manifest file in a cache" do
-      FileUtils.rm_f("./tmp/2019-11-11_18-20-32_508hdr7srt-cor")
+      FileUtils.rm_f("./tmp/d28c5b20cf9b9663181d02b5ce90fac59fa666d7_508hdr7srt-cor")
 
       get :manifest, params: params
       expect(File).to exist(cache_file)
@@ -297,9 +297,9 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
       expect(response_values).to include "sequences"
       expect(response_values["sequences"].first["@type"]).to include "sc:Sequence"
       expect(response_values["sequences"].first["@id"]).to include "/iiif/#{work.id}/manifest/sequence/normal"
-      expect(response_values["sequences"].first["canvases"].first["@id"]).to include "/iiif/#{work.id}/manifest/canvas/#{file_set.id}"
+      expect(response_values["sequences"].first["canvases"].first["@id"]).to include "/iiif/#{work.id}/manifest/canvas/9010p2ngfn-cor"
       expect(response_values["sequences"].first["canvases"].first["images"].first["resource"]["@id"]).to include(
-        "/images/#{file_set.id}%2Ffiles%2F#{file_set.service_file.id.split('/').last}/full/600,/0/default.jpg"
+        "/images/9010p2ngfn-cor%2Ffiles%2F#{file_set.service_file.id.split('/').last}/full/600,/0/default.jpg"
       )
     end
   end
