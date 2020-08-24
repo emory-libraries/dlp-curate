@@ -5,9 +5,9 @@ require 'rails_helper'
 RSpec.describe Hyrax::AdminSetPresenter do
   let(:admin_set) do
     mock_model(AdminSet,
-               id: '123',
+               id:          '123',
                description: ['An example admin set.'],
-               title: ['Example Admin Set Title'])
+               title:       ['Example Admin Set Title'])
   end
 
   let(:work) { FactoryBot.build(:work, title: ['Example Work Title']) }
@@ -56,21 +56,19 @@ RSpec.describe Hyrax::AdminSetPresenter do
   end
 
   describe '#collection_type' do
+    subject { presenter.collection_type }
     let(:admin_set) do
       FactoryBot.build(:admin_set, id: AdminSet::DEFAULT_ID)
     end
-
-    subject { presenter.collection_type }
 
     it { is_expected.to eq(FactoryBot.create(:admin_set_collection_type)) }
   end
 
   describe '#show_path' do
+    subject { presenter.show_path }
     let(:admin_set) do
       FactoryBot.build(:admin_set, id: 'sb397824g')
     end
-
-    subject { presenter.show_path }
 
     it { is_expected.to eq "/admin/admin_sets/#{admin_set.id}?locale=en" }
   end
