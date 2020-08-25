@@ -312,7 +312,6 @@ RSpec.describe Hyrax::Admin::CollectionTypesController, type: :controller, clean
           delete :destroy, params: { id: collection_type_to_destroy }
           expect(response).to have_http_status(:found)
           expect(response).to redirect_to(admin_collection_types_path)
-          expect(flash[:notice]).to eq "The collection type #{collection_type_to_destroy.title} has been deleted."
           expect(Hyrax::CollectionType.exists?(collection_type_to_destroy.id)).to be false
         end
       end
