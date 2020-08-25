@@ -69,8 +69,8 @@ module Hyrax
     private
 
       def report_error_msg
-        error_msg = @collection_type.errors.messages
-        msg = 'Save was not successful because '
+        error_msg = @collection_type.errors.messages.dup
+        msg = 'Save was not successful because '.dup
         error_msg.each { |k, v| msg << k.to_s + ' ' + v.join(', ') + ', and ' }
         msg.chomp!(', and ')
         msg << '.'
