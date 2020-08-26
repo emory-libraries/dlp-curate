@@ -6,4 +6,4 @@ download_dir: /var/tmp
 collection:
     persist: false
     dir: solr/config
-    name: hydratest2
+    name: hydratest5
