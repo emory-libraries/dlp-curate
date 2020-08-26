@@ -172,6 +172,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
   end
 
   def manifest_cache_key
-    Digest::MD5.hexdigest(object.title.first.to_s + object.file_sets.count.to_s + object.holding_repository.to_s + object.rights_statement.first.to_s + object.rendering_ids.to_s)
+    Digest::MD5.hexdigest(object.title.first.to_s + object.file_sets.count.to_s + object.holding_repository.to_s + object.rights_statement.first.to_s + object.visibility.to_s +
+                          object.rendering_ids.to_s)
   end
 end
