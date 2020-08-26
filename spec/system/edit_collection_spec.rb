@@ -10,6 +10,7 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
   let(:file_set) { FactoryBot.create(:file_set, user: admin, title: ["Test title"], pcdm_use: "Primary Content") }
   let(:file) { File.open(fixture_path + '/sun.png') }
   let(:admin) { FactoryBot.create :admin }
+  let(:collection_2) { FactoryBot.create(:collection_lw, user: admin) }
 
   let(:collection_attrs) do
     {
@@ -70,6 +71,21 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
       expect(find("input[name='banner_files[]']", visible: false).value).to eq '1'
       click_on 'Save changes'
       expect(page).to have_content 'balloon.jpeg'
+    end
+
+    scenario 'successfully retains deposit and source collection ids' do
+      collection_2.save!
+      collection_2.reload
+      visit "/dashboard/collections/#{collection.id}/edit"
+      click_on 'Additional fields'
+      expect(page).to have_content 'Source Collection ID (source_collection_id)'
+      expect(page).to have_content 'Deposit Collection IDs (deposit_collection_ids)'
+      select 'Robert Langmuir African American Photograph Collection', from: 'collection_source_collection_id'
+      select 'Testing Collection', from: 'collection_deposit_collection_ids'
+      click_on 'Save changes'
+      collection.reload
+      expect(collection.source_collection_id).to eq collection.id
+      expect(collection.deposit_collection_ids).to eq [collection_2.id]
     end
   end
 end

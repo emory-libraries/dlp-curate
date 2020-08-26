@@ -42,8 +42,6 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
   end
 
   def deposit_collection
-    object.deposit_collection_ids.map do |id|
-      Collection.find(id).title
-    end if object.deposit_collection_ids.present?
+    object.deposit_collection_ids.map { |id| Collection.find(id).title } if object.deposit_collection_ids.present?
   end
 end

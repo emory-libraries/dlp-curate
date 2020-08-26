@@ -58,8 +58,8 @@ RSpec.describe CurateCollectionIndexer do
       let(:collection_new) { FactoryBot.create(:collection_lw, id: 'abc123', title: ['Test title collection123']) }
       let(:attributes) do
         {
-          id:                    '123',
-          title:                 ['A title'],
+          id:                     '123',
+          title:                  ['A title'],
           deposit_collection_ids: ['abc123']
         }
       end
