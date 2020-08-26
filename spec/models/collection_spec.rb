@@ -460,6 +460,24 @@ RSpec.describe Collection, clean: true do
     end
   end
 
+  describe "#deposit_collection_ids" do
+    subject { described_class.new }
+    let(:deposit_collection_ids) { ['123abc', '456def'] }
+
+    context "with new Collection" do
+      its(:deposit_collection_ids) { is_expected.to be_empty }
+    end
+
+    context "with a Collection that has a deposit_collection_ids" do
+      subject do
+        described_class.create.tap do |collection|
+          collection.deposit_collection_ids = deposit_collection_ids
+        end
+      end
+      its(:deposit_collection_ids) { is_expected.to eq deposit_collection_ids }
+    end
+  end
+
   describe "#members_objects", clean_repo: true do
     let(:collection) { FactoryBot.create(:collection_lw) }
 

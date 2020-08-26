@@ -1,0 +1,11 @@
+<% if current_user.admin? %>
+  <%= 
+    f.input key, 
+    as: :multi_value_select, 
+    collection: all_collections_collection,
+    include_blank: true, required: false,
+    input_html: { class: 'form-control' }
+  %>
+<% else %>
+  <p>Available only for admins.</p>
+<% end %>

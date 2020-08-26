@@ -13,8 +13,9 @@ RSpec.describe Hyrax::Forms::CollectionForm do
                          :institution, :local_call_number, :keywords, :subject_topics,
                          :subject_names, :subject_geo, :subject_time_periods, :notes,
                          :rights_documentation, :sensitive_material, :internal_rights_note,
-                         :contact_information, :staff_notes, :system_of_record_ID, :emory_ark,
-                         :visibility, :thumbnail_id, :alt_title]
+                         :contact_information, :staff_notes, :system_of_record_ID,
+                         :emory_ark, :visibility, :thumbnail_id, :alt_title, :source_collection_id,
+                         :deposit_collection_ids]
     end
   end
 
@@ -34,10 +35,11 @@ RSpec.describe Hyrax::Forms::CollectionForm do
 
     it do
       is_expected.to eq [
-        :administrative_unit, :contributors, :primary_language, :finding_aid_link, :institution,
-        :local_call_number, :keywords, :subject_topics, :subject_names, :subject_geo, :subject_time_periods,
-        :notes, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
-        :staff_notes, :system_of_record_ID, :emory_ark, :alt_title
+        :administrative_unit, :contributors, :primary_language, :finding_aid_link,
+        :institution, :local_call_number, :keywords, :subject_topics, :subject_names,
+        :subject_geo, :subject_time_periods, :notes, :rights_documentation, :sensitive_material,
+        :internal_rights_note, :contact_information, :staff_notes, :system_of_record_ID,
+        :emory_ark, :alt_title, :source_collection_id, :deposit_collection_ids
       ]
     end
   end
@@ -90,11 +92,15 @@ RSpec.describe Hyrax::Forms::CollectionForm do
     subject { described_class.build_permitted_params }
 
     it do
-      is_expected.to eq [{ title: [] }, { holding_repository: [] }, { administrative_unit: [] }, { creator: [] }, { contributors: [] },
-                         :abstract, :primary_language, :finding_aid_link, :institution, :local_call_number, { keywords: [] },
-                         { subject_topics: [] }, { subject_names: [] }, { subject_geo: [] }, { subject_time_periods: [] },
-                         { notes: [] }, :rights_documentation, :sensitive_material, :internal_rights_note, :contact_information,
-                         { staff_notes: [] }, :system_of_record_ID, { emory_ark: [] }, :visibility, :thumbnail_id, { alt_title: [] },
+      is_expected.to eq [{ title: [] }, { holding_repository: [] }, { administrative_unit: [] },
+                         { creator: [] }, { contributors: [] }, :abstract, :primary_language,
+                         :finding_aid_link, :institution, :local_call_number, { keywords: [] },
+                         { subject_topics: [] }, { subject_names: [] }, { subject_geo: [] },
+                         { subject_time_periods: [] }, { notes: [] }, :rights_documentation,
+                         :sensitive_material, :internal_rights_note, :contact_information,
+                         { staff_notes: [] }, :system_of_record_ID, { emory_ark: [] },
+                         :visibility, :thumbnail_id, { alt_title: [] }, :source_collection_id,
+                         { deposit_collection_ids: [] },
                          { permissions_attributes: [:type, :name, :access, :id, :_destroy] }]
     end
   end

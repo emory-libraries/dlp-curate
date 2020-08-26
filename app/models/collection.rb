@@ -38,7 +38,7 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :deposit_collection_id, predicate: "http://metadata.emory.edu/vocab/cor-terms#depositCollectionID", multiple: false do |index|
+  property :deposit_collection_ids, predicate: "http://metadata.emory.edu/vocab/cor-terms#depositCollectionID" do |index|
     index.as :stored_searchable
   end
 

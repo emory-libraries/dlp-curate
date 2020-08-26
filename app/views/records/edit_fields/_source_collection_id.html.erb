@@ -1,0 +1,10 @@
+<% if current_user.admin? %>
+  <%=
+    f.input key,
+    collection: all_collections_collection,
+    include_blank: true, required: false,
+    input_html: { class: 'form-control' }
+  %>
+<% else %>
+  <p>Available only for admins.</p>
+<% end %>

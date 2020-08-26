@@ -50,7 +50,7 @@ RSpec.describe CurateCollectionIndexer do
       end
 
       it 'returns empty array' do
-        expect(solr_document['deposit_collection_id_tesim']).to eq(nil)
+        expect(solr_document['deposit_collection_ids_tesim']).to be_nil
       end
     end
 
@@ -58,9 +58,9 @@ RSpec.describe CurateCollectionIndexer do
       let(:collection_new) { FactoryBot.create(:collection_lw, id: 'abc123', title: ['Test title collection123']) }
       let(:attributes) do
         {
-          id:                    '123',
-          title:                 ['A title'],
-          deposit_collection_id: 'abc123'
+          id:                     '123',
+          title:                  ['A title'],
+          deposit_collection_ids: ['abc123']
         }
       end
 
@@ -69,7 +69,7 @@ RSpec.describe CurateCollectionIndexer do
       end
 
       it 'returns correct deposit collection title' do
-        expect(solr_document['deposit_collection_title_ssim']).to eq(['Test title collection123'])
+        expect(solr_document['deposit_collection_titles_tesim']).to eq(['Test title collection123'])
       end
     end
   end
