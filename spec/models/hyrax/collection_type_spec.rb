@@ -35,6 +35,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     expect(collection_type.require_membership).to eq false
     expect(collection_type.assigns_workflow?).to eq false
     expect(collection_type.assigns_visibility?).to eq false
+    expect(collection_type.deposit_only_collection?).to eq false
   end
 
   describe '#gid' do

@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 201901241536542) do
     t.boolean "share_applies_to_new_works", default: true, null: false
     t.boolean "brandable", default: true, null: false
     t.string "badge_color", default: "#663333"
+    t.boolean "deposit_only_collection", default: false, null: false
     t.index ["machine_id"], name: "index_hyrax_collection_types_on_machine_id", unique: true
   end
 

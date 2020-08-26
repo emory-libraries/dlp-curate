@@ -70,6 +70,10 @@ RSpec.describe Curate::CollectionType, :clean, type: :model do
     expect(collection_type.allow_multiple_membership?).to eq false
   end
 
+  it 'is not deposit-only' do
+    expect(collection_type.deposit_only_collection?).to be_falsey
+  end
+
   it "has default settings for everything else" do
     expect(collection_type.require_membership).to eq false
     expect(collection_type.assigns_workflow?).to eq false
