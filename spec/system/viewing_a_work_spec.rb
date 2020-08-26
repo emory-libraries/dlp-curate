@@ -391,4 +391,32 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       end
     end
   end
+
+  describe 'viewing works using source collection facet' do
+    context 'when source collection is present' do
+      let(:work) { FactoryBot.create(:public_generic_work, title: ['SC test work']) }
+      let(:work2) { FactoryBot.create(:public_generic_work, title: ['SC test work2']) }
+      let(:collection) { FactoryBot.create(:collection_lw, title: ['Collection test']) }
+      before do
+        work.source_collection_id = collection.id
+        work.save!
+      end
+
+      it 'shows source collection in its dropdown facet' do
+        visit("/dashboard/works")
+        expect(page).to have_content(collection.title.first)
+        click_link(collection.title.first)
+        expect(page).to have_content('SC test work') # make sure work with source collection shows up in search result
+        expect(page).not_to have_content('SC test work 2') # make sure work without source collection does not show up in search result
+      end
+    end
+
+    context 'when source collection is absent' do
+      it 'does not show source collection details' do
+        visit("/dashboard/works")
+
+        expect(page).not_to have_content('Source Collection') # make sure dropdown is not present
+      end
+    end
+  end
 end
