@@ -244,7 +244,7 @@ RSpec.describe CurateGenericWorkIndexer do
       end
 
       it 'returns manifest_cache_key' do
-        expect(Digest::MD5).to receive(:hexdigest).with('Test title0[]') # zero because number of file_sets attached to the work is zero
+        expect(Digest::MD5).to receive(:hexdigest).with('Test title0restricted[]') # zero because number of file_sets attached to the work is zero
         indexer.generate_solr_document
       end
     end
@@ -259,7 +259,7 @@ RSpec.describe CurateGenericWorkIndexer do
       end
 
       it 'returns manifest_cache_key' do
-        expect(Digest::MD5).to receive(:hexdigest).with('Test title0Library[]') # zero because number of file_sets attached to the work is zero
+        expect(Digest::MD5).to receive(:hexdigest).with('Test title0Libraryrestricted[]') # zero because number of file_sets attached to the work is zero
         indexer.generate_solr_document
       end
     end
@@ -274,7 +274,7 @@ RSpec.describe CurateGenericWorkIndexer do
       end
 
       it 'returns manifest_cache_key' do
-        expect(Digest::MD5).to receive(:hexdigest).with("Test title0http://rightsstatements.org/vocab/InC/1.0/[]") # zero because number of file_sets attached to the work is zero
+        expect(Digest::MD5).to receive(:hexdigest).with("Test title0http://rightsstatements.org/vocab/InC/1.0/restricted[]") # zero because number of file_sets attached to the work is zero
         indexer.generate_solr_document
       end
     end
@@ -289,7 +289,22 @@ RSpec.describe CurateGenericWorkIndexer do
       end
 
       it 'returns manifest_cache_key' do
-        expect(Digest::MD5).to receive(:hexdigest).with("Test title0[\"abc123\"]") # zero because number of file_sets attached to the work is zero
+        expect(Digest::MD5).to receive(:hexdigest).with("Test title0restricted[\"abc123\"]") # zero because number of file_sets attached to the work is zero
+        indexer.generate_solr_document
+      end
+    end
+
+    context 'when object visibility is changed' do
+      let(:attributes) do
+        {
+          id:         '123',
+          title:      ['Test title'],
+          visibility: "open"
+        }
+      end
+
+      it 'returns manifest_cache_key' do
+        expect(Digest::MD5).to receive(:hexdigest).with("Test title0open[]") # zero because number of file_sets attached to the work is zero
         indexer.generate_solr_document
       end
     end
