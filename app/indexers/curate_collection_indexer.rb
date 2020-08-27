@@ -13,7 +13,7 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
       solr_doc['generic_type_sim'] = ["Collection"]
       solr_doc['banner_path_ss'] = banner_path
       solr_doc['source_collection_title_ssim'] = source_collection
-      solr_doc['deposit_collection_titles_tesim'] = deposit_collection&.first
+      solr_doc['deposit_collection_titles_tesim'] = deposit_collection
     end
   end
 
@@ -42,6 +42,6 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
   end
 
   def deposit_collection
-    object.deposit_collection_ids.map { |id| Collection.find(id).title } if object.deposit_collection_ids.present?
+    object.deposit_collection_ids.map { |id| Collection.find(id).title.first } if object.deposit_collection_ids.present?
   end
 end
