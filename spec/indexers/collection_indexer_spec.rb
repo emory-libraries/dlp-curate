@@ -56,20 +56,23 @@ RSpec.describe CurateCollectionIndexer do
 
     context 'when deposit_collection_id is present' do
       let(:collection_new) { FactoryBot.create(:collection_lw, id: 'abc123', title: ['Test title collection123']) }
+      let(:collection_new_2) { FactoryBot.create(:collection_lw, id: 'def456', title: ['Test title collection456']) }
       let(:attributes) do
         {
           id:                     '123',
           title:                  ['A title'],
-          deposit_collection_ids: ['abc123']
+          deposit_collection_ids: ['abc123', 'def456']
         }
       end
 
       before do
-        allow(Collection).to receive(:create).and_return(collection_new)
+        allow(Collection).to receive(:create).and_return(collection_new, collection_new_2)
       end
 
       it 'returns correct deposit collection title' do
-        expect(solr_document['deposit_collection_titles_tesim']).to eq(['Test title collection123'])
+        expect(solr_document['deposit_collection_titles_tesim']).to match_array(
+          ["Test title collection123", "Test title collection456"]
+        )
       end
     end
   end
