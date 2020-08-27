@@ -73,12 +73,12 @@ RSpec.describe Hyrax::CollectionPresenter, :clean do
       end
     end
 
-    context '#deposit_collection_link' do
-      it 'provides link built from 2 solr_doc fields' do
+    context '#deposit_collection_object' do
+      it 'provides hash built from 2 solr_doc fields' do
         solr_doc = SolrDocument.new(deposit_collection.to_solr)
         deposit_presenter = described_class.new(solr_doc, ability)
 
-        expect(deposit_presenter.deposit_collection_link).to eq "<a href=\"/collections/#{collection.id}\">Testing Collection</a>"
+        expect(deposit_presenter.deposit_collection_object).to eq({ id: collection.id, title: "Testing Collection" })
       end
     end
   end
