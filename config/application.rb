@@ -24,6 +24,7 @@ module DlpCurate
     config.autoload_paths += %W[#{config.root}/lib]
     config.to_prepare do
       Hyrax::Dashboard::CollectionsController.prepend Hyrax::Dashboard::CollectionsControllerOverride
+      Hyrax::Admin::CollectionTypesController.prepend Hyrax::Admin::CollectionTypesControllerOverride
     end
   end
 end
