@@ -105,17 +105,30 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
       end
 
       describe 'viewing deposit collection' do
-        it 'does have the Source Collection element' do
+        it 'does have the Source Collection element on public page' do
           visit "/collections/#{user_collection.id}"
 
           expect(page).to have_content "Source Collection"
           expect(page).to have_link(admin_collection.title[0], href: "/collections/#{admin_collection.id}")
         end
+
+        it 'does have the Source Collection element on dashboard page' do
+          visit "/dashboard/collections/#{user_collection.id}"
+
+          expect(page).to have_content "Source Collection"
+          expect(page).to have_link(admin_collection.title[0], href: "/dashboard/collections/#{admin_collection.id}")
+        end
       end
 
       describe 'viewing source collection' do
-        it 'does not have the Source Collection element' do
+        it 'does not have the Source Collection element on public page' do
           visit "/collections/#{admin_collection.id}"
+
+          expect(page).not_to have_content "Source Collection"
+        end
+
+        it 'does not have the Source Collection element on dashboard page' do
+          visit "/dashboard/collections/#{admin_collection.id}"
 
           expect(page).not_to have_content "Source Collection"
         end

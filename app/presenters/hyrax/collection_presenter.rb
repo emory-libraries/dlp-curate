@@ -229,8 +229,8 @@ module Hyrax
       source_coll_id.present? && source_coll_id[0] != id
     end
 
-    def deposit_collection_link
-      tag.a solr_document['source_collection_title_ssim'][0], href: "/collections/#{source_coll_id[0]}"
+    def deposit_collection_object
+      { title: solr_document['source_collection_title_ssim'][0], id: source_coll_id[0] }
     end
 
     def source_coll_id
