@@ -68,6 +68,13 @@
         </div>
       </section>
 
+      <!-- Deposit Collections -->
+      <section class="collections-deposit-collections-wrapper">
+        <div class="row">
+          <%= render 'hyrax/collections/deposit_collections', presenter: @presenter, request_url: request.url %>
+        </div>
+      </section>
+
       <!-- Subcollections -->
       <% if @presenter.collection_type_is_nestable? %>
         <section id="sub-collections-wrapper" class="sub-collections-wrapper">

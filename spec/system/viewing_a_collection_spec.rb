@@ -101,6 +101,8 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
       before do
         user_collection.source_collection_id = admin_collection.id
         user_collection.save!
+        admin_collection.deposit_collection_ids = [user_collection.id]
+        admin_collection.save!
         user_collection.reload
       end
 
@@ -121,16 +123,30 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
       end
 
       describe 'viewing source collection' do
-        it 'does not have the Source Collection element on public page' do
-          visit "/collections/#{admin_collection.id}"
+        context 'on public page' do
+          before { visit "/collections/#{admin_collection.id}" }
 
-          expect(page).not_to have_content "Source Collection"
+          it 'does not have the Source Collection element' do
+            expect(page).not_to have_content "Source Collection"
+          end
+
+          it 'displays deposit collections' do
+            expect(page).to have_content "Additional Deposit Collections"
+            expect(page).to have_link(user_collection.title[0], href: "/collections/#{user_collection.id}")
+          end
         end
 
-        it 'does not have the Source Collection element on dashboard page' do
-          visit "/dashboard/collections/#{admin_collection.id}"
+        context 'on dashboard page' do
+          before { visit "/dashboard/collections/#{admin_collection.id}" }
 
-          expect(page).not_to have_content "Source Collection"
+          it 'does not have the Source Collection element' do
+            expect(page).not_to have_content "Source Collection"
+          end
+
+          it 'displays deposit collections' do
+            expect(page).to have_content "Additional Deposit Collections"
+            expect(page).to have_link(user_collection.title[0], href: "/dashboard/collections/#{user_collection.id}")
+          end
         end
       end
     end

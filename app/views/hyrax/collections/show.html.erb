@@ -98,6 +98,9 @@
   <!-- Source Collection -->
   <%= render 'source_collection', presenter: @presenter, request_url: request.url %>
 
+  <!-- Deposit Collections -->
+  <%= render 'deposit_collections', presenter: @presenter, request_url: request.url %>
+
   <!-- Subcollections -->
   <% if @presenter.collection_type_is_nestable? && @subcollection_count > 0 %>
       <div class="hyc-blacklight hyc-bl-title">
