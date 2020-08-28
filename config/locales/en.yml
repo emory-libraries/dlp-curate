@@ -40,6 +40,7 @@ en:
     collections:
       show: 
         source_collection: Source Collection
+        deposit_collections: Additional Deposit Collections
     dashboard:
       my:
         heading:
