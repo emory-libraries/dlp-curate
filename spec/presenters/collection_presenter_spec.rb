@@ -61,6 +61,8 @@ RSpec.describe Hyrax::CollectionPresenter, :clean do
       collection.save!
       deposit_collection.source_collection_id = collection.id
       deposit_collection.save!
+      collection.deposit_collection_ids = [deposit_collection.id]
+      collection.save!
     end
 
     context '#deposit_collection?' do
@@ -73,12 +75,30 @@ RSpec.describe Hyrax::CollectionPresenter, :clean do
       end
     end
 
-    context '#deposit_collection_object' do
+    context '#source_collection_object' do
       it 'provides hash built from 2 solr_doc fields' do
         solr_doc = SolrDocument.new(deposit_collection.to_solr)
         deposit_presenter = described_class.new(solr_doc, ability)
 
-        expect(deposit_presenter.deposit_collection_object).to eq({ id: collection.id, title: "Testing Collection" })
+        expect(deposit_presenter.source_collection_object).to eq({ id: collection.id, title: "Testing Collection" })
+      end
+    end
+
+    context '#deposit_collection_ids' do
+      it 'provides array of deposit collection ids for a source collection' do
+        solr_doc = SolrDocument.new(collection.to_solr)
+        collection_presenter = described_class.new(solr_doc, ability)
+
+        expect(collection_presenter.deposit_collection_ids).to eq([deposit_collection.id])
+      end
+    end
+
+    context 'deposit_collections' do
+      it 'provides array of deposit collection objects for a source collection' do
+        solr_doc = SolrDocument.new(collection.to_solr)
+        collection_presenter = described_class.new(solr_doc, ability)
+
+        expect(collection_presenter.deposit_collections).to eq([{ id: deposit_collection.id, title: deposit_collection.title.first }])
       end
     end
   end

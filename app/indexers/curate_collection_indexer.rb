@@ -14,6 +14,7 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
       solr_doc['banner_path_ss'] = banner_path
       solr_doc['source_collection_title_ssim'] = source_collection
       solr_doc['deposit_collection_titles_tesim'] = deposit_collection
+      solr_doc['deposit_collection_ids_tesim'] = object.deposit_collection_ids
     end
   end
 

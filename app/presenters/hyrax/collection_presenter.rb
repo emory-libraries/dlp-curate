@@ -229,12 +229,20 @@ module Hyrax
       source_coll_id.present? && source_coll_id[0] != id
     end
 
-    def deposit_collection_object
+    def source_collection_object
       { title: solr_document['source_collection_title_ssim'][0], id: source_coll_id[0] }
     end
 
     def source_coll_id
       solr_document['source_collection_id_tesim']
+    end
+
+    def deposit_collection_ids
+      solr_document['deposit_collection_ids_tesim']
+    end
+
+    def deposit_collections
+      deposit_collection_ids&.map { |id| { id: id, title: Collection.find(id).title.first } }
     end
   end
 end

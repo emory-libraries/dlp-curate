@@ -1,0 +1,12 @@
+<% if @presenter.deposit_collections %>
+  <div class="col hyc-metadata">
+    <h4><%= t('hyrax.collections.show.deposit_collections') %></h4>
+    <dl>
+      <% @presenter.deposit_collections.each do |collection| %>
+        <div class="metadata-line">
+          <%= collection_link(collection, request_url) %>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+<% end %>

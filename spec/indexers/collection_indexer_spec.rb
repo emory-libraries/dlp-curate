@@ -50,7 +50,7 @@ RSpec.describe CurateCollectionIndexer do
       end
 
       it 'returns empty array' do
-        expect(solr_document['deposit_collection_ids_tesim']).to be_nil
+        expect(solr_document['deposit_collection_ids_tesim']).to be_empty
       end
     end
 
@@ -72,6 +72,12 @@ RSpec.describe CurateCollectionIndexer do
       it 'returns correct deposit collection title' do
         expect(solr_document['deposit_collection_titles_tesim']).to match_array(
           ["Test title collection123", "Test title collection456"]
+        )
+      end
+
+      it 'returns correct deposit collection ids' do
+        expect(solr_document['deposit_collection_ids_tesim']).to match_array(
+          ['abc123', 'def456']
         )
       end
     end
