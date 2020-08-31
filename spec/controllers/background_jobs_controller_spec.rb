@@ -2,7 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe BackgroundJobsController, type: :controller do
+RSpec.describe BackgroundJobsController, type: :controller, clean: true do
+  include ActionDispatch::TestProcess
+
   let(:admin) { FactoryBot.create(:admin) }
   let(:user) { FactoryBot.create(:user) }
   let(:csv_file) do
