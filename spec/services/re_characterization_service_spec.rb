@@ -22,7 +22,7 @@ describe ReCharacterizationService, :clean do
     it 'works' do
       expect(values.size).to be > 1
       service.empty_characterization
-      new_values = fields.map { |f| file.send(f)&.first}.compact
+      new_values = fields.map { |f| file.send(f)&.first }.compact
       expect(new_values).to be_empty
     end
   end

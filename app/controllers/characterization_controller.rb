@@ -5,7 +5,7 @@ class CharacterizationController < ApplicationController
 
   def re_characterize
     file_set = FileSet.find(params[:file_set_id])
-    ReCharacterizeJob.perform_later(file_set: file_set, user: current_user)
+    ReCharacterizeJob.perform_later(file_set: file_set, user: current_user.uid)
     flash[:notice] = "The Re-characterization request has been submitted and may take several minutes to complete"
     redirect_to hyrax_file_set_path(params[:file_set_id])
   end

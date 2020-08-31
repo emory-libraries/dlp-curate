@@ -28,7 +28,9 @@ RSpec.describe ReCharacterizeJob, :clean do
 
   context '#characterization_setters' do
     it 'returns the right keys' do
-      expect(described_class.characterization_setters(file)).to eq([])
+      expect(ReCharacterizationService).to receive(:empty_out_characterization)
+      expect(CharacterizeJob).to receive(:perform_later)
+      described_class.perform_now(file_set: file_set)
     end
   end
 end

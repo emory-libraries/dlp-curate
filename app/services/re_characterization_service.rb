@@ -10,6 +10,11 @@ class ReCharacterizationService
     @repository_file.save!
   end
 
+  def self.empty_out_characterization(repository_file)
+    service = ReCharacterizationService.new(repository_file)
+    service.empty_characterization
+  end
+
   private
 
     def characterization_terms
