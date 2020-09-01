@@ -29,18 +29,18 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
 
     def selected_coll_hsh(collection_array)
       collections = collection_array.map { |coll| Collection.find(coll) }
-      collections.map { |c| { title: c.title, id: c.id } }
+      collections_hasherizer(collections)
     end
 
     def collection_hsh
-      Collection.all&.map { |c| { title: c.title, id: c.id } }
+      collections_hasherizer(source_collections)
     end
 
     def collection_works(collection_id)
       solr_service.query(
         query_builder.construct_query(
-          member_of_collection_ids_ssim: collection_id,
-          has_model_ssim:                "CurateGenericWork"
+          source_collection_id_tesim: collection_id,
+          has_model_ssim:             "CurateGenericWork"
         ), rows: 1_000_000
       )
     end
@@ -55,5 +55,17 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
 
     def filesets_file_count(filesets)
       filesets.sum { |fs| fs['sha1_tesim']&.compact&.uniq&.size || 0 }
+    end
+
+    def source_collections
+      # The determination of which collections are considered Source Collections
+      # is based solely on the Collection's CollectionType deposit_only_collection
+      # attribute. This logic can be changed, but the simplest determination is the
+      # CollectionType.
+      Collection.all.select { |c| !c&.collection_type&.deposit_only_collection? }
+    end
+
+    def collections_hasherizer(collection_array)
+      collection_array&.map { |c| { title: c.title, id: c.id } }
     end
 end

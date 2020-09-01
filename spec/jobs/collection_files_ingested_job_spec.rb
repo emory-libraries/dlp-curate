@@ -34,6 +34,9 @@ RSpec.describe CollectionFilesIngestedJob, :clean do
     Hydra::Works::AddFileToFileSet.call(file_set, file2, :intermediate_file)
     work1.ordered_members << file_set
     work1.member_of_collections << collection
+    # New requirement: source_collection_id must be populated in order for a work
+    # to be associated to a collection.
+    work1.source_collection_id = collection.id
     Curate::FileSetIndexer.new(file_set).generate_solr_document
     work1.save!
   end
