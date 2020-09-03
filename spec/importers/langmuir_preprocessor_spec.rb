@@ -67,7 +67,7 @@ RSpec.describe LangmuirPreprocessor do
     metadata_row_fields = CSV.parse(unparsed_rows.lines[13]).first # Advertising : Rafael's, gay 'n frisky
     fileset_row_fields = CSV.parse(unparsed_rows.lines[14]).first
     # The following has changed since we are automatically including source_collection_id
-    # if the field is not in the nput csv.
+    # if the field is not in the input csv.
     expect(metadata_row_fields.size).to eq(header_fields.size - 1)
     expect(fileset_row_fields.size).to eq(header_fields.size)
   end
