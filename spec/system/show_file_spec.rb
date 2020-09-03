@@ -171,4 +171,15 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
       expect(page).not_to have_link(title: "Tumblr", exact: true)
     end
   end
+
+  context 'Re-characterize FileSet' do
+    it 'has a link to re-characterize the fileset' do
+      visit hyrax_file_set_path(file_set)
+      form = page.find("form[action='/concern/file_sets/#{file_set.id}/re_characterize']")
+
+      within form do
+        page.find("input[value='Re-characterize FileSet']")
+      end
+    end
+  end
 end

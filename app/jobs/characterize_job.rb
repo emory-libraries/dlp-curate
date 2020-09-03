@@ -12,7 +12,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
   # @param [FileSet] file_set
   # @param [String] file_id identifier for a Hydra::PCDM::File
   # @param [String, NilClass] filepath the cached file within the Hyrax.config.working_path
-  def perform(file_set, file_id, filepath = nil)
+  def perform(file_set, file_id, filepath = nil, user: nil)
     event_start = DateTime.current
     relation = file_set.class.characterization_proxy
     file = file_set.characterization_proxy
@@ -21,7 +21,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
     Hydra::Works::CharacterizationService.run(file, filepath)
     event = { 'type' => 'Characterization', 'start' => event_start, 'outcome' => 'Success',
               'details' => "#{relation}: #{file.file_name.first} - Technical metadata extracted from file, format identified, and file validated",
-              'software_version' => 'FITS v1.5.0', 'user' => file_set.depositor }
+              'software_version' => 'FITS v1.5.0', 'user' => user.presence || file_set.depositor }
     create_preservation_event(file_set, event)
     Rails.logger.debug "Ran characterization on #{file.id} (#{file.mime_type})"
     file.alpha_channels = channels(filepath) if file_set.image? && Hyrax.config.iiif_image_server?

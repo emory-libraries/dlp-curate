@@ -2,7 +2,7 @@
 # [Hyrax-overwrite-v3.0.0.pre.rc1]
 require 'rails_helper'
 
-RSpec.describe Hyrax::AdminSetPresenter do
+RSpec.describe Hyrax::AdminSetPresenter, :clean do
   let(:admin_set) do
     mock_model(AdminSet,
                id:          '123',

@@ -5,31 +5,31 @@
       <%= media_display @presenter %>
       <%= render 'show_actions', presenter: @presenter %>
       <br>
-      <div><%= button_to 'Run Fixity check', file_set_fixity_checks_path(file_set_id: @presenter.id), method: :post, class: 'btn btn-primary' %></div>
-      <br>
-      <div><%= button_to 'Regenerate derivative', "/concern/file_sets/#{@presenter.id}/clean_up", class: 'btn btn-primary' %></div>
+      <div><%= button_to t('.fixity_check'), file_set_fixity_checks_path(file_set_id: @presenter.id), method: :post, class: 'btn btn-primary' %></div><br>
+      <div><%= button_to t('.regenerate_derivative'), "/concern/file_sets/#{@presenter.id}/clean_up", class: 'btn btn-primary' %></div><br>
+      <div><%= button_to t('.recharacterize'), "/concern/file_sets/#{@presenter.id}/re_characterize", class: 'btn btn-primary' %></div>
     </div>
     <div itemscope itemtype="<%= @presenter.itemtype %>" class="col-xs-12 col-sm-8">
       <header>
         <%= render 'file_set_title', presenter: @presenter %>
       </header>
       <%# TODO: render 'show_descriptions' See https://github.com/samvera/hyrax/issues/1481 %>
-      <div id="fileset-id"><strong >FileSet ID:</strong> <%= @presenter.id %></div>
-      <div id="fileset-category"><strong >FileSet Category:</strong> <%= @fileset_use %></div>
-      <div id="fileset-parent"><strong>Is Part of:</strong> <%= link_to "Parent Work", @parent, class: 'btn-link' %></div>
+      <div id="fileset-id"><strong ><%= t('.file_set_id') %>:</strong> <%= @presenter.id %></div>
+      <div id="fileset-category"><strong ><%= t('.file_set_category') %>:</strong> <%= @fileset_use %></div>
+      <div id="fileset-parent"><strong><%= t('.is_part_of') %>:</strong> <%= link_to t('.parent_work'), @parent, class: 'btn-link' %></div>
       <br />
       <table class="table table-striped table-bordered">
         <thead>
-          <th>File name</th>
-          <th>Use</th>
-          <th>Uploaded</th>
+          <th><%= t('.file_name') %></th>
+          <th><%= t('.use') %></th>
+          <th><%= t('.uploaded') %></th>
         </thead>
         <tbody>
-          <%= render partial: 'file_details', locals: { use: "Preservation Master File", file: @pm } unless @pm.nil? %>
-          <%= render partial: 'file_details', locals: { use: "Service File", file: @sf } unless @sf.nil? %>
-          <%= render partial: 'file_details', locals: { use: "Intermediate File", file: @if } unless @if.nil? %>
-          <%= render partial: 'file_details', locals: { use: "Extracted", file: @et } unless @et.nil? %>
-          <%= render partial: 'file_details', locals: { use: "Transcript File", file: @tf } unless @tf.nil? %>
+          <%= render partial: 'file_details', locals: { use: t('.preservation_master_file'), file: @pm } unless @pm.nil? %>
+          <%= render partial: 'file_details', locals: { use: t('.service_file'), file: @sf } unless @sf.nil? %>
+          <%= render partial: 'file_details', locals: { use: t('.intermediate_file'), file: @if } unless @if.nil? %>
+          <%= render partial: 'file_details', locals: { use: t('.extracted'), file: @et } unless @et.nil? %>
+          <%= render partial: 'file_details', locals: { use: t('.transcript_file'), file: @tf } unless @tf.nil? %>
         </tbody>
       </table>
     </div><!-- /columns second -->
