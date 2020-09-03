@@ -2,15 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe BackgroundJobsController, type: :controller do
+RSpec.describe BackgroundJobsController, type: :controller, clean: true do
+  include ActionDispatch::TestProcess
+
   let(:admin) { FactoryBot.create(:admin) }
   let(:user) { FactoryBot.create(:user) }
-  let(:csv_file) do
-    fixture_path + '/reindex_files.csv'
-  end
-  let(:csv_file2) do
-    fixture_path + '/preservation_workflows.csv'
-  end
+  let(:csv_file) { fixture_file_upload((fixture_path + '/reindex_files.csv'), 'text/csv') }
+  let(:csv_file2) { fixture_file_upload((fixture_path + '/preservation_workflows.csv'), 'text/csv') }
 
   context "when signed in" do
     before do
@@ -30,12 +28,12 @@ RSpec.describe BackgroundJobsController, type: :controller do
         response.should redirect_to(new_background_job_path)
       end
       it "successfully starts a preservation workflow background job" do
-        post :create, params: { jobs: 'preservation', preservation_csv: fixture_file_upload(csv_file, 'text/csv'), format: 'json' }
+        post :create, params: { jobs: 'preservation', preservation_csv: csv_file, format: 'json' }
         expect(PreservationWorkflowImporterJob).to have_been_enqueued
         response.should redirect_to(new_background_job_path)
       end
       it "successfully starts a reindex background job" do
-        post :create, params: { jobs: 'reindex', reindex_csv: fixture_file_upload(csv_file2, 'text/csv'), format: 'json' }
+        post :create, params: { jobs: 'reindex', reindex_csv: csv_file2, format: 'json' }
         expect(ReindexObjectJob).to have_been_enqueued
         response.should redirect_to(new_background_job_path)
       end
