@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe BackgroundJobsController, type: :controller, clean: true do
   include ActionDispatch::TestProcess
+  include ActiveJob::TestHelper
 
   let(:admin) { FactoryBot.create(:admin) }
   let(:user) { FactoryBot.create(:user) }
@@ -13,6 +14,11 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
   context "when signed in" do
     before do
       sign_in admin
+    end
+
+    # Needed since Jobs were still in queue when next test started, throwing errors.
+    after do
+      clear_enqueued_jobs
     end
 
     describe "#new" do
@@ -28,13 +34,14 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
         response.should redirect_to(new_background_job_path)
       end
       it "successfully starts a preservation workflow background job" do
-        post :create, params: { jobs: 'preservation', preservation_csv: csv_file, format: 'json' }
+        post :create, params: { jobs: 'preservation', preservation_csv: csv_file2, format: 'json' }
         expect(PreservationWorkflowImporterJob).to have_been_enqueued
         response.should redirect_to(new_background_job_path)
       end
       it "successfully starts a reindex background job" do
-        post :create, params: { jobs: 'reindex', reindex_csv: csv_file2, format: 'json' }
-        expect(ReindexObjectJob).to have_been_enqueued
+        post :create, params: { jobs: 'reindex', reindex_csv: csv_file, format: 'json' }
+        # Needed to call out how many times the job will be enqueued.
+        expect(ReindexObjectJob).to have_been_enqueued.twice
         response.should redirect_to(new_background_job_path)
       end
     end
