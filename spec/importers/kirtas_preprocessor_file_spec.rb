@@ -84,4 +84,9 @@ RSpec.describe YellowbackPreprocessor do
     expect(import_rows[0]['visibility']).to eq('Emory Network') # Edge cases
     expect(import_rows[shakespeare_start]['visibility']).to eq('Public') # Shakespeare's comedy of The merchant of Venice
   end
+
+  it 'sets the source_collection_id value', :aggregate_failures do
+    expect(import_rows[0]['source_collection_id']).to eq('some_id_1') # Edge cases
+    expect(import_rows[shakespeare_start]['source_collection_id']).to be_nil # Shakespeare's comedy of The merchant of Venice
+  end
 end

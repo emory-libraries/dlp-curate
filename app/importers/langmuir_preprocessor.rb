@@ -18,7 +18,7 @@ class LangmuirPreprocessor
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
     @processed_csv = File.join(directory, filename + "-processed.csv")
-    @merged_headers = additional_headers + @source_csv.headers
+    @merged_headers = exclusion_guard(additional_headers + @source_csv.headers)
     @tree = {}
   end
 
@@ -108,5 +108,13 @@ class LangmuirPreprocessor
     else
       "Image #{side}"
     end
+  end
+
+  def exclusion_guard(arr)
+    arr | required_fields
+  end
+
+  def required_fields
+    ['source_collection_id']
   end
 end

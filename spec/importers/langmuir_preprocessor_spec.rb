@@ -66,7 +66,9 @@ RSpec.describe LangmuirPreprocessor do
     header_fields = import_rows.headers
     metadata_row_fields = CSV.parse(unparsed_rows.lines[13]).first # Advertising : Rafael's, gay 'n frisky
     fileset_row_fields = CSV.parse(unparsed_rows.lines[14]).first
-    expect(metadata_row_fields.size).to eq(header_fields.size)
+    # The following has changed since we are automatically including source_collection_id
+    # if the field is not in the input csv.
+    expect(metadata_row_fields.size).to eq(header_fields.size - 1)
     expect(fileset_row_fields.size).to eq(header_fields.size)
   end
 
@@ -87,5 +89,28 @@ RSpec.describe LangmuirPreprocessor do
 
   it 'includes the relative path in the file attachment' do
     expect(import_rows[7]['preservation_master_file']).to eq('dmfiles/MARBL/Manuscripts/MSS_1218_Langmuir/ARCH/B071/MSS1218_B071_I207_P0001_ARCH.tif')
+  end
+
+  it 'includes source_collection_id column when not in input csv' do
+    import_rows.each do |row|
+      expect(row.headers).to include('source_collection_id')
+      expect(row['source_collection_id']).to be_nil
+    end
+  end
+
+  context 'file has source_collection_id defined' do
+    it 'shows assigned values in processed csv' do
+      source_langmuir_sample = File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed-with-source-id.csv')
+      preprocessor = described_class.new(source_langmuir_sample)
+      preprocessor.merge
+      source_processed_csv = File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed-with-source-id-processed.csv')
+      source_import_rows = CSV.read(source_processed_csv, headers: true).by_row!
+      works_with_source_ids = source_import_rows.select { |r| r['source_collection_id'] == "some_id_1" }
+
+      expect(source_import_rows.headers).to include('source_collection_id')
+      expect(works_with_source_ids.size).to eq(5)
+
+      File.delete(source_processed_csv) if File.exist?(source_processed_csv)
+    end
   end
 end

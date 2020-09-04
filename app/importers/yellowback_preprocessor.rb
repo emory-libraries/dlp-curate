@@ -43,6 +43,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     'institution',
     'other_identifiers',
     'rights_statement',
+    'source_collection_id',
     'system_of_record_ID',
     'visibility',
     # Fields extracted from Alma MARC records
@@ -116,6 +117,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
         row['institution'],
         row['other_identifiers'],
         row['rights_statement'],
+        row['source_collection_id'],
         row['system_of_record_ID'],
         row['visibility']
       ]
