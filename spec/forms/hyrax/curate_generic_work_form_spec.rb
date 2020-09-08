@@ -6,7 +6,7 @@ RSpec.describe Hyrax::CurateGenericWorkForm do
     it 'includes the expected terms' do
       expect(described_class.terms).to include(:title, :creator, :rights_statement, :conference_name,
                                                :institution, :volume, :sublocation, :subject_names,
-                                               :internal_rights_note, :issue)
+                                               :internal_rights_note, :issue, :source_collection_id)
     end
   end
 

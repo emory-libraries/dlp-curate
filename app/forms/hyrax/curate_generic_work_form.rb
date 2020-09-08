@@ -15,7 +15,7 @@ module Hyrax
                   :rights_statement, :rights_holders, :copyright_date, :re_use_license, :access_restriction_notes, :rights_documentation,
                   :scheduled_rights_review, :scheduled_rights_review_note, :internal_rights_note, :legacy_rights,
                   :data_classifications, :sensitive_material, :sensitive_material_note, :staff_notes, :date_digitized,
-                  :transfer_engineer, :other_identifiers, :emory_ark, :system_of_record_ID, :primary_repository_ID, :deduplication_key]
+                  :transfer_engineer, :other_identifiers, :emory_ark, :system_of_record_ID, :primary_repository_ID, :deduplication_key, :source_collection_id]
 
     self.required_fields = REQUIRED_FIELDS_ON_FORM
 
@@ -39,7 +39,7 @@ module Hyrax
     end
 
     def primary_admin_metadata_fields
-      [:staff_notes, :system_of_record_ID, :other_identifiers, :emory_ark, :date_digitized, :transfer_engineer, :deduplication_key]
+      [:staff_notes, :system_of_record_ID, :other_identifiers, :emory_ark, :date_digitized, :transfer_engineer, :deduplication_key, :source_collection_id]
     end
 
     def preservation_workflow_metadata_fields

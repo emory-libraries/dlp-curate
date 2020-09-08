@@ -6,21 +6,25 @@ include Warden::Test::Helpers
 # NOTE: If you generated more than one work, you have to set "js: true"
 RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, type: :system do
   context 'a logged in user' do
-    let(:user_attributes) do
-      { uid: 'test@example.com' }
-    end
     let(:user) do
-      User.new(user_attributes) { |u| u.save(validate: false) }
+      FactoryBot.create(:admin)
     end
     let(:user_attributes_second) do
       { uid: 'test2@example.com' }
     end
+    let(:user_attributes_third) do
+      { uid: 'test3@example.com' }
+    end
     let(:user_2) do
       User.new(user_attributes_second) { |u| u.save(validate: false) }
+    end
+    let(:user_3) do
+      User.new(user_attributes_third) { |u| u.save(validate: false) }
     end
     let(:admin_set_id) { AdminSet.find_or_create_default_admin_set_id }
     let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id) }
     let(:workflow) { Sipity::Workflow.create!(active: true, name: 'test-workflow', permission_template: permission_template) }
+    let(:collection) { FactoryBot.create(:collection_lw, user: user) }
 
     before do
       # Create a single action that can be taken
@@ -33,6 +37,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
         agent_id:               user.user_key,
         access:                 'deposit'
       )
+      collection.save!
       login_as user
     end
 
@@ -183,6 +188,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
     end
 
     it "verify work private visibility different user" do
+      login_as user_3
       visit("/concern/curate_generic_works/#{cgw_second.id}")
       expect(page).not_to have_content('Test title')
     end
@@ -222,6 +228,17 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
 
       visit("/concern/curate_generic_works/#{cgw.id}")
       expect(page).to have_content 'abc12345-dedup_key'
+    end
+
+    scenario "user fills in source collection id" do
+      visit("/concern/curate_generic_works/#{cgw.id}/edit")
+      find('body').click
+      click_link('Additional descriptive fields')
+      select collection.title.first, from: 'curate_generic_work_source_collection_id'
+      click_on('Save')
+
+      visit("/concern/curate_generic_works/#{cgw.id}")
+      expect(page).to have_content(collection.id)
     end
 
     scenario "user cannot navigate to batch upload" do
