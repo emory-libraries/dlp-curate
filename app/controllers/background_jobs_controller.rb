@@ -10,7 +10,7 @@ class BackgroundJobsController < ApplicationController
     elsif params[:jobs] == 'preservation'
       name = params[:preservation_csv].original_filename
       path = Rails.root.join('tmp', 'uploads', name)
-      File.open(path, "wb") { |f| f.write(params[:preservation_csv].read) }
+      File.open(path, "w+") { |f| f.write(params[:preservation_csv].read) }
       PreservationWorkflowImporterJob.perform_later(path)
       msg = "Preservation Workflow Importer Job"
     else
