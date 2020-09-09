@@ -11,7 +11,7 @@ class BackgroundJobsController < ApplicationController
       name = params[:preservation_csv].original_filename
       path = Rails.root.join('tmp', name)
       File.open(path, "w+") { |f| f.write(params[:preservation_csv].read) }
-      PreservationWorkflowImporterJob.perform_later(path)
+      PreservationWorkflowImporterJob.perform_later(path.to_s)
       msg = "Preservation Workflow Importer Job"
     else
       CSV.foreach(params[:reindex_csv].path, headers: true) do |row|
