@@ -1,10 +1,19 @@
-<% if current_user.admin? %>
+<% if @curation_concern.class == CurateGenericWork %>
   <%=
     f.input key,
     collection: all_collections_collection,
-    include_blank: true, required: false,
+    include_blank: true, required: true,
     input_html: { class: 'form-control' }
   %>
 <% else %>
-  <p>Available only for admins.</p>
+  <% if current_user.admin? %>
+    <%=
+      f.input key,
+      collection: all_collections_collection,
+      include_blank: true, required: false,
+      input_html: { class: 'form-control' }
+    %>
+  <% else %>
+    <p>Available only for admins.</p>
+  <% end %>
 <% end %>

@@ -85,6 +85,8 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
 
     scenario "metadata fields are validated", js: true do
       new_cgw_form.visit_new_page.metadata_fill_in_with
+      click_link('Additional descriptive fields')
+      select collection.title.first, from: 'curate_generic_work_source_collection_id'
       find('body').click
       expect(page).to have_css('li#required-metadata.complete')
     end
