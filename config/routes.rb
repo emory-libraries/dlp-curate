@@ -68,6 +68,7 @@ Rails.application.routes.draw do
 
   post "/concern/file_sets/:file_set_id/clean_up", to: "derivatives#clean_up"
   post '/concern/file_sets/:file_set_id/re_characterize', to: 'characterization#re_characterize', as: 'file_set_re_characterization'
+  post "/concern/curate_generic_works/:work_id/regen_manifest", to: "manifest_regeneration#regen_manifest", as: 'regen_manifest'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
