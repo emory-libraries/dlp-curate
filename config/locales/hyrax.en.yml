@@ -236,6 +236,8 @@ en:
         no_failures: "No Event failures noted."
         with_failures: "One or more recent events failed for this object"
         preservation_events_work_level: "Preservation Events - Work-level"
+      show_actions:
+        regen_manifest: "Regenerate Manifest"
     account_name: My Institution Account Id
     directory:
       suffix: "@example.org"
