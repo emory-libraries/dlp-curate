@@ -259,6 +259,8 @@ RSpec.describe CurateGenericWorkIndexer do
       end
 
       it 'returns manifest_cache_key' do
+        expect(solr_document['holding_repository_tesim']).to eq(['Library']) # solr returns an array for holding_repo. This problem is solved at
+        # L#177 in CurateGenericWorkIndexer
         expect(Digest::MD5).to receive(:hexdigest).with('Test title0Libraryrestricted[]') # zero because number of file_sets attached to the work is zero
         indexer.generate_solr_document
       end
@@ -284,12 +286,12 @@ RSpec.describe CurateGenericWorkIndexer do
         {
           id:            '123',
           title:         ['Test title'],
-          rendering_ids: ['abc123']
+          rendering_ids: ["7719kd51jq-cor", "4881jwstww-cor"] # making sure we sort these before passed to hash generation
         }
       end
 
       it 'returns manifest_cache_key' do
-        expect(Digest::MD5).to receive(:hexdigest).with("Test title0restricted[\"abc123\"]") # zero because number of file_sets attached to the work is zero
+        expect(Digest::MD5).to receive(:hexdigest).with("Test title0restricted[\"4881jwstww-cor\", \"7719kd51jq-cor\"]") # zero because number of file_sets attached to the work is zero
         indexer.generate_solr_document
       end
     end
