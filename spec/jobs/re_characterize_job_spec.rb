@@ -10,6 +10,7 @@ RSpec.describe ReCharacterizeJob, :clean do
       allow(fs).to receive(:update_index)
     end
   end
+  let(:user) { 'bob' }
 
   let(:file) do
     Hydra::PCDM::File.new.tap do |f|
@@ -26,11 +27,13 @@ RSpec.describe ReCharacterizeJob, :clean do
     CharacterizeJob.perform_now(file_set, file.id)
   end
 
-  context '#characterization_setters' do
-    it 'returns the right keys' do
-      expect(ReCharacterizationService).to receive(:empty_out_characterization)
-      expect(CharacterizeJob).to receive(:perform_later)
-      described_class.perform_now(file_set: file_set)
+  context 'processing' do
+    it 'calls the right services and jobs' do
+      repository_file = file_set.public_send(:preservation_master_file)
+
+      expect(ReCharacterizationService).to receive(:empty_out_characterization).with(repository_file)
+      expect(CharacterizeJob).to receive(:perform_later).with(file_set, repository_file.id, "", user)
+      described_class.perform_now(file_set: file_set, user: user)
     end
   end
 end
