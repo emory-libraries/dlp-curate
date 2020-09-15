@@ -22,13 +22,12 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 - To avoid tying up server resources, perform this rake task on local environment.
 - This procedure combines two documents with different formats into a CSV that the Curate application can ingest.
 - It requires a CSV and a XML file to run correctly. 
-- There are two arguments that are required for this:
-    1. A CSV file path (`csv`) provided by the ticket creator.
-    2. A MARCXml file path (`xml`) also provided by the same person.
-- There are also three more arguments provided by the ticket maker that alter the preprocessor's logic and are assigned defaults:
-    1. `repl`(replacement_path): a string found in the ticket.
-    2. `map`(workflow): options are `:limb` or `:kirtas`. Ticket will state which.
-    3. `base`(start page): an integer also found in the request ticket.
+- There are five arguments that are required for this:
+    1. A CSV file path (`csv`): provided by the ticket creator.
+    2. A MARCXml file path (`xml`): also provided by the same person.
+    3. The replacement path (`repl`): a string found in the ticket.
+    4. A Workflow symbol (`map`): options are `:limb` or `:kirtas`. Ticket will state which.
+    5. Start Page (`base`): an integer also found in the request ticket.
 - The task produces a CSV file that must be delivered to the admin/manager shown on the ZenHub issue.
 ### Steps
 1. Place the CSV and XML files into the same folder inside of `dlp-curate` (within `tmp` is recommended).
@@ -39,10 +38,11 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 4. Run the command. The newly created CSV will be in the same folder that the other two files were placed and will have "-merged" added to the end of the original CSV file name. 
 5. Pass the new file to the ticket creator.
 ## Collection Files Ingested Count
-- This task counts the number of Works, FileSets, and Files ingested for Collections.
+- This task counts the number of Works, FileSets, and Files ingested for Source Collections.
 - It does not requires a CSV file to run correctly. 
 - There is one optional argument (`collections`) that accepts a string of ids separated by a space. 
-- The task produces a JSON file containing an array of (a) hash(es), each containing the needed Collection numbers.
+- The task produces a JSON file containing an array of (a) hash(es), each containing the needed Source Collection numbers.
+- Please note that the process doesn't check whether the ids passed to it represent Source Collections. It is up to the user to verify the ids they pass through the task.
 ### Steps
 1. Login to the needed SSH environment (see [Prerequisites](#prerequisites)).
 2. This procedure has two ways it can function:
@@ -61,7 +61,7 @@ Some Rake Tasks require file(s) to be uploaded to your chosen environment. This 
 - This procedure creates IIIF manifests for Work objects.
 - It does not require a CSV file to run correctly. 
 - The task can be operated two different ways, though:
-    1. Ran without an argument assigned, every CurateGenericWork object will be checked to see if it has been changed since the object's manifest was created. If so, a newly created manifest will replace the old one. If the `date_modified` attribute of the object matches the date the manifest was created, a new manifest will not be created.
+    1. Ran without an argument assigned, every CurateGenericWork object will be checked to see if it has been changed since the object's manifest was created. If so, a newly created manifest will replace the old one.
     2. Processed with an `id` string in the `work` argument, the procedure only focuses on that listed object and creates just its manifest.
 ### Steps For Creating Manifests For All Works
 1. Perform the [Prerequisites](#prerequisites) for the needed SSH environment.
