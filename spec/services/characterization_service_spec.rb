@@ -272,6 +272,7 @@ describe Hydra::Works::CharacterizationService, :clean do
     let(:fits_response)    { IO.read(File.join(fixture_path, fits_filename)) }
     let(:digest)           { class_double("Digest::SHA256").as_stubbed_const }
     let(:hexdigest_value)  { "urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a" }
+    let(:re_char_user)     { FactoryBot.create(:user, uid: "Recharacterizing Bob") }
 
     before do
       Hydra::Works::AddFileToFileSet.call(file_set, file, :preservation_master_file)
@@ -292,6 +293,18 @@ describe Hydra::Works::CharacterizationService, :clean do
                                                                               "urn:md5:3a1735b5b30c4adc3f92c70004ae53ed"]
         expect(file_set.preservation_event.pluck(:initiating_user)).to include [user.uid]
         expect(file_set.preservation_event.pluck(:outcome)).to include ['Success']
+      end
+    end
+
+    context 'when a user id is passed through the command' do
+      before do
+        allow(digest).to receive_message_chain(:file, :hexdigest, :prepend).and_return(hexdigest_value)
+        described_class.run(file_set.preservation_master_file, path_on_disk, {}, re_char_user.uid)
+        file_set.reload
+      end
+
+      it 'event shows recharacterizer instead of depositor' do
+        expect(file_set.preservation_event.pluck(:initiating_user)).to include [re_char_user.uid]
       end
     end
 

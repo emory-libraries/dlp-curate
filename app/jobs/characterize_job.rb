@@ -18,7 +18,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
     file = file_set.characterization_proxy
     raise "#{relation} was not found for FileSet #{file_set.id}" unless file_set.characterization_proxy?
     filepath = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id) unless filepath && File.exist?(filepath)
-    Hydra::Works::CharacterizationService.run(file, filepath)
+    Hydra::Works::CharacterizationService.run(file, filepath, {}, user)
     event = { 'type' => 'Characterization', 'start' => event_start, 'outcome' => 'Success',
               'details' => "#{relation}: #{file.file_name.first} - Technical metadata extracted from file, format identified, and file validated",
               'software_version' => 'FITS v1.5.0', 'user' => user.presence || file_set.depositor }

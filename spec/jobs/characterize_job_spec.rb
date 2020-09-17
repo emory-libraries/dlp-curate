@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+#frozen_string_literal: true
 # [Hyrax-overwrite-v3.0.0.pre.rc1]
 require 'rails_helper'
 
@@ -24,7 +24,7 @@ RSpec.describe CharacterizeJob, :clean do
 
   before do
     allow(FileSet).to receive(:find).with(file_set_id).and_return(file_set)
-    allow(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename)
+    allow(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename, {}, user)
     # commenting out because we are doing this in file_actor and not characterize_job
     # allow(CreateDerivativesJob).to receive(:perform_later).with(file_set, file.id, filename)
   end
@@ -34,19 +34,19 @@ RSpec.describe CharacterizeJob, :clean do
 
     it 'skips Hyrax::WorkingDirectory' do
       expect(Hyrax::WorkingDirectory).not_to receive(:find_or_retrieve)
-      expect(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename)
-      described_class.perform_now(file_set, file.id, filename)
+      expect(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename, {}, user)
+      described_class.perform_now(file_set, file.id, filename, user)
     end
   end
 
   context 'when the characterization proxy content is present' do
     it 'runs Hydra::Works::CharacterizationService and creates a CreateDerivativesJob' do
-      expect(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename)
+      expect(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename, {}, user)
       expect(file).to receive(:save!)
       expect(file_set).to receive(:update_index)
       # commenting out because we are doing this in file_actor and not characterize_job
       # expect(CreateDerivativesJob).to receive(:perform_later).with(file_set, file.id, filename)
-      described_class.perform_now(file_set, file.id)
+      described_class.perform_now(file_set, file.id, "", user)
     end
   end
 
