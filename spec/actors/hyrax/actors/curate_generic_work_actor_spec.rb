@@ -41,4 +41,20 @@ RSpec.describe Hyrax::Actors::CurateGenericWorkActor do
       end
     end
   end
+
+  describe '#update' do
+    let(:curation_concern) { FactoryBot.create(:generic_work, user: user) }
+    let(:work_actor) { Hyrax::CurationConcern.actor }
+
+    context 'success' do
+      let(:attributes) { { title: ['Other Title'] } }
+
+      it "invokes the after_update_metadata callback, updates work, creates modification preservation_event" do
+        expect(Hyrax.config.callback).to receive(:run)
+          .with(:after_update_metadata, curation_concern, user)
+        work_actor.update(env)
+        expect(curation_concern.preservation_event.pluck(:event_type)).to include ['Modification']
+      end
+    end
+  end
 end
