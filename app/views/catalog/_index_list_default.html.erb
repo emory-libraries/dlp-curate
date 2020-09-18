@@ -1,0 +1,41 @@
+<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Add logic to display source collection for a work if present %>
+<div class="col-md-6">
+  <div class="metadata">
+    <dl class="dl-horizontal">
+    <% doc_presenter = index_presenter(document) %>
+    <% index_fields(document).each do |field_name, field| -%>
+      <% if should_render_index_field? document, field %>
+        <% # display field name %>
+        <dt><%= render_index_field_label document, field: field_name %></dt>
+        <% if field_name == 'member_of_collections_ssim' %>
+        <% # only do this for collection field %>
+          <% if document.source_collection_id %>
+          <% # check if work has source collection %>
+            <% unless document.member_of_collection_ids.first == document.source_collection_id.first %>
+            <% # only display source collection if it is different from deposit collection %>
+              <dd><%= document.source_collection_title.first %></dd>
+              <% # `next` will make sure dd on L#23 does not get executed if source collection is already displayed %>
+              <%next%>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% # display field value %>
+        <dd><%= doc_presenter.field_value field %></dd>
+      <% end %>
+    <% end %>
+    </dl>
+  </div>
+</div>
+<% if document.collection? %>
+<% collection_presenter = Hyrax::CollectionPresenter.new(document, current_ability) %>
+<div class="col-md-4">
+  <div class="collection-counts-wrapper">
+    <div class="collection-counts-item">
+      <span><%= collection_presenter.total_viewable_collections %></span>Collections
+    </div>
+    <div class="collection-counts-item">
+      <span><%= collection_presenter.total_viewable_works %></span>Works
+    </div>
+  </div>
+</div>
+<% end %>

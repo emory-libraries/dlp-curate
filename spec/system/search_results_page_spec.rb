@@ -4,8 +4,9 @@ include Warden::Test::Helpers
 
 RSpec.describe 'viewing the search results page', type: :system, clean: true do
   let(:admin_user) { FactoryBot.create(:admin) }
+  let(:source_collection) { FactoryBot.create(:collection_lw, title: ['Source Collection test']) }
   let(:work) { FactoryBot.build(:work_with_full_metadata, user: admin_user) }
-  let(:admin_collection) { FactoryBot.build(:public_collection_lw, user: admin_user, with_permission_template: true) }
+  let(:admin_collection) { FactoryBot.build(:public_collection_lw, user: admin_user, with_permission_template: true, title: ['Deposit Collection test']) }
   before do
     login_as admin_user
     work.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
@@ -46,6 +47,24 @@ RSpec.describe 'viewing the search results page', type: :system, clean: true do
       expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Library:')
       expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Collection:')
       expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Visibility:')
+    end
+  end
+
+  context 'source collection is present' do
+    before do
+      work.source_collection_id = source_collection.id
+      work.save!
+    end
+
+    it 'shows source collection for work' do
+      visit '/catalog?q='
+      expect(page).to have_content('Source Collection test')
+    end
+  end
+
+  context 'source collection is absent' do
+    it 'shows deposit collection for work' do
+      expect(page).to have_content('Deposit Collection test')
     end
   end
 end
