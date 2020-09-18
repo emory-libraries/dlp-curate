@@ -5,6 +5,20 @@
 # to the hashValue predicate
 Hydra::Works::CharacterizationService.class_eval do
   include PreservationEvents
+
+  def self.run(object, source = nil, options = {}, user = nil)
+    new(object, source, options, user).characterize
+  end
+
+  def initialize(object, source, options, user)
+    @object       = object
+    @source       = source
+    @mapping      = options.fetch(:parser_mapping, Hydra::Works::Characterization.mapper)
+    @parser_class = options.fetch(:parser_class, Hydra::Works::Characterization::FitsDocument)
+    @tools        = options.fetch(:ch12n_tool, :fits)
+    @user         = user
+  end
+
   # Assign values of the instance properties from the metadata mapping :prop => val
   def store_metadata(terms)
     terms.each_pair do |term, value|
@@ -35,7 +49,7 @@ Hydra::Works::CharacterizationService.class_eval do
       file_set = FileSet.find(file_set_id)
       # create event for digest calculation/failure
       event = { 'type' => 'Message Digest Calculation', 'start' => event_start, 'details' => value,
-                'software_version' => 'FITS v1.5.0, Fedora v4.7.5, Ruby Digest library', 'user' => file_set.depositor }
+                'software_version' => 'FITS v1.5.0, Fedora v4.7.5, Ruby Digest library', 'user' => @user.presence || file_set.depositor }
       event['outcome'] = value.size == 3 ? 'Success' : 'Failure'
       create_preservation_event(file_set, event)
     end

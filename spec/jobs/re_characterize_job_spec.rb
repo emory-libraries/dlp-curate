@@ -23,7 +23,7 @@ RSpec.describe ReCharacterizeJob, :clean do
 
   before do
     allow(FileSet).to receive(:find).with(file_set_id).and_return(file_set)
-    allow(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename)
+    allow(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename, {}, nil)
     CharacterizeJob.perform_now(file_set, file.id)
   end
 
