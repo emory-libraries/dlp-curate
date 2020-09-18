@@ -4,12 +4,18 @@ module Hyrax
   module CollectionsOverrideHelper
     include Hyrax::CollectionsHelper
 
+    def pull_collection_list(solr_doc)
+      Hyrax::CollectionMemberService.run(solr_doc, controller.current_ability)
+    end
+
+    def source_collection(id)
+      id.present? ? [::SolrDocument.find(id)] : []
+    end
+
     # rubocop:disable Rails/ContentTag
     def render_collection_links(solr_doc)
-      collection_list = Hyrax::CollectionMemberService.run(solr_doc, controller.current_ability)
-      return if collection_list.empty?
-      source_collection = collection_list.first['source_collection_id_tesim'].present? ? [::SolrDocument.find(collection_list.first['source_collection_id_tesim'])] : []
-      collection_list |= source_collection
+      return if pull_collection_list(solr_doc).empty?
+      collection_list = pull_collection_list(solr_doc) | source_collection(pull_collection_list(solr_doc).first['source_collection_id_tesim'])
       links = collection_list.map { |collection| link_to collection.title_or_label, hyrax.collection_path(collection.id) }
       collection_links = []
       links.each_with_index do |link, n|
