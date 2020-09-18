@@ -41,6 +41,18 @@ module Hyrax
         create_preservation_event(env.curation_concern, work_creation)
         create_preservation_event(env.curation_concern, work_policy)
       end
+
+      def update(env)
+        event_start = DateTime.current # record event_start timestamp
+        apply_update_data_to_curation_concern(env)
+        apply_save_data_to_curation_concern(env)
+        next_actor.update(env) && save(env) && run_callbacks(:after_update_metadata, env)
+        # Update work preservation event
+        work_update = { 'type' => 'Modification', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Object updated',
+                          'software_version' => 'Curate v.1', 'user' => env.user.uid }
+        # Create preservation events
+        create_preservation_event(env.curation_concern, work_update)
+      end
     end
   end
 end
