@@ -33,7 +33,6 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['child_works_for_lux_tesim'] = child_works_for_lux
       solr_doc['parent_work_for_lux_tesim'] = parent_work_for_lux
       solr_doc['source_collection_title_ssim'] = source_collection
-      solr_doc['source_collection_title_for_works_ssim'] = source_collection
       solr_doc['manifest_cache_key_tesim'] = manifest_cache_key
       # the next two fields are for display and search, not for security
       solr_doc['visibility_group_ssi'] = visibility_group_for_lux

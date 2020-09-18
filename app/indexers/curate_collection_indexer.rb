@@ -12,7 +12,7 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
       solr_doc['creator_ssort'] = object.creator.first
       solr_doc['generic_type_sim'] = ["Collection"]
       solr_doc['banner_path_ss'] = banner_path
-      solr_doc['source_collection_title_ssim'] = source_collection
+      solr_doc['source_collection_title_for_collections_ssim'] = source_collection
       solr_doc['deposit_collection_titles_tesim'] = deposit_collection
       solr_doc['deposit_collection_ids_tesim'] = object.deposit_collection_ids
     end

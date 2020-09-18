@@ -230,7 +230,7 @@ module Hyrax
     end
 
     def source_collection_object
-      { title: solr_document['source_collection_title_ssim'][0], id: source_coll_id[0] }
+      { title: solr_document['source_collection_title_for_collections_ssim'][0], id: source_coll_id[0] }
     end
 
     def source_coll_id

@@ -43,7 +43,7 @@ class CatalogController < ApplicationController
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
     config.add_facet_field 'holding_repository_sim', limit: 5, label: 'Library'
-    config.add_facet_field 'source_collection_title_for_works_ssim', limit: 10, label: 'Collection'
+    config.add_facet_field 'source_collection_title_ssim', limit: 10, label: 'Collection'
     config.add_facet_field 'creator_sim', limit: 10, label: 'Creator'
     config.add_facet_field 'human_readable_content_type_ssim', limit: 10, label: 'Format'
     config.add_facet_field 'content_genres_sim', limit: 10, label: 'Genre'
