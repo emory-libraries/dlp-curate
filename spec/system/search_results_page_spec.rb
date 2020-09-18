@@ -38,7 +38,7 @@ RSpec.describe 'viewing the search results page', type: :system, clean: true do
 
   context 'facet_selects' do
     it 'has the right count of facet_selects' do
-      expect(page).to have_selector('a.facet_select', count: 13)
+      expect(page).to have_selector('a.facet_select', count: 12)
     end
   end
 
@@ -59,6 +59,19 @@ RSpec.describe 'viewing the search results page', type: :system, clean: true do
     it 'shows source collection for work' do
       visit '/catalog?q='
       expect(page).to have_content('Source Collection test')
+    end
+
+    context 'when faceting by source collection' do
+      before { visit '/catalog?f%5Bsource_collection_title_for_works_ssim%5D%5B%5D=Source+Collection+test&locale=en&q=&search_field=all_fields' }
+
+      it 'shows work in search results for source collection' do
+        expect(page).to have_content('Test title')
+        expect(page).to have_content('1 entry found')
+      end
+
+      it 'does not show deposit collections in search results' do
+        expect(page).not_to have_content('Deposit Collection test')
+      end
     end
   end
 
