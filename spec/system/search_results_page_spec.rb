@@ -62,7 +62,7 @@ RSpec.describe 'viewing the search results page', type: :system, clean: true do
     end
 
     context 'when faceting by source collection' do
-      before { visit '/catalog?f%5Bsource_collection_title_for_works_ssim%5D%5B%5D=Source+Collection+test&locale=en&q=&search_field=all_fields' }
+      before { visit '/catalog?f%5Bsource_collection_title_ssim%5D%5B%5D=Source+Collection+test&locale=en&q=&search_field=all_fields' }
 
       it 'shows work in search results for source collection' do
         expect(page).to have_content('Test title')

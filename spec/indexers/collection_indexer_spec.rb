@@ -35,7 +35,7 @@ RSpec.describe CurateCollectionIndexer do
       end
 
       it 'returns correct source collection title' do
-        expect(solr_document['source_collection_title_ssim']).to eq(['Test title collection123'])
+        expect(solr_document['source_collection_title_for_collections_ssim']).to eq(['Test title collection123'])
       end
     end
   end
