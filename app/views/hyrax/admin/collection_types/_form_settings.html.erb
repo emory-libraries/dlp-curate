@@ -38,6 +38,10 @@
     <p><%= f.input :require_membership, as: :boolean, disabled: true %></p>
     <p><%= f.input :assigns_workflow, as: :boolean, disabled: true %></p>
     <p><%= f.input :assigns_visibility, as: :boolean, disabled: true %></p>
+    <!--
+      Change below was necessary to institute Source/Deposit Collection structure.
+      For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
+    -->
     <p><%= f.input :deposit_only_collection, as: :boolean, disabled: f.object.all_settings_disabled?, label: 'DEPOSIT-ONLY COLLECTION' %></p>
   </div>
 </div>

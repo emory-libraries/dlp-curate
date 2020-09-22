@@ -7,6 +7,9 @@ module Hyrax
     CurateGenericWorkAttributes.instance.attributes.each do |key|
       delegate key.to_sym, to: :solr_document
     end
+
+    # Change below was necessary to institute Source/Deposit Collection structure.
+    # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     delegate :failed_preservation_events, :source_collection_title, to: :solr_document
 
     include CuratePurl

@@ -32,10 +32,14 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
       collections_hasherizer(collections)
     end
 
+    # Change below was necessary to institute Source/Deposit Collection structure.
+    # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     def collection_hsh
       collections_hasherizer(source_collections)
     end
 
+    # Change below was necessary to institute Source/Deposit Collection structure.
+    # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     def collection_works(collection_id)
       solr_service.query(
         query_builder.construct_query(
@@ -57,6 +61,8 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
       filesets.sum { |fs| fs['sha1_tesim']&.compact&.uniq&.size || 0 }
     end
 
+    # Change below was necessary to institute Source/Deposit Collection structure.
+    # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     def source_collections
       # The determination of which collections are considered Source Collections
       # is based solely on the Collection's CollectionType deposit_only_collection

@@ -3,6 +3,8 @@
 class CurateMapper < Zizia::HashMapper
   attr_reader :row_number
 
+  # Change below was necessary to institute Source/Deposit Collection structure.
+  # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
   CURATE_TERMS_MAP = {
     abstract:                     "abstract",
     access_restriction_notes:     "access_restriction_notes",

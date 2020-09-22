@@ -225,6 +225,8 @@ module Hyrax
       false
     end
 
+    # Change below was necessary to institute Source/Deposit Collection structure.
+    # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     def deposit_collection?
       source_coll_id.present? && source_coll_id[0] != id
     end

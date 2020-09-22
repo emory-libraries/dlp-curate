@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Change below was necessary to institute Source/Deposit Collection structure.
+# For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
 module Hyrax
   module Admin
     module CollectionTypesControllerOverride

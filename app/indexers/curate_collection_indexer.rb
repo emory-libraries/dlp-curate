@@ -5,6 +5,8 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
     CurateIndexer
   end
 
+  # Change below was necessary to institute Source/Deposit Collection structure.
+  # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
   def generate_solr_document
     super.tap do |solr_doc|
       solr_doc['member_works_count_isi'] = object.child_works.count
@@ -37,6 +39,8 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
     path
   end
 
+  # Change below was necessary to institute Source/Deposit Collection structure.
+  # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
   def source_collection
     collection = Collection.find(object.source_collection_id) if object.source_collection_id
     return collection.title unless collection.nil?

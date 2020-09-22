@@ -3,6 +3,9 @@ module Hyrax
   # Generated form for CurateGenericWork
   class CurateGenericWorkForm < Hyrax::Forms::WorkForm
     self.model_class = ::CurateGenericWork
+
+    # Change below was necessary to institute Source/Deposit Collection structure.
+    # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     self.terms = [:title, :institution, :holding_repository, :administrative_unit, :sublocation, :access_right,
                   :content_type, :content_genres, :abstract, :table_of_contents, :edition, :alt_title, :rights_notes,
                   :primary_language, :subject_topics, :subject_names, :subject_geo, :subject_time_periods,
@@ -38,6 +41,8 @@ module Hyrax
        :internal_rights_note, :legacy_rights, :contact_information]
     end
 
+    # Change below was necessary to institute Source/Deposit Collection structure.
+    # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     def primary_admin_metadata_fields
       [:staff_notes, :system_of_record_ID, :other_identifiers, :emory_ark, :date_digitized, :transfer_engineer, :deduplication_key, :source_collection_id]
     end

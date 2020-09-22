@@ -9,6 +9,8 @@ module Hyrax
         attr_accessor :collection_type
         validates :title, presence: true
 
+        # Change below was necessary to institute Source/Deposit Collection structure.
+        # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
         delegate :title, :description, :brandable, :discoverable, :nestable, :sharable,
                  :share_applies_to_new_works, :require_membership, :allow_multiple_membership,
                  :assigns_workflow, :assigns_visibility, :id, :collection_type_participants,
