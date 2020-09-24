@@ -136,6 +136,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       visit "dashboard/works"
       find("input[type='checkbox'][id='check_all']").set(true)
       expect(page).to have_selector("input[value='delete_all']", visible: false)
+      expect(page).to have_css('button', text: 'Add to collection')
     end
   end
 
@@ -168,6 +169,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       visit "dashboard/works"
       find("input[type='checkbox'][id='check_all']").set(true)
       expect(page).not_to have_selector("input[value='delete_all']", visible: false)
+      expect(page).not_to have_css('button', text: 'Add to collection')
     end
 
     context 'viewer role' do
