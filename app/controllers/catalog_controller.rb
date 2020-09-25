@@ -41,8 +41,10 @@ class CatalogController < ApplicationController
     config.index.thumbnail_field = 'thumbnail_path_ss'
 
     # solr fields that will be treated as facets by the blacklight application
-    #   The ordering of the field names is the order of the display
+    # The ordering of the field names is the order of the display
     config.add_facet_field 'holding_repository_sim', limit: 5, label: 'Library'
+    # Change below was necessary to institute Source/Deposit Collection structure.
+    # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     config.add_facet_field 'source_collection_title_ssim', limit: 10, label: 'Collection'
     config.add_facet_field 'creator_sim', limit: 10, label: 'Creator'
     config.add_facet_field 'human_readable_content_type_ssim', limit: 10, label: 'Format'
@@ -66,7 +68,7 @@ class CatalogController < ApplicationController
     config.add_facet_fields_to_solr_request!
 
     # solr fields to be displayed in the index (search results) view
-    #   The ordering of the field names is the order of the display
+    # The ordering of the field names is the order of the display
     config.add_index_field solr_name("title", :stored_searchable), label: "Title", itemprop: 'name', if: false
     config.add_index_field solr_name("holding_repository", :stored_searchable), label: "Library", itemprop: 'holding_repository'
     config.add_index_field 'member_of_collections_ssim', label: "Collection", itemprop: 'member_of_collections'
@@ -75,7 +77,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'human_readable_visibility_ssi', label: 'Visibility', itemprop: 'human_readable_visibility'
 
     # solr fields to be displayed in the show (single result) view
-    #   The ordering of the field names is the order of the display
+    # The ordering of the field names is the order of the display
     CurateGenericWorkAttributes.instance.attributes.each do |key|
       config.add_show_field solr_name(key, :stored_searchable)
     end

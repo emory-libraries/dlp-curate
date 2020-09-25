@@ -22,6 +22,8 @@ module Hyrax
 
       delegate :blacklight_config, to: Hyrax::CollectionsController
 
+      # Change below was necessary to institute Source/Deposit Collection structure.
+      # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
       self.terms = [:title, :holding_repository, :administrative_unit, :creator,
                     :contributors, :abstract, :primary_language, :finding_aid_link,
                     :institution, :local_call_number, :keywords, :subject_topics,
@@ -95,6 +97,8 @@ module Hyrax
       end
 
       # Terms that appear within the accordion
+      # Change below was necessary to institute Source/Deposit Collection structure.
+      # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
       def secondary_terms
         [:administrative_unit, :contributors, :primary_language, :finding_aid_link,
          :institution, :local_call_number, :keywords, :subject_topics, :subject_names,

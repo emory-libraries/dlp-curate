@@ -12,6 +12,8 @@ class LangmuirPreprocessor
   ##
   # Initialize a preprocessor instance by supplying
   # @param [String] csv the path to a CSV file containing the expectd Pull List metadata
+  # Change below was necessary to institute Source/Deposit Collection structure.
+  # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
   def initialize(csv)
     @source_csv = CSV.read(csv, headers: true)
     directory = File.dirname(csv)
@@ -110,6 +112,8 @@ class LangmuirPreprocessor
     end
   end
 
+  # Change below was necessary to institute Source/Deposit Collection structure.
+  # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
   def exclusion_guard(arr)
     arr | required_fields
   end

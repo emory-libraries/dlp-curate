@@ -27,6 +27,8 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     @base_offset = 1 - start_page
   end
 
+  # Change below was necessary to institute Source/Deposit Collection structure.
+  # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
   HEADER_FIELDS = [
     # Context fields to help humans compare this file to sources
     'deduplication_key',
@@ -106,6 +108,8 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       ]
     end
 
+    # Change below was necessary to institute Source/Deposit Collection structure.
+    # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     def pull_list_mappings(row)
       [
         row['administrative_unit'],

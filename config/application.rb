@@ -22,6 +22,8 @@ module DlpCurate
     # -- all .rb files in that directory are automatically loaded.
     config.active_job.queue_adapter = :sidekiq
     config.autoload_paths += %W[#{config.root}/lib]
+    # Change below was necessary to institute Source/Deposit Collection structure.
+    # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     config.to_prepare do
       Hyrax::Dashboard::CollectionsController.prepend Hyrax::Dashboard::CollectionsControllerOverride
       Hyrax::Admin::CollectionTypesController.prepend Hyrax::Admin::CollectionTypesControllerOverride

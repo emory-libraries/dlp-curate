@@ -260,6 +260,8 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  # Change below was necessary to institute Source/Deposit Collection structure.
+  # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
   property :source_collection_id, predicate: "http://metadata.emory.edu/vocab/cor-terms#sourceCollectionID", multiple: false do |index|
     index.as :stored_searchable
   end
