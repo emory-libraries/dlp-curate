@@ -1,7 +1,7 @@
 <% # [Hyrax-overwrite-v3.0.0.pre.rc1] Only display delete button if user is an admin L#44 %>
 <div class="row show-actions button-row-top-two-column">
   <div class="col-sm-6">
-    <% if presenter.show_deposit_for?(collections: @user_collections) %>
+    <% if presenter.show_deposit_for?(collections: @user_collections) && current_user.admin? %>
       <input type="checkbox"  style="display:none" name="batch_document_ids[]" id="batch_document_<%= presenter.id %>" value="<%= presenter.id %>" class="batch_document_selector" checked="checked" />
       <%= button_tag t('hyrax.dashboard.my.action.add_to_collection'),
                     class: 'btn btn-default submits-batches submits-batches-add',
