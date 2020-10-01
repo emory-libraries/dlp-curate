@@ -5,6 +5,10 @@ require "capistrano/setup"
 require "cap-ec2/capistrano"
 # Include default deployment tasks
 require "capistrano/deploy"
+# exec `whenever` every time we deploy so that jobs
+# are added to crontab
+set :whenever_command, "bundle exec whenever"
+require "whenever/capistrano"
 
 # Load the SCM plugin appropriate to your project:
 #
