@@ -13,6 +13,8 @@ module Hyrax
         files             = uploaded_files(uploaded_file_ids)
         # get a current copy of attributes, to protect against future mutations
         attributes        = env.attributes.clone
+        # Initiating user variable created and then passed along in the the
+        # attach_files method call below.
         user = env&.user
 
         validate_files(files, env) &&
@@ -27,6 +29,8 @@ module Hyrax
         files             = uploaded_files(uploaded_file_ids)
         # get a current copy of attributes, to protect against future mutations
         attributes        = env.attributes.clone
+        # Initiating user variable created and then passed along in the the
+        # attach_files method call below.
         user = env&.user
 
         validate_files(files, env) &&
