@@ -28,6 +28,10 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
 
       expect(social_media.size).to eq(0)
     end
+
+    it 'does not show feature button' do
+      expect(page).not_to have_link('Feature')
+    end
   end
 
   context 'page metadata labels' do
