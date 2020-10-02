@@ -103,6 +103,7 @@ Metrics/MethodLength:
         - app/controllers/iiif_controller.rb
         - app/controllers/background_jobs_controller.rb
         - spec/fixtures/placeholder_manifest_output.rb
+        - app/importers/dams_preprocessor.rb
 
 Metrics/ModuleLength:
     Exclude:
