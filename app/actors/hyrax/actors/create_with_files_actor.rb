@@ -19,7 +19,7 @@ module Hyrax
 
         validate_files(files, env) &&
           next_actor.create(env) &&
-          attach_files(files, env.curation_concern, attributes, user)
+          attach_files(files, env.curation_concern, user, attributes)
       end
 
       # @param [Hyrax::Actors::Environment] env
@@ -35,7 +35,7 @@ module Hyrax
 
         validate_files(files, env) &&
           next_actor.update(env) &&
-          attach_files(files, env.curation_concern, attributes, user)
+          attach_files(files, env.curation_concern, user, attributes)
       end
 
       private
@@ -57,7 +57,7 @@ module Hyrax
         end
 
         # @return [TrueClass]
-        def attach_files(files, curation_concern, attributes, user = nil)
+        def attach_files(files, curation_concern, user, attributes)
           return true if files.blank?
           AttachFilesToWorkJob.perform_later(curation_concern, files, user, attributes.to_h.symbolize_keys)
           true
