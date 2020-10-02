@@ -7,12 +7,10 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
 
   # @param [ActiveFedora::Base] work - the work object
   # @param [Array<Hyrax::UploadedFile>] uploaded_files - an array of files to attach
-  # @param [User] initiating_user - single user pulled from the env container so
-  #   that the change event can reflect the initiating user
-  def perform(work, uploaded_files, initiating_user, **work_attributes)
+  def perform(work, uploaded_files, **work_attributes)
     validate_files!(uploaded_files)
     depositor = proxy_or_depositor(work)
-    user = initiating_user.presence || User.find_by_user_key(depositor)
+    user = User.find_by_user_key(depositor)
     work, work_permissions = create_permissions work, depositor
     metadata = visibility_attributes(work_attributes)
     uploaded_files.each do |uploaded_file|

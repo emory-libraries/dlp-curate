@@ -27,12 +27,11 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
   end
   let(:generic_work) { FactoryBot.create(:public_generic_work) }
   let(:user)         { FactoryBot.create(:user) }
-  let(:user2)        { FactoryBot.create(:user) }
 
   shared_examples 'a file attacher', perform_enqueued: [described_class, IngestJob] do
     it 'attaches files, copies visibility and permissions and updates the uploaded files' do
       expect(CharacterizeJob).to receive(:perform_later).once
-      described_class.perform_now(generic_work, [uploaded_file1], user)
+      described_class.perform_now(generic_work, [uploaded_file1])
       generic_work.reload
       expect(generic_work.file_sets.first.title).to eq ['Example title']
       expect(generic_work.file_sets.first.pcdm_use).to eq 'primary'
@@ -48,21 +47,12 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
   context "sets fileset name" do
     it_behaves_like 'a file attacher' do
       it 'sets fileset name as preservation_master_file name when fileset name is not present' do
-        described_class.perform_now(generic_work, [uploaded_file2], user)
+        described_class.perform_now(generic_work, [uploaded_file2])
 
         expect(generic_work.file_sets.first.title).to eq ['0003_preservation_master.tif']
         expect(generic_work.file_sets.first.pcdm_use).to eq 'supplementary'
         expect(generic_work.file_sets.first.files.size).to eq 3
       end
-    end
-  end
-
-  # Added to check that the associated event actually gets the initiating user instead of
-  #   the depositor on file.
-  context "calls FileSetAttachedEventJob", perform_enqueued: [described_class, IngestJob, FileSetAttachedEventJob] do
-    it 'calls FileSetAttachedEventJob with the initiating user when passed along' do
-      expect(FileSetAttachedEventJob).to receive(:perform_later).with(an_instance_of(FileSet), user2).once
-      described_class.perform_now(generic_work, [uploaded_file1], user2)
     end
   end
 
@@ -81,7 +71,7 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
         let(:uploaded_file1) { FactoryBot.build(:uploaded_file, file: pmf, file_set_uri: 'http://example.com/file_set') }
 
         it 'skips files that already have a FileSet' do
-          expect { described_class.perform_now(generic_work, [uploaded_file1, uploaded_file2], user) }
+          expect { described_class.perform_now(generic_work, [uploaded_file1, uploaded_file2]) }
             .to change { generic_work.file_sets.count }.to eq 1
         end
       end
@@ -121,7 +111,7 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
       upload = File.open(virus_file_path) do |virus_file|
         Hyrax::UploadedFile.create(user: user, preservation_master_file: virus_file)
       end
-      described_class.perform_now(generic_work, [upload], user)
+      described_class.perform_now(generic_work, [upload])
     end
     it 'does not upload file' do
       expect(generic_work.file_sets.first.files.size).to eq 0

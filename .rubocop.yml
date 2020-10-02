@@ -152,7 +152,3 @@ RSpec/AnyInstance:
 RSpec/LetSetup:
     Exclude:
         - spec/presenters/collection_presenter_spec.rb
-
-RSpec/LeadingSubject:
-    Exclude:
-        - spec/actors/hyrax/actors/create_with_files_actor_spec.rb
