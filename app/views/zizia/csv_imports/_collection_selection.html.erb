@@ -1,1 +1,3 @@
+<!-- [Zizia-overwrite-v5.3.0] ActiveFedora Solr query was producing a list without all Collections, so
+        an overwrite is needed to provide them all, which all_collections_collection does -->
 <%= form.select :fedora_collection_id, options_for_select(all_collections_collection), {}, class: "form-control", id: "fedora_collection_id"  %>
