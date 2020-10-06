@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 # [Hyrax-overwrite-v3.0.0.pre.rc1]
 # Adds fixity_check preservation_event
+
+require 'sidekiq-limit_fetch'
+
 class FixityCheckJob < Hyrax::ApplicationJob
+  queue_as :fixity_check_job
   include PreservationEvents
   # A Job class that runs a fixity check (using ActiveFedora::FixityService,
   # which contacts fedora and requests a fixity check), and stores the results
