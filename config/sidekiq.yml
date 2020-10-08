@@ -6,10 +6,10 @@
   - [default, 1]
 
 :limits:
-  fixity_check_job: 1
+  fixity_check_job: 3
 
 :process_limits:
-  fixity_check_job: 1
+  fixity_check_job: 3
 
 :timeout: 300
 
