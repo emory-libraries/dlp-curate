@@ -21,7 +21,10 @@
 
 # Learn more: http://github.com/javan/whenever
 
-# run rake task on the 3rd of every 3rd month
-every '0 0 3 */3 *' do
-  rake "curate:file_sets:fixity_check"
+case @hostname
+when 'curate-test'
+  # run rake task every monday - this is only for testing purposes
+  every '0 0 * * 1' do
+    rake "curate:file_sets:fixity_check limit=1000"
+  end
 end

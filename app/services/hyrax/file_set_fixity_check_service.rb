@@ -90,7 +90,6 @@ module Hyrax
 
         if async_jobs
           FixityCheckJob.perform_later(version_uri.to_s, file_set_id: file_set.id, file_id: file_id, initiating_user: @initiating_user)
-          sleep(1) # sleep for 1 second after running fixity check job so that file can be correctly fetched from s3 and processed
         else
           FixityCheckJob.perform_now(version_uri.to_s, file_set_id: file_set.id, file_id: file_id, initiating_user: @initiating_user)
         end
