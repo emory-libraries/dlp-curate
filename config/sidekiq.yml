@@ -2,8 +2,11 @@
 :queues:
   - [ingest, 4]
   - [batch, 2]
-  - [default, 1]
   - [fixity_check_job, 2]
+  - [default, 1]
+
+:limits:
+  fixity_check_job: 1
 
 :process_limits:
   fixity_check_job: 1
