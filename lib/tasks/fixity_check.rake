@@ -3,7 +3,7 @@ namespace :curate do
   namespace :file_sets do
     desc "Perform fixity checking on file_sets"
     task fixity_check: :environment do
-      limit = ENV['limit'].to_i || FileSet.count # limit number of file_sets
+      limit = ENV['limit'].present? ? ENV['limit'].to_i : FileSet.count # limit number of file_sets
       response = Blacklight.default_index.connection.get 'select', params: { q: "has_model_ssim:FileSet", rows: limit, fl: "id" }
       file_set_ids = response["response"]["docs"].pluck("id")
 
