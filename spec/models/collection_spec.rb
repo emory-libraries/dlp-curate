@@ -16,9 +16,11 @@ RSpec.describe Collection, clean: true do
 
     it "indexes the correct count of child works for populated collections" do
       works = [work1, work2, work3]
-      works.each { |w| collection.ordered_members << w }
-      collection.save!
-      collection.reload
+      works.each do |w|
+        w.source_collection_id = collection.id
+        w.save!
+        w.reload
+      end
       expect(solr_doc['member_works_count_isi']).to eq 3
     end
 

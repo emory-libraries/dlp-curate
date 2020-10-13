@@ -9,7 +9,7 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
   # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
   def generate_solr_document
     super.tap do |solr_doc|
-      solr_doc['member_works_count_isi'] = object.child_works.count
+      solr_doc['member_works_count_isi'] = member_works_count
       solr_doc['title_ssort'] = sort_title
       solr_doc['creator_ssort'] = object.creator.first
       solr_doc['generic_type_sim'] = ["Collection"]
@@ -48,5 +48,9 @@ class CurateCollectionIndexer < Hyrax::CollectionIndexer
 
   def deposit_collection
     object.deposit_collection_ids.map { |id| Collection.find(id).title.first } if object.deposit_collection_ids.present?
+  end
+
+  def member_works_count
+    Collection.related_works_solrized(object.id).count
   end
 end

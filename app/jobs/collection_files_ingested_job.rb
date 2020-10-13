@@ -19,14 +19,6 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
 
   private
 
-    def solr_service
-      Hyrax::SolrService
-    end
-
-    def query_builder
-      Hyrax::SolrQueryBuilderService
-    end
-
     def selected_coll_hsh(collection_array)
       collections = collection_array.map { |coll| Collection.find(coll) }
       collections_hasherizer(collections)
@@ -41,12 +33,7 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
     # Change below was necessary to institute Source/Deposit Collection structure.
     # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     def collection_works(collection_id)
-      solr_service.query(
-        query_builder.construct_query(
-          source_collection_id_tesim: collection_id,
-          has_model_ssim:             "CurateGenericWork"
-        ), rows: 1_000_000
-      )
+      Collection.related_works_solrized(collection_id)
     end
 
     def fileset_ids(works)
@@ -54,7 +41,12 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
     end
 
     def filesets(ids)
-      ids.map { |id| solr_service.query(query_builder.construct_query(id: id), rows: 1_000_000) }&.flatten
+      ids.map do |id|
+        Hyrax::SolrService.query(
+          Hyrax::SolrQueryBuilderService.construct_query(id: id),
+          rows: 1_000_000
+        )
+      end&.flatten
     end
 
     def filesets_file_count(filesets)
