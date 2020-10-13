@@ -23,8 +23,8 @@
 
 case @hostname
 when 'curate-test'
-  # run rake task every 7th day - this is only for testing purposes
-  every '0 0 * * */7' do
+  # run rake task every wednesday - this is only for testing purposes
+  every '0 0 * * 3' do
     rake "curate:file_sets:fixity_check"
   end
 end
