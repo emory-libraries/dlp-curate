@@ -120,6 +120,15 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  def self.related_works_solrized(id)
+    Hyrax::SolrService.query(
+      Hyrax::SolrQueryBuilderService.construct_query(
+        source_collection_id_tesim: id,
+        has_model_ssim:             "CurateGenericWork"
+      ), rows: 1_000_000
+    )
+  end
+
   private
 
     def service
