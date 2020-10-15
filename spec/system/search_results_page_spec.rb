@@ -47,6 +47,8 @@ RSpec.describe 'viewing the search results page', type: :system, clean: true do
       expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Library:')
       expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Collection:')
       expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Visibility:')
+      expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Deduplication Key:')
+      expect(page).to have_css('.metadata .dl-horizontal dt', text: 'ID:')
     end
   end
 
