@@ -75,6 +75,8 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name("date_uploaded", :stored_sortable, type: :date), label: 'Date Uploaded', itemprop: 'datePublished', helper_method: :human_readable_date
     config.add_index_field solr_name("date_modified", :stored_sortable, type: :date), label: 'Date Modified', itemprop: 'dateModified', helper_method: :human_readable_date
     config.add_index_field 'human_readable_visibility_ssi', label: 'Visibility', itemprop: 'human_readable_visibility'
+    config.add_index_field 'deduplication_key_tesim', label: 'Deduplication Key', itemprop: 'deduplication_key'
+    config.add_index_field 'id', label: 'ID', itemprop: 'id'
 
     # solr fields to be displayed in the show (single result) view
     # The ordering of the field names is the order of the display
