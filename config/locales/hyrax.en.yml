@@ -254,7 +254,7 @@ en:
         additional_descriptive_fields: "Additional descriptive fields"
         rights_metadata_heading: "Rights Metadata"
         additional_rights_fields: "Additional rights fields"
-        admin_metadata_heading: "Admin Metadata"
+        admin_metadata_heading: "Administrative Metadata"
         additional_admin_fields: "Additional admin fields"
         preservation_workflow_metadata_heading: "Preservation Workflow Metadata"
     file_sets:
