@@ -60,6 +60,8 @@ module Hyrax
       ret_arr
     end
 
+    # Below is an override of an attributes display method found in
+    # Hyrax::PresentsAttributes, which is included by this Presenter via inheritance.
     def permission_badge
       permission_badge_class.new(solr_document['visibility_ssi']).render
     end
