@@ -60,6 +60,10 @@ module Hyrax
       ret_arr
     end
 
+    def permission_badge
+      permission_badge_class.new(solr_document['visibility_ssi']).render
+    end
+
     private
 
       def workflow_formatter(type, flow_arr, ret_arr)
