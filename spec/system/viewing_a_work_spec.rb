@@ -207,6 +207,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         visit(work_url)
 
         expect(page).to have_css("#visibility", text: 'Public')
+        expect(badge_text(page)).to eq('Public')
       end
     end
 
@@ -217,6 +218,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         visit(work_url)
 
         expect(page).to have_css("#visibility", text: 'Emory High Download')
+        expect(badge_text(page)).to eq('Emory High Download')
       end
     end
 
@@ -227,6 +229,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         visit(work_url)
 
         expect(page).to have_css("#visibility", text: 'Emory Low Download')
+        expect(badge_text(page)).to eq('Emory Low Download')
       end
     end
 
@@ -237,6 +240,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         visit(work_url)
 
         expect(page).to have_css("#visibility", text: 'Public Low View')
+        expect(badge_text(page)).to eq('Public Low View')
       end
     end
 
@@ -247,6 +251,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         visit(work_url)
 
         expect(page).to have_css("#visibility", text: 'Private')
+        expect(badge_text(page)).to eq('Private')
       end
     end
 
@@ -257,6 +262,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         visit(work_url)
 
         expect(page).to have_css("#visibility", text: 'Rose High View')
+        expect(badge_text(page)).to eq('Rose High View')
       end
     end
   end
@@ -424,5 +430,9 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         expect(page).not_to have_content('Source Collection') # make sure dropdown is not present
       end
     end
+  end
+
+  def badge_text(page)
+    page.find_all('div.title-with-badges span').first.text
   end
 end
