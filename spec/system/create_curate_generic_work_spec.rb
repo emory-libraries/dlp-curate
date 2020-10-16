@@ -292,6 +292,8 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
         expect(page).to have_css('option[value="true"][text()="Yes"]')
         expect(page).to have_css('option[value="false"][text()="No"]')
       end
+      expect(page).to have_content "Administrative Metadata"
+      expect(page).not_to have_content "Admin Metadata"
       # expect(page).to have_content "Add folder"
       # within('span#addfiles') do
       #   attach_file("files[]", "#{Hyrax::Engine.root}/spec/fixtures/image.jp2", visible: false)
