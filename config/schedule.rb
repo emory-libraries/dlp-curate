@@ -28,8 +28,8 @@ when 'curate-test'
     rake "curate:file_sets:fixity_check"
   end
 when 'curate-prod'
-  # run rake task on 18th every two months
-  every '0 0 18 */2 *' do
+  # run rake task on 20th every two months
+  every '0 0 20 2,4,6,8,10,12 *' do
     rake "curate:file_sets:fixity_check"
   end
 end
