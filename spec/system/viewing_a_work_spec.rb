@@ -306,6 +306,17 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       include_examples "check_page_for_multiple_text",
         ['Smackety', DateTime.current.strftime("%F")],
         'displays the right details and dates'
+
+      context 'top metadata block' do
+        it 'has no listing of Preservation event' do
+          within 'dl.work-show.curate_generic_work' do
+            pres_event_attributes = find_all('li.attribute.attribute-preservation_event')
+
+            expect(page).not_to have_content('Preservation event')
+            expect(pres_event_attributes.size).to eq(0)
+          end
+        end
+      end
     end
 
     context 'when no pwf is supplied' do
@@ -367,6 +378,17 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
 
       it 'will not have the no info warning' do
         expect(page).to have_no_content('No information supplied')
+      end
+
+      context 'top metadata block' do
+        it 'has no listing of Preservation workflow terms' do
+          within 'dl.work-show.curate_generic_work' do
+            pres_event_attributes = find_all('li.attribute.attribute-preservation_workflow_terms')
+
+            expect(page).not_to have_content('Preservation workflow terms')
+            expect(pres_event_attributes.size).to eq(0)
+          end
+        end
       end
     end
 
