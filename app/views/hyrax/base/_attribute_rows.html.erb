@@ -20,6 +20,7 @@
     <%= presenter.attribute_to_html(key.to_sym, render_as: 'format')  %>
   <% when 'rights_statement' %>
     <%= presenter.attribute_to_html(key.to_sym, render_as: 'rights_statement') %>
+  <% when 'preservation_event','preservation_workflow', 'preservation_workflow_terms' %>
   <% else %>
     <%= presenter.attribute_to_html(key.to_sym) %>
   <% end %>
