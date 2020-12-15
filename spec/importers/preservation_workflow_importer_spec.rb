@@ -25,6 +25,11 @@ RSpec.describe PreservationWorkflowImporter, :clean do
       ['Deletion', 'Decommission'].each do |type|
         include_examples 'check_basis_reviewer_for_text', type, 'Woodruff Health Sciences Library Administration'
       end
+
+      it 'populates the workflow_rights_basis_uri' do
+        rights_basis_uri_array = generic_work.preservation_workflow.map { |workflow| workflow.workflow_rights_basis_uri.first }.uniq
+        expect(rights_basis_uri_array).to eq ['https://someawesomewebsite.com']
+      end
     end
 
     context "with existing preservation_workflow for the work" do
