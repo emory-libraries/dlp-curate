@@ -9,7 +9,7 @@
     "bootstrap": "^4.3.1",
     "edtf": "^2.6.1",
     "jquery": "^3.5.0",
-    "jquery-validation": "^1.19.0",
+    "jquery-validation": "^1.19.3",
     "popper.js": "^1.15.0",
     "set-value": "^2.0.1",
     "turbolinks": "^5.2.0",
