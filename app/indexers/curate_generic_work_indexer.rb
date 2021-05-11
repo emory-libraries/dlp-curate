@@ -175,7 +175,8 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
     rendering_ids = object.rendering_ids.sort.to_s # sorting so it always returns the same order when generating hash key
     holding_repository = object.holding_repository.class == 'Array' ? object.holding_repository.first : object.holding_repository # checking if holding repo is returned
     # from solr. If yes, this might be an array and we will need to get the first value; if it is from fedora, this will be a string always.
+    file_sets_visibility = object.file_sets.map(&:visibility).join
     Digest::MD5.hexdigest(object.title.first.to_s + object.file_sets.count.to_s + holding_repository.to_s + object.rights_statement.first.to_s + object.visibility.to_s +
-                          rendering_ids)
+                          file_sets_visibility + rendering_ids)
   end
 end
