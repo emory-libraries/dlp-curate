@@ -310,5 +310,25 @@ RSpec.describe CurateGenericWorkIndexer do
         indexer.generate_solr_document
       end
     end
+
+    context 'when fileset visibility is changed' do
+      let(:work) { FactoryBot.create(:public_generic_work) }
+      let(:uf) do
+        FactoryBot.build(:uploaded_file,
+                         file:                     'Example title',
+                         preservation_master_file: File.open(fixture_path + '/book_page/0003_preservation_master.tif'),
+                         fileset_use:              'primary')
+      end
+
+      it 'returns manifest_cache_key' do
+        AttachFilesToWorkJob.perform_now(work, [uf])
+        file_set = work.file_sets.first
+        file_set.visibility = 'low_res'
+        file_set.save!
+
+        expect(Digest::MD5).to receive(:hexdigest).with("Test title1openlow_res[]")
+        indexer.generate_solr_document
+      end
+    end
   end
 end
