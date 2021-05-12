@@ -34,7 +34,8 @@ class PreservationWorkflowImporter
             workflow_rights_basis:          workflow_attrs["#{type}.workflow_rights_basis"],
             workflow_rights_basis_note:     workflow_attrs["#{type}.workflow_rights_basis_note"],
             workflow_rights_basis_date:     workflow_attrs["#{type}.workflow_rights_basis_date"],
-            workflow_rights_basis_reviewer: workflow_attrs["#{type}.rights_basis_reviewer"].presence || workflow_attrs["#{type}.workflow_rights_basis_reviewer"] }
+            workflow_rights_basis_reviewer: workflow_attrs["#{type}.rights_basis_reviewer"].presence || workflow_attrs["#{type}.workflow_rights_basis_reviewer"],
+            workflow_rights_basis_uri:      workflow_attrs["#{type}.workflow_rights_basis_uri"] }
         ]
       end
   end
