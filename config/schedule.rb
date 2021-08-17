@@ -21,15 +21,17 @@
 
 # Learn more: http://github.com/javan/whenever
 
-case @hostname
-when 'curate-test'
-  # run rake task on 18th every three months
-  every '0 0 18 */3 *' do
-    rake "curate:file_sets:fixity_check"
-  end
-when 'curate-prod'
-  # run rake task on 20th every two months
-  every '0 0 20 2,4,6,8,10,12 *' do
-    rake "curate:file_sets:fixity_check"
-  end
-end
+# Commenting out scheduled cron jobs for fixity checking
+
+# case @hostname
+# when 'curate-test'
+#   # run rake task on 18th every three months
+#   every '0 0 18 */3 *' do
+#     rake "curate:file_sets:fixity_check"
+#   end
+# when 'curate-prod'
+#   # run rake task on 20th every two months
+#   every '0 0 20 2,4,6,8,10,12 *' do
+#     rake "curate:file_sets:fixity_check"
+#   end
+# end
