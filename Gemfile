@@ -9,6 +9,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'active-fedora', '13.2.4'
 gem 'bootsnap', require: false
 gem 'bootstrap-sass', '~> 3.0'
 gem 'clamby'
