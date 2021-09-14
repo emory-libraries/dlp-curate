@@ -11,7 +11,7 @@
     "jquery": "^3.5.0",
     "jquery-validation": "^1.19.3",
     "popper.js": "^1.15.0",
-    "set-value": "^2.0.1",
+    "set-value": "^4.0.1",
     "turbolinks": "^5.2.0",
     "universalviewer": "^3.0.16",
     "webpack": "^4.0.0"
