@@ -24,14 +24,11 @@ gem 'hyrax', '3.0.0-rc1'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 gem 'mysql2', '~> 0.5'
-gem 'noid-rails'
 gem 'omniauth-shibboleth', '~> 1.3'
 gem 'puma', '~> 3.12'
-gem 'rails', '~> 5.1'
-gem 'rdf-vocab', '<= 3.1.4'
+gem 'rails', '~> 5.0'
 gem 'riiif', '~> 2.0'
 gem 'rsolr', '>= 1.0'
-gem 'sass-rails', '~> 5.0'
 gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-limit_fetch'
 gem 'stackprof'
@@ -60,7 +57,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'bixby', "~> 3.0.1"
+  gem 'bixby', '~> 3.0', ">= 3.0.2"
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw] unless ENV['CI'] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'coveralls', require: false
   gem 'factory_bot_rails', '~> 4.11.1'
@@ -72,7 +69,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'sqlite3', '~> 1.3.7'
-  gem 'webdrivers', '~> 3.0'
+  gem 'webdrivers', '~> 4.4'
   gem 'webmock'
   gem 'yard'
 end
