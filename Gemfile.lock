@@ -2214,7 +2214,7 @@ DEPENDENCIES
   pry
   pry-byebug
   puma (~> 3.12)
-  rails (~> 5)
+  rails (~> 5.2)
   rails-controller-testing
   riiif (~> 2.0)
   rsolr (>= 1.0)
@@ -2241,7 +2241,7 @@ DEPENDENCIES
   whenever
   xray-rails
   yard
-  zizia (~> 5)
+  zizia (~> 5.5)
 
 RUBY VERSION
    ruby 2.5.3p105
