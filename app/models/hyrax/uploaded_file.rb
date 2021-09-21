@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.1.0]
+# [Hyrax-overwrite-v3.0.0.pre.rc1]
 
 module Hyrax
-  ##
-  # Store a file uploaded by a user.
-  #
-  # Eventually these files get attached to FileSets and pushed into Fedora.
+  # Store a file uploaded by a user. Eventually these files get
+  # attached to FileSets and pushed into Fedora.
   class UploadedFile < ApplicationRecord
     # removed before_destroy since it wasd deemed unnecessary in v3.0.0.pre.beta3
     self.table_name = 'uploaded_files'
@@ -23,20 +21,5 @@ module Hyrax
              class_name: 'JobIoWrapper',
              dependent:  :destroy
     belongs_to :user, class_name: '::User'
-
-    ##
-    # Associate a {FileSet} with this uploaded file.
-    #
-    # @param [Hyrax::Resource, ActiveFedora::Base] file_set
-    # @return [void]
-    def add_file_set!(file_set)
-      uri = case file_set
-            when ActiveFedora::Base
-              file_set.uri
-            when Hyrax::Resource
-              file_set.id
-            end
-      update!(file_set_uri: uri)
-    end
   end
 end
