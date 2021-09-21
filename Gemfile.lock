@@ -1460,6 +1460,8 @@ GEM
       jquery-rails
     font-awesome-rails (4.7.0.7)
       railties (>= 3.2, < 7)
+    font-awesome-sass (5.15.1)
+      sassc (>= 1.11)
     gems (1.2.0)
     geocoder (1.6.7)
     globalid (0.5.2)
@@ -2202,12 +2204,14 @@ DEPENDENCIES
   factory_bot_rails (~> 4.11.1)
   fcrepo_wrapper
   ffaker
+  font-awesome-sass
   honeybadger (~> 4.0)
   http
   hydra-role-management
   hyrax (= 3.1.0)
   jbuilder (~> 2.5)
   jquery-rails
+  jquery-ui-rails
   listen (>= 3.0.5, < 3.2)
   mysql2 (~> 0.5)
   omniauth-shibboleth (~> 1.3)

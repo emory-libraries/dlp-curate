@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Note: Hyrax::CollectionType was updated in our recent version v3.1.0. However,
+# the updates do not affect any of our actions below. The changes were largely refactors
+# and the overall behavior of this model remains intact. Hyrax::CollectionTypeParticipant
+# was also examined and deemed to not have any alterations that would affect us.gst
 module Curate
   class CollectionType < Hyrax::CollectionType
     USER_COLLECTION_DEFAULT_TITLE = 'Library Collection'
