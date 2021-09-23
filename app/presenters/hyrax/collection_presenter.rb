@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# [Hyrax-overwrite-v3.1.0]
+
 module Hyrax
   class CollectionPresenter
     include ModelProxy
@@ -109,7 +111,10 @@ module Hyrax
     end
 
     def total_items
-      ActiveFedora::Base.where("member_of_collection_ids_ssim:#{id}").count
+      field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
+      SolrQueryService.new
+                      .with_field_pairs(field_pairs: field_pairs)
+                      .count
     end
 
     # Product Owner preferred that the count not be restricted by user's ability to
@@ -120,11 +125,21 @@ module Hyrax
     end
 
     def total_viewable_works
-      ActiveFedora::Base.where("member_of_collection_ids_ssim:#{id} AND generic_type_sim:Work").accessible_by(current_ability).count
+      field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
+      SolrQueryService.new
+                      .with_field_pairs(field_pairs: field_pairs)
+                      .with_generic_type(generic_type: "Work")
+                      .accessible_by(ability: current_ability)
+                      .count
     end
 
     def total_viewable_collections
-      ActiveFedora::Base.where("member_of_collection_ids_ssim:#{id} AND generic_type_sim:Collection").accessible_by(current_ability).count
+      field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
+      SolrQueryService.new
+                      .with_field_pairs(field_pairs: field_pairs)
+                      .with_generic_type(generic_type: "Collection")
+                      .accessible_by(ability: current_ability)
+                      .count
     end
 
     def collection_type_badge
@@ -155,24 +170,18 @@ module Hyrax
     end
 
     def banner_file
-      # Find Banner filename
-      ci = CollectionBrandingInfo.where(collection_id: id, role: "banner")
-      "/" + ci[0].local_path.split("/")[-4..-1].join("/") unless ci.empty?
+      banner = CollectionBrandingInfo.find_by(collection_id: id, role: "banner")
+      "/" + banner.local_path.split("/")[-4..-1].join("/") if banner
     end
 
     def logo_record
-      logo_info = []
-      # Find Logo filename, alttext, linktext
-      cis = CollectionBrandingInfo.where(collection_id: id, role: "logo")
-      return if cis.empty?
-      cis.each do |coll_info|
-        logo_file = File.split(coll_info.local_path).last
-        file_location = "/" + coll_info.local_path.split("/")[-4..-1].join("/") unless logo_file.empty?
-        alttext = coll_info.alt_text
-        linkurl = coll_info.target_url
-        logo_info << { file: logo_file, file_location: file_location, alttext: alttext, linkurl: linkurl }
+      CollectionBrandingInfo.where(collection_id: id, role: "logo")
+                            .select(:local_path, :alt_text, :target_url).map do |logo|
+        { alttext: logo.alt_text,
+          file: File.split(logo.local_path).last,
+          file_location: "/#{logo.local_path.split('/')[-4..-1].join('/')}",
+          linkurl: logo.target_url }
       end
-      logo_info
     end
 
     # A presenter for selecting a work type to create
@@ -193,14 +202,21 @@ module Hyrax
       create_work_presenter.first_model
     end
 
+    ##
+    # @deprecated this implementation requires an extra db round trip, had a
+    #   buggy cacheing mechanism, and was largely duplicative of other code.
+    #   all versions of this code are replaced by
+    #   {CollectionsHelper#available_parent_collections_data}.
     def available_parent_collections(scope:)
+      Deprecation.warn("#{self.class}#available_parent_collections is " \
+                       "deprecated. Use available_parent_collections_data " \
+                       "helper instead.")
       return @available_parents if @available_parents.present?
-      collection = Collection.find(id)
+      collection = ::Collection.find(id)
       colls = Hyrax::Collections::NestedCollectionQueryService.available_parent_collections(child: collection, scope: scope, limit_to_id: nil)
       @available_parents = colls.map do |col|
         { "id" => col.id, "title_first" => col.title.first }
-      end
-      @available_parents.to_json
+      end.to_json
     end
 
     def subcollection_count=(total)
