@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax overwrite]
+# [Hyrax-overwrite-v3.1.0]
 # Adds additional methods to configure UV
 
 module Hyrax
