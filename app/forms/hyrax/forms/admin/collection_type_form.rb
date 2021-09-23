@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.0.0.pre.rc1] Adds new field to delegation.
+# [Hyrax-overwrite-v3.1.0] Adds new field to delegation.
 module Hyrax
   module Forms
     module Admin
@@ -18,12 +18,22 @@ module Hyrax
                  :deposit_only_collection,
                  to: :collection_type
 
+        ##
+        # @return [Boolean]
         def all_settings_disabled?
           collections? || admin_set? || user_collection?
         end
 
+        ##
+        # @return [Boolean]
         def share_options_disabled?
           all_settings_disabled? || !sharable
+        end
+
+        ##
+        # @return [Boolean]
+        def collections?
+          collection_type.collections.any?
         end
       end
     end
