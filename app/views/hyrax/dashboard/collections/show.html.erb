@@ -1,4 +1,4 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Inserts source collection link L#64 %>
+<% # [Hyrax-overwrite-v3.1.0] Inserts source collection link L#64 %>
 <% provide :page_title, construct_page_title(@presenter.title) %>
 
 <% provide :page_header do %>
@@ -32,7 +32,7 @@
               <%= render 'hyrax/collections/collection_description', presenter: @presenter %>
             </section>
 
-            <% unless has_collection_search_parameters? %>
+            <% unless collection_search_parameters? %>
               <%= render 'show_descriptions' %>
             <% end %>
           </div>
@@ -44,9 +44,10 @@
       <% if @members_count > 0 || @presenter.subcollection_count > 0 %>
           <div class="hyc-blacklight hyc-bl-title">
             <h2>
-              <% if has_collection_search_parameters? %>
+              <% if collection_search_parameters? %>
                   <%= t('hyrax.dashboard.collections.show.search_results') %>
               <% end %>
+              <p class="sr-only"><%= t('hyrax.dashboard.collections.show.search_results') %></p>
             </h2>
           </div>
       <% end %>
@@ -87,7 +88,7 @@
             <div class="col-md-7">
               <%= render 'subcollection_list', id: @presenter.id, collection: @subcollection_docs %>
             </div>
-            <% unless has_collection_search_parameters? %>
+            <% unless collection_search_parameters? %>
               <div class="col-md-5">
                 <%= render 'show_subcollection_actions', presenter: @presenter %>
               </div>
@@ -99,7 +100,7 @@
       <!-- Works -->
       <section class="works-wrapper">
         <h4><%= t('.item_count') %> (<%= @members_count %>)</h4>
-        <% unless has_collection_search_parameters? %>
+        <% unless collection_search_parameters? %>
           <%= render 'show_add_items_actions', presenter: @presenter %>
         <% end %>
 
@@ -112,12 +113,12 @@
   </section><!-- /collections-panel-wrapper -->
 </div><!-- /collections-wrapper -->
 
-<% if @presenter.collection_type_is_nestable? && !has_collection_search_parameters? %>
+<% if @presenter.collection_type_is_nestable? && !collection_search_parameters? %>
   <%= render 'hyrax/my/collections/modal_add_to_collection', source: 'show' %>
-  <%= render 'hyrax/my/collections/modal_add_subcollection', id: @presenter.id, source: 'show' %>
+  <%= render 'hyrax/my/collections/modal_add_subcollection', id: @presenter.id, presenter: @presenter, source: 'show' %>
   <%= render 'hyrax/dashboard/collections/modal_parent_collection_remove_deny', source: 'show' %>
 <% end %>
 
-<% unless has_collection_search_parameters? %>
+<% unless collection_search_parameters? %>
   <%= render '/shared/select_work_type_modal', create_work_presenter: @presenter.create_work_presenter if @presenter.draw_select_work_modal? %>
 <% end %>
