@@ -19,7 +19,7 @@
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require blacklight/blacklight
-//= require hyrax
+//= require curate_hyrax
 //= require hyrax/autocomplete/default
 //= require almond
 //= require zizia/application
