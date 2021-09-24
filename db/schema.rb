@@ -159,6 +159,11 @@ ActiveRecord::Schema.define(version: 201901241536542) do
     t.index ["user_id"], name: "index_job_io_wrappers_on_user_id"
   end
 
+  create_table "job_retries", force: :cascade do |t|
+    t.string "tid"
+    t.integer "retry_count", default: 0
+  end
+
   create_table "mailboxer_conversation_opt_outs", force: :cascade do |t|
     t.string "unsubscriber_type"
     t.integer "unsubscriber_id"
