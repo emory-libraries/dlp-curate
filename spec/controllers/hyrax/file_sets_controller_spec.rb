@@ -63,7 +63,7 @@ RSpec.describe Hyrax::FileSetsController, :clean do
         expect(controller).to receive(:add_breadcrumb).with(I18n.t('hyrax.file_set.browse_view'), Rails.application.routes.url_helpers.hyrax_file_set_path(file_set, locale: 'en'))
         get :edit, params: { id: file_set }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns[:file_set]).to eq file_set
         expect(assigns[:version_list]).to be_kind_of Hyrax::VersionListPresenter
         expect(assigns[:parent]).to eq parent
@@ -312,7 +312,7 @@ RSpec.describe Hyrax::FileSetsController, :clean do
       describe '#show' do
         it 'allows access to the file' do
           get :show, params: { id: public_file_set }
-          expect(response).to be_success
+          expect(response).to be_successful
         end
       end
     end
@@ -347,7 +347,7 @@ RSpec.describe Hyrax::FileSetsController, :clean do
       it 'allows access to public files' do
         expect(controller).to receive(:additional_response_formats).with(ActionController::MimeResponds::Collector)
         get :show, params: { id: public_file_set }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end

@@ -31,7 +31,7 @@ RSpec.describe ManifestRegenerationController, type: :controller, clean: true do
         expect(ManifestBuilderService).to receive(:build_manifest).with(presenter: presenter, curation_concern: work)
         post :regen_manifest, params: { work_id: work }, xhr: true
         expect(File.exist?("./tmp/abc123_#{work.id}")).to be_falsey
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end

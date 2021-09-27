@@ -17,7 +17,7 @@ RSpec.describe Hyrax::UploadsController do
       end
       it "is successful with pmf" do
         post :create, params: { preservation_master_file: file, format: 'json' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:upload)).to be_kind_of Hyrax::UploadedFile
         expect(assigns(:upload)).to be_persisted
         expect(assigns(:upload).user).to eq user
