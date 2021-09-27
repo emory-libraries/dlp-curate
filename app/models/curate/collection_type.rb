@@ -6,6 +6,7 @@
 # was also examined and deemed to not have any alterations that would affect us.gst
 module Curate
   class CollectionType < Hyrax::CollectionType
+    after_initialize :configure
     USER_COLLECTION_DEFAULT_TITLE = 'Library Collection'
 
     # If a Curate::CollectionType already exists, ensure it adheres to expectations and return it.
@@ -18,11 +19,6 @@ module Curate
       end
       new_library_collection_type = Curate::CollectionType.new
       new_library_collection_type
-    end
-
-    def initialize
-      super
-      configure
     end
 
     def configure
