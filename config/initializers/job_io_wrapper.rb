@@ -12,7 +12,7 @@ JobIoWrapper.class_eval do
     args = { user: user, relation: relation.to_s, file_set_id: file_set.id, preferred: preferred.to_s }
     if file.is_a?(Hyrax::UploadedFile)
       args[:uploaded_file] = file
-      args[:path] = file.file.path
+      args[:path] = file.uploader.path
     elsif file.respond_to?(:path)
       args[:path] = file.path
       args[:original_name] = file.original_filename if file.respond_to?(:original_filename)
