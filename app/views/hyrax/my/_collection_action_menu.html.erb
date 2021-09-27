@@ -1,4 +1,4 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Only display delete button if user is an admin L#37 %>
+<% # [Hyrax-overwrite-v3.1.0] Only display delete button if user is an admin L#37 %>
 <% id = collection_presenter.id %>
 <% ul_id = 'collection-action-dropdown-ul-' + id %>
 
@@ -47,7 +47,7 @@
       </li>
     <% end %>
 
-    <% if Hyrax::CollectionType.any_nestable? %>
+    <% if collection_presenter.collection_type_is_nestable? %>
       <% # The user should have deposit access to the parent we are adding, and read access to the child (the collection we are linking here). %>
       <li role="menuitem" tabindex="-1">
         <%= link_to "#",
