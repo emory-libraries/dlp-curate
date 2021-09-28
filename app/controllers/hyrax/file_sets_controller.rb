@@ -60,7 +60,6 @@ module Hyrax
         @display_file = @file_set.preservation_master_file
         @display_use = 'preservation_master_file'
       end
-      guard_for_workflow_restriction_on!(parent: @parent)
       respond_to do |wants|
         wants.html
         wants.json
@@ -70,8 +69,7 @@ module Hyrax
 
     # DELETE /concern/file_sets/:id
     def destroy
-      guard_for_workflow_restriction_on!(parent: parent)
-
+      parent = curation_concern.parent
       delete(file_set: curation_concern)
       redirect_to [main_app, parent],
                   notice: view_context.t('hyrax.file_sets.asset_deleted_flash.message')
@@ -79,8 +77,6 @@ module Hyrax
 
     # PATCH /concern/file_sets/:id
     def update
-      guard_for_workflow_restriction_on!(parent: parent)
-
       if attempt_update
         after_update_response
       else
@@ -150,7 +146,7 @@ module Hyrax
           actor.revert_content(params[:revision])
         elsif params.key?(:file_set)
           if params[:file_set].key?(:files)
-            actor.update_content(uploaded_file_from_path, @file_set.preferred_file)
+            actor.update_content(params[:file_set][:files].first, @file_set.preferred_file)
           else
             update_metadata
           end
@@ -159,11 +155,6 @@ module Hyrax
           actor.update_content(uploaded_files.first)
           update_metadata
         end
-      end
-
-      def uploaded_file_from_path
-        uploaded_file = CarrierWave::SanitizedFile.new(params[:file_set][:files].first)
-        Hyrax::UploadedFile.create(user_id: current_user.id, file: uploaded_file)
       end
 
       def after_update_response
@@ -205,21 +196,8 @@ module Hyrax
       end
 
       def initialize_edit_form
-        guard_for_workflow_restriction_on!(parent: parent)
-
         @version_list = Hyrax::VersionListPresenter.for(file_set: @file_set)
         @groups = current_user.groups
-      end
-
-      include WorkflowsHelper # Provides #workflow_restriction?, and yes I mean include not helper; helper exposes the module methods
-      # @param parent [Hyrax::WorkShowPresenter, GenericWork, #suppressed?] an
-      #        object on which we check if the current can take action.
-      #
-      # @return true if we did not encounter any workflow restrictions
-      # @raise WorkflowAuthorizationException if we encountered some workflow_restriction
-      def guard_for_workflow_restriction_on!(parent:)
-        return true unless workflow_restriction?(parent, ability: current_ability)
-        raise WorkflowAuthorizationException
       end
 
       def actor
@@ -233,7 +211,6 @@ module Hyrax
       def presenter
         @presenter ||= begin
                          presenter = show_presenter.new(curation_concern_document, current_ability, request)
-                         raise WorkflowAuthorizationException if presenter.parent.blank?
                          presenter
                        end
       end
