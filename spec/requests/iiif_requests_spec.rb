@@ -37,15 +37,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
     solr = Blacklight.default_index.connection
     solr.add([attributes])
     solr.commit
-    stub_request(:any, /iiif-cor-arch.library.emory.edu/)
-      .with(
-        headers: {
-          'Connection' => 'close',
-          'Host' => 'iiif-cor-arch.library.emory.edu',
-          'User-Agent' => 'http.rb/4.4.1'
-        }
-      )
-      .to_return(status: 200, body: "I am returning an image, but for now I'm words", headers: {})
+    stub_request(:any, /iiif-cor-arch.library.emory.edu/).to_return(status: 200, body: "I am returning an image, but for now I'm words", headers: {})
   end
 
   describe "GET image" do
