@@ -31,7 +31,7 @@ RSpec.describe Hyrax::Actors::CurateGenericWorkActor do
     context 'success' do
       it "invokes the after_create_concern callback, creates work, and its preservation_events" do
         expect(Hyrax.config.callback).to receive(:run)
-          .with(:after_create_concern, curation_concern, user)
+          .with(:after_create_concern, curation_concern, user, warn: false)
         middleware.create(env)
         expect(curation_concern.preservation_event.pluck(:event_type)).to include ['Validation']
         expect(curation_concern.preservation_event.first.outcome).to eq ['Success']
@@ -51,7 +51,7 @@ RSpec.describe Hyrax::Actors::CurateGenericWorkActor do
 
       it "invokes the after_update_metadata callback, updates work, creates modification preservation_event" do
         expect(Hyrax.config.callback).to receive(:run)
-          .with(:after_update_metadata, curation_concern, user)
+          .with(:after_update_metadata, curation_concern, user, warn: false)
         work_actor.update(env)
         expect(curation_concern.preservation_event.pluck(:event_type)).to include ['Modification']
       end
