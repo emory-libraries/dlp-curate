@@ -513,9 +513,9 @@ RSpec.describe Collection, clean: true do
 
         it 'fails to add the member' do
           begin
-            Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id: collection.id,
+            Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id:  collection.id,
                                                                            new_member_ids: [work1.id, work2.id, work3.id],
-                                                                           user: nil)
+                                                                           user:           nil)
           rescue; end # rubocop:disable Lint/SuppressedException
           expect(collection.reload.member_objects.map(&:id)).to match_array [work1.id.to_s, work3.id.to_s]
         end

@@ -177,10 +177,10 @@ module Hyrax
     def logo_record
       CollectionBrandingInfo.where(collection_id: id, role: "logo")
                             .select(:local_path, :alt_text, :target_url).map do |logo|
-        { alttext: logo.alt_text,
-          file: File.split(logo.local_path).last,
+        { alttext:       logo.alt_text,
+          file:          File.split(logo.local_path).last,
           file_location: "/#{logo.local_path.split('/')[-4..-1].join('/')}",
-          linkurl: logo.target_url }
+          linkurl:       logo.target_url }
       end
     end
 

@@ -37,6 +37,8 @@ Metrics/AbcSize:
         - app/importers/preservation_workflow_importer.rb
         - app/indexers/curate_generic_work_indexer.rb
         - app/controllers/background_jobs_controller.rb
+        - app/controllers/file_sets_controller.rb
+        - app/controllers/hyrax/file_sets_controller.rb
 
 Metrics/BlockLength:
     Exclude:
@@ -77,6 +79,8 @@ Metrics/CyclomaticComplexity:
         - app/indexers/curate_generic_work_indexer.rb
         - app/controllers/iiif_controller.rb
         - app/jobs/characterize_job.rb
+        - app/models/concerns/hydra/access_controls/visibility.rb
+        - app/models/concerns/hyrax/file_metadata.rb
 
 Layout/LineLength:
     Exclude:
@@ -104,6 +108,8 @@ Metrics/MethodLength:
         - app/controllers/background_jobs_controller.rb
         - spec/fixtures/placeholder_manifest_output.rb
         - app/importers/dams_preprocessor.rb
+        - app/models/concerns/hydra/access_controls/visibility.rb
+        - app/models/concerns/hyrax/file_metadata.rb
 
 Metrics/ModuleLength:
     Exclude:
@@ -118,6 +124,7 @@ Metrics/PerceivedComplexity:
 Metrics/ParameterLists:
     Exclude:
         - app/jobs/manifest_persistence_job.rb
+        - config/initializers/collection_member_search_service_overrides.rb
 
 RSpec/DescribeClass:
     Exclude:

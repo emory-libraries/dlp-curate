@@ -80,6 +80,6 @@ group :test do
   gem 'capybara'
   gem 'rspec_junit_formatter'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
-  gem 'show_me_the_cookies'
   gem 'shoulda-matchers'
+  gem 'show_me_the_cookies'
 end
