@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# [hydra-access-controls-overwrite-v11.0.7] L#7-60 contains customizations to our needs.
 module Hydra::AccessControls::Visibility
     extend ActiveSupport::Concern
 
