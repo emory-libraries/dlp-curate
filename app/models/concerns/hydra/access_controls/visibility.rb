@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-module CustomVisibility
+# [hydra-access-controls-overwrite-v11.0.7] L#7-60 contains customizations to our needs.
+module Hydra::AccessControls::Visibility
+  extend ActiveSupport::Concern
+
   def visibility=(value)
     return if value.nil?
     # only set explicit permissions
@@ -54,5 +57,40 @@ module CustomVisibility
     visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
     remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH]
     set_read_groups([Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH], remove_groups)
+  end
+
+  def visibility_changed?
+    !!@visibility_will_change
+  end
+
+  private
+
+  # Override represented_visibility if you want to add another visibility that is
+  # represented as a read group (e.g. on-campus)
+  # @return [Array] a list of visibility types that are represented as read groups
+  def represented_visibility
+    [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED,
+     Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+  end
+
+  def visibility_will_change!
+    @visibility_will_change = true
+  end
+
+  def public_visibility!
+    visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+    set_read_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], remove_groups)
+  end
+
+  def registered_visibility!
+    visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+    remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
+    set_read_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED], remove_groups)
+  end
+
+  def private_visibility!
+    visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    set_read_groups([], represented_visibility)
   end
 end
