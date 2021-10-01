@@ -131,11 +131,6 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       expect(page).to have_selector(:css, 'a[data-method="delete"]')
     end
 
-    it 'has a batch upload link on the works dashboard' do
-      visit "/dashboard/works"
-      expect(page).to have_link(href: /batch/)
-    end
-
     it 'has delete selected and add to collections buttons' do
       visit "dashboard/works"
       find("input[type='checkbox'][id='check_all']").set(true)

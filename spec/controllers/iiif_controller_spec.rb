@@ -79,15 +79,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
 
     context "with an unsuccessful cantaloupe request" do
       before do
-        stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json")
-          .with(
-            headers: {
-              'Connection' => 'close',
-              'Host' => 'iiif-cor-arch.library.emory.edu',
-              'User-Agent' => 'http.rb/4.4.1'
-            }
-          )
-          .to_return(
+        stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json").to_return(
             status:  404,
             body:    "a big long stack trace",
             headers: {}
@@ -108,15 +100,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
 
     context "with a successful cantaloupe request" do
       before do
-        stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json")
-          .with(
-            headers: {
-              'Connection' => 'close',
-              'Host' => 'iiif-cor-arch.library.emory.edu',
-              'User-Agent' => 'http.rb/4.4.1'
-            }
-          )
-          .to_return(
+        stub_request(:get, "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json").to_return(
             status:  200,
             body:    info_dot_json_from_cantaloupe,
             headers: {}
