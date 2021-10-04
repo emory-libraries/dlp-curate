@@ -105,7 +105,7 @@ RSpec.describe Hyrax::CollectionPresenter, :clean do
 
   describe "#total_items", :clean_repo do
     context "empty collection" do
-      let(:ability) { double(::Ability, user_groups: ['public'], current_user: user) }
+      let(:ability) { instance_double(::Ability, user_groups: ['public'], current_user: user) }
       let(:user) { FactoryBot.create(:user) }
       let(:collection) { FactoryBot.create(:collection_lw) }
 
@@ -134,10 +134,9 @@ RSpec.describe Hyrax::CollectionPresenter, :clean do
     end
   end
 
-
   describe "#total_viewable_works", :clean_repo do
     subject { presenter.total_viewable_works }
-    let(:ability) { double(::Ability, user_groups: ['public'], current_user: user) }
+    let(:ability) { instance_double(::Ability, user_groups: ['public'], current_user: user) }
     let(:user) { FactoryBot.create(:user) }
     let(:collection) { FactoryBot.create(:collection_lw) }
     let(:solr_hash) { collection.to_solr }
@@ -176,7 +175,7 @@ RSpec.describe Hyrax::CollectionPresenter, :clean do
 
   describe "#total_viewable_collections", :clean_repo do
     subject { presenter.total_viewable_collections }
-    let(:ability) { double(::Ability, user_groups: ['public'], current_user: user) }
+    let(:ability) { instance_double(::Ability, user_groups: ['public'], current_user: user) }
     let(:user) { FactoryBot.create(:user) }
     let(:collection) { FactoryBot.create(:collection_lw) }
     let(:solr_hash) { collection.to_solr }
@@ -219,19 +218,19 @@ RSpec.describe Hyrax::CollectionPresenter, :clean do
     let(:banner_info) do
       CollectionBrandingInfo.new(
         collection_id: "123",
-        filename: "banner.gif",
-        role: "banner",
-        target_url: ""
+        filename:      "banner.gif",
+        role:          "banner",
+        target_url:    ""
       )
     end
 
     let(:logo_info) do
       CollectionBrandingInfo.new(
         collection_id: "123",
-        filename: "logo.gif",
-        role: "logo",
-        alt_txt: "This is the logo",
-        target_url: "http://logo.com"
+        filename:      "logo.gif",
+        role:          "logo",
+        alt_txt:       "This is the logo",
+        target_url:    "http://logo.com"
       )
     end
 

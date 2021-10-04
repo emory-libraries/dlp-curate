@@ -56,9 +56,9 @@ module Hyrax
     def add_members(new_member_ids)
       Deprecation.warn("'##{__method__}' will be removed in Hyrax 4.0.  " \
                          "Instead, use Hyrax::Collections::CollectionMemberService.add_members_by_ids.")
-      Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id: id,
+      Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id:  id,
                                                                      new_member_ids: new_member_ids,
-                                                                     user: nil)
+                                                                     user:           nil)
     end
 
     # Add member objects by adding this collection to the objects' member_of_collection association.
@@ -66,9 +66,9 @@ module Hyrax
     def add_member_objects(new_member_ids)
       Deprecation.warn("'##{__method__}' will be removed in Hyrax 4.0.  " \
                          "Instead, use Hyrax::Collections::CollectionMemberService.add_members_by_ids.")
-      Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id: id,
+      Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id:  id,
                                                                      new_member_ids: new_member_ids,
-                                                                     user: nil)
+                                                                     user:           nil)
     end
 
     # @return [Enumerable<ActiveFedora::Base>] an enumerable over the children of this collection
@@ -135,15 +135,15 @@ module Hyrax
 
     private
 
-    # Solr field name works use to index member ids
-    def member_ids_field
-      "member_ids_ssim"
-    end
+      # Solr field name works use to index member ids
+      def member_ids_field
+        "member_ids_ssim"
+      end
 
-    def destroy_permission_template
-      permission_template.destroy
-    rescue ActiveRecord::RecordNotFound
-      true
-    end
+      def destroy_permission_template
+        permission_template.destroy
+      rescue ActiveRecord::RecordNotFound
+        true
+      end
   end
 end

@@ -9,9 +9,9 @@ RSpec.describe Hyrax::CollectionBehavior, clean: true do
 
   describe "#destroy" do
     it "removes the collection id from associated members" do
-      Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id: collection.id,
+      Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id:  collection.id,
                                                                      new_member_ids: [work.id],
-                                                                     user: nil)
+                                                                     user:           nil)
       collection.save
 
       collection_via_query = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: collection.id, use_valkyrie: false)

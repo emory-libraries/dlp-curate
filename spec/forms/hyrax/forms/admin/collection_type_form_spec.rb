@@ -39,7 +39,7 @@ RSpec.describe Hyrax::Forms::Admin::CollectionTypeForm, :clean_repo do
       end
 
       it 'returns true' do
-        expect(subject.all_settings_disabled?).to be true
+        expect(form.all_settings_disabled?).to be true
       end
     end
 
@@ -49,7 +49,7 @@ RSpec.describe Hyrax::Forms::Admin::CollectionTypeForm, :clean_repo do
       end
 
       it 'returns true' do
-        expect(subject.all_settings_disabled?).to be true
+        expect(form.all_settings_disabled?).to be true
       end
     end
 
@@ -57,7 +57,7 @@ RSpec.describe Hyrax::Forms::Admin::CollectionTypeForm, :clean_repo do
       include_context 'with a collection'
 
       it 'returns true' do
-        expect(subject.all_settings_disabled?).to be true
+        expect(form.all_settings_disabled?).to be true
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe Hyrax::Forms::Admin::CollectionTypeForm, :clean_repo do
       end
 
       it 'returns false' do
-        expect(subject.all_settings_disabled?).to be false
+        expect(form.all_settings_disabled?).to be false
       end
     end
   end
@@ -80,7 +80,7 @@ RSpec.describe Hyrax::Forms::Admin::CollectionTypeForm, :clean_repo do
       end
 
       it 'returns true' do
-        expect(subject.share_options_disabled?).to be true
+        expect(form.share_options_disabled?).to be true
       end
     end
 
