@@ -3,7 +3,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xs-12 col-sm-4">
-      <%= media_display @presenter %>
+      <%= render media_display_partial(@presenter), file_set: @presenter %>
       <%= render 'show_actions', presenter: @presenter %>
       <br>
       <div><%= button_to t('.fixity_check'), file_set_fixity_checks_path(file_set_id: @presenter.id), method: :post, class: 'btn btn-primary' %></div><br>
