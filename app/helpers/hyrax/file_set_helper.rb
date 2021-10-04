@@ -11,7 +11,7 @@ module Hyrax::FileSetHelper
   #
   # @return [Boolean] whether to display the download link for the given file
   #   set
-  def display_media_download_link?(file_set:)
+  def display_media_download_link?(*)
     Hyrax.config.display_media_download_link?
   end
 

@@ -197,7 +197,6 @@ module Hyrax
 
       def initialize_edit_form
         @parent = @file_set.in_objects.first
-        original = @file_set.original_file
         @version_list = Hyrax::VersionListPresenter.for(file_set: @file_set)
         @groups = current_user.groups
       end
