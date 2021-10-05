@@ -113,11 +113,4 @@ RSpec.configure do |config|
   def main_app
     Rails.application.class.routes.url_helpers
   end
-
-  Shoulda::Matchers.configure do |shoulda_config|
-    shoulda_config.integrate do |with|
-      with.test_framework :rspec
-      with.library :rails
-    end
-  end
 end

@@ -111,10 +111,7 @@ module Hyrax
     end
 
     def total_items
-      field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
-      SolrQueryService.new
-                      .with_field_pairs(field_pairs: field_pairs)
-                      .count
+      Hyrax::SolrService.new.count("member_of_collection_ids_ssim:#{id}")
     end
 
     # Product Owner preferred that the count not be restricted by user's ability to
@@ -125,21 +122,11 @@ module Hyrax
     end
 
     def total_viewable_works
-      field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
-      SolrQueryService.new
-                      .with_field_pairs(field_pairs: field_pairs)
-                      .with_generic_type(generic_type: "Work")
-                      .accessible_by(ability: current_ability)
-                      .count
+      ActiveFedora::Base.where("member_of_collection_ids_ssim:#{id} AND generic_type_sim:Work").accessible_by(current_ability).count
     end
 
     def total_viewable_collections
-      field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
-      SolrQueryService.new
-                      .with_field_pairs(field_pairs: field_pairs)
-                      .with_generic_type(generic_type: "Collection")
-                      .accessible_by(ability: current_ability)
-                      .count
+      ActiveFedora::Base.where("member_of_collection_ids_ssim:#{id} AND generic_type_sim:Collection").accessible_by(current_ability).count
     end
 
     def collection_type_badge

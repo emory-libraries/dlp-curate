@@ -17,21 +17,20 @@ gem 'devise'
 gem 'devise-guests', '~> 0.6'
 gem 'dotenv-rails'
 gem 'edtf-humanize'
-gem 'font-awesome-rails', '4.7.0.5'
-gem 'font-awesome-sass'
 gem 'honeybadger', '~> 4.0'
 gem 'http'
 gem 'hydra-role-management'
-gem 'hyrax', '3.1.0'
+gem 'hyrax', '3.0.2'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 gem 'mysql2', '~> 0.5'
-gem 'omniauth', '~> 1.9'
+gem 'noid-rails'
 gem 'omniauth-shibboleth', '~> 1.3'
 gem 'puma', '~> 3.12'
-gem 'rails', '~> 5.2'
+gem 'rails', '~> 5.1'
 gem 'riiif', '~> 2.0'
 gem 'rsolr', '>= 1.0'
+gem 'sass-rails', '~> 5.0'
 gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-limit_fetch'
 gem 'stackprof'
@@ -60,7 +59,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'bixby', '~> 3.0', ">= 3.0.2"
+  gem 'bixby', "~> 3.0.1"
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw] unless ENV['CI'] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'coveralls', require: false
   gem 'factory_bot_rails', '~> 4.11.1'
@@ -72,7 +71,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'sqlite3', '~> 1.3.7'
-  gem 'webdrivers', '~> 4.4'
+  gem 'webdrivers', '~> 3.0'
   gem 'webmock'
   gem 'yard'
 end
@@ -81,6 +80,5 @@ group :test do
   gem 'capybara'
   gem 'rspec_junit_formatter'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
-  gem 'shoulda-matchers'
   gem 'show_me_the_cookies'
 end

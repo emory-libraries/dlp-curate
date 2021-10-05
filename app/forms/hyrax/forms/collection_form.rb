@@ -18,7 +18,7 @@ module Hyrax
 
       self.model_class = ::Collection
 
-      self.membership_service_class = Collections::CollectionMemberSearchService
+      self.membership_service_class = Collections::CollectionMemberService
 
       delegate :blacklight_config, to: Hyrax::CollectionsController
 
@@ -47,36 +47,6 @@ module Hyrax
       def initialize(model, current_ability, repository)
         super(model)
         @scope = ProxyScope.new(current_ability, repository, blacklight_config)
-      end
-
-      # Cast back to multi-value when saving
-      # Reads from form
-      def self.model_attributes(attributes)
-        attrs = super
-        return attrs unless attributes[:title]
-
-        attrs[:title] = Array(attributes[:title])
-        return attrs if attributes[:alt_title].nil?
-        Array(attributes[:alt_title]).each do |value|
-          attrs["title"] << value if value != ""
-        end
-        attrs
-      end
-
-      # @param [Symbol] key the field to read
-      # @return the value of the form field.
-      # For display in edit page
-      def [](key)
-        return model.member_of_collection_ids if key == :member_of_collection_ids
-        if key == :title
-          @attributes["title"].each do |value|
-            @attributes["alt_title"] << value
-          end
-          @attributes["alt_title"].delete(@attributes["alt_title"].sort.first) unless @attributes["alt_title"].empty?
-          return @attributes["title"].sort.first unless @attributes["title"].empty?
-          return ""
-        end
-        super
       end
 
       def permission_template
