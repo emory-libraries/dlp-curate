@@ -2,6 +2,7 @@
 
 # [Hyrax-overwrite-v3.1.0]
 require 'rails_helper'
+require 'shoulda/matchers/independent/delegate_method_matcher'
 
 RSpec.describe Hyrax::Forms::Admin::CollectionTypeForm, :clean_repo do
   subject(:form) { described_class.new(collection_type: collection_type) }

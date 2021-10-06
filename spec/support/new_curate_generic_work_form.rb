@@ -10,7 +10,7 @@ class NewCurateGenericWorkForm
   end
 
   def metadata_fill_in_with
-    fill_in "curate_generic_work[title]", with: "Example title"
+    fill_in "curate_generic_work[title][]", with: "Example title"
     fill_in "curate_generic_work[holding_repository]", with: "Woodruff"
     fill_in "curate_generic_work[date_created]", with: Date.new(2018, 1, 12)
     select("Audio", from: "Format (content_type)")

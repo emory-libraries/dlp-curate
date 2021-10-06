@@ -48,7 +48,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
     scenario "'descriptions' loads with all its inputs", js: true do
       new_cgw_form.visit_new_page
 
-      expect(page).to have_css('#metadata textarea#curate_generic_work_title')
+      expect(page).to have_css('#metadata input#curate_generic_work_title')
       expect(page).to have_css('#metadata select#curate_generic_work_rights_statement')
 
       click_link('Additional descriptive fields')
@@ -65,7 +65,8 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       fill_in "curate_generic_work[creator][]", with: "first creator"
       click_on 'Add another Creator (creator)'
       expect(all("input[name='curate_generic_work[creator][]']").count).to eq(2)
-      expect(page).not_to have_css('input#curate_generic_work_title.multi_value')
+      # Samvera has given up on making the title input single valued.
+      # expect(page).not_to have_css('input#curate_generic_work_title.multi_value')
     end
 
     scenario "invalid etdf of Date Created", js: true do
@@ -283,7 +284,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       # click_button "Create work"
 
       expect(page).to have_content "Add New Curate Generic Work"
-      expect(page).to have_css('textarea#curate_generic_work_title.required')
+      expect(page).to have_css('input#curate_generic_work_title.required')
       click_link "Files" # switch tab
       expect(page).to have_content "Add files"
       expect(page).to have_content 'Sensitive/Objectionable Material (sensitive_material)'

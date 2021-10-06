@@ -70,9 +70,8 @@ module Hyrax
     # DELETE /concern/file_sets/:id
     def destroy
       parent = curation_concern.parent
-      delete(file_set: curation_concern)
-      redirect_to [main_app, parent],
-                  notice: view_context.t('hyrax.file_sets.asset_deleted_flash.message')
+      actor.destroy
+      redirect_to [main_app, parent], notice: view_context.t('hyrax.file_sets.asset_deleted_flash.message')
     end
 
     # PATCH /concern/file_sets/:id
@@ -98,47 +97,9 @@ module Hyrax
 
     private
 
-      ##
-      # @api public
-      def delete(file_set:)
-        case file_set
-        when Valkyrie::Resource
-          transactions['file_set.destroy']
-            .with_step_args('file_set.remove_from_work' => { user: current_user },
-                            'file_set.delete' => { user: current_user })
-            .call(curation_concern)
-            .value!
-        else
-          actor.destroy
-        end
-      end
-
-      ##
-      # @api public
-      #
-      # @note this is provided so that implementing application can override this
-      #   behavior and map params to different attributes
       def update_metadata
-        case file_set
-        when Hyrax::Resource
-          change_set = Hyrax::Forms::ResourceForm.for(file_set)
-
-          change_set.validate(attributes) &&
-            transactions['change_set.apply'].call(change_set).value_or { false }
-        else
-          file_attributes = form_class.model_attributes(attributes)
-          actor.update_metadata(file_attributes)
-        end
-      end
-
-      def parent(file_set: curation_concern)
-        @parent ||=
-          case file_set
-          when Hyrax::Resource
-            Hyrax.query_service.find_parents(resource: file_set).first
-          else
-            file_set.parent
-          end
+        file_attributes = form_class.model_attributes(attributes)
+        actor.update_metadata(file_attributes)
       end
 
       def attempt_update
@@ -197,7 +158,8 @@ module Hyrax
 
       def initialize_edit_form
         @parent = @file_set.in_objects.first
-        @version_list = Hyrax::VersionListPresenter.for(file_set: @file_set)
+        original = @file_set.original_file
+        @version_list = Hyrax::VersionListPresenter.new(original ? original.versions.all : [])
         @groups = current_user.groups
       end
 
@@ -254,6 +216,36 @@ module Hyrax
 
       def set_file_set
         @file_set = ::FileSet.find(params[:id])
+      end
+
+      # rubocop:disable Metrics/MethodLength
+      def render_unavailable
+        message = I18n.t("hyrax.workflow.unauthorized_parent")
+        respond_to do |wants|
+          wants.html do
+            unavailable_presenter
+            flash[:notice] = message
+            render 'unavailable', status: :unauthorized
+          end
+          wants.json do
+            render plain: message, status: :unauthorized
+          end
+          additional_response_formats(wants)
+          wants.ttl do
+            render plain: message, status: :unauthorized
+          end
+          wants.jsonld do
+            render plain: message, status: :unauthorized
+          end
+          wants.nt do
+            render plain: message, status: :unauthorized
+          end
+        end
+      end
+      # rubocop:enable Metrics/MethodLength
+
+      def unavailable_presenter
+        @presenter ||= show_presenter.new(::SolrDocument.find(params[:id]), current_ability, request)
       end
 
       def files

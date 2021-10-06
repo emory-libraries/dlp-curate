@@ -54,21 +54,24 @@ module Hyrax
 
     # Add members using the members association.
     def add_members(new_member_ids)
-      Deprecation.warn("'##{__method__}' will be removed in Hyrax 4.0.  " \
-                         "Instead, use Hyrax::Collections::CollectionMemberService.add_members_by_ids.")
-      Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id:  id,
-                                                                     new_member_ids: new_member_ids,
-                                                                     user:           nil)
+      return if new_member_ids.blank?
+      members << Hyrax.custom_queries.find_many_by_alternate_ids(alternate_ids: new_member_ids, use_valkyrie: false)
     end
 
     # Add member objects by adding this collection to the objects' member_of_collection association.
     # @param [Enumerable<String>] the ids of the new child collections and works collection ids
     def add_member_objects(new_member_ids)
-      Deprecation.warn("'##{__method__}' will be removed in Hyrax 4.0.  " \
-                         "Instead, use Hyrax::Collections::CollectionMemberService.add_members_by_ids.")
-      Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id:  id,
-                                                                     new_member_ids: new_member_ids,
-                                                                     user:           nil)
+      Array(new_member_ids).collect do |member_id|
+        member = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: member_id, use_valkyrie: false)
+        message = Hyrax::MultipleMembershipChecker.new(item: member).check(collection_ids: id, include_current_members: true)
+        if message
+          member.errors.add(:collections, message)
+        else
+          member.member_of_collections << self
+          member.save!
+        end
+        member
+      end
     end
 
     # @return [Enumerable<ActiveFedora::Base>] an enumerable over the children of this collection
@@ -98,7 +101,8 @@ module Hyrax
       end
 
       def collection_type_gid_document_field_name
-        "collection_type_gid_ssim"
+        Deprecation.warn('use Hyrax.config.collection_type_index_field instead')
+        Hyrax.config.collection_type_index_field
       end
     end
 
@@ -127,13 +131,36 @@ module Hyrax
     # Calculate and update who should have read/edit access to the collections based on who
     # has access in PermissionTemplateAccess
     def reset_access_controls!
-      Deprecation.warn("reset_access_controls! is deprecated; use PermissionTemplate#reset_access_controls instead.")
-
-      permission_template
-        .reset_access_controls_for(collection: self, interpret_visibility: true)
+      update!(edit_users: permission_template_edit_users, edit_groups: permission_template_edit_groups, read_users: permission_template_read_users,
+              read_groups: (permission_template_read_groups + visibility_group).uniq)
     end
 
     private
+
+      def permission_template_edit_users
+        permission_template.agent_ids_for(access: 'manage', agent_type: 'user')
+      end
+
+      def permission_template_edit_groups
+        permission_template.agent_ids_for(access: 'manage', agent_type: 'group')
+      end
+
+      def permission_template_read_users
+        (permission_template.agent_ids_for(access: 'view', agent_type: 'user') +
+          permission_template.agent_ids_for(access: 'deposit', agent_type: 'user')).uniq
+      end
+
+      def permission_template_read_groups
+        (permission_template.agent_ids_for(access: 'view', agent_type: 'group') +
+          permission_template.agent_ids_for(access: 'deposit', agent_type: 'group')).uniq -
+          [::Ability.registered_group_name, ::Ability.public_group_name]
+      end
+
+      def visibility_group
+        return [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC] if visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        return [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED] if visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+        []
+      end
 
       # Solr field name works use to index member ids
       def member_ids_field

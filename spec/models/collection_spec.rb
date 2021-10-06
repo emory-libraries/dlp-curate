@@ -500,9 +500,9 @@ RSpec.describe Collection, clean: true do
 
       context 'when multiple membership checker returns a non-nil value' do
         before do
-          allow(Hyrax::MultipleMembershipChecker).to receive(:new).with(item: work1.valkyrie_resource).and_return(nil_checker)
-          allow(Hyrax::MultipleMembershipChecker).to receive(:new).with(item: work2.valkyrie_resource).and_return(checker)
-          allow(Hyrax::MultipleMembershipChecker).to receive(:new).with(item: work3.valkyrie_resource).and_return(nil_checker)
+          allow(Hyrax::MultipleMembershipChecker).to receive(:new).with(item: work1).and_return(nil_checker)
+          allow(Hyrax::MultipleMembershipChecker).to receive(:new).with(item: work2).and_return(checker)
+          allow(Hyrax::MultipleMembershipChecker).to receive(:new).with(item: work3).and_return(nil_checker)
           allow(nil_checker).to receive(:check).and_return(nil)
           allow(checker).to receive(:check).and_return(error_message)
         end
@@ -512,12 +512,9 @@ RSpec.describe Collection, clean: true do
         let(:error_message) { 'Error: foo bar' }
 
         it 'fails to add the member' do
-          begin
-            Hyrax::Collections::CollectionMemberService.add_members_by_ids(collection_id:  collection.id,
-                                                                           new_member_ids: [work1.id, work2.id, work3.id],
-                                                                           user:           nil)
-          rescue; end # rubocop:disable Lint/SuppressedException
-          expect(collection.reload.member_objects.map(&:id)).to match_array [work1.id.to_s, work3.id.to_s]
+          collection.add_member_objects [work1.id, work2.id, work3.id]
+          collection.save!
+          expect(collection.reload.member_objects).to match_array [work1, work3]
         end
       end
     end

@@ -6,17 +6,17 @@
       <a href="#description" role="tab" data-toggle="tab" class="nav-safety-confirm"><%= t('.tabs.description') %></a>
     </li>
     <% if @form.persisted? %>
-      <% if collection_brandable?(collection: @collection) %>
+      <% if @collection.brandable? %>
       <li>
         <a href="#branding" role="tab" data-toggle="tab" class="nav-safety-confirm"><%= t('.tabs.branding') %></a>
       </li>
       <% end %>
-      <% if collection_discoverable?(collection: @collection) %>
+      <% if @collection.discoverable? %>
       <li>
         <a href="#discovery" role="tab" data-toggle="tab" class="nav-safety-confirm"><%= t('.tabs.discovery') %></a>
       </li>
       <% end %>
-      <% if collection_sharable?(collection: @collection) %>
+      <% if @collection.sharable? %>
       <li>
         <a href="#sharing" role="tab" data-toggle="tab" class="nav-safety-confirm"><%= t('.tabs.sharing') %></a>
       </li>

@@ -26,7 +26,7 @@ RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: t
 
     it "has expected input fields" do
       visit("dashboard/collections/new?collection_type_id=1")
-      expect(page).to have_css("textarea#collection_title")
+      expect(page).to have_css("input#collection_title")
       click_link('Additional fields')
       expect(page).to have_css("input#collection_creator")
       expect(page).to have_content("Add another Creator (creator)")
