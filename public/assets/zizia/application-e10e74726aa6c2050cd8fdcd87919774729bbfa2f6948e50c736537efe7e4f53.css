@@ -1,0 +1,134 @@
+@charset "UTF-8";
+/* line 1, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_file_upload.scss */
+.file-upload {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+/* line 10, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_file_upload.scss */
+.file-upload + label {
+  margin-bottom: 1em;
+}
+
+/* line 14, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_file_upload.scss */
+.file-upload:focus + label {
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+/* line 1, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_field_guide.scss */
+.system-field {
+  display: none;
+}
+
+/* line 3, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_field_guide.scss */
+.field-guide-intro {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-size: large;
+}
+
+/* line 9, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_field_guide.scss */
+.delimiter {
+  font-weight: 800;
+  font-family: monospace;
+}
+
+/* line 14, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_field_guide.scss */
+input.btn {
+  font-family: auto-apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+}
+
+/* line 1, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_new.scss */
+.bullet {
+  background: black;
+  color: white;
+  border-radius: 0.8em;
+  -moz-border-radius: 0.8em;
+  -webkit-border-radius: 0.8em;
+  display: inline-block;
+  font-weight: bold;
+  line-height: 1.6em;
+  margin-right: 5px;
+  text-align: center;
+  width: 1.6em;
+}
+
+/* line 15, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_new.scss */
+.well {
+  margin-bottom: 0.25em;
+  min-height: 5em;
+}
+/* line 18, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_new.scss */
+.well h4 {
+  margin-top: 0;
+}
+/* line 20, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_new.scss */
+.well h4 .bullet {
+  float: left;
+  background: white;
+  color: black;
+  border: 1px solid #e3e3e3;
+}
+
+/* line 29, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_new.scss */
+.no-collection {
+  background: #f7ecb5;
+}
+
+/* line 33, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_new.scss */
+.step {
+  margin-top: -1em;
+  margin-bottom: .5em;
+}
+
+/* line 38, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_new.scss */
+.zizia .btn {
+  width: 60%;
+}
+
+/* line 42, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_new.scss */
+.zizia h3 {
+  margin-bottom: 1.5em;
+}
+
+/* line 1, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_import_table.scss */
+.desc::after {
+  content: " ▾";
+}
+
+/* line 4, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_import_table.scss */
+.asc::after {
+  content: " ▴";
+}
+
+/* line 8, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/_import_table.scss */
+.toggle-imports {
+  margin-bottom: 1em;
+}
+
+/* line 6, /Users/bwatso9/.rbenv/versions/2.7.4/lib/ruby/gems/2.7.0/gems/zizia-5.5.0/app/assets/stylesheets/zizia/zizia.scss */
+.btn {
+  white-space: normal !important;
+  word-wrap: break-word;
+}
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+
+
+ */
+
