@@ -25,6 +25,10 @@ jobs:
             - samvera/rubocop
 
             - run:
+                name: Upgrade node-sass
+                command: yarn add node-sass
+
+            - run:
                 name: Get yarn version
                 command: echo $(yarn --version) >> "YARN_VERSION"
 
