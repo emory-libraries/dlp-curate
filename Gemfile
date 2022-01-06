@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '>=2.4.2', '<=2.5.99'
+ruby '2.7.4'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
@@ -27,7 +27,7 @@ gem 'mysql2', '~> 0.5'
 gem 'noid-rails'
 gem 'omniauth-shibboleth', '~> 1.3'
 gem 'puma', '~> 3.12'
-gem 'rails', '~> 5.1'
+gem 'rails', '<= 5.2.5'
 gem 'rdf-vocab', '<= 3.1.4'
 gem 'riiif', '~> 2.0'
 gem 'rsolr', '>= 1.0'
@@ -41,7 +41,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows doe
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '~> 4.x'
 gem 'whenever', require: false
-gem 'zizia', '~> 5.3.0'
+gem 'zizia', '~> 5.5'
 
 group :development do
   gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2'
