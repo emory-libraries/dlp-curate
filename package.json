@@ -2,8 +2,9 @@
   "name": "dlp-curate",
   "private": true,
   "repository": "git@github.com:samvera/hyrax.git",
-  "dependencies": { 
-    "universalviewer": "^3.0.16"
+  "dependencies": {
+    "universalviewer": "^3.0.16",
+    "webpack": "^4.0.0"
   },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",
