@@ -32,7 +32,9 @@ jobs:
                 keys:
                     - v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}
 
-            - run: yarn
+            - run: 
+                name: Install Dependencies
+                command: yarn install --ignore-engines --check-files
 
             - save_cache:
                 key: v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}
