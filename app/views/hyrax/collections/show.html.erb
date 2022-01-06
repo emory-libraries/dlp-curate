@@ -1,13 +1,13 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Changes column sizing L# 57 and 72 %>
+<% # [Hyrax-overwrite-v3.0.2] Changes column sizing L# 57 and 72 %>
 <% provide :page_title, construct_page_title(@presenter.title) %>
 <div class="hyc-container" itemscope itemtype="http://schema.org/CollectionPage">
   <div class="row hyc-header">
     <div class="col-md-12">
 
-      <% unless @presenter.banner_file.blank? %>
-          <header class="hyc-banner" style="background-image:url(<%= @presenter.banner_file %>)">
+      <% if @presenter.banner_file.present? %>
+          <div class="hyc-banner" style="background-image:url(<%= @presenter.banner_file %>)">
       <% else %>
-          <header class="hyc-generic">
+          <div class="hyc-generic">
       <% end %>
 
       <div class="hyc-title">
@@ -21,10 +21,10 @@
             <% @presenter.logo_record.each_with_index  do |lr, i| %>
 
                 <% if lr[:linkurl].blank? %>
-                    <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
+                    <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" onerror="this.style.display='none'"/>
                 <% else %>
                     <a href="<%= lr[:linkurl] %>">
-                      <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
+                      <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" onerror="this.style.display='none'"/>
                     </a>
                 <% end %>
 
@@ -36,7 +36,7 @@
           <div class="hyc-bugs">
             <div class="hyc-item-count">
               <b><%= @presenter.total_viewable_items %></b>
-              <%= 'Item'.pluralize(@presenter.total_viewable_items) %></div>
+              <%= pluralize(@presenter.total_viewable_items, t('.item_count')) %></div>
 
             <% unless @presenter.creator.blank? %>
                 <div class="hyc-created-by">Created by: <%= @presenter.creator.first %></div>
@@ -48,7 +48,7 @@
           </div>
       <% end %>
 
-      </header>
+      </div>
 
     </div>
   </div>
@@ -70,7 +70,8 @@
 
     </div>
     <div class="col hyc-metadata">
-      <% unless has_collection_search_parameters? %>
+      <%= render 'hyrax/collections/media_display', presenter: @presenter %>
+      <% unless collection_search_parameters? %>
           <h2><%= t('hyrax.dashboard.collections.show.metadata_header') %></h2>
           <%= render 'show_descriptions' %>
       <% end %>
@@ -80,11 +81,11 @@
   <!-- Search results label -->
   <% if @members_count > 0 || @presenter.subcollection_count > 0 %>
     <div class="hyc-blacklight hyc-bl-title">
+    <% if collection_search_parameters? %>
       <h2>
-        <% if has_collection_search_parameters? %>
-            <%= t('hyrax.dashboard.collections.show.search_results') %>
-        <% end %>
+        <%= t('hyrax.dashboard.collections.show.search_results') %>
       </h2>
+    <% end %>
     </div>
   <% end %>
 

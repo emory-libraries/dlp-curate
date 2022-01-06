@@ -1,4 +1,4 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] %>
+<% # [Hyrax-overwrite-v3.0.2] %>
 <dl>
   <!-- Persistent URL block start -->
   <div class='metadata-line'>
@@ -6,10 +6,14 @@
     <div class='col-xs-12 col-sm-8'><dd><a href="<%= @presenter.purl %>" target="_blank"><%= @presenter.purl %></a></dd></div>
   </div>
   <!-- Persistent URL block end -->
-    <% present_terms(@presenter, @presenter.terms_with_values) do |r, term| %>
-      <div class='metadata-line'>
-        <div class='col-xs-12 col-sm-4'><dt><%= r.label(term) %></dt></div>
-        <div class='col-xs-12 col-sm-8'><dd><%= r.value(term) %></dd></div>
+    <% @presenter.terms_with_values.each do |field_name| %>
+      <div class='metadata-line' id=<%= "hyc-collection-metadata-#{field_name}" %>>
+        <div class='col-xs-12 col-sm-4'>
+          <dt><%= collection_metadata_label(@presenter, field_name) %></dt>
+        </div>
+        <div class='col-xs-12 col-sm-8'>
+          <dd><%= collection_metadata_value(@presenter, field_name) %></dd>
+        </div>
       </div>
     <% end %>
   </div>

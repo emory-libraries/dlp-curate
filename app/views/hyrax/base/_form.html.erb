@@ -1,4 +1,4 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Remove batch upload link L#17-18 %>
+<% # [Hyrax-overwrite-v3.0.2] Remove batch upload link L#17-18 %>
 <%= simple_form_for [main_app, @form],
                     html: {
                       data: { behavior: 'work-form',
@@ -16,7 +16,7 @@
       <%= render 'form_url_validation_error', f: f %>
     </div>
   <% end %>
-  <%= render 'hyrax/base/guts4form', f: f %>
+  <%= render 'hyrax/base/guts4form', f: f, tabs: form_tabs_for(form: f.object) %>
 <% end %>
 
 <script type="text/javascript">

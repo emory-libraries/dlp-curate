@@ -1,19 +1,19 @@
 {
-    "options": {
-        "rightPanelEnabled": true
-    },
-    "modules": {
-        "footerPanel": {
-            "options": {
-                "downloadEnabled": false,
-                "fullscreenEnabled": false,
-                "shareEnabled": false
-            }
-        }
-        "pagingHeaderPanel": {
-          "options": {
-            "pagingToggleEnabled": true
-          }
-        },
+  "options": {
+    "rightPanelEnabled": true
+  },
+  "modules": {
+    "footerPanel": {
+      "options": {
+        "downloadEnabled": false,
+        "fullscreenEnabled": false,
+        "shareEnabled": false
+      }
     }
+    "pagingHeaderPanel": {
+      "options": {
+        "pagingToggleEnabled": true
+      }
+    },
+  }
 }

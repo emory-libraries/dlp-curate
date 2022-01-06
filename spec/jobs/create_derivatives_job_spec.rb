@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-overwrite-v3.0.2]
 require 'rails_helper'
 
 RSpec.describe CreateDerivativesJob, :clean do
@@ -119,8 +119,8 @@ RSpec.describe CreateDerivativesJob, :clean do
     end
 
     it "logs info and warn" do
-      expect(logger).to receive(:info).with("CreateDerivativesJob for #{filename} started at #{DateTime.current}")
-      expect(logger).to receive(:warn).with("Error occurred in CreateDerivativesJob for #{filename}")
+      expect(logger).to receive(:info)
+      expect(logger).to receive(:warn)
       described_class.perform_now(file_set, file.id)
     end
   end

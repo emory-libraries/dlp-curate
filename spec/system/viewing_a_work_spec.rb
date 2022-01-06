@@ -116,24 +116,15 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       login_as admin_user
     end
 
-    it 'has a delete button on the show page' do
-      visit "/concern/curate_generic_works/#{user_work.id}"
-      expect(page).to have_selector(:css, 'a[data-method="delete"]')
-    end
+    it 'has a delete action on the all and my works dashboard' do
+      sites_array = [
+        "/dashboard/works", "/dashboard/my/works", "/concern/curate_generic_works/#{user_work.id}"
+      ]
 
-    it 'has a delete action on the all works dashboard' do
-      visit "/dashboard/works"
-      expect(page).to have_selector(:css, 'a[data-method="delete"]')
-    end
-
-    it 'has a delete action on the my works dashboard' do
-      visit "/dashboard/my/works"
-      expect(page).to have_selector(:css, 'a[data-method="delete"]')
-    end
-
-    it 'has a batch upload link on the works dashboard' do
-      visit "/dashboard/works"
-      expect(page).to have_link(href: /batch/)
+      sites_array.each do |site|
+        visit site
+        expect(page).to have_selector(:css, 'a[data-method="delete"]')
+      end
     end
 
     it 'has delete selected and add to collections buttons' do

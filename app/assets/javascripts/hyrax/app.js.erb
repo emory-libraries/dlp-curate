@@ -1,6 +1,7 @@
-// [Hyrax-overwrite] Initializes collectionEditor for collection-form that enables autocomplete
+// [Hyrax-overwrite v3.0.2] Initializes collectionEditor for collection-form that enables autocomplete
 // Once, javascript is written in a modular format, all initialization
 // code should be called from here.
+// v3.0.2 Removes Tiny MCE.
 Hyrax = {
     initialize: function () {
         this.popovers();
@@ -19,20 +20,10 @@ Hyrax = {
         this.collectionTypeEditor();
         this.collectionUtilities();
         this.adminStatisticsGraphs();
-        this.tinyMCE();
         this.sortAndPerPage();
         this.sidebar();
         this.batchSelect();
         this.internationalizationHelper();
-    },
-
-    // Add WYSIWYG editor functionality to editable content blocks
-    tinyMCE: function() {
-        if (typeof tinyMCE === "undefined")
-            return;
-        tinyMCE.init({
-            selector: 'textarea.tinymce'
-        });
     },
 
     // The AdminSet edit page

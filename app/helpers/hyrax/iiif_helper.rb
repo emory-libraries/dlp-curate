@@ -1,8 +1,6 @@
 # frozen_string_literal: true
-
-# [Hyrax overwrite]
+# [Hyrax overwrite v3.0.2]
 # Adds additional methods to configure UV
-
 module Hyrax
   module IiifHelper
     def iiif_viewer_display(work_presenter, locals = {})

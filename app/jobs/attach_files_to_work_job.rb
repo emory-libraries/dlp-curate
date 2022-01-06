@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite-v3.0.0.pre.rc1] Attaching multiple files to single fileset
+# [Hyrax-overwrite-v3.0.2] Attaching multiple files to single fileset
 # Converts UploadedFiles into FileSets and attaches them to works.
 class AttachFilesToWorkJob < Hyrax::ApplicationJob
   queue_as Hyrax.config.ingest_queue_name
@@ -11,13 +10,14 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
     validate_files!(uploaded_files)
     depositor = proxy_or_depositor(work)
     user = User.find_by_user_key(depositor)
+
     work, work_permissions = create_permissions work, depositor
     metadata = visibility_attributes(work_attributes)
     uploaded_files.each do |uploaded_file|
       next if uploaded_file.file_set_uri.present?
 
       actor = Hyrax::Actors::FileSetActor.new(FileSet.create, user)
-      uploaded_file.update(file_set_uri: actor.file_set.uri)
+      uploaded_file.add_file_set!(actor.file_set)
       process_fileset(actor, work_permissions, metadata, uploaded_file, work)
     end
   end

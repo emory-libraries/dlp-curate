@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1] Changing reindex-extent to limited instead of full in order
+# [Hyrax-overwrite-v3.0.2] Changing reindex-extent to limited instead of full in order
 # to speed up collection indexing.
 
 module Hyrax
@@ -46,7 +46,7 @@ module Hyrax
       _run_update_index_callbacks { super }
     end
 
-    # This method updated to match v3.0.0.pre.beta3
+    # This method updated to match v3.0.2
     def find_children_of(destroyed_id:)
       Hyrax::SolrService.query(Hyrax::SolrQueryBuilderService.construct_query(member_of_collection_ids_ssim: destroyed_id))
     end
