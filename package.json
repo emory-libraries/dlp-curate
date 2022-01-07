@@ -30,7 +30,6 @@
     "**/node-gyp": "^5"
   },
   "devDependencies": {
-    
     "webpack-dev-server": "^3.3.1"
   }
 }
