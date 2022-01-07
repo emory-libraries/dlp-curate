@@ -6,6 +6,7 @@
     "@rails/actioncable": "^6.0.0-alpha",
     "@rails/activestorage": "^6.0.0-alpha",
     "@rails/ujs": "^6.0.0-alpha",
+    "@rails/webpacker": "^4",
     "bootstrap": "^4.3.1",
     "edtf": "^2.6.1",
     "jquery": "^3.5.0",
@@ -15,13 +16,17 @@
     "turbolinks": "^5.2.0",
     "universalviewer": "3.0.16",
     "webpack": "^4.0.0",
-    "webpack-cli": "^4.0.0"
+    "webpack-cli": "^4"
   },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",
     "postinstall": "yarn run uv-install && yarn run uv-config",
     "uv-install": "shx cp -r ./node_modules/universalviewer/uv ./public/",
-    "uv-config": "shx cp ./config/uv/uv.html ./public/uv/uv.html & shx cp ./config/uv/uv_config.json ./public/uv/ & shx cp ./config/uv/uv_config_liberal.json ./public/uv/"
+    "uv-config": "shx cp ./config/uv/uv.html ./public/uv/uv.html & shx cp ./config/uv/uv-config.json ./public/uv/ & shx cp ./config/uv/uv_config_liberal.json ./public/uv/"
+  },
+  "resolutions": {
+    "**/node-sass": "^6",
+    "**/node-gyp": "^5"
   },
   "devDependencies": {
     "shx": "^0.3.2",
