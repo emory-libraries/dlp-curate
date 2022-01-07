@@ -31,7 +31,7 @@ jobs:
 
             - restore_cache:
                 keys:
-                    - v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}-update
+                    - v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}
 
             - run:
                 name: Install Python2
@@ -40,7 +40,7 @@ jobs:
             - run: yarn
 
             - save_cache:
-                key: v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}-update
+                key: v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}
                 paths:
                     - ~/project/node_modules
 
