@@ -3,7 +3,9 @@
   "private": true,
   "repository": "git@github.com:samvera/hyrax.git",
   "dependencies": {
-    "@rails/webpacker": "^4.3",
+    "@rails/webpacker": "*",
+    "jquery": "*",
+    "jquery-validation": "*",
     "universalviewer": "3.0.16"
   },
   "resolutions": {
