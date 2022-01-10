@@ -5,6 +5,7 @@
   "dependencies": {
     "@rails/webpacker": "*",
     "bootstrap": "^4",
+    "edtf": "*",
     "jquery": "*",
     "jquery-validation": "*",
     "popper.js": "*",
