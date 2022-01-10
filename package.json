@@ -3,7 +3,11 @@
   "private": true,
   "repository": "git@github.com:samvera/hyrax.git",
   "dependencies": {
+    "@rails/webpacker": "^4.3",
     "universalviewer": "3.0.16"
+  },
+  "resolutions": {
+    "**/node-sass": "^6"
   },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",
