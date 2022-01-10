@@ -4,8 +4,10 @@
   "repository": "git@github.com:samvera/hyrax.git",
   "dependencies": {
     "@rails/webpacker": "*",
+    "bootstrap": "^4",
     "jquery": "*",
     "jquery-validation": "*",
+    "popper.js": "*",
     "universalviewer": "3.0.16"
   },
   "resolutions": {
