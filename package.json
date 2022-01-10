@@ -3,33 +3,12 @@
   "private": true,
   "repository": "git@github.com:samvera/hyrax.git",
   "dependencies": {
-    "@rails/actioncable": "^6.0.0-alpha",
-    "@rails/activestorage": "^6.0.0-alpha",
-    "@rails/ujs": "^6.0.0-alpha",
-    "@rails/webpacker": "^6.0.0-alpha",
-    "bootstrap": "^4.3.1",
-    "edtf": "^2.6.1",
-    "jquery": "^3.5.0",
-    "jquery-validation": "^1.19.3",
-    "popper.js": "^1.15.0",
-    "set-value": "^2.0.1",
-    "shx": "^0.3.2",
-    "turbolinks": "^5.2.0",
-    "universalviewer": "3.0.16",
-    "webpack": "^4.0.0",
-    "webpack-cli": "^4"
+    "universalviewer": "3.0.16"
   },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",
     "postinstall": "yarn run uv-install && yarn run uv-config",
-    "uv-install": "shx cp -r ./node_modules/universalviewer/uv ./public/",
-    "uv-config": "shx cp ./config/uv/uv.html ./public/uv/uv.html & shx cp ./config/uv/uv-config.json ./public/uv/ & shx cp ./config/uv/uv_config_liberal.json ./public/uv/"
-  },
-  "resolutions": {
-    "**/node-sass": "^6",
-    "**/node-gyp": "^5"
-  },
-  "devDependencies": {
-    "webpack-dev-server": "^3.3.1"
+    "uv-install": "cp -r ./node_modules/universalviewer/uv ./public/",
+    "uv-config": "cp ./config/uv/uv.html ./public/uv/uv.html & cp ./config/uv/uv-config.json ./public/uv/ & cp ./config/uv/uv_config_liberal.json ./public/uv/"
   }
 }
