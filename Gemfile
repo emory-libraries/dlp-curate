@@ -20,6 +20,7 @@ gem 'dotenv-rails'
 gem 'edtf-humanize'
 gem 'honeybadger', '~> 4.0'
 gem 'http'
+gem 'hydra-derivatives', '~> 3.6'
 gem 'hydra-role-management'
 gem 'hyrax', '3.0.0-rc1'
 gem 'jbuilder', '~> 2.5'
@@ -73,7 +74,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'sqlite3', '~> 1.3.7'
-  gem 'webdrivers', '~> 3.0'
+  gem 'webdrivers', '~> 4.4'
   gem 'webmock'
   gem 'yard'
 end
@@ -82,5 +83,6 @@ group :test do
   gem 'capybara'
   gem 'rspec_junit_formatter'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
+  gem 'shoulda-matchers'
   gem 'show_me_the_cookies'
 end
