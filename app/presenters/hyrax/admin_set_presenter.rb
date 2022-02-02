@@ -1,8 +1,6 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-overwrite-v3.0.2]
 # Changes behavior of total_viewable_items to match total_items
-
 module Hyrax
   class AdminSetPresenter < CollectionPresenter
     ##

@@ -4,7 +4,7 @@ inherit_gem:
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-    TargetRubyVersion: 2.5
+    TargetRubyVersion: 2.7
     Exclude:
         - 'bin/**/*'
         - 'db/**/*'
@@ -118,6 +118,7 @@ Metrics/PerceivedComplexity:
 Metrics/ParameterLists:
     Exclude:
         - app/jobs/manifest_persistence_job.rb
+        - config/initializers/collection_member_search_service_overrides.rb
 
 RSpec/DescribeClass:
     Exclude:

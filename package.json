@@ -1,4 +1,5 @@
 {
+  "_comment": "This may need to change if we change universal viewer version",
   "name": "dlp-curate",
   "private": true,
   "repository": "git@github.com:samvera/hyrax.git",

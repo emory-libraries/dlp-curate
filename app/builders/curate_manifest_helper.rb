@@ -3,7 +3,7 @@ class CurateManifestHelper
   include Rails.application.routes.url_helpers
   include ActionDispatch::Routing::PolymorphicRoutes
 
-  # Build a rendering hash (logic and method taken from Hyrax-v3.0.0beta1, except host resolution)
+  # Build a rendering hash (logic and method taken from Hyrax-v3.0.2, except host resolution)
   #
   # @return [Hash] rendering
   def build_rendering(file_set_id)

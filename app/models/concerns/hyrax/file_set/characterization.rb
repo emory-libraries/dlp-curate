@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite-v3.0.0.pre.rc1] Change `characterization_proxy`
+# [Hyrax-overwrite-v3.0.2] Change `characterization_proxy`
 # This module points the FileSet to the location of the technical metdata.
 # By default, the file holding the metadata is :preservation_master_file and the terms
 # are listed under ::characterization_terms.
@@ -14,7 +13,7 @@
 # MyFileSet.characterization_proxy = :master_file
 # MyFileSet.characterization_terms = [:term1, :term2, :term3]
 module Hyrax
-  module FileSet
+  class FileSet
     module Characterization
       extend ActiveSupport::Concern
 

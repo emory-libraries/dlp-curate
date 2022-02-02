@@ -1,8 +1,8 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Completely excises the dl structure %>
+<% # [Hyrax-overwrite-v3.0.2] Completely excises the dl structure %>
 <h2 class="sr-only"><%= t('.descriptions') %></h2>
 <div>
-  <% present_terms(@presenter, @presenter.terms_with_values) do |r, term| %>
-    <p><strong><%= r.label(term) %></strong><br>
-    <%= r.value(term) %></p>
+  <% @presenter.terms_with_values.each do |field_name| %>
+    <p><strong><%= collection_metadata_label(@presenter, field_name) %></strong><br>
+    <%= collection_metadata_value(@presenter, field_name) %></p>
   <% end %>
 </div>
