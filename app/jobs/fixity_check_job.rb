@@ -37,12 +37,7 @@ class FixityCheckJob < Hyrax::ApplicationJob
 
       Hyrax.publisher.publish('file.set.audited', file_set: file_set, audit_log: audit, result: result)
 
-      # @todo remove this callback call for Hyrax 4.0.0
-      if audit.failed? && Hyrax.config.callback.set?(:after_fixity_check_failure)
-        Hyrax.config.callback.run(:after_fixity_check_failure,
-                                  file_set,
-                                  checksum_audit_log: audit, warn: false)
-      end
+      run_fixity_failure_callback(audit, file_set)
     end
   end
 
@@ -82,5 +77,13 @@ class FixityCheckJob < Hyrax::ApplicationJob
     # @return [Class]
     def fixity_service_for(id:)
       Hyrax.config.fixity_service.new(id)
+    end
+
+    def run_fixity_failure_callback(audit, file_set)
+      # @todo remove this callback call for Hyrax 4.0.0
+      return unless audit.failed? && Hyrax.config.callback.set?(:after_fixity_check_failure)
+      Hyrax.config.callback.run(:after_fixity_check_failure,
+                                  file_set,
+                                  checksum_audit_log: audit, warn: false)
     end
 end

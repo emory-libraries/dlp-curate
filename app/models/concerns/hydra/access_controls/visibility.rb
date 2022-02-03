@@ -30,19 +30,14 @@ module Hydra::AccessControls::Visibility
   # rubocop:enable Metrics/MethodLength
 
   def visibility
-    if read_groups.include? Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC
-      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-    elsif read_groups.include? Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED
-      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-    elsif read_groups.include? Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-    elsif read_groups.include? Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-    elsif read_groups.include? Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-    else
-      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    ret_val = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+
+    visibility_array.each do |vr|
+      next unless read_groups.include? vr[:test_value]
+      ret_val = vr[:return_value]
+      break
     end
+    ret_val
   end
 
   def low_res_visibility!
@@ -96,5 +91,20 @@ module Hydra::AccessControls::Visibility
     def private_visibility!
       visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
       set_read_groups([], represented_visibility)
+    end
+
+    def visibility_array
+      [
+        { test_value:   Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC,
+          return_value: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC },
+        { test_value:   Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED,
+          return_value: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED },
+        { test_value:   Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES,
+          return_value: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES },
+        { test_value:   Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW,
+          return_value: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW },
+        { test_value:   Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH,
+          return_value: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH }
+      ]
     end
 end

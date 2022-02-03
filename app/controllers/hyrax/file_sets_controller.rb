@@ -107,15 +107,9 @@ module Hyrax
         if wants_to_revert?
           actor.revert_content(params[:revision])
         elsif params.key?(:file_set)
-          if params[:file_set].key?(:files)
-            actor.update_content(params[:file_set][:files].first, @file_set.preferred_file)
-          else
-            update_metadata
-          end
+          file_set_processing
         elsif params.key?(:files_files) # version file already uploaded with ref id in :files_files array
-          uploaded_files = Array(Hyrax::UploadedFile.find(params[:files_files]))
-          actor.update_content(uploaded_files.first)
-          update_metadata
+          files_files_processing
         end
       end
       # rubocop:enable Metrics/AbcSize
@@ -256,6 +250,16 @@ module Hyrax
         @if = @file_set.intermediate_file unless @file_set.intermediate_file.nil?
         @et = @file_set.extracted unless @file_set.extracted.nil?
         @tf = @file_set.transcript_file unless @file_set.transcript_file.nil?
+      end
+
+      def files_files_processing
+        uploaded_files = Array(Hyrax::UploadedFile.find(params[:files_files]))
+        actor.update_content(uploaded_files.first)
+        update_metadata
+      end
+
+      def file_set_processing
+        params[:file_set].key?(:files) ? actor.update_content(params[:file_set][:files].first, @file_set.preferred_file) : update_metadata
       end
   end
 end
