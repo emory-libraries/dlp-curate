@@ -30,10 +30,14 @@ module Hyrax
 
       attribs[:title] = Array(attributes[:title])
       return attribs if attributes[:alt_title].nil?
+      process_model_alt_titles(attribs, attributes)
+      attribs
+    end
+
+    def process_model_alt_titles(attribs, attributes)
       Array(attributes[:alt_title]).each do |value|
         attribs["title"] << value if value != ""
       end
-      attribs
     end
 
     # @param [Symbol] key the field to read
