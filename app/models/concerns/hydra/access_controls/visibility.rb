@@ -41,21 +41,15 @@ module Hydra::AccessControls::Visibility
   end
 
   def low_res_visibility!
-    visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-    remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES]
-    set_read_groups([Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES], remove_groups)
+    common_visibility_processor(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES)
   end
 
   def emory_low_visibility!
-    visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-    remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW]
-    set_read_groups([Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW], remove_groups)
+    common_visibility_processor(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW)
   end
 
   def rose_high_visibility!
-    visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-    remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH]
-    set_read_groups([Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH], remove_groups)
+    common_visibility_processor(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH)
   end
 
   def visibility_changed?
@@ -63,6 +57,18 @@ module Hydra::AccessControls::Visibility
   end
 
   private
+
+    def common_visibility_processor(common_visibility)
+      visibility_will_change! unless visibility == common_visibility
+      remove_groups = represented_visibility - [common_visibility]
+      set_read_groups([common_visibility], remove_groups)
+    end
+
+    def differing_return_visibility_processor(test_visibility, return_visibility)
+      visibility_will_change! unless visibility == test_visibility
+      remove_groups = represented_visibility - [return_visibility]
+      set_read_groups([return_visibility], remove_groups)
+    end
 
     # Override represented_visibility if you want to add another visibility that is
     # represented as a read group (e.g. on-campus)
@@ -77,15 +83,17 @@ module Hydra::AccessControls::Visibility
     end
 
     def public_visibility!
-      visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-      remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
-      set_read_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], remove_groups)
+      differing_return_visibility_processor(
+        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
+        Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC
+      )
     end
 
     def registered_visibility!
-      visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-      remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
-      set_read_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED], remove_groups)
+      differing_return_visibility_processor(
+        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
+        Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED
+      )
     end
 
     def private_visibility!
