@@ -58,9 +58,7 @@ module Hyrax
         def unlink_from_work
           work = parent_for(file_set: file_set)
           return unless work && (work.thumbnail_id == file_set.id || work.representative_id == file_set.id || work.rendering_ids.include?(file_set.id))
-          work.thumbnail = nil if work.thumbnail_id == file_set.id
-          work.representative = nil if work.representative_id == file_set.id
-          work.rendering_ids -= [file_set.id]
+          process_unlinking(work)
           work.save!
         end
 
@@ -87,6 +85,12 @@ module Hyrax
         # determine if the object is a valkyrie resource
         def valkyrie_object?(object)
           object.is_a? Valkyrie::Resource
+        end
+
+        def process_unlinking(work)
+          work.thumbnail = nil if work.thumbnail_id == file_set.id
+          work.representative = nil if work.representative_id == file_set.id
+          work.rendering_ids -= [file_set.id]
         end
       # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/CyclomaticComplexity
