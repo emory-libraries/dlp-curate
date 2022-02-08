@@ -1,4 +1,4 @@
-<% # [Hyrax-overwrite-v3.0.2] Changes column sizing L# 57 and 72 %>
+<% # [Hyrax-overwrite-v3.3.0] Changes column sizing L# 57 and 72 %>
 <% provide :page_title, construct_page_title(@presenter.title) %>
 <div class="hyc-container" itemscope itemtype="http://schema.org/CollectionPage">
   <div class="row hyc-header">
@@ -70,7 +70,6 @@
 
     </div>
     <div class="col hyc-metadata">
-      <%= render 'hyrax/collections/media_display', presenter: @presenter %>
       <% unless collection_search_parameters? %>
           <h2><%= t('hyrax.dashboard.collections.show.metadata_header') %></h2>
           <%= render 'show_descriptions' %>
@@ -135,3 +134,6 @@
       </div>
   <% end # if @members_count > 0 %>
 </div>
+
+
+<span class='hide analytics-event' data-category="collection" data-action="collection-page-view" data-name="<%= @presenter.id %>" >

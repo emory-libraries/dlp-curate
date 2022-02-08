@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2] expands the #uri_for use options.
+# [Hyrax-overwrite-v3.3.0] expands the #uri_for use options.
 module Hyrax
   class FileMetadata < Valkyrie::Resource
     GENERIC_MIME_TYPE = 'application/octet-stream'
@@ -11,7 +11,7 @@ module Hyrax
       ORIGINAL_FILE = ::Valkyrie::Vocab::PCDMUse.OriginalFile
       EXTRACTED_TEXT = ::Valkyrie::Vocab::PCDMUse.ExtractedText
       THUMBNAIL = ::Valkyrie::Vocab::PCDMUse.ThumbnailImage
-      PRESERVATION_FILE = ::Valkyrie::Vocab::PCDMUse.PreservationFile
+      PRESERVATION_FILE = ::Valkyrie::Vocab::PCDMUse.PreservationMasterFile
       SERVICE_FILE = ::Valkyrie::Vocab::PCDMUse.ServiceFile
       INTERMEDIATE_FILE = ::Valkyrie::Vocab::PCDMUse.IntermediateFile
       TRANSCRIPT_FILE = ::Valkyrie::Vocab::PCDMUse.Transcript

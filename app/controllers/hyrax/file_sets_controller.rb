@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2]
+# [Hyrax-overwrite-v3.3.0]
 module Hyrax
   class FileSetsController < ApplicationController # rubocop:disable Metrics/ClassLength
     rescue_from WorkflowAuthorizationException, with: :render_unavailable
@@ -12,6 +12,7 @@ module Hyrax
     load_and_authorize_resource class: ::FileSet, except: :show
     before_action :build_breadcrumbs, only: [:show, :edit, :stats]
     before_action :set_file_set, only: [:show]
+    before_action :parent, only: [:edit, :destroy, :update]
 
     # provides the help_text view method
     helper PermissionsHelper
@@ -68,7 +69,6 @@ module Hyrax
 
     # DELETE /concern/file_sets/:id
     def destroy
-      parent = curation_concern.parent
       actor.destroy
       redirect_to [main_app, parent], notice: view_context.t('hyrax.file_sets.asset_deleted_flash.message')
     end
@@ -96,10 +96,18 @@ module Hyrax
 
     private
 
-      # this is provided so that implementing application can override this behavior and map params to different attributes
+      ##
+      # @api public
+      #
+      # @note this is provided so that implementing application can override this
+      #   behavior and map params to different attributes
       def update_metadata
         file_attributes = form_class.model_attributes(attributes)
         actor.update_metadata(file_attributes)
+      end
+
+      def parent(file_set: curation_concern)
+        @parent ||= file_set.parent
       end
 
       # rubocop:disable Metrics/AbcSize
@@ -153,9 +161,7 @@ module Hyrax
       end
 
       def initialize_edit_form
-        @parent = @file_set.in_objects.first
-        original = @file_set.original_file
-        @version_list = Hyrax::VersionListPresenter.new(original ? original.versions.all : [])
+        @version_list = Hyrax::VersionListPresenter.for(file_set: @file_set)
         @groups = current_user.groups
       end
 

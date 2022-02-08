@@ -1,8 +1,8 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2]
+# [Hyrax-overwrite-v3.3.0]
 require 'rails_helper'
 
-RSpec.describe Hyrax::Forms::CollectionForm do
+RSpec.describe Hyrax::Forms::CollectionForm, skip: !(Hyrax.config.collection_class < ActiveFedora::Base) do
   describe "#terms" do
     subject { described_class.terms }
 

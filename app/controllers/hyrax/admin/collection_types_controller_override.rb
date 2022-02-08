@@ -5,7 +5,7 @@
 module Hyrax
   module Admin
     module CollectionTypesControllerOverride
-      # [Hyrax-overwrite-v3.0.2] Adding deposit_only collection to the
+      # [Hyrax-overwrite-v3.3.0] Adding deposit_only collection to the
       # permitted params.
       def collection_type_params
         params.require(:collection_type).permit(

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2]
+# [Hyrax-overwrite-v3.3.0]
 # Adds redirect on L#28 in create action
 module Hyrax
   class FixityChecksController < ApplicationController

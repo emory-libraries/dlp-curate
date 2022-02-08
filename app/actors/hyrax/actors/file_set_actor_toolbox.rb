@@ -92,7 +92,6 @@ module Hyrax
           work.representative = nil if work.representative_id == file_set.id
           work.rendering_ids -= [file_set.id]
         end
-      # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/CyclomaticComplexity
     end
   end

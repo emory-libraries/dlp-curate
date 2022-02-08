@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2] Attaching multiple files to single fileset
+# [Hyrax-overwrite-v3.3.0] Attaching multiple files to single fileset
 # Converts UploadedFiles into FileSets and attaches them to works.
 class AttachFilesToWorkJob < Hyrax::ApplicationJob
   queue_as Hyrax.config.ingest_queue_name
@@ -9,20 +9,41 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
   def perform(work, uploaded_files, **work_attributes)
     validate_files!(uploaded_files)
     depositor = proxy_or_depositor(work)
-    user = User.find_by_user_key(depositor)
+    @user = User.find_by_user_key(depositor)
 
     work, work_permissions = create_permissions work, depositor
-    metadata = visibility_attributes(work_attributes)
     uploaded_files.each do |uploaded_file|
       next if uploaded_file.file_set_uri.present?
 
-      actor = Hyrax::Actors::FileSetActor.new(FileSet.create, user)
-      uploaded_file.add_file_set!(actor.file_set)
-      process_fileset(actor, work_permissions, metadata, uploaded_file, work)
+      attach_work(work, work_attributes, work_permissions, uploaded_file)
     end
   end
 
   private
+
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
+    def attach_work(work, work_attributes, work_permissions, uploaded_file)
+      actor = Hyrax::Actors::FileSetActor.new(FileSet.create, @user)
+      file_set_attributes = file_set_attrs(work_attributes, uploaded_file)
+      metadata = visibility_attributes(work_attributes, file_set_attributes)
+      uploaded_file.add_file_set!(actor.file_set)
+      actor.file_set.permissions_attributes = work_permissions
+      actor.create_metadata(uploaded_file.fileset_use, metadata)
+      actor.fileset_name(uploaded_file.file.to_s) if uploaded_file.file.present?
+      preferred = preferred_file(uploaded_file)
+      actor.create_content(uploaded_file.preservation_master_file, preferred, :preservation_master_file)
+      actor.create_content(uploaded_file.intermediate_file, preferred, :intermediate_file) if uploaded_file.intermediate_file.present?
+      actor.create_content(uploaded_file.service_file, preferred, :service_file) if uploaded_file.service_file.present?
+      actor.create_content(uploaded_file.extracted_text, preferred, :extracted) if uploaded_file.extracted_text.present?
+      actor.create_content(uploaded_file.transcript, preferred, :transcript_file) if uploaded_file.transcript.present?
+      work.ordered_members << actor.file_set
+      work.save
+      actor.file_set.save
+      actor.attach_to_work(work, metadata)
+    end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
 
     def create_permissions(work, depositor)
       work.edit_users += [depositor]
@@ -32,8 +53,8 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
     end
 
     # The attributes used for visibility - sent as initial params to created FileSets.
-    def visibility_attributes(attributes)
-      attributes.slice(:visibility, :visibility_during_lease,
+    def visibility_attributes(attributes, file_set_attributes)
+      attributes.merge(file_set_attributes).slice(:visibility, :visibility_during_lease,
                        :visibility_after_lease, :lease_expiration_date,
                        :embargo_release_date, :visibility_during_embargo,
                        :visibility_after_embargo)
@@ -53,23 +74,6 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       work.on_behalf_of.presence || work.depositor
     end
 
-    def process_fileset(actor, work_permissions, metadata, uploaded_file, work) # rubocop:disable Metrics/AbcSize
-      actor.file_set.permissions_attributes = work_permissions
-      actor.create_metadata(uploaded_file.fileset_use, metadata)
-      actor.fileset_name(uploaded_file.file.to_s) if uploaded_file.file.present?
-      preferred = preferred_file(uploaded_file)
-      actor.create_content(uploaded_file.preservation_master_file, preferred, :preservation_master_file)
-      actor.create_content(uploaded_file.intermediate_file, preferred, :intermediate_file) if uploaded_file.intermediate_file.present?
-      actor.create_content(uploaded_file.service_file, preferred, :service_file) if uploaded_file.service_file.present?
-      actor.create_content(uploaded_file.extracted_text, preferred, :extracted) if uploaded_file.extracted_text.present?
-      actor.create_content(uploaded_file.transcript, preferred, :transcript_file) if uploaded_file.transcript.present?
-
-      work.ordered_members << actor.file_set
-      work.save
-      actor.file_set.save
-      actor.attach_to_work(work)
-    end
-
     def preferred_file(uploaded_file)
       preferred = if uploaded_file.service_file.present?
                     :service_file
@@ -79,5 +83,10 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
                     :preservation_master_file
                   end
       preferred
+    end
+
+    def file_set_attrs(attributes, uploaded_file)
+      attrs = Array(attributes[:file_set]).find { |fs| fs[:uploaded_file_id].present? && (fs[:uploaded_file_id].to_i == uploaded_file&.id) }
+      Hash(attrs).symbolize_keys
     end
 end

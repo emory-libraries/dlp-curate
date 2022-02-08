@@ -9,6 +9,7 @@ RSpec.describe Hyrax::Dashboard::CollectionsController, :clean do
   let(:collection) { FactoryBot.create(:public_collection_lw, id: '888889', user: user, with_permission_template: true) }
 
   describe "#delete" do
+    # These may have to change because of v3.2.0.
     context "when logged in as an admin" do
       before { sign_in admin }
       it "destroys the collection" do

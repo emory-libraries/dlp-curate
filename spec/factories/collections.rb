@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.0.2]
+# [Hyrax-overwrite-v3.3.0
 FactoryBot.define do
   # Tests that create a Fedora Object are very slow.  This factory lets you control which parts of the object ecosystem
   # get built.

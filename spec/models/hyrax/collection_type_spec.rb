@@ -42,7 +42,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     it 'returns the gid when id exists' do
       collection_type.id = 5
       # The response behavior has changed in app/models/hyrax/collection_type.rb
-      # because of Hyrax v3.0.2 upgrade.
+      # because of Hyrax v3.3.0 upgrade.
       expect(collection_type.gid.to_s).to eq 'gid://dlp-curate/Hyrax::CollectionType/5'
     end
 
@@ -131,13 +131,13 @@ RSpec.describe Hyrax::CollectionType, type: :model do
 
     it 'raises error if collection type with gid does NOT exist' do
       # The response behavior has changed in app/models/hyrax/collection_type.rb
-      # because of Hyrax v3.0.2 upgrade.
+      # because of Hyrax v3.3.0 upgrade.
       expect { described_class.find_by_gid!(nonexistent_gid) }.to raise_error(ActiveRecord::RecordNotFound, "Couldn't find Hyrax::CollectionType with 'id'=NO_EXIST")
     end
 
     it 'raises error if passed nil' do
       # The response behavior has changed in app/models/hyrax/collection_type.rb
-      # because of Hyrax v3.0.2 upgrade.
+      # because of Hyrax v3.3.0 upgrade.
       expect { described_class.find_by_gid!(nil) }.to raise_error(URI::InvalidURIError)
     end
   end
@@ -181,7 +181,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
   describe "destroy" do
     before do
       # The response behavior has changed in app/models/hyrax/collection_type.rb
-      # because of Hyrax v3.0.2 upgrade.
+      # because of Hyrax v3.3.0 upgrade.
       allow(collection_type).to receive(:collections).and_return([true])
     end
 
@@ -210,7 +210,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     context 'for non-special collection type' do
       before do
         # The response behavior has changed in app/models/hyrax/collection_type.rb
-        # because of Hyrax v3.0.2 upgrade.
+        # because of Hyrax v3.3.0 upgrade.
         allow(collection_type).to receive(:collections).and_return([true])
       end
 

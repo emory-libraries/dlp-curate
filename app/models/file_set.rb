@@ -37,7 +37,7 @@ class FileSet < ActiveFedora::Base
   include PreservationEvents
   self.indexer = Curate::FileSetIndexer
 
-  directly_contains_one :preservation_master_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#PreservationFile'), class_name: 'Hydra::PCDM::File'
+  directly_contains_one :preservation_master_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#PreservationMasterFile'), class_name: 'Hydra::PCDM::File'
   directly_contains_one :service_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#ServiceFile'), class_name: 'Hydra::PCDM::File'
   directly_contains_one :intermediate_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#IntermediateFile'), class_name: 'Hydra::PCDM::File'
   directly_contains_one :transcript_file, through: :files, type: ::RDF::URI('http://pcdm.org/use#Transcript'), class_name: 'Hydra::PCDM::File'
@@ -58,7 +58,7 @@ class FileSet < ActiveFedora::Base
   def viruses?
     return false unless preservation_master_file&.new_record? # We have a new file to check
     event_start = DateTime.current
-    # This method updated to match v3.0.2
+    # This method updated to match v3.3.0
     result = Hyrax::VirusCheckerService.file_has_virus?(preservation_master_file)
     file_set = FileSet.find(preservation_master_file.id&.partition("/files")&.first)
     event = { 'type' => 'Virus Check', 'start' => event_start, 'outcome' => result, 'software_version' => 'ClamAV 0.101.4', 'user' => file_set.depositor }

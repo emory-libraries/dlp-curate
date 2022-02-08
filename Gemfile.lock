@@ -86,8 +86,8 @@ GEM
     ast (2.4.2)
     autoprefixer-rails (9.7.6)
       execjs
-    awesome_nested_set (3.4.0)
-      activerecord (>= 4.0.0, < 7.0)
+    awesome_nested_set (3.5.0)
+      activerecord (>= 4.0.0, < 7.1)
     aws-eventstream (1.1.0)
     aws-partitions (1.329.0)
     aws-sdk (3.0.1)
@@ -1108,6 +1108,9 @@ GEM
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
     declarative (0.0.20)
+    declarative-builder (0.1.0)
+      declarative-option (< 0.2.0)
+    declarative-option (0.1.0)
     deprecation (1.1.0)
       activesupport
     devise (4.7.2)
@@ -1119,9 +1122,12 @@ GEM
     devise-guests (0.7.0)
       devise
     diff-lcs (1.3)
-    disposable (0.6.2)
+    disposable (0.4.7)
       declarative (>= 0.0.9, < 1.0.0)
-      representable (>= 3.1.1, < 3.2.0)
+      declarative-builder (< 0.2.0)
+      declarative-option (< 0.2.0)
+      representable (>= 2.4.0, <= 3.1.0)
+      uber (< 0.2.0)
     docile (1.3.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -1162,7 +1168,7 @@ GEM
     dry-monads (1.4.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.7)
-    dry-schema (1.8.0)
+    dry-schema (1.9.1)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.13, >= 0.13.0)
       dry-core (~> 0.5, >= 0.5)
@@ -1184,12 +1190,12 @@ GEM
       dry-core (~> 0.5, >= 0.5)
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 1.0, >= 1.0.2)
-    dry-validation (1.7.0)
+    dry-validation (1.8.0)
       concurrent-ruby (~> 1.0)
       dry-container (~> 0.7, >= 0.7.1)
       dry-core (~> 0.5, >= 0.5)
       dry-initializer (~> 3.0)
-      dry-schema (~> 1.8, >= 1.8.0)
+      dry-schema (~> 1.9, >= 1.9.1)
     ebnf (1.2.0)
       rdf (~> 3.1)
       sxp (~> 1.1)
@@ -1329,12 +1335,12 @@ GEM
       bundler (>= 1.5)
       cancancan
       json (>= 1.8)
-    hydra-works (1.2.0)
-      activesupport (>= 4.2.10, < 6.0)
-      hydra-derivatives (~> 3.0)
+    hydra-works (2.0.0)
+      activesupport (>= 5.2, < 7.0)
+      hydra-derivatives (~> 3.6)
       hydra-file_characterization (~> 1.0)
       hydra-pcdm (>= 0.9)
-    hyrax (3.0.2)
+    hyrax (3.3.0)
       active-fedora (~> 13.1, >= 13.1.2)
       almond-rails (~> 0.1)
       awesome_nested_set (~> 3.1)
@@ -1355,8 +1361,9 @@ GEM
       font-awesome-rails (~> 4.2)
       hydra-derivatives (~> 3.3)
       hydra-editor (~> 5.0, >= 5.0.4)
+      hydra-file_characterization (~> 1.1.2)
       hydra-head (~> 11.0, >= 11.0.1)
-      hydra-works (>= 0.16, < 2.0)
+      hydra-works (>= 0.16)
       iiif_manifest (>= 0.3, < 2.0)
       jquery-datatables-rails (~> 3.4)
       jquery-ui-rails (~> 6.0)
@@ -1386,7 +1393,7 @@ GEM
       select2-rails (~> 3.5)
       signet
       tinymce-rails
-      valkyrie (>= 2.1.1, < 3.0)
+      valkyrie (~> 2, >= 2.1.1)
     i18n (1.9.1)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -1561,10 +1568,10 @@ GEM
       pry (~> 0.13.0)
     public_suffix (4.0.6)
     puma (3.12.6)
-    qa (5.7.0)
+    qa (5.8.1)
       activerecord-import
       deprecation
-      faraday
+      faraday (< 2.0)
       geocoder
       ldpath
       nokogiri (~> 1.6)
@@ -1675,17 +1682,17 @@ GEM
       redis (>= 3.0.4)
     redlock (1.2.2)
       redis (>= 3.0.0, < 5.0)
-    reform (2.6.1)
-      disposable (>= 0.5.0, < 1.0.0)
-      representable (>= 3.1.1, < 3.2.0)
+    reform (2.5.0)
+      disposable (>= 0.4.2, < 0.5.0)
+      representable (>= 2.4.0, < 3.1.0)
       uber (< 0.2.0)
     reform-rails (0.2.3)
       activemodel (>= 5.0)
       reform (>= 2.3.1, < 3.0.0)
     regexp_parser (1.8.2)
-    representable (3.1.1)
+    representable (3.0.4)
       declarative (< 0.1.0)
-      trailblazer-option (>= 0.1.1, < 0.2.0)
+      declarative-option (< 0.2.0)
       uber (< 0.2.0)
     request_store (1.5.1)
       rack (>= 1.4)
@@ -1853,9 +1860,8 @@ GEM
     tilt (2.0.10)
     tins (1.25.0)
       sync
-    tinymce-rails (5.10.2)
+    tinymce-rails (5.10.3)
       railties (>= 3.1.1)
-    trailblazer-option (0.1.2)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -1874,9 +1880,11 @@ GEM
       unf_ext
     unf_ext (0.0.7.7)
     unicode-display_width (1.8.0)
-    valkyrie (3.0.0.pre.beta.1)
+    valkyrie (2.2.0)
       activemodel
       activesupport
+      disposable (~> 0.4.5)
+      draper
       dry-struct
       dry-types (~> 1.0)
       faraday (< 1.0)
@@ -1955,7 +1963,7 @@ DEPENDENCIES
   http
   hydra-derivatives (~> 3.6)
   hydra-role-management
-  hyrax (= 3.0.2)
+  hyrax (= 3.3.0)
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)

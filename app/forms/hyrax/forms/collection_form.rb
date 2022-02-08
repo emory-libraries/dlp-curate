@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2]
+# [Hyrax-overwrite-v3.3.0]
 module Hyrax
   module Forms
     class CollectionForm
@@ -15,9 +15,9 @@ module Hyrax
       # Required for search builder (FIXME)
       alias collection model
 
-      self.model_class = ::Collection
+      self.model_class = Hyrax.config.collection_class
 
-      self.membership_service_class = Collections::CollectionMemberService
+      self.membership_service_class = Collections::CollectionMemberSearchService
 
       delegate :blacklight_config, to: Hyrax::CollectionsController
 
@@ -151,10 +151,15 @@ module Hyrax
         collection_member_service.available_member_subcollections.documents
       end
 
+      ##
+      # @deprecated this implementation requires an extra db round trip, had a
+      #   buggy cacheing mechanism, and was largely duplicative of other code.
+      #   all versions of this code are replaced by
+      #   {CollectionsHelper#available_parent_collections_data}.
       def available_parent_collections(scope:)
         return @available_parents if @available_parents.present?
 
-        collection = ::Collection.find(id)
+        collection = model_class.find(id)
         colls = Hyrax::Collections::NestedCollectionQueryService.available_parent_collections(child: collection, scope: scope, limit_to_id: nil)
         @available_parents = colls.map do |col|
           { "id" => col.id, "title_first" => col.title.first }
