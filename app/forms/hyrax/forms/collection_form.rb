@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2]
+# [Hyrax-overwrite-v3.1.0]
 module Hyrax
   module Forms
     class CollectionForm
@@ -17,7 +17,7 @@ module Hyrax
 
       self.model_class = ::Collection
 
-      self.membership_service_class = Collections::CollectionMemberService
+      self.membership_service_class = Collections::CollectionMemberSearchService
 
       delegate :blacklight_config, to: Hyrax::CollectionsController
 
@@ -151,6 +151,11 @@ module Hyrax
         collection_member_service.available_member_subcollections.documents
       end
 
+      ##
+      # @deprecated this implementation requires an extra db round trip, had a
+      #   buggy cacheing mechanism, and was largely duplicative of other code.
+      #   all versions of this code are replaced by
+      #   {CollectionsHelper#available_parent_collections_data}.
       def available_parent_collections(scope:)
         return @available_parents if @available_parents.present?
 

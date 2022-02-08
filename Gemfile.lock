@@ -1334,7 +1334,7 @@ GEM
       hydra-derivatives (~> 3.0)
       hydra-file_characterization (~> 1.0)
       hydra-pcdm (>= 0.9)
-    hyrax (3.0.2)
+    hyrax (3.1.0)
       active-fedora (~> 13.1, >= 13.1.2)
       almond-rails (~> 0.1)
       awesome_nested_set (~> 3.1)
@@ -1561,10 +1561,10 @@ GEM
       pry (~> 0.13.0)
     public_suffix (4.0.6)
     puma (3.12.6)
-    qa (5.7.0)
+    qa (5.8.1)
       activerecord-import
       deprecation
-      faraday
+      faraday (< 2.0)
       geocoder
       ldpath
       nokogiri (~> 1.6)
@@ -1955,7 +1955,7 @@ DEPENDENCIES
   http
   hydra-derivatives (~> 3.6)
   hydra-role-management
-  hyrax (= 3.0.2)
+  hyrax (= 3.1.0)
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)

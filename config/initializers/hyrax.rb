@@ -190,6 +190,11 @@ Hyrax.config do |config|
   # Should a button with "Share my work" show on the front page to all users (even those not logged in)?
   # config.display_share_button_when_not_logged_in = true
 
+  # This user is logged as the acting user for jobs and other processes that
+  # run without being attributed to a specific user (e.g. creation of the
+  # default admin set).
+  # config.system_user_key = 'systemuser@example.com'
+
   # The user who runs batch jobs. Update this if you aren't using emails
   config.batch_user_key = 'batchuser'
 
@@ -224,7 +229,7 @@ Hyrax.config do |config|
   config.working_path = ENV['WORKING_PATH'] || Rails.root.join('tmp', 'uploads')
 
   # Should the media display partial render a download link?
-  # config.display_media_download_link = true
+  config.display_media_download_link = true
 
   # A configuration point for changing the behavior of the license service
   #   @see Hyrax::LicenseService for implementation details

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2] Changing reindex-extent to limited instead of full in order
+# [Hyrax-overwrite-v3.1.0] Changing reindex-extent to limited instead of full in order
 # to speed up collection indexing.
 require 'rails_helper'
 require 'shoulda/callback/matchers'
