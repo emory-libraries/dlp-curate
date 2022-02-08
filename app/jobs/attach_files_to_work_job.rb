@@ -9,13 +9,13 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
   def perform(work, uploaded_files, **work_attributes)
     validate_files!(uploaded_files)
     depositor = proxy_or_depositor(work)
-    user = User.find_by_user_key(depositor)
+    @user = User.find_by_user_key(depositor)
 
     work, work_permissions = create_permissions work, depositor
     uploaded_files.each do |uploaded_file|
       next if uploaded_file.file_set_uri.present?
 
-      attach_work(user, work, work_attributes, work_permissions, uploaded_file)
+      attach_work(work, work_attributes, work_permissions, uploaded_file)
     end
   end
 
@@ -23,8 +23,8 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
 
     # rubocop:disable Metrics/AbcSize
     # rubocop:disable Metrics/MethodLength
-    def attach_work(user, work, work_attributes, work_permissions, uploaded_file)
-      actor = Hyrax::Actors::FileSetActor.new(FileSet.create, user)
+    def attach_work(work, work_attributes, work_permissions, uploaded_file)
+      actor = Hyrax::Actors::FileSetActor.new(FileSet.create, @user)
       file_set_attributes = file_set_attrs(work_attributes, uploaded_file)
       metadata = visibility_attributes(work_attributes, file_set_attributes)
       uploaded_file.add_file_set!(actor.file_set)
