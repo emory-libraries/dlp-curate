@@ -488,6 +488,7 @@ RSpec.describe Collection, clean: true do
     end
 
     context "when adding members" do
+      # The code below may need to change.
       let(:work1) { FactoryBot.create(:work) }
       let(:work2) { FactoryBot.create(:work) }
       let(:work3) { FactoryBot.create(:work) }

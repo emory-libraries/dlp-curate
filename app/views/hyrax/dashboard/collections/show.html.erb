@@ -1,4 +1,4 @@
-<% # [Hyrax-overwrite-v3.0.2] Inserts source collection link L#64 %>
+<% # [Hyrax-overwrite-v3.1.0] Inserts source collection link L#64 %>
 <% provide :page_title, construct_page_title(@presenter.title) %>
 
 <% provide :page_header do %>
@@ -115,7 +115,7 @@
 
 <% if @presenter.collection_type_is_nestable? && !collection_search_parameters? %>
   <%= render 'hyrax/my/collections/modal_add_to_collection', source: 'show' %>
-  <%= render 'hyrax/my/collections/modal_add_subcollection', id: @presenter.id, source: 'show' %>
+  <%= render 'hyrax/my/collections/modal_add_subcollection', id: @presenter.id, presenter: @presenter, source: 'show' %>
   <%= render 'hyrax/dashboard/collections/modal_parent_collection_remove_deny', source: 'show' %>
 <% end %>
 
