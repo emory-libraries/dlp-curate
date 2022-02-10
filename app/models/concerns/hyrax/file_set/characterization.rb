@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2] Change `characterization_proxy`
+# [Hyrax-overwrite-v3.1.0] Change `characterization_proxy`
 ##
 # This module points the FileSet to the location of the technical metadata.
 # By default, the file holding the metadata is +:original_file+ and the terms

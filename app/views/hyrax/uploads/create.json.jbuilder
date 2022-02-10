@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2]
+# [Hyrax-overwrite-v3.1.0]
 json.files [@upload] do |uploaded_file|
   json.id uploaded_file.id
   # if uploaded_file.service_file.file.present?

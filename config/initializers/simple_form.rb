@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# NOTE: [Hyrax-overwrite-v3.0.2] This is a modified version of simple_form's default
+# NOTE: [Hyrax-overwrite-v3.1.0] This is a modified version of simple_form's default
 #       config file. The only changes were to move the input to after the hint and error.
 # Use this setup block to configure all options available in SimpleForm.
 SimpleForm.setup do |config|
