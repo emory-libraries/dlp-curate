@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2]
+# [Hyrax-overwrite-v3.1.0]
 module Hyrax
   module Actors
     # Actions are decoupled from controller logic so that they may be called from a controller or a background job.

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Hyrax
-  # [Hyrax-overwrite-v3.0.2]
+  # [Hyrax-overwrite-v3.1.0]
   ##
   # This class runs fixity checks on a {FileSetBehavior}, potentially on multiple
   # files each with multiple versions in the +FileSet+.

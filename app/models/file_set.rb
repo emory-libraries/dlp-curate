@@ -58,7 +58,7 @@ class FileSet < ActiveFedora::Base
   def viruses?
     return false unless preservation_master_file&.new_record? # We have a new file to check
     event_start = DateTime.current
-    # This method updated to match v3.0.2
+    # This method updated to match v3.1.0
     result = Hyrax::VirusCheckerService.file_has_virus?(preservation_master_file)
     file_set = FileSet.find(preservation_master_file.id&.partition("/files")&.first)
     event = { 'type' => 'Virus Check', 'start' => event_start, 'outcome' => result, 'software_version' => 'ClamAV 0.101.4', 'user' => file_set.depositor }

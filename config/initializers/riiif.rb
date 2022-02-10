@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2]
+# [Hyrax-overwrite-v3.1.0]
 ActiveSupport::Reloader.to_prepare do
   Riiif::Image.file_resolver = Riiif::HttpFileResolver.new
   Riiif::Image.info_service = lambda do |id, _file|

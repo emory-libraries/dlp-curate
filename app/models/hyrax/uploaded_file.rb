@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2]
+# [Hyrax-overwrite-v3.1.0]
 module Hyrax
   ##
   # Store a file uploaded by a user.

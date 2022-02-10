@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.2] expands the #uri_for use options.
+# [Hyrax-overwrite-v3.1.0] expands the #uri_for use options.
 module Hyrax
   class FileMetadata < Valkyrie::Resource
     GENERIC_MIME_TYPE = 'application/octet-stream'
