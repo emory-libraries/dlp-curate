@@ -272,6 +272,17 @@ Hyrax.config do |config|
   #                                "#{ActiveFedora.fedora.host}#{ActiveFedora.fedora.base_path}/#{Noid::Rails.treeify(id)}"
   #                              end
 
+  # The following two configurations needed for Hyrax v3.2.0.
+  # Identify the model class name that will be used for Collections in your app
+  # (i.e. ::Collection for ActiveFedora, Hyrax::PcdmCollection for Valkyrie)
+  config.collection_model = '::Collection'
+  # config.collection_model = 'Hyrax::PcdmCollection'
+
+  # Identify the model class name that will be used for Admin Sets in your app
+  # (i.e. AdminSet for ActiveFedora, Hyrax::AdministrativeSet for Valkyrie)
+  config.admin_set_model = 'AdminSet'
+  # config.admin_set_model = 'Hyrax::AdministrativeSet'
+
   ## Fedora import/export tool
   #
   # Path to the Fedora import export tool jar file

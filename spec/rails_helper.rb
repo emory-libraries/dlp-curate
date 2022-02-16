@@ -58,7 +58,7 @@ RSpec.configure do |config|
   end
 
   config.before(admin_set: true) do
-    admin_set_id = AdminSet.find_or_create_default_admin_set_id
+    admin_set_id = Hyrax::AdminSetCreateService.find_or_create_default_admin_set.id.to_s
     Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id)
     Hyrax::CollectionType.find_or_create_default_collection_type
   end
