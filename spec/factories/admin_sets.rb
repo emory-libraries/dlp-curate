@@ -25,7 +25,7 @@ FactoryBot.define do
       with_persisted_default_id { false }
     end
 
-     factory :default_adminset do
+    factory :default_adminset do
       id { AdminSet::DEFAULT_ID }
       with_persisted_default_id { true }
 
