@@ -1,10 +1,30 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.1.0]
+# [Hyrax-overwrite-v3.3.0]
+
+##
+# a +ActiveJob+ job to process file characterization.
+#
+# the characterization process is handled by a service object, which is
+# configurable via {CharacterizeJob.characterization_service}.
+#
+# @example setting a custom characterization service
+#   class MyCharacterizer
+#     def run(file, path)
+#       # do custom characterization
+#     end
+#   end
+#
+#   # in a Rails initializer
+#   CharacterizeJob.characterization_service = MyCharacterizer.new
+# end
 # Adds preservation event for fileset characterization
 class CharacterizeJob < Hyrax::ApplicationJob
   include PreservationEvents
 
   queue_as Hyrax.config.ingest_queue_name
+
+  class_attribute :characterization_service
+  self.characterization_service = Hydra::Works::CharacterizationService
 
   # Characterizes the file at 'filepath' if available, otherwise, pulls a copy from the repository
   # and runs characterization on that file.
@@ -17,7 +37,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
     file = file_set.characterization_proxy
     raise "#{relation} was not found for FileSet #{file_set.id}" unless file_set.characterization_proxy?
     filepath = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id) unless filepath && File.exist?(filepath)
-    Hydra::Works::CharacterizationService.run(file, filepath, {}, user)
+    characterization_service.run(file, filepath, {}, user)
     event = { 'type' => 'Characterization', 'start' => event_start, 'outcome' => 'Success',
               'details' => "#{relation}: #{file.file_name.first} - Technical metadata extracted from file, format identified, and file validated",
               'software_version' => 'FITS v1.5.0', 'user' => user.presence || file_set.depositor }
@@ -38,5 +58,12 @@ class CharacterizeJob < Hyrax::ApplicationJob
         cmd << filepath
       end
       [ch]
+    end
+
+    ##
+    # @api public
+    # @return [#run]
+    def characterization_service
+      self.class.characterization_service
     end
 end

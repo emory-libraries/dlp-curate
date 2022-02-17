@@ -30,6 +30,7 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
 
   shared_examples 'a file attacher', perform_enqueued: [described_class, IngestJob] do
     it 'attaches files, copies visibility and permissions and updates the uploaded files' do
+      # The following line may have to change for Hyrax v3.3.0.
       expect(CharacterizeJob).to receive(:perform_later).once
       described_class.perform_now(generic_work, [uploaded_file1])
       generic_work.reload

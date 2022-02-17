@@ -37,6 +37,7 @@ Metrics/AbcSize:
         - app/importers/preservation_workflow_importer.rb
         - app/indexers/curate_generic_work_indexer.rb
         - app/controllers/background_jobs_controller.rb
+        - app/jobs/characterize_job.rb
 
 Metrics/BlockLength:
     Exclude:

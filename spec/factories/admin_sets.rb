@@ -22,6 +22,17 @@ FactoryBot.define do
     transient do
       # false, true, or Hash with keys for permission_template
       with_permission_template { false }
+      with_persisted_default_id { false }
+    end
+
+     factory :default_adminset do
+      id { AdminSet::DEFAULT_ID }
+      with_persisted_default_id { true }
+
+      after(:create) do |admin_set, evaluator|
+        Hyrax::DefaultAdministrativeSet.update(default_admin_set_id: admin_set.id) if
+          evaluator.with_persisted_default_id
+      end
     end
   end
 end

@@ -278,7 +278,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
     scenario "Create Curate Work" do
       visit '/concern/curate_generic_works/new'
 
-      # If you generate more than one work uncomment these lines
+      # TODO: If you generate more than one work uncomment these lines
       # choose "payload_concern", option: "CurateGenericWork"
       # click_button "Create work"
 

@@ -24,7 +24,7 @@ RSpec.describe Hyrax::DownloadsController, :clean do
       sign_in user
       expect do
         get :show, params: { id: '8675309' }
-      end.to raise_error Blacklight::Exceptions::InvalidSolrID
+      end.to raise_error Blacklight::Exceptions::RecordNotFound # Updated for Hyrax v3.3.0
     end
 
     context "when user doesn't have access" do
