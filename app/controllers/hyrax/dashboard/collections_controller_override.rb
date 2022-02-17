@@ -18,20 +18,31 @@ module Hyrax
         banner_info.save f.collection_banner_url
       end
 
-      # [Hyrax-overwrite-v3.1.0] Restrict deletion to admins only
+      # [Hyrax-overwrite-v3.2.0] Restrict deletion to admins only
       def destroy
-        if current_user.admin? && @collection == Valkyrie::Resource
+        return admin_destroy_processing if current_user.admin?
+        after_destroy_error(params[:id])
+      rescue StandardError => err
+        destroy_error_processing(err)
+      end
+
+      private
+
+        def admin_valkyrie_processing
           Hyrax.persister.delete(resource: @collection)
           after_destroy(params[:id])
-        elsif current_user.admin? && @collection.destroy
-          after_destroy(params[:id])
-        else
+        end
+
+        def destroy_error_processing(err)
+          Rails.logger.error(err)
           after_destroy_error(params[:id])
         end
-      rescue StandardError => err
-        Rails.logger.error(err)
-        after_destroy_error(params[:id])
-      end
+
+        def admin_destroy_processing
+          return admin_valkyrie_processing if @collection == Valkyrie::Resource
+          return after_destroy(params[:id]) if @collection.destroy
+          after_destroy_error(params[:id])
+        end
     end
   end
 end
