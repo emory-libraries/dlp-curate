@@ -24,7 +24,7 @@
     <% end %>
   </ul>
 
-  <%= simple_form_for @form, url: [hyrax, :dashboard, @form], html: { class: 'editor nav-safety', data: { behavior: 'collection-form' } } do |f| %>
+  <%= simple_form_for @form, url: [hyrax, :dashboard, @form], html: { class: 'editor nav-safety', data: { behavior: 'collection-form' } }, remote: true do |f| %>
     <div class="tab-content">
       <div id="description" class="tab-pane active">
         <div class="panel panel-default labels">
