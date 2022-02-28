@@ -21,7 +21,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
     let(:user_3) do
       User.new(user_attributes_third) { |u| u.save(validate: false) }
     end
-    let(:admin_set_id) { AdminSet.find_or_create_default_admin_set_id }
+    let(:admin_set_id) { Hyrax::AdminSetCreateService.find_or_create_default_admin_set.id.to_s }
     let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id) }
     let(:workflow) { Sipity::Workflow.create!(active: true, name: 'test-workflow', permission_template: permission_template) }
     let(:collection) { FactoryBot.create(:collection_lw, user: user) }

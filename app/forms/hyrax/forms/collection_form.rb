@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-overwrite-v3.3.0]
 module Hyrax
   module Forms
     class CollectionForm
@@ -16,9 +15,9 @@ module Hyrax
       # Required for search builder (FIXME)
       alias collection model
 
-      self.model_class = ::Collection
+      self.model_class = Hyrax.config.collection_class
 
-      self.membership_service_class = Collections::CollectionMemberService
+      self.membership_service_class = Collections::CollectionMemberSearchService
 
       delegate :blacklight_config, to: Hyrax::CollectionsController
 
@@ -41,7 +40,7 @@ module Hyrax
         end
       end
 
-      # @param model [Collection] the collection model that backs this form
+      # @param model [::Collection] the collection model that backs this form
       # @param current_ability [Ability] the capabilities of the current user
       # @param repository [Blacklight::Solr::Repository] the solr repository
       def initialize(model, current_ability, repository)
@@ -110,18 +109,19 @@ module Hyrax
       def banner_info
         @banner_info ||= begin
           # Find Banner filename
-          banner_info = CollectionBrandingInfo.where(collection_id: id).where(role: "banner")
+          banner_info = CollectionBrandingInfo.where(collection_id: id, role: "banner")
           banner_file = File.split(banner_info.first.local_path).last unless banner_info.empty?
+          alttext = banner_info.first.alt_text unless banner_info.empty?
           file_location = banner_info.first.local_path unless banner_info.empty?
           relative_path = "/" + banner_info.first.local_path.split("/")[-4..-1].join("/") unless banner_info.empty?
-          { file: banner_file, full_path: file_location, relative_path: relative_path }
+          { file: banner_file, full_path: file_location, relative_path: relative_path, alttext: alttext }
         end
       end
 
       def logo_info
         @logo_info ||= begin
           # Find Logo filename, alttext, linktext
-          logos_info = CollectionBrandingInfo.where(collection_id: id).where(role: "logo")
+          logos_info = CollectionBrandingInfo.where(collection_id: id, role: "logo")
           logos_info.map do |logo_info|
             logo_file = File.split(logo_info.local_path).last
             relative_path = "/" + logo_info.local_path.split("/")[-4..-1].join("/")
@@ -151,15 +151,19 @@ module Hyrax
         collection_member_service.available_member_subcollections.documents
       end
 
+      ##
+      # @deprecated this implementation requires an extra db round trip, had a
+      #   buggy cacheing mechanism, and was largely duplicative of other code.
+      #   all versions of this code are replaced by
+      #   {CollectionsHelper#available_parent_collections_data}.
       def available_parent_collections(scope:)
         return @available_parents if @available_parents.present?
 
-        collection = Collection.find(id)
+        collection = model_class.find(id)
         colls = Hyrax::Collections::NestedCollectionQueryService.available_parent_collections(child: collection, scope: scope, limit_to_id: nil)
         @available_parents = colls.map do |col|
           { "id" => col.id, "title_first" => col.title.first }
-        end
-        @available_parents.to_json
+        end.to_json
       end
 
       private

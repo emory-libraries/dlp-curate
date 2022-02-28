@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1] Brings in just the tests affected by the change
+# [Hyrax-overwrite-v3.3.0] Brings in just the tests affected by the change
 # in behavior of the #total_viewable_items method.
 require 'rails_helper'
 

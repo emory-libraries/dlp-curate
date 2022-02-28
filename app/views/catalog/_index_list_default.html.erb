@@ -1,4 +1,4 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Add logic to display source collection for a work if present %>
+<% # [Hyrax-overwrite-v3.3.0] Add logic to display source collection for a work if present %>
 <div class="col-md-6">
   <div class="metadata">
     <dl class="dl-horizontal">
@@ -6,7 +6,7 @@
     <% index_fields(document).each do |field_name, field| -%>
       <% if should_render_index_field? document, field %>
         <% # display field name %>
-        <dt><%= render_index_field_label document, field: field_name %></dt>
+        <dt data-solr-field-name="<%= field_name %>"><%= render_index_field_label document, field: field_name %></dt>
         <% if field_name == 'member_of_collections_ssim' %>
         <% # only do this for collection field %>
           <% if document.source_collection_id %>

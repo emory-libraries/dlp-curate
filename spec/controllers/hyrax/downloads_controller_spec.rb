@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1] Adds tests for additional files
+# [Hyrax-overwrite-v3.3.0] Adds tests for additional files
 require 'rails_helper'
 
 RSpec.describe Hyrax::DownloadsController, :clean do
@@ -24,7 +24,7 @@ RSpec.describe Hyrax::DownloadsController, :clean do
       sign_in user
       expect do
         get :show, params: { id: '8675309' }
-      end.to raise_error Blacklight::Exceptions::InvalidSolrID
+      end.to raise_error Blacklight::Exceptions::RecordNotFound # Updated for Hyrax v3.3.0
     end
 
     context "when user doesn't have access" do
@@ -87,7 +87,7 @@ RSpec.describe Hyrax::DownloadsController, :clean do
 
           it 'sends requested file content' do
             get :show, params: { id: file_set, file: 'thumbnail' }
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response.body).to eq content
             expect(response.headers['Content-Length']).to eq "0"
             expect(response.headers['Accept-Ranges']).to eq "bytes"

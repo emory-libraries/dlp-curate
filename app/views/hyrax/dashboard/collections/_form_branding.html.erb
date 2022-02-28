@@ -1,6 +1,4 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] %>
-
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] We are overwriting the `add_new_banner` method in collections 
+<% # [Hyrax-overwrite-v3.3.0] We are overwriting the `add_new_banner` method in collections 
 # controller because we are using the collection_banner (L-25) column in uploaded_files
 # table instead of the default. Our uploaded_files table is different compared
 # to Hyrax. %>
@@ -66,7 +64,7 @@
             <div class="banner-image">
               <i><%= image_tag(f.object.banner_info[:relative_path],
                                size: "800x100",
-                               alt: "Unable to display banner: #{f.object.banner_info[:file]}") %></i>
+                               alt: f.object.banner_info[:alttext].presence || f.object.banner_info[:file]) %></i>
             </div>
             <% end %>
           </div> <!-- end banner -->

@@ -137,6 +137,12 @@ ActiveRecord::Schema.define(version: 201901241536542) do
     t.index ["machine_id"], name: "index_hyrax_collection_types_on_machine_id", unique: true
   end
 
+  create_table "hyrax_default_administrative_set", force: :cascade do |t|
+    t.string "default_admin_set_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "hyrax_features", force: :cascade do |t|
     t.string "key", null: false
     t.boolean "enabled", default: false, null: false

@@ -44,18 +44,7 @@ Hyrax.config do |config|
     maxFileSize:            2500.megabytes
   }
 
-  # Enable displaying usage statistics in the UI
-  # Defaults to false
-  # Requires a Google Analytics id and OAuth2 keyfile.  See README for more info
-  # config.analytics = false
-
-  # Google Analytics tracking ID to gather usage statistics
-  # config.google_analytics_id = 'UA-99999999-1'
-
-  # Date you wish to start collecting Google Analytic statistics for
-  # Leaving it blank will set the start date to when ever the file was uploaded by
-  # NOTE: if you have always sent analytics to GA for downloads and page views leave this commented out
-  # config.analytic_start_date = DateTime.new(2014, 9, 10)
+  # The Google Analytics settings have been removed as of Hyrax v3.3.0.
 
   # Enables a link to the citations page for a work
   # Default is false
@@ -190,6 +179,11 @@ Hyrax.config do |config|
   # Should a button with "Share my work" show on the front page to all users (even those not logged in)?
   # config.display_share_button_when_not_logged_in = true
 
+  # This user is logged as the acting user for jobs and other processes that
+  # run without being attributed to a specific user (e.g. creation of the
+  # default admin set).
+  # config.system_user_key = 'systemuser@example.com'
+
   # The user who runs batch jobs. Update this if you aren't using emails
   config.batch_user_key = 'batchuser'
 
@@ -224,7 +218,7 @@ Hyrax.config do |config|
   config.working_path = ENV['WORKING_PATH'] || Rails.root.join('tmp', 'uploads')
 
   # Should the media display partial render a download link?
-  # config.display_media_download_link = true
+  config.display_media_download_link = true
 
   # A configuration point for changing the behavior of the license service
   #   @see Hyrax::LicenseService for implementation details
@@ -266,6 +260,17 @@ Hyrax.config do |config|
   # config.translate_uri_to_id = lambda do |id|
   #                                "#{ActiveFedora.fedora.host}#{ActiveFedora.fedora.base_path}/#{Noid::Rails.treeify(id)}"
   #                              end
+
+  # The following two configurations needed for Hyrax v3.2.0.
+  # Identify the model class name that will be used for Collections in your app
+  # (i.e. ::Collection for ActiveFedora, Hyrax::PcdmCollection for Valkyrie)
+  config.collection_model = '::Collection'
+  # config.collection_model = 'Hyrax::PcdmCollection'
+
+  # Identify the model class name that will be used for Admin Sets in your app
+  # (i.e. AdminSet for ActiveFedora, Hyrax::AdministrativeSet for Valkyrie)
+  config.admin_set_model = 'AdminSet'
+  # config.admin_set_model = 'Hyrax::AdministrativeSet'
 
   ## Fedora import/export tool
   #

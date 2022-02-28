@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-overwrite-v3.3.0]
 # We have removed json_response tests from here since we are
 # no longer rendering json in our create method
 require 'rails_helper'
@@ -21,7 +21,7 @@ RSpec.describe Hyrax::FixityChecksController do
       end
 
       it "returns result and redirects to file_set page" do
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.redirect_url).to include "/concern/file_sets/#{file_set.id}"
       end
     end

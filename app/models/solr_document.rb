@@ -6,7 +6,7 @@ class SolrDocument
   # Adds Hyrax behaviors to the SolrDocument.
   include Hyrax::SolrDocumentBehavior
 
-  # removed Solrizer convention to be compliant with v3.0.0.pre.beta3
+  # removed Solrizer convention to be compliant with v3.3.0
   # self.unique_key = 'id'
   def preservation_workflow_terms
     self['preservation_workflow_terms_tesim']

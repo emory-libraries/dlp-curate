@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite-v3.0.0.pre.rc1] FileActor ingest_file method in Hyrax::Actors
+# [Hyrax-overwrite-v3.3.0] FileActor ingest_file method in Hyrax::Actors
 # Perform characterize job only on preservation_master_file
 require 'wings'
 Hyrax::Actors::FileActor.class_eval do
@@ -19,12 +18,11 @@ Hyrax::Actors::FileActor.class_eval do
     return false unless file_set.save
     # may cause error since new related_file method normalizes the relation, but may not if relation is always a symbol.
     repository_file = related_file
-    Hyrax::VersioningService.create(repository_file, user)
-    pathhint = io.uploaded_file.uploader.path if io.uploaded_file # in case next worker is on same filesystem
+    create_version(repository_file, user)
+    pathhint = pathhint(io)
     # Perform characterize job only on preservation_master_file
-    CharacterizeJob.perform_later(file_set, repository_file.id, pathhint || io.path) if relation == :preservation_master_file
-    file_path = pathhint || io.path
-    file_derivatives(file_set, file_path, repository_file) if io.preferred == io.relation
+    CharacterizeJob.perform_later(file_set, repository_file.id, pathhint) if relation == :preservation_master_file
+    file_derivatives(file_set, pathhint, repository_file) if io.preferred == io.relation
   end
 
   def file_derivatives(file_set, file_path, repository_file)

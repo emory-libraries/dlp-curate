@@ -1,18 +1,19 @@
 version: 2.1
 orbs:
-    samvera: samvera/circleci-orb@0.3.1
+    samvera: samvera/circleci-orb@1.0.0
 jobs:
     build:
         parameters:
             ruby_version:
                 type: string
-                default: 2.5.3
+                default: 2.7.4
             bundler_version:
                 type: string
-                default: 2.0.2
+                default: 2.1.4
         executor:
             name: samvera/ruby_fcrepo_solr_redis
             ruby_version: << parameters.ruby_version >>
+            solr_version: 7-alpine
         working_directory: ~/project
         parallelism: 4
         steps:
@@ -32,6 +33,10 @@ jobs:
                 keys:
                     - v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}
 
+            - run:
+                name: Install Python2
+                command: sudo apt-get update && sudo apt-get install -y python2
+                
             - run: yarn
 
             - save_cache:
@@ -66,7 +71,7 @@ jobs:
 
     coverage:
         docker:
-            - image: circleci/ruby:2.5.3
+            - image: circleci/ruby:2.7.4
         working_directory: ~/project
         parallelism: 1
         steps:
@@ -90,8 +95,8 @@ workflows:
     ci:
         jobs:
             - build:
-                name: ruby2-5-3
+                name: ruby2.7.4
             - coverage:
                 name: codeclimate
                 requires:
-                    - ruby2-5-3
+                    - ruby2.7.4

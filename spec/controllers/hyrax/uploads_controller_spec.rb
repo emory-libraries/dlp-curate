@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-overwrite-v3.3.0]
 require 'rails_helper'
 
 RSpec.describe Hyrax::UploadsController do
@@ -17,7 +17,7 @@ RSpec.describe Hyrax::UploadsController do
       end
       it "is successful with pmf" do
         post :create, params: { preservation_master_file: file, format: 'json' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:upload)).to be_kind_of Hyrax::UploadedFile
         expect(assigns(:upload)).to be_persisted
         expect(assigns(:upload).user).to eq user
