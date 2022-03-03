@@ -1097,7 +1097,7 @@ GEM
     coffee-script-source (1.12.2)
     colorize (0.8.1)
     concurrent-ruby (1.1.9)
-    connection_pool (2.2.3)
+    connection_pool (2.2.5)
     coveralls (0.8.23)
       json (>= 1.8, < 3)
       simplecov (~> 0.16.1)
@@ -1579,8 +1579,8 @@ GEM
       rails (>= 5.0, < 6.2)
       rdf
     racc (1.6.0)
-    rack (2.0.9)
-    rack-protection (2.0.8.1)
+    rack (2.2.3)
+    rack-protection (2.2.0)
       rack
     rack-proxy (0.6.5)
       rack
@@ -1678,7 +1678,7 @@ GEM
       rexml (~> 3.2)
     redic (1.5.3)
       hiredis
-    redis (4.2.1)
+    redis (4.5.1)
     redis-namespace (1.8.1)
       redis (>= 3.0.4)
     redlock (1.2.2)
@@ -1793,11 +1793,11 @@ GEM
       activesupport (>= 5.2.0)
     show_me_the_cookies (5.0.1)
       capybara (>= 2, < 4)
-    sidekiq (5.2.8)
+    sidekiq (5.2.10)
       connection_pool (~> 2.2, >= 2.2.2)
-      rack (< 2.1.0)
+      rack (~> 2.0)
       rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 5)
+      redis (~> 4.5, < 4.6.0)
     sidekiq-limit_fetch (3.4.0)
       sidekiq (>= 4)
     signet (0.16.0)
