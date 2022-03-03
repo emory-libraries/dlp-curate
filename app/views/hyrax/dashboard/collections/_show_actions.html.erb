@@ -4,7 +4,8 @@
     <%= link_to t('hyrax.collection.actions.edit.label'),
                 hyrax.edit_dashboard_collection_path(presenter),
                 title: t('hyrax.collection.actions.edit.desc'),
-                class: 'btn btn-primary' %>
+                class: 'btn btn-primary', 
+                data:  { turbolinks: false } %>
 <% end %>
 
 <% if presenter.collection_type_is_nestable? && presenter.user_can_nest_collection? && current_user.admin? %>
