@@ -20,7 +20,8 @@ module Hyrax
         path,
         id:    "permission_#{document.id}",
         class: 'visibility-link',
-        title: "#{t('hyrax.works.form.tab.share')}: #{document.title_or_label}"
+        title: "#{t('hyrax.works.form.tab.share')}: #{document.title_or_label}",
+        data:  { turbolinks: false }
       )
     end
   end
