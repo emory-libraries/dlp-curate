@@ -1,0 +1,2 @@
+event_id,event_bucket,event_sha1,event_start,event_end,event_type,fileset_id,initiating_user,outcome,software_version,workflow_id
+,fedora-cor-arch-binaries,f43b4b662480a4477100bf3de73804f8efbcba30,2022-03-09 14:11:25,2022-03-09 14:11:35,Fixity Check,,AWS Serverless Fixity,Success,Serverless Fixity v1.0,
