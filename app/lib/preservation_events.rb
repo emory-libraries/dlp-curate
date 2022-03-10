@@ -7,7 +7,7 @@ module PreservationEvents
   # @param event - hash with all event requirements (details, start, type, user, outcome, software_version)
   def create_preservation_event(object, event)
     object.preservation_event_attributes = [{ event_details:    event['details'],
-                                              event_end:        DateTime.current,
+                                              event_end:        event['end'] || DateTime.current,
                                               event_start:      event['start'],
                                               event_type:       event['type'],
                                               initiating_user:  event['user'],

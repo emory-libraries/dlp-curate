@@ -32,6 +32,15 @@
         <%= file_field_tag 'preservation_csv', class: 'files', :accept => 'text/csv' %>
       </td>
     </tr>
+    <tr>
+      <td>
+        <%= radio_button_tag :jobs, 'aws_fixity', false, id: 'aws_fixity' %>
+        <%= label :job_cleanup, 'Load AWS Fixity Preservation Events' %>
+      </td>
+      <td>
+        <%= file_field_tag 'aws_fixity_csv', class: 'files', :accept => 'text/csv' %>
+      </td>
+    </tr>
   </table>
   <table class="table table-striped">
     <tr>

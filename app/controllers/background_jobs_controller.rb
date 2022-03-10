@@ -8,8 +8,11 @@ class BackgroundJobsController < ApplicationController
       FileSetCleanUpJob.perform_later
       redirect_to new_background_job_path, notice: "File Set Cleanup Job has started successfully."
     elsif params[:jobs] == 'preservation'
-      preservation_worklow_action
+      generic_csv_action(params[:preservation_csv], PreservationWorkflowImporterJob)
       redirect_to new_background_job_path, notice: "Preservation Workflow Importer Job has started successfully."
+    elsif params[:jobs] == 'aws_fixity'
+      generic_csv_action(params[:aws_fixity_csv], ProcessAwsFixityPreservationEventsJob)
+      redirect_to new_background_job_path, notice: "AWS Fixity Preservation Events Importer Job has been added to the queue."
     elsif params[:jobs].include?('_preprocessor')
       preprocessor_actions
     else
@@ -19,13 +22,6 @@ class BackgroundJobsController < ApplicationController
   end
 
   private
-
-    def preservation_worklow_action
-      name = params[:preservation_csv].original_filename
-      path = Rails.root.join('tmp', name)
-      File.open(path, "w+") { |f| f.write(params[:preservation_csv].read) }
-      PreservationWorkflowImporterJob.perform_later(path.to_s)
-    end
 
     def reindex_objects_action
       CSV.foreach(params[:reindex_csv].path, headers: true) do |row|
@@ -62,5 +58,12 @@ class BackgroundJobsController < ApplicationController
       end
     rescue => error
       "This preprocessor has encountered an error: #{error}"
+    end
+
+    def generic_csv_action(csv_param, job_class)
+      name = csv_param.original_filename
+      path = Rails.root.join('tmp', name)
+      File.open(path, "w+") { |f| f.write(csv_param.read) }
+      job_class.perform_later(path.to_s)
     end
 end
