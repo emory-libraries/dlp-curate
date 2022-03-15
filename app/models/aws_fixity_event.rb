@@ -12,7 +12,7 @@ class AwsFixityEvent
     @user = line['initiating_user']&.strip || 'AWS Serverless Fixity'
     @outcome = line['outcome']&.strip
     @software_version = line['software_version']&.strip || 'Serverless Fixity v1.0'
-    @details_outcome = @outcome == 'failed' || @outcome.blank? ? 'check failed' : 'intact'
+    @details_outcome = @outcome == 'Failure' || @outcome.blank? ? 'check failed' : 'intact'
   end
 
   def process_event

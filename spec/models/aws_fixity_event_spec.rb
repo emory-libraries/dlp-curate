@@ -6,14 +6,14 @@ RSpec.describe AwsFixityEvent, :clean, type: :model do
     { 'event_sha1': '3a1759f3e5591f0ef19c7ce67365f0a2dc6be076', 'event_bucket': 'fedora-cor-arch-binaries',
       'event_start': '2022-03-09 14:11:25', 'event_end': '2022-03-09 14:11:35',
       'event_type': 'AWS Fixity Check', 'initiating_user': 'AWS Fixity Tool',
-      'outcome': 'succeeded', 'software_version': 'Serverless Fixity v1.*' }.with_indifferent_access
+      'outcome': 'Success', 'software_version': 'Serverless Fixity v1.*' }.with_indifferent_access
   end
   let(:empty_line) { {} }
   let(:full_line_object) { described_class.new(full_line) }
   let(:empty_line_object) { described_class.new(empty_line) }
   let(:full_line_results) do
     ["3a1759f3e5591f0ef19c7ce67365f0a2dc6be076", "fedora-cor-arch-binaries", "2022-03-09 14:11:25",
-     "2022-03-09 14:11:35", "AWS Fixity Check", "AWS Fixity Tool", "succeeded",
+     "2022-03-09 14:11:35", "AWS Fixity Check", "AWS Fixity Tool", "Success",
      "Serverless Fixity v1.*", "intact"]
   end
   let(:empty_line_results) do
@@ -24,7 +24,7 @@ RSpec.describe AwsFixityEvent, :clean, type: :model do
     { "type" => "AWS Fixity Check", "start" => "2022-03-09 14:11:25", "end" => "2022-03-09 14:11:35",
       "details" => "Fixity intact for sha1: 3a1759f3e5591f0ef19c7ce67365f0a2dc6be076 in fedora-cor-arch-binaries",
       "software_version" => "Serverless Fixity v1.*", "user" => "AWS Fixity Tool",
-      "outcome" => "succeeded" }
+      "outcome" => "Success" }
   end
   let(:empty_line_hash) do
     { "type" => "Fixity Check", "start" => nil, "end" => nil, "details" => "Fixity check failed for sha1:  in ",
