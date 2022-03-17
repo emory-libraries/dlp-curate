@@ -17,7 +17,7 @@ class AwsFixityEvent
 
   def process_event
     { 'type' => @event_type, 'start' => @fixity_start, 'end' => @fixity_end,
-      'details' => "Fixity #{@details_outcome} for sha1: #{@sha1} in #{@aws_bucket}",
+      'details' => "Fixity #{@details_outcome} for sha1:#{@sha1} in #{@aws_bucket}",
       'software_version' => @software_version, 'user' => @user, 'outcome' => @outcome }
   end
 end
