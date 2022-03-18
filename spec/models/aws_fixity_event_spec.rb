@@ -22,12 +22,12 @@ RSpec.describe AwsFixityEvent, :clean, type: :model do
   end
   let(:full_line_hash) do
     { "type" => "AWS Fixity Check", "start" => "2022-03-09 14:11:25", "end" => "2022-03-09 14:11:35",
-      "details" => "Fixity intact for sha1: 3a1759f3e5591f0ef19c7ce67365f0a2dc6be076 in fedora-cor-arch-binaries",
+      "details" => "Fixity intact for sha1:3a1759f3e5591f0ef19c7ce67365f0a2dc6be076 in fedora-cor-arch-binaries",
       "software_version" => "Serverless Fixity v1.*", "user" => "AWS Fixity Tool",
       "outcome" => "Success" }
   end
   let(:empty_line_hash) do
-    { "type" => "Fixity Check", "start" => nil, "end" => nil, "details" => "Fixity check failed for sha1:  in ",
+    { "type" => "Fixity Check", "start" => nil, "end" => nil, "details" => "Fixity check failed for sha1: in ",
       "software_version" => "Serverless Fixity v1.0", "user" => "AWS Serverless Fixity",
       "outcome" => nil }
   end
