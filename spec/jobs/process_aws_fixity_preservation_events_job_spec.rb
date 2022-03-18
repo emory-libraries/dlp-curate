@@ -24,7 +24,7 @@ RSpec.describe ProcessAwsFixityPreservationEventsJob, :clean do
       described_class.perform_now(csv)
 
       expect(file_set.preservation_event.pluck(:event_details))
-        .to include(["Fixity intact for sha1: f43b4b662480a4477100bf3de73804f8efbcba30 in fedora-cor-arch-binaries"])
+        .to include(["Fixity intact for sha1:f43b4b662480a4477100bf3de73804f8efbcba30 in fedora-cor-arch-binaries"])
       expect(file_set.preservation_event.pluck(:event_type)).to include(["Fixity Check"])
       expect(file_set.preservation_event.pluck(:initiating_user)).to include(["AWS Serverless Fixity"])
       expect(file_set.preservation_event.pluck(:outcome)).to include(["Success"])
