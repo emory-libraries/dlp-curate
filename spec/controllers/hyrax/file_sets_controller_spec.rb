@@ -341,13 +341,18 @@ RSpec.describe Hyrax::FileSetsController, :clean do
     describe '#show' do
       it 'denies access to private files' do
         get :show, params: { id: private_file_set }
-        expect(response).to fail_redirect_and_flash(main_app.new_user_session_path(locale: 'en'), 'You are not authorized to access this page.')
+
+        expect(response)
+          .to fail_redirect_and_flash(main_app.new_user_session_path,
+                                    'You need to sign in or sign up before continuing.')
       end
 
-      it 'allows access to public files' do
-        expect(controller).to receive(:additional_response_formats).with(ActionController::MimeResponds::Collector)
+      it 'denies access to public files' do
         get :show, params: { id: public_file_set }
-        expect(response).to be_success
+
+        expect(response)
+          .to fail_redirect_and_flash(main_app.new_user_session_path,
+                                      'You need to sign in or sign up before continuing.')
       end
     end
   end
