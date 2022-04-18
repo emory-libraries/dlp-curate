@@ -7,7 +7,7 @@ module Hyrax
     include Blacklight::AccessControls::Catalog
     include Hyrax::Breadcrumbs
 
-    before_action :authenticate_user!, except: [:show, :citation, :stats]
+    before_action :authenticate_user!
     load_and_authorize_resource class: ::FileSet, except: :show
     before_action :build_breadcrumbs, only: [:show, :edit, :stats]
     before_action :set_file_set, only: [:show]
