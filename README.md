@@ -23,9 +23,27 @@ In order to set up your dev environment for database authentication, you will ne
 
 `export DATABASE_AUTH=true`
 
+# Local Development Setup
+
+Run each of the following commands in a separate tab within the `dlp-curate` directory:
+
+1. Setup local Solr instance by running command `solr_wrapper`
+2. Setup local Fedora instance by running command `fcrepo_wrapper`
+3. Setup local app server by running command `rails server`
+4. Access the app through `http://localhost:3000/`
+
+Refer to the Hyrax local development [guide](https://github.com/samvera/hyrax/blob/main/documentation/developing-your-hyrax-based-app.md) for more information regarding installing additional tools like Fits and ImageMagick, which are needed to enable file uploads.
+
 # Testing and CI
 
-Run the test suite with `bin/rails ci`
+To run the tests locally, run each of the following commands in a separate tab within the `dlp-curate` directory:
+
+1. Setup local Solr testing instance by running command `solr_wrapper --config config/solr_wrapper_test.yml`
+2. Setup local Fedora testing instance by running command `fcrepo_wrapper --config config/fcrepo_wrapper_test.yml`
+3. Run `rspec` and verify that all tests pass
+
+
+A second option, which has not been working consistently for local testing, is running the test suite with `bin/rails ci`.
 
 For our CI we are using CircleCI that we adopted from hyrax project: [Hyrax CircleCI Config](https://github.com/samvera/hyrax/blob/master/.circleci/config.yml)
 
