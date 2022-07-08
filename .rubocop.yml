@@ -154,3 +154,7 @@ RSpec/AnyInstance:
 RSpec/LetSetup:
     Exclude:
         - spec/presenters/collection_presenter_spec.rb
+
+Style/IfUnlessModifier:
+    Exclude:
+        - config/initializers/hyrax.rb

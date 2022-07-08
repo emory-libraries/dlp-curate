@@ -462,6 +462,24 @@ RSpec.describe Collection, clean: true do
     end
   end
 
+  describe '#deduplication_key' do
+    subject { described_class.new }
+    let(:deduplication_key) { 'trash_key' }
+
+    context "with new Fileset" do
+      its(:deduplication_key) { is_expected.to be_falsey }
+    end
+
+    context "with a FileSet that has deduplication_key" do
+      subject do
+        described_class.create.tap do |cgw|
+          cgw.deduplication_key = deduplication_key
+        end
+      end
+      its(:deduplication_key) { is_expected.to eq deduplication_key }
+    end
+  end
+
   describe "#deposit_collection_ids" do
     subject { described_class.new }
     let(:deposit_collection_ids) { ['123abc', '456def'] }

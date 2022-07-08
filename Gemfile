@@ -12,6 +12,7 @@ end
 gem 'active-fedora', '~> 13.1'
 gem 'bootsnap', require: false
 gem 'bootstrap-sass', '~> 3.0'
+gem 'bulkrax'
 gem 'clamby'
 gem 'coffee-rails', '~> 4.2'
 gem 'devise'
