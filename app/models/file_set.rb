@@ -21,6 +21,10 @@ class FileSet < ActiveFedora::Base
 
   property :preservation_event, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_event", class_name: "PreservationEvent"
 
+  property :deduplication_key, predicate: "http://metadata.emory.edu/vocab/predicates#deduplicationKey", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
   def primary?
     pcdm_use == PRIMARY
   end

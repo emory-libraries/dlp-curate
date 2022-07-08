@@ -23,3 +23,4 @@
 //= require hyrax/autocomplete/default
 //= require almond
 //= require zizia/application
+//= require bulkrax/application

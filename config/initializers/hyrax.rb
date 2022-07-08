@@ -275,16 +275,7 @@ Hyrax.config do |config|
   # Location where BagIt files should be exported
   # config.bagit_dir = "tmp/descriptions"
 
-  # If browse-everything has been configured, load the configs.  Otherwise, set to nil.
-  begin
-    if defined? BrowseEverything
-      config.browse_everything = BrowseEverything.config
-    else
-      Rails.logger.warn "BrowseEverything is not installed"
-    end
-  rescue Errno::ENOENT
-    config.browse_everything = nil
-  end
+  config.browse_everything = nil
 
   ## Whitelist all directories which can be used to ingest from the local file
   # system.
@@ -311,3 +302,8 @@ Qa::Authorities::Local.register_subauthority('genres', 'Qa::Authorities::Local::
 
 # Geonames username
 Qa::Authorities::Geonames.username = ENV['GEONAMES_USERNAME']
+
+# set bulkrax default work type to first curation_concern if it isn't already set
+if Bulkrax.default_work_type.blank?
+  Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.to_s
+end
