@@ -41,21 +41,11 @@ module Bulkrax
     end
 
     def parse_rights_statement(src)
-      return unless src
-      active_terms = Qa::Authorities::Local.subauthority_for('rights_statements').all.select { |term| term[:active] }
-      valid_uri_option = active_terms.select { |s| s["id"] == src }.try(:first)
-
-      return src if valid_uri_option
-      raise "Invalid rights_statement value: #{src}"
+      validate_qa_for(src, 'rights_statements')
     end
 
     def parse_data_classifications(src)
-      return unless src
-      active_terms = Qa::Authorities::Local.subauthority_for('data_classifications').all.select { |term| term[:active] }
-      valid_option = active_terms.select { |s| s["id"] == src }.try(:first)
-
-      return src if valid_option
-      raise "Invalid data_classification value: #{src}"
+      validate_qa_for(src, 'data_classifications')
     end
 
     def parse_visibility(src)
@@ -68,6 +58,17 @@ module Bulkrax
     def parse_pcdm_use(src)
       normalized_term = src&.downcase&.gsub(/[^a-z0-9\s]/i, '')
       CurateMapper.new.pcdm_value(normalized_term)
+    end
+
+    private
+
+    def validate_qa_for(src, subauthority)
+      return unless src
+      active_terms = Qa::Authorities::Local.subauthority_for(subauthority).all.select { |term| term[:active] }
+      valid_option = active_terms.select { |s| s["id"] == src }.try(:first)
+
+      return src if valid_option
+      raise "Invalid #{subauthority} value: #{src}"
     end
   end
 end
