@@ -28,16 +28,13 @@ module Bulkrax
 
     def parse_content_type(src)
       return unless src
-      active_terms = Qa::Authorities::Local.subauthority_for('resource_types').all.select { |term| term[:active] }
+      active_terms = pull_active_terms_for('resource_types')
       # Check whether this is a uri that matches a valid URI option
-      valid_uri_option = active_terms.select { |s| s["id"] == src }.try(:first)
+      valid_uri_option = pull_valid_option(src, active_terms)
 
       return valid_uri_option["id"] if valid_uri_option && valid_uri_option["id"]
       # Check whether this is a string that can be easily matched to a valid URI
-      matching_term = active_terms.find { |s| s["label"].downcase.strip == src.downcase.strip }
-
-      raise "Invalid resource_type value: #{src}" unless matching_term
-      matching_term["id"]
+      pull_matching_term(src, active_terms)
     end
 
     def parse_rights_statement(src)
@@ -62,13 +59,28 @@ module Bulkrax
 
     private
 
-    def validate_qa_for(src, subauthority)
-      return unless src
-      active_terms = Qa::Authorities::Local.subauthority_for(subauthority).all.select { |term| term[:active] }
-      valid_option = active_terms.select { |s| s["id"] == src }.try(:first)
+      def validate_qa_for(src, subauthority)
+        return unless src
+        valid_option = pull_valid_option(src, pull_active_terms_for(subauthority))
 
-      return src if valid_option
-      raise "Invalid #{subauthority} value: #{src}"
-    end
+        return src if valid_option
+        raise "Invalid #{subauthority} value: #{src}"
+      end
+
+      def pull_valid_option(src, active_terms)
+        active_terms&.select { |s| s["id"] == src }&.try(:first)
+      end
+
+      def pull_active_terms_for(subauthority)
+        Qa::Authorities::Local.subauthority_for(subauthority).all.select { |term| term[:active] }
+      end
+
+      def pull_matching_term(src, active_terms)
+        # Check whether this is a string that can be easily matched to a valid URI
+        matching_term = active_terms.find { |s| s["label"].downcase.strip == src.downcase.strip }
+
+        raise "Invalid resource_type value: #{src}" unless matching_term
+        matching_term["id"]
+      end
   end
 end
