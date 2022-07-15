@@ -1562,7 +1562,7 @@ GEM
     erubi (1.10.0)
     ethon (0.15.0)
       ffi (>= 1.15.0)
-    execjs (2.8.1)
+    execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
     factory_bot_rails (4.11.1)
@@ -2301,6 +2301,7 @@ DEPENDENCIES
   devise-guests (~> 0.6)
   dotenv-rails
   edtf-humanize
+  execjs (= 2.7.0)
   factory_bot_rails (~> 4.11.1)
   fcrepo_wrapper
   ffaker
