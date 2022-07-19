@@ -43,7 +43,8 @@ Bulkrax.setup do |config|
       "deduplication_key" => { from: ["deduplication_key"], source_identifier: true },
       "source_collection_id" => { from: ["source_collection_id"] },
       "pcdm_use" => { from: ["pcdm_use"], parsed: true },
-      "file" => { from: ["file"] }
+      "file" => { from: ["file"] },
+      "parent" => { from: ["parent"] }
     }
   }
 
