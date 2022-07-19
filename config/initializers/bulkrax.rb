@@ -44,7 +44,8 @@ Bulkrax.setup do |config|
       "source_collection_id" => { from: ["source_collection_id"] },
       "pcdm_use" => { from: ["pcdm_use"], parsed: true },
       "file" => { from: ["file"] },
-      "parent" => { from: ["parent"] }
+      "parent" => { from: ["parent"] },
+      "model" => { from: ["model"] }
     }
   }
 
