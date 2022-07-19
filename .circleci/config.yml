@@ -35,8 +35,10 @@ jobs:
 
             - run:
                 name: Install Python2
-                command: sudo apt-get update && sudo apt-get install -y python2
-                
+                command: |
+                    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4EB27DB2A3B88B8B
+                    sudo apt-get update && sudo apt-get install -y python2
+                    
             - run: yarn
 
             - save_cache:
