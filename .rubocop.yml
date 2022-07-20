@@ -28,31 +28,33 @@ Lint/NonLocalExitFromIterator:
 
 Metrics/AbcSize:
     Exclude:
-        - app/importers/modular_importer.rb
-        - spec/system/import_langmuir_from_csv_spec.rb
+        - app/controllers/background_jobs_controller.rb
         - app/importers/curate_collection_importer.rb
         - app/importers/curate_record_importer.rb
-        - app/lib/metadata_details.rb
-        - app/indexers/curate/file_set_indexer.rb
+        - app/importers/modular_importer.rb
         - app/importers/preservation_workflow_importer.rb
         - app/indexers/curate_generic_work_indexer.rb
-        - app/controllers/background_jobs_controller.rb
+        - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
+        - app/lib/metadata_details.rb
+        - config/initializers/bulkrax.rb
+        - spec/system/import_langmuir_from_csv_spec.rb
 
 Metrics/BlockLength:
     Exclude:
-        - 'spec/**/*'
-        - 'config/routes.rb'
-        - 'config/initializers/simple_form_bootstrap.rb'
-        - 'app/controllers/catalog_controller.rb'
-        - 'config/initializers/hyrax.rb'
+        - app/controllers/catalog_controller.rb
         - app/importers/curate_collection_importer.rb
-        - lib/tasks/curate_collections.rake
-        - lib/tasks/curate_books.rake
-        - config/initializers/characterization_service.rb
-        - config/initializers/job_io_wrapper.rb
-        - lib/tasks/derivatives.rake
         - app/views/manifest/manifest.json.jbuilder
+        - config/initializers/bulkrax.rb
+        - config/initializers/characterization_service.rb
+        - config/initializers/hyrax.rb
+        - config/initializers/job_io_wrapper.rb
+        - config/initializers/simple_form_bootstrap.rb
+        - config/routes.rb
+        - lib/tasks/curate_books.rake
+        - lib/tasks/curate_collections.rake
+        - lib/tasks/derivatives.rake
+        - spec/**/*
 
 Metrics/ClassLength:
     Exclude:
@@ -86,25 +88,26 @@ Layout/LineLength:
 
 Metrics/MethodLength:
     Exclude:
-        - app/uploaders/zizia/csv_manifest_validator.rb
-        - app/importers/curate_collection_importer.rb
-        - app/presenters/hyrax/curate_collection_presenter.rb
-        - app/presenters/hyrax/collection_presenter.rb
-        - app/importers/curate_mapper.rb
-        - app/forms/hyrax/curate_generic_work_form.rb
-        - app/importers/curate_record_importer.rb
-        - config/prepends/custom_visibility.rb
+        - app/controllers/background_jobs_controller.rb
         - app/controllers/hyrax/file_sets_controller.rb
-        - app/jobs/create_work_job.rb
+        - app/controllers/iiif_controller.rb
+        - app/forms/hyrax/curate_generic_work_form.rb
+        - app/importers/curate_collection_importer.rb
+        - app/importers/curate_mapper.rb
+        - app/importers/curate_record_importer.rb
+        - app/importers/dams_preprocessor.rb
         - app/importers/modular_importer.rb
+        - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
-        - app/indexers/curate_generic_work_indexer.rb
+        - app/jobs/create_work_job.rb
+        - app/presenters/hyrax/collection_presenter.rb
+        - app/presenters/hyrax/curate_collection_presenter.rb
+        - app/uploaders/zizia/csv_manifest_validator.rb
+        - config/initializers/bulkrax.rb
+        - config/prepends/custom_visibility.rb
         - spec/fixtures/manifest_output.rb
-        - app/controllers/iiif_controller.rb
-        - app/controllers/background_jobs_controller.rb
         - spec/fixtures/placeholder_manifest_output.rb
-        - app/importers/dams_preprocessor.rb
 
 Metrics/ModuleLength:
     Exclude:

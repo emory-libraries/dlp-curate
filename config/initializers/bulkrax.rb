@@ -86,3 +86,51 @@ end
 if Object.const_defined?(:Hyrax) && ::Hyrax::DashboardController&.respond_to?(:sidebar_partials)
   Hyrax::DashboardController.sidebar_partials[:repository_content] << "hyrax/dashboard/sidebar/bulkrax_sidebar_additions"
 end
+
+Bulkrax::ObjectFactory.class_eval do
+  # Bulkrax v3.5.1 Override: as mentioned below, this method's largely mimicing AttachFilesToWorkJob,
+  #   which we have extensively customized in Curate to accomodate our needs. Here,
+  #   we are purely adapting those customizations.
+  #   TODO: To DRY up this code, we should shoot for refactoring these processes into
+  #   a reusable module.
+  # This method is heavily inspired by Hyrax's AttachFilesToWorkJob
+  def create_file_set(attrs)
+    _, work = find_record(attributes[related_parents_parsed_mapping].first, importer_run_id)
+    work_permissions = work.permissions.map(&:to_hash)
+    attrs = clean_attrs(attrs)
+    file_set_attrs = attrs.slice(*object.attributes.keys)
+    object.assign_attributes(file_set_attrs)
+
+    attrs['uploaded_files'].each do |uploaded_file_id|
+      uploaded_file = ::Hyrax::UploadedFile.find(uploaded_file_id)
+      next if uploaded_file.file_set_uri.present?
+
+      actor = ::Hyrax::Actors::FileSetActor.new(object, @user)
+      uploaded_file.update(file_set_uri: actor.file_set.uri)
+      actor.file_set.permissions_attributes = work_permissions
+      actor.create_metadata(uploaded_file.fileset_use, file_set_attrs)
+      preferred = preferred_file(uploaded_file)
+      actor.create_content(uploaded_file.intermediate_file, preferred, :intermediate_file) if uploaded_file.intermediate_file.present?
+      actor.create_content(uploaded_file.service_file, preferred, :service_file) if uploaded_file.service_file.present?
+      actor.create_content(uploaded_file.extracted_text, preferred, :extracted) if uploaded_file.extracted_text.present?
+      actor.create_content(uploaded_file.transcript, preferred, :transcript_file) if uploaded_file.transcript.present?
+      work.ordered_members << actor.file_set
+      work.save
+      actor.file_set.save
+      actor.attach_to_work(work, file_set_attrs)
+    end
+
+    object.save!
+  end
+
+  def preferred_file(uploaded_file)
+    preferred = if uploaded_file.service_file.present?
+                  :service_file
+                elsif uploaded_file.intermediate_file.present?
+                  :intermediate_file
+                else
+                  :preservation_master_file
+                end
+    preferred
+  end
+end
