@@ -24,6 +24,117 @@ ActiveRecord::Schema.define(version: 201901241536542) do
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
   end
 
+  create_table "bulkrax_entries", force: :cascade do |t|
+    t.string "identifier"
+    t.string "collection_ids"
+    t.string "type"
+    t.integer "importerexporter_id"
+    t.text "raw_metadata", limit: 16777215
+    t.text "parsed_metadata", limit: 16777215
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "last_error_at"
+    t.datetime "last_succeeded_at"
+    t.string "importerexporter_type", default: "Bulkrax::Importer"
+    t.integer "import_attempts", default: 0
+  end
+
+  create_table "bulkrax_exporter_runs", force: :cascade do |t|
+    t.integer "exporter_id"
+    t.integer "total_work_entries", default: 0
+    t.integer "enqueued_records", default: 0
+    t.integer "processed_records", default: 0
+    t.integer "deleted_records", default: 0
+    t.integer "failed_records", default: 0
+    t.index ["exporter_id"], name: "index_bulkrax_exporter_runs_on_exporter_id"
+  end
+
+  create_table "bulkrax_exporters", force: :cascade do |t|
+    t.string "name"
+    t.integer "user_id"
+    t.string "parser_klass"
+    t.integer "limit"
+    t.text "parser_fields", limit: 16777215
+    t.text "field_mapping", limit: 16777215
+    t.string "export_source"
+    t.string "export_from"
+    t.string "export_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "last_error_at"
+    t.datetime "last_succeeded_at"
+    t.date "start_date"
+    t.date "finish_date"
+    t.string "work_visibility"
+    t.string "workflow_status"
+    t.boolean "include_thumbnails", default: false
+    t.boolean "generated_metadata", default: false
+    t.index ["user_id"], name: "index_bulkrax_exporters_on_user_id"
+  end
+
+  create_table "bulkrax_importer_runs", force: :cascade do |t|
+    t.integer "importer_id"
+    t.integer "total_work_entries", default: 0
+    t.integer "enqueued_records", default: 0
+    t.integer "processed_records", default: 0
+    t.integer "deleted_records", default: 0
+    t.integer "failed_records", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "processed_collections", default: 0
+    t.integer "failed_collections", default: 0
+    t.integer "total_collection_entries", default: 0
+    t.integer "processed_relationships", default: 0
+    t.integer "failed_relationships", default: 0
+    t.text "invalid_records", limit: 16777215
+    t.integer "processed_file_sets", default: 0
+    t.integer "failed_file_sets", default: 0
+    t.integer "total_file_set_entries", default: 0
+    t.integer "processed_works", default: 0
+    t.integer "failed_works", default: 0
+    t.index ["importer_id"], name: "index_bulkrax_importer_runs_on_importer_id"
+  end
+
+  create_table "bulkrax_importers", force: :cascade do |t|
+    t.string "name"
+    t.string "admin_set_id"
+    t.integer "user_id"
+    t.string "frequency"
+    t.string "parser_klass"
+    t.integer "limit"
+    t.text "parser_fields", limit: 16777215
+    t.text "field_mapping", limit: 16777215
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "validate_only"
+    t.datetime "last_error_at"
+    t.datetime "last_succeeded_at"
+    t.index ["user_id"], name: "index_bulkrax_importers_on_user_id"
+  end
+
+  create_table "bulkrax_pending_relationships", force: :cascade do |t|
+    t.integer "importer_run_id", null: false
+    t.string "parent_id", null: false
+    t.string "child_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "order", default: 0
+    t.index ["importer_run_id"], name: "index_bulkrax_pending_relationships_on_importer_run_id"
+  end
+
+  create_table "bulkrax_statuses", force: :cascade do |t|
+    t.string "status_message"
+    t.string "error_class"
+    t.text "error_message"
+    t.text "error_backtrace", limit: 16777215
+    t.integer "statusable_id"
+    t.string "statusable_type"
+    t.integer "runnable_id"
+    t.string "runnable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "checksum_audit_logs", force: :cascade do |t|
     t.string "file_set_id"
     t.string "file_id"
@@ -135,6 +246,12 @@ ActiveRecord::Schema.define(version: 201901241536542) do
     t.string "badge_color", default: "#663333"
     t.boolean "deposit_only_collection", default: false, null: false
     t.index ["machine_id"], name: "index_hyrax_collection_types_on_machine_id", unique: true
+  end
+
+  create_table "hyrax_default_administrative_set", force: :cascade do |t|
+    t.string "default_admin_set_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "hyrax_features", force: :cascade do |t|

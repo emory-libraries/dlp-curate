@@ -21,6 +21,10 @@ class FileSet < ActiveFedora::Base
 
   property :preservation_event, predicate: "http://metadata.emory.edu/vocab/cor-terms#preservation_event", class_name: "PreservationEvent"
 
+  property :deduplication_key, predicate: "http://metadata.emory.edu/vocab/predicates#deduplicationKey", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
   def primary?
     pcdm_use == PRIMARY
   end
@@ -58,7 +62,7 @@ class FileSet < ActiveFedora::Base
   def viruses?
     return false unless preservation_master_file&.new_record? # We have a new file to check
     event_start = DateTime.current
-    # This method updated to match v3.0.0.pre.beta3
+    # This method updated to match v3.3.0
     result = Hyrax::VirusCheckerService.file_has_virus?(preservation_master_file)
     file_set = FileSet.find(preservation_master_file.id&.partition("/files")&.first)
     event = { 'type' => 'Virus Check', 'start' => event_start, 'outcome' => result, 'software_version' => 'ClamAV 0.101.4', 'user' => file_set.depositor }
