@@ -39,7 +39,7 @@ gem 'stackprof'
 gem 'turbolinks', '~> 5'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '~> 3.0.4'
 gem 'webpacker', '~> 4.x'
 gem 'whenever', require: false
 gem 'zizia', '~> 5.3.0'
