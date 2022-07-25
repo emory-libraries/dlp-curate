@@ -75,7 +75,7 @@ Metrics/CyclomaticComplexity:
         - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
-        - app/models/hydra/access_controls/visibility.rb
+        - app/models/concerns/hydra/access_controls/visibility.rb
         - config/initializers/file_actor.rb
 
 Layout/LineLength:
@@ -98,7 +98,7 @@ Metrics/MethodLength:
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
         - app/jobs/create_work_job.rb
-        - app/models/hydra/access_controls/visibility.rb
+        - app/models/concerns/hydra/access_controls/visibility.rb
         - app/presenters/hyrax/collection_presenter.rb
         - app/presenters/hyrax/curate_collection_presenter.rb
         - app/uploaders/zizia/csv_manifest_validator.rb
@@ -155,4 +155,4 @@ RSpec/LetSetup:
 
 Naming/PredicateName:
     Exclude:
-        - app/models/hydra/access_controls/access_right.rb
+        - app/models/concerns/hydra/access_controls/access_right.rb
