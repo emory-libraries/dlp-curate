@@ -43,7 +43,7 @@ Bulkrax.setup do |config|
       "deduplication_key" => { from: ["deduplication_key"], source_identifier: true },
       "source_collection_id" => { from: ["source_collection_id"] },
       "pcdm_use" => { from: ["pcdm_use"], parsed: true },
-      "file" => { from: ["file"] },
+      "file" => { from: ["file"], split: '\;' },
       "parent" => { from: ["parent"], related_parents_field_mapping: true },
       "model" => { from: ["model"] },
       "file_types" => { from: ["file_types"], split: '\|' }
@@ -169,5 +169,17 @@ Bulkrax::Entry.class_eval do
       update_files:                   update_files,
       parser:                         parser
     )
+  end
+end
+
+Bulkrax::CsvParser.class_eval do
+  # Retrieve the path where we expect to find the files
+  def path_to_files(**args)
+    filename = args.fetch(:filename, '')
+
+    return @path_to_files if @path_to_files.present? && filename.blank?
+    @path_to_files = File.join(
+        zip? ? importer_unzip_path : File.dirname(import_file_path), 'files', filename
+      )
   end
 end

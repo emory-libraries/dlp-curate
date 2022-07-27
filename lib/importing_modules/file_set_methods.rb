@@ -18,7 +18,7 @@ module FileSetMethods
   def create_content_for_actor(actor, uploaded_file)
     preferred = preferred_file(uploaded_file)
 
-    actor.create_content(uploaded_file.preservation_master_file, preferred, :preservation_master_file)
+    actor.create_content(uploaded_file.preservation_master_file, preferred, :preservation_master_file) if uploaded_file.preservation_master_file.present?
     actor.create_content(uploaded_file.intermediate_file, preferred, :intermediate_file) if uploaded_file.intermediate_file.present?
     actor.create_content(uploaded_file.service_file, preferred, :service_file) if uploaded_file.service_file.present?
     actor.create_content(uploaded_file.extracted_text, preferred, :extracted) if uploaded_file.extracted_text.present?
