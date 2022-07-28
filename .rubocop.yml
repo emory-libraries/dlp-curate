@@ -118,6 +118,7 @@ Metrics/PerceivedComplexity:
 Metrics/ParameterLists:
     Exclude:
         - app/jobs/manifest_persistence_job.rb
+        - lib/importing_modules/file_set_methods.rb
 
 RSpec/DescribeClass:
     Exclude:

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module FileSetMethods
-  def process_uploaded_file(uploaded_file, work, work_permissions, file_set_attrs)
+  def process_uploaded_file(uploaded_file, work, work_permissions, file_set_attrs, ind, num_files)
     actor = ::Hyrax::Actors::FileSetActor.new(object, @user)
 
     uploaded_file.update(file_set_uri: actor.file_set.uri)
@@ -9,8 +9,10 @@ module FileSetMethods
     actor.create_metadata(uploaded_file.fileset_use, file_set_attrs)
     actor.fileset_name(uploaded_file.file.to_s) if uploaded_file.file.present?
     create_content_for_actor(actor, uploaded_file)
-    work.ordered_members << actor.file_set
-    work.save
+    if ind == num_files - 1
+      work.ordered_members << actor.file_set
+      work.save
+    end
     actor.file_set.save
     actor.attach_to_work(work)
   end
