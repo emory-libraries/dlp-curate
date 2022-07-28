@@ -77,6 +77,7 @@ Metrics/CyclomaticComplexity:
         - app/indexers/curate_generic_work_indexer.rb
         - app/controllers/iiif_controller.rb
         - app/jobs/characterize_job.rb
+        - app/models/concerns/hydra/access_controls/visibility.rb
 
 Layout/LineLength:
     Exclude:
@@ -104,6 +105,7 @@ Metrics/MethodLength:
         - app/controllers/background_jobs_controller.rb
         - spec/fixtures/placeholder_manifest_output.rb
         - app/importers/dams_preprocessor.rb
+        - app/models/concerns/hydra/access_controls/visibility.rb
 
 Metrics/ModuleLength:
     Exclude:
@@ -152,3 +154,7 @@ RSpec/AnyInstance:
 RSpec/LetSetup:
     Exclude:
         - spec/presenters/collection_presenter_spec.rb
+
+Naming/PredicateName:
+    Exclude:
+        - app/models/concerns/hydra/access_controls/access_right.rb 
