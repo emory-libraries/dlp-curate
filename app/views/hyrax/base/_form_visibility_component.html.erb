@@ -20,8 +20,8 @@
         <!-- Public Low View -->
         <li class="radio">
           <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES %>
-            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES) %>
+            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES %>
+            <%= visibility_badge(::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES) %>
             <br />
             <%= t('hyrax.visibility.low_res.note_html') %>
           </label>
@@ -40,8 +40,8 @@
         <!-- Emory Low Download -->
         <li class="radio">
           <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW %>
-            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW) %>
+            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW %>
+            <%= visibility_badge(::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW) %>
             <br />
             <%= t('hyrax.visibility.emory_low.note_html') %>
           </label>
@@ -50,8 +50,8 @@
         <!-- Rose High Resolution -->
         <li class="radio">
           <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH %>
-            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH) %>
+            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH %>
+            <%= visibility_badge(::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH) %>
             <br />
             <%= t('hyrax.visibility.rose_high.note_html') %>
           </label>

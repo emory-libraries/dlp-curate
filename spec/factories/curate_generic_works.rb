@@ -132,11 +132,11 @@ FactoryBot.define do
     end
 
     factory :public_low_work do
-      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES }
+      visibility { ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES }
     end
 
     factory :emory_low_work do
-      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW }
+      visibility { ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW }
     end
 
     # Emory High Download is a re-use of the "authenticated"/"registered" visibility
@@ -145,7 +145,7 @@ FactoryBot.define do
     end
 
     factory :rose_high_work do
-      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH }
+      visibility { ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH }
     end
 
     factory :registered_generic_work do
