@@ -141,9 +141,9 @@ class CurateMapper < Zizia::HashMapper
       'emory network' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
       'open' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       'public' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-      'public low view' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES,
-      'emory low download' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW,
-      'rose high view' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
+      'public low view' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES,
+      'emory low download' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW,
+      'rose high view' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
     }.freeze
   end
 

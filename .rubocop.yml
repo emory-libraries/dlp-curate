@@ -154,7 +154,3 @@ RSpec/AnyInstance:
 RSpec/LetSetup:
     Exclude:
         - spec/presenters/collection_presenter_spec.rb
-
-Naming/PredicateName:
-    Exclude:
-        - app/models/concerns/hydra/access_controls/access_right.rb 
