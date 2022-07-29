@@ -16,19 +16,11 @@ module Hydra::AccessControls
         registered_visibility!
       when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
         private_visibility!
-<<<<<<< HEAD
       when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
         low_res_visibility!
       when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
         emory_low_visibility!
       when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-=======
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-        low_res_visibility!
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-        emory_low_visibility!
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
->>>>>>> Moves overrides to proper folder.
         rose_high_visibility!
       else
         raise ArgumentError, "Invalid visibility: #{value.inspect}"
@@ -40,21 +32,12 @@ module Hydra::AccessControls
         Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
       elsif read_groups.include? Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED
         Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-<<<<<<< HEAD
       elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
         ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
       elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
         ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
       elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
         ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-=======
-      elsif read_groups.include? Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-      elsif read_groups.include? Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-      elsif read_groups.include? Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
->>>>>>> Moves overrides to proper folder.
       else
         Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
       end
@@ -96,7 +79,6 @@ module Hydra::AccessControls
       end
 
       def low_res_visibility!
-<<<<<<< HEAD
         visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
         remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES]
         set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES], remove_groups)
@@ -112,23 +94,6 @@ module Hydra::AccessControls
         visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
         remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH]
         set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH], remove_groups)
-=======
-        visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-        remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES]
-        set_read_groups([Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES], remove_groups)
-      end
-
-      def emory_low_visibility!
-        visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-        remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW]
-        set_read_groups([Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW], remove_groups)
-      end
-
-      def rose_high_visibility!
-        visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-        remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH]
-        set_read_groups([Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH], remove_groups)
->>>>>>> Moves overrides to proper folder.
       end
   end
 end
