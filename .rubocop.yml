@@ -76,10 +76,7 @@ Metrics/CyclomaticComplexity:
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
         - app/models/concerns/hydra/access_controls/visibility.rb
-<<<<<<< HEAD
         - config/initializers/file_actor.rb
-=======
->>>>>>> 9525677... Swaps out non-functional prepends to straight overrides. (#1857)
 
 Layout/LineLength:
     Exclude:
@@ -107,11 +104,8 @@ Metrics/MethodLength:
         - app/uploaders/zizia/csv_manifest_validator.rb
         - spec/fixtures/manifest_output.rb
         - spec/fixtures/placeholder_manifest_output.rb
-<<<<<<< HEAD
-=======
         - app/importers/dams_preprocessor.rb
         - app/models/concerns/hydra/access_controls/visibility.rb
->>>>>>> 9525677... Swaps out non-functional prepends to straight overrides. (#1857)
 
 Metrics/ModuleLength:
     Exclude:
