@@ -253,7 +253,7 @@ Hyrax.config do |config|
   # config.lock_retry_count = 600 # Up to 2 minutes of trying at intervals up to 200ms
   #
   # Maximum wait time in milliseconds before retrying. Wait time is a random value between 0 and retry_delay.
-  # config.lock_retry_delay = 200
+  config.lock_retry_delay = 1_000
   #
   # How long to hold the lock in milliseconds
   config.lock_time_to_live = 300_000
