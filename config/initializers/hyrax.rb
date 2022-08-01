@@ -253,10 +253,10 @@ Hyrax.config do |config|
   # config.lock_retry_count = 600 # Up to 2 minutes of trying at intervals up to 200ms
   #
   # Maximum wait time in milliseconds before retrying. Wait time is a random value between 0 and retry_delay.
-  config.lock_retry_delay = 1_000
+  config.lock_retry_delay = 2_000
   #
   # How long to hold the lock in milliseconds
-  config.lock_time_to_live = 300_000
+  config.lock_time_to_live = 450_000
 
   ## Do not alter unless you understand how ActiveFedora handles URI/ID translation
   # config.translate_id_to_uri = lambda do |uri|
