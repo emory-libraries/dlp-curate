@@ -2,10 +2,8 @@
 
 module Bulkrax
   class CsvMatcher < ApplicationMatcher
-
     def result(parser, content)
-      return nil if self.excluded == true || Bulkrax.reserved_properties.include?(self.to)
-      return nil if self.if && (!self.if.is_a?(Array) && self.if.length != 2)
+      return nil if result_nil_rules
 
       if self.if
         return unless content.send(self.if[0], Regexp.new(self.if[1]))
@@ -14,9 +12,9 @@ module Bulkrax
       # @result will evaluate to an empty string for nil content values
       @result = content.to_s.gsub(/\s/, ' ').strip # remove any line feeds and tabs
       process_split if @result.present?
-      @result = @result[0] if @result.is_a?(Array) && @result.size == 1
+      assign_result
       parser.class == Bulkrax::CsvFileSetEntry ? process_fs_parse : process_parse
-      return @result
+      @result
     end
 
     def process_parse
@@ -117,6 +115,15 @@ module Bulkrax
 
         raise "Invalid resource_type value: #{src}" unless matching_term
         matching_term["id"]
+      end
+
+      def result_nil_rules
+        excluded == true || Bulkrax.reserved_properties.include?(to) ||
+          (self.if && (!self.if.is_a?(Array) && self.if.length != 2))
+      end
+
+      def assign_result
+        @result = @result[0] if @result.is_a?(Array) && @result.size == 1
       end
   end
 end
