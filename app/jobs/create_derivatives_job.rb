@@ -2,7 +2,7 @@
 # [Hyrax-overwrite-v3.0.0.pre.rc1] - Adds logger info and warning for bad/missing tmp files L#13-L#20
 
 class CreateDerivativesJob < Hyrax::ApplicationJob
-  queue_as Hyrax.config.ingest_queue_name
+  queue_as :derivatives
 
   # @param [FileSet] file_set
   # @param [String] file_id identifier for a Hydra::PCDM::File

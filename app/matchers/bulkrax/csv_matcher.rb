@@ -2,12 +2,48 @@
 
 module Bulkrax
   class CsvMatcher < ApplicationMatcher
+
+    def result(parser, content)
+      return nil if self.excluded == true || Bulkrax.reserved_properties.include?(self.to)
+      return nil if self.if && (!self.if.is_a?(Array) && self.if.length != 2)
+
+      if self.if
+        return unless content.send(self.if[0], Regexp.new(self.if[1]))
+      end
+
+      # @result will evaluate to an empty string for nil content values
+      @result = content.to_s.gsub(/\s/, ' ').strip # remove any line feeds and tabs
+      process_split if @result.present?
+      @result = @result[0] if @result.is_a?(Array) && @result.size == 1
+      parser.class == Bulkrax::CsvFileSetEntry ? process_fs_parse : process_parse
+      return @result
+    end
+
     def process_parse
       # New parse methods will need to be added here
       parsed_fields = [
         'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
         'format_original', 'content_type', 'rights_statement', 'data_classifications',
         'visibility', 'pcdm_use'
+      ]
+      # This accounts for prefixed matchers
+      parser = parsed_fields.find { |field| to&.include? field }
+
+      if @result.is_a?(Array) && parsed && respond_to?("parse_#{parser}")
+        @result.each_with_index do |res, index|
+          @result[index] = send("parse_#{parser}", res.strip)
+        end
+        @result.delete(nil)
+      elsif parsed && respond_to?("parse_#{parser}")
+        @result = send("parse_#{parser}", @result)
+      end
+    end
+
+    def process_fs_parse
+      # New parse methods will need to be added here
+      parsed_fields = [
+        'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
+        'format_original', 'pcdm_use'
       ]
       # This accounts for prefixed matchers
       parser = parsed_fields.find { |field| to&.include? field }

@@ -1,10 +1,11 @@
 ---
 :queues:
-  - [ingest, 4]
-  - [batch, 2]
-  - [fixity_check_job, 2]
-  - [default, 1]
   - [import, 4]
+  - [ingest, 4]
+  - [batch, 3]
+  - [derivatives, 2]
+  - [default, 2]
+  - [fixity_check_job, 2]
   - [export, 1]
 
 :limits:

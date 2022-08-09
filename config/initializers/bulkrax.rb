@@ -156,7 +156,7 @@ Bulkrax::ObjectFactory.class_eval do
 end
 # rubocop:enable Metrics/BlockLength
 
-Bulkrax::Entry.class_eval do
+Bulkrax::CsvEntry.class_eval do
   def factory
     @factory ||= Bulkrax::ObjectFactory.new(
       attributes:                     parsed_metadata,
