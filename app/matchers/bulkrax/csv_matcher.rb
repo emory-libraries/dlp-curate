@@ -2,6 +2,16 @@
 
 module Bulkrax
   class CsvMatcher < ApplicationMatcher
+    GENERAL_PARSE_FIELDS = [
+      'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
+      'format_original', 'content_type', 'rights_statement', 'data_classifications',
+      'visibility', 'pcdm_use'
+    ].freeze
+    FILE_SET_PARSE_FIELDS = [
+      'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
+      'format_original', 'pcdm_use'
+    ].freeze
+
     def result(parser, content)
       return nil if result_nil_rules
 
@@ -13,38 +23,17 @@ module Bulkrax
       @result = content.to_s.gsub(/\s/, ' ').strip # remove any line feeds and tabs
       process_split if @result.present?
       assign_result
-      parser.class == Bulkrax::CsvFileSetEntry ? process_fs_parse : process_parse
+      if parser.class == Bulkrax::CsvFileSetEntry
+        process_parse(FILE_SET_PARSE_FIELDS)
+      else
+        process_parse(GENERAL_PARSE_FIELDS)
+      end
       @result
     end
 
-    def process_parse
-      # New parse methods will need to be added here
-      parsed_fields = [
-        'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
-        'format_original', 'content_type', 'rights_statement', 'data_classifications',
-        'visibility', 'pcdm_use'
-      ]
+    def process_parse(fields)
       # This accounts for prefixed matchers
-      parser = parsed_fields.find { |field| to&.include? field }
-
-      if @result.is_a?(Array) && parsed && respond_to?("parse_#{parser}")
-        @result.each_with_index do |res, index|
-          @result[index] = send("parse_#{parser}", res.strip)
-        end
-        @result.delete(nil)
-      elsif parsed && respond_to?("parse_#{parser}")
-        @result = send("parse_#{parser}", @result)
-      end
-    end
-
-    def process_fs_parse
-      # New parse methods will need to be added here
-      parsed_fields = [
-        'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
-        'format_original', 'pcdm_use'
-      ]
-      # This accounts for prefixed matchers
-      parser = parsed_fields.find { |field| to&.include? field }
+      parser = fields.find { |field| to&.include? field }
 
       if @result.is_a?(Array) && parsed && respond_to?("parse_#{parser}")
         @result.each_with_index do |res, index|
