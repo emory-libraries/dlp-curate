@@ -256,7 +256,7 @@ Hyrax.config do |config|
   config.lock_retry_delay = 2_000
   #
   # How long to hold the lock in milliseconds
-  config.lock_time_to_live = 450_000
+  config.lock_time_to_live = 240_000
 
   ## Do not alter unless you understand how ActiveFedora handles URI/ID translation
   # config.translate_id_to_uri = lambda do |uri|
