@@ -102,18 +102,18 @@ Bulkrax::ObjectFactory.class_eval do
   #   a reusable module.
   # This method is heavily inspired by Hyrax's AttachFilesToWorkJob
   def create_file_set(attrs)
-    _, work = find_record(attributes[related_parents_parsed_mapping].first, importer_run_id)
-    work_permissions = work.permissions.map(&:to_hash)
+    _, @work = find_record(attributes[related_parents_parsed_mapping].first, importer_run_id)
+    work_permissions = @work.permissions.map(&:to_hash)
     attrs = clean_attrs(attrs)
     file_set_attrs = attrs.slice(*object.attributes.keys)
     object.assign_attributes(file_set_attrs)
 
     num_files = attrs['uploaded_files']&.size
     attrs['uploaded_files'].each_with_index do |uploaded_file_id, ind|
-      uploaded_file = ::Hyrax::UploadedFile.find(uploaded_file_id)
-      next if uploaded_file.file_set_uri.present?
+      @uploaded_file = ::Hyrax::UploadedFile.find(uploaded_file_id)
+      next if @uploaded_file.file_set_uri.present?
 
-      process_uploaded_file(uploaded_file, work, work_permissions, file_set_attrs, ind, num_files)
+      process_uploaded_file(work_permissions, file_set_attrs, ind, num_files)
     end
 
     object.save!
