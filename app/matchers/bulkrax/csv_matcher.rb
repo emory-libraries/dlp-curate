@@ -13,21 +13,13 @@ module Bulkrax
     ].freeze
 
     def result(parser, content)
-      return nil if result_nil_rules
-
-      if self.if
-        return unless content.send(self.if[0], Regexp.new(self.if[1]))
-      end
+      return nil if result_nil_rules(content)
 
       # @result will evaluate to an empty string for nil content values
       @result = content.to_s.gsub(/\s/, ' ').strip # remove any line feeds and tabs
       process_split if @result.present?
       assign_result
-      if parser.class == Bulkrax::CsvFileSetEntry
-        process_parse(FILE_SET_PARSE_FIELDS)
-      else
-        process_parse(GENERAL_PARSE_FIELDS)
-      end
+      choose_parsing_fields(parser)
       @result
     end
 
@@ -106,13 +98,29 @@ module Bulkrax
         matching_term["id"]
       end
 
-      def result_nil_rules
+      def result_nil_rules(content)
         excluded == true || Bulkrax.reserved_properties.include?(to) ||
-          (self.if && (!self.if.is_a?(Array) && self.if.length != 2))
+          check_if_size || check_if_content(content)
+      end
+
+      def check_if_size
+        self.if && (!self.if.is_a?(Array) && self.if.length != 2)
+      end
+
+      def check_if_content(content)
+        self.if && !content.send(self.if[0], Regexp.new(self.if[1]))
       end
 
       def assign_result
         @result = @result[0] if @result.is_a?(Array) && @result.size == 1
+      end
+
+      def choose_parsing_fields(parser)
+        if parser.class == Bulkrax::CsvFileSetEntry
+          process_parse(FILE_SET_PARSE_FIELDS)
+        else
+          process_parse(GENERAL_PARSE_FIELDS)
+        end
       end
   end
 end
