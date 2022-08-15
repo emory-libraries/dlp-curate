@@ -147,6 +147,8 @@ Bulkrax::ObjectFactory.class_eval do
   # rubocop:enable Metrics/ParameterLists
 
   # This overrides the method included in this class by the module Bulkrax::FileFactory.
+  # This is needed so that we can distinguish between preservation_master_file, intermediate_file,
+  # service_file, extracted_text, and transcript (#process_file_types).
   def import_file(path)
     u = Hyrax::UploadedFile.new
     u.user_id = @user.id
@@ -174,6 +176,7 @@ Bulkrax::CsvEntry.class_eval do
 end
 
 Bulkrax::CsvParser.class_eval do
+  # This is the fix present in v4.3.0
   # Retrieve the path where we expect to find the files
   def path_to_files(**args)
     filename = args.fetch(:filename, '')
