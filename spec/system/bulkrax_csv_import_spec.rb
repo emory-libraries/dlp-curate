@@ -3,6 +3,18 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, type: :system do
+  context 'not logged in' do
+    it 'redirects you to login when visiting dashboard ' do
+      visit '/dashboard'
+      expect(page).to have_current_path('/sign_in')
+    end
+
+    it 'redirects you to login when attempting to create new importer ' do
+      visit '/importers/new'
+      expect(page).to have_current_path('/sign_in')
+    end
+  end
+
   context 'logged in user' do
     let(:user_attributes) { { uid: 'test@example.com' } }
     let(:user) { User.new(user_attributes) { |u| u.save(validate: false) } }
