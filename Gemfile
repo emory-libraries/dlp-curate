@@ -21,7 +21,7 @@ gem 'edtf-humanize'
 gem 'honeybadger', '~> 4.0'
 gem 'http'
 gem 'hydra-role-management'
-gem 'hyrax', '3.0.0-rc1'
+gem 'hyrax', '3.4.1'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 gem 'mysql2', '~> 0.5'
@@ -42,7 +42,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows doe
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '~> 4.x'
 gem 'whenever', require: false
-gem 'zizia', '~> 5.3.0'
+gem 'zizia'
 
 group :development do
   gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2'
