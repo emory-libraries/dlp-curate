@@ -17,6 +17,7 @@
       <div id="fileset-id"><strong ><%= t('.file_set_id') %>:</strong> <%= @presenter.id %></div>
       <div id="fileset-category"><strong ><%= t('.file_set_category') %>:</strong> <%= @fileset_use %></div>
       <div id="fileset-parent"><strong><%= t('.is_part_of') %>:</strong> <%= link_to t('.parent_work'), @parent, class: 'btn-link' %></div>
+      <div id="fileset-deduplication-key"><strong>Deduplication Key:</strong> <%= @presenter.deduplication_key&.first %></div>
       <br />
       <table class="table table-striped table-bordered">
         <thead>

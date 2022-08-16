@@ -253,10 +253,10 @@ Hyrax.config do |config|
   # config.lock_retry_count = 600 # Up to 2 minutes of trying at intervals up to 200ms
   #
   # Maximum wait time in milliseconds before retrying. Wait time is a random value between 0 and retry_delay.
-  # config.lock_retry_delay = 200
+  config.lock_retry_delay = 2_000
   #
   # How long to hold the lock in milliseconds
-  # config.lock_time_to_live = 60_000
+  config.lock_time_to_live = 240_000
 
   ## Do not alter unless you understand how ActiveFedora handles URI/ID translation
   # config.translate_id_to_uri = lambda do |uri|
@@ -275,16 +275,7 @@ Hyrax.config do |config|
   # Location where BagIt files should be exported
   # config.bagit_dir = "tmp/descriptions"
 
-  # If browse-everything has been configured, load the configs.  Otherwise, set to nil.
-  begin
-    if defined? BrowseEverything
-      config.browse_everything = BrowseEverything.config
-    else
-      Rails.logger.warn "BrowseEverything is not installed"
-    end
-  rescue Errno::ENOENT
-    config.browse_everything = nil
-  end
+  config.browse_everything = nil
 
   ## Whitelist all directories which can be used to ingest from the local file
   # system.
@@ -311,3 +302,7 @@ Qa::Authorities::Local.register_subauthority('genres', 'Qa::Authorities::Local::
 
 # Geonames username
 Qa::Authorities::Geonames.username = ENV['GEONAMES_USERNAME']
+
+# set bulkrax default work type to first curation_concern if it isn't already set
+
+Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.to_s if Bulkrax.default_work_type.blank?

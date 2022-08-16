@@ -1,12 +1,16 @@
 ---
 :queues:
+  - [import, 4]
   - [ingest, 4]
-  - [batch, 2]
+  - [batch, 3]
+  - [derivatives, 2]
+  - [default, 2]
   - [fixity_check_job, 2]
-  - [default, 1]
+  - [export, 1]
 
 :limits:
   fixity_check_job: 1
+  import: 15
 
 :process_limits:
   fixity_check_job: 1
