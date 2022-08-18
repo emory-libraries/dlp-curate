@@ -99,7 +99,7 @@
               <% @work_entries.each do |e| %>
                 <tr>
                   <td><%= link_to e.identifier, bulkrax.importer_entry_path(@importer.id, e.id) %></td>
-                  <td><%= e.parsed_metadata['title']&.first %></td>
+                  <td><%= e.parsed_metadata['title']&.first if e.parsed_metadata %></td>
                   <td><%= e.id %></td>
                   <% if e.status == "Complete" %>
                     <td><span class="glyphicon glyphicon-ok" style="color: green;"></span> <%= e.status %></td>
@@ -139,7 +139,7 @@
               <% @collection_entries.each do |e| %>
                 <tr>
                   <td><%= link_to e.identifier, bulkrax.importer_entry_path(@importer.id, e.id) %></td>
-                  <td><%= e.parsed_metadata['title']&.first %></td>
+                  <td><%= e.parsed_metadata['title']&.first if e.parsed_metadata %></td>
                   <td><%= e.id %></td>
                   <% if e.status == "Complete" %>
                     <td><span class="glyphicon glyphicon-ok" style="color: green;"></span> <%= e.status %></td>
@@ -179,7 +179,7 @@
               <% @file_set_entries.each do |e| %>
                 <tr>
                   <td><%= link_to e.identifier, bulkrax.importer_entry_path(@importer.id, e.id) %></td>
-                  <td><%= e.parsed_metadata['title']&.first %></td>
+                  <td><%= e.parsed_metadata['title']&.first if e.parsed_metadata %></td>
                   <td><%= e.id %></td>
                   <% if e.status == "Complete" %>
                     <td><span class="glyphicon glyphicon-ok" style="color: green;"></span> <%= e.status %></td>
