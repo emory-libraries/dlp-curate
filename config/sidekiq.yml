@@ -10,7 +10,7 @@
 
 :limits:
   fixity_check_job: 1
-  import: 15
+  import: 10
 
 :process_limits:
   fixity_check_job: 1
