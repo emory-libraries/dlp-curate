@@ -173,7 +173,7 @@ module Hyrax
     end
 
     ##
-    # @return [#to_s, nil] a download path for the banner file
+    # @return [String, nil] a download path for the banner file
     def banner_file
       banner = CollectionBrandingInfo.find_by(collection_id: id, role: "banner")
       "/" + banner.local_path.split("/")[-4..-1].join("/") if banner
