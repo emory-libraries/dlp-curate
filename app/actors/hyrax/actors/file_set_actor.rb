@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-overwrite-v3.4.1]
 
 module Hyrax
   module Actors
@@ -8,9 +8,10 @@ module Hyrax
     class FileSetActor
       include Lockable
       include PreservationEvents
-      attr_reader :file_set, :user, :attributes
+      attr_reader :file_set, :user, :attributes, :use_valkyrie
 
-      def initialize(file_set, user)
+      def initialize(file_set, user, use_valkyrie: false)
+        @use_valkyrie = use_valkyrie
         @file_set = file_set
         @user = user
       end
@@ -34,10 +35,9 @@ module Hyrax
           # reach into the FileActor and run the ingest with the file instance in
           # hand. Do this because we don't have the underlying UploadedFile instance
           file_actor.ingest_file(wrapper!(file: file, relation: relation, preferred: preferred))
-          # Copy visibility and permissions from parent (work) to
-          # FileSets even if they come in from BrowseEverything
-          VisibilityCopyJob.perform_later(file_set.parent)
-          InheritPermissionsJob.perform_later(file_set.parent)
+          parent = parent_for(file_set: file_set)
+          VisibilityCopyJob.perform_later(parent)
+          InheritPermissionsJob.perform_later(parent)
         else
           IngestJob.perform_later(io_wrapper)
         end
@@ -55,7 +55,6 @@ module Hyrax
       def update_content(file, preferred, relation = :preservation_master_file)
         IngestJob.perform_later(wrapper!(file: file, relation: relation, preferred: preferred), notification: true)
       end
-
       # @!endgroup
 
       # Adds the appropriate metadata, visibility and relationships to file_set
@@ -78,32 +77,34 @@ module Hyrax
         yield(file_set) if block_given?
       end
 
-      # Adds a FileSet to the work using ore:Aggregations.
       # Locks to ensure that only one process is operating on the list at a time.
       def attach_to_work(work, file_set_params = {})
         acquire_lock_for(work.id) do
           # Ensure we have an up-to-date copy of the members association, so that we append to the end of the list.
-          work.reload unless work.new_record?
-          file_set.visibility = work.visibility unless assign_visibility?(file_set_params)
-
-          work.representative = file_set if work.representative_id.blank?
-          work.thumbnail = file_set if work.thumbnail_id.blank?
-
-          # Save the work so the association between the work and the file_set is persisted (head_id)
-          # NOTE: the work may not be valid, in which case this save doesn't do anything.
-          work.save
-          Hyrax.config.callback.run(:after_create_fileset, file_set, user)
+          attach_to_af_work(work, file_set_params)
+          Hyrax.config.callback.run(:after_create_fileset, file_set, user, warn: false)
         end
       end
       alias attach_file_to_work attach_to_work
       deprecation_deprecate attach_file_to_work: "use attach_to_work instead"
+
+      # Adds a FileSet to the work using ore:Aggregations.
+      def attach_to_af_work(work, file_set_params)
+        work.reload unless work.new_record?
+        file_set.visibility = work.visibility unless assign_visibility?(file_set_params)
+        work.representative = file_set if work.representative_id.blank?
+        work.thumbnail = file_set if work.thumbnail_id.blank?
+        # Save the work so the association between the work and the file_set is persisted (head_id)
+        # NOTE: the work may not be valid, in which case this save doesn't do anything.
+        work.save
+      end
 
       # @param [String] revision_id the revision to revert to
       # @param [Symbol, #to_sym] relation
       # @return [Boolean] true on success, false otherwise
       def revert_content(revision_id, relation = :original_file)
         return false unless build_file_actor(relation).revert_to(revision_id)
-        Hyrax.config.callback.run(:after_revert_content, file_set, user, revision_id)
+        Hyrax.config.callback.run(:after_revert_content, file_set, user, revision_id, warn: false)
         true
       end
 
@@ -115,7 +116,7 @@ module Hyrax
       def destroy
         unlink_from_work
         file_set.destroy
-        Hyrax.config.callback.run(:after_destroy, file_set.id, user)
+        Hyrax.config.callback.run(:after_destroy, file_set.id, user, warn: false)
       end
 
       class_attribute :file_actor_class
@@ -127,8 +128,14 @@ module Hyrax
           @ability ||= ::Ability.new(user)
         end
 
+        # @param file_set [FileSet]
+        # @return [ActiveFedora::Base]
+        def parent_for(file_set:)
+          file_set.parent
+        end
+
         def build_file_actor(relation)
-          file_actor_class.new(file_set, relation, user)
+          file_actor_class.new(file_set, relation, user, use_valkyrie: false)
         end
 
         # uses create! because object must be persisted to serialize for jobs
@@ -142,14 +149,15 @@ module Hyrax
         # @note This is only useful for labeling the file_set, because of the recourse to import_url
         def label_for(file)
           if file.is_a?(Hyrax::UploadedFile) # filename not present for uncached remote file!
-            file.uploader.filename.presence || File.basename(Addressable::URI.parse(file.file_url).path)
+            file.uploader.filename.presence || File.basename(Addressable::URI.unencode(file.file_url))
           elsif file.respond_to?(:original_name) # e.g. Hydra::Derivatives::IoDecorator
             file.original_name
           elsif file_set.import_url.present?
             # This path is taken when file is a Tempfile (e.g. from ImportUrlJob)
-            File.basename(Addressable::URI.parse(file_set.import_url).path)
+            File.basename(Addressable::URI.unencode(file.file_url))
+          elsif file.respond_to?(:original_filename) # e.g. Rack::Test::UploadedFile
+            file.original_filename
           else
-            # Convert to string since Hyrax::UploadedFileUploader object is passed and not raw file
             File.basename(file.to_s)
           end
         end
@@ -168,7 +176,7 @@ module Hyrax
         # Although ActiveFedora clears the children nodes it leaves those fields in Solr populated.
         # rubocop:disable Metrics/CyclomaticComplexity
         def unlink_from_work
-          work = file_set.parent
+          work = parent_for(file_set: file_set)
           return unless work && (work.thumbnail_id == file_set.id || work.representative_id == file_set.id || work.rendering_ids.include?(file_set.id))
           work.thumbnail = nil if work.thumbnail_id == file_set.id
           work.representative = nil if work.representative_id == file_set.id
