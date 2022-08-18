@@ -64,9 +64,10 @@ class CatalogController < ApplicationController
     config.add_facet_field 'human_readable_rights_statement_ssim', label: 'Rights Status'
     config.add_facet_field 'visibility_group_ssi', label: 'Access'
 
-    # The generic_type isn't displayed on the facet list
-    # It's used to give a label to the filter that comes from the user profile
+    # The generic_type and depositor are not displayed on the facet list
+    # They are used to give a label to the filters that comes from the user profile
     config.add_facet_field solr_name("generic_type", :facetable), if: false
+    config.add_facet_field "depositor_ssim", label: "Depositor", if: false
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
