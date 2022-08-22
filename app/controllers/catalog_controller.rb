@@ -6,6 +6,8 @@ class CatalogController < ApplicationController
 
   # This filter applies the hydra access controls
   before_action :enforce_show_permissions, only: :show
+  # Allow all search options when in read-only mode
+  skip_before_action :check_read_only
 
   def self.uploaded_field
     solr_name('system_create', :stored_sortable, type: :date)
@@ -27,6 +29,10 @@ class CatalogController < ApplicationController
     # Show gallery view
     config.view.gallery.partials = [:index_header, :index]
     config.view.slideshow.partials = [:index]
+
+    # Because too many times on Samvera tech people raise a problem regarding a failed query to SOLR.
+    # Often, it's because they inadvertently exceeded the character limit of a GET request.
+    config.http_method = :post
 
     ## Default parameters to send to solr for all search-like requests. See also SolrHelper#solr_search_params
     config.default_solr_params = {
@@ -58,9 +64,10 @@ class CatalogController < ApplicationController
     config.add_facet_field 'human_readable_rights_statement_ssim', label: 'Rights Status'
     config.add_facet_field 'visibility_group_ssi', label: 'Access'
 
-    # The generic_type isn't displayed on the facet list
-    # It's used to give a label to the filter that comes from the user profile
+    # The generic_type and depositor are not displayed on the facet list
+    # They are used to give a label to the filters that comes from the user profile
     config.add_facet_field solr_name("generic_type", :facetable), if: false
+    config.add_facet_field "depositor_ssim", label: "Depositor", if: false
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
