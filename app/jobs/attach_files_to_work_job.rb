@@ -27,7 +27,6 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       work, work_permissions = create_permissions work, depositor
       uploaded_files.each do |uploaded_file|
         next if uploaded_file.file_set_uri.present?
-
         attach_work(user, work, work_attributes, work_permissions, uploaded_file)
       end
     end
