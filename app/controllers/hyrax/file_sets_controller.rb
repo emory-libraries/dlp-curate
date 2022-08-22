@@ -1,8 +1,11 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-overwrite-v3.4.1]
+# Note: if issues occur with this controller, try removing all guard_for_workflow_restriction_on! calls.
 
 module Hyrax
   class FileSetsController < ApplicationController # rubocop:disable Metrics/ClassLength
+    rescue_from WorkflowAuthorizationException, with: :render_unavailable
+
     include Blacklight::Base
     include Blacklight::AccessControls::Catalog
     include Hyrax::Breadcrumbs
@@ -17,6 +20,10 @@ module Hyrax
 
     helper_method :curation_concern
     copy_blacklight_config_from(::CatalogController)
+    # Define collection specific filter facets.
+    configure_blacklight do |config|
+      config.search_builder_class = Hyrax::FileSetSearchBuilder
+    end
 
     class_attribute :show_presenter, :form_class
     self.show_presenter = Curate::FileSetPresenter
@@ -41,6 +48,8 @@ module Hyrax
 
     # GET /concern/parent/:parent_id/file_sets/:id
     def show
+      guard_for_workflow_restriction_on!(parent: parent(file_set: presenter))
+
       @parent = main_app.polymorphic_path(presenter.parent)
       @fileset_use = presenter.pcdm_use.first unless presenter.pcdm_use.nil?
       files
@@ -55,21 +64,25 @@ module Hyrax
         @display_use = 'preservation_master_file'
       end
       respond_to do |wants|
-        wants.html { presenter }
-        wants.json { presenter }
+        wants.html
+        wants.json
         additional_response_formats(wants)
       end
     end
 
     # DELETE /concern/file_sets/:id
     def destroy
-      parent = curation_concern.parent
+      guard_for_workflow_restriction_on!(parent: parent)
+
       actor.destroy
-      redirect_to [main_app, parent], notice: view_context.t('hyrax.file_sets.asset_deleted_flash.message')
+      redirect_to [main_app, parent],
+                  notice: view_context.t('hyrax.file_sets.asset_deleted_flash.message')
     end
 
     # PATCH /concern/file_sets/:id
     def update
+      guard_for_workflow_restriction_on!(parent: parent)
+
       if attempt_update
         after_update_response
       else
@@ -91,10 +104,32 @@ module Hyrax
 
     private
 
-      # this is provided so that implementing application can override this behavior and map params to different attributes
+      ##
+      # @api public
+      #
+      # @note this is provided so that implementing application can override this
+      #   behavior and map params to different attributes
       def update_metadata
-        file_attributes = form_class.model_attributes(attributes)
-        actor.update_metadata(file_attributes)
+        case file_set
+        when Hyrax::Resource
+          change_set = Hyrax::Forms::ResourceForm.for(file_set)
+
+          change_set.validate(attributes) &&
+            transactions['change_set.apply'].call(change_set).value_or { false }
+        else
+          file_attributes = form_class.model_attributes(attributes)
+          actor.update_metadata(file_attributes)
+        end
+      end
+
+      def parent(file_set: curation_concern)
+        @parent ||=
+          case file_set
+          when Hyrax::Resource
+            Hyrax.query_service.find_parents(resource: file_set).first
+          else
+            file_set.parent
+          end
       end
 
       def attempt_update
@@ -102,11 +137,20 @@ module Hyrax
           actor.revert_content(params[:revision])
         elsif params.key?(:file_set)
           if params[:file_set].key?(:files)
-            actor.update_content(params[:file_set][:files].first, @file_set.preferred_file)
+            actor.update_content(uploaded_file_from_path, @file_set.preferred_file)
           else
             update_metadata
           end
+        elsif params.key?(:files_files) # version file already uploaded with ref id in :files_files array
+          uploaded_files = Array(Hyrax::UploadedFile.find(params[:files_files]))
+          actor.update_content(uploaded_files.first, @file_set.preferred_file)
+          update_metadata
         end
+      end
+
+      def uploaded_file_from_path
+        uploaded_file = CarrierWave::SanitizedFile.new(params[:file_set][:files].first)
+        Hyrax::UploadedFile.create(user_id: current_user.id, file: uploaded_file)
       end
 
       def after_update_response
@@ -142,21 +186,27 @@ module Hyrax
         when 'edit'
           add_breadcrumb I18n.t("hyrax.file_set.browse_view"), main_app.hyrax_file_set_path(params["id"])
         when 'show'
-          add_breadcrumb presenter.parent.to_s, main_app.polymorphic_path(presenter.parent)
+          add_breadcrumb presenter.parent.to_s, main_app.polymorphic_path(presenter.parent) if presenter.parent.present?
           add_breadcrumb presenter.to_s, main_app.polymorphic_path(presenter)
         end
       end
 
-      # Override of Blacklight::RequestBuilders
-      def search_builder_class
-        Hyrax::FileSetSearchBuilder
+      def initialize_edit_form
+        guard_for_workflow_restriction_on!(parent: parent)
+
+        @version_list = Hyrax::VersionListPresenter.for(file_set: @file_set)
+        @groups = current_user.groups
       end
 
-      def initialize_edit_form
-        @parent = @file_set.in_objects.first
-        original = @file_set.original_file
-        @version_list = Hyrax::VersionListPresenter.new(original ? original.versions.all : [])
-        @groups = current_user.groups
+      include WorkflowsHelper # Provides #workflow_restriction?, and yes I mean include not helper; helper exposes the module methods
+      # @param parent [Hyrax::WorkShowPresenter, GenericWork, #suppressed?] an
+      #        object on which we check if the current can take action.
+      #
+      # @return true if we did not encounter any workflow restrictions
+      # @raise WorkflowAuthorizationException if we encountered some workflow_restriction
+      def guard_for_workflow_restriction_on!(parent:)
+        return true unless workflow_restriction?(parent, ability: current_ability)
+        raise WorkflowAuthorizationException
       end
 
       def actor
@@ -169,11 +219,23 @@ module Hyrax
 
       def presenter
         @presenter ||= begin
-          _, document_list = search_results(params)
-          curation_concern = document_list.first
-          raise CanCan::AccessDenied unless curation_concern
-          show_presenter.new(curation_concern, current_ability, request)
-        end
+                         presenter = show_presenter.new(curation_concern_document, current_ability, request)
+                         raise WorkflowAuthorizationException if presenter.parent.blank?
+                         presenter
+                       end
+      end
+
+      def curation_concern_document
+        # Query Solr for the collection.
+        # run the solr query to find the collection members
+        response, _docs = single_item_search_service.search_results
+        curation_concern = response.documents.first
+        raise CanCan::AccessDenied unless curation_concern
+        curation_concern
+      end
+
+      def single_item_search_service
+        Hyrax::SearchService.new(config: blacklight_config, user_params: params.except(:q, :page), scope: self, search_builder_class: search_builder_class)
       end
 
       def wants_to_revert?
@@ -197,6 +259,36 @@ module Hyrax
                    'dashboard'
                  end
         File.join(theme, layout)
+      end
+
+      # rubocop:disable Metrics/MethodLength
+      def render_unavailable
+        message = I18n.t("hyrax.workflow.unauthorized_parent")
+        respond_to do |wants|
+          wants.html do
+            unavailable_presenter
+            flash[:notice] = message
+            render 'unavailable', status: :unauthorized
+          end
+          wants.json do
+            render plain: message, status: :unauthorized
+          end
+          additional_response_formats(wants)
+          wants.ttl do
+            render plain: message, status: :unauthorized
+          end
+          wants.jsonld do
+            render plain: message, status: :unauthorized
+          end
+          wants.nt do
+            render plain: message, status: :unauthorized
+          end
+        end
+      end
+      # rubocop:enable Metrics/MethodLength
+
+      def unavailable_presenter
+        @presenter ||= show_presenter.new(::SolrDocument.find(params[:id]), current_ability, request)
       end
 
       def set_file_set
