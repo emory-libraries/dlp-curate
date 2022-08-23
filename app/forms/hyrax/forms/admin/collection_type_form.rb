@@ -14,8 +14,7 @@ module Hyrax
         delegate :title, :description, :brandable, :discoverable, :nestable, :sharable,
                  :share_applies_to_new_works, :require_membership, :allow_multiple_membership,
                  :assigns_workflow, :assigns_visibility, :id, :collection_type_participants,
-                 :persisted?, :admin_set?, :user_collection?, :badge_color,
-                 :deposit_only_collection,
+                 :persisted?, :admin_set?, :user_collection?, :badge_color, :deposit_only_collection,
                  to: :collection_type
 
         ##
