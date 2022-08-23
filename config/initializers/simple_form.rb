@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# [Hyrax-overwrite-v3.4.1]
 # NOTE: This is a modified version of simple_form's default config file.
 #       The only changes were to move the input to after the hint and error.
 
