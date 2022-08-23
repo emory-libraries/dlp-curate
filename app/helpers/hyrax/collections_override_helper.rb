@@ -22,7 +22,7 @@ module Hyrax
         collection_links << link
         collection_links << ', ' unless links[n + 1].nil?
       end
-      content_tag :span, safe_join([t('hyrax.collection.is_part_of'), ': '] + collection_links)
+      tag.span safe_join([t('hyrax.collection.is_part_of'), ': '] + collection_links)
     end
     # rubocop:enable Rails/ContentTag
   end
