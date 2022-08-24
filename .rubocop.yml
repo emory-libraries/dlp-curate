@@ -22,6 +22,10 @@ Layout/IndentationConsistency:
 RSpec/MessageSpies:
     EnforcedStyle: receive
 
+Lint/DuplicateMethods:
+    Exclude:
+        - app/search_builders/hyrax/collection_member_search_builder.rb
+
 Lint/NonLocalExitFromIterator:
     Exclude:
         - app/importers/collection_permission_ensurer.rb
