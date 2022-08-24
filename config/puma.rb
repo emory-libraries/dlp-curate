@@ -17,6 +17,8 @@ port        ENV.fetch("PORT") { 3000 }
 #
 environment ENV.fetch("RAILS_ENV") { "development" }
 
+# pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
+
 # Specifies the number of `workers` to boot in clustered mode.
 # Workers are forked webserver processes. If using threads and workers together
 # the concurrency of the application would be max `threads` * `workers`.
@@ -36,7 +38,7 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 
 # If you are preloading your application and using Active Record, it's
 # recommended that you close any connections to the database before workers
-# are forked to prevent connection leakage.
+# are forked to   revent connection leakage.
 #
 # before_fork do
 #   ActiveRecord::Base.connection_pool.disconnect! if defined?(ActiveRecord)
