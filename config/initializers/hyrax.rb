@@ -10,7 +10,7 @@ Hyrax.config do |config|
   #   registry.add(name: 'captaining', description: 'For those that really like the front lines')
   # end
 
-  config.collection_class = ::Collection
+  config.collection_model = ::Collection
   config.fixity_service = Hyrax::Fixity::ActiveFedoraFixityService
 
   # When an admin set is created, we need to activate a workflow.
