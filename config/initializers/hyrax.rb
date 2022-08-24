@@ -12,7 +12,6 @@ Hyrax.config do |config|
 
   config.admin_set_model = 'AdminSet'
   config.collection_model = '::Collection'
-  config.fixity_service = 'Hyrax::Fixity::ActiveFedoraFixityService'
 
   # When an admin set is created, we need to activate a workflow.
   # The :default_active_workflow_name is the name of the workflow we will activate.
