@@ -38,7 +38,7 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 
 # If you are preloading your application and using Active Record, it's
 # recommended that you close any connections to the database before workers
-# are forked to   revent connection leakage.
+# are forked to prevent connection leakage.
 #
 # before_fork do
 #   ActiveRecord::Base.connection_pool.disconnect! if defined?(ActiveRecord)
