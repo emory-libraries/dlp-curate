@@ -79,4 +79,22 @@ RSpec.describe Curate::CollectionType, :clean, type: :model do
     expect(collection_type.assigns_workflow?).to eq false
     expect(collection_type.assigns_visibility?).to eq false
   end
+
+  describe ".any_nestable?" do
+    context "when there is a nestable collection type" do
+      it 'returns true' do
+        collection_type.save
+
+        expect(described_class.any_nestable?).to be true
+      end
+    end
+
+    context "when there are no nestable collection types" do
+      let!(:collection_type) { described_class.create(nestable: false) }
+
+      it 'returns false' do
+        expect(described_class.any_nestable?).to be false
+      end
+    end
+  end
 end

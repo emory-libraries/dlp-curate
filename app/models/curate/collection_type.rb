@@ -3,6 +3,7 @@
 module Curate
   class CollectionType < Hyrax::CollectionType
     USER_COLLECTION_DEFAULT_TITLE = 'Library Collection'
+    after_initialize :configure
 
     # If a Curate::CollectionType already exists, ensure it adheres to expectations and return it.
     # Otherwise, make a new one and return that.
@@ -14,11 +15,6 @@ module Curate
       end
       new_library_collection_type = Curate::CollectionType.new
       new_library_collection_type
-    end
-
-    def initialize
-      super
-      configure
     end
 
     def configure
@@ -42,6 +38,11 @@ module Curate
       h.agent_id = "admin"
       h.access = "manage"
       h.save
+    end
+
+    # @return [Boolean] True if there is at least one collection type that has nestable? true
+    def self.any_nestable?
+      any? {|ct| ct.nestable}
     end
   end
 end
