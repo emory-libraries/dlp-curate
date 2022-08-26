@@ -42,7 +42,7 @@ module Curate
 
     # @return [Boolean] True if there is at least one collection type that has nestable? true
     def self.any_nestable?
-      any? {|ct| ct.nestable}
+      any?(&:nestable)
     end
   end
 end

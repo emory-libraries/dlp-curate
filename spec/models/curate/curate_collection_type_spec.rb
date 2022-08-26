@@ -90,7 +90,7 @@ RSpec.describe Curate::CollectionType, :clean, type: :model do
     end
 
     context "when there are no nestable collection types" do
-      let!(:collection_type) { described_class.create(nestable: false) }
+      let(:collection_type) { described_class.create(nestable: false) }
 
       it 'returns false' do
         expect(described_class.any_nestable?).to be false

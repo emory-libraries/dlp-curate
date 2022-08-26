@@ -7,7 +7,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
 
   shared_context 'with a collection' do
     let(:collection_type) { FactoryBot.create(:collection_type) }
-    let!(:collection) { FactoryBot.create(:collection_lw, collection_type_gid: collection_type.to_global_id) }
+    let(:collection) { FactoryBot.create(:collection_lw, collection_type_gid: collection_type.to_global_id) }
   end
 
   describe '.collection_type_settings_methods' do
@@ -68,16 +68,16 @@ RSpec.describe Hyrax::CollectionType, type: :model do
   end
 
   describe ".find_or_create_default_collection_type" do
-    subject { described_class.find_or_create_default_collection_type }
+    subject(:default_collection_type) { described_class.find_or_create_default_collection_type }
 
     it 'creates a default collection type' do
       expect(Hyrax::CollectionTypes::CreateService).to receive(:create_collection_type)
-      subject
+      default_collection_type
     end
   end
 
   describe ".gids_that_do_not_allow_multiple_membership" do
-    let!(:type_allows_multiple_membership) { FactoryBot.create(:collection_type, allow_multiple_membership: true) }
+    let(:type_allows_multiple_membership) { FactoryBot.create(:collection_type, allow_multiple_membership: true) }
     let!(:type_disallows_multiple_membership) { FactoryBot.create(:collection_type, allow_multiple_membership: false) }
 
     it 'lists the single membership gids' do
@@ -87,13 +87,13 @@ RSpec.describe Hyrax::CollectionType, type: :model do
   end
 
   describe ".find_or_create_admin_set_type" do
-    subject { described_class.find_or_create_admin_set_type }
+    subject(:admin_collection_type) { described_class.find_or_create_admin_set_type }
 
     it 'creates admin set collection type' do
       machine_id = described_class::ADMIN_SET_MACHINE_ID
       title = described_class::ADMIN_SET_DEFAULT_TITLE
       expect(Hyrax::CollectionTypes::CreateService).to receive(:create_collection_type).with(machine_id: machine_id, title: title, options: anything)
-      subject
+      admin_collection_type
     end
   end
 
