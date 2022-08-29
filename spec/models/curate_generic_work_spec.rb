@@ -788,12 +788,15 @@ RSpec.describe CurateGenericWork do
     end
 
     context "with a CurateGenericWork work that has data_collection_dates" do
-      subject do
+      subject(:saved_data_collection_dates) do
         described_class.create.tap do |cgw|
           cgw.data_collection_dates = data_collection_dates
         end
       end
-      its(:data_collection_dates) { is_expected.to eq data_collection_dates }
+
+      it 'is expected to be parsed to display date and time' do
+        expect(saved_data_collection_dates.data_collection_dates.first).to eq 'Fri, 30 Mar 2018 00:00:00 +0000'
+      end
     end
   end
 
