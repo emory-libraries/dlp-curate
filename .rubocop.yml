@@ -157,6 +157,7 @@ RSpec/MessageChain:
 
 RSpec/AnyInstance:
     Exclude:
+        - spec/controllers/hyrax/file_sets_controller_spec.rb
         - spec/jobs/associate_filesets_with_work_job_spec.rb
         - spec/models/job_io_wrapper_spec.rb
         - spec/views/manifest/manifest.json.jbuilder_spec.rb
@@ -164,6 +165,10 @@ RSpec/AnyInstance:
 RSpec/LetSetup:
     Exclude:
         - spec/presenters/collection_presenter_spec.rb
+
+RSpec/VerifiedDoubles:
+    Exclude:
+        - spec/controllers/hyrax/file_sets_controller_spec.rb
 
 Naming/PredicateName:
     Exclude:
