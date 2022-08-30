@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-overwrite-v3.4.1]
 require 'rails_helper'
 require_relative '../../support/response_matchers.rb'
 
@@ -9,20 +9,12 @@ RSpec.describe Hyrax::FileSetsController, :clean do
   let(:actor) { controller.send(:actor) }
 
   context "when signed in" do
-    before do
-      sign_in user
-    end
+    before { sign_in user }
 
     describe "#destroy" do
       context "file_set with a parent" do
-        let(:file_set) do
-          FactoryBot.create(:file_set, user: user)
-        end
-        let(:work) do
-          FactoryBot.create(:work, title: ['test title'], user: user)
-        end
-
-        let(:delete_message) { instance_double('delete message') }
+        let(:file_set) { FactoryBot.create(:file_set, user: user) }
+        let(:work) { FactoryBot.create(:work, title: ['test title'], user: user) }
 
         before do
           work.ordered_members << file_set
@@ -31,18 +23,20 @@ RSpec.describe Hyrax::FileSetsController, :clean do
 
         it "deletes the file" do
           expect(ContentDeleteEventJob).to receive(:perform_later).with(file_set.id, user)
-          expect do
-            delete :destroy, params: { id: file_set }
-          end.to change { FileSet.exists?(file_set.id) }.from(true).to(false)
+
+          expect { delete :destroy, params: { id: file_set } }
+            .to change { FileSet.exists?(file_set.id) }
+            .from(true)
+            .to(false)
+
           expect(response).to redirect_to main_app.hyrax_curate_generic_work_path(work, locale: 'en')
         end
       end
     end
 
     describe "#edit" do
-      let(:parent) do
-        FactoryBot.create(:work, :public, user: user)
-      end
+      let(:parent) { FactoryBot.create(:work, :public, user: user) }
+
       let(:file_set) do
         FactoryBot.create(:file_set, user: user).tap do |file_set|
           parent.ordered_members << file_set
@@ -56,14 +50,26 @@ RSpec.describe Hyrax::FileSetsController, :clean do
         request.env['HTTP_REFERER'] = 'http://test.host/foo'
       end
 
-      xit "sets the breadcrumbs and versions presenter" do
-        expect(controller).to receive(:add_breadcrumb).with('Home', Hyrax::Engine.routes.url_helpers.root_path(locale: 'en'))
-        expect(controller).to receive(:add_breadcrumb).with(I18n.t('hyrax.dashboard.title'), Hyrax::Engine.routes.url_helpers.dashboard_path(locale: 'en'))
-        expect(controller).to receive(:add_breadcrumb).with(I18n.t('hyrax.dashboard.my.works'), Hyrax::Engine.routes.url_helpers.my_works_path(locale: 'en'))
-        expect(controller).to receive(:add_breadcrumb).with(I18n.t('hyrax.file_set.browse_view'), Rails.application.routes.url_helpers.hyrax_file_set_path(file_set, locale: 'en'))
+      it "sets the breadcrumbs and versions presenter" do
+        app_helpers    = Rails.application.routes.url_helpers
+        engine_helpers = Hyrax::Engine.routes.url_helpers
+
+        expect(controller)
+          .to receive(:add_breadcrumb)
+          .with('Home', Hyrax::Engine.routes.url_helpers.root_path(locale: 'en'))
+        expect(controller)
+          .to receive(:add_breadcrumb)
+          .with(I18n.t('hyrax.dashboard.title'), engine_helpers.dashboard_path(locale: 'en'))
+        expect(controller)
+          .to receive(:add_breadcrumb)
+          .with(I18n.t('hyrax.dashboard.my.works'), engine_helpers.my_works_path(locale: 'en'))
+        expect(controller)
+          .to receive(:add_breadcrumb)
+          .with(I18n.t('hyrax.file_set.browse_view'), app_helpers.hyrax_file_set_path(file_set, locale: 'en'))
+
         get :edit, params: { id: file_set }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns[:file_set]).to eq file_set
         expect(assigns[:version_list]).to be_kind_of Hyrax::VersionListPresenter
         expect(assigns[:parent]).to eq parent
@@ -73,32 +79,48 @@ RSpec.describe Hyrax::FileSetsController, :clean do
     end
 
     describe "#update" do
+      let(:parent) { FactoryBot.create(:work, :public, user: user) }
+
       let(:file_set) do
-        FactoryBot.create(:file_set, user: user)
+        FactoryBot.create(:file_set, user: user, title: ['test title']).tap do |file_set|
+          parent.ordered_members << file_set
+          parent.save!
+        end
       end
 
       context "when updating metadata" do
         it "spawns a content update event job" do
-          expect(ContentUpdateEventJob).to receive(:perform_later).with(file_set, user)
-          post :update, params: {
-            id:       file_set,
-            file_set: {
-              title:                  ['new_title'],
-              keyword:                [''],
-              permissions_attributes: [{ type:   'person',
-                                         name:   'archivist1',
-                                         access: 'edit' }]
+          expect do
+            post :update, params: {
+              id: file_set,
+              file_set: {
+                title: ['new_title'],
+                keyword: [''],
+                permissions_attributes: [{ type: 'person',
+                                           name: 'archivist1',
+                                           access: 'edit' }]
+              }
             }
-          }
-          expect(response).to redirect_to main_app.hyrax_file_set_path(file_set, locale: 'en')
+          end.to have_enqueued_job(ContentUpdateEventJob).exactly(:once)
+
+          expect(response)
+            .to redirect_to main_app.hyrax_file_set_path(file_set, locale: 'en')
+          expect(assigns[:file_set].modified_date)
+            .not_to be file_set.modified_date
         end
       end
 
-      context "when updating the attached file" do
+      context "when updating the attached file direct upload" do
         let(:actor) { double }
+        let(:uploader) { double }
+        let(:fake_file) { double }
 
         before do
           allow(Hyrax::Actors::FileActor).to receive(:new).and_return(actor)
+          allow_any_instance_of(Hyrax::UploadedFile).to receive(:uploader).and_return(uploader)
+          allow(uploader).to receive(:path).and_return(anything())
+          allow_any_instance_of(JobIoWrapper).to receive(:file).and_return(fake_file)
+          allow(fake_file).to receive(:path).and_return('a/path')
         end
 
         it "spawns a ContentNewVersionEventJob", perform_enqueued: [IngestJob] do
@@ -107,6 +129,37 @@ RSpec.describe Hyrax::FileSetsController, :clean do
           file = fixture_file_upload('/world.png', 'image/png')
           post :update, params: { id: file_set, filedata: file, file_set: { keyword: [''], permissions_attributes: [{ type: 'person', name: 'archivist1', access: 'edit' }] } }
           post :update, params: { id: file_set, file_set: { files: [file], keyword: [''], permissions_attributes: [{ type: 'person', name: 'archivist1', access: 'edit' }] } }
+        end
+      end
+
+      context "when updating the attached file already uploaded" do
+        let(:actor) { double(Hyrax::Actors::FileActor) }
+
+        before do
+          allow(Hyrax::Actors::FileActor).to receive(:new).and_return(actor)
+        end
+
+        it "spawns a ContentNewVersionEventJob", perform_enqueued: [IngestJob] do
+          expect(actor)
+            .to receive(:ingest_file)
+            .with(JobIoWrapper)
+            .and_return(true)
+          expect(ContentNewVersionEventJob)
+            .to receive(:perform_later)
+            .with(file_set, user)
+
+          file = fixture_file_upload('/world.png', 'image/png')
+          allow(Hyrax::UploadedFile)
+            .to receive(:find)
+            .with(["1"])
+            .and_return([file])
+
+          post :update, params: { id: file_set, files_files: ["1"] }
+
+          expect(assigns[:file_set].modified_date)
+            .not_to be file_set.modified_date
+          expect(assigns[:file_set].title)
+            .to contain_exactly(*file_set.title)
         end
       end
 
@@ -141,14 +194,13 @@ RSpec.describe Hyrax::FileSetsController, :clean do
               expect(restored_content.original_name).to eq file1
               expect(versions.all.count).to eq 3
               expect(versions.last.label).to eq latest_version.label
-              expect(Hyrax::VersionCommitter.where(version_id: versions.last.uri).pluck(:committer_login)).to eq [user.user_key]
+              expect(Hyrax::VersionCommitter.where(version_id: versions.last.uri).pluck(:committer_login))
+                .to eq [user.user_key]
             end
           end
 
           context "as a user without edit access" do
-            before do
-              sign_in second_user
-            end
+            before { sign_in second_user }
 
             it "is unauthorized" do
               post :update, params: { id: file_set, revision: version1 }
@@ -170,13 +222,15 @@ RSpec.describe Hyrax::FileSetsController, :clean do
                       ] }
         }
 
-        expect(assigns[:file_set].read_groups).to eq ["group1"]
-        expect(assigns[:file_set].edit_users).to include("user1", user.user_key)
+        expect(assigns[:file_set])
+          .to have_attributes(read_groups: contain_exactly("group1"),
+                              edit_users: include("user1", user.user_key))
       end
 
       it "updates existing groups and users" do
         file_set.edit_groups = ['group3']
         file_set.save
+
         post :update, params: {
           id:       file_set,
           file_set: { keyword:                [''],
@@ -185,17 +239,21 @@ RSpec.describe Hyrax::FileSetsController, :clean do
                       ] }
         }
 
-        expect(assigns[:file_set].read_groups).to eq(["group3"])
+        expect(assigns[:file_set].read_groups).to contain_exactly("group3")
       end
 
       context "when there's an error saving" do
+        let(:parent) { FactoryBot.create(:work, :public, user: user) }
+
         let(:file_set) do
-          FactoryBot.create(:file_set, user: user)
+          FactoryBot.create(:file_set, user: user).tap do |file_set|
+            parent.ordered_members << file_set
+            parent.save!
+          end
         end
 
-        before do
-          allow(FileSet).to receive(:find).and_return(file_set)
-        end
+        before { allow(FileSet).to receive(:find).and_return(file_set) }
+
         it "draws the edit page" do
           expect(file_set).to receive(:valid?).and_return(false)
           post :update, params: { id: file_set, file_set: { keyword: [''] } }
@@ -208,18 +266,15 @@ RSpec.describe Hyrax::FileSetsController, :clean do
     end
 
     describe "#edit" do
-      let(:file_set) do
-        FactoryBot.create(:file_set, read_groups: ['public'])
-      end
+      let(:file_set) { FactoryBot.create(:file_set, read_groups: ['public']) }
 
       let(:file) do
-        Hydra::Derivatives::IoDecorator.new(File.open(fixture_path + '/world.png'),
-                                            'image/png', 'world.png')
+        Hydra::Derivatives::IoDecorator
+          .new(File.open(fixture_path + '/world.png'),
+               'image/png', 'world.png')
       end
 
-      before do
-        Hydra::Works::UploadFileToFileSet.call(file_set, file)
-      end
+      before { Hydra::Works::UploadFileToFileSet.call(file_set, file) }
 
       context "someone else's files" do
         it "sets flash error" do
@@ -232,16 +287,12 @@ RSpec.describe Hyrax::FileSetsController, :clean do
     end
 
     describe "#show" do
+      let(:work) { FactoryBot.create(:work, title: ['test title'], user: user) }
       let(:file_set) do
-        FactoryBot.create(:file_set, title: ['test file'], user: user)
-      end
-      let(:work) do
-        FactoryBot.create(:work, title: ['test title'], user: user)
-      end
-
-      before do
-        work.ordered_members << file_set
-        work.save!
+        FactoryBot.create(:file_set, title: ['test file'], user: user).tap do |file_set|
+          work.ordered_members << file_set
+          work.save!
+        end
       end
 
       context "without a referer" do
@@ -262,12 +313,6 @@ RSpec.describe Hyrax::FileSetsController, :clean do
       end
 
       context "with a referer" do
-        let(:work) do
-          FactoryBot.create(:generic_work, :public,
-                            title: ['test title'],
-                            user:  user)
-        end
-
         before do
           request.env['HTTP_REFERER'] = 'http://test.host/foo'
           work.ordered_members << file_set
@@ -288,8 +333,21 @@ RSpec.describe Hyrax::FileSetsController, :clean do
     end
 
     context 'someone elses (public) files' do
-      let(:creator) { FactoryBot.create(:user, email: 'archivist1@example.com') }
-      let(:public_file_set) { FactoryBot.create(:file_set, user: creator, read_groups: ['public']) }
+      let(:creator) do
+        FactoryBot.create(:user, email: 'archivist1@example.com')
+      end
+
+      let(:parent) do
+        FactoryBot.create(:work, :public, user: creator, read_groups: ['public'])
+      end
+
+      let(:public_file_set) do
+        FactoryBot.create(:file_set, user: creator, read_groups: ['public']).tap do |file_set|
+          parent.ordered_members << file_set
+          parent.save!
+        end
+      end
+
       let(:work) do
         FactoryBot.create(:work, title: ['test title'], user: user)
       end
@@ -312,18 +370,17 @@ RSpec.describe Hyrax::FileSetsController, :clean do
       describe '#show' do
         it 'allows access to the file' do
           get :show, params: { id: public_file_set }
-          expect(response).to be_success
+
+          expect(response).to be_successful
         end
       end
     end
   end
 
   context 'when not signed in' do
+    let(:work) { FactoryBot.create(:work, :public, user: user) }
     let(:private_file_set) { FactoryBot.create(:file_set) }
     let(:public_file_set) { FactoryBot.create(:file_set, read_groups: ['public']) }
-    let(:work) do
-      FactoryBot.create(:work, title: ['test title'], user: user)
-    end
 
     before do
       work.ordered_members << public_file_set
@@ -334,7 +391,10 @@ RSpec.describe Hyrax::FileSetsController, :clean do
     describe '#edit' do
       it 'requires login' do
         get :edit, params: { id: public_file_set }
-        expect(response).to fail_redirect_and_flash(main_app.new_user_session_path, 'You need to sign in or sign up before continuing.')
+
+        expect(response)
+          .to fail_redirect_and_flash(main_app.new_user_session_path,
+                                      'You need to sign in or sign up before continuing.')
       end
     end
 
