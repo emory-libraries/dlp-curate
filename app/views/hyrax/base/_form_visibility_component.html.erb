@@ -1,8 +1,8 @@
 <% # [Hyrax-overwrite-v3.4.1] %>
 <% if embargo_enforced?(f.object) %>
   <%= render 'form_permission_under_embargo', f: f %>
-  <% elsif lease_enforced?(f.object) %>
-    <%= render 'form_permission_under_lease', f: f %>
+<% elsif lease_enforced?(f.object) %>
+  <%= render 'form_permission_under_lease', f: f %>
 <% else %>
     <fieldset>
       <legend class="legend-save-work"><%= t('.visibility') %></legend>
