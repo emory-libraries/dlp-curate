@@ -14,7 +14,7 @@ RSpec.describe CharacterizationController, type: :controller, clean: true do
       it 'queues up characterize job' do
         expect(ReCharacterizeJob).to receive(:perform_later).with(file_set: file_set, user: user.uid)
         post :re_characterize, params: { file_set_id: file_set.id }, xhr: true
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end
