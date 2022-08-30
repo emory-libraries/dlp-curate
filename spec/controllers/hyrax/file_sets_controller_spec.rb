@@ -92,12 +92,12 @@ RSpec.describe Hyrax::FileSetsController, :clean do
         it "spawns a content update event job" do
           expect do
             post :update, params: {
-              id: file_set,
+              id:       file_set,
               file_set: {
-                title: ['new_title'],
-                keyword: [''],
-                permissions_attributes: [{ type: 'person',
-                                           name: 'archivist1',
+                title:                  ['new_title'],
+                keyword:                [''],
+                permissions_attributes: [{ type:   'person',
+                                           name:   'archivist1',
                                            access: 'edit' }]
               }
             }
@@ -118,7 +118,7 @@ RSpec.describe Hyrax::FileSetsController, :clean do
         before do
           allow(Hyrax::Actors::FileActor).to receive(:new).and_return(actor)
           allow_any_instance_of(Hyrax::UploadedFile).to receive(:uploader).and_return(uploader)
-          allow(uploader).to receive(:path).and_return(anything())
+          allow(uploader).to receive(:path).and_return(anything)
           allow_any_instance_of(JobIoWrapper).to receive(:file).and_return(fake_file)
           allow(fake_file).to receive(:path).and_return('a/path')
         end
@@ -224,7 +224,7 @@ RSpec.describe Hyrax::FileSetsController, :clean do
 
         expect(assigns[:file_set])
           .to have_attributes(read_groups: contain_exactly("group1"),
-                              edit_users: include("user1", user.user_key))
+                              edit_users:  include("user1", user.user_key))
       end
 
       it "updates existing groups and users" do

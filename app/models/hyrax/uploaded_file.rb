@@ -38,9 +38,9 @@ module Hyrax
       update!(file_set_uri: uri)
     end
 
-    def uploader
+    def uploader # rubocop:disable Metrics/CyclomaticComplexity
       service_file.presence || preservation_master_file.presence || intermediate_file.presence ||
         extracted_text.presence || transcript.presence || collection_banner.presence || nil
-    end
+    end # rubocop:enable Metrics/CyclomaticComplexity
   end
 end
