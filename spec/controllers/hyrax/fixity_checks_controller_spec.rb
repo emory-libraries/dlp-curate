@@ -21,7 +21,7 @@ RSpec.describe Hyrax::FixityChecksController do
       end
 
       it "returns result and redirects to file_set page" do
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.redirect_url).to include "/concern/file_sets/#{file_set.id}"
       end
     end
