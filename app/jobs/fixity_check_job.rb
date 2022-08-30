@@ -33,7 +33,7 @@ class FixityCheckJob < Hyrax::ApplicationJob
   # @param file_id [String] File#id, used for logging/reporting.
   def perform(uri, file_set_id:, file_id:, initiating_user:)
     event_start = DateTime.current
-    run_check(file_set_id, file_id, uri, initiating_user).tap do |audit|
+    run_check(file_set_id, file_id, uri).tap do |audit|
       result   = audit.failed? ? :failure : :success
       file_set = ::FileSet.find(file_set_id)
 
@@ -54,7 +54,7 @@ class FixityCheckJob < Hyrax::ApplicationJob
 
     ##
     # @api private
-    def run_check(file_set_id, file_id, uri, initiating_user)
+    def run_check(file_set_id, file_id, uri)
       service = fixity_service_for(id: uri)
       expected_result = service.expected_message_digest
 
