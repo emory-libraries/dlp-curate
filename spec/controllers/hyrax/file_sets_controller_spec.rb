@@ -415,5 +415,19 @@ RSpec.describe Hyrax::FileSetsController, :clean do
                                       'You need to sign in or sign up before continuing.')
       end
     end
+
+    describe '#update' do
+      it 'requires login' do
+        post :update, params: { id: public_file_set }
+        expect(response).to fail_redirect_and_flash(main_app.new_user_session_path, 'You need to sign in or sign up before continuing.')
+      end
+    end
+
+    describe '#destroy' do
+      it 'requires login' do
+        delete :destroy, params: { id: public_file_set }
+        expect(response).to fail_redirect_and_flash(main_app.new_user_session_path, 'You need to sign in or sign up before continuing.')
+      end
+    end
   end
 end
