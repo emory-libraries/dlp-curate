@@ -32,6 +32,7 @@ class FixityCheckJob < Hyrax::ApplicationJob
   # @param file_set_id [FileSet] the id for FileSet parent object of URI being checked.
   # @param file_id [String] File#id, used for logging/reporting.
   def perform(uri, file_set_id:, file_id:, initiating_user:)
+    event_start = DateTime.current
     run_check(file_set_id, file_id, uri, initiating_user).tap do |audit|
       result   = audit.failed? ? :failure : :success
       file_set = ::FileSet.find(file_set_id)
@@ -44,21 +45,29 @@ class FixityCheckJob < Hyrax::ApplicationJob
                                   file_set,
                                   checksum_audit_log: audit, warn: false)
       end
+
+      file_set_preservation_event(audit.passed, file_set_id, file_id, event_start, initiating_user)
     end
   end
 
   private
 
+    ##
+    # @api private
     def run_check(file_set_id, file_id, uri, initiating_user)
-      event_start = DateTime.current
       service = fixity_service_for(id: uri)
       expected_result = service.expected_message_digest
-      fixity_ok = service.check
 
-      file_set_preservation_event(fixity_ok, file_set_id, file_id, event_start, initiating_user)
-      ChecksumAuditLog.create_and_prune!(passed: fixity_ok, file_set_id: file_set_id, checked_uri: uri.to_s, file_id: file_id, expected_result: expected_result)
+      ChecksumAuditLog.create_and_prune!(passed: service.check, file_set_id: file_set_id, checked_uri: uri.to_s, file_id: file_id, expected_result: expected_result)
     rescue Hyrax::Fixity::MissingContentError
       ChecksumAuditLog.create_and_prune!(passed: false, file_set_id: file_set_id, checked_uri: uri.to_s, file_id: file_id, expected_result: expected_result)
+    end
+
+    ##
+    # @api private
+    # @return [Class]
+    def fixity_service_for(id:)
+      Hyrax.config.fixity_service.new(id)
     end
 
     def file_set_preservation_event(log, file_set_id, file_id, event_start, initiating_user)
@@ -76,12 +85,5 @@ class FixityCheckJob < Hyrax::ApplicationJob
         @logger.error "Fixity check failure: Fixity failed for #{fixity_file&.original_name}"
       end
       create_preservation_event(fixity_file_set, event)
-    end
-
-    ##
-    # @api private
-    # @return [Class]
-    def fixity_service_for(id:)
-      Hyrax.config.fixity_service.new(id)
     end
 end
