@@ -184,6 +184,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
 
   describe '#destroy' do
     include_context 'with a collection'
+    before { reload_context_variables }
 
     it "fails if collections exist of this type" do
       expect(collection_type.destroy).to eq false
@@ -193,6 +194,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
 
   describe "save (no settings changes)" do
     include_context 'with a collection'
+    before { reload_context_variables }
 
     it "succeeds no changes to settings are being made" do
       expect(collection_type.save).to be true
@@ -205,6 +207,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
 
     context 'for non-special collection type' do
       include_context 'with a collection'
+      before { collection.reload }
 
       it "fails if collections exist of this type and settings are changed" do
         expect(collection_type.save).to be false
@@ -229,5 +232,9 @@ RSpec.describe Hyrax::CollectionType, type: :model do
         expect(collection_type.errors.messages[:base].first).to eq "Collection type settings cannot be altered for the User Collection type"
       end
     end
+  end
+
+  def reload_context_variables
+    [collection_type, collection].each(&:reload)
   end
 end
