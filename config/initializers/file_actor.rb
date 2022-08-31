@@ -31,3 +31,16 @@ Hyrax::Actors::FileActor.class_eval do
     CreateDerivativesJob.perform_later(file_set, repository_file.id, file_path)
   end
 end
+
+Wings::Valkyrie::QueryService.class_eval do
+  def find_by_alternate_identifier(alternate_identifier:, use_valkyrie: true)
+    puts "alternate_identifier: #{alternate_identifier}, use_valkyrie: #{use_valkyrie}"
+    alternate_identifier = ::Valkyrie::ID.new(alternate_identifier.to_s) if alternate_identifier.is_a?(String)
+    validate_id(alternate_identifier)
+    object = ::ActiveFedora::Base.find(alternate_identifier.to_s)
+    return object if use_valkyrie == false
+    resource_factory.to_resource(object: object)
+  rescue ActiveFedora::ObjectNotFoundError, Ldp::Gone
+    raise Hyrax::ObjectNotFoundError
+  end
+end
