@@ -34,11 +34,8 @@ end
 
 Hyrax::Actors::ApplyOrderActor.class_eval do
   def cleanup_ids_to_remove_from_curation_concern(curation_concern, ordered_member_ids)
-    Rails.logger.info "curation_concern: #{curation_concern}"
-    Rails.logger.info "cc ordered_member_ids: #{curation_concern.ordered_member_ids}"
-    Rails.logger.info "params ordered_member_ids: #{ordered_member_ids}"
+    Rails.logger.info "diffed array: #{(curation_concern.ordered_member_ids - ordered_member_ids)}"
     (curation_concern.ordered_member_ids - ordered_member_ids).each do |old_id|
-      Rails.logger.info "current_id: #{old_id}"
       work = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: old_id, use_valkyrie: false)
       curation_concern.ordered_members.delete(work)
       curation_concern.members.delete(work)
