@@ -31,14 +31,3 @@ Hyrax::Actors::FileActor.class_eval do
     CreateDerivativesJob.perform_later(file_set, repository_file.id, file_path)
   end
 end
-
-Hyrax::Actors::ApplyOrderActor.class_eval do
-  def cleanup_ids_to_remove_from_curation_concern(curation_concern, ordered_member_ids)
-    Rails.logger.info "diffed array: #{(curation_concern.ordered_member_ids - ordered_member_ids)}"
-    (curation_concern.ordered_member_ids - ordered_member_ids).each do |old_id|
-      work = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: old_id, use_valkyrie: false)
-      curation_concern.ordered_members.delete(work)
-      curation_concern.members.delete(work)
-    end
-  end
-end
