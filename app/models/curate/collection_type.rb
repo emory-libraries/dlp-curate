@@ -8,13 +8,10 @@ module Curate
     # If a Curate::CollectionType already exists, ensure it adheres to expectations and return it.
     # Otherwise, make a new one and return that.
     def self.find_or_create_library_collection_type
-      existing_library_collection_type = Curate::CollectionType.find_by_title(USER_COLLECTION_DEFAULT_TITLE)
-      if existing_library_collection_type
-        existing_library_collection_type.configure
-        return existing_library_collection_type
-      end
-      new_library_collection_type = Curate::CollectionType.new
-      new_library_collection_type
+      library_collection_type = Curate::CollectionType.find_by_title(USER_COLLECTION_DEFAULT_TITLE)
+      library_collection_type = Curate::CollectionType.new if library_collection_type.nil?
+      library_collection_type.configure
+      library_collection_type
     end
 
     def configure
