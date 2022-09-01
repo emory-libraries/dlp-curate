@@ -191,14 +191,14 @@ end
 
 Bulkrax::ScheduleRelationshipsJob.class_eval do
   def perform(importer_id:)
-    importer = Importer.find(importer_id)
+    importer = ::Bulkrax::Importer.find(importer_id)
     pending_num = importer.entries.left_outer_joins(:latest_status)
                           .where('bulkrax_statuses.status_message IS NULL ').count
     return reschedule(importer_id) unless pending_num.zero?
 
     importer.last_run.parents.each do |parent_id|
-      AssociateFilesetsWithWorkJob.perform_later(importer)
-      CreateRelationshipsJob.perform_later(parent_identifier: parent_id, importer_run_id: importer.last_run.id)
+      ::AssociateFilesetsWithWorkJob.perform_later(importer)
+      ::Bulkrax::CreateRelationshipsJob.perform_later(parent_identifier: parent_id, importer_run_id: importer.last_run.id)
     end
   end
 end
