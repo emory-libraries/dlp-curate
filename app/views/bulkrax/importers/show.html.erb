@@ -58,6 +58,23 @@
 
     <%= render partial: 'bulkrax/shared/bulkrax_field_mapping', locals: {item: @importer} %>
 
+    <div class="accordion-container">
+      <div class="accordion-heading" role="tab" id="fileset-ids-joined-heading">
+        <a class="accordion-title" role="button" data-toggle="collapse" data-target="#fileset-ids-joined-show" aria-expanded="true" aria-controls="fileset-ids-joined-show">
+          List of FileSet IDs:
+        </a>
+        <a role="button" data-toggle="collapse" data-target="#fileset-ids-joined-show" aria-expanded="true" aria-controls="fileset-ids-joined-show">
+          <div class="accordion-icon glyphicon glyphicon-remove-circle" aria-hidden="true"></div>
+        </a>
+      </div>
+      <div id="fileset-ids-joined-show" class="accordion-collapse collapse" role="tabpanel" aria-labelledby="fileset-ids-joined-heading">
+        <div class="accordion-body">
+          <% importer_file_sets = @importer.entries.select {|e| e.factory_class == FileSet} %>
+          <%= importer_file_sets&.map { |e| e&.factory&.find&.id }&.compact&.join('|') %>
+        </div>
+      </div>
+    </div>
+
     <p class="bulkrax-p-align" title="<%= @importer.last_run&.processed_works %> processed, <%= @importer.last_run&.failed_works %> failed">
       <strong>Total Works:</strong>
       <%= @importer.last_run&.total_work_entries %>
@@ -172,6 +189,7 @@
                 <th>Status</th>
                 <th>Errors</th>
                 <th>Status Set At</th>
+                <th>Curate ID</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -194,6 +212,13 @@
                     <td></td>
                   <% end %>
                   <td><%= e.status_at %></td>
+                  <td>
+                    <% file_set_obj = e&.factory&.find %>
+                    <% if file_set_obj.present? %>
+                      <span><%= file_set_obj.id %></span>&nbsp;
+                      <span><%= link_to raw('<span class="glyphicon glyphicon-link"></span>'), main_app.polymorphic_path(file_set_obj) %></span>
+                    <% end %>
+                  </td>
                   <td><%= link_to raw('<span class="glyphicon glyphicon-info-sign"></span>'), bulkrax.importer_entry_path(@importer.id, e.id) %></td>
                 </tr>
               <% end %>
