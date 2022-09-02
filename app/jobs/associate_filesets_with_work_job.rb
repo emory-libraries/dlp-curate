@@ -43,6 +43,8 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
       file_sets.each do |fs|
         work.ordered_members << fs
         work.save
+
+        Hyrax.config.callback.run(:after_create_fileset, fs, ::User.find_by(uid: fs.depositor))
       end
     end
   end
