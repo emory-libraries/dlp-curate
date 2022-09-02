@@ -15,12 +15,11 @@ RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, type: :system do
     end
   end
 
-  context 'logged in user' do
-    let(:user_attributes) { { uid: 'test@example.com' } }
-    let(:user) { User.new(user_attributes) { |u| u.save(validate: false) } }
+  context 'logged in admin user' do
+    let(:admin) { FactoryBot.create(:admin) }
     let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'Bulkrax_Test_CSV.csv') }
 
-    before { login_as user }
+    before { login_as admin }
 
     it 'displays importers on Dashboard' do
       visit '/dashboard'
