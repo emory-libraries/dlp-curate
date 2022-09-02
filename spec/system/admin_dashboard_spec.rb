@@ -18,6 +18,14 @@ RSpec.describe 'Admin dashboard', integration: true, clean: true, type: :system 
     scenario 'does not have import csv link' do
       expect(page).not_to have_link 'Import Content From a CSV'
     end
+
+    scenario 'does not have Bulkrax Importers link' do
+      expect(page).not_to have_link 'Importers'
+    end
+
+    scenario 'does not have Bulkrax Exporters link' do
+      expect(page).not_to have_link 'Exporters'
+    end
   end
 
   context 'as an admin user' do
@@ -47,6 +55,14 @@ RSpec.describe 'Admin dashboard', integration: true, clean: true, type: :system 
     scenario 'view background jobs page' do
       click_on 'Background Jobs'
       expect(page).to have_content 'Select Job'
+    end
+
+    scenario 'does have Bulkrax Importers link' do
+      expect(page).to have_link 'Importers'
+    end
+
+    scenario 'does have Bulkrax Exporters link' do
+      expect(page).to have_link 'Exporters'
     end
     # TODO: Add more admin tests, for eg: stats page, when work is created
 
