@@ -110,8 +110,8 @@ Bulkrax::ObjectFactory.class_eval do
     uploaded_files = attrs['uploaded_files'].map { |ufid| ::Hyrax::UploadedFile.find(ufid) }
     @preferred = preferred_file(uploaded_files)
 
-    attrs['uploaded_files'].each do |uploaded_file_id|
-      @uploaded_file = ::Hyrax::UploadedFile.find(uploaded_file_id)
+    uploaded_files.each do |uploaded_file|
+      @uploaded_file = uploaded_file
       next if @uploaded_file.file_set_uri.present?
 
       process_uploaded_file(work_permissions, file_set_attrs)
@@ -196,8 +196,8 @@ Bulkrax::ScheduleRelationshipsJob.class_eval do
                           .where('bulkrax_statuses.status_message IS NULL ').count
     return reschedule(importer_id) unless pending_num.zero?
 
+    ::AssociateFilesetsWithWorkJob.perform_later(importer)
     importer.last_run.parents.each do |parent_id|
-      ::AssociateFilesetsWithWorkJob.perform_later(importer)
       ::Bulkrax::CreateRelationshipsJob.perform_later(parent_identifier: parent_id, importer_run_id: importer.last_run.id)
     end
   end

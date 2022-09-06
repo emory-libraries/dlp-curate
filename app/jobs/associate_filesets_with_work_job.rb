@@ -29,7 +29,7 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
   end
 
   def pull_file_sets(file_set_entries, parent)
-    pull_fileset_entries_for_parent(file_set_entries, parent).map { |v| v&.factory&.find }.compact
+    pull_fileset_entries_for_parent(file_set_entries, parent).map { |v| v&.factory&.find }.compact.uniq
   end
 
   def process_file_sets(parents, file_set_entries)
