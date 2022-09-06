@@ -107,10 +107,12 @@ Bulkrax::ObjectFactory.class_eval do
     attrs = clean_attrs(attrs)
     file_set_attrs = attrs.slice(*object.attributes.keys)
     object.assign_attributes(file_set_attrs)
+    uploaded_files = attrs['uploaded_files'].map { |ufid| ::Hyrax::UploadedFile.find(ufid) }
+    @preferred = preferred_file(uploaded_files)
 
     num_files = attrs['uploaded_files']&.size
-    attrs['uploaded_files'].each_with_index do |uploaded_file_id, ind|
-      @uploaded_file = ::Hyrax::UploadedFile.find(uploaded_file_id)
+    uploaded_files.each_with_index do |uploaded_file, ind|
+      @uploaded_file = uploaded_file
       next if @uploaded_file.file_set_uri.present?
 
       process_uploaded_file(work_permissions, file_set_attrs, ind, num_files)
