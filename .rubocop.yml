@@ -36,6 +36,7 @@ Metrics/AbcSize:
         - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
         - app/lib/metadata_details.rb
+        - config/initializers/bulkrax.rb
         - spec/system/import_langmuir_from_csv_spec.rb
 
 Metrics/BlockLength:

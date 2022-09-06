@@ -18,19 +18,17 @@ module FileSetMethods
   end
 
   def create_content_for_actor(actor, uploaded_file)
-    preferred = preferred_file(uploaded_file)
-
-    actor.create_content(uploaded_file.preservation_master_file, preferred, :preservation_master_file) if uploaded_file.preservation_master_file.present?
-    actor.create_content(uploaded_file.intermediate_file, preferred, :intermediate_file) if uploaded_file.intermediate_file.present?
-    actor.create_content(uploaded_file.service_file, preferred, :service_file) if uploaded_file.service_file.present?
-    actor.create_content(uploaded_file.extracted_text, preferred, :extracted) if uploaded_file.extracted_text.present?
-    actor.create_content(uploaded_file.transcript, preferred, :transcript_file) if uploaded_file.transcript.present?
+    actor.create_content(uploaded_file.preservation_master_file, @preferred, :preservation_master_file) if uploaded_file.preservation_master_file.present?
+    actor.create_content(uploaded_file.intermediate_file, @preferred, :intermediate_file) if uploaded_file.intermediate_file.present?
+    actor.create_content(uploaded_file.service_file, @preferred, :service_file) if uploaded_file.service_file.present?
+    actor.create_content(uploaded_file.extracted_text, @preferred, :extracted) if uploaded_file.extracted_text.present?
+    actor.create_content(uploaded_file.transcript, @preferred, :transcript_file) if uploaded_file.transcript.present?
   end
 
-  def preferred_file(uploaded_file)
-    preferred = if uploaded_file.service_file.present?
+  def preferred_file(uploaded_files)
+    preferred = if uploaded_files.any? { |uf| uf&.service_file&.present? }
                   :service_file
-                elsif uploaded_file.intermediate_file.present?
+                elsif uploaded_files.any? { |uf| uf&.intermediate_file&.present? }
                   :intermediate_file
                 else
                   :preservation_master_file
