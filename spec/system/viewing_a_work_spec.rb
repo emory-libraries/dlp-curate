@@ -132,6 +132,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
     end
 
     it 'has a batch upload link on the works dashboard' do
+      allow(Flipflop).to receive(:batch_upload?).and_return(true)
       visit "/dashboard/works"
       expect(page).to have_link(href: /batch/)
     end
