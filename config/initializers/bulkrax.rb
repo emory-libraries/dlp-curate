@@ -32,27 +32,27 @@ Bulkrax.setup do |config|
   # Create a completely new set of mappings by replacing the whole set as follows
   config.field_mappings = {
     "Bulkrax::CsvParser" => {
-      "title" => { from: ["title"], parsed: true },
-      "holding_repository" => { from: ["holding_repository"] },
-      "date_created" => { from: ["date_created"] },
-      "content_type" => { from: ["content_type"], parsed: true },
-      "emory_rights_statements" => { from: ["emory_rights_statements"] },
-      "rights_statement" => { from: ["rights_statement"], parsed: true },
-      "data_classifications" => { from: ["data_classifications"], parsed: true, split: '\|' },
-      "visibility" => { from: ["visibility"], parsed: true },
-      "deduplication_key" => { from: ["deduplication_key"], source_identifier: true },
-      "source_collection_id" => { from: ["source_collection_id"] },
-      "pcdm_use" => { from: ["pcdm_use"], parsed: true },
-      "file" => { from: ["file"], split: '\;' },
-      "parent" => { from: ["parent"], related_parents_field_mapping: true },
-      "model" => { from: ["model"] },
-      "file_types" => { from: ["file_types"], split: '\|' },
       "abstract" => { from: ["abstract"] },
       "access_restriction_notes" => { from: ["access_restriction_notes"], split: '\|' },
       "administrative_unit" => { from: ["administrative_unit"], parsed: true },
       "author_notes" => { from: ["author_notes"] },
       "conference_dates" => { from: ["conference_dates"] },
-      "conference_name" => { from: ["conference_name"] }
+      "conference_name" => { from: ["conference_name"] },
+      "content_type" => { from: ["content_type"], parsed: true },
+      "data_classifications" => { from: ["data_classifications"], parsed: true, split: '\|' },
+      "date_created" => { from: ["date_created"] },
+      "deduplication_key" => { from: ["deduplication_key"], source_identifier: true },
+      "emory_rights_statements" => { from: ["emory_rights_statements"] },
+      "file" => { from: ["file"], split: '\;' },
+      "file_types" => { from: ["file_types"], split: '\|' },
+      "holding_repository" => { from: ["holding_repository"] },
+      "model" => { from: ["model"] },
+      "parent" => { from: ["parent"], related_parents_field_mapping: true },
+      "pcdm_use" => { from: ["pcdm_use"], parsed: true },
+      "rights_statement" => { from: ["rights_statement"], parsed: true },
+      "source_collection_id" => { from: ["source_collection_id"] },
+      "title" => { from: ["title"], parsed: true },
+      "visibility" => { from: ["visibility"], parsed: true }
     }
   }
 
