@@ -24,7 +24,7 @@ RSpec.describe 'viewing a user page', type: :system, clean: true do
       click_on "Collections created"
 
       expect(page).to have_content "1 entry found"
-      within 'h4.search-result-title' do
+      within 'h3.search-result-title' do
         expect(page).to have_link(admin_collection.title.first)
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe 'viewing a user page', type: :system, clean: true do
     it 'returns the two instances of work in the list' do
       click_on "Works created"
       lis = find_all('ul.list-unstyled.catalog li')
-      lis_titles = lis.map { |li| li.find('div.search-results-title-row h4.search-result-title a').text }
+      lis_titles = lis.map { |li| li.find('div.search-results-title-row h3.search-result-title a').text }
       work_titles = [work, work2].map { |w| w.title.first }
 
       expect(page).to have_content "1 - 2 of 2"
