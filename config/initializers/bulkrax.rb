@@ -49,7 +49,10 @@ Bulkrax.setup do |config|
       "file_types" => { from: ["file_types"], split: '\|' },
       "abstract" => { from: ["abstract"] },
       "access_restriction_notes" => { from: ["access_restriction_notes"], split: '\|' },
-      "administrative_unit" => { from: ["administrative_unit"], parsed: true }
+      "administrative_unit" => { from: ["administrative_unit"], parsed: true },
+      "author_notes" => { from: ["author_notes"] },
+      "conference_dates" => { from: ["conference_dates"] },
+      "conference_name" => { from: ["conference_name"] }
     }
   }
 

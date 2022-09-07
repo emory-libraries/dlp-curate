@@ -44,6 +44,7 @@ Metrics/BlockLength:
         - app/controllers/catalog_controller.rb
         - app/importers/curate_collection_importer.rb
         - app/views/manifest/manifest.json.jbuilder
+        - config/initializers/bulkrax.rb
         - config/initializers/characterization_service.rb
         - config/initializers/hyrax.rb
         - config/initializers/job_io_wrapper.rb
