@@ -82,6 +82,15 @@ module Bulkrax
       raise "Invalid administrative_unit value: #{src}"
     end
 
+    def parse_publisher_version(src)
+      return unless src
+      terms = Qa::Authorities::Local.subauthority_for('publisher_version').all
+      valid_option = pull_valid_option(src, terms)
+
+      return src if valid_option
+      raise "Invalid publisher_version value: #{src}"
+    end
+
     private
 
       def validate_qa_for(src, subauthority)

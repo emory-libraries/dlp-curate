@@ -97,15 +97,25 @@ RSpec.describe Bulkrax::CsvMatcher, :clean do
   end
 
   context "#administrative_unit" do
-    let(:value_to_parse) do
-      "Stuart A. Rose Manuscript, Archives and Rare Book Library"
-    end
-    let(:parsed_value) do
-      "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
-    end
+    let(:value_to_parse) { "Stuart A. Rose Manuscript, Archives and Rare Book Library" }
+    let(:parsed_value) { "Stuart A. Rose Manuscript, Archives, and Rare Book Library" }
 
     it "does its best to match the configured controlled vocabulary term" do
       expect(matcher.parse_administrative_unit(value_to_parse)).to eq parsed_value
+    end
+  end
+
+  context "#publisher_version" do
+    let(:valid_version) { "Post-print, After Peer Review" }
+
+    it "maps the publisher_version field" do
+      expect(matcher.parse_publisher_version(valid_version)).to eq valid_version
+    end
+
+    context "invalid publisher_version" do
+      it "raises an exception when it isn't valid" do
+        expect { matcher.parse_publisher_version("Blah") }.to raise_error(RuntimeError, "Invalid publisher_version value: Blah")
+      end
     end
   end
 end
