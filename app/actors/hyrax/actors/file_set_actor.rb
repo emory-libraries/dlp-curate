@@ -92,7 +92,6 @@ module Hyrax
           # Save the work so the association between the work and the file_set is persisted (head_id)
           # NOTE: the work may not be valid, in which case this save doesn't do anything.
           work.save
-          Hyrax.config.callback.run(:after_create_fileset, file_set, user)
         end
       end
       alias attach_file_to_work attach_to_work

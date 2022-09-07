@@ -4,7 +4,7 @@
 #  `rails generate hyrax:work CurateGenericWork`
 require 'rails_helper'
 
-RSpec.describe Hyrax::Actors::CurateGenericWorkActor do
+RSpec.describe Hyrax::Actors::CurateGenericWorkActor, :clean do
   let(:env) { Hyrax::Actors::Environment.new(curation_concern, ability, attributes) }
   let(:user) { FactoryBot.create(:user) }
   let(:ability) { ::Ability.new(user) }

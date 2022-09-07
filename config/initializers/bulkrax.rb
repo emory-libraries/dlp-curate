@@ -110,12 +110,11 @@ Bulkrax::ObjectFactory.class_eval do
     uploaded_files = attrs['uploaded_files'].map { |ufid| ::Hyrax::UploadedFile.find(ufid) }
     @preferred = preferred_file(uploaded_files)
 
-    num_files = attrs['uploaded_files']&.size
-    uploaded_files.each_with_index do |uploaded_file, ind|
+    uploaded_files.each do |uploaded_file|
       @uploaded_file = uploaded_file
       next if @uploaded_file.file_set_uri.present?
 
-      process_uploaded_file(work_permissions, file_set_attrs, ind, num_files)
+      process_uploaded_file(work_permissions, file_set_attrs)
     end
 
     object.save!
@@ -187,5 +186,19 @@ Bulkrax::CsvParser.class_eval do
     @path_to_files = File.join(
         zip? ? importer_unzip_path : File.dirname(import_file_path), 'files', filename
       )
+  end
+end
+
+Bulkrax::ScheduleRelationshipsJob.class_eval do
+  def perform(importer_id:)
+    importer = ::Bulkrax::Importer.find(importer_id)
+    pending_num = importer.entries.left_outer_joins(:latest_status)
+                          .where('bulkrax_statuses.status_message IS NULL ').count
+    return reschedule(importer_id) unless pending_num.zero?
+
+    ::AssociateFilesetsWithWorkJob.perform_later(importer)
+    importer.last_run.parents.each do |parent_id|
+      ::Bulkrax::CreateRelationshipsJob.perform_later(parent_identifier: parent_id, importer_run_id: importer.last_run.id)
+    end
   end
 end

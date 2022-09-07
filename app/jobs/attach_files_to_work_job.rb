@@ -67,6 +67,7 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       work.ordered_members << actor.file_set
       work.save
       actor.file_set.save
+      Hyrax.config.callback.run(:after_create_fileset, actor.file_set, actor.user)
       actor.attach_to_work(work)
     end
 
