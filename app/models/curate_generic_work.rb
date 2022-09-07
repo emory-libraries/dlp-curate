@@ -96,6 +96,10 @@ class CurateGenericWork < ActiveFedora::Base
     index.as :stored_searchable, :dateable, :facetable, :sortable
   end
 
+  property :deduplication_key, predicate: "http://metadata.emory.edu/vocab/predicates#deduplicationKey", multiple: false do |index|
+    index.as :stored_searchable
+  end
+
   property :edition, predicate: "http://id.loc.gov/ontologies/bibframe/editionStatement", multiple: false do |index|
     index.as :stored_searchable
   end
@@ -315,10 +319,6 @@ class CurateGenericWork < ActiveFedora::Base
   end
 
   property :volume, predicate: "http://purl.org/ontology/bibo/volume", multiple: false do |index|
-    index.as :stored_searchable
-  end
-
-  property :deduplication_key, predicate: "http://metadata.emory.edu/vocab/predicates#deduplicationKey", multiple: false do |index|
     index.as :stored_searchable
   end
 
