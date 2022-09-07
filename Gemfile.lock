@@ -1184,7 +1184,7 @@ GEM
     dry-monads (1.4.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.7)
-    dry-schema (1.9.3)
+    dry-schema (1.10.2)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.13, >= 0.13.0)
       dry-core (~> 0.5, >= 0.5)
@@ -1267,7 +1267,7 @@ GEM
       retriable (>= 2.0, < 4.a)
       rexml
       webrick
-    google-apis-drive_v3 (0.26.0)
+    google-apis-drive_v3 (0.27.0)
       google-apis-core (>= 0.7, < 2.a)
     googleauth (1.2.0)
       faraday (>= 0.17.3, < 3.a)
@@ -1343,7 +1343,7 @@ GEM
       hydra-derivatives (~> 3.6)
       hydra-file_characterization (~> 1.0)
       hydra-pcdm (>= 0.9)
-    hyrax (3.4.1)
+    hyrax (3.4.2)
       active-fedora (~> 13.1, >= 13.1.2)
       almond-rails (~> 0.1)
       awesome_nested_set (~> 3.1)
@@ -1370,6 +1370,7 @@ GEM
       iiif_manifest (>= 0.3, < 2.0)
       jquery-datatables-rails (~> 3.4)
       jquery-ui-rails (~> 6.0)
+      json-ld (< 3.2)
       json-schema
       kaminari_route_prefix (~> 0.1.1)
       legato (~> 0.3)
@@ -1381,6 +1382,7 @@ GEM
       oauth2 (~> 1.2)
       posix-spawn
       power_converter (~> 0.1, >= 0.1.2)
+      psych (~> 3.3)
       qa (~> 5.5, >= 5.5.1)
       rails (~> 5.0)
       rails_autolink (~> 1.1)
@@ -1395,7 +1397,7 @@ GEM
       sass-rails (~> 5.0)
       select2-rails (~> 3.5)
       signet
-      tinymce-rails
+      tinymce-rails (~> 5.10)
       valkyrie (~> 2, >= 2.1.1)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
@@ -1434,7 +1436,7 @@ GEM
       rdf (~> 3.1)
     json-schema (3.0.0)
       addressable (>= 2.8)
-    jwt (2.4.1)
+    jwt (2.5.0)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.2)
@@ -1550,7 +1552,12 @@ GEM
       builder (>= 3.1.0)
       faraday
       faraday_middleware
-    oauth (0.5.10)
+    oauth (1.1.0)
+      oauth-tty (~> 1.0, >= 1.0.1)
+      snaky_hash (~> 2.0)
+      version_gem (~> 1.1)
+    oauth-tty (1.0.2)
+      version_gem (~> 1.1)
     oauth2 (1.4.10)
       faraday (>= 0.17.3, < 3.0)
       jwt (>= 1.0, < 3.0)
@@ -1578,6 +1585,7 @@ GEM
     pry-byebug (3.9.0)
       byebug (~> 11.0)
       pry (~> 0.13.0)
+    psych (3.3.2)
     public_suffix (4.0.7)
     puma (3.12.6)
     qa (5.9.0)
@@ -1824,6 +1832,9 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     slop (4.9.2)
+    snaky_hash (2.0.0)
+      hashie
+      version_gem (~> 1.1)
     solr_wrapper (2.2.0)
       faraday
       retriable
@@ -1872,7 +1883,7 @@ GEM
     tilt (2.0.11)
     tins (1.25.0)
       sync
-    tinymce-rails (6.1.2)
+    tinymce-rails (5.10.5)
       railties (>= 3.1.1)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
@@ -1909,6 +1920,7 @@ GEM
       rdf-vocab
       reform (~> 2.2)
       reform-rails
+    version_gem (1.1.0)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (3.7.0)
@@ -1976,7 +1988,7 @@ DEPENDENCIES
   honeybadger (~> 4.0)
   http
   hydra-role-management
-  hyrax (= 3.4.1)
+  hyrax (= 3.4.2)
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)
