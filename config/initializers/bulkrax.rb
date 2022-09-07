@@ -84,6 +84,7 @@ Bulkrax.setup do |config|
       "primary_repository_ID" => { from: ["primary_repository_ID"] },
       "publisher" => { from: ["publisher"] },
       "publisher_version" => { from: ["publisher_version"], parsed: true },
+      "re_use_license" => { from: ["re_use_license"], parsed: true },
       "rights_statement" => { from: ["rights_statement"], parsed: true },
       "source_collection_id" => { from: ["source_collection_id"] },
       "title" => { from: ["title"], parsed: true },

@@ -91,6 +91,15 @@ module Bulkrax
       raise "Invalid publisher_version value: #{src}"
     end
 
+    def parse_re_use_license(src)
+      return unless src
+      active_terms = pull_active_terms_for('licenses')
+      valid_option = pull_valid_option(src, active_terms)
+
+      return src if valid_option
+      raise "Invalid re_use_license value: #{src}"
+    end
+
     private
 
       def validate_qa_for(src, subauthority)
