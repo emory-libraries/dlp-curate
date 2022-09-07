@@ -46,7 +46,10 @@ Bulkrax.setup do |config|
       "file" => { from: ["file"], split: '\;' },
       "parent" => { from: ["parent"], related_parents_field_mapping: true },
       "model" => { from: ["model"] },
-      "file_types" => { from: ["file_types"], split: '\|' }
+      "file_types" => { from: ["file_types"], split: '\|' },
+      "abstract" => { from: ["abstract"] },
+      "access_restriction_notes" => { from: ["access_restriction_notes"], split: '\|' },
+      "administrative_unit" => { from: ["administrative_unit"], parsed: true }
     }
   }
 

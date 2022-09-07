@@ -4,8 +4,8 @@ module Bulkrax
   class CsvMatcher < ApplicationMatcher
     GENERAL_PARSE_FIELDS = [
       'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
-      'format_original', 'title', 'content_type', 'rights_statement', 'data_classifications',
-      'visibility', 'pcdm_use'
+      'format_original', 'content_type', 'rights_statement', 'data_classifications',
+      'visibility', 'pcdm_use', 'administrative_unit'
     ].freeze
     FILE_SET_PARSE_FIELDS = [
       'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
@@ -68,8 +68,18 @@ module Bulkrax
     end
 
     def parse_pcdm_use(src)
-      normalized_term = src&.downcase&.gsub(/[^a-z0-9\s]/i, '')
-      CurateMapper.new.pcdm_value(normalized_term)
+      CurateMapper.new.pcdm_value(normalize_term(src))
+    end
+
+    def parse_administrative_unit(src)
+      return unless src
+      active_terms = pull_active_terms_for('administrative_unit')
+      valid_option = active_terms.select do |s|
+        s["id"].downcase.gsub(/[^a-z0-9\s]/i, '') == normalize_term(src)
+      end.try(:first)
+
+      return valid_option["id"] if valid_option
+      raise "Invalid administrative_unit value: #{src}"
     end
 
     private
@@ -98,29 +108,8 @@ module Bulkrax
         matching_term["id"]
       end
 
-      def result_nil_rules(content)
-        excluded == true || Bulkrax.reserved_properties.include?(to) ||
-          check_if_size || check_if_content(content)
-      end
-
-      def check_if_size
-        self.if && (!self.if.is_a?(Array) && self.if.length != 2)
-      end
-
-      def check_if_content(content)
-        self.if && !content.send(self.if[0], Regexp.new(self.if[1]))
-      end
-
-      def assign_result
-        @result = @result[0] if @result.is_a?(Array) && @result.size == 1
-      end
-
-      def choose_parsing_fields(parser)
-        if parser.class == Bulkrax::CsvFileSetEntry
-          process_parse(FILE_SET_PARSE_FIELDS)
-        else
-          process_parse(GENERAL_PARSE_FIELDS)
-        end
+      def normalize_term(term)
+        term&.downcase&.gsub(/[^a-z0-9\s]/i, '')
       end
   end
 end

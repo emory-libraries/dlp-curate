@@ -95,4 +95,17 @@ RSpec.describe Bulkrax::CsvMatcher, :clean do
       end
     end
   end
+
+  context "#administrative_unit" do
+    let(:value_to_parse) do
+      "Stuart A. Rose Manuscript, Archives and Rare Book Library"
+    end
+    let(:parsed_value) do
+      "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
+    end
+
+    it "does its best to match the configured controlled vocabulary term" do
+      expect(matcher.parse_administrative_unit(value_to_parse)).to eq parsed_value
+    end
+  end
 end
