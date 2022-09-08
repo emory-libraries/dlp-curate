@@ -88,7 +88,9 @@ Bulkrax.setup do |config|
       "related_datasets" => { from: ["related_datasets"], split: '\|' },
       "related_material_notes" => { from: ["related_material_notes"], split: '\|' },
       "related_publications" => { from: ["related_publications"], split: '\|' },
-      "rights_statement" => { from: ["rights_statement"], parsed: true },
+      "rights_documentation" => { from: ["rights_documentation"] },
+      "rights_holders" => { from: ["rights_holders"], split: '\|' },
+      "rights_statement" => { from: ["rights_statement"], split: '\|', parsed: true },
       "source_collection_id" => { from: ["source_collection_id"] },
       "title" => { from: ["title"], parsed: true },
       "visibility" => { from: ["visibility"], parsed: true }
