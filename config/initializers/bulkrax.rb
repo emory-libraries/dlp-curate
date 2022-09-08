@@ -91,6 +91,9 @@ Bulkrax.setup do |config|
       "rights_documentation" => { from: ["rights_documentation"] },
       "rights_holders" => { from: ["rights_holders"], split: '\|' },
       "rights_statement" => { from: ["rights_statement"], split: '\|', parsed: true },
+      "scheduled_rights_review" => { from: ["scheduled_rights_review"] },
+      "scheduled_rights_review_note" => { from: ["scheduled_rights_review_note"] },
+      "sensitive_material" => { from: ["sensitive_material"], parsed: true },
       "source_collection_id" => { from: ["source_collection_id"] },
       "title" => { from: ["title"], parsed: true },
       "visibility" => { from: ["visibility"], parsed: true }

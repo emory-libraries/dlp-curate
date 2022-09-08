@@ -146,4 +146,14 @@ RSpec.describe Bulkrax::CsvMatcher, :clean do
       end
     end
   end
+
+  context "#sensitive_material" do
+    it "maps the sensitive_material field to what the QA authority expects (false)" do
+      expect(matcher.parse_sensitive_material("No")).to eq "false"
+    end
+
+    it "maps the sensitive_material field to what the QA authority expects (true)" do
+      expect(matcher.parse_sensitive_material("Yes")).to eq "true"
+    end
+  end
 end

@@ -100,6 +100,16 @@ module Bulkrax
       raise "Invalid re_use_license value: #{src}"
     end
 
+    def parse_sensitive_material(src)
+      return unless src
+      active_terms = pull_active_terms_for('sensitive_material')
+      transformed_term = pull_transformed_term(src)
+      valid_option = pull_valid_option(transformed_term, active_terms)
+
+      return transformed_term.to_s if valid_option
+      raise "Invalid sensitive_material value: #{src}"
+    end
+
     private
 
       def validate_qa_for(src, subauthority)
@@ -128,6 +138,12 @@ module Bulkrax
 
       def normalize_term(term)
         term&.downcase&.gsub(/[^a-z0-9\s]/i, '')
+      end
+
+      def pull_transformed_term(term)
+        return false if CurateMapper.new.falsey?(term)
+        return true if CurateMapper.new.truthy?(term)
+        false
       end
   end
 end
