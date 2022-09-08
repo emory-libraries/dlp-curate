@@ -94,7 +94,10 @@ Bulkrax.setup do |config|
       "scheduled_rights_review" => { from: ["scheduled_rights_review"] },
       "scheduled_rights_review_note" => { from: ["scheduled_rights_review_note"] },
       "sensitive_material" => { from: ["sensitive_material"], parsed: true },
+      "sensitive_material_note" => { from: ["sensitive_material_note"] },
+      "series_title" => { from: ["series_title"] },
       "source_collection_id" => { from: ["source_collection_id"] },
+      "sponsor" => { from: ["sponsor"] },
       "title" => { from: ["title"], parsed: true },
       "visibility" => { from: ["visibility"], parsed: true }
     }
