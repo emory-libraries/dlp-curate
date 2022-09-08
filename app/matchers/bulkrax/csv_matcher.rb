@@ -5,7 +5,8 @@ module Bulkrax
     GENERAL_PARSE_FIELDS = [
       'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
       'format_original', 'content_type', 'rights_statement', 'data_classifications',
-      'visibility', 'pcdm_use', 'administrative_unit'
+      'visibility', 'pcdm_use', 'administrative_unit', 'publisher_version', 're_use_license',
+      'sensitive_material'
     ].freeze
     FILE_SET_PARSE_FIELDS = [
       'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
