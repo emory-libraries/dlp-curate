@@ -98,6 +98,9 @@ Bulkrax.setup do |config|
       "series_title" => { from: ["series_title"] },
       "source_collection_id" => { from: ["source_collection_id"] },
       "sponsor" => { from: ["sponsor"] },
+      "staff_notes" => { from: ["staff_notes"], split: '\|' },
+      "subject_geo" => { from: ["subject_geo"], split: '\|' },
+      "subject_names" => { from: ["subject_names"], split: '\|' },
       "title" => { from: ["title"], parsed: true },
       "visibility" => { from: ["visibility"], parsed: true }
     }
