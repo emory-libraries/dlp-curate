@@ -107,7 +107,7 @@ Bulkrax.setup do |config|
       "system_of_record_ID" => { from: ["system_of_record_ID"] },
       "table_of_contents" => { from: ["table_of_contents"] },
       "technical_note" => { from: ["technical_note"] },
-      "title" => { from: ["title"], parsed: true },
+      "title" => { from: ["title"], parsed: true, split: '\|' },
       "transfer_engineer" => { from: ["transfer_engineer"] },
       "uniform_title" => { from: ["uniform_title"] },
       "visibility" => { from: ["visibility"], parsed: true },
