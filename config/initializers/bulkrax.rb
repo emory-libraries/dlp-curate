@@ -108,7 +108,10 @@ Bulkrax.setup do |config|
       "table_of_contents" => { from: ["table_of_contents"] },
       "technical_note" => { from: ["technical_note"] },
       "title" => { from: ["title"], parsed: true },
-      "visibility" => { from: ["visibility"], parsed: true }
+      "transfer_engineer" => { from: ["transfer_engineer"] },
+      "uniform_title" => { from: ["uniform_title"] },
+      "visibility" => { from: ["visibility"], parsed: true },
+      "volume" => { from: ["volume"] }
     }
   }
 
