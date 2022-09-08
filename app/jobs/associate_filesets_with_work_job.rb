@@ -21,7 +21,9 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
   end
 
   def pull_work(parent)
-    parent.include?('-cor') ? CurateGenericWork.find(parent) : CurateGenericWork.where(deduplication_key: [parent])&.first
+    CurateGenericWork.find(parent)
+  rescue
+    CurateGenericWork.where(deduplication_key: [parent])&.first || nil
   end
 
   def pull_fileset_entries_for_parent(file_set_entries, parent)
