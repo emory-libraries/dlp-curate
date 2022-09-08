@@ -101,6 +101,9 @@ Bulkrax.setup do |config|
       "staff_notes" => { from: ["staff_notes"], split: '\|' },
       "subject_geo" => { from: ["subject_geo"], split: '\|' },
       "subject_names" => { from: ["subject_names"], split: '\|' },
+      "subject_time_periods" => { from: ["subject_time_periods"], split: '\|' },
+      "subject_topics" => { from: ["subject_topics"], split: '\|' },
+      "sublocation" => { from: ["sublocation"] },
       "title" => { from: ["title"], parsed: true },
       "visibility" => { from: ["visibility"], parsed: true }
     }
