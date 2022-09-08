@@ -104,6 +104,9 @@ Bulkrax.setup do |config|
       "subject_time_periods" => { from: ["subject_time_periods"], split: '\|' },
       "subject_topics" => { from: ["subject_topics"], split: '\|' },
       "sublocation" => { from: ["sublocation"] },
+      "system_of_record_ID" => { from: ["system_of_record_ID"] },
+      "table_of_contents" => { from: ["table_of_contents"] },
+      "technical_note" => { from: ["technical_note"] },
       "title" => { from: ["title"], parsed: true },
       "visibility" => { from: ["visibility"], parsed: true }
     }
