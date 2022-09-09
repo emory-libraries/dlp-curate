@@ -2,20 +2,7 @@
 
 module Bulkrax
   class CsvMatcher < ApplicationMatcher
-<<<<<<< HEAD
-    GENERAL_PARSE_FIELDS = [
-      'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
-      'format_original', 'content_type', 'rights_statement', 'data_classifications',
-      'visibility', 'pcdm_use', 'administrative_unit', 'publisher_version', 're_use_license',
-      'sensitive_material'
-    ].freeze
-    FILE_SET_PARSE_FIELDS = [
-      'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
-      'format_original', 'title', 'rights_statement', 'pcdm_use'
-    ].freeze
-=======
     include CsvMatcherBehavior
->>>>>>> modulizes some methods.
 
     def result(parser, content)
       return nil if result_nil_rules(content)
