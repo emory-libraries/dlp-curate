@@ -4,13 +4,28 @@ module Bulkrax
   class CsvMatcher < ApplicationMatcher
     GENERAL_PARSE_FIELDS = [
       'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
-      'format_original', 'content_type', 'rights_statement', 'data_classifications',
+      'format_original', 'title', 'content_type', 'rights_statement', 'data_classifications',
       'visibility', 'pcdm_use'
     ].freeze
+    FILE_SET_PARSE_FIELDS = [
+      'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
+      'format_original', 'title', 'rights_statement', 'pcdm_use'
+    ].freeze
 
-    def process_parse
+    def result(parser, content)
+      return nil if result_nil_rules(content)
+
+      # @result will evaluate to an empty string for nil content values
+      @result = content.to_s.gsub(/\s/, ' ').strip # remove any line feeds and tabs
+      process_split if @result.present?
+      assign_result
+      choose_parsing_fields(parser)
+      @result
+    end
+
+    def process_parse(fields)
       # This accounts for prefixed matchers
-      parser = GENERAL_PARSE_FIELDS.find { |field| to&.include? field }
+      parser = fields.find { |field| to&.include? field }
 
       if @result.is_a?(Array) && parsed && respond_to?("parse_#{parser}")
         @result.each_with_index do |res, index|
@@ -81,6 +96,31 @@ module Bulkrax
 
         raise "Invalid resource_type value: #{src}" unless matching_term
         matching_term["id"]
+      end
+
+      def result_nil_rules(content)
+        excluded == true || Bulkrax.reserved_properties.include?(to) ||
+          check_if_size || check_if_content(content)
+      end
+
+      def check_if_size
+        self.if && (!self.if.is_a?(Array) && self.if.length != 2)
+      end
+
+      def check_if_content(content)
+        self.if && !content.send(self.if[0], Regexp.new(self.if[1]))
+      end
+
+      def assign_result
+        @result = @result[0] if @result.is_a?(Array) && @result.size == 1
+      end
+
+      def choose_parsing_fields(parser)
+        if parser.class == Bulkrax::CsvFileSetEntry
+          process_parse(FILE_SET_PARSE_FIELDS)
+        else
+          process_parse(GENERAL_PARSE_FIELDS)
+        end
       end
   end
 end
