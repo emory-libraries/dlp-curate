@@ -146,5 +146,30 @@ module Bulkrax
         return true if CurateMapper.new.truthy?(term)
         false
       end
+
+      def result_nil_rules(content)
+        excluded == true || Bulkrax.reserved_properties.include?(to) ||
+          check_if_size || check_if_content(content)
+      end
+
+      def check_if_size
+        self.if && (!self.if.is_a?(Array) && self.if.length != 2)
+      end
+
+      def check_if_content(content)
+        self.if && !content.send(self.if[0], Regexp.new(self.if[1]))
+      end
+
+      def assign_result
+        @result = @result[0] if @result.is_a?(Array) && @result.size == 1
+      end
+
+      def choose_parsing_fields(parser)
+        if parser.class == Bulkrax::CsvFileSetEntry
+          process_parse(FILE_SET_PARSE_FIELDS)
+        else
+          process_parse(GENERAL_PARSE_FIELDS)
+        end
+      end
   end
 end
