@@ -64,7 +64,6 @@ Metrics/ClassLength:
         - app/importers/curate_mapper.rb
         - app/importers/curate_record_importer.rb
         - app/indexers/curate_generic_work_indexer.rb
-        - app/matchers/bulkrax/csv_matcher.rb
         - app/models/curate_generic_work.rb
         - app/models/solr_document.rb
         - app/presenters/hyrax/collection_presenter.rb
