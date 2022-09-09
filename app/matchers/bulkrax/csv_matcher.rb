@@ -2,15 +2,7 @@
 
 module Bulkrax
   class CsvMatcher < ApplicationMatcher
-    GENERAL_PARSE_FIELDS = [
-      'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
-      'format_original', 'title', 'content_type', 'rights_statement', 'data_classifications',
-      'visibility', 'pcdm_use'
-    ].freeze
-    FILE_SET_PARSE_FIELDS = [
-      'remote_files', 'language', 'subject', 'types', 'model', 'resource_type',
-      'format_original', 'title', 'rights_statement', 'pcdm_use'
-    ].freeze
+    include CsvMatcherBehavior
 
     def result(parser, content)
       return nil if result_nil_rules(content)
@@ -68,59 +60,46 @@ module Bulkrax
     end
 
     def parse_pcdm_use(src)
-      normalized_term = src&.downcase&.gsub(/[^a-z0-9\s]/i, '')
-      CurateMapper.new.pcdm_value(normalized_term)
+      CurateMapper.new.pcdm_value(normalize_term(src))
     end
 
-    private
+    def parse_administrative_unit(src)
+      return unless src
+      active_terms = pull_active_terms_for('administrative_unit')
+      valid_option = active_terms.select do |s|
+        s["id"].downcase.gsub(/[^a-z0-9\s]/i, '') == normalize_term(src)
+      end.try(:first)
 
-      def validate_qa_for(src, subauthority)
-        return unless src
-        valid_option = pull_valid_option(src, pull_active_terms_for(subauthority))
+      return valid_option["id"] if valid_option
+      raise "Invalid administrative_unit value: #{src}"
+    end
 
-        return src if valid_option
-        raise "Invalid #{subauthority} value: #{src}"
-      end
+    def parse_publisher_version(src)
+      return unless src
+      terms = Qa::Authorities::Local.subauthority_for('publisher_version').all
+      valid_option = pull_valid_option(src, terms)
 
-      def pull_valid_option(src, active_terms)
-        active_terms&.select { |s| s["id"] == src }&.try(:first)
-      end
+      return src if valid_option
+      raise "Invalid publisher_version value: #{src}"
+    end
 
-      def pull_active_terms_for(subauthority)
-        Qa::Authorities::Local.subauthority_for(subauthority).all.select { |term| term[:active] }
-      end
+    def parse_re_use_license(src)
+      return unless src
+      active_terms = pull_active_terms_for('licenses')
+      valid_option = pull_valid_option(src, active_terms)
 
-      def pull_matching_term(src, active_terms)
-        # Check whether this is a string that can be easily matched to a valid URI
-        matching_term = active_terms.find { |s| s["label"].downcase.strip == src.downcase.strip }
+      return src if valid_option
+      raise "Invalid re_use_license value: #{src}"
+    end
 
-        raise "Invalid resource_type value: #{src}" unless matching_term
-        matching_term["id"]
-      end
+    def parse_sensitive_material(src)
+      return unless src
+      active_terms = pull_active_terms_for('sensitive_material')
+      transformed_term = pull_transformed_term(src)
+      valid_option = pull_valid_option(transformed_term, active_terms)
 
-      def result_nil_rules(content)
-        excluded == true || Bulkrax.reserved_properties.include?(to) ||
-          check_if_size || check_if_content(content)
-      end
-
-      def check_if_size
-        self.if && (!self.if.is_a?(Array) && self.if.length != 2)
-      end
-
-      def check_if_content(content)
-        self.if && !content.send(self.if[0], Regexp.new(self.if[1]))
-      end
-
-      def assign_result
-        @result = @result[0] if @result.is_a?(Array) && @result.size == 1
-      end
-
-      def choose_parsing_fields(parser)
-        if parser.class == Bulkrax::CsvFileSetEntry
-          process_parse(FILE_SET_PARSE_FIELDS)
-        else
-          process_parse(GENERAL_PARSE_FIELDS)
-        end
-      end
+      return transformed_term.to_s if valid_option
+      raise "Invalid sensitive_material value: #{src}"
+    end
   end
 end

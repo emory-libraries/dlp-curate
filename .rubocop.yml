@@ -44,6 +44,7 @@ Metrics/BlockLength:
         - app/controllers/catalog_controller.rb
         - app/importers/curate_collection_importer.rb
         - app/views/manifest/manifest.json.jbuilder
+        - config/initializers/bulkrax.rb
         - config/initializers/characterization_service.rb
         - config/initializers/hyrax.rb
         - config/initializers/job_io_wrapper.rb
@@ -56,18 +57,18 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
     Exclude:
-        - 'spec/**/*'
-        - 'app/models/curate_generic_work.rb'
-        - 'app/controllers/catalog_controller.rb'
-        - 'app/controllers/iiif_controller.rb'
-        - 'app/actors/hyrax/actors/file_set_actor.rb'
-        - 'app/forms/hyrax/forms/collection_form.rb'
-        - app/uploaders/zizia/csv_manifest_validator.rb
-        - app/presenters/hyrax/collection_presenter.rb
+        - app/actors/hyrax/actors/file_set_actor.rb
+        - app/controllers/catalog_controller.rb
+        - app/controllers/iiif_controller.rb
+        - app/forms/hyrax/forms/collection_form.rb
         - app/importers/curate_mapper.rb
         - app/importers/curate_record_importer.rb
-        - app/models/solr_document.rb
         - app/indexers/curate_generic_work_indexer.rb
+        - app/models/curate_generic_work.rb
+        - app/models/solr_document.rb
+        - app/presenters/hyrax/collection_presenter.rb
+        - app/uploaders/zizia/csv_manifest_validator.rb
+        - spec/**/*
 
 Metrics/CyclomaticComplexity:
     Exclude:

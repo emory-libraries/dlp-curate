@@ -95,4 +95,65 @@ RSpec.describe Bulkrax::CsvMatcher, :clean do
       end
     end
   end
+
+  context "#administrative_unit" do
+    let(:value_to_parse) { "Stuart A. Rose Manuscript, Archives and Rare Book Library" }
+    let(:parsed_value) { "Stuart A. Rose Manuscript, Archives, and Rare Book Library" }
+
+    it "does its best to match the configured controlled vocabulary term" do
+      expect(matcher.parse_administrative_unit(value_to_parse)).to eq parsed_value
+    end
+  end
+
+  context "#publisher_version" do
+    let(:valid_version) { "Post-print, After Peer Review" }
+
+    it "maps the publisher_version field" do
+      expect(matcher.parse_publisher_version(valid_version)).to eq valid_version
+    end
+
+    context "invalid publisher_version" do
+      it "raises an exception when it isn't valid" do
+        expect { matcher.parse_publisher_version("Blah") }.to raise_error(RuntimeError, "Invalid publisher_version value: Blah")
+      end
+    end
+  end
+
+  context "#re_use_license" do
+    let(:valid_license) { "https://creativecommons.org/licenses/by/4.0/" }
+
+    it "maps the re_use_license field" do
+      expect(matcher.parse_re_use_license(valid_license)).to eq valid_license
+    end
+
+    context "invalid re_use_license" do
+      let(:invalid_license) { "https://creativecommons.org/licenses/by/3.0/" }
+
+      it "raises an exception when it isn't valid" do
+        expect { matcher.parse_re_use_license(invalid_license) }.to(
+          raise_error(RuntimeError, "Invalid re_use_license value: #{invalid_license}")
+        )
+      end
+    end
+
+    context "inactive re_use_license" do
+      let(:inactive_license) { "http://creativecommons.org/licenses/by-nc/3.0/us/" }
+
+      it "raises an exception when it isn't valid" do
+        expect { matcher.parse_re_use_license(inactive_license) }.to(
+          raise_error(RuntimeError, "Invalid re_use_license value: #{inactive_license}")
+        )
+      end
+    end
+  end
+
+  context "#sensitive_material" do
+    it "maps the sensitive_material field to what the QA authority expects (false)" do
+      expect(matcher.parse_sensitive_material("No")).to eq "false"
+    end
+
+    it "maps the sensitive_material field to what the QA authority expects (true)" do
+      expect(matcher.parse_sensitive_material("Yes")).to eq "true"
+    end
+  end
 end
