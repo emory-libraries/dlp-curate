@@ -43,14 +43,21 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
       file_sets = pull_file_sets(file_set_entries, p)
       raise 'A CurateGenericWork and/or FileSet objects could not be found' unless work.present? && file_sets.present?
 
-      acquire_lock_for(work.id) do
-        unless file_sets&.map(&:id)&.all? { |id| work.reload.ordered_member_ids.include?(id) }
-          work.ordered_members += file_sets
-          work.save
-        end
-      end
-
-      file_sets.each { |fs| Hyrax.config.callback.run(:after_create_fileset, fs, ::User.find_by(uid: fs.depositor)) }
+      associate_filesets_to_work(file_sets, work)
+      announce_filesets_attachement(file_sets)
     end
+  end
+
+  def associate_filesets_to_work(file_sets, work)
+    acquire_lock_for(work.id) do
+      unless file_sets&.map(&:id)&.all? { |id| work.reload.ordered_member_ids.include?(id) }
+        work.ordered_members += file_sets
+        work.save
+      end
+    end
+  end
+
+  def announce_filesets_attachement(file_sets)
+    file_sets.each { |fs| Hyrax.config.callback.run(:after_create_fileset, fs, ::User.find_by(uid: fs.depositor)) }
   end
 end
