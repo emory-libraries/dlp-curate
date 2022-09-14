@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
+  include ::Hyrax::Lockable
   queue_as :import
 
   def perform(importer)
@@ -42,8 +43,12 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
       file_sets = pull_file_sets(file_set_entries, p)
       raise 'A CurateGenericWork and/or FileSet objects could not be found' unless work.present? && file_sets.present?
 
-      work.ordered_members += file_sets
-      work.save
+      acquire_lock_for(work.id) do
+        unless file_sets&.map(&:id)&.all? { |id| work.reload.ordered_member_ids.include?(id) }
+          work.ordered_members += file_sets
+          work.save
+        end
+      end
 
       file_sets.each { |fs| Hyrax.config.callback.run(:after_create_fileset, fs, ::User.find_by(uid: fs.depositor)) }
     end
