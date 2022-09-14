@@ -30,7 +30,7 @@ module Bulkrax
     end
 
     def parse_title(src)
-      src.blank? ? "Unknown Title" : src.strip!
+      src.blank? ? "Unknown Title" : src.strip
     end
 
     def parse_content_type(src)
