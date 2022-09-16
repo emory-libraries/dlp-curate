@@ -125,7 +125,7 @@ RSpec.describe 'Fileset upload', integration: true, admin_set: true, clean: true
   context 'when a user is not authenticated' do
     it 'requires the user to sign in' do
       visit("/concern/curate_generic_works/new#files")
-      expect(page.current_path).to eq '/users/sign_in'
+      expect(page.current_path).to include '/sign_in'
       expect(page).to have_content 'You need to sign in or sign up before continuing.'
     end
   end
