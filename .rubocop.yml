@@ -128,6 +128,7 @@ Metrics/ParameterLists:
     Exclude:
         - app/jobs/characterize_job.rb
         - app/jobs/manifest_persistence_job.rb
+        - config/initializers/collection_member_search_service_overrides.rb
         - lib/importing_modules/file_set_methods.rb
 
 RSpec/DescribeClass:
