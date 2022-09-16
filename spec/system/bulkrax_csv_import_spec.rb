@@ -56,12 +56,12 @@ RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, type: :system do
   context 'not logged in' do
     it 'redirects you to login when visiting dashboard ' do
       visit '/dashboard'
-      expect(page).to have_current_path('/users/sign_in')
+      expect(page.current_path).to include('/sign_in')
     end
 
     it 'redirects you to login when attempting to create new importer ' do
       visit '/importers/new'
-      expect(page).to have_current_path('/users/sign_in')
+      expect(page.current_path).to include('/sign_in')
     end
   end
 
