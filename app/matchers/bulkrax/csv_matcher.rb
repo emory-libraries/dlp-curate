@@ -34,7 +34,7 @@ module Bulkrax
     end
 
     def parse_content_type(src)
-      return unless src
+      return if src&.strip&.empty?
       active_terms = pull_active_terms_for('resource_types')
       # Check whether this is a uri that matches a valid URI option
       valid_uri_option = pull_valid_option(src, active_terms)
@@ -64,7 +64,7 @@ module Bulkrax
     end
 
     def parse_administrative_unit(src)
-      return unless src
+      return if src&.strip&.empty?
       active_terms = pull_active_terms_for('administrative_unit')
       valid_option = active_terms.select do |s|
         s["id"].downcase.gsub(/[^a-z0-9\s]/i, '') == normalize_term(src)
@@ -75,7 +75,7 @@ module Bulkrax
     end
 
     def parse_publisher_version(src)
-      return unless src
+      return if src&.strip&.empty?
       terms = Qa::Authorities::Local.subauthority_for('publisher_version').all
       valid_option = pull_valid_option(src, terms)
 
@@ -84,7 +84,7 @@ module Bulkrax
     end
 
     def parse_re_use_license(src)
-      return unless src
+      return if src&.strip&.empty?
       active_terms = pull_active_terms_for('licenses')
       valid_option = pull_valid_option(src, active_terms)
 
@@ -93,7 +93,7 @@ module Bulkrax
     end
 
     def parse_sensitive_material(src)
-      return unless src
+      return if src&.strip&.empty?
       active_terms = pull_active_terms_for('sensitive_material')
       transformed_term = pull_transformed_term(src)
       valid_option = pull_valid_option(transformed_term, active_terms)
