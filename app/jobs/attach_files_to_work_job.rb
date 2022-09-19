@@ -20,17 +20,17 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
 
       work, work_permissions = create_permissions work, depositor
       uploaded_files.each do |uploaded_file|
+        actor = Hyrax::Actors::FileSetActor.new(FileSet.create, user)
+        metadata = pull_metadata(work_attributes, uploaded_file)
+        actor.file_set.permissions_attributes = work_permissions
+
         next if uploaded_file.file_set_uri.present?
-        attach_work(user, work, work_attributes, work_permissions, uploaded_file)
+        attach_work(actor, work, metadata, uploaded_file)
       end
     end
 
-    def attach_work(user, work, work_attributes, work_permissions, uploaded_file)
-      actor = Hyrax::Actors::FileSetActor.new(FileSet.create, user)
-      file_set_attributes = file_set_attrs(work_attributes, uploaded_file)
-      metadata = visibility_attributes(work_attributes, file_set_attributes)
+    def attach_work(actor, work, metadata, uploaded_file)
       uploaded_file.add_file_set!(actor.file_set)
-      actor.file_set.permissions_attributes = work_permissions
       actor.create_metadata(uploaded_file.fileset_use, metadata)
       actor.fileset_name(uploaded_file.file.to_s) if uploaded_file.file.present?
       preferred = preferred_file(uploaded_file)
@@ -97,5 +97,10 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
                     :preservation_master_file
                   end
       preferred
+    end
+
+    def pull_metadata(work_attributes, uploaded_file)
+      file_set_attributes = file_set_attrs(work_attributes, uploaded_file)
+      visibility_attributes(work_attributes, file_set_attributes)
     end
 end
