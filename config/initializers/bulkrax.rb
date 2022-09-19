@@ -239,6 +239,15 @@ Bulkrax::CsvEntry.class_eval do
       parser:                         parser
     )
   end
+
+  def add_ingested_metadata
+    # we do not want to sort the values in the record before adding the metadata.
+    # if we do, the factory_class will be set to the default_work_type for all values that come before "model" or "work type"
+    record.each do |key, value|
+      index = key[/\d+/].to_i - 1 if key[/\d+/].to_i != 0
+      add_metadata(key_without_numbers(key), value, index) unless value&.strip.&empty?
+    end
+  end
 end
 
 Bulkrax::CsvParser.class_eval do
