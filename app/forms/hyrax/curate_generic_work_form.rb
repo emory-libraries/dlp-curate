@@ -2,6 +2,7 @@
 module Hyrax
   # Generated form for CurateGenericWork
   class CurateGenericWorkForm < Hyrax::Forms::WorkForm
+    extend ::CurateFormBehavior
     self.model_class = ::CurateGenericWork
 
     # Change below was necessary to institute Source/Deposit Collection structure.
@@ -27,20 +28,6 @@ module Hyrax
                   :source_collection_id]
 
     self.required_fields = REQUIRED_FIELDS_ON_FORM
-
-    # Cast back to multi-value when saving
-    # Reads from form
-    def self.model_attributes(attributes)
-      attrs = super
-      return attrs unless attributes[:title]
-
-      attrs[:title] = Array(attributes[:title])
-      return attrs if attributes[:alt_title].nil?
-      Array(attributes[:alt_title]).each do |value|
-        attrs["title"] << value if value != ""
-      end
-      attrs
-    end
 
     # @param [Symbol] key the field to read
     # @return the value of the form field.

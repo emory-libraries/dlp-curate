@@ -6,6 +6,7 @@ module Hyrax
     class CollectionForm
       include HydraEditor::Form
       include HydraEditor::Form::Permissions
+      extend ::CurateFormBehavior
       # Used by the search builder
       attr_reader :scope
 
@@ -47,20 +48,6 @@ module Hyrax
       def initialize(model, current_ability, repository)
         super(model)
         @scope = ProxyScope.new(current_ability, repository, blacklight_config)
-      end
-
-      # Cast back to multi-value when saving
-      # Reads from form
-      def self.model_attributes(attributes)
-        attrs = super
-        return attrs unless attributes[:title]
-
-        attrs[:title] = Array(attributes[:title])
-        return attrs if attributes[:alt_title].nil?
-        Array(attributes[:alt_title]).each do |value|
-          attrs["title"] << value if value != ""
-        end
-        attrs
       end
 
       # @param [Symbol] key the field to read
