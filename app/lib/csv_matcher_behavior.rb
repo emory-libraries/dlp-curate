@@ -13,7 +13,7 @@ module CsvMatcherBehavior
   ].freeze
 
   def validate_qa_for(src, subauthority)
-    return unless src
+    return if src&.strip&.empty?
     valid_option = pull_valid_option(src, pull_active_terms_for(subauthority))
 
     return src if valid_option
