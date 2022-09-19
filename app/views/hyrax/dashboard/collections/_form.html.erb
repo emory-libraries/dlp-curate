@@ -38,7 +38,7 @@
                 <% unless f.object.select_files.blank? %>
                   <%# we're loading these values dynamically to speed page load %>
                   <%= f.input :thumbnail_id,
-                            input_html: { data: { text: thumbnail_label_for(object: f.object) } } %>
+                            input_html: { data: { text: f.object.thumbnail_id } } %>
                 <% end %>
               <% end %>
             </div>
