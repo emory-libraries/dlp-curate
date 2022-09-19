@@ -60,7 +60,7 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
       click_on 'Save changes'
       # Now the form should have the new values
       expect(page).to have_content 'New Title'
-      expect(page).to have_content file_set.id
+      expect(page).to have_content file_set.title.first
     end
 
     scenario 'successfully uploads a banner image' do
