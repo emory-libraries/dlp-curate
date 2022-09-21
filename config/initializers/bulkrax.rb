@@ -221,6 +221,27 @@ Bulkrax::ObjectFactory.class_eval do
     u.send("#{process_file_types(path.split('/').last)}=", CarrierWave::SanitizedFile.new(path))
     update_filesets(u)
   end
+
+  # Override if we need to map the attributes from the parser in
+  # a way that is compatible with how the factory needs them.
+  def transform_attributes(update: false)
+    @transform_attributes = attributes.slice(*permitted_attributes)
+    @transform_attributes.merge!(file_attributes(update_files)) if with_files
+    @transform_attributes = remove_blank_hash_values(@transform_attributes)
+    update ? @transform_attributes.except(:id) : @transform_attributes
+  end
+
+  def remove_blank_hash_values(hsh)
+    dupe = hsh.dup
+    dupe.each do |k, v|
+      if v.is_a?(Array) && v.all? { |o| o.is_a?(String) && o.empty? }
+        dupe[k] = []
+      elsif v.is_a?(String) && v.empty?
+        dupe[k] = nil
+      end
+    end
+    dupe
+  end
 end
 # rubocop:enable Metrics/BlockLength
 
@@ -238,15 +259,6 @@ Bulkrax::CsvEntry.class_eval do
       update_files:                   update_files,
       parser:                         parser
     )
-  end
-
-  def add_ingested_metadata
-    # we do not want to sort the values in the record before adding the metadata.
-    # if we do, the factory_class will be set to the default_work_type for all values that come before "model" or "work type"
-    record.each do |key, value|
-      index = key[/\d+/].to_i - 1 if key[/\d+/].to_i != 0
-      add_metadata(key_without_numbers(key), value, index) unless value&.strip&.empty?
-    end
   end
 end
 
