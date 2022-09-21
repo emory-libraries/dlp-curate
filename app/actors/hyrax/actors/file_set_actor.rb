@@ -148,18 +148,19 @@ module Hyrax
         # If all else fails, use the basename of the file where it sits.
         # @note This is only useful for labeling the file_set, because of the recourse to import_url
         def label_for(file)
-          if file.is_a?(Hyrax::UploadedFile) # filename not present for uncached remote file!
-            file.uploader.filename.presence || File.basename(Addressable::URI.unencode(file.file_url))
-          elsif file.respond_to?(:original_name) # e.g. Hydra::Derivatives::IoDecorator
-            file.original_name
-          elsif file_set.import_url.present?
-            # This path is taken when file is a Tempfile (e.g. from ImportUrlJob)
-            File.basename(Addressable::URI.unencode(file.file_url))
-          elsif file.respond_to?(:original_filename) # e.g. Rack::Test::UploadedFile
-            file.original_filename
-          else
-            File.basename(file.to_s)
-          end
+          # filename not present for uncached remote file!
+          return uploaded_file_label(file) if file.is_a?(Hyrax::UploadedFile)
+          # e.g. Hydra::Derivatives::IoDecorator
+          return file.original_name if file.respond_to?(:original_name)
+          # This path is taken when file is a Tempfile (e.g. from ImportUrlJob)
+          return File.basename(Addressable::URI.unencode(file.file_url)) if file_set.import_url.present?
+          # e.g. Rack::Test::UploadedFile
+          return file.original_filename if file.respond_to?(:original_filename)
+          File.basename(file.to_s)
+        end
+
+        def uploaded_file_label(file)
+          file.uploader.filename.presence || File.basename(Addressable::URI.unencode(file.file_url))
         end
 
         def assign_visibility?(file_set_params = {})
