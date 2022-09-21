@@ -136,16 +136,24 @@ module Hyrax
         if wants_to_revert?
           actor.revert_content(params[:revision])
         elsif params.key?(:file_set)
-          if params[:file_set].key?(:files)
-            actor.update_content(uploaded_file_from_path, @file_set.preferred_file)
-          else
-            update_metadata
-          end
+          general_file_set_update
         elsif params.key?(:files_files) # version file already uploaded with ref id in :files_files array
-          uploaded_files = Array(Hyrax::UploadedFile.find(params[:files_files]))
-          actor.update_content(uploaded_files.first, @file_set.preferred_file)
+          files_files_file_set_update
+        end
+      end
+
+      def general_file_set_update
+        if params[:file_set].key?(:files)
+          actor.update_content(uploaded_file_from_path, @file_set.preferred_file)
+        else
           update_metadata
         end
+      end
+
+      def files_files_file_set_update
+        uploaded_files = Array(Hyrax::UploadedFile.find(params[:files_files]))
+        actor.update_content(uploaded_files.first, @file_set.preferred_file)
+        update_metadata
       end
 
       def uploaded_file_from_path
