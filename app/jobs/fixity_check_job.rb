@@ -37,15 +37,7 @@ class FixityCheckJob < Hyrax::ApplicationJob
       result   = audit.failed? ? :failure : :success
       file_set = ::FileSet.find(file_set_id)
 
-      Hyrax.publisher.publish('file.set.audited', file_set: file_set, audit_log: audit, result: result)
-
-      # @todo remove this callback call for Hyrax 4.0.0
-      if audit.failed? && Hyrax.config.callback.set?(:after_fixity_check_failure)
-        Hyrax.config.callback.run(:after_fixity_check_failure,
-                                  file_set,
-                                  checksum_audit_log: audit, warn: false)
-      end
-
+      announce_fixity_check_results(file_set, audit, result)
       file_set_preservation_event(audit.passed, file_set_id, file_id, event_start, initiating_user)
     end
   end
@@ -85,5 +77,22 @@ class FixityCheckJob < Hyrax::ApplicationJob
         @logger.error "Fixity check failure: Fixity failed for #{fixity_file&.original_name}"
       end
       create_preservation_event(fixity_file_set, event)
+    end
+
+    def announce_fixity_check_results(file_set, audit, result)
+      Hyrax.publisher.publish('file.set.audited', file_set: file_set, audit_log: audit, result: result)
+
+      # @todo remove this callback call for Hyrax 4.0.0
+      process_failure_callback(file_set, audit) if should_call_failure_callback(audit)
+    end
+
+    def should_call_failure_callback(audit)
+      audit.failed? && Hyrax.config.callback.set?(:after_fixity_check_failure)
+    end
+
+    def process_failure_callback(file_set, audit)
+      Hyrax.config.callback.run(:after_fixity_check_failure,
+                                file_set,
+                                checksum_audit_log: audit, warn: false)
     end
 end
