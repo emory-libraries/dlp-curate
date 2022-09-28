@@ -52,17 +52,19 @@ module Hyrax
 
       @parent = main_app.polymorphic_path(presenter.parent)
       @fileset_use = presenter.pcdm_use.first unless presenter.pcdm_use.nil?
-      files
-      if @sf
-        @display_file = @sf
+      @files = set_files
+
+      if @files[:service_file]
+        @display_file = @files[:service_file]
         @display_use = 'service_file'
-      elsif @if
-        @display_file = @if
+      elsif @files[:intermediate_file]
+        @display_file = @files[:intermediate_file]
         @display_use = 'intermediate_file'
       else
-        @display_file = @file_set.preservation_master_file
+        @display_file = @files[:preservation_master_file]
         @display_use = 'preservation_master_file'
       end
+
       respond_to do |wants|
         wants.html
         wants.json
@@ -303,12 +305,14 @@ module Hyrax
         @file_set = ::FileSet.find(params[:id])
       end
 
-      def files
-        @pm = @file_set.preservation_master_file unless @file_set.preservation_master_file.nil?
-        @sf = @file_set.service_file unless @file_set.service_file.nil?
-        @if = @file_set.intermediate_file unless @file_set.intermediate_file.nil?
-        @et = @file_set.extracted unless @file_set.extracted.nil?
-        @tf = @file_set.transcript_file unless @file_set.transcript_file.nil?
+      def set_files
+        {
+          'preservation_master_file': @file_set.preservation_master_file,
+          'service_file':             @file_set.service_file,
+          'intermediate_file':        @file_set.intermediate_file,
+          'extracted':                @file_set.extracted,
+          'transcript_file':          @file_set.transcript_file
+        }
       end
   end
 end
