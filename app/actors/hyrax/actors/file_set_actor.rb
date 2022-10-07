@@ -158,8 +158,6 @@ module Hyrax
           return file.original_name if file.respond_to?(:original_name)
           # This path is taken when file is a Tempfile (e.g. from ImportUrlJob)
           return File.basename(Addressable::URI.unencode(file.file_url)) if file_set.import_url.present?
-          # e.g. Rack::Test::UploadedFile
-          return file.original_filename if file.respond_to?(:original_filename)
           File.basename(file.to_s)
         end
 
