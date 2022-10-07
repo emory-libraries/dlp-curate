@@ -42,7 +42,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows doe
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '~> 4.x'
 gem 'whenever', require: false
-gem 'zizia'
+gem 'zizia', '~> 5.5.0'
 
 group :development do
   gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2'
