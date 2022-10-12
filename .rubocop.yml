@@ -63,6 +63,7 @@ Metrics/ClassLength:
         - app/forms/hyrax/forms/collection_form.rb
         - app/importers/curate_mapper.rb
         - app/importers/curate_record_importer.rb
+        - app/importers/dams_preprocessor.rb
         - app/indexers/curate_generic_work_indexer.rb
         - app/models/curate_generic_work.rb
         - app/models/solr_document.rb
