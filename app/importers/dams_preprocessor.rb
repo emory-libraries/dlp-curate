@@ -14,16 +14,18 @@ class DamsPreprocessor
   # @param [String] csv the path to a CSV file containing the expectd Pull List metadata
   # Change below was necessary to institute Source/Deposit Collection structure.
   # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
-  def initialize(csv)
+  def initialize(csv, importer)
     convert = dams_header_map
     header_lambda = ->(name) { (convert[name] || name) }
     mapped_csv = CSV.open(csv, headers: true, header_converters: header_lambda, converters: :all)
     @source_csv = mapped_csv.read
+    @is_for_bulkrax = importer == 'bulkrax'
+    @headers_to_merge = @is_for_bulkrax ? additional_headers_bulkrax : additional_headers
     directory = File.dirname(csv)
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
     @processed_csv = File.join(directory, filename + "-processed.csv")
-    @merged_headers = exclusion_guard(additional_headers + @source_csv.headers)
+    @merged_headers = exclusion_guard(@headers_to_merge + @source_csv.headers)
     @tree = {}
   end
 
@@ -32,13 +34,19 @@ class DamsPreprocessor
   end
 
   def additional_headers
-    ['source_row', 'deduplication_key', 'type', 'fileset_label', 'preservation_master_file']
+    ['source_row', 'deduplication_key', 'type', 'parent', 'file', 'file_types',
+     'fileset_label', 'preservation_master_file']
+  end
+
+  def additional_headers_bulkrax
+    ['source_row', 'deduplication_key', 'model', 'parent', 'file', 'file_types',
+     'fileset_label', 'preservation_master_file']
   end
 
   def dams_header_map
     { "Desc - Abstract" => "abstract", "Desc - Administrative Unit" => "administrative_unit",
       "Desc - Call Number/MSS Number" => "local_call_number", "Desc - Contact Information" => "contact_information",
-      "Desc - Creator" => "creators", "Desc - Date Created" => "date_created", "Desc - Date Published" => "date_issued",
+      "Desc - Creator" => "creator", "Desc - Date Created" => "date_created", "Desc - Date Published" => "date_issued",
       "Desc - Genre - AAT" => "content_genres", "Desc - Genre - Legacy Data" => "content_genres",
       "Desc - Holding Repository" => "holding_repository", "Desc - Institution" => "institution",
       "Desc - Language - Primary" => "primary_language", "Desc - Notes" => "notes",
@@ -78,7 +86,12 @@ class DamsPreprocessor
       merge_csv << work[:metadata]
       work[:filesets].keys.sort.each do |fileset_index|
         fileset = work[:filesets][fileset_index]
-        fileset['fileset_label'] = make_label(fileset_index)
+        fileset_label = make_label(fileset_index)
+        if @is_for_bulkrax
+          fileset['title'] = fileset_label
+        else
+          fileset['fileset_label'] = fileset_label
+        end
         merge_csv << fileset
       end
       progressbar.increment
@@ -87,12 +100,16 @@ class DamsPreprocessor
   end
 
   def process_row(row, source_row_num)
-    deduplication_key = row['Digital Object - Parent Identifier']
+    parent = row['Digital Object - Parent Identifier']
+    deduplication_key = @is_for_bulkrax ? '' : parent
     sequence_number, target_file, metadata_row = extract_structure(row)
-    @tree[deduplication_key] ||= { metadata: nil, filesets: {} } # create a placeholder if we don't have one for this key
-    @tree[deduplication_key][:metadata] = extract_metadata(row, source_row_num) if metadata_row
-    @tree[deduplication_key][:filesets][sequence_number] ||= CSV::Row.new(@merged_headers, [source_row_num, deduplication_key, 'fileset'])
-    @tree[deduplication_key][:filesets][sequence_number][target_file] = relative_path_to_file(row)
+    model_or_type = @is_for_bulkrax ? 'FileSet' : 'fileset'
+    filename = row['Filename']
+    file_types = [filename, 'preservation_master_file'].join(':')
+    @tree[parent] ||= { metadata: nil, filesets: {} } # create a placeholder if we don't have one for this key
+    @tree[parent][:metadata] = extract_metadata(row, source_row_num) if metadata_row
+    @tree[parent][:filesets][sequence_number] ||= CSV::Row.new(@merged_headers, [source_row_num, deduplication_key, model_or_type, parent, filename, file_types])
+    @tree[parent][:filesets][sequence_number][target_file] = relative_path_to_file(row)
   end
 
   def extract_structure(row)
@@ -104,8 +121,10 @@ class DamsPreprocessor
   end
 
   def extract_metadata(row, source_row_num)
+    parent = row['source_collection_id']
     deduplication_key = row['Digital Object - Parent Identifier']
-    processed_row = CSV::Row.new(additional_headers, [source_row_num, deduplication_key, 'work'])
+    model_or_type = @is_for_bulkrax ? 'CurateGenericWork' : 'work'
+    processed_row = CSV::Row.new(@headers_to_merge, [source_row_num, deduplication_key, model_or_type, parent, '', ''])
     processed_row << row.to_hash
   end
 
