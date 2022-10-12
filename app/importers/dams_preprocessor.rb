@@ -20,6 +20,7 @@ class DamsPreprocessor
     mapped_csv = CSV.open(csv, headers: true, header_converters: header_lambda, converters: :all)
     @source_csv = mapped_csv.read
     @is_for_bulkrax = importer == 'bulkrax'
+    @fileset_model_or_type = @is_for_bulkrax ? 'FileSet' : 'fileset'
     @headers_to_merge = @is_for_bulkrax ? additional_headers_bulkrax : additional_headers
     directory = File.dirname(csv)
     extension = File.extname(csv)
@@ -102,19 +103,26 @@ class DamsPreprocessor
   def process_row(row, source_row_num)
     parent = row['Digital Object - Parent Identifier']
     deduplication_key = @is_for_bulkrax ? '' : parent
-    sequence_number, target_file, metadata_row = extract_structure(row)
-    model_or_type = @is_for_bulkrax ? 'FileSet' : 'fileset'
-    filename = row['Filename']
-    file_types = [filename, 'preservation_master_file'].join(':')
+    @sequence_number, @target_file, @metadata_row = extract_structure(row)
+    @file_types = [@fileset_filename, 'preservation_master_file'].join(':')
     @tree[parent] ||= { metadata: nil, filesets: {} } # create a placeholder if we don't have one for this key
-    @tree[parent][:metadata] = extract_metadata(row, source_row_num) if metadata_row
-    @tree[parent][:filesets][sequence_number] ||= CSV::Row.new(@merged_headers, [source_row_num, deduplication_key, model_or_type, parent, filename, file_types])
-    @tree[parent][:filesets][sequence_number][target_file] = relative_path_to_file(row)
+
+    populate_tree_row_metadata(parent, row, source_row_num)
+    populate_tree_row_fileset(parent, source_row_num, deduplication_key, row)
+  end
+
+  def populate_tree_row_metadata(parent, row, source_row_num)
+    @tree[parent][:metadata] = extract_metadata(row, source_row_num) if @metadata_row
+  end
+
+  def populate_tree_row_fileset(parent, source_row_num, deduplication_key, row)
+    @tree[parent][:filesets][@sequence_number] ||= CSV::Row.new(@merged_headers, [source_row_num, deduplication_key, @fileset_model_or_type, parent, @fileset_filename, @file_types])
+    @tree[parent][:filesets][@sequence_number][@target_file] = relative_path_to_file(row)
   end
 
   def extract_structure(row)
-    filename = row['Filename']
-    p_number = filename.scan(/P0+(\d+)/)[0][0].to_i
+    @fileset_filename = row['Filename']
+    p_number = @fileset_filename.scan(/P0+(\d+)/)[0][0].to_i
     target_file = 'preservation_master_file'
     metadata_row = p_number == 1 && target_file == 'preservation_master_file'
     [p_number, target_file, metadata_row]
