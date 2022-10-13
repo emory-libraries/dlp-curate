@@ -41,7 +41,7 @@ class BackgroundJobsController < ApplicationController
           YellowbackPreprocessor.new(
             params[:book_csv].path,
             params[:book_xml].path,
-            params[:book_repl],
+            'zizia',
             params[:book_map].to_sym,
             params[:book_start_num].to_i
           )
