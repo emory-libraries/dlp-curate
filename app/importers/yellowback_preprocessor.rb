@@ -178,57 +178,83 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
 
     def pdf_row(csv_index, row)
       pdf = pull_pdf(row)
-      fileset_title = 'PDF for volume'
-      new_row = build_new_row(csv_index, row, fileset_title)
+      new_row = build_new_row(csv_index, row, pdf_fileset_title)
       filename = pull_filename_from_path(pdf)
 
-      new_row + file_mappings(
-        fileset_label:            @is_for_bulkrax ? nil : fileset_title,
-        preservation_master_file: pdf,
-        pcdm_use:                 @is_for_bulkrax ? 'Primary Content' : nil,
-        file:                     @is_for_bulkrax && filename.present? ? filename : nil,
-        file_types:               @is_for_bulkrax ? build_file_type_pair(filename, 'preservation_master_file') : nil
-      )
+      build_complete_pdf_row(new_row, pdf, filename)
     end
 
     def ocr_row(csv_index, row)
       ocr = row['OCR_Path'].sub("Volumes", @replacement_path)
-      fileset_title = 'OCR Output for Volume'
-      new_row = build_new_row(csv_index, row, fileset_title)
+      new_row = build_new_row(csv_index, row, ocr_fileset_title)
       filename = pull_filename_from_path(ocr)
 
-      new_row + file_mappings(
-        fileset_label:            @is_for_bulkrax ? nil : fileset_title,
-        preservation_master_file: ocr,
-        pcdm_use:                 @is_for_bulkrax ? 'Supplemental Content' : ::FileSet::SUPPLEMENTAL,
-        file:                     @is_for_bulkrax && filename.present? ? filename : nil,
-        file_types:               @is_for_bulkrax ? build_file_type_pair(filename, 'preservation_master_file') : nil
-      )
+      build_complete_ocr_row(new_row, ocr, filename)
     end
 
     def mets_row(csv_index, row)
       mets = pull_mets(row)
-      fileset_title = 'METS File'
-      new_row = build_new_row(csv_index, row, fileset_title)
+      new_row = build_new_row(csv_index, row, mets_fileset_title)
       filename = pull_filename_from_path(mets)
 
-      new_row + file_mappings(
-        fileset_label:            @is_for_bulkrax ? nil : fileset_title,
-        preservation_master_file: mets,
-        pcdm_use:                 @is_for_bulkrax ? 'Primary Content' : ::FileSet::PRESERVATION,
+      build_complete_mets_row(new_row, mets, filename)
+    end
+
+    def file_row(csv_index, row, page) # rubocop:disable Metrics/MethodLength
+      page_number, extract_field, extract_extension = pull_file(page)
+      image, transcript, extract = pull_file_paths(page_number, extract_field, extract_extension, row)
+      fileset_title = "Page #{page - @base_offset}"
+      new_row = build_new_row(csv_index, row, fileset_title)
+
+      build_complete_file_row(new_row, fileset_title, image, transcript, extract)
+    end
+
+    def pdf_fileset_title
+      'PDF for volume'
+    end
+
+    def ocr_fileset_title
+      'OCR Output for Volume'
+    end
+
+    def mets_fileset_title
+      'METS File'
+    end
+
+    def pull_file_paths(page_number, extract_field, extract_extension, row)
+      [relative_filename(row['Disp_Path'], page_number, 'tif'),
+       relative_filename(row['Txt_Path'], page_number, 'txt'),
+       pull_extract_field(row, extract_field, page_number, extract_extension)]
+    end
+
+    def pull_extract_field(row, extract_field, page_number, extract_extension)
+      return if @workflow == :kirtas
+      relative_filename(row[extract_field], page_number, extract_extension)
+    end
+
+    def build_complete_pdf_row(new_row, pdf, filename)
+      generic_complete_row_builder(new_row, pdf, filename, pdf_fileset_title, pdf_pcdm_use)
+    end
+
+    def build_complete_ocr_row(new_row, ocr, filename)
+      generic_complete_row_builder(new_row, ocr, filename, ocr_fileset_title, ocr_pcdm_use)
+    end
+
+    def build_complete_mets_row(new_row, mets, filename)
+      generic_complete_row_builder(new_row, mets, filename, mets_fileset_title, mets_pcdm_use)
+    end
+
+    def generic_complete_row_builder(build_on_row, file_path, filename, title, pcdm_use)
+      build_on_row + file_mappings(
+        fileset_label:            @is_for_bulkrax ? nil : title,
+        preservation_master_file: file_path,
+        pcdm_use:                 pcdm_use,
         file:                     @is_for_bulkrax && filename.present? ? filename : nil,
         file_types:               @is_for_bulkrax ? build_file_type_pair(filename, 'preservation_master_file') : nil
       )
     end
 
-    def file_row(csv_index, row, page) # rubocop:disable Metrics/MethodLength
-      page_number, extract_field, extract_extension = pull_file(page)
-      image = relative_filename(row['Disp_Path'], page_number, 'tif')
-      transcript = relative_filename(row['Txt_Path'], page_number, 'txt')
-      extract = relative_filename(row[extract_field], page_number, extract_extension) if @workflow == :limb
-      fileset_title = "Page #{page - @base_offset}"
-      new_row = build_new_row(csv_index, row, fileset_title)
-
+    def build_complete_file_row(new_row, fileset_title, image, transcript, extract)
       new_row + file_mappings(
         fileset_label:            @is_for_bulkrax ? nil : fileset_title,
         preservation_master_file: image,
@@ -236,16 +262,31 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
         extracted:                extract,
         pcdm_use:                 @is_for_bulkrax ? 'Primary Content' : nil,
         file:                     @is_for_bulkrax ? build_file_list([image, transcript, extract]) : nil,
-        file_types:               if @is_for_bulkrax
-                                    build_multiple_file_types(
-                                      [
-                                        [pull_filename_from_path(image), 'preservation_master_file'],
-                                        [pull_filename_from_path(transcript), 'transcript'],
-                                        [pull_filename_from_path(extract), 'extracted_text']
-                                      ]
-                                    )
-                                  end
+        file_types:               process_file_file_types(image, transcript, extract)
       )
+    end
+
+    def process_file_file_types(image, transcript, extract)
+      return unless @is_for_bulkrax
+      build_multiple_file_types(
+        [
+          [pull_filename_from_path(image), 'preservation_master_file'],
+          [pull_filename_from_path(transcript), 'transcript'],
+          [pull_filename_from_path(extract), 'extracted_text']
+        ]
+      )
+    end
+
+    def pdf_pcdm_use
+      @is_for_bulkrax ? 'Primary Content' : nil
+    end
+
+    def ocr_pcdm_use
+      @is_for_bulkrax ? 'Supplemental Content' : ::FileSet::SUPPLEMENTAL
+    end
+
+    def mets_pcdm_use
+      @is_for_bulkrax ? 'Primary Content' : ::FileSet::PRESERVATION
     end
 
     def pull_pdf(row)
