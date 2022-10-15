@@ -28,13 +28,9 @@ RSpec.describe ManifestRegenerationController, type: :controller, clean: true do
       end
 
       it "queues up fileset cleanup job" do
-        # Below is a revision on 8/25/21. Since this method is only used on the show page
-        # and that page load always calls the build_manifest function, it is unnecessary
-        # to call it again. In the past, this has caused two simultaneous jobs to be enqueued.
-        expect(ManifestBuilderService).not_to receive(:build_manifest).with(presenter: presenter, curation_concern: work)
+        expect(ManifestBuilderService).to receive(:regenerate_manifest).with(presenter: presenter, curation_concern: work)
         post :regen_manifest, params: { work_id: work }, xhr: true
-        expect(File.exist?("./tmp/abc123_#{work.id}")).to be_falsey
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end
