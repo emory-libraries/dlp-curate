@@ -179,7 +179,7 @@ class YellowbackPreprocessor
 
       merge_csv << ondemand_transcript_row(csv_index, row) if should_add_pdf(row) && @add_transcript
 
-      merge_csv << ondemand_ocr_row(csv_index, row) if !should_add_ocr(row) && @add_ocr_output
+      merge_csv << ondemand_ocr_row(csv_index, row) if !should_add_ocr(row) && should_add_pdf(row) && @add_ocr_output
 
       pages = row['Disp_Cnt'].to_i
 
