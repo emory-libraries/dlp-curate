@@ -6,33 +6,17 @@ inherit_from: .rubocop_todo.yml
 AllCops:
     TargetRubyVersion: 2.5
     Exclude:
-        - 'bin/**/*'
-        - 'db/**/*'
-        - 'tmp/**/*'
-        - 'vendor/**/*'
-        - 'node_modules/**/*'
+        - bin/**/*
+        - db/**/*
+        - tmp/**/*
+        - vendor/**/*
+        - node_modules/**/*
         - lib/tasks/sample_data.rake
-
-Layout/HashAlignment:
-    EnforcedColonStyle: table
-
-Layout/IndentationConsistency:
-    EnforcedStyle: indented_internal_methods
-
-RSpec/MessageSpies:
-    EnforcedStyle: receive
-
-Lint/NonLocalExitFromIterator:
-    Exclude:
-        - app/importers/collection_permission_ensurer.rb
 
 Metrics/AbcSize:
     Exclude:
         - app/controllers/background_jobs_controller.rb
-        - app/importers/curate_collection_importer.rb
-        - app/importers/curate_record_importer.rb
-        - app/importers/modular_importer.rb
-        - app/importers/preservation_workflow_importer.rb
+        - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
         - app/lib/metadata_details.rb
@@ -44,11 +28,7 @@ Metrics/BlockLength:
         - app/controllers/catalog_controller.rb
         - app/importers/curate_collection_importer.rb
         - app/views/manifest/manifest.json.jbuilder
-        - config/initializers/bulkrax.rb
-        - config/initializers/characterization_service.rb
-        - config/initializers/hyrax.rb
-        - config/initializers/job_io_wrapper.rb
-        - config/initializers/simple_form_bootstrap.rb
+        - config/initializers/*
         - config/routes.rb
         - lib/tasks/curate_books.rake
         - lib/tasks/curate_collections.rake
@@ -61,9 +41,7 @@ Metrics/ClassLength:
         - app/controllers/catalog_controller.rb
         - app/controllers/iiif_controller.rb
         - app/forms/hyrax/forms/collection_form.rb
-        - app/importers/curate_mapper.rb
-        - app/importers/curate_record_importer.rb
-        - app/importers/dams_preprocessor.rb
+        - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
         - app/models/curate_generic_work.rb
         - app/models/solr_document.rb
@@ -75,16 +53,27 @@ Metrics/CyclomaticComplexity:
     Exclude:
         - app/controllers/iiif_controller.rb
         - app/importers/curate_record_importer.rb
+        - app/importers/yellowback_preprocessor.rb
         - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
         - app/models/concerns/hydra/access_controls/visibility.rb
         - config/initializers/file_actor.rb
 
+Layout/HashAlignment:
+    EnforcedColonStyle: table
+
+Layout/IndentationConsistency:
+    EnforcedStyle: indented_internal_methods
+
 Layout/LineLength:
     Exclude:
-        - spec/importers/curate_mapper_spec.rb
         - app/importers/curate_record_importer.rb
+        - spec/importers/curate_mapper_spec.rb
+
+Lint/NonLocalExitFromIterator:
+    Exclude:
+        - app/importers/collection_permission_ensurer.rb
 
 Metrics/MethodLength:
     Exclude:
@@ -92,11 +81,7 @@ Metrics/MethodLength:
         - app/controllers/hyrax/file_sets_controller.rb
         - app/controllers/iiif_controller.rb
         - app/forms/hyrax/curate_generic_work_form.rb
-        - app/importers/curate_collection_importer.rb
-        - app/importers/curate_mapper.rb
-        - app/importers/curate_record_importer.rb
-        - app/importers/dams_preprocessor.rb
-        - app/importers/modular_importer.rb
+        - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
@@ -107,48 +92,27 @@ Metrics/MethodLength:
         - app/uploaders/zizia/csv_manifest_validator.rb
         - spec/fixtures/manifest_output.rb
         - spec/fixtures/placeholder_manifest_output.rb
-        - app/importers/dams_preprocessor.rb
-        - app/models/concerns/hydra/access_controls/visibility.rb
 
 Metrics/ModuleLength:
     Exclude:
         - app/lib/metadata_definitions.rb
         - app/models/concerns/hyrax/collection_behavior.rb
 
+Metrics/ParameterLists:
+    Exclude:
+        - app/importers/yellowback_preprocessor.rb
+        - lib/importing_modules/file_set_methods.rb
+        - app/jobs/manifest_persistence_job.rb
+
 Metrics/PerceivedComplexity:
     Exclude:
         - app/importers/curate_record_importer.rb
+        - app/importers/yellowback_preprocessor.rb
         - app/forms/hyrax/curate_generic_work_form.rb
 
-Metrics/ParameterLists:
+Naming/PredicateName:
     Exclude:
-        - app/jobs/manifest_persistence_job.rb
-        - lib/importing_modules/file_set_methods.rb
-
-RSpec/DescribeClass:
-    Exclude:
-        - 'spec/models/visibility_spec.rb'
-
-RSpec/ExampleLength:
-    Exclude:
-        - 'spec/**/*'
-
-RSpec/NestedGroups:
-    Exclude:
-        - 'spec/controllers/hyrax/downloads_controller_spec.rb'
-        - 'spec/controllers/hyrax/file_sets_controller_spec.rb'
-
-RSpec/InstanceVariable:
-    Exclude:
-        - 'spec/services/characterization_service_spec.rb'
-
-RSpec/MessageChain:
-    Exclude:
-        - 'spec/services/characterization_service_spec.rb'
-        - 'spec/actors/hyrax/actors/file_actor_spec.rb'
-        - 'spec/system/show_file_spec.rb'
-        - 'spec/jobs/file_set_clean_up_job_spec.rb'
-        - 'spec/jobs/check_binaries_job_spec.rb'
+        - app/models/concerns/hydra/access_controls/access_right.rb
 
 RSpec/AnyInstance:
     Exclude:
@@ -156,10 +120,35 @@ RSpec/AnyInstance:
         - spec/models/job_io_wrapper_spec.rb
         - spec/views/manifest/manifest.json.jbuilder_spec.rb
 
+RSpec/DescribeClass:
+    Exclude:
+        - spec/models/visibility_spec.rb
+
+RSpec/ExampleLength:
+    Exclude:
+        - spec/**/*
+
+RSpec/InstanceVariable:
+    Exclude:
+        - spec/services/characterization_service_spec.rb
+
 RSpec/LetSetup:
     Exclude:
         - spec/presenters/collection_presenter_spec.rb
 
-Naming/PredicateName:
+RSpec/MessageChain:
     Exclude:
-        - app/models/concerns/hydra/access_controls/access_right.rb
+        - spec/actors/hyrax/actors/file_actor_spec.rb
+        - spec/jobs/check_binaries_job_spec.rb
+        - spec/jobs/file_set_clean_up_job_spec.rb
+        - spec/models/job_io_wrapper_spec.rb
+        - spec/services/characterization_service_spec.rb
+        - spec/system/show_file_spec.rb
+
+RSpec/MessageSpies:
+    EnforcedStyle: receive
+
+RSpec/NestedGroups:
+    Exclude:
+        - spec/controllers/hyrax/downloads_controller_spec.rb
+        - spec/controllers/hyrax/file_sets_controller_spec.rb

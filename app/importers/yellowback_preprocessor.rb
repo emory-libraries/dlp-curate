@@ -6,7 +6,7 @@ require 'ruby-progressbar'
 # Utility service and methods that merge metadata from a CSV Pull List and MARCXml records
 # into a format suitable for ingest by the curate CSV importer
 
-class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
+class YellowbackPreprocessor
   attr_accessor :processed_csv
 
   ##
@@ -15,7 +15,13 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
   # @param [String] marcxml the path to an XML file containing one or more MARCXml records
   # @param [String] replacement_path AWS target path to replace 'Volumes' in source data
   # @param [String] digitization the fileset mappings to use (:limb or :kirtas)
-  def initialize(csv, marcxml, importer, workflow = :kirtas, start_page = 1)
+  def initialize(csv,
+                 marcxml,
+                 importer,
+                 workflow = :kirtas,
+                 start_page = 1,
+                 add_transcript = false,
+                 add_ocr_output = false)
     @pull_list = CSV.read(csv, headers: true)
     @marc_records = Nokogiri::XML(File.open(marcxml))
     @workflow = workflow
@@ -23,6 +29,8 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     @is_for_bulkrax = importer == 'bulkrax'
     @proper_model_or_type_work = @is_for_bulkrax ? 'CurateGenericWork' : 'work'
     @proper_model_or_type_fileset = @is_for_bulkrax ? 'FileSet' : 'fileset'
+    @add_transcript = add_transcript
+    @add_ocr_output = add_ocr_output
     directory = File.dirname(csv)
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
@@ -32,7 +40,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
 
   # Change below was necessary to institute Source/Deposit Collection structure.
   # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
-  def header_fields # rubocop:disable Metrics/MethodLength
+  def header_fields
     [
       # Context fields to help humans compare this file to sources
       'deduplication_key',
@@ -86,7 +94,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       'file',
       'file_types'
     ]
-  end # rubocop:enable Metrics/MethodLength
+  end
 
   def merge
     merge_csv = CSV.open(@processed_csv, 'w+', headers: true, write_headers: true)
@@ -136,7 +144,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       ]
     end
 
-    def alma_mappings(record, row) # rubocop:disable Metrics/MethodLength
+    def alma_mappings(record, row)
       [
         conference_name(record),
         contributors(record),
@@ -162,18 +170,30 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       ]
     end
 
-    def add_file_rows(csv_index, merge_csv, row) # rubocop:disable Metrics/CyclomaticComplexity
-      merge_csv << pdf_row(csv_index, row) if row['PDF_Path'].present? && row['PDF_Cnt'] == '1'
+    def add_file_rows(csv_index, merge_csv, row)
+      merge_csv << pdf_row(csv_index, row) if should_add_pdf(row)
 
-      merge_csv << ocr_row(csv_index, row) if row['OCR_Path'].present? && row['OCR_Cnt'] == '1'
+      merge_csv << ocr_row(csv_index, row) if should_add_ocr(row)
 
       merge_csv << mets_row(csv_index, row) if row['METS_Path'].present? && row['METS_Cnt'] == '1'
+
+      merge_csv << ondemand_transcript_row(csv_index, row) if should_add_pdf(row) && @add_transcript
+
+      merge_csv << ondemand_ocr_row(csv_index, row) if !should_add_ocr(row) && @add_ocr_output
 
       pages = row['Disp_Cnt'].to_i
 
       (1..pages).each do |page|
         merge_csv << file_row(csv_index, row, page)
       end
+    end
+
+    def should_add_pdf(row)
+      row['PDF_Path'].present? && row['PDF_Cnt'] == '1'
+    end
+
+    def should_add_ocr(row)
+      row['OCR_Path'].present? && row['OCR_Cnt'] == '1'
     end
 
     def pdf_row(csv_index, row)
@@ -200,7 +220,23 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       build_complete_mets_row(new_row, mets, filename)
     end
 
-    def file_row(csv_index, row, page) # rubocop:disable Metrics/MethodLength
+    def ondemand_transcript_row(csv_index, row)
+      transcript = pull_and_transform_pdf(row, '.txt')
+      new_row = build_new_row(csv_index, row, transcript_fileset_title)
+      filename = pull_filename_from_path(transcript)
+
+      build_complete_pdf_row(new_row, transcript, filename)
+    end
+
+    def ondemand_ocr_row(csv_index, row)
+      ocr = pull_and_transform_pdf(row, '.xml')
+      new_row = build_new_row(csv_index, row, ocr_fileset_title)
+      filename = pull_filename_from_path(ocr)
+
+      build_complete_ocr_row(new_row, ocr, filename)
+    end
+
+    def file_row(csv_index, row, page)
       page_number, extract_field, extract_extension = pull_file(page)
       image, transcript, extract = pull_file_paths(page_number, extract_field, extract_extension, row)
       fileset_title = "Page #{page - @base_offset}"
@@ -221,6 +257,10 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       'METS File'
     end
 
+    def transcript_fileset_title
+      'Transcript for Volume'
+    end
+
     def pull_file_paths(page_number, extract_field, extract_extension, row)
       [relative_filename(row['Disp_Path'], page_number, 'tif'),
        relative_filename(row['Txt_Path'], page_number, 'txt'),
@@ -233,15 +273,15 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
     end
 
     def build_complete_pdf_row(new_row, pdf, filename)
-      generic_complete_row_builder(new_row, pdf, filename, pdf_fileset_title, pdf_pcdm_use)
+      generic_complete_row_builder(new_row, pdf, filename, pdf_fileset_title, ::FileSet::PRIMARY)
     end
 
     def build_complete_ocr_row(new_row, ocr, filename)
-      generic_complete_row_builder(new_row, ocr, filename, ocr_fileset_title, ocr_pcdm_use)
+      generic_complete_row_builder(new_row, ocr, filename, ocr_fileset_title, ::FileSet::SUPPLEMENTAL)
     end
 
     def build_complete_mets_row(new_row, mets, filename)
-      generic_complete_row_builder(new_row, mets, filename, mets_fileset_title, mets_pcdm_use)
+      generic_complete_row_builder(new_row, mets, filename, mets_fileset_title, ::FileSet::PRESERVATION)
     end
 
     def generic_complete_row_builder(build_on_row, file_path, filename, title, pcdm_use)
@@ -277,18 +317,6 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       )
     end
 
-    def pdf_pcdm_use
-      @is_for_bulkrax ? 'Primary Content' : nil
-    end
-
-    def ocr_pcdm_use
-      @is_for_bulkrax ? 'Supplemental Content' : ::FileSet::SUPPLEMENTAL
-    end
-
-    def mets_pcdm_use
-      @is_for_bulkrax ? 'Primary Content' : ::FileSet::PRESERVATION
-    end
-
     def pull_pdf(row)
       case @workflow
       when :kirtas
@@ -314,6 +342,11 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       when :limb
         [format("%08d", page - @base_offset), 'ALTO_Path', 'xml']
       end
+    end
+
+    def pull_and_transform_pdf(row, new_ext)
+      unaltered_path = pull_pdf(row)
+      unaltered_path.gsub('.pdf', new_ext)
     end
 
     def build_new_row(csv_index, row, fileset_title)
