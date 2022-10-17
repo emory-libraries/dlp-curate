@@ -10,14 +10,38 @@ class ManifestBuilderService
     @curation_concern = curation_concern
   end
 
-  def manifest
-    manifest_builder
-  end
-
   # ManifestBuilderService.build_manifest(presenter, curation_concern)
   def self.build_manifest(presenter:, curation_concern:)
     service = ManifestBuilderService.new(presenter: presenter, curation_concern: curation_concern)
     service.manifest
+  end
+
+  def self.regenerate_manifest(presenter:, curation_concern:)
+    service = ManifestBuilderService.new(presenter: presenter, curation_concern: curation_concern)
+    service.regenerate_manifest_file
+  end
+
+  def manifest
+    solr_doc = ::SolrDocument.find(@curation_concern.id)
+    key = solr_doc[:manifest_cache_key_tesim]&.first.to_s + '_' + solr_doc[:id]
+
+    if File.exist?(File.join(iiif_manifest_cache, key))
+      render_manifest_file(key: key)
+    else
+      regenerate_manifest_file
+      ApplicationController.render(template: 'manifest/placeholder.json', assigns: { root_url: @presenter.manifest_url })
+    end
+  end
+
+  def regenerate_manifest_file
+    solr_doc = ::SolrDocument.find(@curation_concern.id)
+    key = solr_doc[:manifest_cache_key_tesim]&.first.to_s + '_' + solr_doc[:id]
+    ManifestPersistenceJob.perform_later(key:                key,
+                                         solr_doc:           solr_doc,
+                                         root_url:           @presenter.manifest_url,
+                                         manifest_metadata:  @presenter.manifest_metadata,
+                                         curation_concern:   @curation_concern,
+                                         sequence_rendering: sequence_rendering)
   end
 
   def iiif_url
@@ -36,19 +60,6 @@ class ManifestBuilderService
   end
 
   private
-
-    def manifest_builder
-      solr_doc = ::SolrDocument.find(@curation_concern.id)
-      key = solr_doc[:manifest_cache_key_tesim]&.first.to_s + '_' + solr_doc[:id]
-
-      if File.exist?(File.join(iiif_manifest_cache, key))
-        render_manifest_file(key: key)
-      else
-        ManifestPersistenceJob.perform_later(key: key, solr_doc: solr_doc, root_url: @presenter.manifest_url, manifest_metadata: @presenter.manifest_metadata,
-                                             curation_concern: @curation_concern, sequence_rendering: sequence_rendering)
-        ApplicationController.render(template: 'manifest/placeholder.json', assigns: { root_url: @presenter.manifest_url })
-      end
-    end
 
     def render_manifest_file(key:)
       manifest_file = File.open(File.join(iiif_manifest_cache, key))

@@ -70,45 +70,87 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
       work.save!
     end
 
-    context "#build_manifest class method" do
-      it "saves manifest file" do
-        expect(File).not_to exist(cache_file)
-        response_values = JSON.parse(described_class.build_manifest(presenter: presenter, curation_concern: work))
-        expect(response_values).to_s.match(identifier)
-        expect(File).to exist(cache_file)
+    describe "#build_manifest class method" do
+      context "when a manifest cache file exists" do
+        before do
+          described_class.regenerate_manifest(presenter: presenter, curation_concern: work)
+        end
 
-        response_values = JSON.parse(File.open(cache_file).read)
+        it "renders cached file" do
+          service = described_class.new(presenter: presenter, curation_concern: work)
+          allow(described_class).to receive(:new).and_return(service)
+          expect(cache_file).to exist
+          expect(service).not_to receive(:regenerate_manifest_file)
+          expect(service).to receive(:render_manifest_file)
+          described_class.build_manifest(presenter: presenter, curation_concern: work)
+        end
+      end
 
-        expect(response_values).to include "@context"
-        expect(response_values["@context"]).to include "http://iiif.io/api/presentation/2/context.json"
-        expect(response_values).to include "@type"
-        expect(response_values["@type"]).to include "sc:Manifest"
-        expect(response_values).to include "@id"
-        expect(response_values["@id"]).to include "/iiif/#{work.id}/manifest"
-        expect(response_values).to include "label"
-        expect(response_values["label"]).to include work.title.first.to_s
-        expect(response_values).to include "metadata"
-        expect(response_values["metadata"][0]["label"]).to eq "Provided by"
-        expect(response_values["metadata"][0]["value"]).to eq ["test holding repo"]
-        expect(response_values["metadata"][1]["label"]).to eq "Rights Status"
-        expect(response_values["metadata"][1]["value"]).to eq "<a href=\"http://rightsstatements.org/vocab/InC/1.0/\">In Copyright</a>"
-        expect(response_values["metadata"][2]["label"]).to eq "Identifier"
-        expect(response_values["metadata"][2]["value"]).to eq work.id
-        expect(response_values).to include "sequences"
-        expect(response_values["sequences"].first["@type"]).to include "sc:Sequence"
-        expect(response_values["sequences"].first["@id"]).to include "/iiif/#{work.id}/manifest/sequence/normal"
-        expect(response_values["sequences"][0]["canvases"][0]["@id"]).to include "/iiif/#{work.id}/manifest/canvas/#{file_set.id}"
-        expect(response_values["sequences"][0]["canvases"][0]["images"][0]["resource"]["@id"]).to include(
-          "/images/#{file_set.id}%2Ffiles%2F#{file_set.service_file.id.split('/').last}/full/600,/0/default.jpg"
-        )
-        expect(response_values["sequences"][0]["canvases"][1]["@id"]).to include "/iiif/#{work.id}/manifest/canvas/#{file_set2.id}"
-        expect(response_values["sequences"][0]["canvases"][1]["images"][0]["resource"]["@id"]).to include(
-          "/images/#{file_set2.id}%2Ffiles%2F#{file_set2.preservation_master_file.id.split('/').last}/full/600,/0/default.jpg"
-        )
+      context 'when no manifest cache file exists' do
+        it 'queues regenerating the manifest file' do
+          service = described_class.new(presenter: presenter, curation_concern: work)
+          allow(described_class).to receive(:new).and_return(service)
+          expect(cache_file).not_to exist
+          expect(service).not_to receive(:render_manifest_file)
+          expect(service).to receive(:regenerate_manifest_file)
+          described_class.build_manifest(presenter: presenter, curation_concern: work)
+        end
+
+        it 'renders the manifest placeholder json' do
+          expect(cache_file).not_to exist
+          response_values = JSON.parse(described_class.build_manifest(presenter: presenter, curation_concern: work))
+          expect(response_values).to_s.match(identifier)
+          expect(File).to exist(cache_file)
+
+          response_values = JSON.parse(File.open(cache_file).read)
+
+          expect(response_values).to include "@context"
+          expect(response_values["@context"]).to include "http://iiif.io/api/presentation/2/context.json"
+          expect(response_values).to include "@type"
+          expect(response_values["@type"]).to include "sc:Manifest"
+          expect(response_values).to include "@id"
+          expect(response_values["@id"]).to include "/iiif/#{work.id}/manifest"
+          expect(response_values).to include "label"
+          expect(response_values["label"]).to include work.title.first.to_s
+          expect(response_values).to include "metadata"
+          expect(response_values["metadata"][0]["label"]).to eq "Provided by"
+          expect(response_values["metadata"][0]["value"]).to eq ["test holding repo"]
+          expect(response_values["metadata"][1]["label"]).to eq "Rights Status"
+          expect(response_values["metadata"][1]["value"]).to eq "<a href=\"http://rightsstatements.org/vocab/InC/1.0/\">In Copyright</a>"
+          expect(response_values["metadata"][2]["label"]).to eq "Identifier"
+          expect(response_values["metadata"][2]["value"]).to eq work.id
+          expect(response_values).to include "sequences"
+          expect(response_values["sequences"].first["@type"]).to include "sc:Sequence"
+          expect(response_values["sequences"].first["@id"]).to include "/iiif/#{work.id}/manifest/sequence/normal"
+          expect(response_values["sequences"][0]["canvases"][0]["@id"]).to include "/iiif/#{work.id}/manifest/canvas/#{file_set.id}"
+          path = "/images/#{file_set.id}%2Ffiles%2F#{file_set.service_file.id.split('/').last}/full/600,/0/default.jpg"
+          expect(response_values["sequences"][0]["canvases"][0]["images"][0]["resource"]["@id"]).to include(path)
+          expect(response_values["sequences"][0]["canvases"][1]["@id"]).to include "/iiif/#{work.id}/manifest/canvas/#{file_set2.id}"
+          path = "/images/#{file_set2.id}%2Ffiles%2F#{file_set2.preservation_master_file.id.split('/').last}/full/600,/0/default.jpg"
+          expect(response_values["sequences"][0]["canvases"][1]["images"][0]["resource"]["@id"]).to include(path)
+        end
       end
     end
 
-    context "#iiif_url and #info_url instance methods" do
+    describe "#regenerate_manifest class method" do
+      it "queues regenerating the manifest file" do
+        service = described_class.new(presenter: presenter, curation_concern: work)
+        allow(described_class).to receive(:new).and_return(service)
+        expect(service).to receive(:regenerate_manifest_file)
+        described_class.regenerate_manifest(presenter: presenter, curation_concern: work)
+      end
+    end
+
+    context "#regenerate_manifest_file instance method" do
+      it "queues regenerating the manifest file" do
+        expect(File).not_to exist(cache_file)
+        service = described_class.new(presenter: presenter, curation_concern: work)
+        expect(ManifestPersistenceJob).to receive(:perform_later)
+        service.regenerate_manifest_file
+      end
+    end
+
+    describe "#iiif_url and #info_url instance methods" do
       let(:service) { described_class.new(curation_concern: file_set) }
 
       context "for localhost" do
@@ -134,7 +176,7 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
       end
     end
 
-    context "#sequence_rendering" do
+    describe "#sequence_rendering" do
       it "something here" do
         expect(service.send(:sequence_rendering).first["@id"]).to eq("http://example.com/downloads/508hdr7srq-cor")
       end
