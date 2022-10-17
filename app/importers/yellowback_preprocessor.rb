@@ -171,21 +171,25 @@ class YellowbackPreprocessor
     end
 
     def add_file_rows(csv_index, merge_csv, row)
-      merge_csv << pdf_row(csv_index, row) if should_add_pdf(row)
-
-      merge_csv << ocr_row(csv_index, row) if should_add_ocr(row)
-
-      merge_csv << mets_row(csv_index, row) if row['METS_Path'].present? && row['METS_Cnt'] == '1'
-
-      merge_csv << ondemand_transcript_row(csv_index, row) if should_add_pdf(row) && @add_transcript
-
-      merge_csv << ondemand_ocr_row(csv_index, row) if !should_add_ocr(row) && should_add_pdf(row) && @add_ocr_output
+      process_standard_file_rows(merge_csv, csv_index, row)
+      process_optional_file_rows(merge_csv, csv_index, row)
 
       pages = row['Disp_Cnt'].to_i
 
       (1..pages).each do |page|
         merge_csv << file_row(csv_index, row, page)
       end
+    end
+
+    def process_standard_file_rows(merge_csv, csv_index, row)
+      merge_csv << pdf_row(csv_index, row) if should_add_pdf(row)
+      merge_csv << ocr_row(csv_index, row) if should_add_ocr(row)
+      merge_csv << mets_row(csv_index, row) if row['METS_Path'].present? && row['METS_Cnt'] == '1'
+    end
+
+    def process_optional_file_rows(merge_csv, csv_index, row)
+      merge_csv << ondemand_transcript_row(csv_index, row) if should_add_pdf(row) && @add_transcript
+      merge_csv << ondemand_ocr_row(csv_index, row) if !should_add_ocr(row) && should_add_pdf(row) && @add_ocr_output
     end
 
     def should_add_pdf(row)
