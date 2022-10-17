@@ -14,8 +14,10 @@ class LangmuirPreprocessor
   # @param [String] csv the path to a CSV file containing the expectd Pull List metadata
   # Change below was necessary to institute Source/Deposit Collection structure.
   # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
-  def initialize(csv)
+  def initialize(csv, importer)
     @source_csv = CSV.read(csv, headers: true)
+    @is_for_bulkrax = importer == 'bulkrax'
+    @fileset_model_or_type = @is_for_bulkrax ? 'FileSet' : 'fileset'
     directory = File.dirname(csv)
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
@@ -29,7 +31,9 @@ class LangmuirPreprocessor
   end
 
   def additional_headers
-    ['source_row', 'deduplication_key', 'type', 'fileset_label', 'preservation_master_file', 'intermediate_file']
+    ['source_row', 'deduplication_key', @is_for_bulkrax ? 'model' : 'type', 'parent',
+     'file', 'file_types', 'pcdm_use', 'fileset_label', 'preservation_master_file',
+     'intermediate_file']
   end
 
   # process_source_rows builds
@@ -67,7 +71,8 @@ class LangmuirPreprocessor
       two_sided = work[:filesets].count <= 2
       work[:filesets].keys.sort.each do |fileset_index|
         fileset = work[:filesets][fileset_index]
-        fileset['fileset_label'] = make_label(fileset_index, two_sided)
+        fileset_label = make_label(fileset_index, two_sided)
+        @is_for_bulkrax ? fileset['title'] = fileset_label : fileset['fileset_label'] = fileset_label
         merge_csv << fileset
       end
       progressbar.increment
@@ -76,25 +81,40 @@ class LangmuirPreprocessor
   end
 
   def process_row(row, source_row_num)
-    deduplication_key = row['Digital Object - Parent Identifier']
-    sequence_number, target_file, metadata_row = extract_structure(row)
-    @tree[deduplication_key] ||= { metadata: nil, filesets: {} } # create a placeholder if we don't have one for this key
-    @tree[deduplication_key][:metadata] = extract_metadata(row, source_row_num) if metadata_row
-    @tree[deduplication_key][:filesets][sequence_number] ||= CSV::Row.new(@merged_headers, [source_row_num, deduplication_key, 'fileset'])
-    @tree[deduplication_key][:filesets][sequence_number][target_file] = relative_path_to_file(row)
+    parent = row['Digital Object - Parent Identifier']
+    deduplication_key = @is_for_bulkrax ? '' : parent
+    @sequence_number, @target_file, @metadata_row = extract_structure(row)
+    @file_types = [@fileset_filename, @target_file].join(':')
+    @tree[parent] ||= { metadata: nil, filesets: {} } # create a placeholder if we don't have one for this key
+
+    populate_tree_row_metadata(parent, row, source_row_num)
+    populate_tree_row_fileset(parent, source_row_num, deduplication_key, row)
+  end
+
+  def populate_tree_row_metadata(parent, row, source_row_num)
+    @tree[parent][:metadata] = extract_metadata(row, source_row_num) if @metadata_row
+  end
+
+  def populate_tree_row_fileset(parent, source_row_num, deduplication_key, row)
+    @tree[parent][:filesets][@sequence_number] ||= CSV::Row.new(
+      @merged_headers, [source_row_num, deduplication_key, @fileset_model_or_type, parent, @fileset_filename, @file_types, 'Primary Content']
+    )
+    @tree[parent][:filesets][@sequence_number][@target_file] = relative_path_to_file(row)
   end
 
   def extract_structure(row)
-    filename = row['Filename']
-    p_number = filename.scan(/P0+(\d+)_(ARCH|PROD)/)[0][0].to_i
-    target_file = filename.include?('ARCH') ? 'preservation_master_file' : 'intermediate_file'
+    @fileset_filename = row['Filename']
+    p_number = @fileset_filename.scan(/P0+(\d+)_(ARCH|PROD)/)[0][0].to_i
+    target_file = @fileset_filename.include?('ARCH') ? 'preservation_master_file' : 'intermediate_file'
     metadata_row = p_number == 1 && target_file == 'preservation_master_file'
     [p_number, target_file, metadata_row]
   end
 
   def extract_metadata(row, source_row_num)
+    parent = row['source_collection_id']
     deduplication_key = row['Digital Object - Parent Identifier']
-    processed_row = CSV::Row.new(additional_headers, [source_row_num, deduplication_key, 'work'])
+    model_or_type = @is_for_bulkrax ? 'CurateGenericWork' : 'work'
+    processed_row = CSV::Row.new(additional_headers, [source_row_num, deduplication_key, model_or_type, parent, '', '', ''])
     processed_row << row.to_hash
   end
 

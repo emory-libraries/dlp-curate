@@ -5,7 +5,7 @@ RSpec.describe LangmuirPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results
     langmuir_sample = File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed.csv')
-    preprocessor = described_class.new(langmuir_sample, '')
+    preprocessor = described_class.new(langmuir_sample, 'bulkrax')
     preprocessor.merge
   end
 
@@ -45,21 +45,35 @@ RSpec.describe LangmuirPreprocessor do
   end
 
   it 'sets the row type' do
-    expect(import_rows[0]['type']).to eq('work') # City gates, St. Augustine, Florida
+    expect(import_rows[0]['type']).to be_nil # City gates, St. Augustine, Florida
+    expect(import_rows[0]['model']).to eq('CurateGenericWork')
   end
 
   it 'creates a fileset row for each side/part' do
-    expect(import_rows[13]['type']).to eq('fileset') # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[13]['type']).to be_nil # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[13]['model']).to eq('FileSet')
+  end
+
+  it 'uses the source_collection_id for parent on a work' do
+    expect(import_rows[0]['parent']).to eq(import_rows[0]['source_collection_id'])
+  end
+
+  it 'uses the work dedupe key for parent on filesets' do
+    expect(import_rows[1]['parent']).to eq(import_rows[0]['deduplication_key'])
   end
 
   it 'uses Front/Back as fileset labels for two sided works' do
-    expect(import_rows[1]['fileset_label']).to eq('Front') # City gates, St. Augustine, Florida
-    expect(import_rows[2]['fileset_label']).to eq('Back') # City gates, St. Augustine, Florida
+    expect(import_rows[1]['fileset_label']).to be_nil # City gates, St. Augustine, Florida
+    expect(import_rows[1]['title']).to eq('Front')
+    expect(import_rows[2]['fileset_label']).to be_nil # City gates, St. Augustine, Florida
+    expect(import_rows[2]['title']).to eq('Back')
   end
 
   it 'uses Side # as fileset labels for multi-sided works' do
-    expect(import_rows[13]['fileset_label']).to eq('Image 1') # Advertising : Rafael's, gay 'n frisky
-    expect(import_rows[16]['fileset_label']).to eq('Image 4') # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[13]['fileset_label']).to be_nil # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[13]['title']).to eq('Image 1')
+    expect(import_rows[16]['fileset_label']).to be_nil # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[16]['title']).to eq('Image 4')
   end
 
   it 'has the expected row length', :aggregate_failures do
@@ -72,6 +86,11 @@ RSpec.describe LangmuirPreprocessor do
     expect(fileset_row_fields.size).to eq(header_fields.size)
   end
 
+  it 'has the filename found in file in file_types for filesets' do
+    expect(import_rows[1]['file_types']).to include(import_rows[1]['file'])
+      .and include(':preservation_master_file')
+  end
+
   it 'attaches the ARCH file as the preservation_master_file' do
     expect(import_rows[2]['preservation_master_file']).to match(/ARCH/) # City gates, St. Augustine, Florida
   end
@@ -81,9 +100,22 @@ RSpec.describe LangmuirPreprocessor do
   end
 
   it 'attaches the expected files to the expected filesets in the expected order', :aggregate_failures do # Advertising : Rafael's, gay 'n frisky
-    expect(import_rows[14]['fileset_label']).to eq('Image 2') # P0002
+    expect(import_rows[14]['fileset_label']).to be_nil # P0002
+    expect(import_rows[14]['title']).to eq('Image 2')
+    expect(import_rows[14]['deduplication_key']).to be_empty
+    expect(import_rows[14]['parent']).to eq('MSS1218_B028_I091')
+    expect(import_rows[14]['pcdm_use']).to eq('Primary Content')
+    expect(import_rows[14]['file']).to eq('MSS1218_B028_I091_P0002_ARCH.tif')
+    expect(import_rows[14]['file_types']).to eq('MSS1218_B028_I091_P0002_ARCH.tif:preservation_master_file')
     expect(import_rows[14]['preservation_master_file']).to match('MSS1218_B028_I091_P0002_ARCH.tif') # ARCH
-    expect(import_rows[15]['fileset_label']).to eq('Image 3') # P0003
+
+    expect(import_rows[15]['fileset_label']).to be_nil # P0003
+    expect(import_rows[15]['title']).to eq('Image 3')
+    expect(import_rows[15]['deduplication_key']).to be_empty
+    expect(import_rows[15]['parent']).to eq('MSS1218_B028_I091')
+    expect(import_rows[15]['pcdm_use']).to eq('Primary Content')
+    expect(import_rows[15]['file']).to eq('MSS1218_B028_I091_P0003_PROD.tif')
+    expect(import_rows[15]['file_types']).to eq('MSS1218_B028_I091_P0003_PROD.tif:intermediate_file')
     expect(import_rows[15]['intermediate_file']).to match('MSS1218_B028_I091_P0003_PROD.tif') # PROD
   end
 
@@ -101,7 +133,7 @@ RSpec.describe LangmuirPreprocessor do
   context 'file has source_collection_id defined' do
     it 'shows assigned values in processed csv' do
       source_langmuir_sample = File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed-with-source-id.csv')
-      preprocessor = described_class.new(source_langmuir_sample, '')
+      preprocessor = described_class.new(source_langmuir_sample, 'bulkrax')
       preprocessor.merge
       source_processed_csv = File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed-with-source-id-processed.csv')
       source_import_rows = CSV.read(source_processed_csv, headers: true).by_row!
