@@ -34,7 +34,7 @@ class BackgroundJobsController < ApplicationController
       if params[:jobs].include?('dams')
         preprocessor_action(params[:dams_csv].present?, DamsPreprocessor.new(params[:dams_csv].path, 'zizia'))
       elsif params[:jobs].include?('lang')
-        preprocessor_action(params[:lang_csv].present?, LangmuirPreprocessor.new(params[:lang_csv].path))
+        preprocessor_action(params[:lang_csv].present?, LangmuirPreprocessor.new(params[:lang_csv].path, 'zizia'))
       else
         preprocessor_action(
           params[:book_csv] && params[:book_xml] && params[:book_map],

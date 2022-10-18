@@ -87,8 +87,11 @@ RSpec.describe LangmuirPreprocessor do
   end
 
   it 'has the filename found in file in file_types for filesets' do
-    expect(import_rows[1]['file_types']).to include(import_rows[1]['file'])
+    filename1, filename2 = import_rows[1]['file'].split(';')
+    expect(import_rows[1]['file_types']).to include(filename1)
+      .and include(filename2)
       .and include(':preservation_master_file')
+      .and include(':intermediate_file')
   end
 
   it 'attaches the ARCH file as the preservation_master_file' do
@@ -105,8 +108,12 @@ RSpec.describe LangmuirPreprocessor do
     expect(import_rows[14]['deduplication_key']).to be_empty
     expect(import_rows[14]['parent']).to eq('MSS1218_B028_I091')
     expect(import_rows[14]['pcdm_use']).to eq('Primary Content')
-    expect(import_rows[14]['file']).to eq('MSS1218_B028_I091_P0002_ARCH.tif')
-    expect(import_rows[14]['file_types']).to eq('MSS1218_B028_I091_P0002_ARCH.tif:preservation_master_file')
+    expect(import_rows[14]['file']).to eq(
+      "MSS1218_B028_I091_P0002_ARCH.tif;MSS1218_B028_I091_P0002_PROD.tif"
+    )
+    expect(import_rows[14]['file_types']).to eq(
+      "MSS1218_B028_I091_P0002_ARCH.tif:preservation_master_file|MSS1218_B028_I091_P0002_PROD.tif:intermediate_file"
+    )
     expect(import_rows[14]['preservation_master_file']).to match('MSS1218_B028_I091_P0002_ARCH.tif') # ARCH
 
     expect(import_rows[15]['fileset_label']).to be_nil # P0003
@@ -114,8 +121,12 @@ RSpec.describe LangmuirPreprocessor do
     expect(import_rows[15]['deduplication_key']).to be_empty
     expect(import_rows[15]['parent']).to eq('MSS1218_B028_I091')
     expect(import_rows[15]['pcdm_use']).to eq('Primary Content')
-    expect(import_rows[15]['file']).to eq('MSS1218_B028_I091_P0003_PROD.tif')
-    expect(import_rows[15]['file_types']).to eq('MSS1218_B028_I091_P0003_PROD.tif:intermediate_file')
+    expect(import_rows[15]['file']).to eq(
+      "MSS1218_B028_I091_P0003_ARCH.tif;MSS1218_B028_I091_P0003_PROD.tif"
+    )
+    expect(import_rows[15]['file_types']).to eq(
+      "MSS1218_B028_I091_P0003_ARCH.tif:preservation_master_file|MSS1218_B028_I091_P0003_PROD.tif:intermediate_file"
+    )
     expect(import_rows[15]['intermediate_file']).to match('MSS1218_B028_I091_P0003_PROD.tif') # PROD
   end
 

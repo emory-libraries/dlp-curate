@@ -69,15 +69,35 @@ class LangmuirPreprocessor
     @tree.each_value do |work|
       merge_csv << work[:metadata]
       two_sided = work[:filesets].count <= 2
-      work[:filesets].keys.sort.each do |fileset_index|
-        fileset = work[:filesets][fileset_index]
-        fileset_label = make_label(fileset_index, two_sided)
-        @is_for_bulkrax ? fileset['title'] = fileset_label : fileset['fileset_label'] = fileset_label
-        merge_csv << fileset
-      end
+      process_work_filesets_output(work, two_sided, merge_csv)
       progressbar.increment
     end
     merge_csv.close
+  end
+
+  def process_work_filesets_output(work, two_sided, merge_csv)
+    work[:filesets].keys.sort.each do |fileset_index|
+      fileset = work[:filesets][fileset_index]
+
+      process_fileset_title_label(fileset, fileset_index, two_sided)
+      process_fileset_file_and_file_type(fileset) if @is_for_bulkrax
+      merge_csv << fileset
+    end
+  end
+
+  def process_fileset_title_label(fileset, fileset_index, two_sided)
+    fileset_label = make_label(fileset_index, two_sided)
+    @is_for_bulkrax ? fileset['title'] = fileset_label : fileset['fileset_label'] = fileset_label
+  end
+
+  def process_fileset_file_and_file_type(fileset)
+    pres_filename = fileset['preservation_master_file']&.split('/')&.last
+    int_filename = fileset['intermediate_file']&.split('/')&.last
+    pres_file_type_chunk = "#{pres_filename}:preservation_master_file" if pres_filename.present?
+    int_file_type_chunk = "#{int_filename}:intermediate_file" if int_filename.present?
+
+    fileset['file'] = [pres_filename, int_filename].compact.join(';')
+    fileset['file_types'] = [pres_file_type_chunk, int_file_type_chunk].compact.join('|')
   end
 
   def process_row(row, source_row_num)
@@ -97,7 +117,7 @@ class LangmuirPreprocessor
 
   def populate_tree_row_fileset(parent, source_row_num, deduplication_key, row)
     @tree[parent][:filesets][@sequence_number] ||= CSV::Row.new(
-      @merged_headers, [source_row_num, deduplication_key, @fileset_model_or_type, parent, @fileset_filename, @file_types, 'Primary Content']
+      @merged_headers, [source_row_num, deduplication_key, @fileset_model_or_type, parent, '', '', 'Primary Content']
     )
     @tree[parent][:filesets][@sequence_number][@target_file] = relative_path_to_file(row)
   end
