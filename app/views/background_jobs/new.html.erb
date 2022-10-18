@@ -42,21 +42,25 @@
       </td>
     </tr>
   </table>
-  <table class="table table-striped">
+  <table class="table table-striped preprocessors">
     <tr>
       <th>Preprocessors</th>
-      <th>CSV File</th>
-      <th>XML File</th>
-      <th>Replacement Path</th>
+      <th>Importer</th>
+      <th class="compress">CSV File</th>
+      <th class="compress">XML File</th>
       <th>Workflow</th>
       <th>Starting Page Number</th>
+      <th>Additional Files</th>
     </tr>
     <tr>
       <td>
         <%= radio_button_tag :jobs, 'dams_preprocessor', false, id: 'dams_preprocessor' %>
-        <%= label :job_cleanup, 'DAMS Preprocessor' %>
+        <%= label :job_cleanup, 'DAMS' %>
       </td>
       <td>
+        <%= select_tag 'dams_importer', raw("<option>zizia</option><option>bulkrax</option>"), class: 'dams_importer_text' %>
+      </td>
+      <td class="compress">
         <%= file_field_tag 'dams_csv', class: 'files', :accept => 'text/csv' %>
       </td>
       <td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td>
@@ -64,9 +68,12 @@
     <tr>
       <td>
         <%= radio_button_tag :jobs, 'lang_preprocessor', false, id: 'lang_preprocessor' %>
-        <%= label :job_cleanup, 'Langmuir Preprocessor' %>
+        <%= label :job_cleanup, 'Langmuir' %>
       </td>
       <td>
+        <%= select_tag 'lang_importer', raw("<option>zizia</option><option>bulkrax</option>"), class: 'lang_importer_text' %>
+      </td>
+      <td class="compress">
         <%= file_field_tag 'lang_csv', class: 'files', :accept => 'text/csv' %>
       </td>
       <td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td>
@@ -74,22 +81,28 @@
     <tr>
       <td>
         <%= radio_button_tag :jobs, 'book_preprocessor', false, id: 'book_preprocessor' %>
-        <%= label :job_cleanup, 'Book Preprocessor' %>
+        <%= label :job_cleanup, 'Book' %>
       </td>
       <td>
+        <%= select_tag 'book_importer', raw("<option>zizia</option><option>bulkrax</option>"), class: 'book_importer_text' %>
+      </td>
+      <td class="compress">
         <%= file_field_tag 'book_csv', class: 'files', :accept => 'text/csv' %>
       </td>
       <td>
         <%= file_field_tag 'book_xml', class: 'files', :accept => 'text/xml' %>
       </td>
       <td>
-        <%= text_field_tag 'book_repl', nil, class: 'repl_text', placeholder: 'optional' %>
-      </td>
-      <td>
-        <%= select_tag 'book_map', raw("<option>kirtas</option><option>limb</option>"), class: 'book_map_text', prompt: 'Please choose limb or kirtas' %>
+        <%= select_tag 'book_map', raw("<option>kirtas</option><option>limb</option>"), class: 'book_map_text' %>
       </td>
       <td>
         <%= number_field_tag 'book_start_num', nil, class: 'book_start_num', prompt: 'Start page of book' %>
+      </td>
+      <td>
+        <%= check_box_tag :add_transcript, true, false %>
+        <%= label :add_transcript, 'Volume Text' %><br>
+        <%= check_box_tag :add_ocr_output, true, false %>
+        <%= label :add_ocr_output, 'Volume OCR' %>
       </td>
     </tr>
   </table>

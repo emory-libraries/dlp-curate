@@ -105,5 +105,21 @@ div.row.hyc-body {
 .hyc-blacklight.hyc-bl-source-link {
   margin-bottom: 3rem;
   padding: 0 1.5rem;
+} 
+
+.table.table-striped.preprocessors {
+  td > input.book_start_num {
+    max-width: 4rem;
+  }
+
+  td > input[type="file"] {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 15rem;
+  }
+
+  td, th {
+    max-width: 10%;
+  }
 }
 

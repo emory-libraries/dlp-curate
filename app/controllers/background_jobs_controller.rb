@@ -32,21 +32,33 @@ class BackgroundJobsController < ApplicationController
 
     def preprocessor_actions
       if params[:jobs].include?('dams')
-        preprocessor_action(params[:dams_csv].present?, DamsPreprocessor.new(params[:dams_csv].path, 'zizia'))
-      elsif params[:jobs].include?('lang')
-        preprocessor_action(params[:lang_csv].present?, LangmuirPreprocessor.new(params[:lang_csv].path, 'zizia'))
-      else
         preprocessor_action(
-          params[:book_csv] && params[:book_xml] && params[:book_map],
-          YellowbackPreprocessor.new(
-            params[:book_csv].path,
-            params[:book_xml].path,
-            'zizia',
-            params[:book_map].to_sym,
-            params[:book_start_num].to_i
-          )
+          params[:dams_csv] && params[:dams_importer],
+          DamsPreprocessor.new(params[:dams_csv].path, params[:dams_importer])
         )
+      elsif params[:jobs].include?('lang')
+        preprocessor_action(
+          params[:lang_csv] && params[:lang_importer],
+          LangmuirPreprocessor.new(params[:lang_csv].path, params[:lang_importer])
+        )
+      else
+        process_yellowback
       end
+    end
+
+    def process_yellowback
+      preprocessor_action(
+        params[:book_csv] && params[:book_xml] && params[:book_map] && params[:book_importer],
+        YellowbackPreprocessor.new(
+          params[:book_csv].path,
+          params[:book_xml].path,
+          params[:book_importer],
+          params[:book_map].to_sym,
+          params[:book_start_num].to_i,
+          params[:add_transcript],
+          params[:add_ocr_output]
+        )
+      )
     end
 
     def preprocessor_action(guard_test, preprocessor)
