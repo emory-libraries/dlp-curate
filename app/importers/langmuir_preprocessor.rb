@@ -104,7 +104,6 @@ class LangmuirPreprocessor
     parent = row['Digital Object - Parent Identifier']
     deduplication_key = @is_for_bulkrax ? '' : parent
     @sequence_number, @target_file, @metadata_row = extract_structure(row)
-    @file_types = [@fileset_filename, @target_file].join(':')
     @tree[parent] ||= { metadata: nil, filesets: {} } # create a placeholder if we don't have one for this key
 
     populate_tree_row_metadata(parent, row, source_row_num)
@@ -123,9 +122,9 @@ class LangmuirPreprocessor
   end
 
   def extract_structure(row)
-    @fileset_filename = row['Filename']
-    p_number = @fileset_filename.scan(/P0+(\d+)_(ARCH|PROD)/)[0][0].to_i
-    target_file = @fileset_filename.include?('ARCH') ? 'preservation_master_file' : 'intermediate_file'
+    filename = row['Filename']
+    p_number = filename.scan(/P0+(\d+)_(ARCH|PROD)/)[0][0].to_i
+    target_file = filename.include?('ARCH') ? 'preservation_master_file' : 'intermediate_file'
     metadata_row = p_number == 1 && target_file == 'preservation_master_file'
     [p_number, target_file, metadata_row]
   end
