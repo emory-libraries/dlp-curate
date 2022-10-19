@@ -96,7 +96,7 @@
         <%= select_tag 'book_map', raw("<option>kirtas</option><option>limb</option>"), class: 'book_map_text' %>
       </td>
       <td>
-        <%= number_field_tag 'book_start_num', nil, class: 'book_start_num', prompt: 'Start page of book' %>
+        <%= number_field_tag 'book_start_num', 1, min: 0, max: 1, class: 'book_start_num', prompt: 'Start page of book' %>
       </td>
       <td>
         <%= check_box_tag :add_transcript, true, false %>
