@@ -77,7 +77,14 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
           allow(preprocessor).to receive(:processed_csv)
           expect(YellowbackPreprocessor).to receive(:new).with(any_args).and_return(preprocessor)
           expect(preprocessor).to receive(:merge)
-          post :create, params: { jobs: 'book_preprocessor', book_csv: yellowback_pull_list_sample, book_xml: alma_export_sample, book_map: 'limb', format: 'json' }
+          post :create, params: {
+            jobs:          'book_preprocessor',
+            book_csv:      yellowback_pull_list_sample,
+            book_importer: 'zizia',
+            book_xml:      alma_export_sample,
+            book_map:      'limb',
+            format:        'json'
+          }
         end
       end
 
@@ -91,7 +98,12 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
           allow(preprocessor).to receive(:processed_csv)
           expect(LangmuirPreprocessor).to receive(:new).with(any_args).and_return(preprocessor)
           expect(preprocessor).to receive(:merge)
-          post :create, params: { jobs: 'lang_preprocessor', lang_csv: langmuir_sample, format: 'json' }
+          post :create, params: {
+            jobs:          'lang_preprocessor',
+            lang_csv:      langmuir_sample,
+            lang_importer: 'zizia',
+            format:        'json'
+          }
         end
       end
 
@@ -105,7 +117,12 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
           allow(preprocessor).to receive(:processed_csv)
           expect(DamsPreprocessor).to receive(:new).with(any_args).and_return(preprocessor)
           expect(preprocessor).to receive(:merge)
-          post :create, params: { jobs: 'dams_preprocessor', dams_csv: dams_sample, format: 'json' }
+          post :create, params: {
+            jobs:          'dams_preprocessor',
+            dams_csv:      dams_sample,
+            dams_importer: 'zizia',
+            format:        'json'
+          }
         end
       end
     end
