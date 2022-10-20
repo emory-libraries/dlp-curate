@@ -28,8 +28,9 @@ class ManifestBuilderService
     if File.exist?(File.join(iiif_manifest_cache, key))
       render_manifest_file(key: key)
     else
+      placeholder_manifest = persist_placeholder_manifest(key)
       regenerate_manifest_file
-      ApplicationController.render(template: 'manifest/placeholder.json', assigns: { root_url: @presenter.manifest_url })
+      placeholder_manifest
     end
   end
 
@@ -66,6 +67,14 @@ class ManifestBuilderService
       manifest = manifest_file.read
       manifest_file.close
       manifest
+    end
+
+    def persist_placeholder_manifest(key)
+      manifest_json = ApplicationController.render(template: 'manifest/placeholder.json', assigns: { root_url: @presenter.manifest_url })
+      File.open(File.join(iiif_manifest_cache, key), 'w+') do |f|
+        f.write(manifest_json)
+      end
+      manifest_json
     end
 
     def request_base_url

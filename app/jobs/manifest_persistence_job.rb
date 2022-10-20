@@ -9,6 +9,7 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
                                                                                                 manifest_metadata:  manifest_metadata,
                                                                                                 manifest_rendering: sequence_rendering,
                                                                                                 image_concerns:     image_concerns(curation_concern) })
+    remove_outdated_manifests(solr_doc[:id])
     persist_manifest(key: key, manifest_json: manifest_json)
   end
 
@@ -18,6 +19,14 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
       File.open(File.join(iiif_manifest_cache, key), 'w+') do |f|
         f.write(manifest_json)
       end
+    end
+
+    def remove_outdated_manifests(solr_doc_id)
+      outdated_manifests = Dir.glob(iiif_manifest_cache + '/*').select do |path|
+        path.ends_with?("_#{solr_doc_id}")
+      end
+
+      outdated_manifests.each { |path| File.delete(path) if File.exist?(path) }
     end
 
     def image_concerns(curation_concern)
