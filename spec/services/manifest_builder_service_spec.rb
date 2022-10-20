@@ -87,19 +87,25 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
       end
 
       context 'when no manifest cache file exists' do
+        it 'saves a placehoder manifest file' do
+          service = described_class.new(presenter: presenter, curation_concern: work)
+          allow(described_class).to receive(:new).and_return(service)
+          allow(service).to receive(:regenerate_manifest_file).and_return(nil)
+          described_class.build_manifest(presenter: presenter, curation_concern: work)
+          placeholder_values = JSON.parse(File.open(cache_file).read)
+          expect(placeholder_values["label"]).to eq "Content is being assembled - please return soon"
+        end
+
         it 'queues regenerating the manifest file' do
           service = described_class.new(presenter: presenter, curation_concern: work)
           allow(described_class).to receive(:new).and_return(service)
-          expect(cache_file).not_to exist
           expect(service).not_to receive(:render_manifest_file)
           expect(service).to receive(:regenerate_manifest_file)
           described_class.build_manifest(presenter: presenter, curation_concern: work)
         end
 
-        it 'renders the manifest placeholder json' do
-          expect(cache_file).not_to exist
-          response_values = JSON.parse(described_class.build_manifest(presenter: presenter, curation_concern: work))
-          expect(response_values).to_s.match(identifier)
+        it 'saves manifest with correct data upon manifest regeneration' do
+          described_class.build_manifest(presenter: presenter, curation_concern: work)
           expect(File).to exist(cache_file)
 
           response_values = JSON.parse(File.open(cache_file).read)
@@ -129,6 +135,17 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
           path = "/images/#{file_set2.id}%2Ffiles%2F#{file_set2.preservation_master_file.id.split('/').last}/full/600,/0/default.jpg"
           expect(response_values["sequences"][0]["canvases"][1]["images"][0]["resource"]["@id"]).to include(path)
         end
+
+        it 'only keeps the newly generated manifest upon completion of manifest regeneration' do
+          File.open(Rails.root.join('tmp', "outdated_manifest_#{identifier}"), 'w+') do |f|
+            f.write("outdated manifest")
+          end
+          described_class.build_manifest(presenter: presenter, curation_concern: work)
+          manifest_file_paths = Dir.glob(Rails.root.join('tmp').to_s + '/*').select do |path|
+            path.ends_with?("_#{work.id}")
+          end
+          expect(manifest_file_paths). to eq([cache_file.to_s])
+        end
       end
     end
 
@@ -143,7 +160,6 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
 
     context "#regenerate_manifest_file instance method" do
       it "queues regenerating the manifest file" do
-        expect(File).not_to exist(cache_file)
         service = described_class.new(presenter: presenter, curation_concern: work)
         expect(ManifestPersistenceJob).to receive(:perform_later)
         service.regenerate_manifest_file
