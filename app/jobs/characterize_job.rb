@@ -56,10 +56,6 @@ class CharacterizeJob < Hyrax::ApplicationJob
 
       clear_metadata(file_set)
 
-      # If the current FileSet title is the same as the label, it must be a filename as opposed to a user-entered...
-      # value. So later we'll ensure it's set to the new file's filename.
-      reset_title = file_set.title.first == file_set.label
-
       characterization_service.run(file, filepath, {}, user)
       event = { 'type' => 'Characterization', 'start' => event_start, 'outcome' => 'Success',
                 'details' => "#{relation}: #{file.file_name.first} - Technical metadata extracted from file, format identified, and file validated",
@@ -77,10 +73,6 @@ class CharacterizeJob < Hyrax::ApplicationJob
       # "cold storage" archive of the parent Work. It's worth noting that adding a *new* version always touches this...
       # mod time. This is done in the versioning code.
       file_set.date_modified = Hyrax::TimeService.time_in_utc if file.original_checksum.first != previous_checksum
-      # set title to label if that's how it was before this characterization
-      file_set.title = [file.original_name] if reset_title
-      # always set the label to the original_name
-      file_set.label = file.original_name
 
       file_set.save!
       # commenting this job call since we are doing this in the file_actor
