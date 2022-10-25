@@ -6,7 +6,7 @@ require 'ruby-progressbar'
 # Utility service and methods that merge metadata from a CSV Pull List and MARCXml records
 # into a format suitable for ingest by the curate CSV importer
 
-class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
+class YellowbackPreprocessor
   attr_accessor :processed_csv
 
   ##
@@ -15,11 +15,22 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
   # @param [String] marcxml the path to an XML file containing one or more MARCXml records
   # @param [String] replacement_path AWS target path to replace 'Volumes' in source data
   # @param [String] digitization the fileset mappings to use (:limb or :kirtas)
-  def initialize(csv, marcxml, replacement_path = 'Yellowbacks', workflow = :kirtas, start_page = 1)
+  def initialize(csv,
+                 marcxml,
+                 importer,
+                 workflow = :kirtas,
+                 start_page = 1,
+                 add_transcript = false,
+                 add_ocr_output = false)
     @pull_list = CSV.read(csv, headers: true)
     @marc_records = Nokogiri::XML(File.open(marcxml))
     @workflow = workflow
-    @replacement_path = replacement_path
+    @replacement_path = 'Yellowbacks'
+    @is_for_bulkrax = importer == 'bulkrax'
+    @proper_model_or_type_work = @is_for_bulkrax ? 'CurateGenericWork' : 'work'
+    @proper_model_or_type_fileset = @is_for_bulkrax ? 'FileSet' : 'fileset'
+    @add_transcript = add_transcript
+    @add_ocr_output = add_ocr_output
     directory = File.dirname(csv)
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
@@ -29,64 +40,69 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
 
   # Change below was necessary to institute Source/Deposit Collection structure.
   # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
-  HEADER_FIELDS = [
-    # Context fields to help humans compare this file to sources
-    'deduplication_key',
-    'pl_row',
-    'CSV title',
-    'type',
-    # Fields extracted from the csv pull list
-    'administrative_unit',
-    'content_type',
-    'data_classifications',
-    'emory_ark',
-    'emory_rights_statements',
-    'holding_repository',
-    'institution',
-    'other_identifiers',
-    'rights_statement',
-    'source_collection_id',
-    'system_of_record_ID',
-    'visibility',
-    # Fields extracted from Alma MARC records
-    'conference_name',
-    'contributors',
-    'copyright_date',
-    'creator',
-    'date_created',
-    'date_digitized',
-    'date_issued',
-    'edition',
-    'extent',
-    'content_genres',
-    'local_call_number',
-    'place_of_production',
-    'primary_language',
-    'publisher',
-    'series_title',
-    'subject_geo',
-    'subject_names',
-    'subject_topics',
-    'table_of_contents',
-    'title',
-    'uniform_title',
-    # Fileset fields
-    'fileset_label',
-    'preservation_master_file',
-    'service_file',
-    'intermediate_file',
-    'transcript_file',
-    'extracted',
-    'pcdm_use'
-  ].freeze
+  def header_fields
+    [
+      # Context fields to help humans compare this file to sources
+      'deduplication_key',
+      'pl_row',
+      'CSV title',
+      @is_for_bulkrax ? 'model' : 'type',
+      'parent',
+      # Fields extracted from the csv pull list
+      'administrative_unit',
+      'content_type',
+      'data_classifications',
+      'emory_ark',
+      'emory_rights_statements',
+      'holding_repository',
+      'institution',
+      'other_identifiers',
+      'rights_statement',
+      'source_collection_id',
+      'system_of_record_ID',
+      'visibility',
+      # Fields extracted from Alma MARC records
+      'conference_name',
+      'contributors',
+      'copyright_date',
+      'creator',
+      'date_created',
+      'date_digitized',
+      'date_issued',
+      'edition',
+      'extent',
+      'content_genres',
+      'local_call_number',
+      'place_of_production',
+      'primary_language',
+      'publisher',
+      'series_title',
+      'subject_geo',
+      'subject_names',
+      'subject_topics',
+      'table_of_contents',
+      'title',
+      'uniform_title',
+      # Fileset fields
+      'fileset_label',
+      'preservation_master_file',
+      'service_file',
+      'intermediate_file',
+      'transcript_file',
+      'extracted',
+      'pcdm_use',
+      'file',
+      'file_types'
+    ]
+  end
 
   def merge
     merge_csv = CSV.open(@processed_csv, 'w+', headers: true, write_headers: true)
-    merge_csv << HEADER_FIELDS
+    merge_csv << header_fields
     progressbar = ProgressBar.create(title: "Processing Rows", total: @pull_list.size, format: '%t: |%B| %p%  ')
     @pull_list.each.with_index do |row, csv_index|
       record = @marc_records.xpath("//record/controlfield[@tag='001'][text()='#{row['ALMA MMSID']}']/ancestor::record").first
-      new_row = context_fields(csv_index, row, 'work')
+      new_row = context_fields(csv_index, row, @proper_model_or_type_work)
       new_row += pull_list_mappings(row)
       new_row += alma_mappings(record, row)
       new_row += file_placeholder
@@ -99,12 +115,13 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
 
   private
 
-    def context_fields(csv_index, row, type)
+    def context_fields(csv_index, row, type, for_file_set = false)
       [
-        row['deduplication_key'], # deduplication_key
+        for_file_set && @is_for_bulkrax ? '' : row['deduplication_key'], # deduplication_key
         csv_index + 2, # pl_row  (original row number from pull list)
         row['CSV Title'], # title
-        type # row type (work | fileset)
+        type, # row type (work | fileset)
+        populate_parent_field(for_file_set, row)
       ]
     end
 
@@ -127,7 +144,7 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       ]
     end
 
-    def alma_mappings(record, row) # rubocop:disable Metrics/MethodLength
+    def alma_mappings(record, row)
       [
         conference_name(record),
         contributors(record),
@@ -153,12 +170,9 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       ]
     end
 
-    def add_file_rows(csv_index, merge_csv, row) # rubocop:disable Metrics/CyclomaticComplexity
-      merge_csv << pdf_row(csv_index, row) if row['PDF_Path'].present? && row['PDF_Cnt'] == '1'
-
-      merge_csv << ocr_row(csv_index, row) if row['OCR_Path'].present? && row['OCR_Cnt'] == '1'
-
-      merge_csv << mets_row(csv_index, row) if row['METS_Path'].present? && row['METS_Cnt'] == '1'
+    def add_file_rows(csv_index, merge_csv, row)
+      process_standard_file_rows(merge_csv, csv_index, row)
+      process_optional_file_rows(merge_csv, csv_index, row)
 
       pages = row['Disp_Cnt'].to_i
 
@@ -167,52 +181,213 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
       end
     end
 
+    def process_standard_file_rows(merge_csv, csv_index, row)
+      merge_csv << pdf_row(csv_index, row) if should_add_pdf(row)
+      merge_csv << ocr_row(csv_index, row) if should_add_ocr(row)
+      merge_csv << mets_row(csv_index, row) if row['METS_Path'].present? && row['METS_Cnt'] == '1'
+    end
+
+    def process_optional_file_rows(merge_csv, csv_index, row)
+      merge_csv << ondemand_transcript_row(csv_index, row) if should_add_pdf(row) && @add_transcript
+      merge_csv << ondemand_ocr_row(csv_index, row) if !should_add_ocr(row) && should_add_pdf(row) && @add_ocr_output
+    end
+
+    def should_add_pdf(row)
+      row['PDF_Path'].present? && row['PDF_Cnt'] == '1'
+    end
+
+    def should_add_ocr(row)
+      row['OCR_Path'].present? && row['OCR_Cnt'] == '1'
+    end
+
     def pdf_row(csv_index, row)
-      case @workflow
-      when :kirtas
-        pdf = row['PDF_Path'].sub("Volumes", @replacement_path)
-      when :limb
-        pdf = File.join(row['PDF_Path'].sub("Volumes", @replacement_path), "#{row['Barcode']}.pdf")
-      end
-      new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
-      new_row + file_mappings(fileset_label: 'PDF for volume', preservation_master_file: pdf)
+      pdf = pull_pdf(row)
+      new_row = build_new_row(csv_index, row, pdf_fileset_title)
+      filename = pull_filename_from_path(pdf)
+
+      build_complete_pdf_row(new_row, pdf, filename)
     end
 
     def ocr_row(csv_index, row)
       ocr = row['OCR_Path'].sub("Volumes", @replacement_path)
-      new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
-      new_row + file_mappings(fileset_label: 'OCR Output for Volume', preservation_master_file: ocr, pcdm_use: ::FileSet::SUPPLEMENTAL)
+      new_row = build_new_row(csv_index, row, ocr_fileset_title)
+      filename = pull_filename_from_path(ocr)
+
+      build_complete_ocr_row(new_row, ocr, filename)
     end
 
     def mets_row(csv_index, row)
-      case @workflow
-      when :kirtas
-        mets = row['METS_Path'].sub("Volumes", @replacement_path)
-      when :limb
-        mets = File.join(row['METS_Path'].sub("Volumes", @replacement_path), "#{row['Barcode']}.mets.xml")
-      end
-      new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
-      new_row + file_mappings(fileset_label: 'METS File', preservation_master_file: mets, pcdm_use: ::FileSet::PRESERVATION)
+      mets = pull_mets(row)
+      new_row = build_new_row(csv_index, row, mets_fileset_title)
+      filename = pull_filename_from_path(mets)
+
+      build_complete_mets_row(new_row, mets, filename)
     end
 
-    def file_row(csv_index, row, page) # rubocop:disable Metrics/MethodLength
+    def ondemand_transcript_row(csv_index, row)
+      transcript = pull_and_transform_pdf(row, '.txt')
+      new_row = build_new_row(csv_index, row, transcript_fileset_title)
+      filename = pull_filename_from_path(transcript)
+
+      build_complete_pdf_row(new_row, transcript, filename)
+    end
+
+    def ondemand_ocr_row(csv_index, row)
+      ocr = pull_and_transform_pdf(row, '.xml')
+      new_row = build_new_row(csv_index, row, ocr_fileset_title)
+      filename = pull_filename_from_path(ocr)
+
+      build_complete_ocr_row(new_row, ocr, filename)
+    end
+
+    def file_row(csv_index, row, page)
+      page_number, extract_field, extract_extension = pull_file(page)
+      image, transcript, extract = pull_file_paths(page_number, extract_field, extract_extension, row)
+      fileset_title = "Page #{page - @base_offset}"
+      new_row = build_new_row(csv_index, row, fileset_title)
+
+      build_complete_file_row(new_row, fileset_title, image, transcript, extract)
+    end
+
+    def pdf_fileset_title
+      'PDF for volume'
+    end
+
+    def ocr_fileset_title
+      'OCR Output for Volume'
+    end
+
+    def mets_fileset_title
+      'METS File'
+    end
+
+    def transcript_fileset_title
+      'Transcript for Volume'
+    end
+
+    def pull_file_paths(page_number, extract_field, extract_extension, row)
+      [relative_filename(row['Disp_Path'], page_number, 'tif'),
+       relative_filename(row['Txt_Path'], page_number, 'txt'),
+       pull_extract_field(row, extract_field, page_number, extract_extension)]
+    end
+
+    def pull_extract_field(row, extract_field, page_number, extract_extension)
+      return if @workflow == :kirtas
+      relative_filename(row[extract_field], page_number, extract_extension)
+    end
+
+    def build_complete_pdf_row(new_row, pdf, filename)
+      generic_complete_row_builder(new_row, pdf, filename, pdf_fileset_title, ::FileSet::PRIMARY)
+    end
+
+    def build_complete_ocr_row(new_row, ocr, filename)
+      generic_complete_row_builder(new_row, ocr, filename, ocr_fileset_title, ::FileSet::SUPPLEMENTAL)
+    end
+
+    def build_complete_mets_row(new_row, mets, filename)
+      generic_complete_row_builder(new_row, mets, filename, mets_fileset_title, ::FileSet::PRESERVATION)
+    end
+
+    def generic_complete_row_builder(build_on_row, file_path, filename, title, pcdm_use)
+      build_on_row + file_mappings(
+        fileset_label:            @is_for_bulkrax ? nil : title,
+        preservation_master_file: file_path,
+        pcdm_use:                 pcdm_use,
+        file:                     @is_for_bulkrax && filename.present? ? filename : nil,
+        file_types:               @is_for_bulkrax ? build_file_type_pair(filename, 'preservation_master_file') : nil
+      )
+    end
+
+    def build_complete_file_row(new_row, fileset_title, image, transcript, extract)
+      new_row + file_mappings(
+        fileset_label:            @is_for_bulkrax ? nil : fileset_title,
+        preservation_master_file: image,
+        transcript_file:          transcript,
+        extracted:                extract,
+        pcdm_use:                 @is_for_bulkrax ? 'Primary Content' : nil,
+        file:                     @is_for_bulkrax ? build_file_list([image, transcript, extract]) : nil,
+        file_types:               process_file_file_types(image, transcript, extract)
+      )
+    end
+
+    def process_file_file_types(image, transcript, extract)
+      return unless @is_for_bulkrax
+      build_multiple_file_types(
+        [
+          [pull_filename_from_path(image), 'preservation_master_file'],
+          [pull_filename_from_path(transcript), 'transcript'],
+          [pull_filename_from_path(extract), 'extracted_text']
+        ]
+      )
+    end
+
+    def pull_pdf(row)
       case @workflow
       when :kirtas
-        page_number = format("%04d", page - @base_offset)
-        extract_field = 'POS_Path'
-        extract_extension = 'pos'
+        row['PDF_Path'].sub("Volumes", @replacement_path)
       when :limb
-        page_number = format("%08d", page - @base_offset)
-        extract_field = 'ALTO_Path'
-        extract_extension = 'xml'
+        File.join(row['PDF_Path'].sub("Volumes", @replacement_path), "#{row['Barcode']}.pdf")
       end
+    end
 
-      image       = relative_filename(row['Disp_Path'],   page_number, 'tif')
-      transcript  = relative_filename(row['Txt_Path'],    page_number, 'txt')
-      extract     = relative_filename(row[extract_field], page_number, extract_extension)
+    def pull_mets(row)
+      case @workflow
+      when :kirtas
+        row['METS_Path'].sub("Volumes", @replacement_path)
+      when :limb
+        File.join(row['METS_Path'].sub("Volumes", @replacement_path), "#{row['Barcode']}.mets.xml")
+      end
+    end
 
-      new_row = context_fields(csv_index, row, 'fileset') + pull_list_placeholder + alma_placeholder
-      new_row + file_mappings(fileset_label: "Page #{page - @base_offset}", preservation_master_file: image, transcript_file: transcript, extracted: extract)
+    def pull_file(page)
+      case @workflow
+      when :kirtas
+        [format("%04d", page - @base_offset), 'POS_Path', 'pos']
+      when :limb
+        [format("%08d", page - @base_offset), 'ALTO_Path', 'xml']
+      end
+    end
+
+    def pull_and_transform_pdf(row, new_ext)
+      unaltered_path = pull_pdf(row)
+      unaltered_path.gsub('.pdf', new_ext)
+    end
+
+    def build_new_row(csv_index, row, fileset_title)
+      context_fields(
+        csv_index,
+        row,
+        @proper_model_or_type_fileset,
+        @is_for_bulkrax ? true : false
+      ) + pull_list_placeholder + alma_placeholder(@is_for_bulkrax ? fileset_title : false)
+    end
+
+    def build_file_list(arr)
+      return if arr.compact.empty?
+      arr.compact.map { |f| pull_filename_from_path(f) }.join(';')
+    end
+
+    def pull_filename_from_path(path)
+      path&.split('/')&.last
+    end
+
+    def build_file_type_pair(filename, type)
+      [filename, type].join(':')
+    end
+
+    def build_multiple_file_types(arr_of_arrs)
+      arr_of_arrs.map do |arr|
+        build_file_type_pair(arr[0], arr[1]) if arr[0].present?
+      end.compact.join('|')
+    end
+
+    def populate_parent_field(for_file_set, row)
+      return unless @is_for_bulkrax
+      if for_file_set
+        row['deduplication_key']
+      else
+        row['source_collection_id']
+      end
     end
 
     def relative_filename(source_path, page_number, extension)
@@ -228,13 +403,17 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
         args[:intermediate_file],
         args[:transcript_file],
         args[:extracted],
-        args[:pcdm_use]
+        args[:pcdm_use],
+        args[:file],
+        args[:file_types]
       ]
     end
 
     # return an array to pad the correct number of colums for alma fields
-    def alma_placeholder
-      alma_mappings(Nokogiri::XML("<empty_doc/>"), {}).fill(nil)
+    def alma_placeholder(title_to_inject = nil)
+      blank_mappings = alma_mappings(Nokogiri::XML("<empty_doc/>"), {}).fill(nil)
+      blank_mappings[-2] = title_to_inject if title_to_inject
+      blank_mappings
     end
 
     # return an array to pad the correct number of colums for pull list fields
@@ -252,11 +431,11 @@ class YellowbackPreprocessor # rubocop:disable Metrics/ClassLength
 
     def contributors(marc_record)
       [extract_datafields(marc_record, '700'),
-       extract_datafields(marc_record, '710')].join('|')
+       extract_datafields(marc_record, '710')]&.compact&.join('|')
     end
 
     def copyright_date(marc_record)
-      date_created(marc_record)
+      clean_marc_date(marc_record.xpath("./datafield[@tag='264' and @ind2='4']/subfield[@code='c']").text)
     end
 
     def creator(marc_record)

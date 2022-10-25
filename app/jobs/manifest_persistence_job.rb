@@ -25,6 +25,14 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
       end
     end
 
+    def remove_outdated_manifests(solr_doc_id)
+      outdated_manifests = Dir.glob(iiif_manifest_cache + '/*').select do |path|
+        path.ends_with?("_#{solr_doc_id}")
+      end
+
+      outdated_manifests.each { |path| File.delete(path) if File.exist?(path) }
+    end
+
     def image_concerns(curation_concern)
       file_set_ids = curation_concern.ordered_member_ids - curation_concern.child_work_ids
       if file_set_ids.empty?

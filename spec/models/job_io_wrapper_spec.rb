@@ -56,7 +56,7 @@ RSpec.describe JobIoWrapper, type: :model do
     end
     context 'when file responds to :stat' do
       before do
-        allow(wrapper.file).to receive_message_chain(:stat, :size).and_return(456) # rubocop:disable RSpec/MessageChain
+        allow(wrapper.file).to receive_message_chain(:stat, :size).and_return(456)
         allow(wrapper.file).to receive(:respond_to?).with(:size).and_return(false)
         allow(wrapper.file).to receive(:respond_to?).with(:stat).and_return(true)
       end
