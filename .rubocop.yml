@@ -103,6 +103,8 @@ Metrics/ParameterLists:
         - app/importers/yellowback_preprocessor.rb
         - lib/importing_modules/file_set_methods.rb
         - app/jobs/manifest_persistence_job.rb
+        - app/jobs/characterize_job.rb
+        - config/initializers/collection_member_search_service_overrides.rb
 
 Metrics/PerceivedComplexity:
     Exclude:
