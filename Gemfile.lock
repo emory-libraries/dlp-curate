@@ -1599,12 +1599,11 @@ GEM
       scanf (~> 1.0)
       sxp (~> 1.2)
       unicode-types (~> 1.7)
-    edtf (3.1.0)
+    edtf (3.0.8)
       activesupport (>= 3.0, < 8.0)
-    edtf-humanize (2.1.0)
+    edtf-humanize (1.0.0)
       activesupport (>= 4)
       edtf (>= 2.3, < 4)
-      roman (~> 0.2.0)
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
     erubi (1.11.0)
@@ -2111,7 +2110,6 @@ GEM
       deprecation (>= 1.0.0)
       iiif-image-api (>= 0.1.0)
       railties (>= 4.2, < 8)
-    roman (0.2.0)
     rsolr (2.5.0)
       builder (>= 2.1.2)
       faraday (>= 0.9, < 3, != 2.0.0)
@@ -2371,7 +2369,8 @@ DEPENDENCIES
   devise-guests (~> 0.6)
   dotenv-rails
   dry-monads (~> 1.4.0)
-  edtf-humanize
+  edtf (~> 3.0.0)
+  edtf-humanize (~> 1.0.0)
   factory_bot_rails (~> 4.11.1)
   fcrepo_wrapper
   ffaker
