@@ -13,10 +13,11 @@ class Ability
     #   can [:destroy], ActiveFedora::Base
     # end
     return unless current_user.admin?
+
     can [:create, :show, :add_user, :remove_user, :index, :edit, :update, :destroy], Role
 
-    can :manage, Zizia::CsvImport if current_user.admin?
-    can :manage, Zizia::CsvImportDetail if current_user.admin?
+    can :manage, Zizia::CsvImport
+    can :manage, Zizia::CsvImportDetail
 
     # Limits creating new objects to a specific group
     #
