@@ -112,15 +112,12 @@ RSpec.describe Hyrax::FileSetsController, :clean do
 
       context "when updating the attached file direct upload" do
         let(:actor) { double }
-        let(:uploader) { double }
-        let(:fake_file) { double }
+        let(:pmf) { File.open(fixture_path + '/world.png') }
+        let(:uploaded_file) { Hyrax::UploadedFile.new(user: user, file_set_uri: file_set.uri, preservation_master_file: pmf) }
 
         before do
           allow(Hyrax::Actors::FileActor).to receive(:new).and_return(actor)
-          allow_any_instance_of(Hyrax::UploadedFile).to receive(:uploader).and_return(uploader)
-          allow(uploader).to receive(:path).and_return(anything)
-          allow_any_instance_of(JobIoWrapper).to receive(:file).and_return(fake_file)
-          allow(fake_file).to receive(:path).and_return('a/path')
+          allow(Hyrax::UploadedFile).to receive(:new).and_return(uploaded_file)
         end
 
         it "spawns a ContentNewVersionEventJob", perform_enqueued: [IngestJob] do
@@ -133,7 +130,7 @@ RSpec.describe Hyrax::FileSetsController, :clean do
       end
 
       context "when updating the attached file already uploaded" do
-        let(:actor) { double(Hyrax::Actors::FileActor) }
+        let(:actor) { instance_double(Hyrax::Actors::FileActor) }
 
         before do
           allow(Hyrax::Actors::FileActor).to receive(:new).and_return(actor)

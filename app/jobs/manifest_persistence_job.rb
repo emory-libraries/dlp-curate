@@ -14,6 +14,7 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
         image_concerns:     image_concerns(curation_concern)
       }
     )
+    remove_outdated_manifests(solr_doc[:id])
     persist_manifest(key: key, manifest_json: manifest_json)
   end
 
