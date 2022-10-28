@@ -27,4 +27,12 @@ RSpec.describe 'Sidekiq dashboard', integration: true, clean: true, type: :syste
       expect(page).to have_content 'Processes'
     end
   end
+
+  context 'when no user is signed in' do
+    it 'redirects to the sign in page' do
+      visit '/sidekiq'
+      expect(current_path).to eq '/sign_in'
+      expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    end
+  end
 end
