@@ -3,6 +3,7 @@ require 'rails_helper'
 
 include Warden::Test::Helpers
 
+# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, type: :system, js: true do
   let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_post_processing.csv') }
   let(:metadata_update_csv_file) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_post_processing_update_metadata.csv') }

@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe CurateMapper do
   subject(:mapper) { described_class.new }
 

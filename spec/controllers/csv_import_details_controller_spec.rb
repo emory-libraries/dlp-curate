@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
+#   of the Zizia install that will likely be removed.
 RSpec.describe CsvImportDetailsController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   let(:admin) { FactoryBot.create(:admin) }

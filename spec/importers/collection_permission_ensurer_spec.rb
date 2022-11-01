@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe CollectionPermissionEnsurer, :clean do
   let(:collection) { FactoryBot.create(:collection_lw) }
   let(:ensurer) { described_class.new(collection: collection, access_permissions: { 'manage' => ["admin", "rose_manager"], 'deposit' => ["admin", "rose_depositor"], 'view' => ["rose_viewer"] }) }
