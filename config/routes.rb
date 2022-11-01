@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
   get 'importer_documentation/guide', to: 'metadata_details#show'
   get 'importer_documentation/profile', to: 'metadata_details#profile'
+
+  Deprecation.warn('Zizia will be removed with Curate v3.')
   mount Zizia::Engine => '/'
 
   concern :searchable, Blacklight::Routes::Searchable.new
