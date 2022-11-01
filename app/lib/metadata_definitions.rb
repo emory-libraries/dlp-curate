@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
+#   of the Zizia install that will likely be removed.
 module MetadataDefinitions
   def preservation_master_file_definition
     {

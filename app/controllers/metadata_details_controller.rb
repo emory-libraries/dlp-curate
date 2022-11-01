@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
+#   of the Zizia install that will likely be removed.
 class MetadataDetailsController < ApplicationController
   def show
     @details = ::MetadataDetails.instance.details(work_attributes: CurateGenericWorkAttributes.instance)
