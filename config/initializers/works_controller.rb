@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.4.1] Adds source collection search facet to works page
+# [Hyrax-overwrite-v3.4.2] Adds source collection search facet to works page
 # Change below was necessary to institute Source/Deposit Collection structure.
 # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
 Hyrax::My::WorksController.class_eval do

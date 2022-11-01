@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.4.1]
+# [Hyrax-overwrite-v3.4.2]
 # Changes behavior of total_viewable_items to match total_items
 
 module Hyrax

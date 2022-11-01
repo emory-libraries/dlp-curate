@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.4.1]
+# [Hyrax-overwrite-v3.4.2]
 # Adds fixity_check preservation_event
 
 require 'sidekiq-limit_fetch'

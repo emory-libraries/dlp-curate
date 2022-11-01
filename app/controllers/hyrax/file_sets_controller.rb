@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.4.1]
+# [Hyrax-overwrite-v3.4.2]
 # Note: if issues occur with this controller, try removing all guard_for_workflow_restriction_on! calls.
 
 module Hyrax
