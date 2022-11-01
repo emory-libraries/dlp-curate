@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
+# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe Zizia::CsvManifestValidator, type: :model do
   let(:validator) { described_class.new(manifest) }
   let(:manifest) { csv_import.manifest }
