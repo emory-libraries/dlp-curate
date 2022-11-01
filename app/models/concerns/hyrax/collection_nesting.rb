@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.4.1] Changing reindex-extent to limited instead of full in order
+# [Hyrax-overwrite-v3.4.2] Changing reindex-extent to limited instead of full in order
 # to speed up collection indexing.
 
 module Hyrax

@@ -4,7 +4,7 @@ module Hyrax
   module AbilityOverrideHelper
     include Hyrax::AbilityHelper
 
-    # [Hyrax-overwrite-v3.4.1] The following method needs to read the bare
+    # [Hyrax-overwrite-v3.4.2] The following method needs to read the bare
     # document's visibility_ssi when rendering the visibility badge.
     def render_visibility_link(document)
       # Admin Sets do not have a visibility property.

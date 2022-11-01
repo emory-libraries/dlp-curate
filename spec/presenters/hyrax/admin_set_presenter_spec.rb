@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.4.1]
+# [Hyrax-overwrite-v3.4.2]
 require 'rails_helper'
 
 RSpec.describe Hyrax::AdminSetPresenter, :clean do
