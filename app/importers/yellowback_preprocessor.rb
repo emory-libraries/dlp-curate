@@ -6,7 +6,7 @@ require 'ruby-progressbar'
 # Utility service and methods that merge metadata from a CSV Pull List and MARCXml records
 # into a format suitable for ingest by the curate CSV importer
 # Deprecation Warning: As of Curate v3, Zizia will be removed. This preprocessor contains
-#   custom logic that switches expected out based on whether Bulkrax is or isn't the importer.
+#   custom logic that switches expected output based on whether Bulkrax is or isn't the importer.
 #   This should be refactored to only export Bulkrax expected fields when Zizia is removed.
 
 class YellowbackPreprocessor

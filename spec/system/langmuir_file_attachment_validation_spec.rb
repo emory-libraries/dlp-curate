@@ -2,7 +2,7 @@
 require 'rails_helper'
 include Warden::Test::Helpers
 
-# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
+# Deprecation Warning: As of Curate v3, Zizia and this spec will be removed.
 RSpec.describe 'Importing records with a bad file attachment', :perform_jobs, :clean, type: :system, js: true do
   let(:csv_file) { File.join(fixture_path, 'csv_import', 'csv_files_with_problems', 'batch_with_bad_filename.csv') }
 

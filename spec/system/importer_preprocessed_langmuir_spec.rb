@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
+# Deprecation Warning: As of Curate v3, Zizia and this spec will be removed.
 RSpec.describe 'Importing preprocessed langmuir', :clean, perform_enqueued: [AttachFilesToWorkJob, IngestJob], type: :system do
   let(:modular_csv) { 'spec/fixtures/csv_import/good/langmuir_post_processing.csv' }
   let(:user) { ::User.batch_user }
