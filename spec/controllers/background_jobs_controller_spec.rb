@@ -64,6 +64,9 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
         expect(ProcessAwsFixityPreservationEventsJob).to have_been_enqueued
       end
 
+      # Deprecation Warning: As of Curate v3, Zizia will be removed. These preprocessors contain
+      #   custom logic that switches expected output based on whether Bulkrax is or isn't the importer.
+      #   This should be refactored to only export Bulkrax expected fields when Zizia is removed.
       context 'books preprocessor' do
         let(:preprocessor) { instance_double(YellowbackPreprocessor) }
         let(:yellowback_pull_list_sample) do

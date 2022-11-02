@@ -11,6 +11,7 @@ Bundler.require(*Rails.groups)
 
 module DlpCurate
   class Application < Rails::Application
+    # Deprecation Warning: As of Curate v3, Zizia and this requirement will be removed.
     require 'zizia'
 
     # Initialize configuration defaults for originally generated Rails version.

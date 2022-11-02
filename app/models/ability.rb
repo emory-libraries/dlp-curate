@@ -16,6 +16,7 @@ class Ability
 
     can [:create, :show, :add_user, :remove_user, :index, :edit, :update, :destroy], Role
 
+    # Deprecation Warning: As of Curate v3, Zizia and these abilities will be removed.
     can :manage, Zizia::CsvImport
     can :manage, Zizia::CsvImportDetail
 
