@@ -2,6 +2,7 @@
 require 'rails_helper'
 include Warden::Test::Helpers
 
+# Deprecation Warning: As of Curate v3, Zizia and this spec will be removed.
 RSpec.describe 'Importing records with file attachment', :perform_jobs, :clean, type: :system, js: true do
   let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'langmuir_post_processing.csv') }
 

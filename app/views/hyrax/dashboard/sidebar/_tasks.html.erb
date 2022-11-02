@@ -20,6 +20,7 @@
     <span class="fa fa-flag" aria-hidden="true"></span> <span class="sidebar-action-text"><%= t('hyrax.leases.index.manage_leases') %></span>
   <% end %>
 
+  <%# Deprecation Warning: For Curate v3+, Zizia will be removed, making the link below useless. %>
   <%= menu.nav_link('/csv_imports/new',  data: { turbolinks: false }) do %>
     <span class="fa fa-upload"></span> <span class="sidebar-action-text">Import Content From a CSV</span>
   <% end %>

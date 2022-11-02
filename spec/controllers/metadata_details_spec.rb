@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 # [Hyrax-overwrite-v3.0.0.pre.rc1] Adds tests for additional files
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
+#   of the Zizia install that will likely be removed.
 require 'rails_helper'
 
 RSpec.describe MetadataDetailsController, type: :controller do

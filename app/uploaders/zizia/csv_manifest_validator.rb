@@ -10,6 +10,8 @@
 # slowly for the user.  Any validations that are slow
 # should be run in background jobs during the import
 # instead of here.
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
+#   of the Zizia install that will likely be removed.
 module Zizia
   class CsvManifestValidator
     # @param manifest_uploader [CsvManifestUploader] The manifest that's mounted to a CsvImport record.  See carrierwave gem documentation.  This is basically a wrapper for the CSV file.

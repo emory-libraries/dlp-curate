@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
+# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe LangmuirPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results

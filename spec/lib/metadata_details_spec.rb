@@ -2,6 +2,8 @@
 
 require 'rails_helper'
 
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
+#   of the Zizia install that will likely be removed.
 RSpec.describe MetadataDetails do
   let(:work_attributes) { CurateGenericWorkAttributes.instance }
   let(:metadata_details) { described_class.instance }

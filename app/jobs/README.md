@@ -50,6 +50,7 @@ This is an overwrite of Hyrax' [CharacterizeJob](https://github.com/samvera/hyra
 ### [CreateDerivativesJob](https://github.com/emory-libraries/dlp-curate/blob/main/app/jobs/create_derivatives_job.rb)
 This is an overwrite of Hyrax' [CreateDerivativesJob](https://github.com/samvera/hyrax/blob/v3.4.1/app/jobs/create_derivatives_job.rb). This Job creates a Thumbnail from the image passed to it. The following are the changes made to the Hyrax version:
 - `#perform`: The generation of thumbnails using MiniMagick has proven problematic and the addition of error logging has been implemented because of it.
+[//]: (Deprecation Warning: As of Curate v3, Zizia will be removed. Bulkrax will become the lone importing tool, which means that the following section can either be eliminated completely or rewritten to describe Bulkrax' processing sequence.)
 ## Bulk Import Processing Sequence
 The following is each procedure in order of start to finish that a CSV uploaded to Curate Dashboard's "Import Content From a CSV" goes through.
 1. [`Zizia::StartCsvImportJob`](https://github.com/curationexperts/zizia/blob/v6.0.1/app/jobs/zizia/start_csv_import_job.rb)

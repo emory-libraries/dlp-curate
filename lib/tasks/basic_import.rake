@@ -3,6 +3,7 @@
 # Set these values on the command line when you invoke the rake task.
 # CSV_FILE should point to the csv you want to import, and
 # IMPORT_FILE_PATH should point to a directory containing the files to be attached.
+# Deprecation Warning: As of Curate v3, Zizia and this task will be removed.
 CSV_FILE = ENV['CSV_FILE']
 IMPORT_FILE_PATH = ENV['IMPORT_FILE_PATH']
 
