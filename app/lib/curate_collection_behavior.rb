@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module CurateCollectionBehavior
-  # Hyrax v3.4.1 Override: reverting back to the non-Valkrie processing because
+  # Hyrax v3.4.2 Override: reverting back to the non-Valkrie processing because
   #   setting `member_of_collection_ids` in the Valkyrie-converted work object doesn't
   #   communicate back to the AF object to persist the same value there.
   def add_member_objects(new_member_ids)
