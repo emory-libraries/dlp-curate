@@ -29,8 +29,8 @@ class YellowbackPreprocessor
     @is_for_bulkrax = importer == 'bulkrax'
     @proper_model_or_type_work = @is_for_bulkrax ? 'CurateGenericWork' : 'work'
     @proper_model_or_type_fileset = @is_for_bulkrax ? 'FileSet' : 'fileset'
-    @add_transcript = add_transcript
-    @add_ocr_output = add_ocr_output
+    @add_transcript = ActiveModel::Type::Boolean.new.cast(add_transcript)
+    @add_ocr_output = ActiveModel::Type::Boolean.new.cast(add_ocr_output)
     directory = File.dirname(csv)
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
