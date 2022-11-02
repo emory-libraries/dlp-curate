@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
 
-# Deprecation warning: Zizia will be removed with Curate v3.
+  # Deprecation warning: Zizia will be removed with Curate v3.
   get 'importer_documentation/guide', to: 'metadata_details#show'
   get 'importer_documentation/profile', to: 'metadata_details#profile'
   mount Zizia::Engine => '/'
