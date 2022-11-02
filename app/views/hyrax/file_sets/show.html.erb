@@ -26,11 +26,11 @@
           <th><%= t('.uploaded') %></th>
         </thead>
         <tbody>
-          <%= render partial: 'file_details', locals: { use: t('.preservation_master_file'), file: @pm } unless @pm.nil? %>
-          <%= render partial: 'file_details', locals: { use: t('.service_file'), file: @sf } unless @sf.nil? %>
-          <%= render partial: 'file_details', locals: { use: t('.intermediate_file'), file: @if } unless @if.nil? %>
-          <%= render partial: 'file_details', locals: { use: t('.extracted'), file: @et } unless @et.nil? %>
-          <%= render partial: 'file_details', locals: { use: t('.transcript_file'), file: @tf } unless @tf.nil? %>
+          <% @files.each do |key, file| %>
+            <% if file %>
+              <%= render partial: 'file_details', locals: { use: t(".#{key}"), file: file } %>
+            <% end %>
+          <% end %>
         </tbody>
       </table>
     </div><!-- /columns second -->

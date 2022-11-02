@@ -54,12 +54,18 @@ module Bulkrax
 
     def parse_visibility(src)
       value_from_csv = src&.squish&.downcase
+      # Deprecation Warning: CurateMapper will be removed along with other Classes
+      #   related to Zizia with the release of Curate v3. The logic for the method call
+      #   below should be plucked from that class before it's removed.
       CurateMapper.new.visibility_mapping.fetch(
         value_from_csv, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
       )
     end
 
     def parse_pcdm_use(src)
+      # Deprecation Warning: CurateMapper will be removed along with other Classes
+      #   related to Zizia with the release of Curate v3. The logic for the method call
+      #   below should be plucked from that class before it's removed.
       CurateMapper.new.pcdm_value(normalize_term(src))
     end
 

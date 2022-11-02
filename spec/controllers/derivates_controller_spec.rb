@@ -15,7 +15,7 @@ RSpec.describe DerivativesController, type: :controller, clean: true do
       it "queues up fileset cleanup job" do
         expect(FileSetCleanUpJob).to receive(:perform_later).with(file_set.id)
         post :clean_up, params: { file_set_id: file_set }, xhr: true
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end

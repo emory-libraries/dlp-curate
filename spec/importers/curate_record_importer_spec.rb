@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe CurateRecordImporter do
   subject(:importer) { described_class.new(attributes: { csv_import_detail: fake_import_detail }) }
   let(:fake_import_detail) { FactoryBot.build(:csv_import_detail) }

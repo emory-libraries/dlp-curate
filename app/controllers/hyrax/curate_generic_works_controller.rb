@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# [Hyrax-overwrite-v3.4.2]
+
 module Hyrax
   # Generated controller for CurateGenericWork
   class CurateGenericWorksController < ApplicationController
@@ -17,30 +19,24 @@ module Hyrax
       respond_to do |wants|
         wants.html { presenter && parent_presenter }
         wants.json do
-          # load and authorize @curation_concern manually because it's skipped for html
-          @curation_concern = _curation_concern_type.find(params[:id]) unless curation_concern
-          authorize! :show, @curation_concern
+          # load @curation_concern manually because it's skipped for html
+          @curation_concern = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: params[:id])
+          curation_concern # This is here for authorization checks (we could add authorize! but let's use the same method for CanCanCan)
           render :show, status: :ok
         end
         additional_response_formats(wants)
-        wants.ttl do
-          render body: presenter.export_as_ttl, content_type: 'text/turtle'
-        end
-        wants.jsonld do
-          render body: presenter.export_as_jsonld, content_type: 'application/ld+json'
-        end
-        wants.nt do
-          render body: presenter.export_as_nt, content_type: 'application/n-triples'
-        end
+        wants.ttl { render body: presenter.export_as_ttl, mime_type: Mime[:ttl] }
+        wants.jsonld { render body: presenter.export_as_jsonld, mime_type: Mime[:jsonld] }
+        wants.nt { render body: presenter.export_as_nt, mime_type: Mime[:nt] }
       end
     end
 
     def manifest
       headers['Access-Control-Allow-Origin'] = '*'
-      render json: ManifestBuilderService.build_manifest(presenter: presenter, curation_concern: _curation_concern_type.find(params[:id]))
+      render json: ::ManifestBuilderService.build_manifest(presenter: presenter, curation_concern: _curation_concern_type.find(params[:id]))
     end
 
-    # [Hyrax-overwrite-v3.0.0.pre.rc1] Restrict deletion to admins only
+    # Restrict deletion to admins only
     def destroy
       title = curation_concern.to_s
       if current_user.admin?

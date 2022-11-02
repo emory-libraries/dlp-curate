@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-overwrite-v3.4.2]
 # Adds additional fields to characterization_terms
 
 module Hyrax

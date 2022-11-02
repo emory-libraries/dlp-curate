@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 require 'csv'
 
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
+#   of the Zizia install that will likely be removed.
 class CurateCollectionImporter
   def initialize
     @library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.gid

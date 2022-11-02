@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
 
+  # Deprecation warning: Zizia will be removed with Curate v3.
   get 'importer_documentation/guide', to: 'metadata_details#show'
   get 'importer_documentation/profile', to: 'metadata_details#profile'
   mount Zizia::Engine => '/'
@@ -47,8 +48,6 @@ Rails.application.routes.draw do
 
   authenticate :user, ->(u) { u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
-    get 'csv_import_details/index'
-    get 'csv_import_details/show/:id', to: 'csv_import_details#show', as: 'csv_import_detail'
   end
 
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
@@ -70,6 +69,10 @@ Rails.application.routes.draw do
   post "/concern/file_sets/:file_set_id/clean_up", to: "derivatives#clean_up"
   post '/concern/file_sets/:file_set_id/re_characterize', to: 'characterization#re_characterize', as: 'file_set_re_characterization'
   post "/concern/curate_generic_works/:work_id/regen_manifest", to: "manifest_regeneration#regen_manifest", as: 'regen_manifest'
+
+  # Deprecation warning: Zizia will be removed with Curate v3.
+  get 'csv_import_details/index'
+  get 'csv_import_details/show/:id', to: 'csv_import_details#show', as: 'csv_import_detail'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

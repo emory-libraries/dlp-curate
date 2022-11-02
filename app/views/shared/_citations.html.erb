@@ -1,3 +1,4 @@
+<% # [Hyrax-overwrite-v3.4.2] %>
 <% content_for(:twitter_meta) do %>
   <meta name="twitter:card" content="product" />
   <meta name="twitter:site" content="<%= t('hyrax.product_twitter_handle') %>" />
@@ -14,20 +15,35 @@
   <meta name="twitter:label2" content="Rights Statement" />
 <% end %>
 
+<% gscholar = Hyrax::GoogleScholarPresenter.new(@presenter) %>
+<% if gscholar.scholarly? %>
 <% content_for(:gscholar_meta) do %>
-  <meta name="citation_title" content="<%= @presenter.title.first %>" />
+  <meta name="description" content="<%= gscholar.description %>" />
+  <meta name="citation_title" content="<%= gscholar.title %>" />
   <%# DLP Curate has a singular creator  %>
-  <%# @presenter.creator.each do |creator| %>
+  <%# gscholar.authors.each do |author| %>
   <meta name="citation_author" content="<%= @presenter.creator %>" />
   <%# end %>
-  <meta name="citation_publication_date" content="<%= @presenter.date_created.first %>" />
-  <meta name="citation_pdf_url" content="<%= @presenter.download_url %>" />
+  <% if gscholar.publication_date.present? %>
+  <meta name="citation_publication_date" content="<%= gscholar.publication_date %>" />
+  <% end %>
+  <% if gscholar.pdf_url.present? %>
+  <meta name="citation_pdf_url" content="<%= gscholar.pdf_url %>" />
+  <% end %>
+  <% if gscholar.keywords.present? %>
+  <meta name="citation_keywords" content="<%= gscholar.keywords %>" />
+  <% end %>
+  <% if gscholar.publisher.present? %>
+  <meta name="citation_publisher" content="<%= gscholar.publisher %>" />
+  <% end %>
+
   <!-- Hyrax does not yet support these metadata -->
   <!--
-       <meta name="citation_journal_title" content=""/>
-       <meta name="citation_volume" content=""/>
-       <meta name="citation_issue" content=""/>
-       <meta name="citation_firstpage" content=""/>
-       <meta name="citation_lastpage" content=""/>
-     -->
+    <meta name="citation_journal_title" content=""/>
+    <meta name="citation_volume" content=""/>
+    <meta name="citation_issue" content=""/>
+    <meta name="citation_firstpage" content=""/>
+    <meta name="citation_lastpage" content=""/>
+  -->
+<% end %>
 <% end %>

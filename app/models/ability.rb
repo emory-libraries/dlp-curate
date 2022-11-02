@@ -13,10 +13,12 @@ class Ability
     #   can [:destroy], ActiveFedora::Base
     # end
     return unless current_user.admin?
+
     can [:create, :show, :add_user, :remove_user, :index, :edit, :update, :destroy], Role
 
-    can :manage, Zizia::CsvImport if current_user.admin?
-    can :manage, Zizia::CsvImportDetail if current_user.admin?
+    # Deprecation Warning: As of Curate v3, Zizia and these abilities will be removed.
+    can :manage, Zizia::CsvImport
+    can :manage, Zizia::CsvImportDetail
 
     # Limits creating new objects to a specific group
     #

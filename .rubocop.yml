@@ -46,6 +46,7 @@ Metrics/ClassLength:
         - app/models/curate_generic_work.rb
         - app/models/solr_document.rb
         - app/presenters/hyrax/collection_presenter.rb
+        # Deprecation warning: Zizia will be removed with Curate v3.
         - app/uploaders/zizia/csv_manifest_validator.rb
         - spec/**/*
 
@@ -103,6 +104,8 @@ Metrics/ParameterLists:
         - app/importers/yellowback_preprocessor.rb
         - lib/importing_modules/file_set_methods.rb
         - app/jobs/manifest_persistence_job.rb
+        - app/jobs/characterize_job.rb
+        - config/initializers/collection_member_search_service_overrides.rb
 
 Metrics/PerceivedComplexity:
     Exclude:

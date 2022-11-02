@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Hydra::AccessControls v10.7.0 Override: our initializer prepends stopped working,
+# Hydra::AccessControls v11.0.7 Override: our initializer prepends stopped working,
 #   so a straight override is necessary.
 
 module Hydra::AccessControls

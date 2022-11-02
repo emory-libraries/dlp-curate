@@ -4,7 +4,7 @@ require(Rails.root.join('spec', 'support', 'new_curate_generic_work_form.rb'))
 require(Rails.root.join('spec', 'support', 'wait_for_ajax.rb'))
 include Warden::Test::Helpers
 
-RSpec.describe 'Fileset upload', integration: true, clean: true, js: true, type: :system do
+RSpec.describe 'Fileset upload', integration: true, admin_set: true, clean: true, js: true, type: :system do
   context 'a logged in user uploads fileset' do
     let(:user_attributes) do
       { uid: 'test@example.com' }
@@ -119,6 +119,14 @@ RSpec.describe 'Fileset upload', integration: true, clean: true, js: true, type:
       expect(page).to have_selector("input[name='uploaded_files[]']", visible: false, count: 2)
 
       expect(Hyrax::UploadedFile.count).to eq(2)
+    end
+  end
+
+  context 'when a user is not authenticated' do
+    it 'requires the user to sign in' do
+      visit("/concern/curate_generic_works/new#files")
+      expect(page.current_path).to include '/sign_in'
+      expect(page).to have_content 'You need to sign in or sign up before continuing.'
     end
   end
 end

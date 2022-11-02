@@ -2,6 +2,8 @@
 
 require 'zizia'
 
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
+#   of the Zizia install that will likely be removed.
 class ModularImporter
   attr_reader :csv_import, :collection_id,
               :user_id, :row

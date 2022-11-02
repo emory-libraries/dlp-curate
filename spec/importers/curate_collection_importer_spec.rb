@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
+#   of the Zizia install that will likely be removed.
 RSpec.describe CurateCollectionImporter, :clean do
   subject(:cci) { described_class.new }
   let(:collections_csv) { File.join(fixture_path, 'csv_import', 'collections', 'collections.csv') }

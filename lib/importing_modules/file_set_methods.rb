@@ -4,13 +4,13 @@ module FileSetMethods
   def process_uploaded_file(work_permissions, file_set_attrs)
     actor = ::Hyrax::Actors::FileSetActor.new(object, @user)
 
-    @uploaded_file.update(file_set_uri: actor.file_set.uri)
+    @uploaded_file.add_file_set!(actor.file_set)
     actor.file_set.permissions_attributes = work_permissions
     actor.create_metadata(@uploaded_file.fileset_use, file_set_attrs)
     actor.fileset_name(@uploaded_file.file.to_s) if @uploaded_file.file.present?
     create_content_for_actor(actor, @uploaded_file)
     actor.file_set.save
-    actor.attach_to_work(@work)
+    actor.attach_to_work(@work, file_set_attrs)
   end
 
   def create_content_for_actor(actor, uploaded_file)

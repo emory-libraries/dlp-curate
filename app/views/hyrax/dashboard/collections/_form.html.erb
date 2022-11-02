@@ -1,4 +1,4 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Adds data-behavior='collection-form' %>
+<% # [Hyrax-overwrite-v3.4.2] Adds data-behavior='collection-form' %>
 <%= render "shared/nav_safety_modal" %>
 <div class="panel panel-default tabs" id="collection-edit-controls">
   <ul class="nav nav-tabs" role="tablist">
@@ -6,17 +6,17 @@
       <a href="#description" role="tab" data-toggle="tab" class="nav-safety-confirm"><%= t('.tabs.description') %></a>
     </li>
     <% if @form.persisted? %>
-      <% if @collection.brandable? %>
+      <% if collection_brandable?(collection: @collection) %>   
       <li>
         <a href="#branding" role="tab" data-toggle="tab" class="nav-safety-confirm"><%= t('.tabs.branding') %></a>
       </li>
       <% end %>
-      <% if @collection.discoverable? %>
+      <% if collection_discoverable?(collection: @collection) %>
       <li>
         <a href="#discovery" role="tab" data-toggle="tab" class="nav-safety-confirm"><%= t('.tabs.discovery') %></a>
       </li>
       <% end %>
-      <% if @collection.sharable? %>
+      <% if collection_sharable?(collection: @collection) %>
       <li>
         <a href="#sharing" role="tab" data-toggle="tab" class="nav-safety-confirm"><%= t('.tabs.sharing') %></a>
       </li>
@@ -38,7 +38,7 @@
                 <% unless f.object.select_files.blank? %>
                   <%# we're loading these values dynamically to speed page load %>
                   <%= f.input :thumbnail_id,
-                              input_html: { data: { text: f.object.thumbnail_id } } %>
+                            input_html: { data: { text: f.object.thumbnail_id } } %>
                 <% end %>
               <% end %>
             </div>
@@ -73,29 +73,33 @@
       </div> <!-- end description -->
 
       <% if @form.persisted? %>
-        <div id="branding" class="tab-pane">
-          <div class="panel panel-default labels">
-            <div class="panel-body">
-              <%= render 'form_branding', f: f %>
+        <% if collection_brandable?(collection: @collection) %>
+          <div id="branding" class="tab-pane">
+            <div class="panel panel-default labels">
+              <div class="panel-body">
+                <%= render 'form_branding', f: f %>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div id="discovery" class="tab-pane">
-          <div class="panel panel-default labels">
-            <div class="panel-body">
-              <%= render 'form_discovery', f: f %>
+        <% end %>
+        <% if collection_discoverable?(collection: @collection) %>
+          <div id="discovery" class="tab-pane">
+            <div class="panel panel-default labels">
+              <div class="panel-body">
+                <%= render 'form_discovery', f: f %>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div id="sharing" class="tab-pane">
-          <div class="panel panel-default labels" id="collection_permissions" data-param-key="<%= f.object.model_name.param_key %>">
-            <div class="panel-body">
-              <%= render 'form_share', f: f %>
+        <% end %>
+        <% if collection_sharable?(collection: @collection) %>
+          <div id="sharing" class="tab-pane">
+            <div class="panel panel-default labels" id="collection_permissions" data-param-key="<%= f.object.model_name.param_key %>">
+              <div class="panel-body">
+                <%= render 'form_share', f: f %>
+              </div>
             </div>
           </div>
-        </div>
+        <% end %>
       <% end %>
 
       <div class="panel-footer">

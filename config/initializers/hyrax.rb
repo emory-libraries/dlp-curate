@@ -10,6 +10,9 @@ Hyrax.config do |config|
   #   registry.add(name: 'captaining', description: 'For those that really like the front lines')
   # end
 
+  config.admin_set_model = 'AdminSet'
+  config.collection_model = '::Collection'
+
   # When an admin set is created, we need to activate a workflow.
   # The :default_active_workflow_name is the name of the workflow we will activate.
   # @see Hyrax::Configuration for additional details and defaults.

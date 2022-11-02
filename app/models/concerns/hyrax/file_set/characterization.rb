@@ -1,20 +1,25 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.0.0.pre.rc1] Change `characterization_proxy`
-# This module points the FileSet to the location of the technical metdata.
-# By default, the file holding the metadata is :preservation_master_file and the terms
-# are listed under ::characterization_terms.
-# Implementations may define their own terms or use a different source file, but
-# any terms must be set on the ::characterization_proxy by the Hydra::Works::CharacterizationService
-#
-# class MyFileSet
-#   include Hyrax::FileSetBehavior
-# end
-#
-# MyFileSet.characterization_proxy = :master_file
-# MyFileSet.characterization_terms = [:term1, :term2, :term3]
+# [Hyrax-overwrite-v3.4.2] Change `characterization_proxy`
 module Hyrax
-  module FileSet
+  class FileSet
+    ##
+    # This module points the FileSet to the location of the technical metadata.
+    # By default, the file holding the metadata is +:original_file+ and the terms
+    # are listed under +.characterization_terms+.
+    #
+    # Implementations may define their own terms or use a different source file, but
+    # any terms must be set on the +.characterization_proxy+ by the
+    # +Hydra::Works::CharacterizationService+.
+    #
+    # @example
+    #   class MyFileSet
+    #     include Hyrax::FileSetBehavior
+    #   end
+    #
+    #   MyFileSet.characterization_proxy = :master_file
+    #   MyFileSet.characterization_terms = [:term1, :term2, :term3]
+    #
     module Characterization
       extend ActiveSupport::Concern
 
@@ -46,7 +51,6 @@ module Hyrax
         class AlphaChannelsSchema < ActiveTriples::Schema
           property :alpha_channels, predicate: ::RDF::URI.new('http://vocabulary.samvera.org/ns#alphaChannels')
         end
-
         ActiveFedora::WithMetadata::DefaultMetadataClassFactory.file_metadata_schemas << AlphaChannelsSchema
       end
 
@@ -69,8 +73,13 @@ module Hyrax
       class AlphaChannelsSchema < ActiveTriples::Schema
         property :alpha_channels, predicate: ::RDF::URI.new('http://vocabulary.samvera.org/ns#alphaChannels')
       end
-
       ActiveFedora::WithMetadata::DefaultMetadataClassFactory.file_metadata_schemas << AlphaChannelsSchema
+
+      # Add file_set_id for Valkyrie support.
+      class FileSetIdSchema < ActiveTriples::Schema
+        property :file_set_id, predicate: ::RDF::URI.new('http://vocabulary.samvera.org/ns#fileSetId')
+      end
+      ActiveFedora::WithMetadata::DefaultMetadataClassFactory.file_metadata_schemas << FileSetIdSchema
     end
   end
 end

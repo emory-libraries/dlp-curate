@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
+#   of the Zizia install that will likely be removed.
 module ModularImporterUpdateDecorator
   def metadata_only_attach_files(super_method)
     super_method unless related_rows.empty?

@@ -4,11 +4,16 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
   include IiifManifestCache
 
   def perform(key:, solr_doc:, root_url:, manifest_metadata:, curation_concern:, sequence_rendering:)
-    manifest_json = ApplicationController.render(template: 'manifest/manifest.json', assigns: { solr_doc:           solr_doc,
-                                                                                                root_url:           root_url,
-                                                                                                manifest_metadata:  manifest_metadata,
-                                                                                                manifest_rendering: sequence_rendering,
-                                                                                                image_concerns:     image_concerns(curation_concern) })
+    manifest_json = ApplicationController.render(
+      template: 'manifest/manifest.json',
+      assigns:  {
+        solr_doc:           solr_doc,
+        root_url:           root_url,
+        manifest_metadata:  manifest_metadata,
+        manifest_rendering: sequence_rendering,
+        image_concerns:     image_concerns(curation_concern)
+      }
+    )
     remove_outdated_manifests(solr_doc[:id])
     persist_manifest(key: key, manifest_json: manifest_json)
   end

@@ -4,6 +4,8 @@ require 'rails_helper'
 
 # rubocop:disable Style/LineEndConcatenation
 
+# Deprecation Warning: As of Curate v3, Zizia will be removed. This will be refactored to ignore
+#   Zizia specific headers and values.
 RSpec.describe YellowbackPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results

@@ -3,45 +3,62 @@
 require 'rails_helper'
 
 RSpec.describe Hyrax::CollectionType, type: :model do
-  let(:collection_type) { FactoryBot.build(:collection_type) }
+  subject(:collection_type) { FactoryBot.build(:collection_type) }
+
+  shared_context 'with a collection' do
+    let(:collection_type) { FactoryBot.create(:collection_type) }
+    let(:collection) { FactoryBot.create(:collection_lw, collection_type_gid: collection_type.to_global_id) }
+  end
 
   describe '.collection_type_settings_methods' do
-    subject { described_class.collection_type_settings_methods }
-
-    it { is_expected.to be_a(Array) }
+    it 'lists collection settings methods' do # deprecated
+      expect(described_class.collection_type_settings_methods)
+        .to include(:nestable?, :discoverable?, :brandable?)
+    end
   end
 
   describe '#collection_type_settings_methods' do
-    subject { described_class.new.collection_type_settings_methods }
-
-    it { is_expected.to be_a(Array) }
+    it 'lists collection settings methods' do # deprecated
+      expect(collection_type.collection_type_settings_methods)
+        .to include(:nestable?, :discoverable?, :brandable?)
+    end
   end
 
-  it "has basic metadata" do
-    expect(collection_type).to respond_to(:title)
-    expect(collection_type.title).not_to be_empty
-    expect(collection_type).to respond_to(:description)
+  describe '.settings_attributes' do
+    it 'lists collection settings methods' do
+      expect(described_class.settings_attributes)
+        .to include(:nestable?, :discoverable?, :brandable?)
+    end
+  end
+
+  it 'has a description' do
     expect(collection_type.description).not_to be_empty
-    expect(collection_type).to respond_to(:machine_id)
+  end
+
+  it 'has a machine_id' do
+    expect(collection_type.machine_id).not_to be_empty
+  end
+
+  it 'has a title' do
+    expect(collection_type.title).not_to be_empty
   end
 
   it "has configuration properties with defaults" do
-    expect(collection_type.nestable?).to eq true
-    expect(collection_type.brandable?).to eq true
-    expect(collection_type.discoverable?).to eq true
-    expect(collection_type.sharable).to eq true
-    expect(collection_type.share_applies_to_new_works?).to eq true
+    expect(collection_type).to be_nestable
+    expect(collection_type).to be_brandable
+    expect(collection_type).to be_discoverable
+    expect(collection_type).to be_sharable
+    expect(collection_type).to be_share_applies_to_new_works
     expect(collection_type.allow_multiple_membership?).to eq true
     expect(collection_type.require_membership).to eq false
     expect(collection_type.assigns_workflow?).to eq false
     expect(collection_type.assigns_visibility?).to eq false
-    expect(collection_type.deposit_only_collection?).to eq false
   end
 
   describe '#gid' do
     it 'returns the gid when id exists' do
       collection_type.id = 5
-      expect(collection_type.gid.to_s).to eq 'gid://dlp-curate/hyrax-collectiontype/5'
+      expect(collection_type.gid.to_s).to eq "gid://#{GlobalID.app}/#{described_class}/5"
     end
 
     it 'returns nil when id is nil' do
@@ -50,28 +67,8 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     end
   end
 
-  describe ".any_nestable?" do
-    context "when there is a nestable collection type" do
-      let(:collection_type) { FactoryBot.create(:collection_type, nestable: true) }
-
-      it 'returns true' do
-        collection_type
-        expect(described_class.any_nestable?).to be true
-      end
-    end
-
-    context "when there are no nestable collection types" do
-      let(:collection_type) { FactoryBot.create(:collection_type, nestable: false) }
-
-      it 'returns false' do
-        collection_type
-        expect(described_class.any_nestable?).to be false
-      end
-    end
-  end
-
   describe ".find_or_create_default_collection_type" do
-    let(:default_collection_type) { described_class.find_or_create_default_collection_type }
+    subject(:default_collection_type) { described_class.find_or_create_default_collection_type }
 
     it 'creates a default collection type' do
       expect(Hyrax::CollectionTypes::CreateService).to receive(:create_collection_type)
@@ -79,14 +76,24 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     end
   end
 
+  describe ".gids_that_do_not_allow_multiple_membership" do
+    let(:type_allows_multiple_membership) { FactoryBot.create(:collection_type, allow_multiple_membership: true) }
+    let!(:type_disallows_multiple_membership) { FactoryBot.create(:collection_type, allow_multiple_membership: false) }
+
+    it 'lists the single membership gids' do
+      expect(described_class.gids_that_do_not_allow_multiple_membership)
+        .to match_array(type_disallows_multiple_membership.to_global_id.to_s)
+    end
+  end
+
   describe ".find_or_create_admin_set_type" do
-    let(:admin_set_type) { described_class.find_or_create_admin_set_type }
+    subject(:admin_collection_type) { described_class.find_or_create_admin_set_type }
 
     it 'creates admin set collection type' do
       machine_id = described_class::ADMIN_SET_MACHINE_ID
       title = described_class::ADMIN_SET_DEFAULT_TITLE
       expect(Hyrax::CollectionTypes::CreateService).to receive(:create_collection_type).with(machine_id: machine_id, title: title, options: anything)
-      admin_set_type
+      admin_collection_type
     end
   end
 
@@ -104,14 +111,17 @@ RSpec.describe Hyrax::CollectionType, type: :model do
 
   describe '.find_by_gid' do
     let(:collection_type) { FactoryBot.create(:collection_type) }
-    let(:nonexistent_gid) { 'gid://internal/hyrax-collectiontype/NO_EXIST' }
 
-    it 'returns instance of collection type when one with the gid exists' do
+    it 'returns the same collection type the gid exists' do
       expect(described_class.find_by_gid(collection_type.gid)).to eq collection_type
     end
 
+    it 'returns the same collection type with `#to_global_id`' do
+      expect(described_class.find_by_gid(collection_type.to_global_id)).to eq collection_type
+    end
+
     it 'returns false if collection type with gid does NOT exist' do
-      expect(described_class.find_by_gid(nonexistent_gid)).to eq false
+      expect(described_class.find_by_gid('gid://internal/hyrax-collectiontype/NO_EXIST')).to eq false
     end
 
     it 'returns false if gid is nil' do
@@ -121,30 +131,30 @@ RSpec.describe Hyrax::CollectionType, type: :model do
 
   describe '.find_by_gid!' do
     let(:collection_type) { FactoryBot.create(:collection_type) }
-    let(:nonexistent_gid) { 'gid://internal/hyrax-collectiontype/NO_EXIST' }
 
     it 'returns instance of collection type when one with the gid exists' do
       expect(described_class.find_by_gid(collection_type.gid)).to eq collection_type
     end
 
+    it 'returns the same collection type with `#to_global_id`' do
+      expect(described_class.find_by_gid!(collection_type.to_global_id)).to eq collection_type
+    end
+
     it 'raises error if collection type with gid does NOT exist' do
-      expect { described_class.find_by_gid!(nonexistent_gid) }.to raise_error(ActiveRecord::RecordNotFound, "Couldn't find Hyrax::CollectionType matching GID '#{nonexistent_gid}'")
+      expect { described_class.find_by_gid!('gid://internal/hyrax-collectiontype/NO_EXIST') }
+        .to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'raises error if passed nil' do
-      expect { described_class.find_by_gid!(nil) }.to raise_error(ActiveRecord::RecordNotFound, "Couldn't find Hyrax::CollectionType matching GID ''")
+      expect { described_class.find_by_gid!(nil) }.to raise_error(URI::InvalidURIError)
     end
   end
 
   describe "collections" do
-    let!(:collection) { FactoryBot.create(:collection_lw, collection_type_gid: collection_type.gid.to_s) }
     let(:collection_type) { FactoryBot.create(:collection_type) }
 
-    it 'returns collections of this collection type' do
-      expect(collection_type.collections.to_a).to include collection
-    end
-
     it 'returns empty array if gid is nil' do
+      FactoryBot.create(:collection_lw, collection_type_gid: collection_type.gid.to_s)
       expect(Collection.count).not_to be_zero
       expect(FactoryBot.build(:collection_type).collections).to eq []
     end
@@ -154,7 +164,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     let(:collection_type) { FactoryBot.create(:collection_type) }
 
     it 'returns true if there are any collections of this collection type' do
-      FactoryBot.create(:collection_lw, collection_type_gid: collection_type.gid.to_s)
+      FactoryBot.create(:collection_lw, collection_type: collection_type)
       expect(collection_type.collections?).to eq true
     end
     it 'returns false if there are not any collections of this collection type' do
@@ -172,10 +182,9 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     end
   end
 
-  describe "destroy" do
-    before do
-      allow(collection_type).to receive(:collections?).and_return(true)
-    end
+  describe '#destroy' do
+    include_context 'with a collection'
+    before { reload_context_variables }
 
     it "fails if collections exist of this type" do
       expect(collection_type.destroy).to eq false
@@ -184,9 +193,8 @@ RSpec.describe Hyrax::CollectionType, type: :model do
   end
 
   describe "save (no settings changes)" do
-    before do
-      allow(collection_type).to receive(:collections?).and_return(true)
-    end
+    include_context 'with a collection'
+    before { reload_context_variables }
 
     it "succeeds no changes to settings are being made" do
       expect(collection_type.save).to be true
@@ -194,15 +202,12 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     end
   end
 
-  describe "save" do
-    before do
-      allow(collection_type).to receive(:changes).and_return('nestable' => false)
-    end
+  describe '#save' do
+    before { collection_type.nestable = !collection_type.nestable }
 
     context 'for non-special collection type' do
-      before do
-        allow(collection_type).to receive(:collections?).and_return(true)
-      end
+      include_context 'with a collection'
+      before { collection.reload }
 
       it "fails if collections exist of this type and settings are changed" do
         expect(collection_type.save).to be false
@@ -213,10 +218,6 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     context 'for admin set collection type' do
       let(:collection_type) { FactoryBot.create(:admin_set_collection_type) }
 
-      before do
-        allow(collection_type).to receive(:collections?).and_return(false)
-      end
-
       it 'fails if settings are changed' do
         expect(collection_type.save).to be false
         expect(collection_type.errors.messages[:base].first).to eq "Collection type settings cannot be altered for the Administrative Set type"
@@ -226,14 +227,14 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     context 'for user collection type' do
       let(:collection_type) { FactoryBot.create(:user_collection_type) }
 
-      before do
-        allow(collection_type).to receive(:collections?).and_return(false)
-      end
-
       it 'fails if settings are changed' do
         expect(collection_type.save).to be false
         expect(collection_type.errors.messages[:base].first).to eq "Collection type settings cannot be altered for the User Collection type"
       end
     end
+  end
+
+  def reload_context_variables
+    [collection_type, collection].each(&:reload)
   end
 end

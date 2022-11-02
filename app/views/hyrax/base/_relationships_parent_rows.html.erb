@@ -1,3 +1,4 @@
+<% # [Hyrax-overwrite-v3.4.2] %>
 <%# Render presenters which aren't specified in the 'presenter_types' %>
 <% presenter.grouped_presenters(except: presenter.presenter_types).each_pair do |model_name, items| %>
   <%= render 'relationships_parent_row', type: model_name, items: items, presenter: presenter %>
