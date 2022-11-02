@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.1.0] overrides the initialize method to use the
+# [Hyrax-overwrite-v3.4.2] overrides the initialize method to use the
 # MultiLevelCollectionMemberSearchBuilder.
 Hyrax::Collections::CollectionMemberSearchService.class_eval do
   def initialize(scope:, collection:, params:, user_params: nil, current_ability: nil, search_builder_class: Hyrax::MultiLevelCollectionMemberSearchBuilder)
