@@ -49,7 +49,7 @@ gem 'zizia', '~> 5.5.0'
 
 group :development do
   gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2'
-  gem "capistrano", "~> 3.11", require: false
+  gem "capistrano", "~> 3.17", require: false
   gem 'capistrano-bundler', '~> 1.3'
   gem 'capistrano-ext'
   gem 'capistrano-passenger'
