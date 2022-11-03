@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.14.0"
+lock "~> 3.17.1"
 
 set :application, "dlp-curate"
 set :repo_url, "https://github.com/emory-libraries/dlp-curate.git"

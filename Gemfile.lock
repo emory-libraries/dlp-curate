@@ -2355,7 +2355,7 @@ DEPENDENCIES
   bulkrax
   byebug
   cap-ec2-emory!
-  capistrano (~> 3.11)
+  capistrano (~> 3.17)
   capistrano-bundler (~> 1.3)
   capistrano-ext
   capistrano-passenger
