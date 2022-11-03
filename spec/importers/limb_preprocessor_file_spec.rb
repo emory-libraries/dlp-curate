@@ -113,4 +113,34 @@ RSpec.describe YellowbackPreprocessor do
     expect(last_page['extracted']).to include('lsdi2/ftp/050000084033/ALTO/00000004.xml')
     expect(last_page['transcript_file']).to include('lsdi2/ftp/050000084033/OCR/00000004.txt')
   end
+
+  describe 'adding extra lines' do
+    before :all do
+      # running #merge is expensive, only set it up and run it once and then check the results
+      yearbook_pull_list_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB.csv')
+      alma_export_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'yearbooks_marc.xml')
+      preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, 'zizia', :limb, 1, "true", "true")
+      preprocessor.merge
+    end
+
+    after :all do
+      test1_csv = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-merged.csv')
+      File.delete(test1_csv) if File.exist?(test1_csv)
+    end
+
+    # each test inspects the output of the pre-processor, read into the import_rows CSV::Table object
+    let(:import_rows) { CSV.read(File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-merged.csv'), headers: true).by_row! }
+
+    it 'has the expected number of transcript rows' do
+      transcript_rows = import_rows.select { |r| r['fileset_label'] == 'Transcript for Volume' }
+
+      expect(transcript_rows.size).to eq(6)
+    end
+
+    it 'has the expected number of OCR rows' do
+      ocr_rows = import_rows.select { |r| r['fileset_label'] == 'OCR Output for Volume' }
+
+      expect(ocr_rows.size).to eq(6)
+    end
+  end
 end
