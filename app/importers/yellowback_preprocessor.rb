@@ -32,8 +32,8 @@ class YellowbackPreprocessor
     @is_for_bulkrax = importer == 'bulkrax'
     @proper_model_or_type_work = @is_for_bulkrax ? 'CurateGenericWork' : 'work'
     @proper_model_or_type_fileset = @is_for_bulkrax ? 'FileSet' : 'fileset'
-    @add_transcript = add_transcript
-    @add_ocr_output = add_ocr_output
+    @add_transcript = ActiveModel::Type::Boolean.new.cast(add_transcript)
+    @add_ocr_output = ActiveModel::Type::Boolean.new.cast(add_ocr_output)
     directory = File.dirname(csv)
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
@@ -232,7 +232,7 @@ class YellowbackPreprocessor
       new_row = build_new_row(csv_index, row, transcript_fileset_title)
       filename = pull_filename_from_path(transcript)
 
-      build_complete_pdf_row(new_row, transcript, filename)
+      build_complete_transcript_row(new_row, transcript, filename)
     end
 
     def ondemand_ocr_row(csv_index, row)
@@ -289,6 +289,10 @@ class YellowbackPreprocessor
 
     def build_complete_mets_row(new_row, mets, filename)
       generic_complete_row_builder(new_row, mets, filename, mets_fileset_title, ::FileSet::PRESERVATION)
+    end
+
+    def build_complete_transcript_row(new_row, transcript, filename)
+      generic_complete_row_builder(new_row, transcript, filename, transcript_fileset_title, ::FileSet::PRIMARY)
     end
 
     def generic_complete_row_builder(build_on_row, file_path, filename, title, pcdm_use)
