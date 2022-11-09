@@ -288,3 +288,21 @@ Bulkrax::ScheduleRelationshipsJob.class_eval do
     end
   end
 end
+
+Bulkrax::ExportBehavior.module_eval do
+  def filename(file_set)
+    uploader_types = ['service_file', 'preservation_master_file', 'intermediate_file',
+                      'extracted', 'transcript_file']
+    working_array = []
+    uploader_types.each do |type|
+      begin
+        file = file_set.send(type)
+      rescue
+        file = nil
+      end
+      working_array << "#{file.file_name.first}:#{type}" if file.present?
+    end
+
+    working_array.compact.join(';')
+  end
+end
