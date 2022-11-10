@@ -12,9 +12,6 @@
     "popper.js": "*",
     "universalviewer": "3.0.16"
   },
-  "resolutions": {
-    "**/node-sass": "^6"
-  },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",
     "postinstall": "yarn run uv-install && yarn run uv-config",
