@@ -42,7 +42,7 @@ gem 'turbolinks', '~> 5'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'uglifier', '>= 1.3.0'
-gem 'webpacker', '~> 4.x'
+gem 'webpacker', '~> 5.x'
 gem 'whenever', require: false
 # Deprecation Warning: As of Curate v3, Zizia will be removed.
 gem 'zizia', '~> 5.5.0'
