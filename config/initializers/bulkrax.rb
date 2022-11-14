@@ -263,6 +263,7 @@ Bulkrax::CsvEntry.class_eval do
 end
 
 Bulkrax::CsvParser.class_eval do
+  include FileSetMethods
   # This is the fix present in v4.3.0
   # Retrieve the path where we expect to find the files
   def path_to_files(**args)
@@ -272,6 +273,17 @@ Bulkrax::CsvParser.class_eval do
     @path_to_files = File.join(
         zip? ? importer_unzip_path : File.dirname(import_file_path), 'files', filename
       )
+  end
+
+  def store_files(identifier, folder_count)
+    record = ActiveFedora::Base.find(identifier)
+    return unless record
+
+    file_sets = pull_export_filesets(record)
+    file_sets << record.thumbnail if exporter.include_thumbnails && record.thumbnail.present? && record.work?
+    process_multiple_file_export(file_sets, folder_count)
+  rescue Ldp::Gone
+    nil
   end
 end
 
