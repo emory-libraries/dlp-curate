@@ -50,7 +50,7 @@ module FileSetMethods
 
   def process_multiple_file_export(file_sets, folder_count)
     file_sets.each do |fs|
-      path = File.join(exporter_export_path, folder_count, 'files')
+      path = export_file_path(folder_count)
       FileUtils.mkdir_p(path) unless File.exist? path
       files = filename(fs)&.split(';')
       next if files.empty?
@@ -72,5 +72,9 @@ module FileSetMethods
 
   def pull_export_filesets(record)
     record.file_set? ? Array.wrap(record) : record.file_sets
+  end
+
+  def export_file_path(folder_count)
+    File.join(exporter_export_path, folder_count, 'files')
   end
 end
