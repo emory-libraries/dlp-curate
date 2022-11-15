@@ -55,13 +55,17 @@ module FileSetMethods
       files = filename(fs)&.split(';')
       next if files.empty?
 
-      files.each do |file|
-        file_split = file.split(':')
-        io = open(fs.send(file_split.last).uri)
-        File.open(File.join(path, file_split.first), 'wb') do |f|
-          f.write(io.read)
-          f.close
-        end
+      shovel_files_into_folder(files, fs, path)
+    end
+  end
+
+  def shovel_files_into_folder(files, file_set, path)
+    files.each do |file|
+      file_split = file.split(':')
+      io = open(file_set.send(file_split.last).uri)
+      File.open(File.join(path, file_split.first), 'wb') do |f|
+        f.write(io.read)
+        f.close
       end
     end
   end
