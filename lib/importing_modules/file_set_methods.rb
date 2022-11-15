@@ -49,14 +49,16 @@ module FileSetMethods
   end
 
   def process_multiple_file_export(file_sets, folder_count)
-    file_sets.each do |fs|
-      path = export_file_path(folder_count)
-      FileUtils.mkdir_p(path) unless File.exist? path
-      files = filename(fs)&.split(';')
-      next if files.empty?
+    file_sets.each { |fileset| process_export_fileset_files(fileset, folder_count) }
+  end
 
-      shovel_files_into_folder(files, fs, path)
-    end
+  def process_export_fileset_files(fileset, folder_count)
+    path = export_file_path(folder_count)
+    FileUtils.mkdir_p(path) unless File.exist? path
+    files = filename(fileset)&.split(';')
+    next if files.empty?
+
+    shovel_files_into_folder(files, fileset, path)
   end
 
   def shovel_files_into_folder(files, file_set, path)
