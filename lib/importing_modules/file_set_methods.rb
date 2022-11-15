@@ -56,7 +56,7 @@ module FileSetMethods
     path = export_file_path(folder_count)
     FileUtils.mkdir_p(path) unless File.exist? path
     files = filename(fileset)&.split(';')
-    next if files.empty?
+    return if files.empty?
 
     shovel_files_into_folder(files, fileset, path)
   end
