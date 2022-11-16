@@ -47,4 +47,36 @@ module FileSetMethods
       { pieces[0].to_s => pieces[1] }
     end
   end
+
+  def process_multiple_file_export(file_sets, folder_count)
+    file_sets.each { |fileset| process_export_fileset_files(fileset, folder_count) }
+  end
+
+  def process_export_fileset_files(fileset, folder_count)
+    path = export_file_path(folder_count)
+    FileUtils.mkdir_p(path) unless File.exist? path
+    files = filename(fileset)&.split(';')
+    return if files.empty?
+
+    shovel_files_into_folder(files, fileset, path)
+  end
+
+  def shovel_files_into_folder(files, file_set, path)
+    files.each do |file|
+      file_split = file.split(':')
+      io = open(file_set.send(file_split.last).uri)
+      File.open(File.join(path, file_split.first), 'wb') do |f|
+        f.write(io.read)
+        f.close
+      end
+    end
+  end
+
+  def pull_export_filesets(record)
+    record.file_set? ? Array.wrap(record) : record.file_sets
+  end
+
+  def export_file_path(folder_count)
+    File.join(exporter_export_path, folder_count, 'files')
+  end
 end
