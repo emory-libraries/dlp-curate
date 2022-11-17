@@ -23,18 +23,27 @@ RSpec.describe OmniauthCallbacksController do
   context "when origin is present" do
     before do
       request.env["omniauth.origin"] = '/example'
+      post :shibboleth
     end
 
     it "redirects to origin" do
-      post :shibboleth
       expect(response.redirect_url).to eq 'http://test.host/example'
+    end
+
+    it "does not redirect to a 404" do
+      expect(response.status).not_to eq 404
     end
   end
 
   context "when origin is missing" do
+    before { post :shibboleth }
+
     it "redirects to dashboard" do
-      post :shibboleth
       expect(response.redirect_url).to include 'http://test.host/dashboard'
+    end
+
+    it "does not redirect to a 404" do
+      expect(response.status).not_to eq 404
     end
   end
 end
