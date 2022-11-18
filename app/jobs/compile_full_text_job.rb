@@ -10,9 +10,8 @@ class CompileFullTextJob < Hyrax::ApplicationJob
       Rails.logger.error("Unable to generate full text data for work #{work_id} due to the following error: #{e.message}")
     end
 
-    file = File.open(path)
     user = User.find(user_id)
-    generate_file_set_from(file: file, work: work, user: user)
+    generate_file_set_from(path: path, work: work, user: user)
   end
 
   private
@@ -32,13 +31,15 @@ class CompileFullTextJob < Hyrax::ApplicationJob
       path
     end
 
-    def generate_file_set_from(file:, work:, user:)
-      file_set = FileSet.create(label: "Full Text Data - #{work.id}")
-      actor = Hyrax::Actors::FileSetActor.new(file_set, user)
-      actor.create_metadata(nil, {})
-      actor.create_content(file, :transcript_file, :transcript_file)
-      work.ordered_members << actor.file_set
+    def generate_file_set_from(path:, work:, user:)
+      file = File.open(path)
+      label = "Full Text Data - #{work.id}"
+      file_set = FileSet.create(label: label, title: [label])
+      io_wrapper = JobIoWrapper.create_with_varied_file_handling!(user: user, file: file, relation: :transcript_file, file_set: file_set, preferred: :transcript_file)
+      IngestJob.new.perform(io_wrapper)
+      work.ordered_members << file_set
       work.save
-      actor.file_set.save
+      file_set.save
+      File.delete(path) if File.exist?(path)
     end
 end
