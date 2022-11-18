@@ -3,13 +3,7 @@
 class CompileFullTextJob < Hyrax::ApplicationJob
   def perform(work_id:, user_id:)
     work = CurateGenericWork.find(work_id)
-
-    begin
-      path = generate_full_text_data_file_from!(work: work)
-    rescue => e
-      Rails.logger.error("Unable to generate full text data for work #{work_id} due to the following error: #{e.message}")
-    end
-
+    path = generate_full_text_data_file_from!(work: work)
     user = User.find(user_id)
     generate_file_set_from(path: path, work: work, user: user)
   end
