@@ -33,47 +33,47 @@ Bulkrax.setup do |config|
   config.field_mappings = {
     "Bulkrax::CsvParser" => {
       "abstract" => { from: ["abstract"] },
-      "access_restriction_notes" => { from: ["access_restriction_notes"], split: '\|' },
+      "access_restriction_notes" => { from: ["access_restriction_notes"], split: '\|', join: '|' },
       "administrative_unit" => { from: ["administrative_unit"], parsed: true },
       "author_notes" => { from: ["author_notes"] },
       "conference_dates" => { from: ["conference_dates"] },
       "conference_name" => { from: ["conference_name"] },
       "contact_information" => { from: ["contact_information"] },
-      "content_genres" => { from: ["content_genres"], split: '\|' },
+      "content_genres" => { from: ["content_genres"], split: '\|', join: '|' },
       "content_type" => { from: ["content_type"], parsed: true },
-      "contributors" => { from: ["contributors"], split: '\|' },
+      "contributors" => { from: ["contributors"], split: '\|', join: '|' },
       "copyright_date" => { from: ["copyright_date"] },
-      "creator" => { from: ["creator"], split: '\|' },
-      "data_classifications" => { from: ["data_classifications"], parsed: true, split: '\|' },
-      "data_collection_dates" => { from: ["data_collection_dates"], split: '\|' },
-      "data_producers" => { from: ["data_producers"], split: '\|' },
-      "data_source_notes" => { from: ["data_source_notes"], split: '\|' },
+      "creator" => { from: ["creator"], split: '\|', join: '|' },
+      "data_classifications" => { from: ["data_classifications"], parsed: true, split: '\|', join: '|' },
+      "data_collection_dates" => { from: ["data_collection_dates"], split: '\|', join: '|' },
+      "data_producers" => { from: ["data_producers"], split: '\|', join: '|' },
+      "data_source_notes" => { from: ["data_source_notes"], split: '\|', join: '|' },
       "date_created" => { from: ["date_created"] },
       "date_digitized" => { from: ["date_digitized"] },
       "date_issued" => { from: ["date_issued"] },
       "deduplication_key" => { from: ["deduplication_key"], source_identifier: true },
       "edition" => { from: ["edition"] },
-      "emory_ark" => { from: ["emory_ark"], split: '\|' },
-      "emory_rights_statements" => { from: ["emory_rights_statements"], split: '\|' },
+      "emory_ark" => { from: ["emory_ark"], split: '\|', join: '|' },
+      "emory_rights_statements" => { from: ["emory_rights_statements"], split: '\|', join: '|' },
       "extent" => { from: ["extent"] },
-      "file" => { from: ["file"], split: '\;' },
-      "file_types" => { from: ["file_types"], split: '\|' },
-      "final_published_versions" => { from: ["final_published_versions"], split: '\|' },
+      "file" => { from: ["file"], split: '\;', join: ';' },
+      "file_types" => { from: ["file_types"], split: '\|', join: '|' },
+      "final_published_versions" => { from: ["final_published_versions"], split: '\|', join: '|' },
       "geographic_unit" => { from: ["geographic_unit"] },
-      "grant_agencies" => { from: ["grant_agencies"], split: '\|' },
-      "grant_information" => { from: ["grant_information"], split: '\|' },
+      "grant_agencies" => { from: ["grant_agencies"], split: '\|', join: '|' },
+      "grant_information" => { from: ["grant_information"], split: '\|', join: '|' },
       "holding_repository" => { from: ["holding_repository"] },
       "institution" => { from: ["institution"] },
       "internal_rights_note" => { from: ["internal_rights_note"] },
       "isbn" => { from: ["isbn"] },
       "issn" => { from: ["issn"] },
       "issue" => { from: ["issue"] },
-      "keywords" => { from: ["keywords"], split: '\|' },
+      "keywords" => { from: ["keywords"], split: '\|', join: '|' },
       "legacy_rights" => { from: ["legacy_rights"] },
       "local_call_number" => { from: ["local_call_number"] },
       "model" => { from: ["model"] },
       "notes" => { from: ["notes"], split: '\|' },
-      "other_identifiers" => { from: ["other_identifiers"], split: '\|' },
+      "other_identifiers" => { from: ["other_identifiers"], split: '\|', join: '|' },
       "page_range_end" => { from: ["page_range_end"] },
       "page_range_start" => { from: ["page_range_start"] },
       "parent" => { from: ["parent"], related_parents_field_mapping: true },
@@ -85,12 +85,12 @@ Bulkrax.setup do |config|
       "publisher" => { from: ["publisher"] },
       "publisher_version" => { from: ["publisher_version"], parsed: true },
       "re_use_license" => { from: ["re_use_license"], parsed: true },
-      "related_datasets" => { from: ["related_datasets"], split: '\|' },
-      "related_material_notes" => { from: ["related_material_notes"], split: '\|' },
-      "related_publications" => { from: ["related_publications"], split: '\|' },
+      "related_datasets" => { from: ["related_datasets"], split: '\|', join: '|' },
+      "related_material_notes" => { from: ["related_material_notes"], split: '\|', join: '|' },
+      "related_publications" => { from: ["related_publications"], split: '\|', join: '|' },
       "rights_documentation" => { from: ["rights_documentation"] },
-      "rights_holders" => { from: ["rights_holders"], split: '\|' },
-      "rights_statement" => { from: ["rights_statement"], split: '\|', parsed: true },
+      "rights_holders" => { from: ["rights_holders"], split: '\|', join: '|' },
+      "rights_statement" => { from: ["rights_statement"], split: '\|', join: '|', parsed: true },
       "scheduled_rights_review" => { from: ["scheduled_rights_review"] },
       "scheduled_rights_review_note" => { from: ["scheduled_rights_review_note"] },
       "sensitive_material" => { from: ["sensitive_material"], parsed: true },
@@ -98,16 +98,16 @@ Bulkrax.setup do |config|
       "series_title" => { from: ["series_title"] },
       "source_collection_id" => { from: ["source_collection_id"] },
       "sponsor" => { from: ["sponsor"] },
-      "staff_notes" => { from: ["staff_notes"], split: '\|' },
-      "subject_geo" => { from: ["subject_geo"], split: '\|' },
-      "subject_names" => { from: ["subject_names"], split: '\|' },
-      "subject_time_periods" => { from: ["subject_time_periods"], split: '\|' },
-      "subject_topics" => { from: ["subject_topics"], split: '\|' },
+      "staff_notes" => { from: ["staff_notes"], split: '\|', join: '|' },
+      "subject_geo" => { from: ["subject_geo"], split: '\|', join: '|' },
+      "subject_names" => { from: ["subject_names"], split: '\|', join: '|' },
+      "subject_time_periods" => { from: ["subject_time_periods"], split: '\|', join: '|' },
+      "subject_topics" => { from: ["subject_topics"], split: '\|', join: '|' },
       "sublocation" => { from: ["sublocation"] },
       "system_of_record_ID" => { from: ["system_of_record_ID"] },
       "table_of_contents" => { from: ["table_of_contents"] },
       "technical_note" => { from: ["technical_note"] },
-      "title" => { from: ["title"], parsed: true, split: '\|' },
+      "title" => { from: ["title"], parsed: true, split: '\|', join: '|' },
       "transfer_engineer" => { from: ["transfer_engineer"] },
       "uniform_title" => { from: ["uniform_title"] },
       "visibility" => { from: ["visibility"], parsed: true },
@@ -260,6 +260,68 @@ Bulkrax::CsvEntry.class_eval do
       parser:                         parser
     )
   end
+
+  def build_files_metadata
+    # attaching files to the FileSet row only so we don't have duplicates when importing to a new tenant
+    if hyrax_record.work?
+      build_thumbnail_files
+    else
+      file_mapping = key_for_export('file')
+      file_sets = hyrax_record.file_set? ? Array.wrap(hyrax_record) : hyrax_record.file_sets
+      filenames_with_types = map_file_sets(file_sets)
+      only_filenames = filenames_with_types.map { |str| str.split("|").map { |fwt| fwt.split(":").first }.join(';') }
+
+      handle_join_on_export(file_mapping, only_filenames, mapping['file']&.[]('join'))
+      handle_join_on_export('file_types', filenames_with_types, '|')
+    end
+  end
+
+  def build_relationship_metadata
+    # Includes all relationship methods for all exportable record types (works, Collections, FileSets)
+    relationship_methods = {
+      related_parents_parsed_mapping => %i[member_of_collection_ids member_of_work_ids in_work_ids],
+      related_children_parsed_mapping => %i[member_collection_ids member_work_ids file_set_ids]
+    }
+
+    relationship_methods.each do |relationship_key, methods|
+      next if relationship_key.blank?
+
+      values = []
+      methods.each do |m|
+        values << hyrax_record.public_send(m) if hyrax_record.respond_to?(m)
+      end
+      values = values.flatten.uniq
+      next if values.blank?
+
+      handle_join_on_export(relationship_key, values, '|')
+    end
+  end
+
+  def build_value(key, value)
+    data = hyrax_record.send(key.to_s)
+    if data.is_a?(ActiveTriples::Relation)
+      if value['join']
+        parsed_metadata[key_for_export(key)] = data.map { |d| prepare_export_data(d) }.join(value['join']).to_s # TODO: make split char dynamic
+      else
+        data.each_with_index do |d, i|
+          parsed_metadata["#{key_for_export(key)}_#{i + 1}"] = prepare_export_data(d)
+        end
+      end
+    else
+      parsed_metadata[key_for_export(key)] = prepare_export_data(data)
+    end
+  end
+
+  def handle_join_on_export(key, values, join)
+    if join
+      parsed_metadata[key] = values.join(join)
+    else
+      values.each_with_index do |value, i|
+        parsed_metadata["#{key}_#{i + 1}"] = value
+      end
+      parsed_metadata.delete(key)
+    end
+  end
 end
 
 Bulkrax::CsvParser.class_eval do
@@ -315,6 +377,6 @@ Bulkrax::ExportBehavior.module_eval do
       working_array << "#{file.file_name.first}:#{type}" if file.present?
     end
 
-    working_array.compact.join(';')
+    working_array.compact.join('|')
   end
 end
