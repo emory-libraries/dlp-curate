@@ -307,6 +307,8 @@ Bulkrax::CsvEntry.class_eval do
           parsed_metadata["#{key_for_export(key)}_#{i + 1}"] = prepare_export_data(d)
         end
       end
+    elsif key == 'visibility'
+      parsed_metadata[key_for_export(key)] = CurateMapper.new.visibility_mapping.key(data).titleize
     else
       parsed_metadata[key_for_export(key)] = prepare_export_data(data)
     end
