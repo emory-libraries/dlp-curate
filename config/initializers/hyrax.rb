@@ -309,3 +309,14 @@ Qa::Authorities::Geonames.username = ENV['GEONAMES_USERNAME']
 # set bulkrax default work type to first curation_concern if it isn't already set
 
 Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.to_s if Bulkrax.default_work_type.blank?
+
+Hyrax::CollectionSearchBuilder.class_eval do
+  # Hyrax v3.4.2 override: solr_parameters[:sort], previously, was always set by
+  #   "#{sort_field} asc", because the sort command is never called.
+  # Sort results by title if no query was supplied.
+  # This overrides the default 'relevance' sort.
+  def add_sorting_to_solr(solr_parameters)
+    return if solr_parameters[:q]
+    solr_parameters[:sort] = sort || "#{sort_field} asc"
+  end
+end
