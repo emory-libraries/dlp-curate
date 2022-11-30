@@ -326,6 +326,14 @@ class CurateGenericWork < ActiveFedora::Base
     self.preservation_workflow_terms = preservation_workflow.map(&:preservation_terms)
   end
 
+  def full_text_data
+    label = "Full Text Data - #{id}"
+    # rubocop:disable Rails/FindBy
+    file_set = FileSet.where(label: label).first
+    # rubocop:enable Rails/FindBy
+    file_set.present? ? file_set.files&.first&.content : nil
+  end
+
   # accepts_nested_attributes_for can not be called until all
   # the properties are declared because it calls resource_class,
   # which finalizes the propery declarations.

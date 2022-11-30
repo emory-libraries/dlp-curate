@@ -331,4 +331,37 @@ RSpec.describe CurateGenericWorkIndexer do
       end
     end
   end
+
+  describe 'when full text file set is available', :clean, perform_enqueued: [IngestJob] do
+    let(:uploaded_file_1) do
+      FactoryBot.build(:uploaded_file,
+                       file:                     'Page 1',
+                       preservation_master_file: File.open(fixture_path + '/full_text_data/page_1_pmf.tif'),
+                       transcript:               File.open(fixture_path + '/full_text_data/page_1_transcript.txt'),
+                       fileset_use:              'primary')
+    end
+
+    let(:uploaded_file_2) do
+      FactoryBot.build(:uploaded_file,
+                       file:                     'Page 2',
+                       preservation_master_file: File.open(fixture_path + '/full_text_data/page_2_pmf.tif'),
+                       transcript:               File.open(fixture_path + '/full_text_data/page_2_transcript.txt'),
+                       fileset_use:              'primary')
+    end
+
+    let(:work) { FactoryBot.create(:public_work) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:full_text_file_set) { work.file_sets.last }
+
+    before do
+      AttachFilesToWorkJob.new.perform(work, [uploaded_file_1, uploaded_file_2])
+      CompileFullTextJob.new.perform(work_id: work.id, user_id: user.id)
+      work.reload
+    end
+
+    it 'indexes full text data' do
+      expect(solr_document['all_text_timv']).to eq(work.full_text_data)
+      expect(solr_document['all_text_tsimv']).to eq(work.full_text_data)
+    end
+  end
 end
