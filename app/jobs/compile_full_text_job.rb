@@ -19,7 +19,7 @@ class CompileFullTextJob < Hyrax::ApplicationJob
         next if transcript_file.content == "" || transcript_file.content == "[NO TEXT ON PAGE. This page does not contain any text recoverable by the OCR engine.]\n"
 
         File.open(path, "ab") do |f|
-          f.puts(transcript_file.content.force_encoding('UTF-8'))
+          f.puts(transcript_file.content&.force_encoding('UTF-8'))
         end
       end
       path

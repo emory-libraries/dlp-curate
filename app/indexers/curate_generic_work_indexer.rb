@@ -37,8 +37,8 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       # the next two fields are for display and search, not for security
       solr_doc['visibility_group_ssi'] = visibility_group_for_lux
       solr_doc['human_readable_visibility_ssi'] = human_readable_visibility
-      solr_doc['all_text_timv'] = object.full_text_data.force_encoding('UTF-8')
-      solr_doc['all_text_tsimv'] = object.full_text_data.force_encoding('UTF-8')
+      solr_doc['all_text_timv'] = object.full_text_data&.force_encoding('UTF-8')
+      solr_doc['all_text_tsimv'] = object.full_text_data&.force_encoding('UTF-8')
     end
   end
 
