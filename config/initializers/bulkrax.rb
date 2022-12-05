@@ -160,7 +160,7 @@ Bulkrax::ObjectFactory.class_eval do
   include FileSetMethods
   attr_reader :attributes, :object, :source_identifier_value, :klass, :replace_files, :update_files, :work_identifier, :related_parents_parsed_mapping, :importer_run_id, :parser
 
-  # Bulkrax v4.2.1 Override: as mentioned below, this method's largely mimicing AttachFilesToWorkJob,
+  # Bulkrax v4.3.0 Override: as mentioned below, this method's largely mimicing AttachFilesToWorkJob,
   #   which we have extensively customized in Curate to accomodate our needs. Here,
   #   we are purely adapting those customizations.
   #   TODO: To DRY up this code, we should shoot for refactoring these processes into
@@ -328,16 +328,31 @@ end
 
 Bulkrax::CsvParser.class_eval do
   include FileSetMethods
-  # This is the fix present in v4.3.0
-  # Retrieve the path where we expect to find the files
-  def path_to_files(**args)
-    filename = args.fetch(:filename, '')
 
-    return @path_to_files if @path_to_files.present? && filename.blank?
-    @path_to_files = File.join(
-        zip? ? importer_unzip_path : File.dirname(import_file_path), 'files', filename
-      )
+  # Bulkrax v4.3.0 Override: swaps out Bulkrax' sorting for our own, grouping together
+  #   CurateGenericWorks with their associated FileSets.
+  # rubocop:disable Metrics/MethodLength
+  def write_files
+    require 'open-uri'
+    folder_count = 0
+    entries_to_write = sort_entries_to_write(
+      importerexporter.entries.uniq(&:identifier).select { |e| valid_entry_types.include?(e.type) }
+    )
+
+    entries_to_write[0..limit || total].in_groups_of(records_split_count, false) do |group|
+      folder_count += 1
+
+      CSV.open(setup_export_file(folder_count), "w", headers: export_headers, write_headers: true) do |csv|
+        group.each do |entry|
+          csv << entry.parsed_metadata
+          next if importerexporter.metadata_only? || entry.type == 'Bulkrax::CsvCollectionEntry'
+
+          store_files(entry.identifier, folder_count.to_s)
+        end
+      end
+    end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def store_files(identifier, folder_count)
     record = ActiveFedora::Base.find(identifier)
@@ -348,6 +363,17 @@ Bulkrax::CsvParser.class_eval do
     process_multiple_file_export(file_sets, folder_count)
   rescue Ldp::Gone
     nil
+  end
+
+  # This is the fix present in v4.3.0
+  # Retrieve the path where we expect to find the files
+  def path_to_files(**args)
+    filename = args.fetch(:filename, '')
+
+    return @path_to_files if @path_to_files.present? && filename.blank?
+    @path_to_files = File.join(
+        zip? ? importer_unzip_path : File.dirname(import_file_path), 'files', filename
+      )
   end
 end
 
