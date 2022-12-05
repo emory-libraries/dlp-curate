@@ -92,7 +92,8 @@ module FileSetMethods
     end.compact
   end
 
-  def process_filesets_and_work_to_write(entries_to_write, work_file_set_grouping)
+  def process_filesets_and_work_to_write(entries_to_write)
+    work_file_set_grouping = []
     works_in_entries = process_model_to_write(entries_to_write, 'CurateGenericWork')
 
     works_in_entries.each do |w|
@@ -102,13 +103,14 @@ module FileSetMethods
 
       work_file_set_grouping += ([w] + file_set_indexes)
     end
+
+    work_file_set_grouping
   end
 
   def sort_entries_to_write(entries_to_write)
-    work_file_set_grouping = []
     collections_to_write = process_model_to_write(entries_to_write, 'Collection')
 
-    process_filesets_and_work_to_write(entries_to_write, work_file_set_grouping)
+    work_file_set_grouping = process_filesets_and_work_to_write(entries_to_write)
 
     sorted_order = collections_to_write + work_file_set_grouping
     entries_to_write.values_at(*sorted_order)
