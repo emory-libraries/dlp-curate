@@ -79,4 +79,40 @@ module FileSetMethods
   def export_file_path(folder_count)
     File.join(exporter_export_path, folder_count, 'files')
   end
+
+  def process_model_to_write(entries_to_write, model)
+    entries_to_write.map.with_index do |e, ind|
+      e.parsed_metadata['model'] == model ? ind : nil
+    end.compact
+  end
+
+  def process_filesets_to_write(entries_to_write, work_id)
+    entries_to_write.map.with_index do |e, ind|
+      e.parsed_metadata['model'] == 'FileSet' && e.parsed_metadata['parent'] == work_id ? ind : nil
+    end.compact
+  end
+
+  def process_filesets_and_work_to_write(entries_to_write)
+    work_file_set_grouping = []
+    works_in_entries = process_model_to_write(entries_to_write, 'CurateGenericWork')
+
+    works_in_entries.each do |w|
+      work_id = entries_to_write[w].identifier
+
+      file_set_indexes = process_filesets_to_write(entries_to_write, work_id)
+
+      work_file_set_grouping += ([w] + file_set_indexes)
+    end
+
+    work_file_set_grouping
+  end
+
+  def sort_entries_to_write(entries_to_write)
+    collections_to_write = process_model_to_write(entries_to_write, 'Collection')
+
+    work_file_set_grouping = process_filesets_and_work_to_write(entries_to_write)
+
+    sorted_order = collections_to_write + work_file_set_grouping
+    entries_to_write.values_at(*sorted_order)
+  end
 end
