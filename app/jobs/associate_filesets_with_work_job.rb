@@ -53,6 +53,7 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
       unless file_sets&.map(&:id)&.all? { |id| work.reload.ordered_member_ids.include?(id) }
         work.ordered_members += file_sets
         work.save
+        work.update_index
       end
     end
   end
