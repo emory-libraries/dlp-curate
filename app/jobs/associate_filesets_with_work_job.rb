@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
-  include ::Hyrax::Lockable
   queue_as :import
 
   def perform(importer)
@@ -49,12 +48,9 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
   end
 
   def associate_filesets_to_work(file_sets, work)
-    acquire_lock_for(work.id) do
-      unless file_sets&.map(&:id)&.all? { |id| work.reload.ordered_member_ids.include?(id) }
-        work.ordered_members += file_sets
-        work.save
-        work.update_index
-      end
+    unless file_sets&.map(&:id)&.all? { |id| work.reload.ordered_member_ids.include?(id) }
+      work.ordered_members += file_sets
+      work.save
     end
   end
 
