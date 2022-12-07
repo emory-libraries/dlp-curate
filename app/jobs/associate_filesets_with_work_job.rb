@@ -48,10 +48,9 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
   end
 
   def associate_filesets_to_work(file_sets, work)
-    unless file_sets&.map(&:id)&.all? { |id| work.reload.ordered_member_ids.include?(id) }
-      work.ordered_members += file_sets
-      work.save
-    end
+    return if file_sets&.map(&:id)&.all? { |id| work.reload.ordered_member_ids.include?(id) }
+    work.ordered_members += file_sets
+    work.save
   end
 
   def announce_filesets_attachement(file_sets)
