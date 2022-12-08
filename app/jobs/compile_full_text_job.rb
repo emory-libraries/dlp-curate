@@ -44,7 +44,7 @@ class CompileFullTextJob < Hyrax::ApplicationJob
       file = File.open(path)
       label = "Full Text Data - #{work.id}"
       file_set = FileSet.create(label: label, title: [label])
-      io_wrapper = JobIoWrapper.create_with_varied_file_handling!(user: user, file: file, relation: :transcript_file, file_set: file_set, preferred: :transcript_file)
+      io_wrapper = JobIoWrapper.create_with_varied_file_handling!(user: user, file: file, relation: :preservation_master_file, file_set: file_set, preferred: :preservation_master_file)
       IngestJob.new.perform(io_wrapper)
       work.ordered_members << file_set
       work.save
