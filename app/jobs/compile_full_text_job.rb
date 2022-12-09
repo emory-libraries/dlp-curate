@@ -41,9 +41,11 @@ class CompileFullTextJob < Hyrax::ApplicationJob
     end
 
     def generate_file_set_from(path:, work:, user:)
-      file = CarrierWave::SanitizedFile.new(File.open(path))
-      uploaded_file = Hyrax::UploadedFile.create(user: user, preservation_master_file: file, transcript: file, file: "Full Text Data - #{work.id}")
-      AttachFilesToWorkJob.new.perform(work, [uploaded_file])
+      file = File.open(path)
+      sanitized_file = CarrierWave::SanitizedFile.new(file)
+      uploaded_file = Hyrax::UploadedFile.create(user: user, preservation_master_file: sanitized_file, transcript: sanitized_file, file: "Full Text Data - #{work.id}", fileset_use: 'primary')
+      AttachFilesToWorkJob.perform_later(work, [uploaded_file])
+      file.close
       File.delete(path) if File.exist?(path)
     end
 end

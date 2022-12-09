@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe CompileFullTextJob, :clean, perform_enqueued: [IngestJob] do
+RSpec.describe CompileFullTextJob, :clean, perform_enqueued: [AttachFilesToWorkJob, IngestJob] do
   let(:uploaded_file_1) do
     FactoryBot.build(:uploaded_file,
                      file:                     'Page 1',
