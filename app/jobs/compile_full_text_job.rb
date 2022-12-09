@@ -41,14 +41,9 @@ class CompileFullTextJob < Hyrax::ApplicationJob
     end
 
     def generate_file_set_from(path:, work:, user:)
-      file = File.open(path)
-      label = "Full Text Data - #{work.id}"
-      file_set = FileSet.create(label: label, title: [label])
-      io_wrapper = JobIoWrapper.create_with_varied_file_handling!(user: user, file: file, relation: :preservation_master_file, file_set: file_set, preferred: :preservation_master_file)
-      IngestJob.new.perform(io_wrapper)
-      work.ordered_members << file_set
-      work.save
-      file_set.save
+      file = CarrierWave::SanitizedFile.new(File.open(path))
+      uploaded_file = Hyrax::UploadedFile.create(user: user, preservation_master_file: file, transcript: file, file: "Full Text Data - #{work.id}")
+      AttachFilesToWorkJob.new.perform(work, [uploaded_file])
       File.delete(path) if File.exist?(path)
     end
 end
