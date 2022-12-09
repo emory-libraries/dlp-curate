@@ -13,27 +13,42 @@ class CompileFullTextJob < Hyrax::ApplicationJob
     def generate_full_text_data_file_from!(work:)
       path = Rails.root.join('tmp', "full_text_data_#{work.id}.txt")
       File.open(path, "wb+") { |f| f.puts("") }
-      file_sets = CurateGenericWork.last.file_sets.filter { |fs| fs.label&.starts_with?('Page') }
-      file_sets = file_sets.sort_by { |fs| fs.label.partition(' ').last.to_i }
-      file_sets.map(&:transcript_file).compact.each do |transcript_file|
-        next if transcript_file.content == "" || transcript_file.content == "[NO TEXT ON PAGE. This page does not contain any text recoverable by the OCR engine.]\n"
 
+      map = get_transcript_files(work: work)
+      ordered_page_keys = map.keys.sort_by { |key| key.partition(' ').last.to_i }
+
+      ordered_page_keys.each do |key|
+        transcript_file = map[key]
+        next if transcript_file.content == "" || transcript_file.content == "[NO TEXT ON PAGE. This page does not contain any text recoverable by the OCR engine.]\n"
         File.open(path, "ab") do |f|
-          f.puts(transcript_file.content)
+          f.puts(transcript_file.content&.encode('UTF-8', invalid: :replace, undef: :replace, replace: ''))
         end
       end
+
       path
+    end
+
+    def get_transcript_files(work:)
+      member_ids = work.member_ids
+      map = {}
+
+      member_ids.each do |member_id|
+        file_set = FileSet.find(member_id)
+        next unless file_set.title&.first&.starts_with?('Page') && file_set.transcript_file.present?
+        map[file_set.label] = file_set.transcript_file
+      end
+      map
     end
 
     def generate_file_set_from(path:, work:, user:)
       file = File.open(path)
-      label = "Full Text Data - #{work.id}"
-      file_set = FileSet.create(label: label, title: [label])
-      io_wrapper = JobIoWrapper.create_with_varied_file_handling!(user: user, file: file, relation: :transcript_file, file_set: file_set, preferred: :transcript_file)
-      IngestJob.new.perform(io_wrapper)
-      work.ordered_members << file_set
-      work.save
-      file_set.save
+      sanitized_file = CarrierWave::SanitizedFile.new(file)
+      uploaded_file = Hyrax::UploadedFile.create(user:                     user,
+                                                 preservation_master_file: sanitized_file,
+                                                 file:                     "Full Text Data - #{work.id}",
+                                                 fileset_use:              'Primary Content')
+      AttachFilesToWorkJob.perform_later(work, [uploaded_file])
+      file.close
       File.delete(path) if File.exist?(path)
     end
 end
