@@ -9,7 +9,7 @@ RSpec.describe 'Bulkrax CSV exporter', clean: true, js: true, type: :system do
       expect(page.current_path).to include('/sign_in')
     end
 
-    it 'redirects you to login when attempting to create new importer ' do
+    it 'redirects you to login when attempting to create new exporter ' do
       visit '/exporters/new'
       expect(page.current_path).to include('/sign_in')
     end
@@ -49,13 +49,13 @@ RSpec.describe 'Bulkrax CSV exporter', clean: true, js: true, type: :system do
       login_as admin
     end
 
-    it 'displays importers on Dashboard' do
+    it 'displays exporters on Dashboard' do
       visit '/dashboard'
 
       expect(page).to have_css('li a span.sidebar-action-text', text: 'Exporters')
     end
 
-    context 'within importers/new' do
+    context 'within exporters/new' do
       before do
         visit '/exporters/new'
         fill_in 'Name required', with: 'Test'
@@ -67,6 +67,15 @@ RSpec.describe 'Bulkrax CSV exporter', clean: true, js: true, type: :system do
 
       it 'redirects to index with a Test link present' do
         expect(page).to have_link('Test', href: '/exporters/1?locale=en')
+      end
+
+      context 'on exporter show page' do
+        it 'has Title as a column on all entry lists' do
+          allow(Collection).to receive(:find).and_return(collection)
+          click_link 'Test'
+
+          expect(page).to have_selector('th', text: 'Title', count: 3, visible: false)
+        end
       end
     end
   end
