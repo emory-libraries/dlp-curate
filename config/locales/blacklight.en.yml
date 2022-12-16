@@ -1,3 +1,10 @@
 en:
   blacklight:
     application_name: 'Blacklight'
+    search:
+      fields:
+        all_text_tsimv: 'Keyword matches'
+      results:
+        snippets:
+          less: '<< less'
+          more: 'more >>'
