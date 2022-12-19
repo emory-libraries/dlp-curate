@@ -1,0 +1,10 @@
+// gem 'newspaper_works', v1.0.2
+// Refer to the gem repository for more details: https://github.com/samvera-labs/newspaper_works
+// Released under license Apache License 2.0: https://github.com/samvera-labs/newspaper_works/blob/main/LICENSE
+// This gem is not yet compatible with Hyrax v3, hence why I am only using the portions relevant to our use case
+// This gem is used for keyword highlighting in search results
+
+.metadata em {
+  background-color: $highlight-background-color;
+  font-weight: bold;
+}
