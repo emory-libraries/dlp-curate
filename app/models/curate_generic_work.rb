@@ -329,9 +329,9 @@ class CurateGenericWork < ActiveFedora::Base
   def full_text_data
     label = "Full Text Data - #{id}"
     # rubocop:disable Rails/FindBy
-    file_set = FileSet.where(label: label)&.last
+    file_set = FileSet.where(label: label)&.order('date_uploaded_dtsi desc')&.first
     # rubocop:enable Rails/FindBy
-    file_set.present? ? file_set.files&.last&.content : nil
+    file_set.present? ? file_set.preservation_master_file&.content : nil
   end
 
   # accepts_nested_attributes_for can not be called until all
