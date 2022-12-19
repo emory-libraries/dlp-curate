@@ -4,6 +4,14 @@
 // This gem is not yet compatible with Hyrax v3, hence why I am only using the portions relevant to our use case
 // This gem is used for keyword highlighting in search results
 
+$highlight-background-color: rgba(5,166,86,0.36);
+
+#search-results .thumbnail_highlight, #documents .thumbnail_highlight {
+  background-color: $highlight-background-color;
+  z-index: 1000;
+  position: absolute;
+}
+
 .metadata em {
   background-color: $highlight-background-color;
   font-weight: bold;
