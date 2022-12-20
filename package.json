@@ -10,7 +10,9 @@
     "jquery": "*",
     "jquery-validation": "*",
     "popper.js": "*",
-    "universalviewer": "3.0.16"
+    "universalviewer": "3.0.16",
+    "datatables.net-bs4": "*",
+    "handlebars": "^4"
   },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",

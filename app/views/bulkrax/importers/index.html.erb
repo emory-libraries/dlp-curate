@@ -1,4 +1,4 @@
-<%# Bulkrax v4.2.1 Override: L#6 adds turbolinks block so that Javascript can remove the rest of the form options. %>
+<%# Bulkrax v4.3.0 Override: L#6 adds turbolinks block so that Javascript can remove the rest of the form options. %>
 
 <% provide :page_header do %>
   <h1><span class="fa fa-cloud-upload" aria-hidden="true"></span> Importers</h1>
@@ -41,8 +41,8 @@
               <tr>
                 <th scope="row"><%= link_to importer.name, importer_path(importer) %></th>
                 <td><%= importer.status %></td>
-                <td><%= importer.last_imported_at.strftime("%b %d, %Y") if importer.last_imported_at %></td>
-                <td><%= importer.next_import_at.strftime("%b %d, %Y") if importer.next_import_at %></td>
+                <td><%= importer.last_imported_at.strftime("%b %d, %Y %T") if importer.last_imported_at %></td>
+                <td><%= importer.next_import_at.strftime("%b %d, %Y %T") if importer.next_import_at %></td>
                 <td><%= importer.last_run&.enqueued_records %></td>
                 <td><%= (importer.last_run&.processed_records || 0) %></td>
                 <td><%= (importer.last_run&.failed_records || 0) %></td>
@@ -68,6 +68,7 @@
   $(function() {
     $('#DataTables_Table_0').DataTable({
       destroy: true, /* Reinitialize DataTable with config below */
+      order: [[2, 'desc']],
       'columnDefs': [
           { 'orderable': true, 'targets': [...Array(10).keys()] },
           { 'orderable': false, 'targets': [10, 11, 12] }
