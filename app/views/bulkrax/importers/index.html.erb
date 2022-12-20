@@ -41,8 +41,8 @@
               <tr>
                 <th scope="row"><%= link_to importer.name, importer_path(importer) %></th>
                 <td><%= importer.status %></td>
-                <td><%= importer.last_imported_at.strftime("%b %d, %Y %T") if importer.last_imported_at %></td>
-                <td><%= importer.next_import_at.strftime("%b %d, %Y %T") if importer.next_import_at %></td>
+                <td><%= importer.last_imported_at.strftime("%F %T") if importer.last_imported_at %></td>
+                <td><%= importer.next_import_at.strftime("%F %T") if importer.next_import_at %></td>
                 <td><%= importer.last_run&.enqueued_records %></td>
                 <td><%= (importer.last_run&.processed_records || 0) %></td>
                 <td><%= (importer.last_run&.failed_records || 0) %></td>
