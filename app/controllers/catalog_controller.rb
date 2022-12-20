@@ -84,6 +84,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'human_readable_visibility_ssi', label: 'Visibility', itemprop: 'human_readable_visibility'
     config.add_index_field 'deduplication_key_tesim', label: 'Deduplication Key', itemprop: 'deduplication_key'
     config.add_index_field 'id', label: 'ID', itemprop: 'id'
+    config.add_index_field 'all_text_tsimv', highlight: true, helper_method: :render_ocr_snippets
 
     # solr fields to be displayed in the show (single result) view
     # The ordering of the field names is the order of the display
