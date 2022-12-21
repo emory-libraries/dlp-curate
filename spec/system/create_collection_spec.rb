@@ -28,8 +28,11 @@ RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: t
       visit("dashboard/collections/new?collection_type_id=1")
       expect(page).to have_css("textarea#collection_title")
       click_link('Additional fields')
-      expect(page).to have_css("input#collection_creator")
-      expect(page).to have_content("Add another Creator (creator)")
+
+      within('.form-group.multi_value.required.collection_creator.managed') do
+        expect(page).to have_css("input#collection_creator")
+        expect(page).to have_content("Add another")
+      end
     end
 
     it "validates url fields" do

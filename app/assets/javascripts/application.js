@@ -16,10 +16,10 @@
 //= require turbolinks
 //
 // Required by Blacklight
-//= require jquery
-//= require jquery_ujs
-//= require dataTables/jquery.dataTables
-//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
+//= require jquery3
+//= require rails-ujs
+//= require datatables.net/js/jquery.dataTables
+//= require datatables.net-bs4/js/dataTables.bootstrap4
 //= require blacklight/blacklight
 //= require hyrax
 //= require hyrax/autocomplete/default
