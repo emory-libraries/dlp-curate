@@ -77,26 +77,24 @@ module Hyrax
         yield(file_set) if block_given?
       end
 
-      # Locks to ensure that only one process is operating on the list at a time.
       def attach_to_work(work, file_set_params = {})
-        acquire_lock_for(work.id) do
-          # Ensure we have an up-to-date copy of the members association, so that we append to the end of the list.
-          attach_to_af_work(work, file_set_params)
-          Hyrax.config.callback.run(:after_create_fileset, file_set, user, warn: false)
-        end
-      end
-      alias attach_file_to_work attach_to_work
-      deprecation_deprecate attach_file_to_work: "use attach_to_work instead"
-
-      # Adds a FileSet to the work using ore:Aggregations.
-      def attach_to_af_work(work, file_set_params)
+        # Note: This method no longer associates the file_set to the work. That happens
+        #   in AttachFilesToWorkJob#add_file_set_to_work_ordered_members now. This has been changed
+        #   so that Bulkrax can still use this actor and associate all of the file_sets
+        #   to the work at the very end of the ingest process, which has shown significant
+        #   processing time improvements.
+        # Additional Note: The acquire_lock_for method has been removed from this process because its
+        #   original purpose was to "ensure" that file_sets were truly associated to works successfully.
+        #   The following processes do not tax the work's persistence, so that lock isn't needed here.
+        #   It has also been our experience that locking objects to intensive processing backfires,
+        #   due to the fact that all locks have a timeout mechanism that rarely allows for works to persist correctly.
         work.reload unless work.new_record?
         file_set.visibility = work.visibility unless assign_visibility?(file_set_params)
         assign_fileset_to_work_display_elements(work, file_set)
-        # Save the work so the association between the work and the file_set is persisted (head_id)
-        # NOTE: the work may not be valid, in which case this save doesn't do anything.
         work.save
       end
+      alias attach_file_to_work attach_to_work
+      deprecation_deprecate attach_file_to_work: "use attach_to_work instead"
 
       def assign_fileset_to_work_display_elements(work, file_set)
         work.representative = file_set if work.representative_id.blank?
