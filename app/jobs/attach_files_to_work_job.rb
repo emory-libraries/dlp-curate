@@ -36,7 +36,6 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       preferred = preferred_file(uploaded_file)
 
       create_content_based_on_type(actor, uploaded_file, preferred)
-      add_file_set_to_work_ordered_members(work, actor)
       actor.attach_to_work(work, metadata)
     end
 
@@ -46,12 +45,6 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       actor.create_content(uploaded_file.service_file, preferred, :service_file) if uploaded_file.service_file.present?
       actor.create_content(uploaded_file.extracted_text, preferred, :extracted) if uploaded_file.extracted_text.present?
       actor.create_content(uploaded_file.transcript, preferred, :transcript_file) if uploaded_file.transcript.present?
-    end
-
-    def add_file_set_to_work_ordered_members(work, actor)
-      work.ordered_members << actor.file_set
-      work.save
-      actor.file_set.save
     end
 
     def create_permissions(work, depositor)
