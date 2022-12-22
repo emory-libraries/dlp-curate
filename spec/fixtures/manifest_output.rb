@@ -21,6 +21,11 @@ class ManifestOutput
               "@id":    "http://localhost:3000/downloads/608hdr7rrt-cor",
               "format": "application/xml",
               "label":  "Download whole resource: foo2"
+            },
+            {
+              "@id" => "http://localhost:3000/downloads/608hdr7jrt-cor",
+              "format" => "text/plain",
+              "label" => "Download whole resource: foo3"
             }
           ],
           "canvases":  [
