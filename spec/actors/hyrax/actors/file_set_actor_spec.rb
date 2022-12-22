@@ -66,7 +66,7 @@ RSpec.describe Hyrax::Actors::FileSetActor, :clean do
         # Confirm that embargo/lease are not set.
         expect(file_set_subject).not_to be_under_embargo
         expect(file_set_subject).not_to be_active_lease
-        expect(file_set_subject.visibility).to eq 'restricted'
+        expect(file_set_subject.visibility).to eq 'open'
       end
     end
   end
