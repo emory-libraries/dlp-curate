@@ -36,8 +36,13 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       preferred = preferred_file(uploaded_file)
 
       create_content_based_on_type(actor, uploaded_file, preferred)
-      add_file_set_to_work_ordered_members(work, actor)
+      # For Bulkrax importing purposes, the method below no longer actually attaches the
+      #   file_set to the work. This is done in the next method after (add_file_set_to_work_ordered_members)
+      #   so that the FileSetActor can still be used in both Bulkrax, Zizia, and UI importing.
+      # Reference: https://github.com/samvera-labs/bulkrax/blob/5e610b2bf2f54cf85ce84471cf022ecf76c53be0/app/factories/bulkrax/object_factory.rb#L154
       actor.attach_to_work(work, metadata)
+      # The method below is only utilized by the UI and Zizia.
+      add_file_set_to_work_ordered_members(work, actor)
     end
 
     def create_content_based_on_type(actor, uploaded_file, preferred)
@@ -52,6 +57,9 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       work.ordered_members << actor.file_set
       work.save
       actor.file_set.save
+      # The callback processing below will only occur for Zizia and the UI. Bulkrax calls this
+      #   method in it's final job: AssociateFilesetsWithWorkJob, L#56
+      Hyrax.config.callback.run(:after_create_fileset, actor.file_set, actor.user, warn: false)
     end
 
     def create_permissions(work, depositor)
