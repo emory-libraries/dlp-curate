@@ -59,7 +59,7 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       actor.file_set.save
       # The callback processing below will only occur for Zizia and the UI. Bulkrax calls this
       #   method in it's final job: AssociateFilesetsWithWorkJob, L#56
-      Hyrax.config.callback.run(:after_create_fileset, actor.file_set, user, warn: false)
+      Hyrax.config.callback.run(:after_create_fileset, actor.file_set, actor.user, warn: false)
     end
 
     def create_permissions(work, depositor)
