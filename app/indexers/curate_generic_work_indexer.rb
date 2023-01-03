@@ -16,17 +16,9 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['preservation_workflow_terms_tesim'] = preservation_workflow_terms
       solr_doc['failed_preservation_events_ssim'] = [failed_preservation_events]
       solr_doc['preservation_event_tesim'] = [object&.preservation_event&.map(&:preservation_event_terms)]
-      solr_doc['human_readable_content_type_ssim'] = [human_readable_content_type]
-      solr_doc['human_readable_rights_statement_ssim'] = [human_readable_rights_statement]
-      solr_doc['human_readable_re_use_license_ssim'] = [human_readable_re_use_license]
       solr_doc['year_created_isim'] = year_created
-      solr_doc['human_readable_date_created_tesim'] = [human_readable_date_created]
-      solr_doc['human_readable_date_issued_tesim'] = [human_readable_date_issued]
       solr_doc['year_issued_isim'] = year_issued
       solr_doc['year_for_lux_isim'] = year_for_lux
-      solr_doc['human_readable_data_collection_dates_tesim'] = human_readable_data_collection_dates
-      solr_doc['human_readable_conference_dates_tesim'] = [human_readable_conference_dates]
-      solr_doc['human_readable_copyright_date_tesim'] = [human_readable_copyright_date]
       solr_doc['title_ssort'] = sort_title
       solr_doc['creator_ssort'] = object.creator.first
       solr_doc['year_for_lux_ssi'] = sort_year
@@ -37,8 +29,9 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       # the next two fields are for display and search, not for security
       solr_doc['visibility_group_ssi'] = visibility_group_for_lux
       solr_doc['human_readable_visibility_ssi'] = human_readable_visibility
-      solr_doc['all_text_timv'] = object.full_text_data
-      solr_doc['all_text_tsimv'] = object.full_text_data
+
+      add_full_text_data_to(solr_doc)
+      add_human_readable_data_to(solr_doc)
     end
   end
 
@@ -181,4 +174,22 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
     Digest::MD5.hexdigest(object.title.first.to_s + object.file_sets.count.to_s + holding_repository.to_s + object.rights_statement.first.to_s + object.visibility.to_s +
                           file_sets_visibility + rendering_ids)
   end
+
+  private
+
+    def add_full_text_data_to(solr_doc)
+      solr_doc['all_text_timv'] = object.full_text_data
+      solr_doc['all_text_tsimv'] = object.full_text_data
+    end
+
+    def add_human_readable_data_to(solr_doc)
+      solr_doc['human_readable_content_type_ssim'] = [human_readable_content_type]
+      solr_doc['human_readable_rights_statement_ssim'] = [human_readable_rights_statement]
+      solr_doc['human_readable_re_use_license_ssim'] = [human_readable_re_use_license]
+      solr_doc['human_readable_date_created_tesim'] = [human_readable_date_created]
+      solr_doc['human_readable_date_issued_tesim'] = [human_readable_date_issued]
+      solr_doc['human_readable_data_collection_dates_tesim'] = human_readable_data_collection_dates
+      solr_doc['human_readable_conference_dates_tesim'] = [human_readable_conference_dates]
+      solr_doc['human_readable_copyright_date_tesim'] = [human_readable_copyright_date]
+    end
 end
