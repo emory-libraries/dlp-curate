@@ -261,6 +261,19 @@ Bulkrax::CsvEntry.class_eval do
     )
   end
 
+  def build_export_metadata
+    self.parsed_metadata = {}
+
+    build_system_metadata
+    build_files_metadata unless hyrax_record.is_a?(Collection)
+    build_relationship_metadata
+    build_mapping_metadata
+    build_preservation_workflow_metadata if hyrax_record.is_a?(CurateGenericWork)
+    save!
+
+    parsed_metadata
+  end
+
   def build_files_metadata
     # attaching files to the FileSet row only so we don't have duplicates when importing to a new tenant
     if hyrax_record.work?
@@ -294,6 +307,20 @@ Bulkrax::CsvEntry.class_eval do
       next if values.blank?
 
       handle_join_on_export(relationship_key, values, '|')
+    end
+  end
+
+  def build_preservation_workflow_metadata
+    work_pres_workflows = hyrax_record.preservation_workflow
+    return if work_pres_workflows.blank?
+
+    work_pres_workflows.each do |workflow|
+      type = workflow.workflow_type.first
+      workflow_attrs = %w[workflow_notes workflow_rights_basis workflow_rights_basis_note workflow_rights_basis_date workflow_rights_basis_reviewer workflow_rights_basis_uri]
+
+      workflow_attrs.each do |attrib|
+        handle_join_on_export("#{type}.#{attrib}", workflow.send(attrib.to_sym).to_a, '|')
+      end
     end
   end
 
