@@ -26,3 +26,4 @@
 //= require almond
 //= require zizia/application
 //= require bulkrax/application
+//= require newspaper_works/ocr_search

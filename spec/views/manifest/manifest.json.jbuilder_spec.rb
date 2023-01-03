@@ -16,12 +16,14 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
   let(:file_set)        { FactoryBot.create(:file_set, id: '608hdr7qrt-cor', title: ['foo'], read_groups: ['public']) }
   let(:file_set1)       { FactoryBot.create(:file_set, id: '608hdr7srt-cor', title: ['foo1'], read_groups: ['public']) }
   let(:file_set2)       { FactoryBot.create(:file_set, id: '608hdr7rrt-cor', title: ['foo2'], read_groups: ['public']) }
+  let(:file_set3)       { FactoryBot.create(:file_set, id: '608hdr7jrt-cor', title: ['foo3'], read_groups: ['public']) }
   let(:private_fs)      { FactoryBot.create(:file_set, id: '608hdr7trt-cor') }
   let(:pmf)             { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   let(:sf)              { File.open(fixture_path + '/book_page/0003_service.jpg') }
   let(:imf)             { File.open(fixture_path + '/book_page/0003_intermediate.jp2') }
   let(:pdf)             { File.open(fixture_path + '/sample-file.pdf') }
   let(:ocr)             { File.open(fixture_path + '/sample-ocr.xml') }
+  let(:txt)             { File.open(fixture_path + '/sample-text.txt') }
   let(:manifest)        { ManifestOutput.new }
   let(:attributes) do
     { "id" => identifier,
@@ -33,7 +35,7 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
       "depositor_tesim" => 'example_user',
       "holding_repository_tesim" => ["test holding repo"],
       "rights_statement_tesim" => ["example.com"],
-      "hasFormat_ssim" => ["608hdr7srt-cor", "608hdr7rrt-cor"] }
+      "hasFormat_ssim" => ["608hdr7srt-cor", "608hdr7rrt-cor", "608hdr7jrt-cor"] }
   end
 
   let(:rendering_output) do
@@ -47,6 +49,11 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
         "@id" => "http://localhost:3000/downloads/#{file_set2.id}",
         "format" => file_set2.mime_type,
         "label" => "Download whole resource: #{file_set2.title.first}"
+      },
+      {
+        "@id" => "http://localhost:3000/downloads/#{file_set3.id}",
+        "format" => file_set3.mime_type,
+        "label" => "Download whole resource: #{file_set3.title.first}"
       }
     ]
   end
@@ -57,10 +64,12 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
     Hydra::Works::AddFileToFileSet.call(file_set, imf, :intermediate_file)
     Hydra::Works::AddFileToFileSet.call(file_set1, pdf, :preservation_master_file)
     Hydra::Works::AddFileToFileSet.call(file_set2, ocr, :preservation_master_file)
+    Hydra::Works::AddFileToFileSet.call(file_set3, txt, :preservation_master_file)
     Hydra::Works::AddFileToFileSet.call(private_fs, pmf, :preservation_master_file)
     work.ordered_members << file_set
     work.ordered_members << file_set1
     work.ordered_members << file_set2
+    work.ordered_members << file_set3
     # Adding the private file_set to the work without changing the rendered output.
     # This will make sure the file_set is a member of the work but is not added to
     # the manifest.
@@ -84,6 +93,6 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
     render
     doc = manifest.manifest_output(work, file_set).to_json
     expect(JSON.parse(rendered)).to eq(JSON.parse(doc))
-    expect(work.file_sets.count).to eq 4
+    expect(work.file_sets.count).to eq 5
   end
 end

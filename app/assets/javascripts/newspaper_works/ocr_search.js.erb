@@ -1,0 +1,14 @@
+<%#
+# gem 'newspaper_works', v1.0.2
+# Refer to the gem repository for more details: https://github.com/samvera-labs/newspaper_works
+# Released under license Apache License 2.0: https://github.com/samvera-labs/newspaper_works/blob/main/LICENSE
+# This gem is not yet compatible with Hyrax v3, hence why I am only using the portions relevant to our use case
+# This gem is used for keyword highlighting in search results
+%>
+
+/* toggle the ocr snippets collapse link text */
+$(document).ready(function(){
+  $('.ocr_snippets_expand').click(function() {
+    $(this).text($(this).text() == '<%= I18n.t('blacklight.search.results.snippets.more') %>' ? '<%= I18n.t('blacklight.search.results.snippets.less') %>' : '<%= I18n.t('blacklight.search.results.snippets.more') %>');
+  });
+});

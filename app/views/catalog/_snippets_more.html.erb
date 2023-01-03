@@ -1,0 +1,24 @@
+<%#
+# gem 'newspaper_works', v1.0.2
+# Refer to the gem repository for more details: https://github.com/samvera-labs/newspaper_works
+# Released under license Apache License 2.0: https://github.com/samvera-labs/newspaper_works/blob/main/LICENSE
+# This gem is not yet compatible with Hyrax v3, hence why I am only using the portions relevant to our use case
+# This gem is used for keyword highlighting in search results
+%>
+
+<%# additional ocr snippets, with a Bootstrap collapse toggle control %>
+<% document_id = options[:document].id %>
+<div class="collapse ocr_snippet" id="<%= "snippet_collapse_#{document_id}" %>">
+  <% snippets.each do |snippet| %>
+    <%= content_tag('div',
+                    "... #{snippet} ...".html_safe,
+                    class: 'ocr_snippet') %>
+  <% end %>
+</div>
+<%= link_to(t('blacklight.search.results.snippets.more'),
+            "#snippet_collapse_#{document_id}",
+            data: {toggle: 'collapse'},
+            'aria-expanded' => 'false',
+            'aria-controls' => "#snippet_collapse_#{document_id}",
+            class: 'ocr_snippets_expand js-controls')
+%>
