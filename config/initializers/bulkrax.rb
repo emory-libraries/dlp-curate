@@ -327,17 +327,22 @@ Bulkrax::CsvEntry.class_eval do
   def build_value(key, value)
     data = hyrax_record.send(key.to_s)
     if data.is_a?(ActiveTriples::Relation)
-      if value['join']
-        parsed_metadata[key_for_export(key)] = data.map { |d| prepare_export_data(d) }.join(value['join']).to_s # TODO: make split char dynamic
-      else
-        data.each_with_index do |d, i|
-          parsed_metadata["#{key_for_export(key)}_#{i + 1}"] = prepare_export_data(d)
-        end
-      end
+      build_triples_value(key, value, data)
     elsif key == 'visibility'
       parsed_metadata[key_for_export(key)] = CurateMapper.new.visibility_mapping.key(data).titleize
     else
       parsed_metadata[key_for_export(key)] = prepare_export_data(data)
+    end
+  end
+
+  def build_triples_value(key, value, data)
+    if value['join']
+      processed_value = key == 'creator' && hyrax_record.is_a?(FileSet) ? nil : data.map { |d| prepare_export_data(d) }.join(value['join']).to_s
+      parsed_metadata[key_for_export(key)] = processed_value
+    else
+      data.each_with_index do |d, i|
+        parsed_metadata["#{key_for_export(key)}_#{i + 1}"] = prepare_export_data(d)
+      end
     end
   end
 
