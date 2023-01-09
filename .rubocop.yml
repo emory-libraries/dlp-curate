@@ -59,6 +59,7 @@ Metrics/CyclomaticComplexity:
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
         - app/models/concerns/hydra/access_controls/visibility.rb
+        - config/initializers/bulkrax.rb
         - config/initializers/file_actor.rb
 
 Layout/HashAlignment:
@@ -91,6 +92,7 @@ Metrics/MethodLength:
         - app/presenters/hyrax/collection_presenter.rb
         - app/presenters/hyrax/curate_collection_presenter.rb
         - app/uploaders/zizia/csv_manifest_validator.rb
+        - config/initializers/bulkrax.rb
         - spec/fixtures/manifest_output.rb
         - spec/fixtures/placeholder_manifest_output.rb
 
@@ -155,3 +157,7 @@ RSpec/NestedGroups:
     Exclude:
         - spec/controllers/hyrax/downloads_controller_spec.rb
         - spec/controllers/hyrax/file_sets_controller_spec.rb
+
+Style/Alias:
+    Exclude:
+        - config/initializers/bulkrax.rb

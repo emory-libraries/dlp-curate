@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-
-module FileSetMethods
+module IngestAssistiveMethods
   def process_uploaded_file(work_permissions, file_set_attrs)
     actor = ::Hyrax::Actors::FileSetActor.new(object, @user)
 
@@ -48,71 +47,15 @@ module FileSetMethods
     end
   end
 
-  def process_multiple_file_export(file_sets, folder_count)
-    file_sets.each { |fileset| process_export_fileset_files(fileset, folder_count) }
-  end
-
-  def process_export_fileset_files(fileset, folder_count)
-    path = export_file_path(folder_count)
-    FileUtils.mkdir_p(path) unless File.exist? path
-    files = filename(fileset)&.split(';')
-    return if files.empty?
-
-    shovel_files_into_folder(files, fileset, path)
-  end
-
-  def shovel_files_into_folder(files, file_set, path)
-    files.each do |file|
-      file_split = file.split(':')
-      io = open(file_set.send(file_split.last).uri)
-      File.open(File.join(path, file_split.first), 'wb') do |f|
-        f.write(io.read)
-        f.close
+  def remove_blank_hash_values(hsh)
+    dupe = hsh.dup
+    dupe.each do |k, v|
+      if v.is_a?(Array) && v.all? { |o| o.is_a?(String) && o.empty? }
+        dupe[k] = []
+      elsif v.is_a?(String) && v.empty?
+        dupe[k] = nil
       end
     end
-  end
-
-  def pull_export_filesets(record)
-    record.file_set? ? Array.wrap(record) : record.file_sets
-  end
-
-  def export_file_path(folder_count)
-    File.join(exporter_export_path, folder_count, 'files')
-  end
-
-  def process_model_to_write(entries_to_write, model)
-    entries_to_write.map.with_index do |e, ind|
-      e.parsed_metadata['model'] == model ? ind : nil
-    end.compact
-  end
-
-  def process_filesets_to_write(entries_to_write, work_id)
-    entries_to_write.map.with_index do |e, ind|
-      e.parsed_metadata['model'] == 'FileSet' && e.parsed_metadata['parent'] == work_id ? ind : nil
-    end.compact
-  end
-
-  def process_filesets_and_work_to_write(entries_to_write)
-    work_file_set_grouping = []
-    works_in_entries = process_model_to_write(entries_to_write, 'CurateGenericWork')
-
-    works_in_entries.each do |w|
-      work_id = entries_to_write[w].identifier
-
-      file_set_indexes = process_filesets_to_write(entries_to_write, work_id)
-
-      work_file_set_grouping += ([w] + file_set_indexes)
-    end
-
-    work_file_set_grouping
-  end
-
-  def sort_entries_to_write(entries_to_write)
-    collections_to_write = process_model_to_write(entries_to_write, 'Collection')
-
-    work_file_set_grouping = process_filesets_and_work_to_write(entries_to_write)
-
-    sorted_order = collections_to_write + work_file_set_grouping
-    entries_to_write.values_at(*sorted_order)
+    dupe
   end
 end
