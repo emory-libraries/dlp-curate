@@ -99,12 +99,16 @@ module ExportAssistiveMethods
 
   def build_triples_value(key, value, data)
     if value['join']
-      processed_value = key == 'creator' && hyrax_record.is_a?(FileSet) ? nil : data.map { |d| prepare_export_data(d) }.join(value['join']).to_s
-      parsed_metadata[key_for_export(key)] = processed_value
+      triples_values_joined(key, value, data)
     else
       data.each_with_index do |d, i|
         parsed_metadata["#{key_for_export(key)}_#{i + 1}"] = prepare_export_data(d)
       end
     end
+  end
+
+  def triples_values_joined(key, value, data)
+    processed_value = key == 'creator' && hyrax_record.is_a?(FileSet) ? nil : data.map { |d| prepare_export_data(d) }.join(value['join']).to_s
+    parsed_metadata[key_for_export(key)] = processed_value
   end
 end
