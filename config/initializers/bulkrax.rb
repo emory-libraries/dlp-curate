@@ -153,11 +153,11 @@ if Object.const_defined?(:Hyrax) && ::Hyrax::DashboardController&.respond_to?(:s
   Hyrax::DashboardController.sidebar_partials[:repository_content] << "hyrax/dashboard/sidebar/bulkrax_sidebar_additions"
 end
 
-require_relative '../../lib/importing_modules/file_set_methods'
+require_relative '../../lib/bulkrax/override_assistive_methods'
 
 # rubocop:disable Metrics/BlockLength
 Bulkrax::ObjectFactory.class_eval do
-  include FileSetMethods
+  include OverrideAssistiveMethods
   attr_reader :attributes, :object, :source_identifier_value, :klass, :replace_files, :update_files, :work_identifier, :related_parents_parsed_mapping, :importer_run_id, :parser
 
   # Bulkrax v4.3.0 Override: as mentioned below, this method's largely mimicing AttachFilesToWorkJob,
@@ -230,22 +230,12 @@ Bulkrax::ObjectFactory.class_eval do
     @transform_attributes = remove_blank_hash_values(@transform_attributes)
     update ? @transform_attributes.except(:id) : @transform_attributes
   end
-
-  def remove_blank_hash_values(hsh)
-    dupe = hsh.dup
-    dupe.each do |k, v|
-      if v.is_a?(Array) && v.all? { |o| o.is_a?(String) && o.empty? }
-        dupe[k] = []
-      elsif v.is_a?(String) && v.empty?
-        dupe[k] = nil
-      end
-    end
-    dupe
-  end
 end
 # rubocop:enable Metrics/BlockLength
 
 Bulkrax::CsvEntry.class_eval do
+  include OverrideAssistiveMethods
+
   def factory
     @factory ||= Bulkrax::ObjectFactory.new(
       attributes:                     parsed_metadata,
@@ -310,20 +300,6 @@ Bulkrax::CsvEntry.class_eval do
     end
   end
 
-  def build_preservation_workflow_metadata
-    work_pres_workflows = hyrax_record.preservation_workflow
-    return if work_pres_workflows.blank?
-
-    work_pres_workflows.each do |workflow|
-      type = workflow.workflow_type.first
-      workflow_attrs = %w[workflow_notes workflow_rights_basis workflow_rights_basis_note workflow_rights_basis_date workflow_rights_basis_reviewer workflow_rights_basis_uri]
-
-      workflow_attrs.each do |attrib|
-        handle_join_on_export("#{type}.#{attrib}", workflow.send(attrib.to_sym).to_a, '|')
-      end
-    end
-  end
-
   def build_value(key, value)
     data = hyrax_record.send(key.to_s)
     if data.is_a?(ActiveTriples::Relation)
@@ -332,17 +308,6 @@ Bulkrax::CsvEntry.class_eval do
       parsed_metadata[key_for_export(key)] = CurateMapper.new.visibility_mapping.key(data).titleize
     else
       parsed_metadata[key_for_export(key)] = prepare_export_data(data)
-    end
-  end
-
-  def build_triples_value(key, value, data)
-    if value['join']
-      processed_value = key == 'creator' && hyrax_record.is_a?(FileSet) ? nil : data.map { |d| prepare_export_data(d) }.join(value['join']).to_s
-      parsed_metadata[key_for_export(key)] = processed_value
-    else
-      data.each_with_index do |d, i|
-        parsed_metadata["#{key_for_export(key)}_#{i + 1}"] = prepare_export_data(d)
-      end
     end
   end
 
@@ -359,7 +324,40 @@ Bulkrax::CsvEntry.class_eval do
 end
 
 Bulkrax::CsvParser.class_eval do
-  include FileSetMethods
+  include OverrideAssistiveMethods
+
+  alias create_from_object_ids create_new_entries
+
+  def current_record_ids
+    @work_ids = []
+    @collection_ids = []
+    @file_set_ids = []
+
+    case importerexporter.export_from
+    when 'all'
+      @work_ids = ActiveFedora::SolrService.query("has_model_ssim:(#{Hyrax.config.curation_concerns.join(' OR ')}) #{extra_filters}", method: :post, rows: 2_147_483_647).map(&:id)
+      @collection_ids = ActiveFedora::SolrService.query("has_model_ssim:Collection #{extra_filters}", method: :post, rows: 2_147_483_647).map(&:id)
+      @file_set_ids = ActiveFedora::SolrService.query("has_model_ssim:FileSet #{extra_filters}", method: :post, rows: 2_147_483_647).map(&:id)
+    when 'collection'
+      work_id_query = "member_of_collection_ids_ssim:#{importerexporter.export_source + extra_filters} AND has_model_ssim:(#{Hyrax.config.curation_concerns.join(' OR ')})"
+      @work_ids = ActiveFedora::SolrService
+                  .query(work_id_query, method: :post, rows: 2_000_000_000)
+                  .map(&:id)
+      # get the parent collection and child collections
+      @collection_ids = ActiveFedora::SolrService.query("id:#{importerexporter.export_source} #{extra_filters}", method: :post, rows: 2_147_483_647).map(&:id)
+      @collection_ids += ActiveFedora::SolrService.query("has_model_ssim:Collection AND member_of_collection_ids_ssim:#{importerexporter.export_source}", method: :post, rows: 2_147_483_647).map(&:id)
+      find_child_file_sets(@work_ids)
+    when 'object_ids'
+      process_current_record_object_ids
+    when 'worktype'
+      @work_ids = ActiveFedora::SolrService.query("has_model_ssim:#{importerexporter.export_source + extra_filters}", method: :post, rows: 2_000_000_000).map(&:id)
+      find_child_file_sets(@work_ids)
+    when 'importer'
+      set_ids_for_exporting_from_importer
+    end
+
+    @work_ids + @collection_ids + @file_set_ids
+  end
 
   # Bulkrax v4.3.0 Override: swaps out Bulkrax' sorting for our own, grouping together
   #   CurateGenericWorks with their associated FileSets.
@@ -438,5 +436,41 @@ Bulkrax::ExportBehavior.module_eval do
     end
 
     working_array.compact.join('|')
+  end
+end
+
+Bulkrax::Exporter.class_eval do
+  delegate :write, :create_from_collection, :create_from_object_ids, :create_from_importer, :create_from_worktype, :create_from_all, to: :parser
+
+  def export
+    current_run && setup_export_path
+    case export_from
+    when 'collection'
+      create_from_collection
+    when 'object_ids'
+      create_from_object_ids
+    when 'importer'
+      create_from_importer
+    when 'worktype'
+      create_from_worktype
+    when 'all'
+      create_from_all
+    end
+  rescue StandardError => e
+    status_info(e)
+  end
+
+  def export_source_object_ids
+    export_source if export_from == 'object_ids'
+  end
+
+  def export_from_list
+    [
+      [I18n.t('bulkrax.exporter.labels.importer'), 'importer'],
+      [I18n.t('bulkrax.exporter.labels.collection'), 'collection'],
+      ['Object IDs', 'object_ids'],
+      [I18n.t('bulkrax.exporter.labels.worktype'), 'worktype'],
+      [I18n.t('bulkrax.exporter.labels.all'), 'all']
+    ]
   end
 end

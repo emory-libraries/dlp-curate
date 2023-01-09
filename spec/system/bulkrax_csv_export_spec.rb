@@ -55,7 +55,7 @@ RSpec.describe 'Bulkrax CSV exporter', clean: true, js: true, type: :system do
       expect(page).to have_css('li a span.sidebar-action-text', text: 'Exporters')
     end
 
-    context 'within exporters/new' do
+    context 'creating a Collection export' do
       before do
         visit '/exporters/new'
         fill_in 'Name required', with: 'Test'
@@ -75,6 +75,41 @@ RSpec.describe 'Bulkrax CSV exporter', clean: true, js: true, type: :system do
           click_link 'Test'
 
           expect(page).to have_selector('th', text: 'Title', count: 3, visible: false)
+        end
+      end
+    end
+
+    context 'Object IDs export' do
+      before do
+        visit '/exporters/new'
+      end
+
+      it 'contains the right elements for Object IDs' do
+        expect(page).to have_css("option[value='object_ids']", text: 'Object IDs')
+        select 'Object IDs', from: 'exporter_export_from'
+        expect(page).to have_css('div.form-group.text.optional.exporter_export_source_object_ids label', text: 'Object IDs')
+      end
+
+      context 'creating a new export' do
+        before do
+          fill_in 'Name required', with: 'ID Test'
+          select 'Metadata Only', from: 'exporter_export_type'
+          select 'Object IDs', from: 'exporter_export_from'
+          fill_in 'Object IDs', with: "#{collection.id}|#{work.id}"
+          select 'CSV - Comma Separated Values', from: 'exporter_parser_klass'
+          find("input[value='Create and Export']").click
+        end
+
+        it 'redirects to index with a Test link present' do
+          expect(page).to have_link('ID Test', href: '/exporters/1?locale=en')
+        end
+
+        context 'on exporter show page' do
+          it 'has Title as a column on all entry lists' do
+            click_link 'ID Test'
+
+            expect(page).to have_selector('th', text: 'Title', count: 3, visible: false)
+          end
         end
       end
     end
