@@ -67,12 +67,27 @@
 <script>
   $(function() {
     $('#DataTables_Table_0').DataTable({
+      searchPanes: {
+        columns: [1],
+        initCollapsed: true,
+        layout: 'columns-6'
+      },
       destroy: true, /* Reinitialize DataTable with config below */
+      dom: 'Plfrtip',
       order: [[2, 'desc']],
       'columnDefs': [
           { 'orderable': true, 'targets': [...Array(11).keys()] },
-          { 'orderable': false, 'targets': [11, 12, 13] }
+          { 'orderable': false, 'targets': [11, 12, 13] },
+          { 'searchPanes': {
+              'show': true,
+            },
+            'targets': [1]
+          }
       ],
+      select: {
+        style:    'os',
+        selector: 'td:first-child'
+      },
       'language': {
         'info': 'Showing _START_ to _END_ of _TOTAL_ importers',
         'infoEmpty': 'No importers to show',

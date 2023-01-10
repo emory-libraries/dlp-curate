@@ -2228,10 +2228,44 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha512-NJGVKPS81XejHcLhaLJS7plab0fK3slPh11mESeeDq2W4ZI5kUKK/LRRdVDvjJseojbPB7ZwjnyOybg3Igea/A==
 
-datatables.net-bs4@*:
+datatables.net-bs4@*, datatables.net-bs4@>=1.12.1:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/datatables.net-bs4/-/datatables.net-bs4-1.13.1.tgz#b704d9639bbe650c996e614dc37f529e8c09ff47"
   integrity sha512-GBTOzUT8ooEUMPtjVHktvDk0MyakFGh89F8aHj8VwF1OFLbqTGEAPacO8XAgSfej/Ng3dbFJA6sjrk4gFra8kg==
+  dependencies:
+    datatables.net ">=1.12.1"
+    jquery ">=1.7"
+
+datatables.net-searchpanes-bs4@*:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/datatables.net-searchpanes-bs4/-/datatables.net-searchpanes-bs4-2.1.0.tgz#9b3ec069bc3b4ca7acf2a9d9ecf8f87c4c0faffc"
+  integrity sha512-sFwOwWKTn22sGxavPQNGB03TFiIOPc2sfc/0TBhjGZ5f+3B9L+JfBnLbfzoI/SYYWCbQNdY7HNY/kYAyIZOEzg==
+  dependencies:
+    datatables.net-bs4 ">=1.12.1"
+    datatables.net-searchpanes ">=2.0.2"
+    jquery ">=1.7"
+
+datatables.net-searchpanes@>=2.0.2:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/datatables.net-searchpanes/-/datatables.net-searchpanes-2.1.0.tgz#e67fa2e8ce452a8c6fcebc69cddb101cf4208cf2"
+  integrity sha512-MA5rvXxqqCI0wBcAjrA0Bpp7QynWsjfpH2ZlhiTrBjsilYfn5oGPSSwsJxLO7unolmnhm+iuqethlWNyo9TC6Q==
+  dependencies:
+    datatables.net ">=1.12.1"
+    jquery ">=1.7"
+
+datatables.net-select-bs4@*:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/datatables.net-select-bs4/-/datatables.net-select-bs4-1.5.0.tgz#a4514dd49ea67c525c2083ef455c552a010ea6cb"
+  integrity sha512-x70tepWUQKDYFHejk2o1zR4HBqH7Idz4cMTemdeM8oT7lmRnGb9gbiUoYMgwc5h2S2jkDYeIkvQWWMsI17shCg==
+  dependencies:
+    datatables.net-bs4 ">=1.12.1"
+    datatables.net-select ">=1.4.0"
+    jquery ">=1.7"
+
+datatables.net-select@>=1.4.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/datatables.net-select/-/datatables.net-select-1.5.0.tgz#e118438ad98e4857060d6dd66cb0fab215a54fda"
+  integrity sha512-PVYcX5phmu77r3a6miTyS1zF03cgX7Mx+BXH4wCJzZW+UHe2Xz9DAHgxvLQfE7j2M8LG45Ww7RxBhnkFKk1t7A==
   dependencies:
     datatables.net ">=1.12.1"
     jquery ">=1.7"
