@@ -7,7 +7,7 @@ module ExportAssistiveMethods
   def process_export_fileset_files(fileset, folder_count)
     path = export_file_path(folder_count)
     FileUtils.mkdir_p(path) unless File.exist? path
-    files = filename(fileset)&.split(';')
+    files = filename(fileset)&.split('|')
     return if files.empty?
 
     shovel_files_into_folder(files, fileset, path)
