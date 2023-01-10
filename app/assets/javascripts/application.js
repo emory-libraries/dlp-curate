@@ -20,6 +20,10 @@
 //= require rails-ujs
 //= require datatables.net/js/jquery.dataTables
 //= require datatables.net-bs4/js/dataTables.bootstrap4
+//= require datatables.net-select/js/dataTables.select
+//= require datatables.net-select-bs4/js/select.bootstrap4
+//= require datatables.net-searchpanes/js/dataTables.searchPanes
+//= require datatables.net-searchpanes-bs4/js/searchPanes.bootstrap4
 //= require blacklight/blacklight
 //= require hyrax
 //= require hyrax/autocomplete/default
