@@ -73,7 +73,7 @@
 
   <%= form.input :limit,
     as: :integer,
-    hint: 'leave blank or 0 for all records',
+    hint: 'leave blank or 0 for all records. Note: please use this cautiously. Objects are grouped by class, and limiting may not return the results you expect.',
     label: t('bulkrax.exporter.labels.limit') %>
 
   <%= form.input :generated_metadata?,

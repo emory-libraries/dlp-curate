@@ -72,7 +72,7 @@ Bulkrax.setup do |config|
       "legacy_rights" => { from: ["legacy_rights"] },
       "local_call_number" => { from: ["local_call_number"] },
       "model" => { from: ["model"] },
-      "notes" => { from: ["notes"], split: '\|' },
+      "notes" => { from: ["notes"], split: '\|', join: '|' },
       "other_identifiers" => { from: ["other_identifiers"], split: '\|', join: '|' },
       "page_range_end" => { from: ["page_range_end"] },
       "page_range_start" => { from: ["page_range_start"] },
