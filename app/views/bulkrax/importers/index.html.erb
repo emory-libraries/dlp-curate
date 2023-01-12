@@ -70,7 +70,7 @@
       searchPanes: {
         columns: [1],
         initCollapsed: true,
-        layout: 'columns-6'
+        layout: 'columns-3'
       },
       destroy: true, /* Reinitialize DataTable with config below */
       dom: 'Plfrtip',
@@ -95,5 +95,13 @@
         'lengthMenu': 'Show _MENU_ importers'
       }
     })
+
+    var highestBox = 0;
+      $('.btn-group .btn').each(function(){  
+                if($(this).height() > highestBox){  
+                highestBox = $(this).height();  
+      }
+    });    
+    $('.btn-group .btn').height(highestBox);
   })
 </script>
