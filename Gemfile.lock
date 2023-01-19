@@ -1981,7 +1981,7 @@ GEM
       rails (>= 5.0, < 6.2)
       rdf
     racc (1.6.2)
-    rack (2.2.4)
+    rack (2.2.6.2)
     rack-proxy (0.7.4)
       rack
     rack-test (2.0.2)
