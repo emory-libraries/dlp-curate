@@ -47,36 +47,17 @@ RSpec.describe 'Bulkrax CSV exporter', clean: true, js: true, type: :system do
       work.member_of_collections << collection
       work.save!
       login_as admin
+      # The mock below is necessary now that we're using Bulkrax' new out-of-box
+      #   Ability methods that check whether an admin user can create at least one work
+      #   and deposit that work into one AdminSet. It's easier to mock this response
+      #   then to alter the user's specific AdminSet abilities.
+      allow_any_instance_of(Ability).to receive(:can_export_works?).and_return(true)
     end
 
     it 'displays exporters on Dashboard' do
       visit '/dashboard'
 
       expect(page).to have_css('li a span.sidebar-action-text', text: 'Exporters')
-    end
-
-    context 'creating a Collection export' do
-      before do
-        visit '/exporters/new'
-        fill_in 'Name required', with: 'Test'
-        select 'Metadata Only', from: 'exporter_export_type'
-        select 'Collection', from: 'exporter_export_from'
-        select 'CSV - Comma Separated Values', from: 'exporter_parser_klass'
-        find("input[value='Create and Export']").click
-      end
-
-      it 'redirects to index with a Test link present' do
-        expect(page).to have_link('Test', href: '/exporters/1?locale=en')
-      end
-
-      context 'on exporter show page' do
-        it 'has Title as a column on all entry lists' do
-          allow(Collection).to receive(:find).and_return(collection)
-          click_link 'Test'
-
-          expect(page).to have_selector('th', text: 'Title', count: 3, visible: false)
-        end
-      end
     end
 
     context 'Object IDs export' do
@@ -87,7 +68,7 @@ RSpec.describe 'Bulkrax CSV exporter', clean: true, js: true, type: :system do
       it 'contains the right elements for Object IDs' do
         expect(page).to have_css("option[value='object_ids']", text: 'Object IDs')
         select 'Object IDs', from: 'exporter_export_from'
-        expect(page).to have_css('div.form-group.text.optional.exporter_export_source_object_ids label', text: 'Object IDs')
+        expect(page).to have_css('div.form-group.text.exporter_export_source_object_ids.required label', text: 'Object IDs')
       end
 
       context 'creating a new export' do

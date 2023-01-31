@@ -156,9 +156,12 @@ end
 require_relative '../../lib/bulkrax/override_assistive_methods'
 
 # rubocop:disable Metrics/BlockLength
+# rubocop:disable Lint/UselessAssignment
 Bulkrax::ObjectFactory.class_eval do
   include OverrideAssistiveMethods
   attr_reader :attributes, :object, :source_identifier_value, :klass, :replace_files, :update_files, :work_identifier, :related_parents_parsed_mapping, :importer_run_id, :parser
+
+  transformation_removes_blank_hash_values = true
 
   # Bulkrax v4.3.0 Override: as mentioned below, this method's largely mimicing AttachFilesToWorkJob,
   #   which we have extensively customized in Curate to accomodate our needs. Here,
@@ -221,23 +224,16 @@ Bulkrax::ObjectFactory.class_eval do
     u.send("#{process_file_types(path.split('/').last)}=", CarrierWave::SanitizedFile.new(path))
     update_filesets(u)
   end
-
-  # Override if we need to map the attributes from the parser in
-  # a way that is compatible with how the factory needs them.
-  def transform_attributes(update: false)
-    @transform_attributes = attributes.slice(*permitted_attributes)
-    @transform_attributes.merge!(file_attributes(update_files)) if with_files
-    @transform_attributes = remove_blank_hash_values(@transform_attributes)
-    update ? @transform_attributes.except(:id) : @transform_attributes
-  end
 end
+# rubocop:enable Lint/UselessAssignment
 # rubocop:enable Metrics/BlockLength
 
 Bulkrax::CsvEntry.class_eval do
   include OverrideAssistiveMethods
 
   def factory
-    @factory ||= Bulkrax::ObjectFactory.new(
+    of = Bulkrax.object_factory || Bulkrax::ObjectFactory
+    @factory ||= of.new(
       attributes:                     parsed_metadata,
       source_identifier_value:        identifier,
       work_identifier:                parser.work_identifier,

@@ -46,16 +46,4 @@ module IngestAssistiveMethods
       { pieces[0].to_s => pieces[1] }
     end
   end
-
-  def remove_blank_hash_values(hsh)
-    dupe = hsh.dup
-    dupe.each do |k, v|
-      if v.is_a?(Array) && v.all? { |o| o.is_a?(String) && o.empty? }
-        dupe[k] = []
-      elsif v.is_a?(String) && v.empty?
-        dupe[k] = nil
-      end
-    end
-    dupe
-  end
 end
