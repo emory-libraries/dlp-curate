@@ -31,7 +31,7 @@
 
   <%= form.input :export_source_importer,
     label: t('bulkrax.exporter.labels.importer'),
-    # required: true,
+    required: true,
     prompt: 'Select from the list',
     label_html: { class: 'importer export-source-option hidden' },
     input_html: { class: 'importer export-source-option hidden' },
@@ -40,7 +40,7 @@
   <%= form.input :export_source_collection,
     prompt: 'Start typing ...',
     label: t('bulkrax.exporter.labels.collection'),
-    # required: true,
+    required: true,
     placeholder: @collection&.title&.first,
     label_html: { class: 'collection export-source-option hidden' },
     input_html: {
@@ -56,7 +56,7 @@
     as: :text,
     placeholder: "Enter IDs of only collections or works separated by a pipe (\"|\"). When a collection's ID is provided, the child works of the collection will not automatically be added to the exported CSV. The desired works must be added to the ID list. When works are detected, the associated filesets will be found and added to the list by this application.",
     label: 'Object IDs',
-    # required: true,
+    required: true,
     label_html: { class: 'object_ids export-source-option hidden' },
     input_html: {
       class: 'object_ids export-source-option hidden'
@@ -65,7 +65,7 @@
 
   <%= form.input :export_source_worktype,
     label: t('bulkrax.exporter.labels.worktype'),
-    # required: true,
+    required: true,
     prompt: 'Select from the list',
     label_html: { class: 'worktype export-source-option hidden' },
     input_html: { class: 'worktype export-source-option hidden' },

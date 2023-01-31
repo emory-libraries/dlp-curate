@@ -32,6 +32,8 @@ RSpec.describe 'Admin dashboard', integration: true, clean: true, type: :system 
     let(:admin) { FactoryBot.create(:admin) }
     before do
       login_as admin
+      allow_any_instance_of(Ability).to receive(:can_export_works?).and_return(true)
+      allow_any_instance_of(Ability).to receive(:can_import_works?).and_return(true)
       visit '/dashboard'
     end
 

@@ -69,7 +69,10 @@ RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, type: :system do
     let(:admin) { FactoryBot.create(:admin) }
     let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'Bulkrax_Test_CSV.csv') }
 
-    before { login_as admin }
+    before do
+      login_as admin
+      allow_any_instance_of(Ability).to receive(:can_import_works?).and_return(true)
+    end
 
     it 'displays importers on Dashboard' do
       visit '/dashboard'
