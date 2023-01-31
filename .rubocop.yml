@@ -121,9 +121,7 @@ Naming/PredicateName:
 
 RSpec/AnyInstance:
     Exclude:
-        - spec/jobs/associate_filesets_with_work_job_spec.rb
-        - spec/models/job_io_wrapper_spec.rb
-        - spec/views/manifest/manifest.json.jbuilder_spec.rb
+        - spec/**/*
 
 RSpec/DescribeClass:
     Exclude:

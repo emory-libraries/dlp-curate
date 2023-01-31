@@ -156,6 +156,7 @@ end
 require_relative '../../lib/bulkrax/override_assistive_methods'
 
 # rubocop:disable Metrics/BlockLength
+# rubocop:disable Lint/UselessAssignment
 Bulkrax::ObjectFactory.class_eval do
   include OverrideAssistiveMethods
   attr_reader :attributes, :object, :source_identifier_value, :klass, :replace_files, :update_files, :work_identifier, :related_parents_parsed_mapping, :importer_run_id, :parser
@@ -224,6 +225,7 @@ Bulkrax::ObjectFactory.class_eval do
     update_filesets(u)
   end
 end
+# rubocop:enable Lint/UselessAssignment
 # rubocop:enable Metrics/BlockLength
 
 Bulkrax::CsvEntry.class_eval do
