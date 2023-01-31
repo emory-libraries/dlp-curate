@@ -32,6 +32,10 @@ RSpec.describe 'Admin dashboard', integration: true, clean: true, type: :system 
     let(:admin) { FactoryBot.create(:admin) }
     before do
       login_as admin
+      # The 2 mocks below are necessary now that we're using Bulkrax' new out-of-box
+      #   Ability methods that check whether an admin user can create at least one work
+      #   and deposit that work into one AdminSet. It's easier to mock this response
+      #   then to alter the user's specific AdminSet abilities.
       allow_any_instance_of(Ability).to receive(:can_export_works?).and_return(true)
       allow_any_instance_of(Ability).to receive(:can_import_works?).and_return(true)
       visit '/dashboard'
