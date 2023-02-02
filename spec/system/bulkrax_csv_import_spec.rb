@@ -69,14 +69,7 @@ RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, type: :system do
     let(:admin) { FactoryBot.create(:admin) }
     let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'Bulkrax_Test_CSV.csv') }
 
-    before do
-      login_as admin
-      # The mock below is necessary now that we're using Bulkrax' new out-of-box
-      #   Ability methods that check whether an admin user can create at least one work
-      #   and deposit that work into one AdminSet. It's easier to mock this response
-      #   then to alter the user's specific AdminSet abilities.
-      allow_any_instance_of(Ability).to receive(:can_import_works?).and_return(true)
-    end
+    before { login_as admin }
 
     it 'displays importers on Dashboard' do
       visit '/dashboard'
