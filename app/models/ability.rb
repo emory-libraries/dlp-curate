@@ -6,11 +6,11 @@ class Ability
   self.ability_logic += [:everyone_can_create_curation_concerns]
 
   def can_import_works?
-    can? :read, :admin_dashboard
+    admin?
   end
 
   def can_export_works?
-    can? :read, :admin_dashboard
+    admin?
   end
 
   # Define any customized permissions here.
