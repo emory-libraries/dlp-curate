@@ -429,6 +429,7 @@ Bulkrax::ExportBehavior.module_eval do
         file = nil
       end
       next if file.blank?
+
       working_array << "#{file.file_name.first}:extracted_text" if type == 'extracted'
       working_array << "#{file.file_name.first}:transcript" if type == 'transcript_file'
       working_array << "#{file.file_name.first}:#{type}" unless type == 'extracted' || type == 'transcript_file'
