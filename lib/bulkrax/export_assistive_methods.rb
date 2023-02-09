@@ -16,11 +16,25 @@ module ExportAssistiveMethods
   def shovel_files_into_folder(files, file_set, path)
     files.each do |file|
       file_split = file.split(':')
-      io = open(file_set.send(file_split.last).uri)
-      File.open(File.join(path, file_split.first), 'wb') do |f|
+      file_name = file_split.first
+      file_type = convert_setter_to_fileset_getter(file_split.last)
+      io = open(file_set.send(file_type).uri)
+
+      File.open(File.join(path, file_name), 'wb') do |f|
         f.write(io.read)
         f.close
       end
+    end
+  end
+
+  def convert_setter_to_fileset_getter(setter)
+    case setter
+    when 'extracted_text'
+      'extracted'
+    when 'transcript'
+      'transcript_file'
+    else
+      setter
     end
   end
 
