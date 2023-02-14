@@ -7,21 +7,30 @@ class ArchivesSpaceService
   class ServerError < StandardError; end
 
   def initialize
-    @config = config = ArchivesSpace::Configuration.new({
-                                                          base_uri:   ENV['ARCHIVES_SPACE_API_BASE_URL'].chomp('/'),
-                                                          base_repo:  "",
-                                                          username:   ENV['ARCHIVES_SPACE_USERNAME'],
-                                                          password:   ENV['ARCHIVES_SPACE_PASSWORD'],
-                                                          page_size:  50,
-                                                          throttle:   0,
-                                                          verify_ssl: true,
-                                                          timeout:    60
-                                                        })
-    @client = ArchivesSpace::Client.new(config).login
+    @config = ArchivesSpace::Configuration.new({
+                                                 base_uri:   ENV['ARCHIVES_SPACE_API_BASE_URL'].chomp('/'),
+                                                 base_repo:  "",
+                                                 username:   ENV['ARCHIVES_SPACE_USERNAME'],
+                                                 password:   ENV['ARCHIVES_SPACE_PASSWORD'],
+                                                 page_size:  50,
+                                                 throttle:   0,
+                                                 verify_ssl: true,
+                                                 timeout:    60
+                                               })
+  end
+
+  def authenticate
+    @client = ArchivesSpace::Client.new(@config).login
+    self
   end
 
   def fetch_repositories
     @client.get('/repositories')
+  end
+
+  def fetch_resources_by_call_number(call_number, repository_id:)
+    query = { 'identifier[]': [call_number].to_s, 'resolve': ['resources'] }
+    @client.get("/repositories/#{repository_id}/find_by_id/resources", { query: query })
   end
 
   def fetch_repository_by_id(id)
@@ -31,14 +40,34 @@ class ArchivesSpaceService
   end
 
   def fetch_resource_by_id(id, repository_id:)
-    query = { 'resolve': ['subjects', 'tree', 'linked_agents'] }
+    query = { 'resolve': ['subjects', 'linked_agents'] }
     data = process(response: @client.get("/repositories/#{repository_id}/resources/#{id}", { query: query }))
     extract_resource(data: data)
   end
 
-  def fetch_resources_by_call_number(call_number, repository_id:)
-    query = { 'identifier[]': [call_number].to_s, 'resolve': ['resources'] }
-    @client.get("/repositories/#{repository_id}/find_by_id/resources", { query: query })
+  def extract_repository(data:)
+    {
+      name:                data['name'],
+      administrative_unit: data['name'],
+      holding_repository:  data['name'],
+      institution:         data['parent_institution_name'],
+      contact_information: extract_repository_contact(data: data)
+    }
+  end
+
+  def extract_resource(data:)
+    {
+      title:                data['title'],
+      description:          extract_resource_description(data: data),
+      creator:              extract_resource_linked_agents(data: data, type: 'creator'),
+      system_of_record_id:  ENV['ARCHIVES_SPACE_PUBLIC_BASE_URL'].chomp('/') + data['uri'],
+      call_number:          data['id_0'],
+      primary_language:     data['lang_materials']&.first&.dig('language_and_script', 'language'),
+      subject_topics:       extract_resource_subjects(data: data, type: 'topical'),
+      subject_names:        extract_resource_linked_agents(data: data, type: 'subject'),
+      subject_geo:          extract_resource_subjects(data: data, type: 'geographic'),
+      subject_time_periods: extract_resource_subjects(data: data, type: 'temporal')
+    }
   end
 
   private
@@ -51,31 +80,6 @@ class ArchivesSpaceService
       else
         raise ArchivesSpaceService::ServerError, response.parsed.to_s
       end
-    end
-
-    def extract_repository(data:)
-      {
-        name:                data['name'],
-        administrative_unit: data['name'],
-        holding_repository:  data['name'],
-        institution:         data['parent_institution_name'],
-        contact_information: extract_repository_contact(data: data)
-      }
-    end
-
-    def extract_resource(data:)
-      {
-        title:                data['title'],
-        description:          extract_resource_description(data: data),
-        creator:              extract_resource_linked_agents(data: data, type: 'creator'),
-        system_of_record_id:  ENV['ARCHIVES_SPACE_PUBLIC_BASE_URL'].chomp('/') + data['uri'],
-        call_number:          data['id_0'],
-        primary_language:     data['lang_materials']&.first&.dig('language_and_script', 'language'),
-        subject_topics:       extract_resource_subjects(data: data, type: 'topical'),
-        subject_names:        extract_resource_linked_agents(data: data, type: 'subject'),
-        subject_geo:          extract_resource_subjects(data: data, type: 'geographic'),
-        subject_time_periods: extract_resource_subjects(data: data, type: 'temporal')
-      }
     end
 
     def extract_repository_contact(data:)
