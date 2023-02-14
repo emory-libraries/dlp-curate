@@ -9,6 +9,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'archivesspace-client'
 gem 'bootsnap', require: false
 gem 'bootstrap-sass', '~> 3.0'
 gem 'bulkrax'
