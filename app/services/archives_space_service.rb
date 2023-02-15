@@ -17,20 +17,17 @@ class ArchivesSpaceService
                                                  verify_ssl: true,
                                                  timeout:    60
                                                })
+    @client = ArchivesSpace::Client.new(@config)
   end
 
   def authenticate
-    @client = ArchivesSpace::Client.new(@config).login
+    @client.login
     self
   end
 
   def fetch_repositories
-    @client.get('/repositories')
-  end
-
-  def fetch_resources_by_call_number(call_number, repository_id:)
-    query = { 'identifier[]': [call_number].to_s, 'resolve': ['resources'] }
-    @client.get("/repositories/#{repository_id}/find_by_id/resources", { query: query })
+    repositories = process(response: @client.get('/repositories'))
+    repositories.map { |data| extract_repository(data: data) }
   end
 
   def fetch_repository_by_id(id)
@@ -39,10 +36,25 @@ class ArchivesSpaceService
     extract_repository(data: data)
   end
 
-  def fetch_resource_by_id(id, repository_id:)
+  def fetch_resource_by_ref(ref)
     query = { 'resolve': ['subjects', 'linked_agents'] }
-    data = process(response: @client.get("/repositories/#{repository_id}/resources/#{id}", { query: query }))
+    data = process(response: @client.get(ref, { query: query }))
     extract_resource(data: data)
+  end
+
+  def fetch_resource_by_id(id, repository_id:)
+    ref = "/repositories/#{repository_id}/resources/#{id}"
+    fetch_resource_by_ref(ref)
+  end
+
+  def fetch_resource_by_call_number(call_number, repository_id:)
+    query = { 'identifier[]': [call_number].to_s, 'resolve': ['resources'] }
+    data = process(response: @client.get("/repositories/#{repository_id}/find_by_id/resources", { query: query }))
+    resources = data['resources']
+    raise ArchivesSpaceService::ClientError, "No resources match call number #{call_number}" if resources.empty?
+    raise ArchivesSpaceService::ClientError, "Two or more resources have the same call number #{call_number}" if resources.count > 1
+    ref = resources.first.fetch('ref')
+    fetch_resource_by_ref(ref)
   end
 
   def extract_repository(data:)
@@ -50,7 +62,7 @@ class ArchivesSpaceService
       name:                data['name'],
       administrative_unit: data['name'],
       holding_repository:  data['name'],
-      institution:         data['parent_institution_name'],
+      institution:         'Emory University',
       contact_information: extract_repository_contact(data: data)
     }
   end
