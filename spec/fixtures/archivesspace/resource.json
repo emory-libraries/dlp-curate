@@ -1,0 +1,2124 @@
+{
+  "lock_version": 5,
+  "title": "William Levi Dawson papers",
+  "publish": true,
+  "restrictions": false,
+  "ead_id": "dawson892",
+  "ead_location": "http://pid.emory.edu/ark:/25593/8z6qq",
+  "finding_aid_title": "William Levi Dawson papers, 1903-1990",
+  "finding_aid_date": "July 24, 2006",
+  "finding_aid_author": "Stuart A. Rose Manuscript, Archives, and Rare Book Library, Emory University",
+  "finding_aid_language_note": "English",
+  "created_by": "admin",
+  "last_modified_by": "admin",
+  "create_time": "2023-02-13T05:39:22Z",
+  "system_mtime": "2023-02-13T15:11:39Z",
+  "user_mtime": "2023-02-13T05:39:22Z",
+  "suppressed": false,
+  "is_slug_auto": true,
+  "id_0": "Manuscript Collection No. 892",
+  "level": "collection",
+  "finding_aid_language": "eng",
+  "finding_aid_script": "Latn",
+  "jsonmodel_type": "resource",
+  "external_ids": [],
+  "subjects": [
+      {
+          "ref": "/subjects/2749",
+          "_resolved": {
+              "lock_version": 6,
+              "title": "African American choral conductors.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:39Z",
+              "system_mtime": "2023-02-13T06:11:04Z",
+              "user_mtime": "2018-09-06T17:05:39Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "African American choral conductors.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:39Z",
+                      "system_mtime": "2018-09-06T17:05:39Z",
+                      "user_mtime": "2018-09-06T17:05:39Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/2685",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/2749",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/2750",
+          "_resolved": {
+              "lock_version": 6,
+              "title": "African American conductors.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:39Z",
+              "system_mtime": "2023-02-13T06:11:04Z",
+              "user_mtime": "2018-09-06T17:05:39Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "African American conductors.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:39Z",
+                      "system_mtime": "2018-09-06T17:05:39Z",
+                      "user_mtime": "2018-09-06T17:05:39Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/2686",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/2750",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/1788",
+          "_resolved": {
+              "lock_version": 30,
+              "title": "African American composers.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T16:10:15Z",
+              "system_mtime": "2023-02-13T07:16:48Z",
+              "user_mtime": "2018-09-06T16:10:15Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "African American composers.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T16:10:15Z",
+                      "system_mtime": "2018-09-06T16:10:15Z",
+                      "user_mtime": "2018-09-06T16:10:15Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/1736",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/1788",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/1145",
+          "_resolved": {
+              "lock_version": 70,
+              "title": "African American musicians.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-06-20T15:35:40Z",
+              "system_mtime": "2023-02-13T14:18:39Z",
+              "user_mtime": "2018-06-20T15:35:40Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [
+                  {
+                      "external_id": "238",
+                      "source": "Archivists Toolkit Database::SUBJECT",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-06-20T15:35:40Z",
+                      "system_mtime": "2018-06-20T15:35:40Z",
+                      "user_mtime": "2018-06-20T15:35:40Z",
+                      "jsonmodel_type": "external_id"
+                  }
+              ],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "African American musicians.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-06-20T15:35:40Z",
+                      "system_mtime": "2018-06-20T15:35:40Z",
+                      "user_mtime": "2018-06-20T15:35:40Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/1125",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/1145",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/2751",
+          "_resolved": {
+              "lock_version": 3,
+              "title": "African American students.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:39Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2018-09-06T17:05:39Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "African American students.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:39Z",
+                      "system_mtime": "2018-09-06T17:05:39Z",
+                      "user_mtime": "2018-09-06T17:05:39Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/2687",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/2751",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/1891",
+          "_resolved": {
+              "lock_version": 13,
+              "title": "African American universities and colleges--Alabama.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T16:10:30Z",
+              "system_mtime": "2023-02-13T07:06:16Z",
+              "user_mtime": "2018-09-06T16:10:30Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "African American universities and colleges--Alabama.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T16:10:30Z",
+                      "system_mtime": "2018-09-06T16:10:30Z",
+                      "user_mtime": "2018-09-06T16:10:30Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/1838",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/1891",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/1322",
+          "_resolved": {
+              "lock_version": 50,
+              "title": "African American women.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T16:05:25Z",
+              "system_mtime": "2023-02-13T07:19:15Z",
+              "user_mtime": "2018-09-06T16:05:25Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "African American women.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T16:05:25Z",
+                      "system_mtime": "2018-09-06T16:05:25Z",
+                      "user_mtime": "2018-09-06T16:05:25Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/1275",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/1322",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/1892",
+          "_resolved": {
+              "lock_version": 13,
+              "title": "African Americans--Education (Higher)--Alabama.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T16:10:30Z",
+              "system_mtime": "2023-02-13T07:06:16Z",
+              "user_mtime": "2018-09-06T16:10:30Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "African Americans--Education (Higher)--Alabama.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T16:10:30Z",
+                      "system_mtime": "2018-09-06T16:10:30Z",
+                      "user_mtime": "2018-09-06T16:10:30Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/1839",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/1892",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/1800",
+          "_resolved": {
+              "lock_version": 47,
+              "title": "African Americans--Music.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T16:10:17Z",
+              "system_mtime": "2023-02-13T07:24:44Z",
+              "user_mtime": "2018-09-06T16:10:17Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "African Americans--Music.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T16:10:17Z",
+                      "system_mtime": "2018-09-06T16:10:17Z",
+                      "user_mtime": "2018-09-06T16:10:17Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/1748",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/1800",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/2752",
+          "_resolved": {
+              "lock_version": 3,
+              "title": "Copyright--United States.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:39Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2018-09-06T17:05:39Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Copyright--United States.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:39Z",
+                      "system_mtime": "2018-09-06T17:05:39Z",
+                      "user_mtime": "2018-09-06T17:05:39Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/2688",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/2752",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/2753",
+          "_resolved": {
+              "lock_version": 3,
+              "title": "Music publishing.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:39Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2018-09-06T17:05:39Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Music publishing.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:39Z",
+                      "system_mtime": "2018-09-06T17:05:39Z",
+                      "user_mtime": "2018-09-06T17:05:39Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/2689",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/2753",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/931",
+          "_resolved": {
+              "lock_version": 16,
+              "title": "Spirituals (Songs)",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-06-20T15:35:24Z",
+              "system_mtime": "2023-02-13T14:07:25Z",
+              "user_mtime": "2018-06-20T15:35:24Z",
+              "is_slug_auto": false,
+              "source": "lcsh",
+              "jsonmodel_type": "subject",
+              "external_ids": [
+                  {
+                      "external_id": "18",
+                      "source": "Archivists Toolkit Database::SUBJECT",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-06-20T15:35:24Z",
+                      "system_mtime": "2018-06-20T15:35:24Z",
+                      "user_mtime": "2018-06-20T15:35:24Z",
+                      "jsonmodel_type": "external_id"
+                  }
+              ],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Spirituals (Songs)",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-06-20T15:35:24Z",
+                      "system_mtime": "2018-06-20T15:35:24Z",
+                      "user_mtime": "2018-06-20T15:35:24Z",
+                      "term_type": "topical",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/925",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/931",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/2754",
+          "_resolved": {
+              "lock_version": 6,
+              "title": "Africa--Description and travel.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:39Z",
+              "system_mtime": "2023-02-13T05:51:41Z",
+              "user_mtime": "2018-09-06T17:05:39Z",
+              "is_slug_auto": false,
+              "source": "geonames",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Africa--Description and travel.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:39Z",
+                      "system_mtime": "2018-09-06T17:05:39Z",
+                      "user_mtime": "2018-09-06T17:05:39Z",
+                      "term_type": "geographic",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/2690",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/2754",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+        "ref": "This is a testing subject. This subject was not fetched through the API.",
+        "_resolved": {
+            "title": "Test Subject Temporal.",
+            "terms": [
+                {
+                    "term": "Test Subject Temporal.",
+                    "term_type": "temporal"
+                }
+            ]
+        }
+      },
+      {
+          "ref": "/subjects/2386",
+          "_resolved": {
+              "lock_version": 25,
+              "title": "Motion pictures.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T16:32:47Z",
+              "system_mtime": "2023-02-13T07:29:12Z",
+              "user_mtime": "2018-09-06T16:32:47Z",
+              "is_slug_auto": false,
+              "source": "aat",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Motion pictures.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T16:32:47Z",
+                      "system_mtime": "2018-09-06T16:32:47Z",
+                      "user_mtime": "2018-09-06T16:32:47Z",
+                      "term_type": "genre_form",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/2326",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/2386",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/391",
+          "_resolved": {
+              "lock_version": 1508,
+              "title": "Photographs.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-06-18T18:26:46Z",
+              "system_mtime": "2023-02-13T14:16:46Z",
+              "user_mtime": "2018-06-18T18:26:46Z",
+              "is_slug_auto": false,
+              "source": "aat",
+              "jsonmodel_type": "subject",
+              "external_ids": [
+                  {
+                      "external_id": "397",
+                      "source": "Archivists Toolkit Database::SUBJECT",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-06-18T18:26:46Z",
+                      "system_mtime": "2018-06-18T18:26:46Z",
+                      "user_mtime": "2018-06-18T18:26:46Z",
+                      "jsonmodel_type": "external_id"
+                  }
+              ],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Photographs.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-06-18T18:26:46Z",
+                      "system_mtime": "2018-06-18T18:26:46Z",
+                      "user_mtime": "2018-06-18T18:26:46Z",
+                      "term_type": "genre_form",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/419",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/391",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/448",
+          "_resolved": {
+              "lock_version": 475,
+              "title": "Scrapbooks.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-06-18T18:26:50Z",
+              "system_mtime": "2023-02-13T14:20:45Z",
+              "user_mtime": "2018-06-18T18:26:50Z",
+              "is_slug_auto": false,
+              "source": "aat",
+              "jsonmodel_type": "subject",
+              "external_ids": [
+                  {
+                      "external_id": "456",
+                      "source": "Archivists Toolkit Database::SUBJECT",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-06-18T18:26:50Z",
+                      "system_mtime": "2018-06-18T18:26:50Z",
+                      "user_mtime": "2018-06-18T18:26:50Z",
+                      "jsonmodel_type": "external_id"
+                  }
+              ],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Scrapbooks.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-06-18T18:26:50Z",
+                      "system_mtime": "2018-06-18T18:26:50Z",
+                      "user_mtime": "2018-06-18T18:26:50Z",
+                      "term_type": "genre_form",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/484",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/448",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/1790",
+          "_resolved": {
+              "lock_version": 33,
+              "title": "Scores.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T16:10:15Z",
+              "system_mtime": "2023-02-13T07:16:48Z",
+              "user_mtime": "2018-09-06T16:10:15Z",
+              "is_slug_auto": false,
+              "source": "aat",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Scores.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T16:10:15Z",
+                      "system_mtime": "2018-09-06T16:10:15Z",
+                      "user_mtime": "2018-09-06T16:10:15Z",
+                      "term_type": "genre_form",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/1738",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/1790",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/1356",
+          "_resolved": {
+              "lock_version": 64,
+              "title": "Sheet music.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T16:05:27Z",
+              "system_mtime": "2023-02-13T07:21:07Z",
+              "user_mtime": "2018-09-06T16:05:27Z",
+              "is_slug_auto": false,
+              "source": "aat",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Sheet music.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T16:05:27Z",
+                      "system_mtime": "2018-09-06T16:05:27Z",
+                      "user_mtime": "2018-09-06T16:05:27Z",
+                      "term_type": "genre_form",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/1309",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/1356",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/753",
+          "_resolved": {
+              "lock_version": 567,
+              "title": "Sound recordings.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-06-18T18:27:03Z",
+              "system_mtime": "2023-02-13T14:21:50Z",
+              "user_mtime": "2018-06-18T18:27:03Z",
+              "is_slug_auto": false,
+              "source": "aat",
+              "jsonmodel_type": "subject",
+              "external_ids": [
+                  {
+                      "external_id": "771",
+                      "source": "Archivists Toolkit Database::SUBJECT",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-06-18T18:27:03Z",
+                      "system_mtime": "2018-06-18T18:27:03Z",
+                      "user_mtime": "2018-06-18T18:27:03Z",
+                      "jsonmodel_type": "external_id"
+                  }
+              ],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Sound recordings.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-06-18T18:27:03Z",
+                      "system_mtime": "2018-06-18T18:27:03Z",
+                      "user_mtime": "2018-06-18T18:27:03Z",
+                      "term_type": "genre_form",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/770",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/753",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/2755",
+          "_resolved": {
+              "lock_version": 18,
+              "title": "Composer.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:39Z",
+              "system_mtime": "2023-02-13T07:24:44Z",
+              "user_mtime": "2018-09-06T17:05:39Z",
+              "is_slug_auto": false,
+              "source": "aat",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Composer.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:39Z",
+                      "system_mtime": "2018-09-06T17:05:39Z",
+                      "user_mtime": "2018-09-06T17:05:39Z",
+                      "term_type": "occupation",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/2691",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/2755",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      },
+      {
+          "ref": "/subjects/2756",
+          "_resolved": {
+              "lock_version": 6,
+              "title": "Conductor.",
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:39Z",
+              "system_mtime": "2023-02-13T05:44:12Z",
+              "user_mtime": "2018-09-06T17:05:39Z",
+              "is_slug_auto": false,
+              "source": "aat",
+              "jsonmodel_type": "subject",
+              "external_ids": [],
+              "publish": true,
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "terms": [
+                  {
+                      "lock_version": 0,
+                      "term": "Conductor.",
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:39Z",
+                      "system_mtime": "2018-09-06T17:05:39Z",
+                      "user_mtime": "2018-09-06T17:05:39Z",
+                      "term_type": "occupation",
+                      "jsonmodel_type": "term",
+                      "uri": "/terms/2692",
+                      "vocabulary": "/vocabularies/1"
+                  }
+              ],
+              "external_documents": [],
+              "metadata_rights_declarations": [],
+              "uri": "/subjects/2756",
+              "vocabulary": "/vocabularies/1",
+              "is_linked_to_published_record": true
+          }
+      }
+  ],
+  "linked_events": [],
+  "extents": [
+      {
+          "lock_version": 0,
+          "number": "94.375",
+          "container_summary": "(142 boxes); oversized papers folder (OP), 1 extra oversized papers folder (XOP)",
+          "created_by": "admin",
+          "last_modified_by": "admin",
+          "create_time": "2023-02-13T05:39:22Z",
+          "system_mtime": "2023-02-13T05:39:22Z",
+          "user_mtime": "2023-02-13T05:39:22Z",
+          "portion": "whole",
+          "extent_type": "linear feet",
+          "jsonmodel_type": "extent"
+      }
+  ],
+  "lang_materials": [
+      {
+          "lock_version": 0,
+          "created_by": "admin",
+          "last_modified_by": "admin",
+          "create_time": "2023-02-13T05:39:22Z",
+          "system_mtime": "2023-02-13T05:39:22Z",
+          "user_mtime": "2023-02-13T05:39:22Z",
+          "jsonmodel_type": "lang_material",
+          "notes": [],
+          "language_and_script": {
+              "lock_version": 0,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2023-02-13T05:39:22Z",
+              "system_mtime": "2023-02-13T05:39:22Z",
+              "user_mtime": "2023-02-13T05:39:22Z",
+              "language": "eng",
+              "jsonmodel_type": "language_and_script"
+          }
+      },
+      {
+          "lock_version": 0,
+          "created_by": "admin",
+          "last_modified_by": "admin",
+          "create_time": "2023-02-13T05:39:22Z",
+          "system_mtime": "2023-02-13T05:39:22Z",
+          "user_mtime": "2023-02-13T05:39:22Z",
+          "jsonmodel_type": "lang_material",
+          "notes": [
+              {
+                  "jsonmodel_type": "note_langmaterial",
+                  "type": "langmaterial",
+                  "content": [
+                      "Materials mostly in English."
+                  ],
+                  "persistent_id": "737db9b46824a6c9db39d51ad1314a65",
+                  "publish": true
+              }
+          ]
+      }
+  ],
+  "dates": [
+      {
+          "lock_version": 0,
+          "expression": "1903-1990",
+          "begin": "1903",
+          "end": "1990",
+          "created_by": "admin",
+          "last_modified_by": "admin",
+          "create_time": "2023-02-13T05:39:22Z",
+          "system_mtime": "2023-02-13T05:39:22Z",
+          "user_mtime": "2023-02-13T05:39:22Z",
+          "date_type": "inclusive",
+          "label": "creation",
+          "era": "ce",
+          "calendar": "gregorian",
+          "jsonmodel_type": "date"
+      }
+  ],
+  "external_documents": [],
+  "rights_statements": [],
+  "linked_agents": [
+      {
+          "role": "creator",
+          "terms": [],
+          "ref": "/agents/people/7314",
+          "_resolved": {
+              "lock_version": 4,
+              "publish": false,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2022-12-19T01:58:12Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2022-12-19T01:58:12Z",
+              "is_slug_auto": true,
+              "jsonmodel_type": "agent_person",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "creator",
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Dawson, William Levi, 1899-1990.",
+                      "sort_name": "Dawson, William Levi, 1899-1990.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2022-12-19T01:58:12Z",
+                      "system_mtime": "2022-12-19T01:58:12Z",
+                      "user_mtime": "2022-12-19T01:58:12Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "source": "viaf",
+                      "name_order": "inverted",
+                      "jsonmodel_type": "name_person",
+                      "use_dates": [],
+                      "parallel_names": [],
+                      "authority_id": "76502443"
+                  }
+              ],
+              "agent_genders": [],
+              "related_agents": [],
+              "uri": "/agents/people/7314",
+              "agent_type": "agent_person",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Dawson, William Levi, 1899-1990.",
+                  "sort_name": "Dawson, William Levi, 1899-1990.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2022-12-19T01:58:12Z",
+                  "system_mtime": "2022-12-19T01:58:12Z",
+                  "user_mtime": "2022-12-19T01:58:12Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "source": "viaf",
+                  "name_order": "inverted",
+                  "jsonmodel_type": "name_person",
+                  "use_dates": [],
+                  "parallel_names": [],
+                  "authority_id": "76502443"
+              },
+              "title": "Dawson, William Levi, 1899-1990."
+          }
+      },
+      {
+          "role": "subject",
+          "terms": [],
+          "ref": "/agents/people/7314",
+          "_resolved": {
+              "lock_version": 4,
+              "publish": false,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2022-12-19T01:58:12Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2022-12-19T01:58:12Z",
+              "is_slug_auto": true,
+              "jsonmodel_type": "agent_person",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "creator",
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Dawson, William Levi, 1899-1990.",
+                      "sort_name": "Dawson, William Levi, 1899-1990.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2022-12-19T01:58:12Z",
+                      "system_mtime": "2022-12-19T01:58:12Z",
+                      "user_mtime": "2022-12-19T01:58:12Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "source": "viaf",
+                      "name_order": "inverted",
+                      "jsonmodel_type": "name_person",
+                      "use_dates": [],
+                      "parallel_names": [],
+                      "authority_id": "76502443"
+                  }
+              ],
+              "agent_genders": [],
+              "related_agents": [],
+              "uri": "/agents/people/7314",
+              "agent_type": "agent_person",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Dawson, William Levi, 1899-1990.",
+                  "sort_name": "Dawson, William Levi, 1899-1990.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2022-12-19T01:58:12Z",
+                  "system_mtime": "2022-12-19T01:58:12Z",
+                  "user_mtime": "2022-12-19T01:58:12Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "source": "viaf",
+                  "name_order": "inverted",
+                  "jsonmodel_type": "name_person",
+                  "use_dates": [],
+                  "parallel_names": [],
+                  "authority_id": "76502443"
+              },
+              "title": "Dawson, William Levi, 1899-1990."
+          }
+      },
+      {
+          "role": "subject",
+          "terms": [],
+          "ref": "/agents/people/1893",
+          "_resolved": {
+              "lock_version": 3,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:38Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2018-09-06T17:05:38Z",
+              "is_slug_auto": false,
+              "jsonmodel_type": "agent_person",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Ellison, Ralph.",
+                      "sort_name": "Ellison, Ralph.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:38Z",
+                      "system_mtime": "2018-09-06T17:05:38Z",
+                      "user_mtime": "2018-09-06T17:05:38Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "source": "viaf",
+                      "name_order": "inverted",
+                      "jsonmodel_type": "name_person",
+                      "use_dates": [],
+                      "parallel_names": []
+                  }
+              ],
+              "agent_genders": [],
+              "related_agents": [],
+              "uri": "/agents/people/1893",
+              "agent_type": "agent_person",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Ellison, Ralph.",
+                  "sort_name": "Ellison, Ralph.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2018-09-06T17:05:38Z",
+                  "system_mtime": "2018-09-06T17:05:38Z",
+                  "user_mtime": "2018-09-06T17:05:38Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "source": "viaf",
+                  "name_order": "inverted",
+                  "jsonmodel_type": "name_person",
+                  "use_dates": [],
+                  "parallel_names": []
+              },
+              "title": "Ellison, Ralph."
+          }
+      },
+      {
+          "role": "subject",
+          "terms": [],
+          "ref": "/agents/people/7315",
+          "_resolved": {
+              "lock_version": 2,
+              "publish": false,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2022-12-19T01:58:12Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2022-12-19T01:58:12Z",
+              "is_slug_auto": true,
+              "jsonmodel_type": "agent_person",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Krasilovsky, M. William.",
+                      "sort_name": "Krasilovsky, M. William.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2022-12-19T01:58:12Z",
+                      "system_mtime": "2022-12-19T01:58:12Z",
+                      "user_mtime": "2022-12-19T01:58:12Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "source": "viaf",
+                      "name_order": "inverted",
+                      "jsonmodel_type": "name_person",
+                      "use_dates": [],
+                      "parallel_names": [],
+                      "authority_id": "6030925"
+                  }
+              ],
+              "agent_genders": [],
+              "related_agents": [],
+              "uri": "/agents/people/7315",
+              "agent_type": "agent_person",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Krasilovsky, M. William.",
+                  "sort_name": "Krasilovsky, M. William.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2022-12-19T01:58:12Z",
+                  "system_mtime": "2022-12-19T01:58:12Z",
+                  "user_mtime": "2022-12-19T01:58:12Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "source": "viaf",
+                  "name_order": "inverted",
+                  "jsonmodel_type": "name_person",
+                  "use_dates": [],
+                  "parallel_names": [],
+                  "authority_id": "6030925"
+              },
+              "title": "Krasilovsky, M. William."
+          }
+      },
+      {
+          "role": "subject",
+          "terms": [],
+          "ref": "/agents/people/1895",
+          "_resolved": {
+              "lock_version": 3,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:38Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2018-09-06T17:05:38Z",
+              "is_slug_auto": false,
+              "jsonmodel_type": "agent_person",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Spady, James G.",
+                      "sort_name": "Spady, James G.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:38Z",
+                      "system_mtime": "2018-09-06T17:05:38Z",
+                      "user_mtime": "2018-09-06T17:05:38Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "source": "viaf",
+                      "name_order": "inverted",
+                      "jsonmodel_type": "name_person",
+                      "use_dates": [],
+                      "parallel_names": []
+                  }
+              ],
+              "agent_genders": [],
+              "related_agents": [],
+              "uri": "/agents/people/1895",
+              "agent_type": "agent_person",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Spady, James G.",
+                  "sort_name": "Spady, James G.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2018-09-06T17:05:38Z",
+                  "system_mtime": "2018-09-06T17:05:38Z",
+                  "user_mtime": "2018-09-06T17:05:38Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "source": "viaf",
+                  "name_order": "inverted",
+                  "jsonmodel_type": "name_person",
+                  "use_dates": [],
+                  "parallel_names": []
+              },
+              "title": "Spady, James G."
+          }
+      },
+      {
+          "role": "subject",
+          "terms": [],
+          "ref": "/agents/people/1896",
+          "_resolved": {
+              "lock_version": 3,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:38Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2018-09-06T17:05:38Z",
+              "is_slug_auto": false,
+              "jsonmodel_type": "agent_person",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Stokowski, Leopold, 1882-1977.",
+                      "sort_name": "Stokowski, Leopold, 1882-1977.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:38Z",
+                      "system_mtime": "2018-09-06T17:05:38Z",
+                      "user_mtime": "2018-09-06T17:05:38Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "source": "viaf",
+                      "name_order": "inverted",
+                      "jsonmodel_type": "name_person",
+                      "use_dates": [],
+                      "parallel_names": []
+                  }
+              ],
+              "agent_genders": [],
+              "related_agents": [],
+              "uri": "/agents/people/1896",
+              "agent_type": "agent_person",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Stokowski, Leopold, 1882-1977.",
+                  "sort_name": "Stokowski, Leopold, 1882-1977.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2018-09-06T17:05:38Z",
+                  "system_mtime": "2018-09-06T17:05:38Z",
+                  "user_mtime": "2018-09-06T17:05:38Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "source": "viaf",
+                  "name_order": "inverted",
+                  "jsonmodel_type": "name_person",
+                  "use_dates": [],
+                  "parallel_names": []
+              },
+              "title": "Stokowski, Leopold, 1882-1977."
+          }
+      },
+      {
+          "role": "subject",
+          "terms": [],
+          "ref": "/agents/corporate_entities/2607",
+          "_resolved": {
+              "lock_version": 2,
+              "publish": false,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2022-12-19T01:58:12Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2022-12-19T01:58:12Z",
+              "is_slug_auto": true,
+              "jsonmodel_type": "agent_corporate_entity",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Fisk University.",
+                      "sort_name": "Fisk University.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2022-12-19T01:58:12Z",
+                      "system_mtime": "2022-12-19T01:58:12Z",
+                      "user_mtime": "2022-12-19T01:58:12Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "jurisdiction": false,
+                      "conference_meeting": false,
+                      "source": "lcnaf",
+                      "jsonmodel_type": "name_corporate_entity",
+                      "use_dates": [],
+                      "parallel_names": []
+                  }
+              ],
+              "related_agents": [],
+              "uri": "/agents/corporate_entities/2607",
+              "agent_type": "agent_corporate_entity",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Fisk University.",
+                  "sort_name": "Fisk University.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2022-12-19T01:58:12Z",
+                  "system_mtime": "2022-12-19T01:58:12Z",
+                  "user_mtime": "2022-12-19T01:58:12Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "jurisdiction": false,
+                  "conference_meeting": false,
+                  "source": "lcnaf",
+                  "jsonmodel_type": "name_corporate_entity",
+                  "use_dates": [],
+                  "parallel_names": []
+              },
+              "title": "Fisk University."
+          }
+      },
+      {
+          "role": "subject",
+          "terms": [],
+          "ref": "/agents/corporate_entities/2608",
+          "_resolved": {
+              "lock_version": 2,
+              "publish": false,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2022-12-19T01:58:12Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2022-12-19T01:58:12Z",
+              "is_slug_auto": true,
+              "jsonmodel_type": "agent_corporate_entity",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Tuskegee Institute.",
+                      "sort_name": "Tuskegee Institute.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2022-12-19T01:58:12Z",
+                      "system_mtime": "2022-12-19T01:58:12Z",
+                      "user_mtime": "2022-12-19T01:58:12Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "jurisdiction": false,
+                      "conference_meeting": false,
+                      "source": "lcnaf",
+                      "jsonmodel_type": "name_corporate_entity",
+                      "use_dates": [],
+                      "parallel_names": []
+                  }
+              ],
+              "related_agents": [],
+              "uri": "/agents/corporate_entities/2608",
+              "agent_type": "agent_corporate_entity",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Tuskegee Institute.",
+                  "sort_name": "Tuskegee Institute.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2022-12-19T01:58:12Z",
+                  "system_mtime": "2022-12-19T01:58:12Z",
+                  "user_mtime": "2022-12-19T01:58:12Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "jurisdiction": false,
+                  "conference_meeting": false,
+                  "source": "lcnaf",
+                  "jsonmodel_type": "name_corporate_entity",
+                  "use_dates": [],
+                  "parallel_names": []
+              },
+              "title": "Tuskegee Institute."
+          }
+      },
+      {
+          "role": "subject",
+          "terms": [],
+          "ref": "/agents/corporate_entities/1061",
+          "_resolved": {
+              "lock_version": 3,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2018-09-06T17:05:39Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2018-09-06T17:05:39Z",
+              "is_slug_auto": false,
+              "jsonmodel_type": "agent_corporate_entity",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Tuskegee Institute. Choir.",
+                      "sort_name": "Tuskegee Institute. Choir.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2018-09-06T17:05:39Z",
+                      "system_mtime": "2018-09-06T17:05:39Z",
+                      "user_mtime": "2018-09-06T17:05:39Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "jurisdiction": false,
+                      "conference_meeting": false,
+                      "source": "lcnaf",
+                      "jsonmodel_type": "name_corporate_entity",
+                      "use_dates": [],
+                      "parallel_names": []
+                  }
+              ],
+              "related_agents": [],
+              "uri": "/agents/corporate_entities/1061",
+              "agent_type": "agent_corporate_entity",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Tuskegee Institute. Choir.",
+                  "sort_name": "Tuskegee Institute. Choir.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2018-09-06T17:05:39Z",
+                  "system_mtime": "2018-09-06T17:05:39Z",
+                  "user_mtime": "2018-09-06T17:05:39Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "jurisdiction": false,
+                  "conference_meeting": false,
+                  "source": "lcnaf",
+                  "jsonmodel_type": "name_corporate_entity",
+                  "use_dates": [],
+                  "parallel_names": []
+              },
+              "title": "Tuskegee Institute. Choir."
+          }
+      },
+      {
+          "role": "subject",
+          "terms": [],
+          "ref": "/agents/corporate_entities/2609",
+          "_resolved": {
+              "lock_version": 2,
+              "publish": false,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2022-12-19T01:58:13Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2022-12-19T01:58:13Z",
+              "is_slug_auto": true,
+              "jsonmodel_type": "agent_corporate_entity",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Tuskegee Normal and Industrial Institute.",
+                      "sort_name": "Tuskegee Normal and Industrial Institute.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2022-12-19T01:58:13Z",
+                      "system_mtime": "2022-12-19T01:58:13Z",
+                      "user_mtime": "2022-12-19T01:58:13Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "jurisdiction": false,
+                      "conference_meeting": false,
+                      "source": "lcnaf",
+                      "jsonmodel_type": "name_corporate_entity",
+                      "use_dates": [],
+                      "parallel_names": []
+                  }
+              ],
+              "related_agents": [],
+              "uri": "/agents/corporate_entities/2609",
+              "agent_type": "agent_corporate_entity",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Tuskegee Normal and Industrial Institute.",
+                  "sort_name": "Tuskegee Normal and Industrial Institute.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2022-12-19T01:58:13Z",
+                  "system_mtime": "2022-12-19T01:58:13Z",
+                  "user_mtime": "2022-12-19T01:58:13Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "jurisdiction": false,
+                  "conference_meeting": false,
+                  "source": "lcnaf",
+                  "jsonmodel_type": "name_corporate_entity",
+                  "use_dates": [],
+                  "parallel_names": []
+              },
+              "title": "Tuskegee Normal and Industrial Institute."
+          }
+      },
+      {
+          "role": "subject",
+          "terms": [],
+          "ref": "/agents/corporate_entities/2610",
+          "_resolved": {
+              "lock_version": 2,
+              "publish": false,
+              "created_by": "admin",
+              "last_modified_by": "admin",
+              "create_time": "2022-12-19T01:58:13Z",
+              "system_mtime": "2023-02-13T05:40:39Z",
+              "user_mtime": "2022-12-19T01:58:13Z",
+              "is_slug_auto": true,
+              "jsonmodel_type": "agent_corporate_entity",
+              "agent_contacts": [],
+              "agent_record_controls": [],
+              "agent_alternate_sets": [],
+              "agent_conventions_declarations": [],
+              "agent_other_agency_codes": [],
+              "agent_maintenance_histories": [],
+              "agent_record_identifiers": [],
+              "agent_identifiers": [],
+              "agent_sources": [],
+              "agent_places": [],
+              "agent_occupations": [],
+              "agent_functions": [],
+              "agent_topics": [],
+              "agent_resources": [],
+              "linked_agent_roles": [
+                  "subject"
+              ],
+              "external_documents": [],
+              "notes": [],
+              "used_within_repositories": [],
+              "used_within_published_repositories": [],
+              "dates_of_existence": [],
+              "used_languages": [],
+              "metadata_rights_declarations": [],
+              "names": [
+                  {
+                      "lock_version": 0,
+                      "primary_name": "Tuskegee University.",
+                      "sort_name": "Tuskegee University.",
+                      "sort_name_auto_generate": true,
+                      "created_by": "admin",
+                      "last_modified_by": "admin",
+                      "create_time": "2022-12-19T01:58:13Z",
+                      "system_mtime": "2022-12-19T01:58:13Z",
+                      "user_mtime": "2022-12-19T01:58:13Z",
+                      "authorized": true,
+                      "is_display_name": true,
+                      "jurisdiction": false,
+                      "conference_meeting": false,
+                      "source": "lcnaf",
+                      "jsonmodel_type": "name_corporate_entity",
+                      "use_dates": [],
+                      "parallel_names": []
+                  }
+              ],
+              "related_agents": [],
+              "uri": "/agents/corporate_entities/2610",
+              "agent_type": "agent_corporate_entity",
+              "is_linked_to_published_record": true,
+              "display_name": {
+                  "lock_version": 0,
+                  "primary_name": "Tuskegee University.",
+                  "sort_name": "Tuskegee University.",
+                  "sort_name_auto_generate": true,
+                  "created_by": "admin",
+                  "last_modified_by": "admin",
+                  "create_time": "2022-12-19T01:58:13Z",
+                  "system_mtime": "2022-12-19T01:58:13Z",
+                  "user_mtime": "2022-12-19T01:58:13Z",
+                  "authorized": true,
+                  "is_display_name": true,
+                  "jurisdiction": false,
+                  "conference_meeting": false,
+                  "source": "lcnaf",
+                  "jsonmodel_type": "name_corporate_entity",
+                  "use_dates": [],
+                  "parallel_names": []
+              },
+              "title": "Tuskegee University."
+          }
+      }
+  ],
+  "import_previous_arks": [],
+  "revision_statements": [
+      {
+          "date": "July 29, 2015",
+          "description": "Finding aid revised to include enhanced metadata tagging.",
+          "created_by": "admin",
+          "last_modified_by": "admin",
+          "create_time": "2023-02-13T05:39:22Z",
+          "system_mtime": "2023-02-13T05:39:22Z",
+          "user_mtime": "2023-02-13T05:39:22Z",
+          "publish": true,
+          "jsonmodel_type": "revision_statement",
+          "uri": "/revision_statement/1124",
+          "repository": {
+              "ref": "/repositories/7"
+          }
+      }
+  ],
+  "instances": [],
+  "deaccessions": [],
+  "related_accessions": [
+      {
+          "ref": "/repositories/7/accessions/2434"
+      },
+      {
+          "ref": "/repositories/7/accessions/2750"
+      },
+      {
+          "ref": "/repositories/7/accessions/2890"
+      },
+      {
+          "ref": "/repositories/7/accessions/2891"
+      },
+      {
+          "ref": "/repositories/7/accessions/6055"
+      }
+  ],
+  "classifications": [],
+  "notes": [
+      {
+          "jsonmodel_type": "note_singlepart",
+          "content": [
+              "Papers of William Levi Dawson, African American composer, conductor, and educator from Anniston, Alabama, including correspondence, original scores of Dawson's works, personal and family papers, photographs, audio visual materials, and printed material."
+          ],
+          "type": "abstract",
+          "persistent_id": "302c74f8a3625e44323cc9c0a1e7bd3c",
+          "publish": true
+      },
+      {
+          "jsonmodel_type": "note_multipart",
+          "subnotes": [
+              {
+                  "publish": true,
+                  "jsonmodel_type": "note_text",
+                  "content": "Gift, 2001"
+              }
+          ],
+          "type": "acqinfo",
+          "label": "Source",
+          "persistent_id": "18a3a117f0b18d568ce88cfe9fb9f0ef",
+          "publish": true
+      },
+      {
+          "jsonmodel_type": "note_multipart",
+          "subnotes": [
+              {
+                  "publish": true,
+                  "jsonmodel_type": "note_text",
+                  "content": "Special restrictions apply: Use copies have not been made for all of the audiovisual series at this time. Researchers must contact the Rose Library in advance for access to these materials.\n\n Collection stored off-site. Researchers must contact the Rose Library in advance to access this collection."
+              }
+          ],
+          "type": "accessrestrict",
+          "rights_restriction": {
+              "local_access_restriction_type": []
+          },
+          "label": "Restrictions on Access",
+          "persistent_id": "f27b1c9e39c91daaef3adcf44a077774",
+          "publish": true
+      },
+      {
+          "jsonmodel_type": "note_multipart",
+          "subnotes": [
+              {
+                  "publish": true,
+                  "jsonmodel_type": "note_text",
+                  "content": "Printed or manuscript music in this collection that is still under copyright protection and is not in the Public Domain may not be photocopied or photographed. Researchers must provide written authorization from the copyright holder to request copies of these materials."
+              }
+          ],
+          "type": "userestrict",
+          "label": "Terms Governing Use and Reproduction",
+          "persistent_id": "8aa8ab781cb0fec2d8eba900d6350f4f",
+          "publish": true
+      },
+      {
+          "jsonmodel_type": "note_multipart",
+          "subnotes": [
+              {
+                  "publish": true,
+                  "jsonmodel_type": "note_text",
+                  "content": "[after identification of item(s)], William Levi Dawson papers, Stuart A. Rose Manuscript, Archives, and Rare Book Library, Emory University."
+              }
+          ],
+          "type": "prefercite",
+          "label": "Citation",
+          "persistent_id": "15da691c1d2fc730ff02dcfac75b1dac",
+          "publish": true
+      },
+      {
+          "jsonmodel_type": "note_multipart",
+          "subnotes": [
+              {
+                  "publish": true,
+                  "jsonmodel_type": "note_text",
+                  "content": "This finding aid may include language that is offensive or harmful. Please refer to the Rose Library's <extref xlink:href=\"https://rose.library.emory.edu/about/harmful-language.html\">harmful language statement</extref> for more information about why such language may appear and ongoing efforts to remediate racist, ableist, sexist, homophobic, euphemistic and other oppressive language. If you are concerned about language used in this finding aid, please contact us at rose.library@emory.edu."
+              }
+          ],
+          "type": "processinfo",
+          "label": "Processing",
+          "persistent_id": "b44b60b97221f9a839954d1449dc7058",
+          "publish": true
+      },
+      {
+          "jsonmodel_type": "note_multipart",
+          "subnotes": [
+              {
+                  "publish": true,
+                  "jsonmodel_type": "note_text",
+                  "content": "Control level 3"
+              }
+          ],
+          "type": "odd",
+          "persistent_id": "3a106437b0867fe298a59ecd99a0d888",
+          "publish": true
+      },
+      {
+          "jsonmodel_type": "note_multipart",
+          "subnotes": [
+              {
+                  "publish": true,
+                  "jsonmodel_type": "note_text",
+                  "content": "File name: dawson892.doc"
+              }
+          ],
+          "type": "odd",
+          "persistent_id": "9e46f47340f8338baec099c801d79a7c",
+          "publish": true
+      },
+      {
+          "jsonmodel_type": "note_multipart",
+          "subnotes": [
+              {
+                  "publish": true,
+                  "jsonmodel_type": "note_text",
+                  "content": ""
+              }
+          ],
+          "type": "bioghist",
+          "label": "Biographical Note",
+          "persistent_id": "d5d7aee769b58a6987a5e52ceb444d8c",
+          "publish": true
+      },
+      {
+          "jsonmodel_type": "note_multipart",
+          "subnotes": [
+              {
+                  "publish": true,
+                  "jsonmodel_type": "note_text",
+                  "content": "The collection contains the personal papers of William Levi Dawson from 1903-1990. The papers include correspondence, original scores of Dawson's works; files relating to Dawson's music publishing; writings by Dawson; subject files; notebooks, address books; and scrapbooks; personal and family papers; photographs; audio visual materials; ephemera; and printed material."
+              }
+          ],
+          "type": "scopecontent",
+          "label": "Scope and Content Note",
+          "persistent_id": "d029f206ae126b579810c3eb33d4dfd9",
+          "publish": true
+      },
+      {
+          "jsonmodel_type": "note_multipart",
+          "subnotes": [
+              {
+                  "publish": true,
+                  "jsonmodel_type": "note_text",
+                  "content": "Organized into twelve series: (1) Correspondence, (2) Scores, (3) Music publishing files, (4) Writings by Dawson, (5) Subject files, (6) Notebooks, address books, scrapbooks, (7) Other personal and family papers, (8) Photographs, (9) Printed material, (10) Ephemera, (11) Audio-visual materials, and (12) Collected material."
+              }
+          ],
+          "type": "arrangement",
+          "label": "Arrangement Note",
+          "persistent_id": "d831e96baa6e909598c6bfb2f5db577e",
+          "publish": true
+      }
+  ],
+  "metadata_rights_declarations": [],
+  "uri": "/repositories/7/resources/5687",
+  "repository": {
+      "ref": "/repositories/7"
+  },
+  "tree": {
+      "ref": "/repositories/7/resources/5687/tree"
+  }
+}
