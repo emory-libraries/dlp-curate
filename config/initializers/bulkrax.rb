@@ -328,6 +328,18 @@ Bulkrax::CsvParser.class_eval do
 
   alias create_from_object_ids create_new_entries
 
+  def create_entry_and_job(current_record, type)
+    new_entry = find_or_create_entry(send("#{type}_entry_class"),
+                                     current_record[source_identifier]&.strip,
+                                     'Bulkrax::Importer',
+                                     current_record.to_h)
+    if current_record[:delete].present?
+      "Bulkrax::Delete#{type.camelize}Job".constantize.send(perform_method, new_entry, current_run)
+    else
+      "Bulkrax::Import#{type.camelize}Job".constantize.send(perform_method, new_entry.id, current_run.id)
+    end
+  end
+
   def current_record_ids
     @work_ids = []
     @collection_ids = []
