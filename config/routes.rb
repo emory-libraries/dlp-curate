@@ -74,5 +74,9 @@ Rails.application.routes.draw do
   get 'csv_import_details/index'
   get 'csv_import_details/show/:id', to: 'csv_import_details#show', as: 'csv_import_detail'
 
+  # ArchivesSpace
+  get 'archivesspace/repositories', to: 'archives_space#repositories', defaults: { format: :json }
+  get 'archivesspace/find_by_id', to: 'archives_space#find_by_id', defaults: { format: :json }
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
