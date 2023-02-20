@@ -1,40 +1,68 @@
 # frozen_string_literal: true
 class ArchivesSpaceController < ApplicationController
+  class InvalidRequestError < StandardError; end
+
+  API = Aspace::ApiService
+
   authorize_resource class: :archivesspace
+  before_action :verify_json_request
+  before_action :authenticate
 
   def initialize
     super
-    @service = Aspace::ApiService.new.authenticate
+    @service = Aspace::ApiService.new
     @formatter = Aspace::FormattingService.new
   end
 
   # archivesspace/repositories
   def repositories
-    repositories = @service.fetch_repositories
-    repositories.each { |r| @formatter.format_repository(r) }
-
-    respond_to do |format|
-      format.json { render json: repositories.to_json }
+    begin
+      data = @service.fetch_repositories
+      data.each { |r| @formatter.format_repository(r) }
+    rescue API::ClientError, API::ServerError => e
+      data = { error: "ArchivesSpace API error: #{e.message}" }
     end
+
+    render json: data.to_json
   end
 
-  # archivesspace/find_by_id?repository_id=&identifier=
+  # archivesspace/find_by_id?repository_id=&resource_id=
   def find_by_id
-    if params['repository_id'].present? && params['identifier'].present?
-      data = @service.fetch_resource_by_call_number(params['identifier'], repository_id: params['repository_id'])
-      @formatter.format_resource(data)
-    else
-      data = { error: "Repository and resource identifiers must be specified" }
+    begin
+      verify_presence!(['resource_id', 'repository_id'])
+
+      resource = @service.fetch_resource_by_call_number(params['resource_id'], repository_id: params['repository_id'])
+      @formatter.format_resource(resource)
+
+      repository = @service.fetch_repository_by_id(params['repository_id'])
+      @formatter.format_repository(resource)
+
+      data = { repository: repository, resource: resource }
+    rescue InvalidRequestError => e
+      data = { error: "Invalid request error: #{e.message}" }
+    rescue API::ClientError, API::ServerError => e
+      data = { error: "ArchivesSpace API error: #{e.message}" }
     end
 
-    respond_to do |format|
-      format.json { render json: data.to_json }
-    end
+    render json: data.to_json
   end
 
   private
 
-    def permitted
-      # TODO: Sanitize params
+    def verify_presence!(required_params)
+      required_params.each do |param|
+        params[param].presence || raise(InvalidRequestError, "#{param} must be specified")
+      end
+    end
+
+    def verify_json_request
+      render nothing: true, status: :bad_request if request.format != :json
+    end
+
+    def authenticate
+      @service.authenticate!
+    rescue API::AuthenticationError => e
+      data = { error: "ArchivesSpace API error: #{e.message}" }
+      render json: data.to_json
     end
 end
