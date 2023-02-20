@@ -4,6 +4,7 @@ require "net/http"
 
 module Aspace
   class ApiService
+    class AuthenticationError < StandardError; end
     class ClientError < StandardError; end
     class ServerError < StandardError; end
 
@@ -21,8 +22,12 @@ module Aspace
       @client = ArchivesSpace::Client.new(@config)
     end
 
-    def authenticate
-      @client.login
+    def authenticate!
+      begin
+        @client.login
+      rescue ArchivesSpace::ConnectionError
+        raise AuthenticationError, 'Unable to authenticate to ArchivesSpace'
+      end
       self
     end
 
@@ -43,17 +48,12 @@ module Aspace
       extract_resource(data: data)
     end
 
-    def fetch_resource_by_id(id, repository_id:)
-      ref = "/repositories/#{repository_id}/resources/#{id}"
-      fetch_resource_by_ref(ref)
-    end
-
     def fetch_resource_by_call_number(call_number, repository_id:)
       query = { 'identifier[]': [call_number].to_s, 'resolve': ['resources'] }
       data = process(response: @client.get("/repositories/#{repository_id}/find_by_id/resources", { query: query }))
       resources = data['resources']
-      raise Aspace::ApiService::ClientError, "No resources match call number #{call_number}" if resources.empty?
-      raise Aspace::ApiService::ClientError, "Two or more resources have the same call number #{call_number}" if resources.count > 1
+      raise ClientError, "No resources match call number #{call_number}" if resources.empty?
+      raise ClientError, "Two or more resources have the same call number #{call_number}" if resources.count > 1
       ref = resources.first.fetch('ref')
       fetch_resource_by_ref(ref)
     end
@@ -89,9 +89,9 @@ module Aspace
         if response.status_code == 200
           response.parsed
         elsif 400 <= response.status_code && response.status_code < 500
-          raise Aspace::ApiService::ClientError, response.parsed.to_s
+          raise ClientError, response.parsed.to_s
         else
-          raise Aspace::ApiService::ServerError, response.parsed.to_s
+          raise ServerError, response.parsed.to_s
         end
       end
 

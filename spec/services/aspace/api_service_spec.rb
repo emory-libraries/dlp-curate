@@ -82,22 +82,6 @@ describe Aspace::ApiService do
     end
   end
 
-  describe '#fetch_resource_by_id' do
-    let(:response) { instance_double("ArchivesSpace::Response", status_code: 200, parsed: resource_data) }
-
-    before do
-      allow(ArchivesSpace::Client).to receive(:new).and_return(client)
-      allow(client).to receive(:login).and_return(true)
-      allow(client).to receive(:get).with('/repositories/7/resources/5687', { query: { resolve: ["subjects", "linked_agents"] } }).and_return(response)
-    end
-
-    it 'fetches resource from the ArchivesSpace API' do
-      service = described_class.new
-      expect(service).to receive(:fetch_resource_by_ref).with('/repositories/7/resources/5687')
-      service.fetch_resource_by_id('5687', repository_id: '7')
-    end
-  end
-
   describe '#fetch_resource_by_call_number' do
     let(:call_number) { 'Manuscript Collection No. 892' }
     let(:resource_response) { instance_double("ArchivesSpace::Response", status_code: 200, parsed: resource_data) }
