@@ -27,7 +27,7 @@ describe Aspace::ApiService do
 
     it 'requests all repositories from ArchivesSpace API' do
       expect(client).to receive(:get).with('/repositories')
-      service = described_class.new.authenticate
+      service = described_class.new.authenticate!
       service.fetch_repositories
     end
 
@@ -49,7 +49,7 @@ describe Aspace::ApiService do
 
     it 'requests repository from ArchivesSpace API' do
       expect(client).to receive(:get).with('/repositories/7', { query: { resolve: ["agent_representation"] } })
-      service = described_class.new.authenticate
+      service = described_class.new.authenticate!
       service.fetch_repository_by_id('7')
     end
 
@@ -71,7 +71,7 @@ describe Aspace::ApiService do
 
     it 'requests resource from ArchivesSpace API' do
       expect(client).to receive(:get).with('/repositories/7/resources/5687', { query: { resolve: ["subjects", "linked_agents"] } })
-      service = described_class.new.authenticate
+      service = described_class.new.authenticate!
       service.fetch_resource_by_ref('/repositories/7/resources/5687')
     end
 
@@ -97,7 +97,7 @@ describe Aspace::ApiService do
 
     it 'searches ArchivesSpace API for the resource' do
       expect(client).to receive(:get).with('/repositories/7/find_by_id/resources', { query: { 'identifier[]': [call_number].to_s, 'resolve': ['resources'] } })
-      service = described_class.new.authenticate
+      service = described_class.new.authenticate!
       service.fetch_resource_by_call_number(call_number, repository_id: '7')
     end
 
