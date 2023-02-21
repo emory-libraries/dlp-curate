@@ -149,7 +149,7 @@ RSpec.describe AspaceController, type: :controller do
     end
 
     it 'fetches resource from ArchivesSpace' do
-      get :find_by_id, params: { repository_id: 1, resource_id: 1 }, format: :json
+      get :find_by_id, params: { repository_id: 1, call_number: 1 }, format: :json
       # rubocop:disable Layout/LineLength
       expect(response.body).to eq("{\"repository\":{\"name\":\"Test Library\",\"administrative_unit\":\"Test Library\",\"holding_repository\":\"Test Library\",\"institution\":\"Emory University\",\"contact_information\":\"\"},\"resource\":{\"title\":\"Test Resource\",\"description\":\"This is a description\",\"creator\":[\"Test Creator\"],\"system_of_record_id\":\"/repositories/1/resources/1\",\"call_number\":\"call number\",\"primary_language\":\"\",\"subject_topics\":[],\"subject_names\":[],\"subject_geo\":[],\"subject_time_periods\":[],\"administrative_unit\":\"\",\"holding_repository\":\"\"}}")
       # rubocop:enable Layout/LineLength
@@ -157,17 +157,17 @@ RSpec.describe AspaceController, type: :controller do
 
     context 'when repository_id param is missing' do
       it 'returns error response' do
-        get :find_by_id, params: { resource_id: 1 }, format: :json
+        get :find_by_id, params: { call_number: 1 }, format: :json
         expect(response).to have_http_status(:ok)
         expect(response.body).to eq("{\"error\":\"Invalid request error: repository_id must be specified\"}")
       end
     end
 
-    context 'when resource_id param is missing' do
+    context 'when call_number param is missing' do
       it 'returns error response' do
         get :find_by_id, params: { repository_id: 1 }, format: :json
         expect(response).to have_http_status(:ok)
-        expect(response.body).to eq("{\"error\":\"Invalid request error: resource_id must be specified\"}")
+        expect(response.body).to eq("{\"error\":\"Invalid request error: call_number must be specified\"}")
       end
     end
 
@@ -177,7 +177,7 @@ RSpec.describe AspaceController, type: :controller do
       end
 
       it 'returns error response' do
-        get :find_by_id, params: { repository_id: 1, resource_id: 1 }, format: :json
+        get :find_by_id, params: { repository_id: 1, call_number: 1 }, format: :json
         expect(response).to have_http_status(:ok)
         expect(response.body).to eq("{\"error\":\"ArchivesSpace API error: Test client error\"}")
       end
@@ -189,7 +189,7 @@ RSpec.describe AspaceController, type: :controller do
       end
 
       it 'returns error response' do
-        get :find_by_id, params: { repository_id: 1, resource_id: 1 }, format: :json
+        get :find_by_id, params: { repository_id: 1, call_number: 1 }, format: :json
         expect(response).to have_http_status(:ok)
         expect(response.body).to eq("{\"error\":\"ArchivesSpace API error: Test server error\"}")
       end

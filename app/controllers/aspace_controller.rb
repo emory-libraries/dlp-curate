@@ -20,12 +20,12 @@ class AspaceController < ApplicationController
     render json: data.to_json
   end
 
-  # aspace/find_by_id?repository_id=&resource_id=
+  # aspace/find_by_id?repository_id=&call_number=
   def find_by_id
     begin
-      verify_presence!(['resource_id', 'repository_id'])
+      verify_presence!(['call_number', 'repository_id'])
 
-      resource = service.fetch_resource_by_call_number(params['resource_id'], repository_id: params['repository_id'])
+      resource = service.fetch_resource_by_call_number(params['call_number'], repository_id: params['repository_id'])
       formatter.format_resource(resource)
 
       repository = service.fetch_repository_by_id(params['repository_id'])
