@@ -8,7 +8,7 @@ class AspaceController < ApplicationController
   before_action :verify_json_request
   before_action :authenticate
 
-  # archivesspace/repositories
+  # aspace/repositories
   def repositories
     begin
       data = service.fetch_repositories
@@ -20,7 +20,7 @@ class AspaceController < ApplicationController
     render json: data.to_json
   end
 
-  # archivesspace/find_by_id?repository_id=&resource_id=
+  # aspace/find_by_id?repository_id=&resource_id=
   def find_by_id
     begin
       verify_presence!(['resource_id', 'repository_id'])
@@ -58,7 +58,7 @@ class AspaceController < ApplicationController
     end
 
     def verify_json_request
-      render nothing: true, status: :bad_request if request.format != :json
+      render body: nil, status: :bad_request if request.format != :json
     end
 
     def authenticate

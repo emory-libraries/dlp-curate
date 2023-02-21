@@ -5,8 +5,8 @@ require 'rails_helper'
 describe Aspace::ApiService do
   # rubocop:disable Layout/LineLength
   let(:client) { ArchivesSpace::Client.new }
-  let(:repository_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace", "repository.json")).read) }
-  let(:resource_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace", "resource.json")).read) }
+  let(:repository_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace_api", "repository.json")).read) }
+  let(:resource_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace_api", "resource.json")).read) }
 
   before do
     allow(ENV).to receive(:[]).with('ARCHIVES_SPACE_API_BASE_URL').and_return('aspace_api_base_url')
@@ -16,7 +16,7 @@ describe Aspace::ApiService do
   end
 
   describe '#fetch_repositories' do
-    let(:repositories_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace", "repositories.json")).read) }
+    let(:repositories_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace_api", "repositories.json")).read) }
     let(:response) { instance_double("ArchivesSpace::Response", status_code: 200, parsed: repositories_data) }
 
     before do
@@ -85,7 +85,7 @@ describe Aspace::ApiService do
   describe '#fetch_resource_by_call_number' do
     let(:call_number) { 'Manuscript Collection No. 892' }
     let(:resource_response) { instance_double("ArchivesSpace::Response", status_code: 200, parsed: resource_data) }
-    let(:find_by_id_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace", "find_by_id_resources.json")).read) }
+    let(:find_by_id_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace_api", "find_by_id_resources.json")).read) }
     let(:find_by_id_response) { instance_double("ArchivesSpace::Response", status_code: 200, parsed: find_by_id_data) }
 
     before do
@@ -110,7 +110,7 @@ describe Aspace::ApiService do
     end
 
     context 'when more than one resource is found' do
-      let(:find_by_id_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace", "duplicate_find_by_id_resources.json")).read) }
+      let(:find_by_id_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace_api", "duplicate_find_by_id_resources.json")).read) }
 
       it 'raises error' do
         service = described_class.new
