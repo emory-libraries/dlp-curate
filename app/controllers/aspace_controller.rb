@@ -29,7 +29,7 @@ class AspaceController < ApplicationController
       formatter.format_resource(resource)
 
       repository = service.fetch_repository_by_id(params['repository_id'])
-      formatter.format_repository(resource)
+      formatter.format_repository(repository)
 
       data = { repository: repository, resource: resource }
     rescue InvalidRequestError => e

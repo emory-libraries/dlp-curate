@@ -21,7 +21,7 @@ RSpec.describe AspaceController, type: :controller do
       creator:              ['Test Creator'],
       system_of_record_id:  '/repositories/1/resources/1',
       call_number:          'call number',
-      primary_language:     'English',
+      primary_language:     'eng',
       subject_topics:       [],
       subject_names:        [],
       subject_geo:          [],
@@ -151,7 +151,7 @@ RSpec.describe AspaceController, type: :controller do
     it 'fetches resource from ArchivesSpace' do
       get :find_by_id, params: { repository_id: 1, call_number: 1 }, format: :json
       # rubocop:disable Layout/LineLength
-      expect(response.body).to eq("{\"repository\":{\"name\":\"Test Library\",\"administrative_unit\":\"Test Library\",\"holding_repository\":\"Test Library\",\"institution\":\"Emory University\",\"contact_information\":\"\"},\"resource\":{\"title\":\"Test Resource\",\"description\":\"This is a description\",\"creator\":[\"Test Creator\"],\"system_of_record_id\":\"/repositories/1/resources/1\",\"call_number\":\"call number\",\"primary_language\":\"\",\"subject_topics\":[],\"subject_names\":[],\"subject_geo\":[],\"subject_time_periods\":[],\"administrative_unit\":\"\",\"holding_repository\":\"\"}}")
+      expect(response.body).to eq("{\"repository\":{\"name\":\"Test Library\",\"administrative_unit\":\"\",\"holding_repository\":\"\",\"institution\":\"Emory University\",\"contact_information\":\"\"},\"resource\":{\"title\":\"Test Resource\",\"description\":\"This is a description\",\"creator\":[\"Test Creator\"],\"system_of_record_id\":\"/repositories/1/resources/1\",\"call_number\":\"call number\",\"primary_language\":\"English\",\"subject_topics\":[],\"subject_names\":[],\"subject_geo\":[],\"subject_time_periods\":[]}}")
       # rubocop:enable Layout/LineLength
     end
 
