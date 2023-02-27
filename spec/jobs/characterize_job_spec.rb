@@ -61,10 +61,11 @@ RSpec.describe CharacterizeJob, :clean do
     before do
       described_class.perform_now(file_set, file.id, "", user)
     end
-    it "adds a new preservation event for fileset characterization" do
+
+    it "adds a new preservation event for fileset characterization (Failure)" do
       expect(file_set.preservation_event.first.event_type).to eq ['Characterization']
-      expect(file_set.preservation_event.first.outcome).to eq ['Success']
-      expect(file_set.preservation_event.first.event_details).to eq ['preservation_master_file: picture.png - Technical metadata extracted from file, format identified, and file validated']
+      expect(file_set.preservation_event.first.outcome).to eq ['Failure']
+      expect(file_set.preservation_event.first.event_details).to eq ['The Characterization Service failed.']
       expect(file_set.preservation_event.first.initiating_user).to eq [user]
     end
   end
