@@ -60,6 +60,7 @@ module Aspace
 
     def extract_repository(data:)
       {
+        repository_id:       data['uri']&.chomp('/')&.split('/')&.last,
         name:                data['name'],
         administrative_unit: data['name'],
         holding_repository:  data['name'],
@@ -70,6 +71,7 @@ module Aspace
 
     def extract_resource(data:)
       {
+        resource_id:          data['uri']&.chomp('/')&.split('/')&.last,
         title:                data['title'],
         description:          extract_resource_description(data: data),
         creator:              extract_resource_linked_agents(data: data, type: 'creator'),
