@@ -33,24 +33,22 @@ class CharacterizeJob < Hyrax::ApplicationJob
   # @param [String] file_id identifier for a Hydra::PCDM::File
   # @param [String, NilClass] filepath the cached file within the Hyrax.config.working_path
   def perform(file_set, file_id, filepath = nil, user = nil)
-    event_start = DateTime.current
-    relation = file_set.class.characterization_proxy
+    @event_start = DateTime.current
+    @relation = file_set.class.characterization_proxy
     file = file_set.characterization_proxy
-    raise "#{relation} was not found for FileSet #{file_set.id}" unless file_set.characterization_proxy?
+    raise "#{@relation} was not found for FileSet #{file_set.id}" unless file_set.characterization_proxy?
     filepath = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id) unless filepath && File.exist?(filepath)
     characterize(
-      file:        file,
-      filepath:    filepath,
-      user:        user,
-      event_start: event_start,
-      relation:    relation,
-      file_set:    file_set
+      file:     file,
+      filepath: filepath,
+      user:     user,
+      file_set: file_set
     )
   end
 
   private
 
-    def characterize(file:, filepath: nil, user: nil, event_start:, relation:, file_set:)
+    def characterize(file:, filepath: nil, user: nil, file_set:)
       # store this so we can tell if the original_file is actually changing
       previous_checksum = file.original_checksum.first
 
@@ -74,7 +72,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
       file_set.update_index
       # commenting this job call since we are doing this in the file_actor
       # CreateDerivativesJob.perform_later(file_set, file_id, filepath)
-      process_preservation_event(file_set, event_start, relation, file, user)
+      process_preservation_event(file_set, file, user)
     end
 
     def clear_metadata(file_set)
@@ -104,18 +102,18 @@ class CharacterizeJob < Hyrax::ApplicationJob
       self.class.characterization_service
     end
 
-    def pres_event_details(metadata_populated, relation, file)
-      return "#{relation}: #{file.file_name.first} - Technical metadata extracted from file, format identified, and file validated" if metadata_populated
+    def pres_event_details(metadata_populated, file)
+      return "#{@relation}: #{file.file_name.first} - Technical metadata extracted from file, format identified, and file validated" if metadata_populated
       "The Characterization Service failed."
     end
 
-    def process_preservation_event(file_set, event_start, relation, file, user)
+    def process_preservation_event(file_set, file, user)
       metadata_populated = check_for_populated_metadata(file_set)
       event = {
         'type' => 'Characterization',
-        'start' => event_start,
+        'start' => @event_start,
         'outcome' => metadata_populated ? 'Success' : 'Failure',
-        'details' => pres_event_details(metadata_populated, relation, file),
+        'details' => pres_event_details(metadata_populated, file),
         'software_version' => 'FITS v1.5.0',
         'user' => user.presence || file_set.depositor
       }
