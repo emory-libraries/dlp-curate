@@ -1,0 +1,56 @@
+{
+  "first_page": 1,
+  "last_page": 1323,
+  "this_page": 1,
+  "total": 1323,
+  "results": [
+      {
+          "lock_version": 6,
+          "title": "test_collection_title",
+          "publish": true,
+          "restrictions": false,
+          "ead_id": "test_ead_id",
+          "ead_location": "test_ead_location",
+          "finding_aid_title": "finding_aid_title",
+          "finding_aid_date": "February 28, 2023",
+          "finding_aid_author": "Stuart A. Rose Manuscript, Archives, and Rare Book Library, Emory University",
+          "finding_aid_language_note": "English",
+          "created_by": "admin",
+          "last_modified_by": "admin",
+          "create_time": "2023-02-13T04:41:07Z",
+          "system_mtime": "2023-02-13T15:05:52Z",
+          "user_mtime": "2023-02-13T04:41:07Z",
+          "suppressed": false,
+          "is_slug_auto": true,
+          "id_0": "test_call_number",
+          "level": "collection",
+          "finding_aid_language": "finding_aid_language",
+          "finding_aid_script": "finding_aid_script",
+          "jsonmodel_type": "resource",
+          "external_ids": [],
+          "subjects": [],
+          "linked_events": [],
+          "extents": [],
+          "lang_materials": [],
+          "dates": [],
+          "external_documents": [],
+          "rights_statements": [],
+          "linked_agents": [],
+          "import_previous_arks": [],
+          "revision_statements": [],
+          "instances": [],
+          "deaccessions": [],
+          "related_accessions": [],
+          "classifications": [],
+          "notes": [],
+          "metadata_rights_declarations": [],
+          "uri": "/repositories/1/resources/1",
+          "repository": {
+              "ref": "ref"
+          },
+          "tree": {
+              "ref": "ref"
+          }
+      }
+  ]
+}
