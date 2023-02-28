@@ -33,6 +33,7 @@ Metrics/BlockLength:
         - lib/tasks/curate_books.rake
         - lib/tasks/curate_collections.rake
         - lib/tasks/derivatives.rake
+        - lib/tasks/compile_aspace_resources.rake
         - spec/**/*
 
 Metrics/ClassLength:

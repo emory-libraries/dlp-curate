@@ -8,13 +8,15 @@ module Aspace
     class ClientError < StandardError; end
     class ServerError < StandardError; end
 
+    PAGE_SIZE = 50
+
     def initialize
       @config = ArchivesSpace::Configuration.new({
                                                    base_uri:   ENV['ARCHIVES_SPACE_API_BASE_URL'].chomp('/'),
                                                    base_repo:  "",
                                                    username:   ENV['ARCHIVES_SPACE_USERNAME'],
                                                    password:   ENV['ARCHIVES_SPACE_PASSWORD'],
-                                                   page_size:  50,
+                                                   page_size:  PAGE_SIZE,
                                                    throttle:   0,
                                                    verify_ssl: true,
                                                    timeout:    60
