@@ -12,12 +12,12 @@ class AspaceController < ApplicationController
   def repositories
     begin
       data = service.fetch_repositories
-      data.each { |r| formatter.format_repository(r) }
+      response = data.map { |r| formatter.format_repository(r) }
     rescue API::ClientError, API::ServerError => e
-      data = { error: "ArchivesSpace API error: #{e.message}" }
+      response = { error: "ArchivesSpace API error: #{e.message}" }
     end
 
-    render json: data.to_json
+    render json: response.to_json
   end
 
   # aspace/find_by_id?repository_id=&call_number=
@@ -25,20 +25,20 @@ class AspaceController < ApplicationController
     begin
       verify_presence!(['call_number', 'repository_id'])
 
-      resource = service.fetch_resource_by_call_number(params['call_number'], repository_id: params['repository_id'])
-      formatter.format_resource(resource)
+      data = service.fetch_resource_by_call_number(params['call_number'], repository_id: params['repository_id'])
+      resource = formatter.format_resource(data)
 
-      repository = service.fetch_repository_by_id(params['repository_id'])
-      formatter.format_repository(repository)
+      data = service.fetch_repository_by_id(params['repository_id'])
+      repository = formatter.format_repository(data)
 
-      data = { repository: repository, resource: resource }
+      response = { repository: repository, resource: resource }
     rescue InvalidRequestError => e
-      data = { error: "Invalid request error: #{e.message}" }
+      response = { error: "Invalid request error: #{e.message}" }
     rescue API::ClientError, API::ServerError => e
-      data = { error: "ArchivesSpace API error: #{e.message}" }
+      response = { error: "ArchivesSpace API error: #{e.message}" }
     end
 
-    render json: data.to_json
+    render json: response.to_json
   end
 
   private
@@ -64,7 +64,7 @@ class AspaceController < ApplicationController
     def authenticate
       service.authenticate!
     rescue API::AuthenticationError => e
-      data = { error: "ArchivesSpace API error: #{e.message}" }
-      render json: data.to_json
+      response = { error: "ArchivesSpace API error: #{e.message}" }
+      render json: response.to_json
     end
 end

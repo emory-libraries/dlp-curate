@@ -8,24 +8,23 @@ describe Aspace::FormattingService do
 
   describe '#format_resource' do
     let(:resource) { { title: "William Levi Dawson papers", primary_language: "eng" } }
+    let(:formatted_data) { formatter.format_resource(resource) }
 
     it 'formats primary language' do
-      formatter.format_resource(resource)
-      expect(resource[:primary_language]).to eq 'English'
+      expect(formatted_data[:primary_language]).to eq 'English'
     end
   end
 
   describe '#format_repository' do
     let(:repository) { { name: "Pitts Special Collections and Archives", administrative_unit: "Pitts Special Collections and Archives", holding_repository: "Pitts Special Collections and Archives" } }
+    let(:formatted_data) { formatter.format_repository(repository) }
 
     it 'formats administrative unit' do
-      formatter.format_repository(repository)
-      expect(repository[:administrative_unit]).to eq ''
+      expect(formatted_data[:administrative_unit]).to eq ''
     end
 
     it 'formats holding repository' do
-      formatter.format_repository(repository)
-      expect(repository[:holding_repository]).to eq 'Pitts Theology Library'
+      expect(formatted_data[:holding_repository]).to eq 'Pitts Theology Library'
     end
   end
 
