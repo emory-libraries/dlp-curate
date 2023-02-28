@@ -3,6 +3,11 @@
 require 'fileutils'
 
 desc "Compile all ArchivesSpace resources across all repositories in a .csv file"
+
+# Command to run in the terminal: `nohup bundle exec rake compile_aspace_resources &`
+# Task will run in the background. You can retrieve the `tmp/aspace/resources_report.csv` file after completion.
+# You can verify completion in the `tmp/aspace/resources_report.log` file.
+
 task compile_aspace_resources: :environment do
   start_time = Time.zone.now
 
@@ -12,7 +17,7 @@ task compile_aspace_resources: :environment do
 
   # Create/Empty files
   report_path = Rails.root.join('tmp', 'aspace', 'resources_report.csv')
-  log_path = Rails.root.join('tmp', 'aspace', 'resources_report_log')
+  log_path = Rails.root.join('tmp', 'aspace', 'resources_report.log')
   File.open(report_path, "w") { |f| f.truncate(0) }
   File.open(log_path, "w") { |f| f.truncate(0) }
 
