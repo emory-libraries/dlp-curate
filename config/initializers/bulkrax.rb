@@ -11,7 +11,7 @@ Bulkrax.setup do |config|
   config.default_work_type = 'FileSet'
 
   # Path to store pending imports
-  config.import_path = 'imports'
+  # config.import_path = 'tmp/imports'
 
   # Path to store exports before download
   # config.export_path = 'tmp/exports'
