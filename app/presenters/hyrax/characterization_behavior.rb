@@ -26,7 +26,6 @@ module Hyrax
     end
 
     def characterized?
-      ::FileSet.find(solr_document.id).update_index
       !characterization_metadata.values.compact.empty?
     end
 
