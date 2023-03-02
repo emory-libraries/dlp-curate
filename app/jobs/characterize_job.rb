@@ -69,6 +69,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
       file_set.date_modified = Hyrax::TimeService.time_in_utc if file.original_checksum.first != previous_checksum
 
       file_set.save!
+      file_set.update_index
       # commenting this job call since we are doing this in the file_actor
       # CreateDerivativesJob.perform_later(file_set, file_id, filepath)
       process_preservation_event(file_set, file, user)
