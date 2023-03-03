@@ -303,6 +303,7 @@ module Hyrax
 
       def set_file_set
         @file_set = ::FileSet.find(params[:id])
+        @file_set.update_index
       end
 
       def set_files
