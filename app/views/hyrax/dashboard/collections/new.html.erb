@@ -1,7 +1,10 @@
 <% type_title = collection_type_label_for(collection: @collection) %>
 <% provide :page_title, construct_page_title( t('.header', type_title: type_title)) %>
 <% provide :page_header do %>
+  <div class="as-button-div">
   <h1><span class="fa fa-edit" aria-hidden="true"></span> <%= t('.header', type_title: "User Collection") %> </h1>
+  <button class="as-button">here's a button</button>
+  </div>
 <% end %>
 
 <div class="row">
