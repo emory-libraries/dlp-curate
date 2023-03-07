@@ -3,7 +3,37 @@
 <% provide :page_header do %>
   <div class="as-button-div">
   <h1><span class="fa fa-edit" aria-hidden="true"></span> <%= t('.header', type_title: "User Collection") %> </h1>
-  <button class="as-button">here's a button</button>
+  <button type="button" class="as-button btn btn-primary" data-toggle="modal" data-target="#asModal">Populate from ArchivesSpace</button>
+  </div>
+  <div id="asModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Populate from ArchivesSpace</h4>
+      </div>
+      <div class="modal-body">
+        <p>Select an ArchivesSpace Repository.</p>
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">ArchivesSpace Repositories <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            # something like -- for each repository in AS repositories list, do <li>repository item</li>
+          </ul>
+
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+    </div>
   </div>
 <% end %>
 
