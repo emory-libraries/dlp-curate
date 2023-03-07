@@ -6,15 +6,15 @@
   "dependencies": {
     "@rails/webpacker": "*",
     "bootstrap": "^4",
-    "edtf": "*",
-    "jquery": "*",
-    "jquery-validation": "*",
-    "popper.js": "*",
-    "universalviewer": "3.0.16",
     "datatables.net-bs4": "*",
     "datatables.net-searchpanes-bs4": "*",
     "datatables.net-select-bs4": "*",
-    "handlebars": "^4"
+    "edtf": "*",
+    "handlebars": "^4",
+    "jquery": "*",
+    "jquery-validation": "*",
+    "popper.js": "*",
+    "universalviewer": "3.0.16"
   },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",
