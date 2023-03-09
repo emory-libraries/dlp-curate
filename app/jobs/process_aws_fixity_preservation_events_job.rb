@@ -19,6 +19,7 @@ class ProcessAwsFixityPreservationEventsJob < Hyrax::ApplicationJob
       file_set = FileSet.where(sha1_tesim: event_obj.sha1)&.first
       return if file_set.blank?
       event = event_obj.process_event
+      return if check_for_preexisting_preservation_events(file_set, event_obj.sha1, event_obj.fixity_start)
 
       create_preservation_event(file_set, event)
     end
