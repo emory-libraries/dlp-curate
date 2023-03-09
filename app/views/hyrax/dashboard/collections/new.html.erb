@@ -28,7 +28,7 @@
       </div>
       <div id="aspace-result"></div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary"> Look for Resource in ArchivesSpace</button>
+        <button type="button" class="btn btn-primary" id="aspace-loader"> Look for Resource in ArchivesSpace</button>
           
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
@@ -52,16 +52,43 @@ $.ajax({
   url: '/aspace/repositories',
   type: 'GET',
   dataType: 'json',
+  async: false,
   success: function(repositories) {
     jQuery.each( repositories, function(i, val) {
       var o = new Option(val.name, val.repository_id);
       /// jquerify the DOM object 'o' so we can use the html method
       $(o).html(val.name);
       $("#sel1").append(o);
+      repository_id = val.repository_id;
+
     });
-    console.log(repositories);
+    console.log(repository_id);
   }
   });
 
+  
+  $("#aspace-loader").click(function (e) {
+    
+    let reposelector = document.querySelector('#sel1');
+    let repo_value = reposelector.options[reposelector.selectedIndex].value;
+      
+      e.preventDefault();
+      $.ajax({
+          type: "GET",
+          url: "/aspace/find_by_id?",
+          async: false,
+          data: {
+              repository_id: repo_value,
+              call_number: $("#aspace-call-number").val() // < note use of 'this' here
+
+          },
+          success: function (result) {
+              alert('ok');
+          },
+          error: function (result) {
+              alert('error');
+          }
+      });
+  });
 
 </script>
