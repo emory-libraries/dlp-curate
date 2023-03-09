@@ -16,19 +16,20 @@
       </div>
       <div class="modal-body">
         <p>Select an ArchivesSpace Repository.</p>
-        <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">ArchivesSpace Repositories <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            # something like -- for each repository in AS repositories list, do <li>repository item</li>
-          </ul>
-
-        </div>
-        
+          <div class="form-group">
+            <label for="sel1">Select list:</label>
+            <select class="form-control" id="sel1">
+            </select>
+          </div>
+        <div class="call-number-field">
+          # then something like -- if repository selection != null, display field
+          <label for="aspace-call-number">Call Number: (must be exact)</label>
+          <input type="text" class="form-control" id="aspace-call-number">
       </div>
+      <div id="aspace-result"></div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-primary"> Look for Resource in ArchivesSpace</button>
+          
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -42,3 +43,25 @@
     <%= render 'form' %>
   </div>
 </div>
+
+<script>
+
+var repository_id;
+
+$.ajax({
+  url: '/aspace/repositories',
+  type: 'GET',
+  dataType: 'json',
+  success: function(repositories) {
+    jQuery.each( repositories, function(i, val) {
+      var o = new Option(val.name, val.repository_id);
+      /// jquerify the DOM object 'o' so we can use the html method
+      $(o).html(val.name);
+      $("#sel1").append(o);
+    });
+    console.log(repositories);
+  }
+  });
+
+
+</script>
