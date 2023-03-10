@@ -22,16 +22,32 @@
             </select>
           </div>
         <div class="call-number-field">
-          # then something like -- if repository selection != null, display field
           <label for="aspace-call-number">Call Number: (must be exact)</label>
           <input type="text" class="form-control" id="aspace-call-number">
       </div>
-      <div id="aspace-result"></div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="aspace-loader"> Look for Resource in ArchivesSpace</button>
-          
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary" id="aspace-loader"> Look for Resource in ArchivesSpace</button>
+      
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      
+      <div id="aspace-result">
+        <div class="modal-header">
+          <h5 class="modal-title">Title:</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
       </div>
+      </div>
+
+
     </div>
 
     </div>
@@ -46,7 +62,12 @@
 
 <script>
 
+$("#aspace-result").hide();
+console.log("checking the hide")
+
 var repository_id;
+var result_success;
+var result_error;
 
 $.ajax({
   url: '/aspace/repositories',
@@ -77,18 +98,33 @@ $.ajax({
           type: "GET",
           url: "/aspace/find_by_id?",
           async: false,
+          dataType: 'json',
           data: {
               repository_id: repo_value,
               call_number: $("#aspace-call-number").val() // < note use of 'this' here
 
           },
           success: function (result) {
-              alert('ok');
+            console.log(result);
+            console.log("yoyo");
+            result_success = result;
+            if (result.resource) {
+
+              show_result();
+            }
           },
           error: function (result) {
               alert('error');
+              console.log(result);
+              result_error = result;
           }
       });
   });
-
+  function show_result() {
+    $("#aspace-result").show();
+    console.log("show result");
+    console.dir(result_success);
+    
+  };
+  
 </script>
