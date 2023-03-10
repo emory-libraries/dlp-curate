@@ -31,11 +31,11 @@
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <div id="aspace-result">
             <h5 class="modal-title">Resource Result</h5>
-            <div class="modal-body">
-              <p id="aspace-result-title"><span class='aspace-result-label'>Title:</span> </p>
-              <p id="aspace-result-library"><span class='aspace-result-label'>Library:</span> </p>
-              <p id="aspace-result-creator"><span class='aspace-result-label'>Creator:</span> </p>
-              <p id="aspace-result-description"><span class='aspace-result-label'>Description:</span> </p>
+            <div class="aspace-result-body">
+              <p><span class='aspace-result-label'>Title: </span><span id="aspace-result-title"></span></p>
+              <p><span class='aspace-result-label'>Library: </span><span id="aspace-result-library"></span></p>
+              <p><span class='aspace-result-label'>Creator: </span><span id="aspace-result-creator"></span></p>
+              <p><span class='aspace-result-label'>Description: </span><span id="aspace-result-description"></span></p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary">Populate form</button>
@@ -117,10 +117,10 @@ $.ajax({
     $("#aspace-result").show();
     console.log("show result");
     console.dir(result_success);
-    $("#aspace-result-title").append(result_success.resource.title);
-    $("#aspace-result-library").append(result_success.repository.name);
-    $("#aspace-result-creator").append(result_success.resource.creator);
-    $("#aspace-result-description").append(result_success.resource.description);
+    $("#aspace-result-title").replaceWith(result_success.resource.title);
+    $("#aspace-result-library").replaceWith(result_success.repository.name);
+    $("#aspace-result-creator").replaceWith(result_success.resource.creator);
+    $("#aspace-result-description").replaceWith(result_success.resource.description);
   };
   
   $("#aspace-result-clear").click(function () {
