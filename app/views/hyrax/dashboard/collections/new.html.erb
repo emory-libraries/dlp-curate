@@ -29,7 +29,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" id="aspace-loader"> Look for Resource in ArchivesSpace</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <div id="aspace-success">
+          <div class="aspace-success" id="aspace-success">
             <h5 class="modal-title">Resource Result</h5>
             <div class="aspace-result-body">
               <p><span class='aspace-result-label'>Title: </span><span id="aspace-result-title"></span></p>
@@ -38,11 +38,11 @@
               <p><span class='aspace-result-label'>Description: </span><span id="aspace-result-description"></span></p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" id="aspace-result-populate">Populate Form</button>
+              <button type="button" class="btn btn-primary" id="aspace-result-populate" data-dismiss="modal">Populate Form</button>
               <button type="button" class="btn btn-secondary" id="aspace-result-clear">Clear</button>
             </div>
           </div>
-          <div id="aspace-error">
+          <div class="aspace-error" id="aspace-error">
             <p><span class='aspace-result-label'> Error: </span><span id="aspace-result-error"></span></p>
             <button type="button" class="btn btn-secondary" id="aspace-error-clear">Clear</button>
           </div>
@@ -86,6 +86,8 @@
   });
 
   $("#aspace-loader").click(function (e) {
+    $("#aspace-success").hide();
+    $("#aspace-error").hide();
     let reposelector = document.querySelector('#sel1');
     let repo_value = reposelector.options[reposelector.selectedIndex].value;
     e.preventDefault();
