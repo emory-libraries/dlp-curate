@@ -3,7 +3,8 @@
   as: :multi_value,
   input_html: {
     class: 'form-control',
-    data: { 'autocomplete-url' => "/authorities/search/loc/names",
-      'autocomplete' => key }
-  } ,
+      data: { 'autocomplete-url' => "/authorities/search/loc/names",
+      'autocomplete' => key },
+      id: "edit-fields-creator",
+      } ,
   required: f.object.required?(key) %>

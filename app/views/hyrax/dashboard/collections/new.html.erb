@@ -33,12 +33,12 @@
             <h5 class="modal-title">Resource Result</h5>
             <div class="aspace-result-body">
               <p><span class='aspace-result-label'>Title: </span><span id="aspace-result-title"></span></p>
-              <p><span class='aspace-result-label'>Library: </span><span id="aspace-result-library"></span></p>
+              <p><span class='aspace-result-label'>Library: </span><span id="aspace-result-repository"></span></p>
               <p><span class='aspace-result-label'>Creator: </span><span id="aspace-result-creator"></span></p>
               <p><span class='aspace-result-label'>Description: </span><span id="aspace-result-description"></span></p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary">Populate form</button>
+              <button type="button" class="btn btn-primary" id="aspace-result-populate">Populate Form</button>
               <button type="button" class="btn btn-secondary" id="aspace-result-clear">Clear</button>
             </div>
           </div>
@@ -60,69 +60,65 @@
 
 <script>
 
-$("#aspace-success").hide();
-$("#aspace-error").hide();
-console.log("checking the hide")
+  $("#aspace-success").hide();
+  $("#aspace-error").hide();
+  console.log("checking the hide")
 
-var repository_id;
-var result_success;
-var result_error;
+  var repository_id;
+  var result_success;
+  var result_error;
 
-$.ajax({
-  url: '/aspace/repositories',
-  type: 'GET',
-  dataType: 'json',
-  async: false,
-  success: function(repositories) {
-    jQuery.each( repositories, function(i, val) {
-      var o = new Option(val.name, val.repository_id);
-      /// jquerify the DOM object 'o' so we can use the html method
-      $(o).html(val.name);
-      $("#sel1").append(o);
-      repository_id = val.repository_id;
-    });
-    console.log(repository_id);
-  }
+  $.ajax({
+    url: '/aspace/repositories',
+    type: 'GET',
+    dataType: 'json',
+    async: false,
+    success: function(repositories) {
+      jQuery.each( repositories, function(i, val) {
+        var o = new Option(val.name, val.repository_id);
+        /// jquerify the DOM object 'o' so we can use the html method
+        $(o).html(val.name);
+        $("#sel1").append(o);
+        repository_id = val.repository_id;
+      });
+      console.log(repository_id);
+    }
   });
 
-  
   $("#aspace-loader").click(function (e) {
-    
     let reposelector = document.querySelector('#sel1');
     let repo_value = reposelector.options[reposelector.selectedIndex].value;
-      
-      e.preventDefault();
-      $.ajax({
-          type: "GET",
-          url: "/aspace/find_by_id?",
-          async: false,
-          dataType: 'json',
-          data: {
-              repository_id: repo_value,
-              call_number: $("#aspace-call-number").val() // < note use of 'this' here
-
-          },
-          success: function (result) {
-            console.log(result);
-            console.log("yoyo");
-            result_success = result;
-            if (result.resource) {
-              show_success();
-            } else if (result.error) {
-              console.log("oh snap an error");
-              result_error = result.error;
-              show_error();
-            }
-          },
-          
-      });
+    e.preventDefault();
+    $.ajax({
+      type: "GET",
+      url: "/aspace/find_by_id?",
+      async: false,
+      dataType: 'json',
+      data: {
+        repository_id: repo_value,
+        call_number: $("#aspace-call-number").val() // < note use of 'this' here
+      },
+      success: function (result) {
+        console.log(result);
+        console.log("yoyo");
+        result_success = result;
+        if (result.resource) {
+          show_success();
+        } else if (result.error) {
+          console.log("oh snap an error");
+          result_error = result.error;
+          show_error();
+        }
+      },
+    });
   });
+
   function show_success() {
     $("#aspace-success").show();
     console.log("show successful result");
     console.dir(result_success);
     $("#aspace-result-title").replaceWith(result_success.resource.title);
-    $("#aspace-result-library").replaceWith(result_success.repository.name);
+    $("#aspace-result-repository").replaceWith(result_success.repository.name);
     $("#aspace-result-creator").replaceWith(result_success.resource.creator);
     $("#aspace-result-description").replaceWith(result_success.resource.description);
   };
@@ -132,7 +128,7 @@ $.ajax({
     console.log("show error result");
     console.dir(result_error);
     $("#aspace-result-error").replaceWith(result_error);
-  }
+  };
   
   $("#aspace-result-clear").click(function () {
     $("#aspace-success").hide();
@@ -140,6 +136,15 @@ $.ajax({
     
   $("#aspace-error-clear").click(function () {
     $("#aspace-error").hide();
+  });
+
+  $("#aspace-result-populate").click(function () {
+    $("#edit-fields-repository").append(result_success.repository.name);
+    $("#edit-fields-creator").append(result_success.resource.creator);
+    $("#edit-fields-description").append(result_success.resource.description);
+    $("#edit-fields-title").append(result_success.resource.title);
+    
+    console.log("did the fields populate?");
   });
   
 </script>
