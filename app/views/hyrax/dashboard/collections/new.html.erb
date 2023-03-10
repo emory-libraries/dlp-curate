@@ -29,7 +29,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" id="aspace-loader"> Look for Resource in ArchivesSpace</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <div id="aspace-result">
+          <div id="aspace-success">
             <h5 class="modal-title">Resource Result</h5>
             <div class="aspace-result-body">
               <p><span class='aspace-result-label'>Title: </span><span id="aspace-result-title"></span></p>
@@ -41,6 +41,10 @@
               <button type="button" class="btn btn-primary">Populate form</button>
               <button type="button" class="btn btn-secondary" id="aspace-result-clear">Clear</button>
             </div>
+          </div>
+          <div id="aspace-error">
+            <p><span class='aspace-result-label'> Error: </span><span id="aspace-result-error"></span></p>
+            <button type="button" class="btn btn-secondary" id="aspace-error-clear">Clear</button>
           </div>
         </div>
       </div>
@@ -56,7 +60,8 @@
 
 <script>
 
-$("#aspace-result").hide();
+$("#aspace-success").hide();
+$("#aspace-error").hide();
 console.log("checking the hide")
 
 var repository_id;
@@ -102,29 +107,39 @@ $.ajax({
             console.log("yoyo");
             result_success = result;
             if (result.resource) {
-
-              show_result();
+              show_success();
+            } else if (result.error) {
+              console.log("oh snap an error");
+              result_error = result.error;
+              show_error();
             }
           },
-          error: function (result) {
-              alert('error');
-              console.log(result);
-              result_error = result;
-          }
+          
       });
   });
-  function show_result() {
-    $("#aspace-result").show();
-    console.log("show result");
+  function show_success() {
+    $("#aspace-success").show();
+    console.log("show successful result");
     console.dir(result_success);
     $("#aspace-result-title").replaceWith(result_success.resource.title);
     $("#aspace-result-library").replaceWith(result_success.repository.name);
     $("#aspace-result-creator").replaceWith(result_success.resource.creator);
     $("#aspace-result-description").replaceWith(result_success.resource.description);
   };
+
+  function show_error() {
+    $("#aspace-error").show();
+    console.log("show error result");
+    console.dir(result_error);
+    $("#aspace-result-error").replaceWith(result_error);
+  }
   
   $("#aspace-result-clear").click(function () {
-    $("#aspace-result").hide();
+    $("#aspace-success").hide();
+  });
+    
+  $("#aspace-error-clear").click(function () {
+    $("#aspace-error").hide();
   });
   
 </script>
