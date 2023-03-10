@@ -22,29 +22,32 @@
             <label for="sel1">Select list:</label>
             <select class="form-control" id="sel1"></select>
           </div>
-        <div class="call-number-field">
-          <label for="aspace-call-number">Call Number: (must be exact)</label>
-          <input type="text" class="form-control" id="aspace-call-number">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="aspace-loader"> Look for Resource in ArchivesSpace</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <div class="call-number-field">
+            <label for="aspace-call-number">Call Number: (must be exact)</label>
+            <input type="text" class="form-control" id="aspace-call-number">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="aspace-loader"> Look for Resource in ArchivesSpace</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
           <div class="aspace-success" id="aspace-success">
-            <h5 class="modal-title">Resource Result</h5>
+            <h5 class="modal-title aspace-result-heading">Resource Result</h5>
             <div class="aspace-result-body">
               <p><span class='aspace-result-label'>Title: </span><span id="aspace-result-title"></span></p>
               <p><span class='aspace-result-label'>Library: </span><span id="aspace-result-repository"></span></p>
               <p><span class='aspace-result-label'>Creator: </span><span id="aspace-result-creator"></span></p>
               <p><span class='aspace-result-label'>Description: </span><span id="aspace-result-description"></span></p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer aspace-result-populate">
               <button type="button" class="btn btn-primary" id="aspace-result-populate" data-dismiss="modal">Populate Form</button>
-              <button type="button" class="btn btn-secondary" id="aspace-result-clear">Clear</button>
+              <button type="button" class="btn btn-default" id="aspace-result-clear">Clear</button>
             </div>
           </div>
           <div class="aspace-error" id="aspace-error">
             <p><span class='aspace-result-label'> Error: </span><span id="aspace-result-error"></span></p>
-            <button type="button" class="btn btn-secondary" id="aspace-error-clear">Clear</button>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" id="aspace-error-clear">Clear</button>
+            </div>  
           </div>
         </div>
       </div>
