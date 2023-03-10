@@ -139,12 +139,15 @@
   });
 
   $("#aspace-result-populate").click(function () {
-    $("#edit-fields-repository").append(result_success.repository.name);
-    $("#edit-fields-creator").append(result_success.resource.creator);
-    $("#edit-fields-description").append(result_success.resource.description);
-    $("#edit-fields-title").append(result_success.resource.title);
+    document.getElementById("edit-fields-title").value = result_success.resource.title;
+    document.getElementById("edit-fields-abstract").value = result_success.resource.description;
+    document.getElementById('collection_holding_repository').value = result_success.repository.name;
+    document.getElementById('edit-fields-creator').value = result_success.resource.creator;
+    
     
     console.log("did the fields populate?");
   });
+
+
   
 </script>
