@@ -105,7 +105,6 @@
       },
       success: function (result) {
         console.log(result);
-        console.log("yoyo");
         result_success = result;
         if (result.resource) {
           show_success();
@@ -120,7 +119,6 @@
 
   function show_success() {
     $("#aspace-success").show();
-    console.log("show successful result");
     console.dir(result_success);
     $("#aspace-result-title").replaceWith(result_success.resource.title);
     $("#aspace-result-repository").replaceWith(result_success.repository.name);
@@ -144,12 +142,24 @@
   });
 
   $("#aspace-result-populate").click(function () {
-    document.getElementById("edit-fields-title").value = result_success.resource.title;
-    document.getElementById("edit-fields-abstract").value = result_success.resource.description;
-    document.getElementById('collection_holding_repository').value = result_success.repository.name;
-    document.getElementById('edit-fields-creator').value = result_success.resource.creator;
     
-    
+    document.getElementById("collection_title").value = result_success.resource.title;
+    document.getElementById("collection_abstract").value = result_success.resource.description;
+    document.getElementById('collection_holding_repository').value = result_success.repository.holding_repository;
+    document.getElementById('collection_creator').value = result_success.resource.creator;
+    document.getElementById('collection_administrative_unit').value = result_success.repository.administrative_unit;
+    document.getElementById('collection_contributors').value = result_success.resource.contributors;
+    document.getElementById('collection_primary_language').value = result_success.resource.primary_language;
+    document.getElementById('collection_finding_aid_link').value = result_success.resource.finding_aid_link;
+    document.getElementById('collection_institution').value = result_success.repository.institution;
+    document.getElementById('collection_local_call_number').value = result_success.resource.call_number;
+    document.getElementById('collection_subject_topics').value = result_success.resource.subject_topics.join('\n');
+    document.getElementById('collection_subject_names').value = result_success.resource.subject_names.join('\n');
+    document.getElementById('collection_subject_geo').value = result_success.resource.subject_geo;
+    document.getElementById('collection_subject_time_periods').value = result_success.resource.subject_time_periods;
+    document.getElementById('collection_notes').value = result_success.resource.notes;
+    document.getElementById('collection_contact_information').value = result_success.repository.contact_information;
+    document.getElementById('collection_system_of_record_ID').value = result_success.resource.system_of_record_id;
     console.log("did the fields populate?");
   });
 
