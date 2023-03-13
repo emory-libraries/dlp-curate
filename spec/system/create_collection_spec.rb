@@ -4,6 +4,10 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: true, type: :system, js: true do
+  before do
+    AspaceController.any_instance.stub(:repositories).and_return([].to_json)
+  end
+
   context 'logged in as an admin user' do
     let(:admin_user) { FactoryBot.create(:admin) }
 
