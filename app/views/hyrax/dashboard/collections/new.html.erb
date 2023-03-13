@@ -1,7 +1,58 @@
 <% type_title = collection_type_label_for(collection: @collection) %>
 <% provide :page_title, construct_page_title( t('.header', type_title: type_title)) %>
 <% provide :page_header do %>
-  <h1><span class="fa fa-edit" aria-hidden="true"></span> <%= t('.header', type_title: "User Collection") %> </h1>
+  <div class="as-button-div">
+    <h1>
+      <p class="fa fa-edit" aria-hidden="true"></p> 
+      <%= t('.header', type_title: "User Collection") %> 
+    </h1>
+    <button type="button" class="as-button btn btn-primary" data-toggle="modal" data-target="#asModal">Populate from ArchivesSpace</button>
+  </div>
+  <div id="asModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div id="aspace-modal" class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Populate from ArchivesSpace</h4>
+        </div>
+        <div class="modal-body">
+          <p>Select an ArchivesSpace Repository.</p>
+          <div class="form-group">
+            <label for="sel1">Select list:</label>
+            <select class="form-control" id="sel1"></select>
+          </div>
+          <div class="call-number-field">
+            <label for="aspace-call-number">Call Number: (must be exact)</label>
+            <input type="text" class="form-control" id="aspace-call-number">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="aspace-loader"> Look for Resource in ArchivesSpace</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+          <div class="aspace-success" id="aspace-success">
+            <h5 class="modal-title aspace-result-heading">Resource Result</h5>
+            <div class="aspace-result-body">
+              <p><span class='aspace-result-label'>Title: </span><span class="aspace-result-empty" id="aspace-result-title"></span></p>
+              <p><span class='aspace-result-label'>Library: </span><span class="aspace-result-empty" id="aspace-result-repository"></span></p>
+              <p><span class='aspace-result-label'>Creator: </span><span class="aspace-result-empty" id="aspace-result-creator"></span></p>
+              <p><span class='aspace-result-label'>Description: </span><span class="aspace-result-empty" id="aspace-result-description"></span></p>
+            </div>
+            <div class="modal-footer aspace-result-populate">
+              <button type="button" class="btn btn-primary" id="aspace-result-populate" data-dismiss="modal">Populate Form</button>
+              <button type="button" class="btn btn-default" id="aspace-result-clear">Clear</button>
+            </div>
+          </div>
+          <div class="aspace-error" id="aspace-error">
+            <p><span class='aspace-result-label'> Error: </span><span class="aspace-result-empty" id="aspace-result-error"></span></p>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" id="aspace-error-clear">Clear</button>
+            </div>  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>
 
 <div class="row">
@@ -9,3 +60,113 @@
     <%= render 'form' %>
   </div>
 </div>
+
+<script>
+
+  $("#aspace-success").hide();
+  $("#aspace-error").hide();
+  $(".aspace-result-empty").empty();
+
+  var repository_id;
+  var result_success;
+  var result_error;
+
+  $.ajax({
+    url: '/aspace/repositories',
+    type: 'GET',
+    dataType: 'json',
+    async: false,
+    success: function(repositories) {
+      jQuery.each( repositories, function(i, val) {
+        var o = new Option(val.name, val.repository_id);
+        /// jquerify the DOM object 'o' so we can use the html method
+        $(o).html(val.name);
+        $("#sel1").append(o);
+        repository_id = val.repository_id;
+      });
+    }
+  });
+
+  $("#aspace-loader").click(function (e) {
+    $("#aspace-error").hide();
+    $(".aspace-result-empty").empty();
+    let reposelector = document.querySelector('#sel1');
+    let repo_value = reposelector.options[reposelector.selectedIndex].value;
+    e.preventDefault();
+    $.ajax({
+      type: "GET",
+      url: "/aspace/find_by_id?",
+      async: false,
+      dataType: 'json',
+      data: {
+        repository_id: repo_value,
+        call_number: $("#aspace-call-number").val() // < note use of 'this' here
+      },
+      success: function (result) {
+        result_success = result;
+        if (result.resource) {
+          show_success();
+        } else if (result.error) {
+          result_error = result.error;
+          show_error();
+        }
+      },
+    });
+  });
+
+  function show_success() {
+    $("#aspace-success").show();
+    console.dir(result_success);
+    $("#aspace-result-title").append(result_success.resource.title);
+    $("#aspace-result-repository").append(result_success.repository.name);
+    $("#aspace-result-creator").append(result_success.resource.creator);
+    $("#aspace-result-description").append(result_success.resource.description);
+  };
+
+  function show_error() {
+    $("#aspace-error").show();
+    console.dir(result_error);
+    $("#aspace-result-error").append(result_error);
+  };
+  
+  $("#aspace-result-clear").click(function () {
+    $("#aspace-success").hide();
+    $(".aspace-result-empty").empty();
+  });
+    
+  $("#aspace-error-clear").click(function () {
+    $("#aspace-error").hide();
+    $(".aspace-result-empty").empty();
+  });
+
+  $("#aspace-result-populate").click(function () {
+    
+    document.getElementById("collection_title").value = result_success.resource.title;
+    document.getElementById("collection_abstract").value = result_success.resource.description;
+    document.getElementById('collection_holding_repository').value = result_success.repository.holding_repository;
+    document.getElementById('collection_creator').value = populateField('creator', 'collection_creator', result_success.resource.creator, '/authorities/search/loc/names');
+    document.getElementById('collection_administrative_unit').value = result_success.repository.administrative_unit;
+    document.getElementById('collection_primary_language').value = result_success.resource.primary_language;
+    document.getElementById('collection_institution').value = result_success.repository.institution;
+    document.getElementById('collection_local_call_number').value = result_success.resource.call_number;
+    document.getElementById('collection_subject_topics').value = populateField('subject_topics', 'collection_subject_topics', result_success.resource.subject_topics, '/authorities/search/loc/subjects');
+    document.getElementById('collection_subject_names').value = populateField('subject_names', 'collection_subject_names', result_success.resource.subject_names, '/authorities/search/loc/names');
+    document.getElementById('collection_subject_geo').value = populateField('subject_geo', 'collection_subject_geo', result_success.resource.subject_geo, '/authorities/search/geonames');
+    document.getElementById('collection_subject_time_periods').value = populateField('subject_time_periods', 'collection_subject_time_periods', result_success.resource.subject_time_periods, '/authorities/search/getty/aat');
+    document.getElementById('collection_contact_information').value = result_success.repository.contact_information;
+    document.getElementById('collection_system_of_record_ID').value = result_success.resource.system_of_record_id;
+  });
+
+  function populateField(fieldName, fieldClass, values, autocompleteUrl) {
+    const container = document.querySelector(`.${fieldClass} ul.listing`);
+    container.innerHTML = '';
+    values.forEach(value => {
+      const inputField = document.createElement('li');
+      inputField.classList.add('field-wrapper', 'input-group', 'input-append');
+      inputField.innerHTML = `
+        <input class="string multi_value required form-control ${fieldClass} form-control multi-text-field ui-autocomplete-input" data-autocomplete-url="${autocompleteUrl}" data-autocomplete="${fieldName}" required="required" aria-required="true" name="collection[${fieldName}][]" value="${value}" id="${fieldClass}" aria-labelledby="${fieldClass}_label" type="text" autocomplete="off">
+        <span class="input-group-btn field-controls"><button type="button" class="btn btn-link remove"><span class="glyphicon glyphicon-remove"></span><span class="controls-remove-text">Remove</span> <span class="sr-only"> previous <span class="controls-field-name-text"></span></span></button></span>`;
+      container.appendChild(inputField);
+    });
+  }
+</script>

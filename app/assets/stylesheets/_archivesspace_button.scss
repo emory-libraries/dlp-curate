@@ -1,0 +1,28 @@
+div.as-button-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+button.as-button {
+    display: flex;
+    align-items: center;
+}
+
+div.modal-content {
+    transition: 1.1s ease-out;
+}
+
+span.aspace-result-label {
+    font-weight: 700;
+    color: #082B73;
+}
+
+.aspace-result-heading {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.aspace-result-populate {
+    padding-top: 30px;
+}
