@@ -92,6 +92,8 @@ ActiveRecord::Schema.define(version: 201901241536542) do
     t.integer "total_file_set_entries", default: 0
     t.integer "processed_works", default: 0
     t.integer "failed_works", default: 0
+    t.integer "processed_children", default: 0
+    t.integer "failed_children", default: 0
     t.index ["importer_id"], name: "index_bulkrax_importer_runs_on_importer_id"
   end
 
@@ -248,6 +250,12 @@ ActiveRecord::Schema.define(version: 201901241536542) do
     t.index ["machine_id"], name: "index_hyrax_collection_types_on_machine_id", unique: true
   end
 
+  create_table "hyrax_default_administrative_set", force: :cascade do |t|
+    t.string "default_admin_set_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "hyrax_features", force: :cascade do |t|
     t.string "key", null: false
     t.boolean "enabled", default: false, null: false
@@ -328,7 +336,7 @@ ActiveRecord::Schema.define(version: 201901241536542) do
     t.string "namespace", default: "default", null: false
     t.string "template", null: false
     t.text "counters"
-    t.integer "seq", default: 0
+    t.integer "seq", limit: 8, default: 0
     t.binary "rand"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
