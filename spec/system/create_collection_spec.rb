@@ -4,8 +4,12 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: true, type: :system, js: true do
+  let(:api_service) { instance_double('Aspace::ApiService') }
+
   before do
-    AspaceController.any_instance.stub(:repositories).and_return([].to_json)
+    allow(Aspace::ApiService).to receive(:new).and_return(api_service)
+    allow(api_service).to receive(:authenticate!).and_return(api_service)
+    allow(api_service).to receive(:fetch_repositories).and_return([])
   end
 
   context 'logged in as an admin user' do
