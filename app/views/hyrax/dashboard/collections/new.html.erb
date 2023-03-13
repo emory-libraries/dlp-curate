@@ -149,7 +149,7 @@
     document.getElementById('collection_primary_language').value = result_success.resource.primary_language;
     document.getElementById('collection_institution').value = result_success.repository.institution;
     document.getElementById('collection_local_call_number').value = result_success.resource.call_number;
-    document.getElementById('collection_subject_topics').value = populateField('subject_topics', 'collection_subject_topics', result_success.resource.subject_topics, '/authorities/search/loc/names');
+    document.getElementById('collection_subject_topics').value = populateField('subject_topics', 'collection_subject_topics', result_success.resource.subject_topics, '/authorities/search/loc/subjects');
     document.getElementById('collection_subject_names').value = populateField('subject_names', 'collection_subject_names', result_success.resource.subject_names, '/authorities/search/loc/names');
     document.getElementById('collection_subject_geo').value = populateField('subject_geo', 'collection_subject_geo', result_success.resource.subject_geo, '/authorities/search/geonames');
     document.getElementById('collection_subject_time_periods').value = populateField('subject_time_periods', 'collection_subject_time_periods', result_success.resource.subject_time_periods, '/authorities/search/getty/aat');
