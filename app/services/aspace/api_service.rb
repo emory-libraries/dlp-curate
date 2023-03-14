@@ -77,7 +77,7 @@ module Aspace
         title:                data['title'],
         description:          extract_resource_description(data: data),
         creator:              extract_resource_linked_agents(data: data, type: 'creator'),
-        system_of_record_id:  ENV['ARCHIVES_SPACE_PUBLIC_BASE_URL'].chomp('/') + data['uri'],
+        uri:                  data['uri'],
         call_number:          data['id_0'],
         primary_language:     data['lang_materials']&.first&.dig('language_and_script', 'language'),
         subject_topics:       extract_resource_subjects(data: data, type: 'topical'),

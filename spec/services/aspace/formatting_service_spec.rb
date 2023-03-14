@@ -6,12 +6,24 @@ describe Aspace::FormattingService do
   let(:formatter) { described_class.new }
   let(:service) { Aspace::ApiService.new }
 
+  before do
+    allow(ENV).to receive(:[]).with('ARCHIVES_SPACE_PUBLIC_BASE_URL').and_return('aspace_public_base_url')
+  end
+
   describe '#format_resource' do
-    let(:resource) { { title: "William Levi Dawson papers", primary_language: "eng" } }
+    let(:resource) { { title: "William Levi Dawson papers", primary_language: "eng", uri: "/repositories/7/resources/5687" } }
     let(:formatted_data) { formatter.format_resource(resource) }
 
-    it 'formats primary language' do
+    it 'formats primary_language' do
       expect(formatted_data[:primary_language]).to eq 'English'
+    end
+
+    it 'formats system_of_record_id' do
+      expect(formatted_data[:system_of_record_id]).to eq 'aspace:/repositories/7/resources/5687'
+    end
+
+    it 'formats finding_aid_link' do
+      expect(formatted_data[:finding_aid_link]).to eq 'aspace_public_base_url/repositories/7/resources/5687'
     end
   end
 

@@ -19,7 +19,7 @@ RSpec.describe AspaceController, type: :controller do
       title:                'Test Resource',
       description:          'This is a description',
       creator:              ['Test Creator'],
-      system_of_record_id:  '/repositories/1/resources/1',
+      uri:                  '/repositories/1/resources/1',
       call_number:          'call number',
       primary_language:     'eng',
       subject_topics:       [],
@@ -142,6 +142,7 @@ RSpec.describe AspaceController, type: :controller do
 
   describe '#find_by_id' do
     before do
+      allow(ENV).to receive(:[]).with('ARCHIVES_SPACE_PUBLIC_BASE_URL').and_return('aspace_public_base_url')
       allow(service).to receive(:authenticate!).and_return(service)
       allow(service).to receive(:fetch_repository_by_id).and_return(repository_data)
       allow(service).to receive(:fetch_resource_by_call_number).and_return(resource_data)
@@ -150,9 +151,30 @@ RSpec.describe AspaceController, type: :controller do
 
     it 'fetches resource from ArchivesSpace' do
       get :find_by_id, params: { repository_id: 1, call_number: 1 }, format: :json
-      # rubocop:disable Layout/LineLength
-      expect(response.body).to eq("{\"repository\":{\"name\":\"Test Library\",\"administrative_unit\":\"\",\"holding_repository\":\"\",\"institution\":\"Emory University\",\"contact_information\":\"\"},\"resource\":{\"title\":\"Test Resource\",\"description\":\"This is a description\",\"creator\":[\"Test Creator\"],\"system_of_record_id\":\"/repositories/1/resources/1\",\"call_number\":\"call number\",\"primary_language\":\"English\",\"subject_topics\":[],\"subject_names\":[],\"subject_geo\":[],\"subject_time_periods\":[]}}")
-      # rubocop:enable Layout/LineLength
+      expected = {
+        "repository": {
+          "name":                "Test Library",
+          "administrative_unit": "",
+          "holding_repository":  "",
+          "institution":         "Emory University",
+          "contact_information": ""
+        },
+        "resource":   {
+          "title":                "Test Resource",
+          "description":          "This is a description",
+          "creator":              ["Test Creator"],
+          "uri":                  "/repositories/1/resources/1",
+          "call_number":          "call number",
+          "primary_language":     "English",
+          "subject_topics":       [],
+          "subject_names":        [],
+          "subject_geo":          [],
+          "subject_time_periods": [],
+          "system_of_record_id":  "aspace:/repositories/1/resources/1",
+          "finding_aid_link":     "aspace_public_base_url/repositories/1/resources/1"
+        }
+      }
+      expect(response.body).to eq(expected.to_json)
     end
 
     context 'when repository_id param is missing' do

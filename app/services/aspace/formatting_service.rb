@@ -12,6 +12,8 @@ module Aspace
 
     def format_resource(data)
       data[:primary_language] = format_primary_language(data[:primary_language])
+      data[:system_of_record_id] = 'aspace:' + data[:uri]
+      data[:finding_aid_link] = ENV['ARCHIVES_SPACE_PUBLIC_BASE_URL'].chomp('/') + data[:uri]
       data
     end
 

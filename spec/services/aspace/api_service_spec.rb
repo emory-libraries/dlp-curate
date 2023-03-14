@@ -150,7 +150,7 @@ describe Aspace::ApiService do
       expect(resource[:title]).to eq "William Levi Dawson papers"
       expect(resource[:description]).to eq "Papers of William Levi Dawson, African American composer, conductor, and educator from Anniston, Alabama, including correspondence, original scores of Dawson's works, personal and family papers, photographs, audio visual materials, and printed material."
       expect(resource[:creator]).to eq ["Dawson, William Levi, 1899-1990."]
-      expect(resource[:system_of_record_id]).to eq "aspace_public_base_url/repositories/7/resources/5687"
+      expect(resource[:uri]).to eq "/repositories/7/resources/5687"
       expect(resource[:call_number]).to eq "Manuscript Collection No. 892"
       expect(resource[:primary_language]).to eq "eng"
       expect(resource[:subject_topics]).to eq ["African American choral conductors.", "African American composers.", "African American conductors.", "African American musicians.", "African American students.", "African American universities and colleges--Alabama.", "African American women.", "African Americans--Education (Higher)--Alabama.", "African Americans--Music.", "Copyright--United States.", "Music publishing.", "Spirituals (Songs)"]
