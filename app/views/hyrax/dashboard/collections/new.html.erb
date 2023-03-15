@@ -116,7 +116,6 @@
 
   function show_success() {
     $("#aspace-success").show();
-    console.dir(result_success);
     $("#aspace-result-title").append(result_success.resource.title);
     $("#aspace-result-repository").append(result_success.repository.name);
     $("#aspace-result-creator").append(result_success.resource.creator);
@@ -125,7 +124,6 @@
 
   function show_error() {
     $("#aspace-error").show();
-    console.dir(result_error);
     $("#aspace-result-error").append(result_error);
   };
   
@@ -155,6 +153,7 @@
     document.getElementById('collection_subject_time_periods').value = populateField('subject_time_periods', 'collection_subject_time_periods', result_success.resource.subject_time_periods, '/authorities/search/getty/aat');
     document.getElementById('collection_contact_information').value = result_success.repository.contact_information;
     document.getElementById('collection_system_of_record_ID').value = result_success.resource.system_of_record_id;
+    document.getElementById('collection_finding_aid_link').value = result_success.resource.finding_aid_link;
   });
 
   function populateField(fieldName, fieldClass, values, autocompleteUrl) {
