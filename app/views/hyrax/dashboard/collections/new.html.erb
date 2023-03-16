@@ -142,30 +142,43 @@
     document.getElementById("collection_title").value = result_success.resource.title;
     document.getElementById("collection_abstract").value = result_success.resource.description;
     document.getElementById('collection_holding_repository').value = result_success.repository.holding_repository;
-    document.getElementById('collection_creator').value = populateField('creator', 'collection_creator', result_success.resource.creator, '/authorities/search/loc/names');
+    populateField('creator', 'collection_creator', result_success.resource.creator, '/authorities/search/loc/names');
     document.getElementById('collection_administrative_unit').value = result_success.repository.administrative_unit;
     document.getElementById('collection_primary_language').value = result_success.resource.primary_language;
     document.getElementById('collection_institution').value = result_success.repository.institution;
     document.getElementById('collection_local_call_number').value = result_success.resource.call_number;
-    document.getElementById('collection_subject_topics').value = populateField('subject_topics', 'collection_subject_topics', result_success.resource.subject_topics, '/authorities/search/loc/subjects');
-    document.getElementById('collection_subject_names').value = populateField('subject_names', 'collection_subject_names', result_success.resource.subject_names, '/authorities/search/loc/names');
-    document.getElementById('collection_subject_geo').value = populateField('subject_geo', 'collection_subject_geo', result_success.resource.subject_geo, '/authorities/search/geonames');
-    document.getElementById('collection_subject_time_periods').value = populateField('subject_time_periods', 'collection_subject_time_periods', result_success.resource.subject_time_periods, '/authorities/search/getty/aat');
+    populateField('subject_topics', 'collection_subject_topics', result_success.resource.subject_topics, '/authorities/search/loc/subjects');
+    populateField('subject_names', 'collection_subject_names', result_success.resource.subject_names, '/authorities/search/loc/names');
+    populateField('subject_geo', 'collection_subject_geo', result_success.resource.subject_geo, '/authorities/search/geonames');
+    populateField('subject_time_periods', 'collection_subject_time_periods', result_success.resource.subject_time_periods, '/authorities/search/getty/aat');
     document.getElementById('collection_contact_information').value = result_success.repository.contact_information;
     document.getElementById('collection_system_of_record_ID').value = result_success.resource.system_of_record_id;
     document.getElementById('collection_finding_aid_link').value = result_success.resource.finding_aid_link;
+    if ($(".btn.additional-fields").attr("aria-expanded") == "false") {
+      $(".btn.additional-fields").click()
+    }
   });
 
   function populateField(fieldName, fieldClass, values, autocompleteUrl) {
     const container = document.querySelector(`.${fieldClass} ul.listing`);
     container.innerHTML = '';
-    values.forEach(value => {
+    if (values.length == 0) {
       const inputField = document.createElement('li');
       inputField.classList.add('field-wrapper', 'input-group', 'input-append');
       inputField.innerHTML = `
-        <input class="string multi_value required form-control ${fieldClass} form-control multi-text-field ui-autocomplete-input" data-autocomplete-url="${autocompleteUrl}" data-autocomplete="${fieldName}" required="required" aria-required="true" name="collection[${fieldName}][]" value="${value}" id="${fieldClass}" aria-labelledby="${fieldClass}_label" type="text" autocomplete="off">
+      <input id="${fieldClass}" class="string multi_value optional form-control ${fieldClass} form-control multi-text-field ui-autocomplete-input" data-autocomplete-url="${autocompleteUrl}" data-autocomplete="${fieldName}" name="collection[${fieldName}][]" value="" aria-labelledby="${fieldClass}_label" type="text" autocomplete="off">
+      <span class="input-group-btn field-controls"><button type="button" class="btn btn-link remove"><span class="glyphicon glyphicon-remove"></span><span class="controls-remove-text">Remove</span> <span class="sr-only"> previous <span class="controls-field-name-text"></span></span></button></span>
+      `
+      container.appendChild(inputField);
+    } else {
+      values.forEach(value => {
+      const inputField = document.createElement('li');
+      inputField.classList.add('field-wrapper', 'input-group', 'input-append');
+      inputField.innerHTML = `
+        <input id="${fieldClass}" class="string multi_value required form-control ${fieldClass} form-control multi-text-field ui-autocomplete-input" data-autocomplete-url="${autocompleteUrl}" data-autocomplete="${fieldName}" required="required" aria-required="true" name="collection[${fieldName}][]" value="${value}" aria-labelledby="${fieldClass}_label" type="text" autocomplete="off">
         <span class="input-group-btn field-controls"><button type="button" class="btn btn-link remove"><span class="glyphicon glyphicon-remove"></span><span class="controls-remove-text">Remove</span> <span class="sr-only"> previous <span class="controls-field-name-text"></span></span></button></span>`;
       container.appendChild(inputField);
     });
+    }
   }
 </script>
