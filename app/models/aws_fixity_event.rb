@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AwsFixityEvent
-  attr_reader :sha1
+  attr_reader :sha1, :fixity_start
 
   def initialize(line)
     @sha1 = line['event_sha1']&.strip

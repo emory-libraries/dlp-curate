@@ -15,4 +15,12 @@ module PreservationEvents
                                               software_version: event['software_version'] }]
     object.save! if object.errors.empty? # save object only if there aren't any errors, eg: validation errors
   end
+
+  def check_for_preexisting_preservation_events(file_set, sha1, event_start)
+    matching_preservation_events = file_set.preservation_event.select do |e|
+      e.event_type == ['Fixity Check'] && e.event_start == [DateTime.parse(event_start)]
+    end
+
+    matching_preservation_events.select { |mpe| mpe.event_details.first.include? sha1 }.present?
+  end
 end
