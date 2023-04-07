@@ -28,7 +28,14 @@ describe Aspace::FormattingService do
   end
 
   describe '#format_repository' do
-    let(:repository) { { name: "Pitts Special Collections and Archives", administrative_unit: "Pitts Special Collections and Archives", holding_repository: "Pitts Special Collections and Archives" } }
+    let(:repository) do
+      {
+        repository_id:       '2',
+        name:                "Pitts Special Collections and Archives",
+        administrative_unit: "Pitts Special Collections and Archives",
+        holding_repository:  "Pitts Special Collections and Archives"
+      }
+    end
     let(:formatted_data) { formatter.format_repository(repository) }
 
     it 'formats administrative unit' do
@@ -57,13 +64,13 @@ describe Aspace::FormattingService do
   describe '#format_holding_repository' do
     context 'when value is valid' do
       it 'returns Curate vocabulary value' do
-        expect(formatter.format_holding_repository('Pitts Special Collections and Archives')).to eq 'Pitts Theology Library'
+        expect(formatter.format_holding_repository('2')).to eq 'Pitts Theology Library'
       end
     end
 
     context 'when value is not valid' do
       it 'returns empty string' do
-        expect(formatter.format_holding_repository('invalid holding repository')).to eq ''
+        expect(formatter.format_holding_repository('10')).to eq ''
       end
     end
   end
@@ -71,13 +78,13 @@ describe Aspace::FormattingService do
   describe '#format_administrative_unit' do
     context 'when value is valid' do
       it 'returns Curate vocabulary value' do
-        expect(formatter.format_administrative_unit('Emory University Archives')).to eq 'Emory University Archives'
+        expect(formatter.format_administrative_unit('3')).to eq 'Emory University Archives'
       end
     end
 
     context 'when value is not valid' do
       it 'returns empty string' do
-        expect(formatter.format_administrative_unit('invalid administrative unit')).to eq ''
+        expect(formatter.format_administrative_unit('5')).to eq ''
       end
     end
   end

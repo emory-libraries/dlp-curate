@@ -5,8 +5,8 @@ module Aspace
     def initialize; end
 
     def format_repository(data)
-      data[:administrative_unit] = format_administrative_unit(data[:administrative_unit])
-      data[:holding_repository] = format_holding_repository(data[:holding_repository])
+      data[:administrative_unit] = format_administrative_unit(data[:repository_id])
+      data[:holding_repository] = format_holding_repository(data[:repository_id])
       data
     end
 
@@ -22,24 +22,24 @@ module Aspace
       map.fetch(s, '')
     end
 
-    def format_holding_repository(s)
+    def format_holding_repository(id)
       map = {
-        "Pitts Special Collections and Archives" => "Pitts Theology Library",
-        "Emory University Archives" => "Stuart A. Rose Manuscript, Archives, and Rare Book Library",
-        "Emory Law Archives" => "MacMillan Law Library",
-        "Woodruff Health Sciences Library Historical Collections" => "Robert W. Woodruff Health Sciences Center. Library",
-        "Oxford College Archives" => "Oxford College Library (Oxford, Ga.)",
-        "Stuart A. Rose Manuscript, Archives, and Rare Book Library" => "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
+        '2' => "Pitts Theology Library",
+        '3' => "Stuart A. Rose Manuscript, Archives, and Rare Book Library",
+        '4' => "MacMillan Law Library",
+        '5' => "Robert W. Woodruff Health Sciences Center. Library",
+        '6' => "Oxford College Library (Oxford, Ga.)",
+        '7' => "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
       }
-      map.fetch(s, '')
+      map.fetch(id, '')
     end
 
-    def format_administrative_unit(s)
+    def format_administrative_unit(id)
       map = {
-        "Emory University Archives" => "Emory University Archives",
-        "Stuart A. Rose Manuscript, Archives, and Rare Book Library" => "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
+        '3' => "Emory University Archives",
+        '7' => "Stuart A. Rose Manuscript, Archives, and Rare Book Library"
       }
-      map.fetch(s, '')
+      map.fetch(id, '')
     end
   end
 end

@@ -145,7 +145,6 @@ describe Aspace::ApiService do
     it 'formats data correctly' do
       service = described_class.new
       resource = service.extract_resource(data: resource_data)
-      print(resource)
       expect(resource[:resource_id]).to eq "5687"
       expect(resource[:title]).to eq "William Levi Dawson papers"
       expect(resource[:description]).to eq "Papers of William Levi Dawson, African American composer, conductor, and educator from Anniston, Alabama, including correspondence, original scores of Dawson's works, personal and family papers, photographs, audio visual materials, and printed material."
