@@ -69,6 +69,7 @@ Rails.application.routes.draw do
   post "/concern/file_sets/:file_set_id/clean_up", to: "derivatives#clean_up"
   post '/concern/file_sets/:file_set_id/re_characterize', to: 'characterization#re_characterize', as: 'file_set_re_characterization'
   post "/concern/curate_generic_works/:work_id/regen_manifest", to: "manifest_regeneration#regen_manifest", as: 'regen_manifest'
+  post "/concern/curate_generic_works/:work_id/full_text_index", to: "full_text_indexing#full_text_index", as: 'full_text_index'
 
   # Deprecation warning: Zizia will be removed with Curate v3.
   get 'csv_import_details/index'
