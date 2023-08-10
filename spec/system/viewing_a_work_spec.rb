@@ -143,6 +143,11 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       expect(page).to have_selector("input[value='delete_all']", visible: false)
       expect(page).to have_css('button', text: 'Add to collection')
     end
+
+    it 'has a full-text search indexing button' do
+      visit "/concern/curate_generic_works/#{user_work.id}"
+      expect(page).to have_selector('input[value="Index for Full-Text Search"]')
+    end
   end
 
   context 'when logged in as a non-admin user' do
@@ -175,6 +180,11 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       find("input[type='checkbox'][id='check_all']").set(true)
       expect(page).not_to have_selector("input[value='delete_all']", visible: false)
       expect(page).not_to have_css('button', text: 'Add to collection')
+    end
+
+    it 'does not have a full-text search indexing button' do
+      visit "/concern/curate_generic_works/#{user_work.id}"
+      expect(page).not_to have_selector('input[value="Index for Full-Text Search"]')
     end
 
     context 'viewer role' do

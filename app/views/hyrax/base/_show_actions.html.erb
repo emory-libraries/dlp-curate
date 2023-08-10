@@ -35,7 +35,10 @@
       <% end %>
       <% if current_user.admin? %>
         <%= link_to t('.delete'), [main_app, presenter], class: 'btn btn-danger', data: { confirm: t('.confirm_delete', work_type: presenter.human_readable_type) }, method: :delete %>
-        <div><%= button_to t('.regen_manifest'), "/concern/curate_generic_works/#{@presenter.id}/regen_manifest", class: 'btn btn-primary' %></div>
+        <div class="row second-row-buttons">
+          <%= button_to t('.regen_manifest'), "/concern/curate_generic_works/#{@presenter.id}/regen_manifest", class: 'btn btn-primary' %>
+          <%= button_to 'Index for Full-Text Search', "/concern/curate_generic_works/#{@presenter.id}/full_text_index?user_id=#{current_user.id}", class: 'btn btn-primary' %>
+        </div>
       <% end %>
     <% end %>
   </div>
