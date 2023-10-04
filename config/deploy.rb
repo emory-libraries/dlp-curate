@@ -15,7 +15,8 @@ set :passenger_restart_with_touch, true
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
 
-append :linked_dirs, "log", "public/assets", "tmp/pids", "tmp/cache", "tmp/sockets", "config/emory/groups", "tmp/csv_uploads", "tmp/csv_uploads_cache"
+append :linked_dirs, "log", "public/assets", "tmp/pids", "tmp/cache", "tmp/sockets",
+  "tmp/imports", "config/emory/groups", "tmp/csv_uploads", "tmp/csv_uploads_cache"
 append :linked_files, ".env.production", "config/secrets.yml", "config/reading_room_ips.yml"
 
 set :default_env,
