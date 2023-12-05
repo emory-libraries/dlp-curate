@@ -27,6 +27,7 @@ module Hyrax
         end
       end
 
+      # [Hyrax-overwrite-v3.4.2] Creates instance variable for aspace repositories.
       def new
         # Coming from the UI, a collection type id should always be present.  Coming from the API, if a collection type id is not specified,
         # use the default collection type (provides backward compatibility with versions < Hyrax 2.1.0)
