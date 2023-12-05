@@ -18,7 +18,7 @@ module Hyrax
         banner_info.save f.collection_banner_url
       end
 
-      # [Hyrax-overwrite-v3.0.0.pre.rc1] Restrict deletion to admins only
+      # [Hyrax-overwrite-v3.4.2] Restrict deletion to admins only
       def destroy
         if current_user.admin? && @collection.destroy
           after_destroy(params[:id])
@@ -26,6 +26,31 @@ module Hyrax
           after_destroy_error(params[:id])
         end
       end
+
+      def new
+        # Coming from the UI, a collection type id should always be present.  Coming from the API, if a collection type id is not specified,
+        # use the default collection type (provides backward compatibility with versions < Hyrax 2.1.0)
+        @aspace_repositories = retrieve_aspace_repositories
+        collection_type_id = params[:collection_type_id].presence || default_collection_type.id
+        @collection.collection_type_gid = CollectionType.find(collection_type_id).to_global_id
+        add_breadcrumb t(:'hyrax.controls.home'), root_path
+        add_breadcrumb t(:'hyrax.dashboard.breadcrumbs.admin'), hyrax.dashboard_path
+        add_breadcrumb t('.header', type_title: collection_type.title), request.path
+        @collection.try(:apply_depositor_metadata, current_user.user_key)
+        form
+      end
+
+      private
+
+        def retrieve_aspace_repositories
+          service = Aspace::ApiService.new
+          formatter = Aspace::FormattingService.new
+
+          service.authenticate!
+
+          data = service.fetch_repositories
+          data.map { |r| formatter.format_repository(r) } || []
+        end
     end
   end
 end
