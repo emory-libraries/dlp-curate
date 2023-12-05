@@ -149,7 +149,7 @@ The following are the types of Preservation Events the Curate application record
     - Records:
         - `start`: date and time when the event started.
         - `outcome`: "Success"/"Failure"
-        - `software_version`: "Fedora v4.7.5"
+        - `software_version`: "Fedora v4.7.6"
         - `user`: user that initiates the check.
         - `details`: either "Fixity intact for file: < file name >: sha1:< sha1 value >" or "Fixity check failed for: < file name >: sha1:< sha1 value >"
     - Event created in: `FixityCheckJob`
@@ -165,7 +165,7 @@ The following are the types of Preservation Events the Curate application record
     - Records:
         - `start`: date and time when the ingest started.
         - `outcome`: "Success"/"Failure"
-        - `software_version`: "Fedora v4.7.5"
+        - `software_version`: "Fedora v4.7.6"
         - `user`: user that submitted the file.
         - `details`: either "< file name > submitted for preservation storage" or "< file name > could not be submitted for preservation storage"
     - Event created in: `JobIoWrapper#ingest_file`
@@ -173,7 +173,7 @@ The following are the types of Preservation Events the Curate application record
     - Records:
         - `start`: date and time when the calculation started.
         - `outcome`: "Success"/"Failure"
-        - `software_version`: "FITS v1.5.0, Fedora v4.7.5, Ruby Digest library"
+        - `software_version`: "FITS v1.5.0, Fedora v4.7.6, Ruby Digest library"
         - `user`: user that deposited the file.
         - `details`: an array of the checksums.
     - Event created in: `Hydra::Works::CharacterizationServic#append_original_checksum`

@@ -48,7 +48,7 @@ JobIoWrapper.class_eval do
     # create preservation_event for fileset creation (method in PreservationEvents module)
     def file_set_preservation_event(file_set, event_start, outcome, details)
       event = { 'type' => 'File submission', 'start' => event_start, 'outcome' => outcome, 'details' => details,
-                'software_version' => 'Fedora v4.7.5', 'user' => user.uid }
+                'software_version' => 'Fedora v4.7.6', 'user' => user.uid }
       create_preservation_event(file_set, event)
     end
 end

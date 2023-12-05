@@ -39,7 +39,7 @@ RSpec.describe ProcessAwsFixityPreservationEventsJob, :clean do
       let(:event) do
         { 'type' => 'Fixity Check', 'start' => start, 'end' => 'Wed, 08 Mar 2023 16:45:16 +0000',
           'details' => "Fixity intact for sha1:#{sha1} in aws_bucket",
-          'software_version' => 'Fedora v4.7.5', 'user' => 'bobsuruncle', 'outcome' => 'Success' }
+          'software_version' => 'Fedora v4.7.6', 'user' => 'bobsuruncle', 'outcome' => 'Success' }
       end
 
       it 'stops duplicates from happening' do
