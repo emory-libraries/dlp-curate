@@ -49,7 +49,7 @@ Hydra::Works::CharacterizationService.class_eval do
       file_set = FileSet.find(file_set_id)
       # create event for digest calculation/failure
       event = { 'type' => 'Message Digest Calculation', 'start' => event_start, 'details' => value,
-                'software_version' => 'FITS v1.5.0, Fedora v4.7.5, Ruby Digest library', 'user' => @user.presence || file_set.depositor }
+                'software_version' => 'FITS v1.5.0, Fedora v4.7.6, Ruby Digest library', 'user' => @user.presence || file_set.depositor }
       event['outcome'] = value.size == 3 ? 'Success' : 'Failure'
       create_preservation_event(file_set, event)
     end

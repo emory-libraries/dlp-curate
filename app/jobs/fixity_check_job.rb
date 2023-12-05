@@ -66,7 +66,7 @@ class FixityCheckJob < Hyrax::ApplicationJob
       @logger = Logger.new(STDOUT)
       fixity_file_set = ::FileSet.find(file_set_id)
       fixity_file = Hydra::PCDM::File.find(file_id)
-      event = { 'type' => 'Fixity Check', 'start' => event_start, 'software_version' => 'Fedora v4.7.5', 'user' => initiating_user }
+      event = { 'type' => 'Fixity Check', 'start' => event_start, 'software_version' => 'Fedora v4.7.6', 'user' => initiating_user }
       if log == true
         event['outcome'] = 'Success'
         event['details'] = "Fixity intact for file: #{fixity_file&.original_name}: sha1:#{fixity_file&.checksum&.value}"
