@@ -43,6 +43,9 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
       let(:aws_fixity) do
         post :create, params: { jobs: 'aws_fixity', aws_fixity_csv: csv_file3, format: 'json' }
       end
+      let(:work_members_cleanup) do
+        post :create, params: { jobs: 'work_members_cleanup', work_members_cleanup_text: '576rxwdbs7-cor' }
+      end
 
       it "successfully starts a file_set cleanup background job" do
         expect(cleanup).to redirect_to(new_background_job_path)
@@ -62,6 +65,11 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
       it "successfully starts a AWS fixity background job" do
         expect(aws_fixity).to redirect_to(new_background_job_path)
         expect(ProcessAwsFixityPreservationEventsJob).to have_been_enqueued
+      end
+
+      it "successfully starts a work members cleanup background job" do
+        expect(work_members_cleanup).to redirect_to(new_background_job_path)
+        expect(WorkMembersCleanUpJob).to have_been_enqueued
       end
 
       # Deprecation Warning: As of Curate v3, Zizia will be removed. These preprocessors contain

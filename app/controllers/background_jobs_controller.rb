@@ -7,6 +7,8 @@ class BackgroundJobsController < ApplicationController
     if params[:jobs] == 'cleanup'
       FileSetCleanUpJob.perform_later
       redirect_to new_background_job_path, notice: "File Set Cleanup Job has started successfully."
+    elsif params[:jobs] == 'work_members_cleanup'
+      process_work_members_cleanup(params[:work_members_cleanup_text])
     elsif params[:jobs] == 'preservation'
       generic_csv_action(params[:preservation_csv], PreservationWorkflowImporterJob)
       redirect_to new_background_job_path, notice: "Preservation Workflow Importer Job has started successfully."
@@ -77,5 +79,14 @@ class BackgroundJobsController < ApplicationController
       path = Rails.root.join('tmp', name)
       File.open(path, "w+") { |f| f.write(csv_param.read) }
       job_class.perform_later(path.to_s)
+    end
+
+    def process_work_members_cleanup(text_from_box)
+      if text_from_box.length < 14
+        redirect_to new_background_job_path, alert: 'Please enter at least one Work ID in the text box.'
+      else
+        WorkMembersCleanUpJob.perform_later(text_from_box)
+        redirect_to new_background_job_path, notice: "Work Members Cleanup Job has been added to the queue."
+      end
     end
 end

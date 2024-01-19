@@ -15,6 +15,15 @@
     </tr>
     <tr>
       <td>
+        <%= radio_button_tag :jobs, 'work_members_cleanup', false, id: 'work_members_cleanup' %>
+        <%= label :work_members_cleanup, 'Work Members Cleanup' %>
+      </td>
+      <td>
+        <%= text_area_tag 'work_members_cleanup_text', nil, size: '60x2', placeholder: 'Work IDs separated by commas. e.g. "515bcc2hx0-cor,212bcc2hx0-cor"' %>
+      </td>
+    </tr>
+    <tr>
+      <td>
         <%= radio_button_tag :jobs, 'reindex', false, id: 'reindex' %>
         <%= label :job_cleanup, 'Reindex Selected Files' %>
       </td>
