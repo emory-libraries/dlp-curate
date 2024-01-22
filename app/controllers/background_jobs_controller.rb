@@ -4,26 +4,32 @@ class BackgroundJobsController < ApplicationController
   def new; end
 
   def create
-    if params[:jobs] == 'cleanup'
-      FileSetCleanUpJob.perform_later
-      redirect_to new_background_job_path, notice: "File Set Cleanup Job has started successfully."
-    elsif params[:jobs] == 'work_members_cleanup'
-      process_work_members_cleanup(params[:work_members_cleanup_text])
-    elsif params[:jobs] == 'preservation'
-      generic_csv_action(params[:preservation_csv], PreservationWorkflowImporterJob)
-      redirect_to new_background_job_path, notice: "Preservation Workflow Importer Job has started successfully."
-    elsif params[:jobs] == 'aws_fixity'
-      generic_csv_action(params[:aws_fixity_csv], ProcessAwsFixityPreservationEventsJob)
-      redirect_to new_background_job_path, notice: "AWS Fixity Preservation Events Importer Job has been added to the queue."
-    elsif params[:jobs].include?('_preprocessor')
+    if params[:jobs].include?('_preprocessor')
       preprocessor_actions
     else
-      reindex_objects_action
-      redirect_to new_background_job_path, notice: "Reindex Files Job has started successfully."
+      process_non_preprocessor_jobs
     end
   end
 
   private
+
+    def process_non_preprocessor_jobs
+      if params[:jobs] == 'cleanup'
+        FileSetCleanUpJob.perform_later
+        redirect_to new_background_job_path, notice: "File Set Cleanup Job has started successfully."
+      elsif params[:jobs] == 'work_members_cleanup'
+        process_work_members_cleanup(params[:work_members_cleanup_text])
+      elsif params[:jobs] == 'preservation'
+        generic_csv_action(params[:preservation_csv], PreservationWorkflowImporterJob)
+        redirect_to new_background_job_path, notice: "Preservation Workflow Importer Job has started successfully."
+      elsif params[:jobs] == 'aws_fixity'
+        generic_csv_action(params[:aws_fixity_csv], ProcessAwsFixityPreservationEventsJob)
+        redirect_to new_background_job_path, notice: "AWS Fixity Preservation Events Importer Job has been added to the queue."
+      else
+        reindex_objects_action
+        redirect_to new_background_job_path, notice: "Reindex Files Job has started successfully."
+      end
+    end
 
     def reindex_objects_action
       CSV.foreach(params[:reindex_csv].path, headers: true) do |row|
