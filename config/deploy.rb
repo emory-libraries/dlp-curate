@@ -114,6 +114,22 @@ namespace :deploy do
     end
   end
 end
+
+namespace :deploy do
+  desc 'Ask user for CAB approval before deployment if stage is PROD'
+  task :confirm_cab_approval do
+    if fetch(:stage) == :PROD
+      ask(:cab_acknowledged, 'Have you submitted and received CAB approval? (Yes/No): ')
+      unless /^y(es)?$/i.match?(fetch(:cab_acknowledged))
+        puts 'Please submit a CAB request and get it approved before proceeding with deployment.'
+        exit
+      end
+    end
+  end
+end
+
+before 'deploy:starting', 'deploy:confirm_cab_approval'
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 

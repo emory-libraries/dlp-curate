@@ -13,6 +13,21 @@ AllCops:
         - node_modules/**/*
         - lib/tasks/sample_data.rake
 
+Layout/HashAlignment:
+    EnforcedColonStyle: table
+
+Layout/IndentationConsistency:
+    EnforcedStyle: indented_internal_methods
+
+Layout/LineLength:
+    Exclude:
+        - app/importers/curate_record_importer.rb
+        - spec/importers/curate_mapper_spec.rb
+
+Lint/NonLocalExitFromIterator:
+    Exclude:
+        - app/importers/collection_permission_ensurer.rb
+
 Metrics/AbcSize:
     Exclude:
         - app/controllers/background_jobs_controller.rb
@@ -64,21 +79,6 @@ Metrics/CyclomaticComplexity:
         - config/initializers/bulkrax.rb
         - config/initializers/file_actor.rb
 
-Layout/HashAlignment:
-    EnforcedColonStyle: table
-
-Layout/IndentationConsistency:
-    EnforcedStyle: indented_internal_methods
-
-Layout/LineLength:
-    Exclude:
-        - app/importers/curate_record_importer.rb
-        - spec/importers/curate_mapper_spec.rb
-
-Lint/NonLocalExitFromIterator:
-    Exclude:
-        - app/importers/collection_permission_ensurer.rb
-
 Metrics/MethodLength:
     Exclude:
         - app/controllers/background_jobs_controller.rb
@@ -120,6 +120,14 @@ Metrics/PerceivedComplexity:
 Naming/PredicateName:
     Exclude:
         - app/models/concerns/hydra/access_controls/access_right.rb
+
+Rails/Exit:
+    Exclude:
+        - 'config/deploy.rb'
+
+Rails/Output:
+    Exclude:
+        - 'config/deploy.rb'
 
 RSpec/AnyInstance:
     Exclude:
