@@ -47,10 +47,17 @@ module Hyrax
           service = Aspace::ApiService.new
           formatter = Aspace::FormattingService.new
 
-          service.authenticate!
+          repositories =
+            begin
+              service.authenticate!
 
-          data = service.fetch_repositories
-          data.map { |r| formatter.format_repository(r) } || []
+              data = service.fetch_repositories
+              data.map { |r| formatter.format_repository(r) } || []
+            rescue
+              Rails.logger.error "Curate failed to authenticate with ArchivesSpace."
+              []
+            end
+          repositories
         end
     end
   end
