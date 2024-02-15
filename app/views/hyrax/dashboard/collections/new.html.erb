@@ -20,10 +20,7 @@
           <p>Select an ArchivesSpace Repository.</p>
           <div class="form-group">
             <label for="sel1">Select list:</label>
-            <% repositories = @aspace_repositories.presence || [] %>
-            <%= select_tag('sel1', 
-                           options_for_select(repositories.collect{ |ar| [ar[:name], ar[:repository_id]] }), 
-                           class: 'form-control')  %>
+            <select class="form-control" id="sel1"></select>
           </div>
           <div class="call-number-field">
             <label for="aspace-call-number">Call Number: (must be exact)</label>
@@ -73,6 +70,22 @@
   var repository_id;
   var result_success;
   var result_error;
+
+  $.ajax({
+    url: '/aspace/repositories',
+    type: 'GET',
+    dataType: 'json',
+    async: false,
+    success: function(repositories) {
+      jQuery.each( repositories, function(i, val) {
+        var o = new Option(val.name, val.repository_id);
+        /// jquerify the DOM object 'o' so we can use the html method
+        $(o).html(val.name);
+        $("#sel1").append(o);
+        repository_id = val.repository_id;
+      });
+    }
+  });
 
   $("#aspace-loader").click(function (e) {
     $("#aspace-error").hide();
