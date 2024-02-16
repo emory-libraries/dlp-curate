@@ -18,6 +18,8 @@
         </div>
         <div class="modal-body">
           <p>Select an ArchivesSpace Repository.</p>
+
+          <p id='authentication-error' class="alert alert-danger"></p>
           <div class="form-group">
             <label for="sel1">Select list:</label>
             <select class="form-control" id="sel1"></select>
@@ -66,6 +68,7 @@
   $("#aspace-success").hide();
   $("#aspace-error").hide();
   $(".aspace-result-empty").empty();
+  $("#authentication-error").hide();
 
   var repository_id;
   var result_success;
@@ -77,13 +80,18 @@
     dataType: 'json',
     async: false,
     success: function(repositories) {
-      jQuery.each( repositories, function(i, val) {
-        var o = new Option(val.name, val.repository_id);
-        /// jquerify the DOM object 'o' so we can use the html method
-        $(o).html(val.name);
-        $("#sel1").append(o);
-        repository_id = val.repository_id;
-      });
+      if (repositories.error) {
+        $("#authentication-error").html(repositories.error);
+        $("#authentication-error").show();
+      } else {
+        jQuery.each( repositories, function(i, val) {
+          var o = new Option(val.name, val.repository_id);
+          /// jquerify the DOM object 'o' so we can use the html method
+          $(o).html(val.name);
+          $("#sel1").append(o);
+          repository_id = val.repository_id;
+        });
+      }
     }
   });
 
