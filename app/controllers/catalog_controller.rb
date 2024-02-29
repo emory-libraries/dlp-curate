@@ -21,14 +21,13 @@ class CatalogController < ApplicationController
   include BlacklightIiifSearch::Controller
 
   configure_blacklight do |config|
-
     # configuration for Blacklight IIIF Content Search
     config.iiif_search = {
-      full_text_field: 'text',
+      full_text_field:       'text',
       object_relation_field: 'is_page_of_s',
-      supported_params: %w[q page],
-      autocomplete_handler: 'iiif_suggest',
-      suggester_name: 'iiifSuggester'
+      supported_params:      %w[q page],
+      autocomplete_handler:  'iiif_suggest',
+      suggester_name:        'iiifSuggester'
     }
 
     config.view.gallery.partials = [:index_header, :index]

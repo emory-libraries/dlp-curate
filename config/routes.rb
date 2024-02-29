@@ -3,7 +3,6 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-
   concern :iiif_search, BlacklightIiifSearch::Routes.new
   mount Bulkrax::Engine, at: '/'
   get '/concern/curate_generic_works/:id/event_details', to: 'event_details#event_details', as: :event_details
