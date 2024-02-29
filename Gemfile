@@ -10,6 +10,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'archivesspace-client'
+gem 'blacklight_iiif_search'
 gem 'bootsnap', require: false
 gem 'bootstrap-sass', '~> 3.0'
 gem 'bulkrax'
