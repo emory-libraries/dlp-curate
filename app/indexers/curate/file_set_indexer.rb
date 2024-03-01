@@ -4,6 +4,7 @@ module Curate
   class FileSetIndexer < Hyrax::FileSetIndexer
     def generate_solr_document
       super.tap do |solr_doc|
+        solr_doc['is_page_of_ssi'] = object&.parent&.id
         solr_doc['pcdm_use_tesim'] = object.pcdm_use if object.pcdm_use.present?
         solr_doc['file_path_ssim'] = object.file_path if object.file_path.present?
         solr_doc['creating_application_name_ssim'] = object.creating_application_name if object.creating_application_name.present?
@@ -23,6 +24,8 @@ module Curate
           solr_doc['profile_version_ssim'] = object.preservation_master_file.profile_version
         end
         add_sha1(solr_doc)
+        solr_doc['page_text_timv'] = page_text_data
+        solr_doc['page_text_tsimv'] = page_text_data
       end
     end
 
@@ -90,6 +93,12 @@ module Curate
 
       def preservation_event_value(preservation_event)
         preservation_event.pluck(:value).first
+      end
+
+      def page_text_data
+        if object.transcript_file.present? && object.transcript_file.content == "[NO TEXT ON PAGE. This page does not contain any text recoverable by the OCR engine.]\n"
+          object.transcript_file.content.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
+        end
       end
   end
 end
