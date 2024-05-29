@@ -87,6 +87,15 @@ class FileSet < ActiveFedora::Base
     end
   end
 
+  def alto_xml
+    return extracted&.content if extracted&.file_name&.first&.include?('.xml')
+    nil
+  end
+
+  def transcript_text
+    transcript_file&.content&.to_s if transcript_file&.file_name&.first&.include?('.txt')
+  end
+
   private
 
     def service

@@ -10,9 +10,13 @@ RSpec.describe Curate::FileSetIndexer, clean: true do
   end
   let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   let(:sf)  { File.open(fixture_path + '/book_page/0003_service.jpg') }
+  let(:alto_xml) { File.open(fixture_path + '/book_page/0003_alto.xml') }
+  let(:transcript) { File.open(fixture_path + '/book_page/0003_transcript.txt') }
   before do
     Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
     Hydra::Works::AddFileToFileSet.call(file_set, sf, :service_file)
+    Hydra::Works::AddFileToFileSet.call(file_set, alto_xml, :extracted)
+    Hydra::Works::AddFileToFileSet.call(file_set, transcript, :transcript_file)
   end
 
   describe "#generate_solr_doc" do
@@ -24,6 +28,35 @@ RSpec.describe Curate::FileSetIndexer, clean: true do
       expect(indexer['sha1_tesim']).to include(file_set.preservation_master_file.checksum.uri.to_s,
                                                file_set.service_file.checksum.uri.to_s)
     end
+
+    # rubocop:disable RSpec/MessageChain
+    describe 'alto_xml_ssi' do
+      before do
+        allow(file_set).to receive(:extracted).and_call_original
+        allow(file_set).to receive_message_chain(:extracted, :file_name, :first, :include?).and_return(true)
+      end
+
+      it 'returns the expected text' do
+        expect(indexer['alto_xml_ssi']).to include(
+          'String ID="P10_S00002" HPOS="538" VPOS="3223" WIDTH="112" HEIGHT="1005" ' \
+          'STYLEREFS="StyleId-0" CONTENT="incorporation" WC="0.4776923" CC="5723770778406"'
+        )
+      end
+    end
+
+    describe 'transcript_text_tesi' do
+      before do
+        allow(file_set).to receive(:transcript_file).and_call_original
+        allow(file_set).to receive_message_chain(:transcript_file, :file_name, :first, :include?).and_return(true)
+      end
+
+      it 'returns the expected text' do
+        expect(indexer['transcript_text_tesi']).to include(
+          'thousand dollars was added to the endowment of the college. The'
+        )
+      end
+    end
+    # rubocop:enable RSpec/MessageChain
 
     describe "#other_events" do
       subject :other_events do
