@@ -186,4 +186,49 @@ RSpec.describe FileSet, :perform_enqueued, :clean do
       end
     end
   end
+
+  # rubocop:disable RSpec/MessageChain
+  describe '#alto_xml' do
+    let(:file_set) { FactoryBot.create(:file_set) }
+    let(:alto_xml) { File.open(fixture_path + '/book_page/0003_alto.xml') }
+
+    it('returns nil') { expect(file_set.alto_xml).to be_nil }
+
+    context 'when ALTO XML is present' do
+      before do
+        Hydra::Works::AddFileToFileSet.call(file_set, alto_xml, :extracted)
+        allow(file_set).to receive(:extracted).and_call_original
+        allow(file_set).to receive_message_chain(:extracted, :file_name, :first, :include?).and_return(true)
+      end
+
+      it 'returns ALTO XML text' do
+        expect(file_set.alto_xml).to include(
+          'String ID="P10_S00002" HPOS="538" VPOS="3223" WIDTH="112" HEIGHT="1005" ' \
+          'STYLEREFS="StyleId-0" CONTENT="incorporation" WC="0.4776923" CC="5723770778406"'
+        )
+      end
+    end
+  end
+
+  describe '#transcript_text' do
+    let(:file_set) { FactoryBot.create(:file_set) }
+    let(:transcript) { File.open(fixture_path + '/book_page/0003_transcript.txt') }
+
+    it('returns nil') { expect(file_set.transcript_text).to be_nil }
+
+    context 'when transcript file is present' do
+      before do
+        Hydra::Works::AddFileToFileSet.call(file_set, transcript, :transcript_file)
+        allow(file_set).to receive(:transcript_file).and_call_original
+        allow(file_set).to receive_message_chain(:transcript_file, :file_name, :first, :include?).and_return(true)
+      end
+
+      it 'returns ALTO XML text' do
+        expect(file_set.transcript_text).to include(
+          'thousand dollars was added to the endowment of the college. The'
+        )
+      end
+    end
+  end
+  # rubocop:enable RSpec/MessageChain
 end

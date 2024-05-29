@@ -23,6 +23,7 @@ module Curate
           solr_doc['profile_version_ssim'] = object.preservation_master_file.profile_version
         end
         add_sha1(solr_doc)
+        full_text_fields(solr_doc)
       end
     end
 
@@ -90,6 +91,11 @@ module Curate
 
       def preservation_event_value(preservation_event)
         preservation_event.pluck(:value).first
+      end
+
+      def full_text_fields(solr_doc)
+        solr_doc['alto_xml_ssi'] = object.alto_xml if object.alto_xml.present?
+        solr_doc['transcript_text_tesi'] = object.transcript_text if object.transcript_text.present?
       end
   end
 end
