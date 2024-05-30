@@ -94,7 +94,7 @@ module Curate
       end
 
       def full_text_fields(solr_doc)
-        solr_doc['alto_xml_ssi'] = object.alto_xml if object.alto_xml.present?
+        solr_doc['alto_xml_tesi'] = object.alto_xml if object.alto_xml.present?
         solr_doc['transcript_text_tesi'] = object.transcript_text if object.transcript_text.present?
       end
   end

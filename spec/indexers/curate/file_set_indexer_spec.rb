@@ -30,14 +30,14 @@ RSpec.describe Curate::FileSetIndexer, clean: true do
     end
 
     # rubocop:disable RSpec/MessageChain
-    describe 'alto_xml_ssi' do
+    describe 'alto_xml_tesi' do
       before do
         allow(file_set).to receive(:extracted).and_call_original
         allow(file_set).to receive_message_chain(:extracted, :file_name, :first, :include?).and_return(true)
       end
 
       it 'returns the expected text' do
-        expect(indexer['alto_xml_ssi']).to include(
+        expect(indexer['alto_xml_tesi']).to include(
           'String ID="P10_S00002" HPOS="538" VPOS="3223" WIDTH="112" HEIGHT="1005" ' \
           'STYLEREFS="StyleId-0" CONTENT="incorporation" WC="0.4776923" CC="5723770778406"'
         )
