@@ -165,6 +165,26 @@
       </analyzer>
     </fieldType>
 
+    <fieldtype
+        name="text_ocr"
+        class="solr.TextField"
+        storeOffsetsWithPositions="true">
+      <!-- NOTE: When not using the Package Manager, add the `ocrhighlighting:`
+                 prefix to  the `class` attributes -->
+      <analyzer type="index">
+        <!-- For converting OCR to plaintext -->
+        <charFilter class="ocrhighlighting:solrocr.OcrCharFilterFactory" />
+        <tokenizer class="solr.ICUTokenizerFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>  <!-- NFKC, case folding, diacritics removed -->
+        <filter class="solr.TrimFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.ICUTokenizerFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>  <!-- NFKC, case folding, diacritics removed -->
+        <filter class="solr.TrimFilterFactory"/>
+      </analyzer>
+    </fieldtype>
+
 <!-- SolrSuggest disabled due to performance penalties -->
 <!--
     <fieldType class="solr.TextField" name="textSuggest" positionIncrementGap="100">
@@ -330,6 +350,7 @@
 
     <!-- you must define copyField source and dest fields explicity or schemaBrowser doesn't work -->
     <field name="all_text_timv" type="text" stored="false" indexed="true" multiValued="true" termVectors="true" termPositions="true" termOffsets="true"/>
+    <field name="alto_xml_ssi" type="text_ocr" stored="true" indexed="true" multiValued="false"/>
 
 
   </fields>

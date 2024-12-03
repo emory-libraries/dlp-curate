@@ -34,6 +34,7 @@
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
   <lib dir="${solr.install.dir:../../../..}/contrib/extraction/lib" regex=".*\.jar" />
   <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-cell-\d.*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/contrib/ocrhighlighting/lib" regex=".*\.jar" />
 
   <directoryFactory name="DirectoryFactory" 
                     class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}">
@@ -187,6 +188,7 @@
     </lst>
   </requestHandler>
 
+  <searchComponent class="solrocr.OcrHighlightComponent" name="ocrHighlight" />
   <searchComponent name="termsComponent" class="solr.TermsComponent" />
 
   <requestHandler name="/terms" class="solr.SearchHandler">
@@ -195,6 +197,7 @@
     </lst>
     <arr name="components">
       <str>termsComponent</str>
+      <str>ocrHighlight</str>
     </arr>
   </requestHandler>
 
