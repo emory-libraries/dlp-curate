@@ -61,7 +61,7 @@ module Curate
           compute_scaling(attrs) if name == 'Page'
           return if name != 'String'
           token = values['CONTENT']
-          @text << token
+          @text += token
           @words << {
             word:        token,
             coordinates: s_coords(values)
