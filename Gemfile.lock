@@ -1412,6 +1412,10 @@ GEM
       bootstrap-sass (~> 3.0)
       openseadragon (>= 0.2.0)
       rails
+    blacklight_iiif_search (1.0.0)
+      blacklight (~> 6.0)
+      iiif-presentation
+      rails (>= 4.2, < 6)
     bootsnap (1.13.0)
       msgpack (~> 1.2)
     bootstrap-sass (3.4.1)
@@ -1792,6 +1796,10 @@ GEM
     ice_nine (0.11.2)
     iiif-image-api (0.2.0)
       activesupport
+    iiif-presentation (1.1.0)
+      activesupport (>= 3.2.18)
+      faraday (>= 0.9)
+      json
     iiif_manifest (1.1.1)
       activesupport (>= 4)
     iso8601 (0.9.1)
@@ -2373,6 +2381,7 @@ PLATFORMS
 DEPENDENCIES
   archivesspace-client
   bixby (~> 3.0.1)
+  blacklight_iiif_search
   bootsnap
   bootstrap-sass (~> 3.0)
   bulkrax

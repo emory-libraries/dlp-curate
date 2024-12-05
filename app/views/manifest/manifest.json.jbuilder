@@ -38,13 +38,19 @@ json.sequences [''] do
           json.width 640
           json.height 480
           json.service do
-            json.set! :@context, 'http://iiif.io/api/image/2/context.json'
+            if file_set.transcript_text.present?
+              json.set! :@context, 'http://iiif.io/api/search/0/context.json'
+              json.set! :@id, Rails.application.routes.url_helpers.solr_document_iiif_search_url(child_id)
+              json.profile 'http://iiif.io/api/search/0/search'
+              json.label 'Search within this item'
+            else
+              # The base url for the info.json file
+              info_url = child_iiif_service.info_url
 
-            # The base url for the info.json file
-            info_url = child_iiif_service.info_url
-
-            json.set! :@id, info_url
-            json.profile 'http://iiif.io/api/image/2/level2.json'
+              json.set! :@context, 'http://iiif.io/api/image/2/context.json'
+              json.set! :@id, info_url
+              json.profile 'http://iiif.io/api/image/2/level2.json'
+            end
           end
         end
         json.on canvas_uri

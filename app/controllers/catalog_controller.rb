@@ -17,7 +17,19 @@ class CatalogController < ApplicationController
     solr_name('system_modified', :stored_sortable, type: :date)
   end
 
+  # CatalogController-scope behavior and configuration for BlacklightIiifSearch
+  include BlacklightIiifSearch::Controller
+
   configure_blacklight do |config|
+    # configuration for Blacklight IIIF Content Search
+    config.iiif_search = {
+      full_text_field:       'transcript_text_tesi',
+      object_relation_field: 'is_page_of_ssi',
+      supported_params:      %w[q page],
+      autocomplete_handler:  'iiif_suggest',
+      suggester_name:        'iiifSuggester'
+    }
+
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]
