@@ -73,9 +73,9 @@ module Curate
         #
         # @param name [String] element name.
         def end_element(name)
-          @text << " " if name == 'String'
-          @text << "\n" if name == 'TextBlock'
-          @text << "\n" if name == 'TextLine'
+          @text += " " if name == 'String'
+          @text += "\n" if name == 'TextBlock'
+          @text += "\n" if name == 'TextLine'
         end
 
         # Callback for completion of parsing ALTO, used to normalize generated
