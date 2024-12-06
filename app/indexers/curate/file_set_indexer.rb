@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'curate/text_extraction/alto_reader'
-
 module Curate
   class FileSetIndexer < Hyrax::FileSetIndexer
     def generate_solr_document
