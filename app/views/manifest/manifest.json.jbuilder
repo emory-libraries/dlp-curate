@@ -39,8 +39,11 @@ json.sequences [''] do
           json.height 480
           json.service do
             if file_set.transcript_text.present?
+              pulled_hostname = ENV.fetch('HOSTNAME', 'localhost:3000')
+              search_url = Rails.application.routes.url_helpers.solr_document_iiif_search_url(child_id, host: pulled_hostname)
+
               json.set! :@context, 'http://iiif.io/api/search/0/context.json'
-              json.set! :@id, Rails.application.routes.url_helpers.solr_document_iiif_search_url(child_id)
+              json.set! :@id, search_url
               json.profile 'http://iiif.io/api/search/0/search'
               json.label 'Search within this item'
             else
