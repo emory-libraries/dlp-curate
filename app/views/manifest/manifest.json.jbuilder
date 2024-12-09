@@ -38,14 +38,16 @@ json.sequences [''] do
           json.width 640
           json.height 480
           json.service do
-            # The base url for the info.json file
-            info_url = child_iiif_service.info_url
+            json.child! do
+              # The base url for the info.json file
+              info_url = child_iiif_service.info_url
 
-            json.set! :@context, 'http://iiif.io/api/image/2/context.json'
-            json.set! :@id, info_url
-            json.profile 'http://iiif.io/api/image/2/level2.json'
+              json.set! :@context, 'http://iiif.io/api/image/2/context.json'
+              json.set! :@id, info_url
+              json.profile 'http://iiif.io/api/image/2/level2.json'
+            end
             if file_set.transcript_text.present?
-              json.service do
+              json.child! do
                 pulled_hostname = ENV.fetch('HOSTNAME', 'localhost:3000')
                 search_url = Rails.application.routes.url_helpers.solr_document_iiif_search_url(child_id, host: pulled_hostname)
 
