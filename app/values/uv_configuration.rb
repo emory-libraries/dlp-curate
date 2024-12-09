@@ -13,8 +13,7 @@ class UvConfiguration < ActiveSupport::HashWithIndifferentAccess
           {
             "shareEnabled" => false,
             "downloadEnabled" => false,
-            "fullscreenEnabled" => false,
-            "searchWithinEnabled" => true
+            "fullscreenEnabled" => false
           }
         },
         "pagingHeaderPanel" => {
@@ -27,6 +26,10 @@ class UvConfiguration < ActiveSupport::HashWithIndifferentAccess
             "manifestHeader" => nil
           }
         }
+      },
+      "options" =>
+      {
+        "searchWithinEnabled" => true
       }
     }
   end # rubocop:enable Metrics/MethodLength
