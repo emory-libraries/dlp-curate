@@ -38,21 +38,22 @@ json.sequences [''] do
           json.width 640
           json.height 480
           json.service do
+            # The base url for the info.json file
+            info_url = child_iiif_service.info_url
+
+            json.set! :@context, 'http://iiif.io/api/image/2/context.json'
+            json.set! :@id, info_url
+            json.profile 'http://iiif.io/api/image/2/level2.json'
             if file_set.transcript_text.present?
-              pulled_hostname = ENV.fetch('HOSTNAME', 'localhost:3000')
-              search_url = Rails.application.routes.url_helpers.solr_document_iiif_search_url(child_id, host: pulled_hostname)
+              json.service do
+                pulled_hostname = ENV.fetch('HOSTNAME', 'localhost:3000')
+                search_url = Rails.application.routes.url_helpers.solr_document_iiif_search_url(child_id, host: pulled_hostname)
 
-              json.set! :@context, 'http://iiif.io/api/search/0/context.json'
-              json.set! :@id, search_url
-              json.profile 'http://iiif.io/api/search/0/search'
-              json.label 'Search within this item'
-            else
-              # The base url for the info.json file
-              info_url = child_iiif_service.info_url
-
-              json.set! :@context, 'http://iiif.io/api/image/2/context.json'
-              json.set! :@id, info_url
-              json.profile 'http://iiif.io/api/image/2/level2.json'
+                json.set! :@context, 'http://iiif.io/api/search/0/context.json'
+                json.set! :@id, search_url
+                json.profile 'http://iiif.io/api/search/0/search'
+                json.label 'Search within this item'
+              end
             end
           end
         end
