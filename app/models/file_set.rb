@@ -93,7 +93,7 @@ class FileSet < ActiveFedora::Base
   end
 
   def transcript_text
-    transcript_file&.content&.encode("UTF-8", invalid: :replace, replace: "") if transcript_file&.file_name&.first&.include?('.txt')
+    transcript_file&.content&.force_encoding('UTF-8') if transcript_file&.file_name&.first&.include?('.txt')
   end
 
   private
