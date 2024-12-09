@@ -13,7 +13,8 @@ class UvConfiguration < ActiveSupport::HashWithIndifferentAccess
           {
             "shareEnabled" => false,
             "downloadEnabled" => false,
-            "fullscreenEnabled" => false
+            "fullscreenEnabled" => false,
+            "searchWithinEnabled" => true
           }
         },
         "pagingHeaderPanel" => {
