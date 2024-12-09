@@ -164,8 +164,8 @@ class SolrDocument
   end
 
   def work_iiif_search_url
-    return ('http://localhost:3000/catalog/' + self['id'] + '/iiif_search') unless ENV['IIIF_SERVER_URL'].present?
-    parsed_iiif_url = URI::parse(ENV['IIIF_SERVER_URL'])
+    return ('http://localhost:3000/catalog/' + self['id'] + '/iiif_search') if ENV['IIIF_SERVER_URL'].blank?
+    parsed_iiif_url = URI.parse(ENV['IIIF_SERVER_URL'])
     base_path = parsed_iiif_url.to_s[/\A.*(?=#{parsed_iiif_url.path}\z)/]
 
     base_path + '/catalog/' + self['id'] + '/iiif_search'
