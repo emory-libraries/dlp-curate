@@ -13,11 +13,8 @@ end
 if @solr_doc['all_text_tsimv'].present?
   json.service do
     json.child! do
-      pulled_hostname = ENV.fetch('HOSTNAME', 'localhost:3000')
-      search_url = Rails.application.routes.url_helpers.solr_document_iiif_search_url(@solr_doc.id, host: pulled_hostname)
-
       json.set! :@context, 'http://iiif.io/api/search/0/context.json'
-      json.set! :@id, search_url
+      json.set! :@id, @solr_doc.work_iiif_search_url
       json.profile 'http://iiif.io/api/search/0/search'
       json.label 'Search within this item'
     end
