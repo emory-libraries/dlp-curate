@@ -7,14 +7,14 @@ module BlacklightIiifSearch
     # Create a URL for the annotation
     # @return [String]
     def annotation_id
-      "#{controller.solr_document_url(parent_document[:id])}/canvas/#{document[:id]}/annotation/#{hl_index}"
+      "#{sanitized_document_url}/canvas/#{document[:id]}/annotation/#{hl_index}"
     end
 
     ##
     # Create a URL for the canvas that the annotation refers to
     # @return [String]
     def canvas_uri_for_annotation
-      "#{controller.solr_document_url(parent_document[:id])}/canvas/#{document[:id]}" + coordinates
+      "#{sanitized_document_url}/canvas/#{document[:id]}" + coordinates
     end
 
     ##
@@ -54,6 +54,10 @@ module BlacklightIiifSearch
         rescue JSON::ParserError
           nil
         end
+      end
+
+      def sanitized_document_url
+        controller.solr_document_url(parent_document[:id]).split('?').first
       end
   end
 end
