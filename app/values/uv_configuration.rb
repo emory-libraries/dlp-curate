@@ -26,10 +26,6 @@ class UvConfiguration < ActiveSupport::HashWithIndifferentAccess
             "manifestHeader" => nil
           }
         }
-      },
-      "options" =>
-      {
-        "searchWithinEnabled" => true
       }
     }
   end # rubocop:enable Metrics/MethodLength
