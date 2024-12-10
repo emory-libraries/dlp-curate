@@ -7,14 +7,14 @@ module BlacklightIiifSearch
     # Create a URL for the annotation
     # @return [String]
     def annotation_id
-      "#{sanitized_document_url}/canvas/#{document[:id]}/annotation/#{hl_index}"
+      "#{emory_iiif_id_url}/canvas/#{document[:id]}/annotation/#{hl_index}"
     end
 
     ##
     # Create a URL for the canvas that the annotation refers to
     # @return [String]
     def canvas_uri_for_annotation
-      "#{sanitized_document_url}/canvas/#{document[:id]}" + coordinates
+      "#{emory_iiif_id_url}/canvas/#{document[:id]}" + coordinates
     end
 
     ##
@@ -56,8 +56,8 @@ module BlacklightIiifSearch
         end
       end
 
-      def sanitized_document_url
-        controller.solr_document_url(parent_document[:id]).split('?').first
+      def emory_iiif_id_url
+        "http://#{ENV['HOSTNAME'] || 'localhost:3000'}/iiif/#{parent_document[:id]}/manifest"
       end
   end
 end
