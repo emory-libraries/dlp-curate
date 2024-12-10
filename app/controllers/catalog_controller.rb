@@ -23,8 +23,8 @@ class CatalogController < ApplicationController
   configure_blacklight do |config|
     # configuration for Blacklight IIIF Content Search
     config.iiif_search = {
-      full_text_field:       'transcript_text_tesi',
-      object_relation_field: 'is_page_of_ssi',
+      full_text_field:       'transcript_text_tesi', # FileSet field
+      object_relation_field: 'is_page_of_ssi', # FileSet field
       supported_params:      %w[q page],
       autocomplete_handler:  'iiif_suggest',
       suggester_name:        'iiifSuggester'
@@ -47,6 +47,8 @@ class CatalogController < ApplicationController
     config.http_method = :post
 
     ## Default parameters to send to solr for all search-like requests. See also SolrHelper#solr_search_params
+    # NOTE: transcript_text_tesi is needed here because the `iiif_search` path utilizes the default `search` qt to
+    #   match terms in Full-Text search-enabled FileSets.
     config.default_solr_params = {
       qt:   "search",
       rows: 10,

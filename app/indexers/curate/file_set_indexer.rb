@@ -92,6 +92,7 @@ module Curate
         preservation_event.pluck(:value).first
       end
 
+      # All fields assigned here are utilized by BlacklightIiifSearch.
       def full_text_fields(solr_doc)
         solr_doc['alto_xml_tesi'] = Curate::TextExtraction::AltoReader.new(object.alto_xml).json if object.alto_xml.present?
         solr_doc['transcript_text_tesi'] = object.transcript_text if object.transcript_text.present?

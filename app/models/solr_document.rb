@@ -163,6 +163,7 @@ class SolrDocument
     self['source_collection_title_ssim']
   end
 
+  # Added here since the SolrDocument is easily available within app/views/manifest/manifest.json.jbuilder partial.
   def work_iiif_search_url
     return ('http://localhost:3000/catalog/' + self['id'] + '/iiif_search') if ENV['IIIF_SERVER_URL'].blank?
     parsed_iiif_url = URI.parse(ENV['IIIF_SERVER_URL'])

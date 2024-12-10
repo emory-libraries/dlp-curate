@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+# NOTE: This model is largely derived from IiifPrint's (v3.0.1)
+#   IiifPrint::TextExtraction::WordCoordsBuilder class. Minor changes have been made to bring
+#   the code into Rubocop compliancy. The IiifPrint Gem application is licensed under the
+#   Apache License 2.0. At the time of adopting this licensed work into this application,
+#   Commercial use, Modification, and Private use were listed under this Gem's Permissions.
+#   The referenced License can be found here:
+#   https://github.com/scientist-softserv/iiif_print/blob/v3.0.1/LICENSE
 module Curate
   # Module for text extraction (OCR or otherwise)
   module TextExtraction
