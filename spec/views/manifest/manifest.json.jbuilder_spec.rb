@@ -95,4 +95,18 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
     expect(JSON.parse(rendered)).to eq(JSON.parse(doc))
     expect(work.file_sets.count).to eq 5
   end
+
+  context 'when all_text_tsimv is present' do
+    let(:solr_document) { SolrDocument.new(attributes.merge('all_text_tsimv' => 'So much text!')) }
+
+    it 'renders a IIIF Search service' do
+      render
+      parsed_rendered_manifest = JSON.parse(rendered)
+
+      expect(parsed_rendered_manifest['service']).to be_present
+      expect(parsed_rendered_manifest['service'].first['@context']).to eq('http://iiif.io/api/search/0/context.json')
+      expect(parsed_rendered_manifest['service'].first['profile']).to eq('http://iiif.io/api/search/0/search')
+      expect(parsed_rendered_manifest['service'].first['@id']).to eq("/catalog/#{identifier}/iiif_search")
+    end
+  end
 end
