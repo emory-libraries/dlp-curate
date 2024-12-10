@@ -23,9 +23,9 @@ module BlacklightIiifSearch
     # @return [String]
     def coordinates
       coords_json = fetch_and_parse_coords
-      return default_coords unless coords_json && coords_json['coords'] && query.present?
+      return default_coords unless coords_json.present? && coords_json['coords'].present? && query.present?
 
-      query_terms = query.split(' ')
+      query_terms = query.split(' ').map(&:downcase)
       matches = coords_json['coords'].select do |k, _v|
         k.downcase =~ /(#{query_terms.join('|')})/
       end
