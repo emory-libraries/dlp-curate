@@ -10,6 +10,22 @@ json.metadata @manifest_metadata do |child|
   json.value child['value']
 end
 
+# The code block below activates the IIIF Search tools within the
+#   Universal Viewer. This will use the presence of all_text_tsimv values
+#   within the Work to activate, but each text-optimized FileSet's alto_xml_tesi,
+#   transcript_text_tesi, and is_page_of_ssi fields must also be indexed for normal
+#   searching functions.
+if @solr_doc['all_text_tsimv'].present?
+  json.service do
+    json.child! do
+      json.set! :@context, 'http://iiif.io/api/search/0/context.json'
+      json.set! :@id, @solr_doc.work_iiif_search_url
+      json.profile 'http://iiif.io/api/search/0/search'
+      json.label 'Search within this item'
+    end
+  end
+end
+
 json.sequences [''] do
   json.set! :@type, 'sc:Sequence'
   json.set! :@id, "#{@root_url}/sequence/normal"

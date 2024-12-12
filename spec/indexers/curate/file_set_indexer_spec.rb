@@ -31,16 +31,16 @@ RSpec.describe Curate::FileSetIndexer, clean: true do
 
     # rubocop:disable RSpec/MessageChain
     describe 'alto_xml_tesi' do
+      let(:alto_json) { JSON.parse(indexer['alto_xml_tesi']) }
       before do
         allow(file_set).to receive(:extracted).and_call_original
         allow(file_set).to receive_message_chain(:extracted, :file_name, :first, :include?).and_return(true)
       end
 
-      it 'returns the expected text' do
-        expect(indexer['alto_xml_tesi']).to include(
-          'String ID="P10_S00002" HPOS="538" VPOS="3223" WIDTH="112" HEIGHT="1005" ' \
-          'STYLEREFS="StyleId-0" CONTENT="incorporation" WC="0.4776923" CC="5723770778406"'
-        )
+      it('returns the expected text') { expect(indexer['alto_xml_tesi']).to include('"incorporation":[[538,3223,112,1005]]') }
+      it 'can be parsed into JSON' do
+        expect(alto_json.keys).to match_array(['width', 'height', 'coords'])
+        expect(alto_json['coords'].keys.size).to eq(228)
       end
     end
 

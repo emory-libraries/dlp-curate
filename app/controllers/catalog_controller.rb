@@ -17,7 +17,19 @@ class CatalogController < ApplicationController
     solr_name('system_modified', :stored_sortable, type: :date)
   end
 
+  # CatalogController-scope behavior and configuration for BlacklightIiifSearch
+  include BlacklightIiifSearch::Controller
+
   configure_blacklight do |config|
+    # configuration for Blacklight IIIF Content Search
+    config.iiif_search = {
+      full_text_field:       'transcript_text_tesi', # FileSet field
+      object_relation_field: 'is_page_of_ssi', # FileSet field
+      supported_params:      %w[q page],
+      autocomplete_handler:  'iiif_suggest',
+      suggester_name:        'iiifSuggester'
+    }
+
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]
@@ -35,10 +47,12 @@ class CatalogController < ApplicationController
     config.http_method = :post
 
     ## Default parameters to send to solr for all search-like requests. See also SolrHelper#solr_search_params
+    # NOTE: transcript_text_tesi is needed here because the `iiif_search` path utilizes the default `search` qt to
+    #   match terms in Full-Text search-enabled FileSets.
     config.default_solr_params = {
       qt:   "search",
       rows: 10,
-      qf:   "title_tesim description_tesim creator_tesim keyword_tesim"
+      qf:   "title_tesim description_tesim creator_tesim keyword_tesim transcript_text_tesi"
     }
 
     # solr field configuration for document/show views

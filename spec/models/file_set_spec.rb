@@ -228,6 +228,12 @@ RSpec.describe FileSet, :perform_enqueued, :clean do
           'thousand dollars was added to the endowment of the college. The'
         )
       end
+
+      it 'forces UTF-8 encoding to eliminate Solr persistence errors' do
+        expect(file_set.transcript_file.content).to receive(:force_encoding).with('UTF-8')
+
+        file_set.transcript_text
+      end
     end
   end
   # rubocop:enable RSpec/MessageChain
