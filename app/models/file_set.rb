@@ -88,7 +88,7 @@ class FileSet < ActiveFedora::Base
   end
 
   def alto_xml
-    return extracted&.content if extracted&.file_name&.first&.include?('.xml')
+    return extracted&.content&.force_encoding('UTF-8') if extracted&.file_name&.first&.include?('.xml')
     nil
   end
 
