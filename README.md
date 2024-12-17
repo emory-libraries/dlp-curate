@@ -32,7 +32,7 @@ Run each of the following commands in a separate tab within the `dlp-curate` dir
 3. Setup local app server by running command `rails server`
 4. Access the app through `http://localhost:3000/`
 
-Refer to the Hyrax local development [guide](https://github.com/samvera/hyrax/blob/main/documentation/developing-your-hyrax-based-app.md) for more information regarding installing additional tools like Fits and ImageMagick, which are needed to enable file uploads.
+Refer to the Hyrax local development [guide](https://github.com/samvera/hyrax/blob/v3.4.2/documentation/developing-your-hyrax-based-app.md) for more information regarding installing additional tools like Fits and ImageMagick, which are needed to enable file uploads.
 
 # Testing and CI
 
