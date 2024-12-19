@@ -19,6 +19,7 @@ class CatalogController < ApplicationController
 
   # CatalogController-scope behavior and configuration for BlacklightIiifSearch
   include BlacklightIiifSearch::Controller
+  skip_before_action :authenticate_user!, only: :iiif_search
 
   configure_blacklight do |config|
     # configuration for Blacklight IIIF Content Search
