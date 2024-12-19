@@ -96,10 +96,9 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
     expect(work.file_sets.count).to eq 5
   end
 
-  context 'when all_text_tsimv is present' do
-    let(:solr_document) { SolrDocument.new(attributes.merge('all_text_tsimv' => 'So much text!')) }
-
+  context 'when @image_concerns contains values in alto_xml_tesi' do
     it 'renders a IIIF Search service' do
+      allow(image_concerns).to receive(:any?).and_return(true)
       render
       parsed_rendered_manifest = JSON.parse(rendered)
 
