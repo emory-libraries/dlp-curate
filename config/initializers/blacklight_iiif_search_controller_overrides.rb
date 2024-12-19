@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.4.2] sets 'Access-Control-Allow-Origin' before sending response.
+# [BlacklightIiifSearch-overwrite-v1.0.0] sets 'Access-Control-Allow-Origin' before sending response.
 BlacklightIiifSearch::Controller.class_eval do
   def iiif_search
     headers['Access-Control-Allow-Origin'] = '*'
