@@ -15,7 +15,7 @@ end
 #   within the Work to activate, but each text-optimized FileSet's alto_xml_tesi,
 #   transcript_text_tesi, and is_page_of_ssi fields must also be indexed for normal
 #   searching functions.
-if @solr_doc['all_text_tsimv'].present?
+if @image_concerns.any? { |id| SolrDocument&.find(id)&.[]('alto_xml_tesi')&.present? }
   json.service do
     json.child! do
       json.set! :@context, 'http://iiif.io/api/search/0/context.json'
