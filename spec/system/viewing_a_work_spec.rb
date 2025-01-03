@@ -144,9 +144,12 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
       expect(page).to have_css('button', text: 'Add to collection')
     end
 
-    it 'has a full-text search indexing button' do
+    it 'has full-text search indexing options' do
       visit "/concern/curate_generic_works/#{user_work.id}"
-      expect(page).to have_selector('input[value="Index for Full-Text Search"]')
+
+      expect(page).to have_button('Index for Full-Text Search')
+      expect(page).to have_link('Volume Only', visible: false)
+      expect(page).to have_link('Volume and Pages', visible: false)
     end
   end
 
