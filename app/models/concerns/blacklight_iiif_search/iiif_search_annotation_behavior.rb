@@ -84,7 +84,7 @@ module BlacklightIiifSearch
       end
 
       def manifest
-        @manifest ||= ManifestBuilderService.build_manifest(presenter: presenter, curation_concern: CurateGenericWork.find(parent_document[:id])
+        @manifest ||= ManifestBuilderService.build_manifest(presenter: presenter, curation_concern: CurateGenericWork.find(parent_document[:id]))
       end
 
       def parsed_manifest
