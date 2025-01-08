@@ -71,7 +71,28 @@ module BlacklightIiifSearch
       end
 
       def emory_iiif_id_url
-        "http://#{ENV['HOSTNAME'] || 'localhost:3000'}/iiif/#{parent_document[:id]}/manifest"
+        "#{manifest_base_uri}/iiif/#{parent_document[:id]}/manifest"
+      end
+
+      def manifest_base_uri
+        pulled_uri = parsed_uri
+        pulled_uri.to_s[/\A.*(?=#{pulled_uri.path}\z)/]
+      end
+
+      def presenter
+        Hyrax::CurateGenericWorkPresenter.new(parent_document, ManifestAbility.new)
+      end
+
+      def manifest
+        @manifest ||= ManifestBuilderService.build_manifest(presenter: presenter, curation_concern: CurateGenericWork.find(parent_document[:id])
+      end
+
+      def parsed_manifest
+        JSON.parse(manifest)
+      end
+
+      def parsed_uri
+        URI.parse(parsed_manifest['sequences'][0]['canvases'][0]['@id'])
       end
   end
 end
