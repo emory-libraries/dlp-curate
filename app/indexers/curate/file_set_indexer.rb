@@ -94,7 +94,7 @@ module Curate
 
       # All fields assigned here are utilized by BlacklightIiifSearch.
       def full_text_fields(solr_doc)
-        solr_doc['alto_xml_tesi'] = Curate::TextExtraction::AltoReader.new(object.alto_xml).json if object.alto_xml.present?
+        solr_doc['alto_xml_tesi'] = Curate::TextExtraction::AltoReader.new(object.alto_xml, object.width.first, object.height.first).json if object.alto_xml.present?
         solr_doc['transcript_text_tesi'] = object.transcript_text if object.transcript_text.present?
         solr_doc['is_page_of_ssi'] = object.parent.id if object.parent.present?
       end
