@@ -11,6 +11,7 @@ set :assets_prefix, "#{shared_path}/public/assets"
 set :migration_role, :app
 set :service_unit_name, "sidekiq.service"
 set :passenger_restart_with_touch, true
+set :honeybadger_server, -> { roles(:web).first.hostname }
 
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
