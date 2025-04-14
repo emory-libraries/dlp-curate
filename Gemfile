@@ -51,13 +51,14 @@ gem 'whenever', require: false
 gem 'zizia', '~> 5.5.0'
 
 group :development do
-  gem 'cap-ec2-emory', github: 'emory-libraries/cap-ec2'
-  gem "capistrano", "~> 3.17", require: false
+  gem 'bcrypt_pbkdf'
+  gem "capistrano", require: false
   gem 'capistrano-bundler', '~> 1.3'
   gem 'capistrano-ext'
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'capistrano-rails-collection'
+  gem 'ed25519'
   gem 'fcrepo_wrapper'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'rubocop-rspec'
