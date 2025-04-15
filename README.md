@@ -1,3 +1,4 @@
+
 # DLP-Curate
 
 <table width="100%">
@@ -33,6 +34,28 @@ Run each of the following commands in a separate tab within the `dlp-curate` dir
 4. Access the app through `http://localhost:3000/`
 
 Refer to the Hyrax local development [guide](https://github.com/samvera/hyrax/blob/v3.4.2/documentation/developing-your-hyrax-based-app.md) for more information regarding installing additional tools like Fits and ImageMagick, which are needed to enable file uploads.
+
+# Deployment
+
+1. Connect to `vpn.emory.edu`
+2. Pull the latest version of `main`
+3. Stub AWS' environment variables for `Emory Account 70` within the same terminal window. These can be found in the page loaded after logging into [Emory's AWS](https://aws.emory.edu). Directions below:
+  a. After logging in, the page should be the `AWS access portal`. A table of multiple accounts should be presesnt (typically three). Expand the `Emory Account 70` option.
+  b. Clicking on `Access keys` will open a modal with multiple credential options. Option 1 (`Set AWS environment variables`) is necessary for successful deployment.
+  c. Copy the variables in Option 1, paste them into the terminal window that the deployment script will be processed, and press enter.
+5. To deploy, run `BRANCH={BRANCH_NAME_OR_TAG} bundle exec cap {ENVIRONMENT} deploy`. To deploy main to the arch environment, for instance, you run `BRANCH=main bundle exec cap arch deploy`.
+
+## Deployment Troubleshooting
+
+If errors occur when running the deployment script, there could be a couple of factors causing them:
+- Ensure you are authorized to access the server you are deploying to. You can verify your access by trying to ssh into the server e.g. `ssh deploy@SERVER_IP_ADDRESS`.
+- The server IP lookup processing may not be working. In this case, stub the backup environment variables for the desired server in the local `.env.development` file. The list of backup environment variables are below:
+
+```
+ARCH_SERVER_IP=
+TEST_SERVER_IP=
+PROD_SERVER_IP=
+```
 
 # Testing and CI
 
