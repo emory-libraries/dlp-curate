@@ -58,6 +58,7 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'capistrano-rails-collection'
+  gem 'ec2_ipv4_retriever', git: 'https://github.com/emory-libraries/ec2_ipv4_retriever', branch: 'main'
   gem 'ed25519'
   gem 'fcrepo_wrapper'
   gem 'listen', '>= 3.0.5', '< 3.2'
