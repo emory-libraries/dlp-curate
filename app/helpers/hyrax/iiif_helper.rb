@@ -21,5 +21,9 @@ module Hyrax
     def universal_viewer_config_url(id)
       "#{request&.base_url}/uv/config/#{id}"
     end
+
+    def universal_viewer_manifest_link_for_work_id(id)
+      "#{request&.base_url}/concern/curate_generic_works/#{id}/manifest"
+    end
   end
 end

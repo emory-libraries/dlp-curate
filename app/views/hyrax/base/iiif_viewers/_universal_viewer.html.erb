@@ -4,7 +4,7 @@
       class="universal-viewer-iframe"
       width="1140px"
       height="668px"
-      src="/uv/uv.html#?manifest=<%= main_app.polymorphic_url [main_app, :manifest, presenter], { locale: nil } %>&config=<%= universal_viewer_config_url(presenter.id) %>"
+      src="/uv/uv.html#?manifest=<%= universal_viewer_manifest_link_for_work_id(presenter.id) %>&config=<%= universal_viewer_config_url(presenter.id) %>"
       allowfullscreen="true"
       frameborder="0"
   ></iframe>
