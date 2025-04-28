@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/emory-libraries/ec2_ipv4_retriever
+  revision: c0e0f90a94baedcd712f35cfb6b6644cdffc9612
+  branch: main
+  specs:
+    ec2_ipv4_retriever (0.1.0)
+      aws-sdk-ec2
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -84,13 +92,18 @@ GEM
       execjs (~> 2)
     awesome_nested_set (3.5.0)
       activerecord (>= 4.0.0, < 7.1)
-    aws-eventstream (1.2.0)
-    aws-partitions (1.651.0)
-    aws-sdk-core (3.165.1)
-      aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.651.0)
-      aws-sigv4 (~> 1.5)
+    aws-eventstream (1.3.2)
+    aws-partitions (1.1087.0)
+    aws-sdk-core (3.222.1)
+      aws-eventstream (~> 1, >= 1.3.0)
+      aws-partitions (~> 1, >= 1.992.0)
+      aws-sigv4 (~> 1.9)
+      base64
       jmespath (~> 1, >= 1.6.1)
+      logger
+    aws-sdk-ec2 (1.515.0)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sigv4 (~> 1.5)
     aws-sdk-kms (1.59.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
@@ -98,7 +111,7 @@ GEM
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
-    aws-sigv4 (1.5.2)
+    aws-sigv4 (1.11.0)
       aws-eventstream (~> 1, >= 1.0.2)
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
@@ -532,7 +545,7 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    jmespath (1.6.1)
+    jmespath (1.6.2)
     jquery-datatables-rails (3.4.0)
       actionpack (>= 3.1)
       jquery-rails
@@ -1134,6 +1147,7 @@ DEPENDENCIES
   devise-guests (~> 0.6)
   dotenv-rails
   dry-monads (~> 1.4.0)
+  ec2_ipv4_retriever!
   ed25519
   edtf (~> 3.0.0)
   edtf-humanize (~> 1.0.0)
