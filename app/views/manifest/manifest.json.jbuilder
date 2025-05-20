@@ -10,12 +10,13 @@ json.metadata @manifest_metadata do |child|
   json.value child['value']
 end
 
+enable_search = @image_concerns.any? { |id| SolrDocument&.find(id)&.[]('alto_xml_tesi')&.present? } && @solr_doc['all_text_timv'].present?
 # The code block below activates the IIIF Search tools within the
 #   Universal Viewer. This will use the presence of all_text_tsimv values
 #   within the Work to activate, but each text-optimized FileSet's alto_xml_tesi,
 #   transcript_text_tesi, and is_page_of_ssi fields must also be indexed for normal
 #   searching functions.
-if @image_concerns.any? { |id| SolrDocument&.find(id)&.[]('alto_xml_tesi')&.present? }
+if enable_search
   json.service do
     json.child! do
       json.set! :@context, 'http://iiif.io/api/search/0/context.json'
