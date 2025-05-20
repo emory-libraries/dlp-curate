@@ -96,16 +96,41 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
     expect(work.file_sets.count).to eq 5
   end
 
-  context 'when @image_concerns contains values in alto_xml_tesi' do
-    it 'renders a IIIF Search service' do
-      allow(image_concerns).to receive(:any?).and_return(true)
-      render
-      parsed_rendered_manifest = JSON.parse(rendered)
+  describe 'IIIF Search' do
+    context "FileSet's alto_xml_tesi and Work's all_text_timv are present" do
+      let(:solr_document) { SolrDocument.new(attributes.merge("all_text_timv": 'text, yada yada')) }
 
-      expect(parsed_rendered_manifest['service']).to be_present
-      expect(parsed_rendered_manifest['service'].first['@context']).to eq('http://iiif.io/api/search/0/context.json')
-      expect(parsed_rendered_manifest['service'].first['profile']).to eq('http://iiif.io/api/search/0/search')
-      expect(parsed_rendered_manifest['service'].first['@id']).to eq("/catalog/#{identifier}/iiif_search")
+      it 'renders a IIIF Search service' do
+        allow(image_concerns).to receive(:any?).and_return(true)
+        render
+        parsed_rendered_manifest = JSON.parse(rendered)
+
+        expect(parsed_rendered_manifest['service']).to be_present
+        expect(parsed_rendered_manifest['service'].first['@context']).to eq('http://iiif.io/api/search/0/context.json')
+        expect(parsed_rendered_manifest['service'].first['profile']).to eq('http://iiif.io/api/search/0/search')
+        expect(parsed_rendered_manifest['service'].first['@id']).to eq("/catalog/#{identifier}/iiif_search")
+      end
+    end
+
+    context "FileSet's alto_xml_tesi is present" do
+      it 'does not render the IIIF Search service' do
+        allow(image_concerns).to receive(:any?).and_return(true)
+        render
+        parsed_rendered_manifest = JSON.parse(rendered)
+
+        expect(parsed_rendered_manifest['service']).not_to be_present
+      end
+    end
+
+    context "Work's all_text_timv is present" do
+      let(:solr_document) { SolrDocument.new(attributes.merge("all_text_timv": 'text, yada yada')) }
+
+      it 'does not render the IIIF Search service' do
+        render
+        parsed_rendered_manifest = JSON.parse(rendered)
+
+        expect(parsed_rendered_manifest['service']).not_to be_present
+      end
     end
   end
 end
