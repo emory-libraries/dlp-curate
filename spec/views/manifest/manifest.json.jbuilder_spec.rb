@@ -98,7 +98,7 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
 
   describe 'IIIF Search' do
     context "FileSet's alto_xml_tesi and Work's all_text_timv are present" do
-      let(:solr_document) { SolrDocument.new(attributes.merge("all_text_timv": 'text, yada yada')) }
+      let(:solr_document) { SolrDocument.new(attributes.merge("all_text_tsimv": 'text, yada yada')) }
 
       it 'renders a IIIF Search service' do
         allow(image_concerns).to receive(:any?).and_return(true)
@@ -123,7 +123,7 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
     end
 
     context "Work's all_text_timv is present" do
-      let(:solr_document) { SolrDocument.new(attributes.merge("all_text_timv": 'text, yada yada')) }
+      let(:solr_document) { SolrDocument.new(attributes.merge("all_text_tsimv": 'text, yada yada')) }
 
       it 'does not render the IIIF Search service' do
         render
