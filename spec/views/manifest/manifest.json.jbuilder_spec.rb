@@ -123,7 +123,7 @@ RSpec.describe "manifest/manifest", type: :view, clean: true do
     end
 
     context "Work's all_text_timv is present" do
-      let(:solr_document) { SolrDocument.new(attributes.merge("all_text_timv": 'text, yada yada')) }
+      let(:solr_document) { SolrDocument.new(attributes.merge("all_text_tsimv": 'text, yada yada')) }
 
       it 'does not render the IIIF Search service' do
         render
