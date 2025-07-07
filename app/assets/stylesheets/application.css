@@ -15,6 +15,7 @@
  *= require curate
  *= require zizia/application
  *= require openseadragon
+ *= require dataTables.bootstrap4
  *= require datatables.net-bs4/css/dataTables.bootstrap4
  *= require datatables.net-select-bs4/css/select.bootstrap4
  *= require datatables.net-searchpanes-bs4/css/searchPanes.bootstrap4
