@@ -18,6 +18,11 @@
 // Required by Blacklight
 //= require jquery3
 //= require rails-ujs
+//= require popper
+//= require twitter/typeahead
+//= require bootstrap
+//= require jquery.dataTables
+//= require dataTables.bootstrap4
 //= require datatables.net/js/jquery.dataTables
 //= require datatables.net-bs4/js/dataTables.bootstrap4
 //= require datatables.net-select/js/dataTables.select
@@ -25,6 +30,7 @@
 //= require datatables.net-searchpanes/js/dataTables.searchPanes
 //= require datatables.net-searchpanes-bs4/js/searchPanes.bootstrap4
 //= require blacklight/blacklight
+//= require blacklight_gallery
 //= require hyrax
 //= require hyrax/autocomplete/default
 //= require almond
