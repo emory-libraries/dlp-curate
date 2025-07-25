@@ -35,7 +35,7 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     end
 
     def image_concerns(curation_concern)
-      file_set_ids = curation_concern.ordered_member_ids - curation_concern.child_work_ids
+      file_set_ids = (curation_concern.ordered_member_ids - curation_concern.child_work_ids)&.compact
       if file_set_ids.empty?
         []
       else
