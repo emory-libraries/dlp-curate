@@ -1,5 +1,6 @@
 version: 2.1
 orbs:
+    node: circleci/node@4.9.0
     samvera: samvera/circleci-orb@1.0.0
 jobs:
     build:
@@ -18,6 +19,11 @@ jobs:
         parallelism: 4
         steps:
             - checkout
+
+             - node/install:
+                install-yarn: true
+                install-npm: false
+                node-version: "v20.15.1"
 
             - samvera/bundle:
                 ruby_version: << parameters.ruby_version >>
