@@ -122,6 +122,10 @@ class IiifController < ApplicationController
       IO.foreach(path).each do |buffer|
         response.stream.write(buffer)
       end
+    rescue Errno::ENOENT => error
+      Rails.logger.error(error.message)
+      default_image = Rails.root.join("app", "assets", "images", "unauthorized.png")
+      send_file default_image, status: :not_found
     ensure
       response.stream.close
     end
