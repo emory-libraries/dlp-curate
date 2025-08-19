@@ -35,11 +35,21 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     end
 
     def image_concerns(curation_concern)
-      file_set_ids = curation_concern.ordered_member_ids - curation_concern.child_work_ids
+      check_for_nil_in_ordered_members(curation_concern: curation_concern)
+      file_set_ids = pulled_ordered_members(curation_concern: curation_concern)&.compact
       if file_set_ids.empty?
         []
       else
         file_set_ids
       end
+    end
+
+    def pulled_ordered_members(curation_concern:)
+      curation_concern.ordered_member_ids - curation_concern.child_work_ids
+    end
+
+    def check_for_nil_in_ordered_members(curation_concern:)
+      return unless pulled_ordered_members(curation_concern: curation_concern).any?(nil)
+      Rails.logger.error "The CurateGenericWork with the id #{curation_concern.id} contains nil objects in its ordered_members."
     end
 end
