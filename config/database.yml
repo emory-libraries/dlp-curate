@@ -17,6 +17,8 @@ test:
 production:
   <<: *default
   adapter: 'mysql2'
+  encoding: utf8mb4
+  collation: utf8mb4_unicode_ci
   database: <%= ENV['DATABASE_NAME'] %> 
   pool: <%= ENV['DATABASE_POOL'] || 5 %>
   host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
