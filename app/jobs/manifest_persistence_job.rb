@@ -3,6 +3,10 @@
 class ManifestPersistenceJob < Hyrax::ApplicationJob
   include IiifManifestCache
 
+  retry_on(ActionView::Template::Error) do |_job, error|
+    Rails.logger.error(error.message)
+  end
+
   def perform(key:, solr_doc:, root_url:, manifest_metadata:, curation_concern:, sequence_rendering:)
     manifest_json = ApplicationController.render(
       template: 'manifest/manifest.json',
