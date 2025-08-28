@@ -9,7 +9,7 @@ class CatalogController < ApplicationController
   # Allow all search options when in read-only mode
   skip_before_action :check_read_only
   # Quiets highly repetitive BlacklightRangeLimit::InvalidRange error
-  rescue_from BlacklightRangeLimit::InvalidRange, with: :render_404
+  rescue_from ::BlacklightRangeLimit::InvalidRange, with: :render_404
 
   def self.uploaded_field
     solr_name('system_create', :stored_sortable, type: :date)
