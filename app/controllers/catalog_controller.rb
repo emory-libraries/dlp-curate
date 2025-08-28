@@ -304,7 +304,7 @@ class CatalogController < ApplicationController
   private
 
   def render_404(exception)
-    Rails.logger.error(exception.messag)
+    Rails.logger.error(exception.message)
     render file: "#{Rails.root}/public/404.html", layout: false, status: :not_found
   end
 end
