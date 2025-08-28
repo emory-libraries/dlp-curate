@@ -8,6 +8,8 @@ class CatalogController < ApplicationController
   before_action :enforce_show_permissions, only: :show
   # Allow all search options when in read-only mode
   skip_before_action :check_read_only
+  # Quiets highly repetitive BlacklightRangeLimit::InvalidRange error
+  rescue_from BlacklightRangeLimit::InvalidRange, with: :render_404
 
   def self.uploaded_field
     solr_name('system_create', :stored_sortable, type: :date)
@@ -297,5 +299,12 @@ class CatalogController < ApplicationController
   # this method is not called in that context.
   def render_bookmarks_control?
     false
+  end
+
+  private
+
+  def render_404(exception)
+    Rails.logger.error(exception.messag)
+    render file: "#{Rails.root}/public/404.html", layout: false, status: :not_found
   end
 end
