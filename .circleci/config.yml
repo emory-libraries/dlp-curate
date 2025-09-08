@@ -20,7 +20,7 @@ jobs:
         steps:
             - checkout
 
-             - node/install:
+            - node/install:
                 install-yarn: true
                 install-npm: false
                 node-version: "v20.15.1"
