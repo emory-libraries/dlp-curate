@@ -25,8 +25,8 @@ append :linked_dirs, "log", "public/assets", "tmp/pids", "tmp/cache", "tmp/socke
 append :linked_files, ".env.production", "config/secrets.yml", "config/reading_room_ips.yml"
 
 set :default_env,
-    PATH:                            '$PATH:/opt/rh/rh-ruby25/root/usr/local/bin:/opt/rh/rh-ruby25/root/usr/bin',
-    LD_LIBRARY_PATH:                 '$LD_LIBRARY_PATH:/opt/rh/rh-ruby25/root/usr/local/lib64:/opt/rh/rh-ruby25/root/usr/lib64',
+    PATH:                            '$PATH:/usr/local/rbenv/shims/ruby',
+    LD_LIBRARY_PATH:                 '$LD_LIBRARY_PATH:/usr/lib64',
     PASSENGER_INSTANCE_REGISTRY_DIR: '/var/run'
 
 # Default value for local_user is ENV['USER']
@@ -38,7 +38,7 @@ after :'deploy:finished', :'passenger:restart'
 # Restart apache on RedHat
 namespace :deploy do
   after :finishing, :restart_apache do
-    on roles(:redhatapp) do
+    on roles(:ubuntu) do
       execute :sudo, :systemctl, :restart, :httpd
     end
   end
