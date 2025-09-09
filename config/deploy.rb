@@ -11,6 +11,8 @@ Dotenv.load('.env.development')
 set :application, "dlp-curate"
 set :repo_url, "https://github.com/emory-libraries/dlp-curate.git"
 set :deploy_to, '/opt/dlp-curate'
+set :rbenv_ruby, '2.7.4'
+set :rbenv_custom_path, '/usr/local/rbenv'
 set :rails_env, 'production'
 set :assets_prefix, "#{shared_path}/public/assets"
 set :migration_role, :app
@@ -18,7 +20,7 @@ set :service_unit_name, "sidekiq.service"
 set :passenger_restart_with_touch, true
 
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
-set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
+set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'main'
 
 append :linked_dirs, "log", "public/assets", "tmp/pids", "tmp/cache", "tmp/sockets",
   "tmp/imports", "config/emory/groups", "tmp/csv_uploads", "tmp/csv_uploads_cache"
