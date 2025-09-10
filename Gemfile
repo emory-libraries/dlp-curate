@@ -42,6 +42,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'sidekiq'
 gem 'sidekiq-limit_fetch'
 gem 'stackprof'
+gem 'timeout', '0.3.1'
 gem 'turbolinks', '~> 5'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
