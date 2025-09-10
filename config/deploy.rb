@@ -11,6 +11,8 @@ Dotenv.load('.env.development')
 set :application, "dlp-curate"
 set :repo_url, "https://github.com/emory-libraries/dlp-curate.git"
 set :deploy_to, '/opt/dlp-curate'
+set :rbenv_ruby, '2.7.4'
+set :rbenv_custom_path, '/usr/local/rbenv'
 set :rails_env, 'production'
 set :assets_prefix, "#{shared_path}/public/assets"
 set :migration_role, :app
@@ -18,15 +20,15 @@ set :service_unit_name, "sidekiq.service"
 set :passenger_restart_with_touch, true
 
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
-set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'master'
+set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'main'
 
 append :linked_dirs, "log", "public/assets", "tmp/pids", "tmp/cache", "tmp/sockets",
   "tmp/imports", "config/emory/groups", "tmp/csv_uploads", "tmp/csv_uploads_cache"
 append :linked_files, ".env.production", "config/secrets.yml", "config/reading_room_ips.yml"
 
 set :default_env,
-    PATH:                            '$PATH:/opt/rh/rh-ruby25/root/usr/local/bin:/opt/rh/rh-ruby25/root/usr/bin',
-    LD_LIBRARY_PATH:                 '$LD_LIBRARY_PATH:/opt/rh/rh-ruby25/root/usr/local/lib64:/opt/rh/rh-ruby25/root/usr/lib64',
+    PATH:                            '$PATH:/usr/local/rbenv/shims/ruby',
+    LD_LIBRARY_PATH:                 '$LD_LIBRARY_PATH:/usr/lib64',
     PASSENGER_INSTANCE_REGISTRY_DIR: '/var/run'
 
 # Default value for local_user is ENV['USER']
@@ -38,7 +40,7 @@ after :'deploy:finished', :'passenger:restart'
 # Restart apache on RedHat
 namespace :deploy do
   after :finishing, :restart_apache do
-    on roles(:redhatapp) do
+    on roles(:ubuntu) do
       execute :sudo, :systemctl, :restart, :httpd
     end
   end
