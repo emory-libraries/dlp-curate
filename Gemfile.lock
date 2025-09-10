@@ -245,7 +245,7 @@ GEM
       rexml
     crass (1.0.6)
     csv (3.3.5)
-    date (3.3.3)
+    date (3.4.1)
     declarative (0.0.20)
     declarative-builder (0.1.0)
       declarative-option (< 0.2.0)
