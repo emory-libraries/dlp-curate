@@ -98,7 +98,7 @@ class FileSet < ActiveFedora::Base
   end
 
   def extracted_file_by_file_name
-    files.select { |f| f.file_name.first.include?('.xml') }&.first
+    files.select { |f| f&.file_name&.first&.include?('.xml') }&.first
   end
 
   private
