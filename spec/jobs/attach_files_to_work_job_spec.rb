@@ -48,7 +48,7 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
     it_behaves_like 'a file attacher' do
       it 'sets fileset name as preservation_master_file name when fileset name is not present' do
         described_class.perform_now(generic_work, [uploaded_file2])
-
+        generic_work.reload
         expect(generic_work.file_sets.first.title).to eq ['0003_preservation_master.tif']
         expect(generic_work.file_sets.first.pcdm_use).to eq 'supplementary'
         expect(generic_work.file_sets.first.files.size).to eq 3

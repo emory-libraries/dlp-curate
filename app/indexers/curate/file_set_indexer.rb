@@ -32,7 +32,7 @@ module Curate
         solr_doc['sha1_tesim'] = [object&.preservation_master_file&.checksum&.uri&.to_s,
                                   object&.intermediate_file&.checksum&.uri&.to_s,
                                   object&.service_file&.checksum&.uri&.to_s,
-                                  object&.extracted&.checksum&.uri&.to_s,
+                                  pulled_extracted_object&.checksum&.uri&.to_s,
                                   object&.transcript_file&.checksum&.uri&.to_s]
       end
 
@@ -97,6 +97,10 @@ module Curate
         solr_doc['alto_xml_tesi'] = Curate::TextExtraction::AltoReader.new(object.alto_xml, object.width.first, object.height.first).json if object.alto_xml.present?
         solr_doc['transcript_text_tesi'] = object.transcript_text if object.transcript_text.present?
         solr_doc['is_page_of_ssi'] = object.parent.id if object.parent.present?
+      end
+
+      def pulled_extracted_object
+        object.extracted.presence || object.extracted_file_by_file_name
       end
   end
 end
