@@ -10,6 +10,9 @@
   <div itemscope itemtype="http://schema.org/CreativeWork" class="col-xs-12">
     <%= render 'work_title', presenter: @presenter %>
     <%= render 'show_actions', presenter: @presenter %>
+    <% if @presenter&.representative_presenter&.pdf? %>
+      <%= render 'representative_media', presenter: @presenter, viewer: false %>
+    <% end %>
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="row">
@@ -23,7 +26,7 @@
             <% unless @parent.blank? %>
               <%= link_to "Parent Work", @parent, class: 'btn btn-link' %>
             <% end %>
-            <%= render 'representative_media', presenter: @presenter, viewer: false unless @presenter.iiif_viewer? %>
+            <%= render 'representative_media', presenter: @presenter, viewer: false unless @presenter.iiif_viewer? || @presenter&.representative_presenter&.pdf? %>
           </div>
           <div class="col-sm-9">
             <%= render 'work_description', presenter: @presenter %>
