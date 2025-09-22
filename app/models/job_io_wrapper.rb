@@ -96,10 +96,10 @@ class JobIoWrapper < ApplicationRecord
   end
 
   def to_file_metadata
-    Hyrax::FileMetadata.new(label: original_name,
+    Hyrax::FileMetadata.new(label:             original_name,
                             original_filename: original_name,
-                            mime_type: mime_type,
-                            use: [Hyrax::FileMetadata::Use::ORIGINAL_FILE])
+                            mime_type:         mime_type,
+                            use:               [Hyrax::FileMetadata::Use::ORIGINAL_FILE])
   end
 
   # The magic that switches *once* between local filepath and CarrierWave file
@@ -110,37 +110,37 @@ class JobIoWrapper < ApplicationRecord
 
   private
 
-  def extracted_original_name
-    eon = uploaded_file.uploader.filename if uploaded_file
-    eon ||= File.basename(path) if path.present? # NOTE: uploader.filename is `nil` with uncached remote files (e.g. AWSFile)
-    eon
-  end
+    def extracted_original_name
+      eon = uploaded_file.uploader.filename if uploaded_file
+      eon ||= File.basename(path) if path.present? # NOTE: uploader.filename is `nil` with uncached remote files (e.g. AWSFile)
+      eon
+    end
 
-  def extracted_mime_type
-    uploaded_file ? uploaded_file.uploader.content_type : Hydra::PCDM::GetMimeTypeForFile.call(original_name)
-  end
+    def extracted_mime_type
+      uploaded_file ? uploaded_file.uploader.content_type : Hydra::PCDM::GetMimeTypeForFile.call(original_name)
+    end
 
-  # @return [File, StringIO] depending on CarrierWave configuration
-  # @raise when uploaded_file *becomes* required but is missing
-  def file_from_uploaded_file!
-    raise("path '#{path}' was unusable and uploaded_file empty") unless uploaded_file
-    self.path = uploaded_file.uploader.file.path # old path useless now
-    uploaded_file.uploader.sanitized_file.file
-  end
+    # @return [File, StringIO] depending on CarrierWave configuration
+    # @raise when uploaded_file *becomes* required but is missing
+    def file_from_uploaded_file!
+      raise("path '#{path}' was unusable and uploaded_file empty") unless uploaded_file
+      self.path = uploaded_file.uploader.file.path # old path useless now
+      uploaded_file.uploader.sanitized_file.file
+    end
 
-  # @return [File, nil] nil if the path doesn't exist on this (worker) system or can't be read
-  def file_from_path
-    File.open(path, 'rb') if path && File.exist?(path) && File.readable?(path)
-  end
+    # @return [File, nil] nil if the path doesn't exist on this (worker) system or can't be read
+    def file_from_path
+      File.open(path, 'rb') if path && File.exist?(path) && File.readable?(path)
+    end
 
-  def static_defaults
-    self.relation ||= 'original_file'
-  end
+    def static_defaults
+      self.relation ||= 'original_file'
+    end
 
-  # create preservation_event for fileset creation (method in PreservationEvents module)
-  def file_set_preservation_event(file_set, event_start, outcome, details)
-    event = { 'type' => 'File submission', 'start' => event_start, 'outcome' => outcome, 'details' => details,
-              'software_version' => 'Fedora v4.7.6', 'user' => user.uid }
-    create_preservation_event(file_set, event)
-  end
+    # create preservation_event for fileset creation (method in PreservationEvents module)
+    def file_set_preservation_event(file_set, event_start, outcome, details)
+      event = { 'type' => 'File submission', 'start' => event_start, 'outcome' => outcome, 'details' => details,
+                'software_version' => 'Fedora v4.7.6', 'user' => user.uid }
+      create_preservation_event(file_set, event)
+    end
 end
