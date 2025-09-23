@@ -180,6 +180,8 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
     return if object.representative_id.blank?
     representative_file_set = SolrDocument.find(object.representative_id)
     representative_file_set&.pdf? ? 'pdf' : nil
+  rescue Blacklight::Exceptions::RecordNotFound
+    nil
   end
 
   private
