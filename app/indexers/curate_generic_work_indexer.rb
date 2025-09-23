@@ -26,6 +26,7 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       solr_doc['parent_work_for_lux_tesim'] = parent_work_for_lux
       solr_doc['source_collection_title_ssim'] = source_collection
       solr_doc['manifest_cache_key_tesim'] = manifest_cache_key
+      solr_doc['representative_file_type_ssi'] = representative_file_type
       # the next two fields are for display and search, not for security
       solr_doc['visibility_group_ssi'] = visibility_group_for_lux
       solr_doc['human_readable_visibility_ssi'] = human_readable_visibility
@@ -173,6 +174,14 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
     file_sets_visibility = object.file_sets.map(&:visibility).join
     Digest::MD5.hexdigest(object.title.first.to_s + object.file_sets.count.to_s + holding_repository.to_s + object.rights_statement.first.to_s + object.visibility.to_s +
                           file_sets_visibility + rendering_ids)
+  end
+
+  def representative_file_type
+    return if object.representative_id.blank?
+    representative_file_set = SolrDocument.find(object.representative_id)
+    representative_file_set&.pdf? ? 'pdf' : nil
+  rescue Blacklight::Exceptions::RecordNotFound
+    nil
   end
 
   private

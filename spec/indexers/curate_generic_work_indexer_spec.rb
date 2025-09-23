@@ -364,4 +364,25 @@ RSpec.describe CurateGenericWorkIndexer do
       expect(solr_document['all_text_tsimv']).to eq(work.full_text_data)
     end
   end
+
+  describe 'representative_file_type_ssi' do
+    before { allow(SolrDocument).to receive(:find).with('456').and_return(fileset_solr_document) }
+    let(:fileset_solr_document) { SolrDocument.new({ id: '456' }) }
+    let(:attributes) do
+      {
+        id:                '123',
+        representative_id: '456'
+      }
+    end
+
+    it 'indexes nil when file not pdf' do
+      expect(solr_document['representative_file_type_ssi']).to be_nil
+    end
+
+    it 'indexes pdf when file is pdf' do
+      allow(fileset_solr_document).to receive(:pdf?).and_return(true)
+
+      expect(solr_document['representative_file_type_ssi']).to eq 'pdf'
+    end
+  end
 end
