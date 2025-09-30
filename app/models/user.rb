@@ -19,8 +19,6 @@ class User < ApplicationRecord
     end
   end
 
-  attr_accessible :email, :password, :password_confirmation if Blacklight::Utils.needs_attr_accessible?
-
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
   # Include devise modules. Others available are:
@@ -35,6 +33,13 @@ class User < ApplicationRecord
   # the account.
   def to_s
     email
+  end
+
+  # Groups include roles and those set by #groups= (especially in specs)
+  def groups
+    g = roles.map(&:name)
+    g += group_service.fetch_groups(user: self)
+    g
   end
 
   def viewer?

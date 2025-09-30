@@ -15,7 +15,8 @@ module DlpCurate
     require 'zizia'
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+    config.load_defaults 6.1
+    config.add_autoload_paths_to_load_path = true
     config.log_formatter = LogFormatter.new
     config.x.curate_template = '-cor'
     # Settings in config/environments/* take precedence over those specified here.
