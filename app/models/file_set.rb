@@ -121,6 +121,14 @@ class FileSet < ActiveFedora::Base
     @pulled_transcript_file ||= transcript_file.presence || transcript_file_by_logic
   end
 
+  def transcript_file_by_logic
+    files.select { |f| f&.file_name&.first&.include?('.txt') && files.size > 1 }&.first
+  end
+
+  def pulled_transcript_file
+    @pulled_transcript_file ||= transcript_file.presence || transcript_file_by_logic
+  end
+
   private
 
     def service
