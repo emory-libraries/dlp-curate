@@ -34,8 +34,8 @@ class CompileFullTextJob < Hyrax::ApplicationJob
 
       member_ids.each do |member_id|
         file_set = FileSet.find(member_id)
-        next unless file_set.title&.first&.starts_with?('Page') && file_set.transcript_file.present?
-        map[file_set.label] = file_set.transcript_file
+        next unless file_set.title&.first&.starts_with?('Page') && file_set.pulled_transcript_file.present?
+        map[file_set.label] = file_set.pulled_transcript_file
       end
       map
     end

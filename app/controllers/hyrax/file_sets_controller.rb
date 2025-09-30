@@ -312,7 +312,7 @@ module Hyrax
           'service_file':             @file_set.service_file,
           'intermediate_file':        @file_set.intermediate_file,
           'extracted':                @file_set.extracted.presence || @file_set.extracted_file_by_file_name,
-          'transcript_file':          @file_set.transcript_file
+          'transcript_file':          @file_set.pulled_transcript_file
         }
       end
   end
