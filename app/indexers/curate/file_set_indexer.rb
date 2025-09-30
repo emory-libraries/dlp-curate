@@ -33,7 +33,7 @@ module Curate
                                   object&.intermediate_file&.checksum&.uri&.to_s,
                                   object&.service_file&.checksum&.uri&.to_s,
                                   pulled_extracted_object&.checksum&.uri&.to_s,
-                                  object&.transcript_file&.checksum&.uri&.to_s]
+                                  object&.pulled_transcript_file&.checksum&.uri&.to_s]
       end
 
       # Get all events that appear as nested_objects in fedora
