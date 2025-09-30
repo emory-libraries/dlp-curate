@@ -94,7 +94,7 @@ class FileSet < ActiveFedora::Base
   end
 
   def transcript_text
-    transcript_file&.content&.force_encoding('UTF-8')&.encode("UTF-8", invalid: :replace, replace: "") if transcript_file&.file_name&.first&.include?('.txt')
+    pulled_transcript_file&.content&.force_encoding('UTF-8')&.encode("UTF-8", invalid: :replace, replace: "") if pulled_transcript_file&.file_name&.first&.include?('.txt')
   end
 
   def extracted_file_by_file_name
@@ -107,6 +107,14 @@ class FileSet < ActiveFedora::Base
 
   def pulled_extracted_file
     @pulled_extracted_file ||= extracted.presence || extracted_file_by_file_name
+  end
+
+  def pulled_transcript_file
+    @pulled_transcript_file ||= transcript_file.presence || transcript_file_by_logic
+  end
+
+  def transcript_file_by_logic
+    files.select { |f| f&.file_name&.first&.include?('.txt') && files.size > 1 }&.first
   end
 
   def pulled_transcript_file
