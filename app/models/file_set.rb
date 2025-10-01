@@ -34,7 +34,7 @@ class FileSet < ActiveFedora::Base
   end
 
   def original_file
-    preservation_master_file
+    pulled_preservation_master_file
   end
 
   include ::Hyrax::FileSetBehavior
@@ -60,17 +60,17 @@ class FileSet < ActiveFedora::Base
   # We override this method which comes from Hydra::Works::VirusCheck and
   # is mixed-in through ::Hyrax::FileSetBehavior on L#34
   def viruses?
-    return false unless preservation_master_file&.new_record? # We have a new file to check
+    return false unless pulled_preservation_master_file&.new_record? # We have a new file to check
     event_start = DateTime.current
     # This method updated to match v3.0.0.rc1
-    result = Hyrax::VirusCheckerService.file_has_virus?(preservation_master_file)
-    file_set = FileSet.find(preservation_master_file.id&.partition("/files")&.first)
+    result = Hyrax::VirusCheckerService.file_has_virus?(pulled_preservation_master_file)
+    file_set = FileSet.find(pulled_preservation_master_file&.id&.partition("/files")&.first)
     event = { 'type' => 'Virus Check', 'start' => event_start, 'outcome' => result, 'software_version' => 'ClamAV 0.101.4', 'user' => file_set.depositor }
     if result == false
       event['details'] = 'No viruses found'
       event['outcome'] = 'Success'
     else
-      event['details'] = "Virus was found in file: #{preservation_master_file&.original_name}"
+      event['details'] = "Virus was found in file: #{pulled_preservation_master_file&.original_name}"
       event['outcome'] = 'Failure'
     end
     create_preservation_event(file_set, event)
@@ -97,12 +97,22 @@ class FileSet < ActiveFedora::Base
     pulled_transcript_file&.content&.force_encoding('UTF-8')&.encode("UTF-8", invalid: :replace, replace: "") if pulled_transcript_file&.file_name&.first&.include?('.txt')
   end
 
+  def preservation_master_file_by_logic
+    files.size == 1 ? files.first : files.select { |f| f&.file_name&.first&.include?(fs.label) }&.first
+  end
+
   def extracted_file_by_file_name
-    files.select { |f| f&.file_name&.first&.include?('.xml') || f&.file_name&.first&.include?('.pos') }&.first
+    files.select do |f|
+      f&.file_name&.first&.include?('.xml') || f&.file_name&.first&.include?('.pos') && files.size > 1
+    end&.first
   end
 
   def transcript_file_by_logic
     files.select { |f| f&.file_name&.first&.include?('.txt') && files.size > 1 }&.first
+  end
+
+  def pulled_preservation_master_file
+    @pulled_preservation_master_file ||= preservation_master_file.presence || preservation_master_file_by_logic
   end
 
   def pulled_extracted_file

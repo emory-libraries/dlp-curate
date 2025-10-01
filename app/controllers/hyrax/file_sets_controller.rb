@@ -308,7 +308,7 @@ module Hyrax
 
       def set_files
         {
-          'preservation_master_file': @file_set.preservation_master_file,
+          'preservation_master_file': @file_set.pulled_preservation_master_file,
           'service_file':             @file_set.service_file,
           'intermediate_file':        @file_set.intermediate_file,
           'extracted':                @file_set.pulled_extracted_file,

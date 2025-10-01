@@ -331,7 +331,7 @@ class CurateGenericWork < ActiveFedora::Base
     # rubocop:disable Rails/FindBy
     file_set = FileSet.where(label: label)&.order('date_uploaded_dtsi desc')&.first
     # rubocop:enable Rails/FindBy
-    file_set.present? ? file_set.preservation_master_file&.content : nil
+    file_set.present? ? file_set.pulled_preservation_master_file&.content : nil
   end
 
   # accepts_nested_attributes_for can not be called until all
