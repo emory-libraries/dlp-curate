@@ -311,7 +311,7 @@ module Hyrax
           'preservation_master_file': @file_set.preservation_master_file,
           'service_file':             @file_set.service_file,
           'intermediate_file':        @file_set.intermediate_file,
-          'extracted':                @file_set.extracted.presence || @file_set.extracted_file_by_file_name,
+          'extracted':                @file_set.pulled_extracted_file,
           'transcript_file':          @file_set.pulled_transcript_file
         }
       end

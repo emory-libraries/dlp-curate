@@ -98,11 +98,15 @@ class FileSet < ActiveFedora::Base
   end
 
   def extracted_file_by_file_name
-    files.select { |f| f&.file_name&.first&.include?('.xml') }&.first
+    files.select { |f| f&.file_name&.first&.include?('.xml') || f&.file_name&.first&.include?('.pos') }&.first
   end
 
   def transcript_file_by_logic
     files.select { |f| f&.file_name&.first&.include?('.txt') && files.size > 1 }&.first
+  end
+
+  def pulled_extracted_file
+    @pulled_extracted_file ||= extracted.presence || extracted_file_by_file_name
   end
 
   def pulled_transcript_file
