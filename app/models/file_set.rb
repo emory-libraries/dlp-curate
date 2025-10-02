@@ -34,7 +34,7 @@ class FileSet < ActiveFedora::Base
   end
 
   def original_file
-    pulled_preservation_master_file
+    preservation_master_file
   end
 
   include ::Hyrax::FileSetBehavior
@@ -60,17 +60,17 @@ class FileSet < ActiveFedora::Base
   # We override this method which comes from Hydra::Works::VirusCheck and
   # is mixed-in through ::Hyrax::FileSetBehavior on L#34
   def viruses?
-    return false unless pulled_preservation_master_file&.new_record? # We have a new file to check
+    return false unless preservation_master_file&.new_record? # We have a new file to check
     event_start = DateTime.current
     # This method updated to match v3.0.0.rc1
-    result = Hyrax::VirusCheckerService.file_has_virus?(pulled_preservation_master_file)
-    file_set = FileSet.find(pulled_preservation_master_file&.id&.partition("/files")&.first)
+    result = Hyrax::VirusCheckerService.file_has_virus?(preservation_master_file)
+    file_set = FileSet.find(preservation_master_file&.id&.partition("/files")&.first)
     event = { 'type' => 'Virus Check', 'start' => event_start, 'outcome' => result, 'software_version' => 'ClamAV 0.101.4', 'user' => file_set.depositor }
     if result == false
       event['details'] = 'No viruses found'
       event['outcome'] = 'Success'
     else
-      event['details'] = "Virus was found in file: #{pulled_preservation_master_file&.original_name}"
+      event['details'] = "Virus was found in file: #{preservation_master_file&.original_name}"
       event['outcome'] = 'Failure'
     end
     create_preservation_event(file_set, event)
@@ -98,7 +98,11 @@ class FileSet < ActiveFedora::Base
   end
 
   def preservation_master_file_by_logic
-    files.size == 1 ? files.first : files.select { |f| f&.file_name&.first&.include?(fs.label) }&.first
+    if files.size == 1
+      files.first
+    elsif label.present?
+      files.select { |f| f&.file_name&.first&.include?(label) }&.first
+    end
   end
 
   def extracted_file_by_file_name
@@ -112,15 +116,15 @@ class FileSet < ActiveFedora::Base
   end
 
   def pulled_preservation_master_file
-    @pulled_preservation_master_file ||= preservation_master_file.presence || preservation_master_file_by_logic
+    @pulled_preservation_master_file ||= preservation_master_file&.file_name&.present? ? preservation_master_file : preservation_master_file_by_logic
   end
 
   def pulled_extracted_file
-    @pulled_extracted_file ||= extracted.presence || extracted_file_by_file_name
+    @pulled_extracted_file ||= extracted&.file_name&.present? ? extracted : extracted_file_by_file_name
   end
 
   def pulled_transcript_file
-    @pulled_transcript_file ||= transcript_file.presence || transcript_file_by_logic
+    @pulled_transcript_file ||= transcript_file&.file_name&.present? ? transcript_file : transcript_file_by_logic
   end
 
   private
