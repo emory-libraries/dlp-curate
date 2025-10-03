@@ -30,7 +30,7 @@ module Curate
 
       def add_sha1(solr_doc)
         solr_doc['sha1_tesim'] = [object&.pulled_preservation_master_file&.checksum&.uri&.to_s,
-                                  object&.intermediate_file&.checksum&.uri&.to_s,
+                                  object&.pulled_intermediate_file&.checksum&.uri&.to_s,
                                   object&.service_file&.checksum&.uri&.to_s,
                                   object&.pulled_extracted_file&.checksum&.uri&.to_s,
                                   object&.pulled_transcript_file&.checksum&.uri&.to_s]
