@@ -311,7 +311,7 @@ RSpec.describe CurateGenericWorkIndexer do
       end
     end
 
-    context 'when fileset visibility is changed' do
+    context 'when fileset visibility is changed', :clean do
       let(:work) { FactoryBot.create(:public_generic_work) }
       let(:uf) do
         FactoryBot.build(:uploaded_file,

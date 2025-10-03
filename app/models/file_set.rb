@@ -64,7 +64,7 @@ class FileSet < ActiveFedora::Base
     event_start = DateTime.current
     # This method updated to match v3.0.0.rc1
     result = Hyrax::VirusCheckerService.file_has_virus?(preservation_master_file)
-    file_set = FileSet.find(preservation_master_file.id&.partition("/files")&.first)
+    file_set = FileSet.find(preservation_master_file&.id&.partition("/files")&.first)
     event = { 'type' => 'Virus Check', 'start' => event_start, 'outcome' => result, 'software_version' => 'ClamAV 0.101.4', 'user' => file_set.depositor }
     if result == false
       event['details'] = 'No viruses found'
@@ -97,20 +97,34 @@ class FileSet < ActiveFedora::Base
     pulled_transcript_file&.content&.force_encoding('UTF-8')&.encode("UTF-8", invalid: :replace, replace: "") if pulled_transcript_file&.file_name&.first&.include?('.txt')
   end
 
+  def preservation_master_file_by_logic
+    if files.size == 1
+      files.first
+    elsif label.present?
+      files.select { |f| f&.file_name&.first&.include?(label) }&.first
+    end
+  end
+
   def extracted_file_by_file_name
-    files.select { |f| f&.file_name&.first&.include?('.xml') || f&.file_name&.first&.include?('.pos') }&.first
+    files.select do |f|
+      f&.file_name&.first&.include?('.xml') || f&.file_name&.first&.include?('.pos') && files.size > 1
+    end&.first
   end
 
   def transcript_file_by_logic
     files.select { |f| f&.file_name&.first&.include?('.txt') && files.size > 1 }&.first
   end
 
+  def pulled_preservation_master_file
+    @pulled_preservation_master_file ||= preservation_master_file&.file_name&.present? ? preservation_master_file : preservation_master_file_by_logic
+  end
+
   def pulled_extracted_file
-    @pulled_extracted_file ||= extracted.presence || extracted_file_by_file_name
+    @pulled_extracted_file ||= extracted&.file_name&.present? ? extracted : extracted_file_by_file_name
   end
 
   def pulled_transcript_file
-    @pulled_transcript_file ||= transcript_file.presence || transcript_file_by_logic
+    @pulled_transcript_file ||= transcript_file&.file_name&.present? ? transcript_file : transcript_file_by_logic
   end
 
   private

@@ -46,6 +46,7 @@ RSpec.describe "Showing a file:", integration: true, clean: true, type: :system 
 
   context 'on a fileset view page' do
     before do
+      file_set.reload
       visit hyrax_file_set_path(file_set)
     end
 

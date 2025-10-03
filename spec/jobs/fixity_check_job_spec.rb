@@ -11,13 +11,13 @@ RSpec.describe FixityCheckJob, :clean do
       Hydra::Works::AddFileToFileSet.call(file, File.open(fixture_path + '/world.png'), :preservation_master_file, versioning: true)
     end
   end
-  let(:file_id) { file_set.preservation_master_file.id }
+  let(:file_id) { file_set.pulled_preservation_master_file.id }
 
   describe "called with perform_now" do
     let(:log_record) { described_class.perform_now(uri, file_set_id: file_set.id, file_id: file_id, initiating_user: user.uid) }
 
     describe 'fixity check the content' do
-      let(:uri) { file_set.preservation_master_file.uri }
+      let(:uri) { file_set.pulled_preservation_master_file.uri }
 
       it 'passes' do
         expect(log_record).to be_passed
@@ -31,7 +31,7 @@ RSpec.describe FixityCheckJob, :clean do
     end
 
     describe 'fixity check a version of the content' do
-      let(:uri) { Hyrax::VersioningService.latest_version_of(file_set.preservation_master_file).uri }
+      let(:uri) { Hyrax::VersioningService.latest_version_of(file_set.pulled_preservation_master_file).uri }
 
       it 'passes' do
         expect(log_record).to be_passed
@@ -42,7 +42,7 @@ RSpec.describe FixityCheckJob, :clean do
     end
 
     describe 'fixity check an invalid version of the content' do
-      let(:uri) { Hyrax::VersioningService.latest_version_of(file_set.preservation_master_file).uri + 'bogus' }
+      let(:uri) { Hyrax::VersioningService.latest_version_of(file_set.pulled_preservation_master_file).uri + 'bogus' }
 
       it 'fails' do
         expect(log_record).to be_failed
@@ -55,14 +55,14 @@ RSpec.describe FixityCheckJob, :clean do
     describe 'creates fixity_check preservation_events' do
       let(:file1) { File.open(fixture_path + '/sun.png') }
       let(:file2) { File.open(fixture_path + '/image.jp2') }
-      let(:uri1)  { file_set.preservation_master_file.uri }
+      let(:uri1)  { file_set.pulled_preservation_master_file.uri }
       let(:uri2)  { file_set.service_file.uri }
       let(:uri3)  { file_set.intermediate_file.uri }
 
       before do
         Hydra::Works::AddFileToFileSet.call(file_set, file1, :service_file)
         Hydra::Works::AddFileToFileSet.call(file_set, file2, :intermediate_file)
-        described_class.perform_now(uri1, file_set_id: file_set.id, file_id: file_set.preservation_master_file.id, initiating_user: user.uid)
+        described_class.perform_now(uri1, file_set_id: file_set.id, file_id: file_set.pulled_preservation_master_file.id, initiating_user: user.uid)
         described_class.perform_now(uri2, file_set_id: file_set.id, file_id: file_set.service_file.id, initiating_user: user.uid)
       end
 
