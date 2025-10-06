@@ -173,8 +173,8 @@ pdfjs-print-progress-message = 正在準備列印文件…
 #   $progress (Number) - percent value
 pdfjs-print-progress-percent = { $progress }%
 pdfjs-print-progress-close-button = 取消
-pdfjs-printing-not-supported = 警告：此瀏覽器未完整支援列印功能。
-pdfjs-printing-not-ready = 警告：此 PDF 未完成下載以供列印。
+pdfjs-printing-not-supported = 警告: 此瀏覽器未完整支援列印功能。
+pdfjs-printing-not-ready = 警告: 此 PDF 未完成下載以供列印。
 
 ## Tooltips and alt text for side panel toolbar buttons
 
@@ -294,13 +294,9 @@ pdfjs-web-fonts-disabled = 已停用網路字型 (Web fonts): 無法使用 PDF �
 
 pdfjs-editor-free-text-button =
     .title = 文字
-pdfjs-editor-color-picker-free-text-input =
-    .title = 更改文字色彩
 pdfjs-editor-free-text-button-label = 文字
 pdfjs-editor-ink-button =
     .title = 繪圖
-pdfjs-editor-color-picker-ink-input =
-    .title = 更改繪圖色彩
 pdfjs-editor-ink-button-label = 繪圖
 pdfjs-editor-stamp-button =
     .title = 新增或編輯圖片
@@ -312,29 +308,6 @@ pdfjs-highlight-floating-button1 =
     .title = 強調
     .aria-label = 強調
 pdfjs-highlight-floating-button-label = 強調
-pdfjs-comment-floating-button =
-    .title = 註解
-    .aria-label = 註解
-pdfjs-comment-floating-button-label = 註解
-pdfjs-editor-signature-button =
-    .title = 加入簽章
-pdfjs-editor-signature-button-label = 加入簽章
-
-## Default editor aria labels
-
-# “Highlight” is a noun, the string is used on the editor for highlights.
-pdfjs-editor-highlight-editor =
-    .aria-label = 強調樣式編輯器
-# “Drawing” is a noun, the string is used on the editor for drawings.
-pdfjs-editor-ink-editor =
-    .aria-label = 繪圖編輯器
-# Used when a signature editor is selected/hovered.
-# Variables:
-#   $description (String) - a string describing/labeling the signature.
-pdfjs-editor-signature-editor1 =
-    .aria-description = 簽章編輯器：{ $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = 圖片編輯器
 
 ## Remove button for the various kind of editor.
 
@@ -345,9 +318,7 @@ pdfjs-editor-remove-freetext-button =
 pdfjs-editor-remove-stamp-button =
     .title = 移除圖片
 pdfjs-editor-remove-highlight-button =
-    .title = 移除選擇範圍的強調效果
-pdfjs-editor-remove-signature-button =
-    .title = 移除簽章
+    .title = 移除強調範圍
 
 ##
 
@@ -364,16 +335,6 @@ pdfjs-editor-stamp-add-image-button-label = 新增圖片
 pdfjs-editor-free-highlight-thickness-input = 線條粗細
 pdfjs-editor-free-highlight-thickness-title =
     .title = 更改強調文字以外的項目時的線條粗細
-pdfjs-editor-add-signature-container =
-    .aria-label = 簽章控制元件與儲存的簽章
-pdfjs-editor-signature-add-signature-button =
-    .title = 新增簽章
-pdfjs-editor-signature-add-signature-button-label = 新增簽章
-# Used on the button to use an already saved signature.
-# Variables:
-#   $description (String) - a string describing/labeling the signature.
-pdfjs-editor-add-saved-signature-button =
-    .title = 已儲存簽章：{ $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = 文字編輯器
@@ -484,6 +445,7 @@ pdfjs-editor-new-alt-text-error-close-button = 關閉
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = 正在下載替代文字 AI 模型（{ $downloadedSize } / { $totalSize } MB）
     .aria-valuetext = 正在下載替代文字 AI 模型（{ $downloadedSize } / { $totalSize } MB）
 # This is a button that users can click to edit the alt text they have already added.
@@ -524,21 +486,12 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = 新增圖片後立即�
 pdfjs-editor-alt-text-settings-show-dialog-description = 幫助您確保所有圖片都有替代文字。
 pdfjs-editor-alt-text-settings-close-button = 關閉
 
-## Accessibility labels (announced by screen readers) for objects added to the editor.
-
-pdfjs-editor-highlight-added-alert = 已加入強調範圍
-pdfjs-editor-freetext-added-alert = 已加入文字
-pdfjs-editor-ink-added-alert = 已新增繪圖
-pdfjs-editor-stamp-added-alert = 已新增圖片
-pdfjs-editor-signature-added-alert = 已新增簽章
-
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = 已移除強調
 pdfjs-editor-undo-bar-message-freetext = 已移除文字
 pdfjs-editor-undo-bar-message-ink = 已移除繪圖
 pdfjs-editor-undo-bar-message-stamp = 已移除圖片
-pdfjs-editor-undo-bar-message-signature = 已移除簽章
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple = 已移除 { $count } 筆註解
@@ -548,94 +501,3 @@ pdfjs-editor-undo-bar-undo-button-label = 還原
 pdfjs-editor-undo-bar-close-button =
     .title = 關閉
 pdfjs-editor-undo-bar-close-button-label = 關閉
-
-## Add a signature dialog
-
-pdfjs-editor-add-signature-dialog-label = 此對話框讓使用者能夠建立簽章以加入 PDF 文件。使用者可以編輯他們的姓名（同時也是替代文字），並選擇性儲存簽章，以供未來重複使用。
-pdfjs-editor-add-signature-dialog-title = 加入簽章
-
-## Tab names
-
-# Type is a verb (you can type your name as signature)
-pdfjs-editor-add-signature-type-button = 打字
-    .title = 打字
-# Draw is a verb (you can draw your signature)
-pdfjs-editor-add-signature-draw-button = 手繪
-    .title = 手繪
-pdfjs-editor-add-signature-image-button = 圖片
-    .title = 圖片
-
-## Tab panels
-
-pdfjs-editor-add-signature-type-input =
-    .aria-label = 輸入簽章
-    .placeholder = 輸入簽章
-pdfjs-editor-add-signature-draw-placeholder = 手繪簽章
-pdfjs-editor-add-signature-draw-thickness-range-label = 線條粗細
-# Variables:
-#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
-pdfjs-editor-add-signature-draw-thickness-range =
-    .title = 繪製時的線條粗細：{ $thickness }
-pdfjs-editor-add-signature-image-placeholder = 將檔案拖曳到此處即可上傳
-pdfjs-editor-add-signature-image-browse-link =
-    { PLATFORM() ->
-        [macos] 或選擇圖片檔案
-       *[other] 或瀏覽圖片檔案
-    }
-
-## Controls
-
-pdfjs-editor-add-signature-description-label = 描述（替代文字）
-pdfjs-editor-add-signature-description-input =
-    .title = 描述（替代文字）
-pdfjs-editor-add-signature-description-default-when-drawing = 簽章
-pdfjs-editor-add-signature-clear-button-label = 清除簽章
-pdfjs-editor-add-signature-clear-button =
-    .title = 清除簽章
-pdfjs-editor-add-signature-save-checkbox = 儲存簽章
-pdfjs-editor-add-signature-save-warning-message = 您已經儲存 5 式簽章，請移除任一式才能再新增。
-pdfjs-editor-add-signature-image-upload-error-title = 無法上傳圖片
-pdfjs-editor-add-signature-image-upload-error-description = 請檢查您的網路連線，或改用其他圖片。
-pdfjs-editor-add-signature-image-no-data-error-title = 無法將此圖片轉換成簽章
-pdfjs-editor-add-signature-image-no-data-error-description = 請試著上傳另一張圖片。
-pdfjs-editor-add-signature-error-close-button = 關閉
-
-## Dialog buttons
-
-pdfjs-editor-add-signature-cancel-button = 取消
-pdfjs-editor-add-signature-add-button = 新增
-pdfjs-editor-edit-signature-update-button = 更新
-
-##  Edit a comment dialog
-
-pdfjs-editor-edit-comment-actions-button-label = 動作
-pdfjs-editor-edit-comment-actions-button =
-    .title = 動作
-pdfjs-editor-edit-comment-close-button-label = 關閉
-pdfjs-editor-edit-comment-close-button =
-    .title = 關閉
-pdfjs-editor-edit-comment-actions-edit-button-label = 編輯
-pdfjs-editor-edit-comment-actions-delete-button-label = 刪除
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = 輸入您的註解
-pdfjs-editor-edit-comment-manager-cancel-button = 取消
-pdfjs-editor-edit-comment-manager-save-button = 儲存
-
-## Edit a comment button in the editor toolbar
-
-pdfjs-editor-edit-comment-button =
-    .title = 編輯註解
-
-## Main menu for adding/removing signatures
-
-pdfjs-editor-delete-signature-button1 =
-    .title = 移除儲存的簽章
-pdfjs-editor-delete-signature-button-label1 = 移除儲存的簽章
-
-## Editor toolbar
-
-pdfjs-editor-add-signature-edit-button-label = 編輯描述
-
-## Edit signature description dialog
-
-pdfjs-editor-edit-signature-dialog-title = 編輯描述

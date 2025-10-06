@@ -306,13 +306,9 @@ pdfjs-web-fonts-disabled = Webové písma sú vypnuté: nie je možné použiť 
 
 pdfjs-editor-free-text-button =
     .title = Text
-pdfjs-editor-color-picker-free-text-input =
-    .title = Zmeniť farbu textu
 pdfjs-editor-free-text-button-label = Text
 pdfjs-editor-ink-button =
     .title = Kresliť
-pdfjs-editor-color-picker-ink-input =
-    .title = Zmeniť farbu kresby
 pdfjs-editor-ink-button-label = Kresliť
 pdfjs-editor-stamp-button =
     .title = Pridať alebo upraviť obrázky
@@ -324,29 +320,6 @@ pdfjs-highlight-floating-button1 =
     .title = Zvýrazniť
     .aria-label = Zvýrazniť
 pdfjs-highlight-floating-button-label = Zvýrazniť
-pdfjs-comment-floating-button =
-    .title = Pridať komentár
-    .aria-label = Pridať komentár
-pdfjs-comment-floating-button-label = Pridať komentár
-pdfjs-editor-signature-button =
-    .title = Pridať podpis
-pdfjs-editor-signature-button-label = Pridať podpis
-
-## Default editor aria labels
-
-# “Highlight” is a noun, the string is used on the editor for highlights.
-pdfjs-editor-highlight-editor =
-    .aria-label = Editor zvýraznenia
-# “Drawing” is a noun, the string is used on the editor for drawings.
-pdfjs-editor-ink-editor =
-    .aria-label = Editor kreslenia
-# Used when a signature editor is selected/hovered.
-# Variables:
-#   $description (String) - a string describing/labeling the signature.
-pdfjs-editor-signature-editor1 =
-    .aria-description = Editor podpisu: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Editor obrázkov
 
 ## Remove button for the various kind of editor.
 
@@ -358,8 +331,6 @@ pdfjs-editor-remove-stamp-button =
     .title = Odstrániť obrázok
 pdfjs-editor-remove-highlight-button =
     .title = Odstrániť zvýraznenie
-pdfjs-editor-remove-signature-button =
-    .title = Odstrániť podpis
 
 ##
 
@@ -376,16 +347,6 @@ pdfjs-editor-stamp-add-image-button-label = Pridať obrázok
 pdfjs-editor-free-highlight-thickness-input = Hrúbka
 pdfjs-editor-free-highlight-thickness-title =
     .title = Zmeňte hrúbku pre zvýrazňovanie iných položiek ako textu
-pdfjs-editor-add-signature-container =
-    .aria-label = Ovládacie prvky pre podpisy a uložené podpisy
-pdfjs-editor-signature-add-signature-button =
-    .title = Pridať nový podpis
-pdfjs-editor-signature-add-signature-button-label = Pridať nový podpis
-# Used on the button to use an already saved signature.
-# Variables:
-#   $description (String) - a string describing/labeling the signature.
-pdfjs-editor-add-saved-signature-button =
-    .title = Uložený podpis: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Textový editor
@@ -496,6 +457,7 @@ pdfjs-editor-new-alt-text-error-close-button = Zavrieť
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Sťahuje sa model AI pre alternatívne texty ({ $downloadedSize } z { $totalSize } MB)
     .aria-valuetext = Sťahuje sa model AI pre alternatívne texty ({ $downloadedSize } z { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
@@ -536,21 +498,12 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Pri pridávaní obráz
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomáha vám zabezpečiť, aby všetky vaše obrázky mali alternatívny text.
 pdfjs-editor-alt-text-settings-close-button = Zavrieť
 
-## Accessibility labels (announced by screen readers) for objects added to the editor.
-
-pdfjs-editor-highlight-added-alert = Zvýraznenie bolo pridané
-pdfjs-editor-freetext-added-alert = Text bol pridaný
-pdfjs-editor-ink-added-alert = Kresba bola pridaná
-pdfjs-editor-stamp-added-alert = Obrázok bol pridaný
-pdfjs-editor-signature-added-alert = Podpis bol pridaný
-
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Zvýraznenie bolo odstránené
 pdfjs-editor-undo-bar-message-freetext = Text bol odstránený
 pdfjs-editor-undo-bar-message-ink = Kreslenie bolo odstránené
 pdfjs-editor-undo-bar-message-stamp = Obrázok bol odstránený
-pdfjs-editor-undo-bar-message-signature = Podpis bol odstránený
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -566,94 +519,3 @@ pdfjs-editor-undo-bar-undo-button-label = Späť
 pdfjs-editor-undo-bar-close-button =
     .title = Zavrieť
 pdfjs-editor-undo-bar-close-button-label = Zavrieť
-
-## Add a signature dialog
-
-pdfjs-editor-add-signature-dialog-label = Toto okno umožňuje používateľovi vytvoriť podpis, ktorý sa pridá do dokumentu PDF. Používateľ môže upraviť meno (ktoré zároveň slúži ako alternatívny text) a voliteľne uložiť podpis, ak ho plánuje v budúcnosti znova použiť.
-pdfjs-editor-add-signature-dialog-title = Pridať podpis
-
-## Tab names
-
-# Type is a verb (you can type your name as signature)
-pdfjs-editor-add-signature-type-button = Typ
-    .title = Typ
-# Draw is a verb (you can draw your signature)
-pdfjs-editor-add-signature-draw-button = Kresliť
-    .title = Kresliť
-pdfjs-editor-add-signature-image-button = Obrázok
-    .title = Obrázok
-
-## Tab panels
-
-pdfjs-editor-add-signature-type-input =
-    .aria-label = Zadajte svoj podpis
-    .placeholder = Zadajte svoj podpis
-pdfjs-editor-add-signature-draw-placeholder = Nakreslite svoj podpis
-pdfjs-editor-add-signature-draw-thickness-range-label = Hrúbka
-# Variables:
-#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
-pdfjs-editor-add-signature-draw-thickness-range =
-    .title = Hrúbka ceruzky: { $thickness }
-pdfjs-editor-add-signature-image-placeholder = Sem presuňte súbor, ktorý chcete nahrať
-pdfjs-editor-add-signature-image-browse-link =
-    { PLATFORM() ->
-        [macos] Alebo vyberte súbor s obrázkom
-       *[other] Alebo vyberte súbor s obrázkom
-    }
-
-## Controls
-
-pdfjs-editor-add-signature-description-label = Popis (alternatívny text)
-pdfjs-editor-add-signature-description-input =
-    .title = Popis (alternatívny text)
-pdfjs-editor-add-signature-description-default-when-drawing = Podpis
-pdfjs-editor-add-signature-clear-button-label = Vymazať podpis
-pdfjs-editor-add-signature-clear-button =
-    .title = Vymazať podpis
-pdfjs-editor-add-signature-save-checkbox = Uložiť podpis
-pdfjs-editor-add-signature-save-warning-message = Dosiahli ste limit 5 uložených podpisov. Ak chcete uložiť ďalší, jeden odstráňte.
-pdfjs-editor-add-signature-image-upload-error-title = Obrázok sa nepodarilo nahrať
-pdfjs-editor-add-signature-image-upload-error-description = Skontrolujte sieťové pripojenie alebo skúste iný obrázok.
-pdfjs-editor-add-signature-image-no-data-error-title = Tento obrázok sa nedá previesť na podpis
-pdfjs-editor-add-signature-image-no-data-error-description = Skúste nahrať iný obrázok.
-pdfjs-editor-add-signature-error-close-button = Zavrieť
-
-## Dialog buttons
-
-pdfjs-editor-add-signature-cancel-button = Zrušiť
-pdfjs-editor-add-signature-add-button = Pridať
-pdfjs-editor-edit-signature-update-button = Aktualizovať
-
-##  Edit a comment dialog
-
-pdfjs-editor-edit-comment-actions-button-label = Akcie
-pdfjs-editor-edit-comment-actions-button =
-    .title = Akcie
-pdfjs-editor-edit-comment-close-button-label = Zavrieť
-pdfjs-editor-edit-comment-close-button =
-    .title = Zavrieť
-pdfjs-editor-edit-comment-actions-edit-button-label = Upraviť
-pdfjs-editor-edit-comment-actions-delete-button-label = Odstrániť
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Zadajte svoj komentár
-pdfjs-editor-edit-comment-manager-cancel-button = Zrušiť
-pdfjs-editor-edit-comment-manager-save-button = Uložiť
-
-## Edit a comment button in the editor toolbar
-
-pdfjs-editor-edit-comment-button =
-    .title = Upraviť komentár
-
-## Main menu for adding/removing signatures
-
-pdfjs-editor-delete-signature-button1 =
-    .title = Odstrániť uložený podpis
-pdfjs-editor-delete-signature-button-label1 = Odstrániť uložený podpis
-
-## Editor toolbar
-
-pdfjs-editor-add-signature-edit-button-label = Upraviť popis
-
-## Edit signature description dialog
-
-pdfjs-editor-edit-signature-dialog-title = Upraviť popis

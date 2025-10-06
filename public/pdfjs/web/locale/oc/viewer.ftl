@@ -351,6 +351,10 @@ pdfjs-editor-alt-text-add-description-label = Apondre una descripcion
 pdfjs-editor-alt-text-cancel-button = Anullar
 pdfjs-editor-alt-text-save-button = Enregistrar
 
+## Editor resizers
+## This is used in an aria label to help to understand the role of the resizer.
+
+
 ## Color picker
 
 # This means "Color used to highlight text"

@@ -302,13 +302,9 @@ pdfjs-web-fonts-disabled = Webbtypsnitt är inaktiverade: kan inte använda inb�
 
 pdfjs-editor-free-text-button =
     .title = Text
-pdfjs-editor-color-picker-free-text-input =
-    .title = Ändra textfärg
 pdfjs-editor-free-text-button-label = Text
 pdfjs-editor-ink-button =
     .title = Rita
-pdfjs-editor-color-picker-ink-input =
-    .title = Ändra ritningsfärg
 pdfjs-editor-ink-button-label = Rita
 pdfjs-editor-stamp-button =
     .title = Lägg till eller redigera bilder
@@ -320,29 +316,6 @@ pdfjs-highlight-floating-button1 =
     .title = Markera
     .aria-label = Markera
 pdfjs-highlight-floating-button-label = Markera
-pdfjs-comment-floating-button =
-    .title = Kommentar
-    .aria-label = Kommentar
-pdfjs-comment-floating-button-label = Kommentar
-pdfjs-editor-signature-button =
-    .title = Lägg till signatur
-pdfjs-editor-signature-button-label = Lägg till signatur
-
-## Default editor aria labels
-
-# “Highlight” is a noun, the string is used on the editor for highlights.
-pdfjs-editor-highlight-editor =
-    .aria-label = Markeringsredigerare
-# “Drawing” is a noun, the string is used on the editor for drawings.
-pdfjs-editor-ink-editor =
-    .aria-label = Ritredigerare
-# Used when a signature editor is selected/hovered.
-# Variables:
-#   $description (String) - a string describing/labeling the signature.
-pdfjs-editor-signature-editor1 =
-    .aria-description = Signaturredigerare: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Bildredigerare
 
 ## Remove button for the various kind of editor.
 
@@ -354,8 +327,6 @@ pdfjs-editor-remove-stamp-button =
     .title = Ta bort bild
 pdfjs-editor-remove-highlight-button =
     .title = Ta bort markering
-pdfjs-editor-remove-signature-button =
-    .title = Ta bort signatur
 
 ##
 
@@ -372,16 +343,6 @@ pdfjs-editor-stamp-add-image-button-label = Lägg till bild
 pdfjs-editor-free-highlight-thickness-input = Tjocklek
 pdfjs-editor-free-highlight-thickness-title =
     .title = Ändra tjocklek när du markerar andra objekt än text
-pdfjs-editor-add-signature-container =
-    .aria-label = Signaturkontroller och sparade signaturer
-pdfjs-editor-signature-add-signature-button =
-    .title = Lägg till ny signatur
-pdfjs-editor-signature-add-signature-button-label = Lägg till ny signatur
-# Used on the button to use an already saved signature.
-# Variables:
-#   $description (String) - a string describing/labeling the signature.
-pdfjs-editor-add-saved-signature-button =
-    .title = Sparad signatur: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Textredigerare
@@ -492,6 +453,7 @@ pdfjs-editor-new-alt-text-error-close-button = Stäng
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Hämtar AI-modell med alternativ text ({ $downloadedSize } av { $totalSize } MB)
     .aria-valuetext = Hämtar AI-modell med alternativ text ({ $downloadedSize } av { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
@@ -532,21 +494,12 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Visa alternativ textre
 pdfjs-editor-alt-text-settings-show-dialog-description = Hjälper dig att se till att alla dina bilder har alternativ text.
 pdfjs-editor-alt-text-settings-close-button = Stäng
 
-## Accessibility labels (announced by screen readers) for objects added to the editor.
-
-pdfjs-editor-highlight-added-alert = Markering tillagd
-pdfjs-editor-freetext-added-alert = Text tillagd
-pdfjs-editor-ink-added-alert = Ritning tillagd
-pdfjs-editor-stamp-added-alert = Bild tillagd
-pdfjs-editor-signature-added-alert = Signatur tillagd
-
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Markering borttagen
 pdfjs-editor-undo-bar-message-freetext = Text borttagen
 pdfjs-editor-undo-bar-message-ink = Ritning borttagen
 pdfjs-editor-undo-bar-message-stamp = Bild borttagen
-pdfjs-editor-undo-bar-message-signature = Signatur borttagen
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -560,94 +513,3 @@ pdfjs-editor-undo-bar-undo-button-label = Ångra
 pdfjs-editor-undo-bar-close-button =
     .title = Stäng
 pdfjs-editor-undo-bar-close-button-label = Stäng
-
-## Add a signature dialog
-
-pdfjs-editor-add-signature-dialog-label = Denna modal tillåter användaren att skapa en signatur för att lägga till i ett PDF-dokument. Användaren kan redigera namnet (som också fungerar som alternativ text) och eventuellt spara signaturen för upprepad användning.
-pdfjs-editor-add-signature-dialog-title = Lägg till en signatur
-
-## Tab names
-
-# Type is a verb (you can type your name as signature)
-pdfjs-editor-add-signature-type-button = Typ
-    .title = Typ
-# Draw is a verb (you can draw your signature)
-pdfjs-editor-add-signature-draw-button = Rita
-    .title = Rita
-pdfjs-editor-add-signature-image-button = Bild
-    .title = Bild
-
-## Tab panels
-
-pdfjs-editor-add-signature-type-input =
-    .aria-label = Skriv din signatur
-    .placeholder = Skriv din signatur
-pdfjs-editor-add-signature-draw-placeholder = Rita din signatur
-pdfjs-editor-add-signature-draw-thickness-range-label = Tjocklek
-# Variables:
-#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
-pdfjs-editor-add-signature-draw-thickness-range =
-    .title = Ritningstjocklek: { $thickness }
-pdfjs-editor-add-signature-image-placeholder = Dra en fil hit för att ladda upp
-pdfjs-editor-add-signature-image-browse-link =
-    { PLATFORM() ->
-        [macos] Eller välj bildfiler
-       *[other] Eller bläddra bland bildfiler
-    }
-
-## Controls
-
-pdfjs-editor-add-signature-description-label = Beskrivning (alternativ text)
-pdfjs-editor-add-signature-description-input =
-    .title = Beskrivning (alternativ text)
-pdfjs-editor-add-signature-description-default-when-drawing = Signatur
-pdfjs-editor-add-signature-clear-button-label = Rensa signatur
-pdfjs-editor-add-signature-clear-button =
-    .title = Rensa signatur
-pdfjs-editor-add-signature-save-checkbox = Spara signatur
-pdfjs-editor-add-signature-save-warning-message = Du har nått gränsen på 5 sparade signaturer. Ta bort en för att spara fler.
-pdfjs-editor-add-signature-image-upload-error-title = Det gick inte att ladda upp bilden
-pdfjs-editor-add-signature-image-upload-error-description = Kontrollera din nätverksanslutning eller försök med en annan bild.
-pdfjs-editor-add-signature-image-no-data-error-title = Det går inte att konvertera den här bilden till en signatur
-pdfjs-editor-add-signature-image-no-data-error-description = Prova att ladda upp en annan bild.
-pdfjs-editor-add-signature-error-close-button = Stäng
-
-## Dialog buttons
-
-pdfjs-editor-add-signature-cancel-button = Avbryt
-pdfjs-editor-add-signature-add-button = Lägg till
-pdfjs-editor-edit-signature-update-button = Uppdatera
-
-##  Edit a comment dialog
-
-pdfjs-editor-edit-comment-actions-button-label = Åtgärder
-pdfjs-editor-edit-comment-actions-button =
-    .title = Åtgärder
-pdfjs-editor-edit-comment-close-button-label = Stäng
-pdfjs-editor-edit-comment-close-button =
-    .title = Stäng
-pdfjs-editor-edit-comment-actions-edit-button-label = Redigera
-pdfjs-editor-edit-comment-actions-delete-button-label = Ta bort
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Ange din kommentar
-pdfjs-editor-edit-comment-manager-cancel-button = Avbryt
-pdfjs-editor-edit-comment-manager-save-button = Spara
-
-## Edit a comment button in the editor toolbar
-
-pdfjs-editor-edit-comment-button =
-    .title = Redigera kommentar
-
-## Main menu for adding/removing signatures
-
-pdfjs-editor-delete-signature-button1 =
-    .title = Ta bort sparad signatur
-pdfjs-editor-delete-signature-button-label1 = Ta bort sparad signatur
-
-## Editor toolbar
-
-pdfjs-editor-add-signature-edit-button-label = Redigera beskrivning
-
-## Edit signature description dialog
-
-pdfjs-editor-edit-signature-dialog-title = Redigera beskrivning

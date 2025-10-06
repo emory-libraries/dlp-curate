@@ -302,13 +302,9 @@ pdfjs-web-fonts-disabled = ਵੈਬ ਫੋਂਟ ਬੰਦ ਹਨ: ਇੰਬੈ
 
 pdfjs-editor-free-text-button =
     .title = ਲਿਖਤ
-pdfjs-editor-color-picker-free-text-input =
-    .title = ਲਿਖਤ ਦੇ ਰੰਗ ਨੂੰ ਬਦਲੋ
 pdfjs-editor-free-text-button-label = ਲਿਖਤ
 pdfjs-editor-ink-button =
     .title = ਵਾਹੋ
-pdfjs-editor-color-picker-ink-input =
-    .title = ਡਰਾਇੰਗ ਰੰਗ ਨੂੰ ਬਦਲੋ
 pdfjs-editor-ink-button-label = ਵਾਹੋ
 pdfjs-editor-stamp-button =
     .title = ਚਿੱਤਰ ਜੋੜੋ ਜਾਂ ਸੋਧੋ
@@ -320,29 +316,6 @@ pdfjs-highlight-floating-button1 =
     .title = ਹਾਈਲਾਈਟ
     .aria-label = ਹਾਈਲਾਈਟ
 pdfjs-highlight-floating-button-label = ਹਾਈਲਾਈਟ
-pdfjs-comment-floating-button =
-    .title = ਟਿੱਪਣੀ
-    .aria-label = ਟਿੱਪਣੀ
-pdfjs-comment-floating-button-label = ਟਿੱਪਣੀ
-pdfjs-editor-signature-button =
-    .title = ਦਸਤਖ਼ਤ ਜੋੜੋ
-pdfjs-editor-signature-button-label = ਦਸਤਖ਼ਤ ਜੋੜੋ
-
-## Default editor aria labels
-
-# “Highlight” is a noun, the string is used on the editor for highlights.
-pdfjs-editor-highlight-editor =
-    .aria-label = ਹਾਈਲਾਈਟ ਸੰਪਾਦਕ
-# “Drawing” is a noun, the string is used on the editor for drawings.
-pdfjs-editor-ink-editor =
-    .aria-label = ਡਰਾਇੰਗ ਸੰਪਾਦਕ
-# Used when a signature editor is selected/hovered.
-# Variables:
-#   $description (String) - a string describing/labeling the signature.
-pdfjs-editor-signature-editor1 =
-    .aria-description = ਦਸਤਖ਼ਤ ਐਡੀਟਰ: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = ਚਿੱਤਰ ਸੰਪਾਦਕ
 
 ## Remove button for the various kind of editor.
 
@@ -354,8 +327,6 @@ pdfjs-editor-remove-stamp-button =
     .title = ਚਿੱਤਰ ਨੂੰ ਹਟਾਓ
 pdfjs-editor-remove-highlight-button =
     .title = ਹਾਈਲਾਈਟ ਨੂੰ ਹਟਾਓ
-pdfjs-editor-remove-signature-button =
-    .title = ਦਸਤਖ਼ਤ ਨੂੰ ਹਟਾਓ
 
 ##
 
@@ -372,16 +343,6 @@ pdfjs-editor-stamp-add-image-button-label = ਚਿੱਤਰ ਜੋੜੋ
 pdfjs-editor-free-highlight-thickness-input = ਮੋਟਾਈ
 pdfjs-editor-free-highlight-thickness-title =
     .title = ਚੀਜ਼ਾਂ ਨੂੰ ਹੋਰ ਲਿਖਤਾਂ ਤੋਂ ਉਘਾੜਨ ਸਮੇਂ ਮੋਟਾਈ ਨੂੰ ਬਦਲੋ
-pdfjs-editor-add-signature-container =
-    .aria-label = ਦਸਤਖ਼ਤ ਕੰਟਰੋਲ ਅਤੇ ਸੰਭਾਲੇ ਹੋਏ ਦਸਤਖ਼ਤ
-pdfjs-editor-signature-add-signature-button =
-    .title = ਨਵੇਂ ਦਸਤਖ਼ਤ ਨੂੰ ਜੋੜੋ
-pdfjs-editor-signature-add-signature-button-label = ਨਵੇਂ ਦਸਤਖ਼ਤ ਨੂੰ ਜੋੜੋ
-# Used on the button to use an already saved signature.
-# Variables:
-#   $description (String) - a string describing/labeling the signature.
-pdfjs-editor-add-saved-signature-button =
-    .title = ਸੰਭਾਲੇ ਦਸਤਖ਼ਤ: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = ਲਿਖਤ ਐਡੀਟਰ
@@ -492,6 +453,7 @@ pdfjs-editor-new-alt-text-error-close-button = ਬੰਦ ਕਰੋ
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = ਬਦਲਵਾਂ ਲਿਖਤ AI ਮਾਡਲ ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ ({ $totalSize } MB ਵਿੱਚੋਂ { $downloadedSize })
     .aria-valuetext = ਬਦਲਵਾਂ ਲਿਖਤ AI ਮਾਡਲ ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ ({ $totalSize } MB ਵਿੱਚੋਂ { $downloadedSize })
 # This is a button that users can click to edit the alt text they have already added.
@@ -532,21 +494,12 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = ਜਦੋਂ ਵਿੱ
 pdfjs-editor-alt-text-settings-show-dialog-description = ਤੁਹਾਡੀ ਮਦਦ ਕਰਦਾ ਹੈ ਕਿ ਤੁਹਾਡੇ ਸਾਰੇ ਚਿੱਤਰਾਂ ਲਈ ਬਦਲਵੀਂ ਲਿਖਤ ਮੌਜੂਦ ਹੋਵੇ।
 pdfjs-editor-alt-text-settings-close-button = ਬੰਦ ਕਰੋ
 
-## Accessibility labels (announced by screen readers) for objects added to the editor.
-
-pdfjs-editor-highlight-added-alert = ਹਾਈਲਾਈਟ ਨੂੰ ਜੋੜਿਆ
-pdfjs-editor-freetext-added-alert = ਲਿਖਤ ਨੂੰ ਜੋੜਿਆ ਗਿਆ
-pdfjs-editor-ink-added-alert = ਡਰਾਇੰਗ ਨੂੰ ਜੋੜਿਆ
-pdfjs-editor-stamp-added-alert = ਚਿੱਤਰ ਨੂੰ ਜੋੜਿਆ
-pdfjs-editor-signature-added-alert = ਦਸਤਖ਼ਤਾਂ ਨੂੰ ਜੋੜਿਆ
-
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = ਹਾਈਲਾਈਟ ਨੂੰ ਹਟਾਇਆ ਗਿਆ
 pdfjs-editor-undo-bar-message-freetext = ਲਿਖਤ ਨੂੰ ਹਟਾਇਆ ਗਿਆ
 pdfjs-editor-undo-bar-message-ink = ਡਰਾਇੰਗ ਨੂੰ ਹਟਾਇਆ ਗਿਆ
 pdfjs-editor-undo-bar-message-stamp = ਚਿੱਤਰ ਨੂੰ ਹਟਾਇਆ ਗਿਆ
-pdfjs-editor-undo-bar-message-signature = ਦਸਤਖ਼ਤ ਨੂੰ ਹਟਾਇਆ
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -560,94 +513,3 @@ pdfjs-editor-undo-bar-undo-button-label = ਵਾਪਸ
 pdfjs-editor-undo-bar-close-button =
     .title = ਬੰਦ ਕਰੋ
 pdfjs-editor-undo-bar-close-button-label = ਬੰਦ ਕਰੋ
-
-## Add a signature dialog
-
-pdfjs-editor-add-signature-dialog-label = ਇਹ ਮਾਡਲ ਵਰਤੋਂਕਾਰ ਨੂੰ PDF ਦਸਤਾਵੇਜ਼ ਵਿੱਚ ਜੋੜਨ ਲਈ ਦਸਤਖ਼ਤ ਬਣਾਉਣ ਦਿੰਦਾ ਹੈ। ਵਰਤੋਂਕਾਰ ਨਾਂ ਨੂੰ ਸੋਧ ਸਕਦਾ ਹੈ (ਜੋ ਕਿ ਬਦਲਵੀਂ ਲਿਖਤ ਵਜੋਂ ਕੰਮ ਕਰੇਗਾ) ਅਤੇ ਦੁਬਾਰਾ ਵਰਤੋਂ ਕਰਨ ਲਈ ਦਸਤਖ਼ਤਾਂ ਨੂੰ ਸੰਭਾਲ ਵੀ ਸਕਦਾ ਹੈ।
-pdfjs-editor-add-signature-dialog-title = ਦਸਤਖ਼ਤ ਨੂੰ ਜੋੜੋ
-
-## Tab names
-
-# Type is a verb (you can type your name as signature)
-pdfjs-editor-add-signature-type-button = ਕਿਸਮ
-    .title = ਕਿਸਮ
-# Draw is a verb (you can draw your signature)
-pdfjs-editor-add-signature-draw-button = ਵਾਹੋ
-    .title = ਵਾਹੋ
-pdfjs-editor-add-signature-image-button = ਚਿੱਤਰ
-    .title = ਚਿੱਤਰ
-
-## Tab panels
-
-pdfjs-editor-add-signature-type-input =
-    .aria-label = ਆਪਣੇ ਦਸਤਖ਼ਤ ਨੂੰ ਟਾਈਪ ਕਰੋ
-    .placeholder = ਆਪਣੇ ਦਸਤਖ਼ਤ ਨੂੰ ਟਾਈਪ ਕਰੋ
-pdfjs-editor-add-signature-draw-placeholder = ਆਪਣੇ ਦਸਤਖ਼ਤ ਨੂੰ ਵਾਹੋ
-pdfjs-editor-add-signature-draw-thickness-range-label = ਮੋਟਾਈ
-# Variables:
-#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
-pdfjs-editor-add-signature-draw-thickness-range =
-    .title = ਵਹਾਉਣ ਲਈ ਚੌੜਾਈ: { $thickness }
-pdfjs-editor-add-signature-image-placeholder = ਅੱਪਲੋਡ ਕਰਨ ਲਈ ਫ਼ਾਇਲ ਨੂੰ ਇੱਥੇ ਖਿੱਚੋ
-pdfjs-editor-add-signature-image-browse-link =
-    { PLATFORM() ->
-        [macos] ਜਾਂ ਚਿੱਤਰ ਫ਼ਾਇਲਾਂ ਨੂੰ ਚੁਣੋ
-       *[other] ਜਾਂ ਚਿੱਤਰ ਫ਼ਾਇਲਾਂ ਦੀ ਝਲਕ ਵੇਖੋ
-    }
-
-## Controls
-
-pdfjs-editor-add-signature-description-label = ਵਰਣਨ (ਬਦਲਵੀਂ ਲਿਖਤ)
-pdfjs-editor-add-signature-description-input =
-    .title = ਵਰਣਨ (ਬਦਲਵੀਂ ਲਿਖਤ)
-pdfjs-editor-add-signature-description-default-when-drawing = ਦਸਤਖ਼ਤ
-pdfjs-editor-add-signature-clear-button-label = ਦਸਤਖ਼ਤ ਨੂੰ ਮਿਟਾਓ
-pdfjs-editor-add-signature-clear-button =
-    .title = ਦਸਤਖ਼ਤ ਨੂੰ ਮਿਟਾਓ
-pdfjs-editor-add-signature-save-checkbox = ਦਸਤਖ਼ਤ ਨੂੰ ਸੰਭਾਲੋ
-pdfjs-editor-add-signature-save-warning-message = ਤੁਸੀਂ ਵੱਧ ਤੋਂ ਵੱਧ 5 ਸੰਭਾਲੇ ਦਸਤਖ਼ਤਾਂ ਦੀ ਹੱਦ ਤੱਕ ਅੱਪੜੇ। ਹੋਰ ਸੰਭਾਲਣ ਲਈ ਇੱਕ ਨੂੰ ਹਟਾਓ।
-pdfjs-editor-add-signature-image-upload-error-title = ਚਿੱਤਰ ਨੂੰ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ
-pdfjs-editor-add-signature-image-upload-error-description = ਆਪਣੇ ਕਨੈਕਸ਼ਨ ਦੀ ਜਾਂਚ ਕਰੋ ਜਾਂ ਹੋਰ ਚਿੱਤਰ ਨੂੰ ਅਜ਼ਮਾਓ।
-pdfjs-editor-add-signature-image-no-data-error-title = ਇਸ ਚਿੱਤਰ ਨੂੰ ਦਸਤਖ਼ਤ ਵਿੱਚ ਬਦਲਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ ਹੈ
-pdfjs-editor-add-signature-image-no-data-error-description = ਵੱਖਰੇ ਚਿੱਤਰ ਨੂੰ ਅੱਪਲੋਡ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ।
-pdfjs-editor-add-signature-error-close-button = ਬੰਦ ਕਰੋ
-
-## Dialog buttons
-
-pdfjs-editor-add-signature-cancel-button = ਰੱਦ ਕਰੋ
-pdfjs-editor-add-signature-add-button = ਜੋੜੋ
-pdfjs-editor-edit-signature-update-button = ਅੱਪਡੇਟ
-
-##  Edit a comment dialog
-
-pdfjs-editor-edit-comment-actions-button-label = ਕਾਰਵਾਈਆਂ
-pdfjs-editor-edit-comment-actions-button =
-    .title = ਕਾਰਵਾਈਆਂ
-pdfjs-editor-edit-comment-close-button-label = ਬੰਦ ਕਰੋ
-pdfjs-editor-edit-comment-close-button =
-    .title = ਬੰਦ ਕਰੋ
-pdfjs-editor-edit-comment-actions-edit-button-label = ਸੋਧੋ
-pdfjs-editor-edit-comment-actions-delete-button-label = ਹਟਾਓ
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = ਆਪਣੀ ਟਿੱਪਣੀ ਦਿਓ
-pdfjs-editor-edit-comment-manager-cancel-button = ਰੱਦ ਕਰੋ
-pdfjs-editor-edit-comment-manager-save-button = ਸੰਭਾਲੋ
-
-## Edit a comment button in the editor toolbar
-
-pdfjs-editor-edit-comment-button =
-    .title = ਟਿੱਪਣੀ ਨੂੰ ਸੋਧੋ
-
-## Main menu for adding/removing signatures
-
-pdfjs-editor-delete-signature-button1 =
-    .title = ਸੰਭਾਲੇ ਹੋਏ ਦਸਤਖ਼ਤ ਨੂੰ ਹਟਾਓ
-pdfjs-editor-delete-signature-button-label1 = ਸੰਭਾਲੇ ਹੋਏ ਦਸਤਖ਼ਤ ਨੂੰ ਹਟਾਓ
-
-## Editor toolbar
-
-pdfjs-editor-add-signature-edit-button-label = ਵਰਣਨ ਨੂੰ ਸੋਧੋ
-
-## Edit signature description dialog
-
-pdfjs-editor-edit-signature-dialog-title = ਵਰਣਨ ਨੂੰ ਸੋਧੋ
