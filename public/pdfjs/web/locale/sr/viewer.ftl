@@ -416,3 +416,6 @@ pdfjs-editor-new-alt-text-disclaimer1 = Овај алтернативни тек
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Сазнајте више
 pdfjs-editor-new-alt-text-create-automatically-button-label = Прави алтернативни текст аутоматски
 pdfjs-editor-new-alt-text-not-now-button = Не сада
+
+## Image alt-text settings
+

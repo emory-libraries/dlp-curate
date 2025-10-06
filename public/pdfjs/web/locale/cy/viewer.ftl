@@ -310,13 +310,9 @@ pdfjs-web-fonts-disabled = Ffontiau gwe wedi eu hanalluogi: methu defnyddio ffon
 
 pdfjs-editor-free-text-button =
     .title = Testun
-pdfjs-editor-color-picker-free-text-input =
-    .title = Newid lliw testun
 pdfjs-editor-free-text-button-label = Testun
 pdfjs-editor-ink-button =
     .title = Lluniadu
-pdfjs-editor-color-picker-ink-input =
-    .title = Newid lliw lluniadu
 pdfjs-editor-ink-button-label = Lluniadu
 pdfjs-editor-stamp-button =
     .title = Ychwanegu neu olygu delweddau
@@ -328,29 +324,6 @@ pdfjs-highlight-floating-button1 =
     .title = Amlygu
     .aria-label = Amlygu
 pdfjs-highlight-floating-button-label = Amlygu
-pdfjs-comment-floating-button =
-    .title = Sylw
-    .aria-label = Sylw
-pdfjs-comment-floating-button-label = Sylw
-pdfjs-editor-signature-button =
-    .title = Ychwanegu llofnod
-pdfjs-editor-signature-button-label = Ychwanegu llofnod
-
-## Default editor aria labels
-
-# “Highlight” is a noun, the string is used on the editor for highlights.
-pdfjs-editor-highlight-editor =
-    .aria-label = Golygydd amlygu
-# “Drawing” is a noun, the string is used on the editor for drawings.
-pdfjs-editor-ink-editor =
-    .aria-label = Golygydd lluniadu
-# Used when a signature editor is selected/hovered.
-# Variables:
-#   $description (String) - a string describing/labeling the signature.
-pdfjs-editor-signature-editor1 =
-    .aria-description = Golygydd llofnod: { $description }
-pdfjs-editor-stamp-editor =
-    .aria-label = Golygydd delweddau
 
 ## Remove button for the various kind of editor.
 
@@ -362,8 +335,6 @@ pdfjs-editor-remove-stamp-button =
     .title = Dileu delwedd
 pdfjs-editor-remove-highlight-button =
     .title = Tynnu amlygiad
-pdfjs-editor-remove-signature-button =
-    .title = Dileu llofnod
 
 ##
 
@@ -380,16 +351,6 @@ pdfjs-editor-stamp-add-image-button-label = Ychwanegu delwedd
 pdfjs-editor-free-highlight-thickness-input = Trwch
 pdfjs-editor-free-highlight-thickness-title =
     .title = Newid trwch wrth amlygu eitemau heblaw testun
-pdfjs-editor-add-signature-container =
-    .aria-label = Rheolyddion llofnodion a llofnodion wedi'u cadw
-pdfjs-editor-signature-add-signature-button =
-    .title = Ychwanegu llofnod newydd
-pdfjs-editor-signature-add-signature-button-label = Ychwanegu llofnod newydd
-# Used on the button to use an already saved signature.
-# Variables:
-#   $description (String) - a string describing/labeling the signature.
-pdfjs-editor-add-saved-signature-button =
-    .title = Llofnod wedi'i gadw: { $description }
 # .default-content is used as a placeholder in an empty text editor.
 pdfjs-free-text2 =
     .aria-label = Golygydd Testun
@@ -500,6 +461,7 @@ pdfjs-editor-new-alt-text-error-close-button = Cau
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 #   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+#   $percent (Number) - the percentage of the downloaded size.
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Wrthi'n llwytho i lawr model AI testun amgen ( { $downloadedSize } o { $totalSize } MB)
     .aria-valuetext = Wrthi'n llwytho i lawr model AI testun amgen ( { $downloadedSize } o { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
@@ -540,21 +502,12 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Dangoswch y golygydd t
 pdfjs-editor-alt-text-settings-show-dialog-description = Yn eich helpu i wneud yn siŵr bod gan eich holl ddelweddau destun amgen.
 pdfjs-editor-alt-text-settings-close-button = Cau
 
-## Accessibility labels (announced by screen readers) for objects added to the editor.
-
-pdfjs-editor-highlight-added-alert = Amlygu wedi'i ychwanegu
-pdfjs-editor-freetext-added-alert = Testun wedi'i ychwanegu
-pdfjs-editor-ink-added-alert = Lluniadu wedi'i ychwanegu
-pdfjs-editor-stamp-added-alert = Delwedd wedi'i hychwanegu
-pdfjs-editor-signature-added-alert = Llofnod wedi'i ychwanegu
-
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Tynnwyd yr amlygu
 pdfjs-editor-undo-bar-message-freetext = Tynnwyd y testun
 pdfjs-editor-undo-bar-message-ink = Tynnwyd y lluniad
 pdfjs-editor-undo-bar-message-stamp = Tynnwyd y ddelwedd
-pdfjs-editor-undo-bar-message-signature = Llofnod wedi'i dynnu
 # Variables:
 #   $count (Number) - the number of removed annotations.
 pdfjs-editor-undo-bar-message-multiple =
@@ -572,94 +525,3 @@ pdfjs-editor-undo-bar-undo-button-label = Dadwneud
 pdfjs-editor-undo-bar-close-button =
     .title = Cau
 pdfjs-editor-undo-bar-close-button-label = Cau
-
-## Add a signature dialog
-
-pdfjs-editor-add-signature-dialog-label = Mae'r modd hwn yn caniatáu i'r defnyddiwr greu llofnod i'w ychwanegu at ddogfen PDF. Gall y defnyddiwr olygu'r enw (sydd hefyd yn gweithredu fel y testun amgen), ac yn ddewisol cadw'r llofnod i'w ddefnyddio dro ar ôl tro.
-pdfjs-editor-add-signature-dialog-title = Ychwanegu llofnod
-
-## Tab names
-
-# Type is a verb (you can type your name as signature)
-pdfjs-editor-add-signature-type-button = Math
-    .title = Math
-# Draw is a verb (you can draw your signature)
-pdfjs-editor-add-signature-draw-button = Lluniadu
-    .title = Lluniadu
-pdfjs-editor-add-signature-image-button = Delwedd
-    .title = Delwedd
-
-## Tab panels
-
-pdfjs-editor-add-signature-type-input =
-    .aria-label = Teipiwch eich llofnod
-    .placeholder = Teipiwch eich llofnod
-pdfjs-editor-add-signature-draw-placeholder = Lluniwch eich llofnod
-pdfjs-editor-add-signature-draw-thickness-range-label = Trwch
-# Variables:
-#   $thickness (Number) - the thickness (in pixels) of the line used to draw a signature.
-pdfjs-editor-add-signature-draw-thickness-range =
-    .title = Trwch y llinell: { $thickness }
-pdfjs-editor-add-signature-image-placeholder = Llusgwch ffeil yma i'w llwytho
-pdfjs-editor-add-signature-image-browse-link =
-    { PLATFORM() ->
-        [macos] Neu ddewis ffeiliau delwedd
-       *[other] Neu bori ffeiliau delwedd
-    }
-
-## Controls
-
-pdfjs-editor-add-signature-description-label = Disgrifiad (testun amgen)
-pdfjs-editor-add-signature-description-input =
-    .title = Disgrifiad (testun amgen)
-pdfjs-editor-add-signature-description-default-when-drawing = Llofnod
-pdfjs-editor-add-signature-clear-button-label = Diddymu llofnod
-pdfjs-editor-add-signature-clear-button =
-    .title = Diddymu llofnod
-pdfjs-editor-add-signature-save-checkbox = Cadw llofnod
-pdfjs-editor-add-signature-save-warning-message = Rydych chi wedi cyrraedd y terfyn o 5 llofnod sydd wedi'u cadw. Tynnwch un i gadw rhagor
-pdfjs-editor-add-signature-image-upload-error-title = Methu llwytho'r ddelwedd.
-pdfjs-editor-add-signature-image-upload-error-description = Gwiriwch eich cysylltiad rhwydwaith neu rhowch gynnig ar ddelwedd arall.
-pdfjs-editor-add-signature-image-no-data-error-title = Methu trosi'r ddelwedd hon yn llofnod
-pdfjs-editor-add-signature-image-no-data-error-description = Ceisiwch lwytho delwedd wahanol.
-pdfjs-editor-add-signature-error-close-button = Cau
-
-## Dialog buttons
-
-pdfjs-editor-add-signature-cancel-button = Diddymu
-pdfjs-editor-add-signature-add-button = Ychwanegu
-pdfjs-editor-edit-signature-update-button = Diweddaru
-
-##  Edit a comment dialog
-
-pdfjs-editor-edit-comment-actions-button-label = Gweithredoedd
-pdfjs-editor-edit-comment-actions-button =
-    .title = Gweithredoedd
-pdfjs-editor-edit-comment-close-button-label = Cau
-pdfjs-editor-edit-comment-close-button =
-    .title = Cau
-pdfjs-editor-edit-comment-actions-edit-button-label = Golygu
-pdfjs-editor-edit-comment-actions-delete-button-label = Dileu
-pdfjs-editor-edit-comment-manager-text-input =
-    .placeholder = Rhowch eich sylw
-pdfjs-editor-edit-comment-manager-cancel-button = Diddymu
-pdfjs-editor-edit-comment-manager-save-button = Cadw
-
-## Edit a comment button in the editor toolbar
-
-pdfjs-editor-edit-comment-button =
-    .title = Golygu sylw
-
-## Main menu for adding/removing signatures
-
-pdfjs-editor-delete-signature-button1 =
-    .title = Tynnu llofnod sydd wedi'i gadw
-pdfjs-editor-delete-signature-button-label1 = Tynnwch y llofnod sydd wedi'i gadw
-
-## Editor toolbar
-
-pdfjs-editor-add-signature-edit-button-label = Golygu disgrifiad
-
-## Edit signature description dialog
-
-pdfjs-editor-edit-signature-dialog-title = Golygu disgrifiad

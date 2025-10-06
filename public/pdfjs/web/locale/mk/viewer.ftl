@@ -178,6 +178,9 @@ pdfjs-page-scale-actual = Вистинска големина
 #   $scale (Number) - percent value for page scale
 pdfjs-page-scale-percent = { $scale }%
 
+## PDF page
+
+
 ## Loading indicator messages
 
 pdfjs-loading-error = Настана грешка при вчитувањето на PDF-от.
@@ -200,3 +203,13 @@ pdfjs-password-invalid = Невалидна лозинка. Обидете се 
 pdfjs-password-ok-button = Во ред
 pdfjs-password-cancel-button = Откажи
 pdfjs-web-fonts-disabled = Интернет фонтовите се оневозможени: не може да се користат вградените PDF фонтови.
+
+## Editing
+
+
+## Alt-text dialog
+
+
+## Editor resizers
+## This is used in an aria label to help to understand the role of the resizer.
+

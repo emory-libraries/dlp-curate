@@ -213,6 +213,9 @@ pdfjs-page-scale-actual = Aktualno srogość
 #   $scale (Number) - percent value for page scale
 pdfjs-page-scale-percent = { $scale }%
 
+## PDF page
+
+
 ## Loading indicator messages
 
 pdfjs-loading-error = Przi ladowaniu PDFa pokozoł sie feler.
@@ -242,3 +245,13 @@ pdfjs-password-invalid = Hasło je złe. Sprōbuj jeszcze roz.
 pdfjs-password-ok-button = OK
 pdfjs-password-cancel-button = Pociep
 pdfjs-web-fonts-disabled = Necowe fōnty sōm zastawiōne: niy idzie użyć wkludzōnych fōntōw PDF.
+
+## Editing
+
+
+## Alt-text dialog
+
+
+## Editor resizers
+## This is used in an aria label to help to understand the role of the resizer.
+

@@ -206,6 +206,9 @@ pdfjs-page-scale-actual = Patīsais izmārs
 #   $scale (Number) - percent value for page scale
 pdfjs-page-scale-percent = { $scale }%
 
+## PDF page
+
+
 ## Loading indicator messages
 
 pdfjs-loading-error = Īluodejūt PDF nūtyka klaida.
@@ -231,3 +234,13 @@ pdfjs-password-invalid = Napareiza parole, raugit vēļreiz.
 pdfjs-password-ok-button = Labi
 pdfjs-password-cancel-button = Atceļt
 pdfjs-web-fonts-disabled = Šķārsteikla fonti nav aktivizāti: Navar īgult PDF fontus.
+
+## Editing
+
+
+## Alt-text dialog
+
+
+## Editor resizers
+## This is used in an aria label to help to understand the role of the resizer.
+

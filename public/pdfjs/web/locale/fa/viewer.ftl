@@ -279,6 +279,9 @@ pdfjs-highlight-floating-button1 =
     .aria-label = برجسته کردن
 pdfjs-highlight-floating-button-label = برجسته کردن
 
+## Remove button for the various kind of editor.
+
+
 ##
 
 # Editor Parameters
@@ -301,6 +304,10 @@ pdfjs-free-text-default-content = شروع به نوشتن کنید…
 pdfjs-editor-alt-text-add-description-label = افزودن توضیحات
 pdfjs-editor-alt-text-cancel-button = انصراف
 pdfjs-editor-alt-text-save-button = ذخیره
+
+## Editor resizers
+## This is used in an aria label to help to understand the role of the resizer.
+
 
 ## Color picker
 
