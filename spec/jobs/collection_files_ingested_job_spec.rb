@@ -37,7 +37,7 @@ RSpec.describe CollectionFilesIngestedJob, :clean do
     # New requirement: source_collection_id must be populated in order for a work
     # to be associated to a collection.
     work1.source_collection_id = collection.id
-    Curate::FileSetIndexer.new(file_set).generate_solr_document
+    Curate::FileSetIndexer.new(file_set.reload).generate_solr_document
     work1.save!
   end
 

@@ -60,7 +60,6 @@ Metrics/ClassLength:
         - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
         - app/models/curate_generic_work.rb
-        - app/models/file_set.rb
         - app/models/solr_document.rb
         - app/presenters/hyrax/collection_presenter.rb
         - app/services/aspace/api_service.rb
