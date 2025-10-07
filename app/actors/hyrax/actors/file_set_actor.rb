@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-overwrite-hyrax-v5.1.0]
 
 module Hyrax
   module Actors
@@ -8,10 +8,9 @@ module Hyrax
     class FileSetActor
       include Lockable
       include PreservationEvents
-      attr_reader :file_set, :user, :attributes, :use_valkyrie
+      attr_reader :file_set, :user, :attributes
 
-      def initialize(file_set, user, use_valkyrie: false)
-        @use_valkyrie = use_valkyrie
+      def initialize(file_set, user)
         @file_set = file_set
         @user = user
       end
@@ -93,8 +92,6 @@ module Hyrax
         assign_fileset_to_work_display_elements(work, file_set)
         work.save
       end
-      alias attach_file_to_work attach_to_work
-      deprecation_deprecate attach_file_to_work: "use attach_to_work instead"
 
       def assign_fileset_to_work_display_elements(work, file_set)
         work.representative = file_set if work.representative_id.blank?
@@ -137,7 +134,7 @@ module Hyrax
         end
 
         def build_file_actor(relation)
-          file_actor_class.new(file_set, relation, user, use_valkyrie: false)
+          file_actor_class.new(file_set, relation, user)
         end
 
         # uses create! because object must be persisted to serialize for jobs
