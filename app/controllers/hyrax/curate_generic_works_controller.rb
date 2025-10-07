@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-overwrite-hyrax-v5.1.0]
 
 module Hyrax
   # Generated controller for CurateGenericWork
@@ -30,9 +30,6 @@ module Hyrax
           render :show, status: :ok
         end
         additional_response_formats(wants)
-        wants.ttl { render body: presenter.export_as_ttl, mime_type: Mime[:ttl] }
-        wants.jsonld { render body: presenter.export_as_jsonld, mime_type: Mime[:jsonld] }
-        wants.nt { render body: presenter.export_as_nt, mime_type: Mime[:nt] }
       end
     end
 
