@@ -10,8 +10,18 @@ Hyrax.config do |config|
   #   registry.add(name: 'captaining', description: 'For those that really like the front lines')
   # end
 
-  config.admin_set_model = 'AdminSet'
-  config.collection_model = '::Collection'
+  # dassie needs legacy AF models
+  # If using Frayja/Frigg then use the resource they provide
+  if Hyrax.config.valkyrie_transition?
+    config.collection_model = 'CollectionResource'
+    config.admin_set_model = 'AdminSetResource'
+    config.file_set_model = 'Hyrax::FileSet'
+  else
+    # dassie needs legacy AF models
+    config.collection_model = '::Collection'
+    config.admin_set_model = 'AdminSet'
+    config.file_set_model = '::FileSet'
+  end
 
   # When an admin set is created, we need to activate a workflow.
   # The :default_active_workflow_name is the name of the workflow we will activate.
@@ -64,6 +74,8 @@ Hyrax.config do |config|
   # Default is false
   # config.citations = false
 
+  config.characterization_options = { ch12n_tool: ENV.fetch('CH12N_TOOL', 'fits').to_sym }
+
   # Where to store tempfiles, leave blank for the system temp directory (e.g. /tmp)
   # config.temp_file_base = '/home/developer1'
 
@@ -110,7 +122,13 @@ Hyrax.config do |config|
 
   # Location autocomplete uses geonames to search for named regions
   # Username for connecting to geonames
-  # config.geonames_username = ''
+  config.geonames_username = ENV['GEONAMES_USERNAME'] || ''
+
+  # The default method used for Solr queries. Values are :get or :post.
+  # Post is suggested to prevent issues with URL length.
+  config.solr_default_method = :post
+
+
 
   # Should the acceptance of the licence agreement be active (checkbox), or
   # implied when the save button is pressed? Set to true for active

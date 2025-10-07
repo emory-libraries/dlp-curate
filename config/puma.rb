@@ -58,3 +58,21 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
+
+# Embedded Sidekiq https://github.com/sidekiq/sidekiq/wiki/Embedding
+if ENV.fetch('SIDEKIQ_MODE', false) == 'embed'
+  embedded_sidekiq = nil
+
+  on_worker_boot do
+    embedded_sidekiq = Sidekiq.configure_embed do |config|
+      config.logger.level = ENV.fetch("RAILS_LOG_LEVEL", 'debug')
+      config.queues = %w[ingest batch default]
+      config.concurrency = ENV.fetch('SIDEKIQ_WORKERS', 2) # Adjust max `threads` above accordingly
+    end
+    embedded_sidekiq.run
+  end
+
+  on_worker_shutdown do
+    embedded_sidekiq&.stop
+  end
+end
