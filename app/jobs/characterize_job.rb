@@ -37,7 +37,8 @@ class CharacterizeJob < Hyrax::ApplicationJob
     @relation = file_set.class.characterization_proxy
     file = file_set.characterization_proxy
     raise "#{@relation} was not found for FileSet #{file_set.id}" unless file_set.characterization_proxy?
-    filepath = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id) unless filepath && File.exist?(filepath)
+    # Ensure a fresh copy of the repo file's latest version is being worked on, if no filepath is directly provided
+    filepath = Hyrax::WorkingDirectory.copy_repository_resource_to_working_directory(Hydra::PCDM::File.find(file_id), file_set.id) unless filepath && File.exist?(filepath)
     characterize(
       file:     file,
       filepath: filepath,
@@ -55,7 +56,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
       clear_metadata(file_set)
 
       characterization_service.run(file, filepath, {}, user)
-      Rails.logger.debug "Ran characterization on #{file.id} (#{file.mime_type})"
+      Hyrax.logger.debug "Ran characterization on #{file.id} (#{file.mime_type})"
       file.alpha_channels = channels(filepath) if file_set.image? && Hyrax.config.iiif_image_server?
       file.save!
 

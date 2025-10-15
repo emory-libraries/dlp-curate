@@ -9,12 +9,13 @@ class CreateDerivativesJob < Hyrax::ApplicationJob
   # @param [String, NilClass] filepath the cached file within the Hyrax.config.working_path
   def perform(file_set, file_id, filepath = nil)
     return if file_set.video? && !Hyrax.config.enable_ffmpeg
-    filename = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id, filepath)
+    # Ensure a fresh copy of the repo file's latest version is being worked on, if no filepath is directly provided
+    filepath = Hyrax::WorkingDirectory.copy_repository_resource_to_working_directory(Hydra::PCDM::File.find(file_id), file_set.id) unless filepath && File.exist?(filepath)
     @logger = Logger.new(STDOUT)
     @logger.info "CreateDerivativesJob for #{filename} started at #{DateTime.current}"
 
     begin
-      file_set.create_derivatives(filename)
+      file_set.create_derivatives(filepath)
     rescue
       @logger.warn "Error occurred in CreateDerivativesJob for #{filename}"
     end
