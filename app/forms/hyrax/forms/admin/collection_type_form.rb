@@ -11,7 +11,7 @@ module Hyrax
 
         # Change below was necessary to institute Source/Deposit Collection structure.
         # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
-        delegate :title, :description, :brandable, :discoverable, :nestable, :sharable,
+        delegate :title, :description, :brandable, :discoverable, :nestable, :sharable, :collections?,
                  :share_applies_to_new_works, :require_membership, :allow_multiple_membership,
                  :assigns_workflow, :assigns_visibility, :id, :collection_type_participants,
                  :persisted?, :admin_set?, :user_collection?, :badge_color, :deposit_only_collection,
@@ -27,12 +27,6 @@ module Hyrax
         # @return [Boolean]
         def share_options_disabled?
           all_settings_disabled? || !sharable
-        end
-
-        ##
-        # @return [Boolean]
-        def collections?
-          collection_type.collections.any?
         end
       end
     end
