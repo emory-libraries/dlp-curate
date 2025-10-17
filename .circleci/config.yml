@@ -15,7 +15,7 @@ jobs:
         executor:
             name: samvera/ruby_fcrepo_solr_redis
             ruby_version: << parameters.ruby_version >>
-            solr_version: 7-alpine
+            solr_version: 7
         working_directory: ~/project
         parallelism: 4
         steps:
