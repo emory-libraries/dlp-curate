@@ -72,6 +72,6 @@ workflows:
             - build:
                 name: ruby2.7.4
             - coverage:
-                name: codeclimate
+                name: qlty
                 requires:
                     - ruby2.7.4
