@@ -56,6 +56,11 @@ jobs:
                 incomplete: true
                 total_parts_count: 4
                 working_directory: ~/project
+                upload_name: lcov.$CIRCLE_NODE_INDEX.info
+
+            - persist_to_workspace:
+                root: coverage
+                paths: lcov.*.info
 
             - store_artifacts:
                 path: tmp/screenshots
