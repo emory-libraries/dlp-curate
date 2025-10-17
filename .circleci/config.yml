@@ -2,7 +2,7 @@ version: 2.1
 orbs:
     node: circleci/node@4.9.0
     qlty-orb: qltysh/qlty-orb@0.1.1
-    samvera: samvera/circleci-orb@1.0.2
+    samvera: samvera/circleci-orb@1.0.1
 jobs:
     build:
         parameters:
