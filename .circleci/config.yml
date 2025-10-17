@@ -12,10 +12,13 @@ jobs:
             bundler_version:
                 type: string
                 default: 2.1.4
+            solr_version:
+                type: string
+                default: 7-alpine
         executor:
             name: samvera/ruby_fcrepo_solr_redis
             ruby_version: << parameters.ruby_version >>
-            solr_version: 7
+            solr_version: << parameters.solr_version >>
         working_directory: ~/project
         parallelism: 4
         steps:
