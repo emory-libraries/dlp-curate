@@ -2,7 +2,7 @@ version: 2.1
 orbs:
     node: circleci/node@4.9.0
     qlty-orb: qltysh/qlty-orb@0.1.1
-    samvera: samvera/circleci-orb@1.0.3
+    samvera: samvera/circleci-orb@1.0.2
 jobs:
     build:
         parameters:
@@ -15,6 +15,7 @@ jobs:
         executor:
             name: samvera/ruby_fcrepo_solr_redis
             ruby_version: << parameters.ruby_version >>
+            solr_version: 7-alpine
         working_directory: ~/project
         parallelism: 4
         steps:
