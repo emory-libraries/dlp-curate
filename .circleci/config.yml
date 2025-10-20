@@ -52,15 +52,9 @@ jobs:
             - samvera/parallel_rspec
 
             - qlty-orb/coverage_publish:
-                files: coverage/lcov.$CIRCLE_NODE_INDEX.info
+                files: coverage/.resultset.json
                 incomplete: true
                 total_parts_count: 4
-                working_directory: ~/project
-                upload_name: lcov.$CIRCLE_NODE_INDEX.info
-
-            - persist_to_workspace:
-                root: coverage
-                paths: lcov.*.info
 
             - store_artifacts:
                 path: tmp/screenshots
@@ -71,8 +65,7 @@ jobs:
         working_directory: ~/project
         parallelism: 1
         steps:
-            - qlty-orb/coverage_complete:
-                working_directory: ~/project
+            - qlty-orb/coverage_complete
 
 workflows:
     version: 2
