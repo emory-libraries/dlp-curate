@@ -72,8 +72,8 @@ workflows:
     ci:
         jobs:
             - build:
-                name: ruby2.7.4
+                name: rspec
             - coverage:
                 name: qlty
                 requires:
-                    - ruby2.7.4
+                    - rspec
