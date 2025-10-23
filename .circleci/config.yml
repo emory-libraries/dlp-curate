@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
     node: circleci/node@4.9.0
+    qlty-orb: qltysh/qlty-orb@0.1.1
     samvera: samvera/circleci-orb@1.0.0
 jobs:
     build:
@@ -48,57 +49,31 @@ jobs:
 
             - samvera/install_solr_core
 
-            # - run:
-            #     name: Install Code Climate test reporter
-            #     command: |
-            #         curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            #         chmod +x ./cc-test-reporter
-            #         ./cc-test-reporter before-build
-
             - samvera/parallel_rspec
 
-            # - run:
-            #     name: Generate CC coverage
-            #     command:  ./cc-test-reporter format-coverage -t simplecov -o "coverage/codeclimate.$CIRCLE_NODE_INDEX.json"
-
-            # - persist_to_workspace:
-            #     root: coverage
-            #     paths: codeclimate.*.json
+            - qlty-orb/coverage_publish:
+                files: coverage/.resultset.json
+                incomplete: true
+                total_parts_count: 4
 
             - store_artifacts:
                 path: tmp/screenshots
 
-            - run:
-                command: curl -k https://coveralls.io/webhook?repo_token=${COVERALLS_REPO_TOKEN} -d "payload[build_num]=${CIRCLE_BUILD_NUM}&payload[status]=done"
-
-    # coverage:
-    #     docker:
-    #         - image: cimg/ruby:2.7.4
-    #     working_directory: ~/project
-    #     parallelism: 1
-    #     steps:
-    #         - attach_workspace:
-    #             at: /tmp/codeclimate
-
-    #         - run:
-    #             name: Install Code Climate test reporter
-    #             command: |
-    #                 curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-    #                 chmod +x ./cc-test-reporter
-
-            # - run:
-            #     name: Upload Coverage
-            #     command: |
-            #         ./cc-test-reporter sum-coverage --output='/tmp/codeclimate/summed_coverage.json' /tmp/codeclimate/codeclimate.*.json
-            #         ./cc-test-reporter upload-coverage --input='/tmp/codeclimate/summed_coverage.json'
+    coverage:
+        docker:
+            - image: cimg/ruby:2.7.4
+        working_directory: ~/project
+        parallelism: 1
+        steps:
+            - qlty-orb/coverage_complete
 
 workflows:
     version: 2
     ci:
         jobs:
             - build:
-                name: ruby2.7.4
-            # - coverage:
-            #     name: codeclimate
-            #     requires:
-            #         - ruby2.7.4
+                name: rspec
+            - coverage:
+                name: qlty
+                requires:
+                    - rspec
