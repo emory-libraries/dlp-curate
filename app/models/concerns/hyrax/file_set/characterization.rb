@@ -36,7 +36,7 @@ module Hyrax
         delegate(*characterization_terms, to: :characterization_proxy)
 
         def characterization_proxy
-          send(self.class.characterization_proxy) || NullCharacterizationProxy.new
+          send(self.class.characterization_proxy) || pulled_preservation_master_file || NullCharacterizationProxy.new
         end
 
         def characterization_proxy?
