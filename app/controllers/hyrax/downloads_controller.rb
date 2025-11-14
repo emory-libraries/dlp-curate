@@ -78,7 +78,7 @@ module Hyrax
                                    DownloadsController.default_content_path
                                  end
         association = dereference_file(default_file_reference)
-        association&.reader
+        association&.reader || alternate_file_lookup(default_file_reference, asset)
       end
 
       def mime_type_for(file)
@@ -89,6 +89,18 @@ module Hyrax
         return false if file_reference.nil?
         association = asset.association(file_reference.to_sym)
         association if association&.is_a?(ActiveFedora::Associations::SingularAssociation)
+      end
+
+      def alternate_file_lookup(file_reference, file_set)
+        file_reference_hash = {
+          'preservation': :pulled_preservation_master_file,
+          'intermediate': :pulled_intermediate_file,
+          'extracted':    :pulled_extracted_file,
+          'transcript':   :pulled_transcript_file
+        }
+        file_reference_method = file_reference_hash[file_reference_hash.keys.map(&:to_s).find { |ref| file_reference.include?(ref) }&.to_sym]
+
+        file_reference_method.present? ? file_set.send(file_reference_method) : nil
       end
   end
 end
