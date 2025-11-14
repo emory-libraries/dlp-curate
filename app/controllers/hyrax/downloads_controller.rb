@@ -95,8 +95,8 @@ module Hyrax
         file_reference_hash = {
           'preservation': :pulled_preservation_master_file,
           'intermediate': :pulled_intermediate_file,
-          'extracted': :pulled_extracted_file,
-          'transcript': :pulled_transcript_file
+          'extracted':    :pulled_extracted_file,
+          'transcript':   :pulled_transcript_file
         }
         file_reference_method = file_reference_hash[file_reference_hash.keys.map(&:to_s).find { |ref| file_reference.include?(ref) }&.to_sym]
 
