@@ -4,7 +4,7 @@
 # no longer rendering json in our create method
 require 'rails_helper'
 
-RSpec.describe Hyrax::FixityChecksController do
+RSpec.describe Hyrax::FixityChecksController, clean: true do
   routes { Hyrax::Engine.routes }
   let(:user) { FactoryBot.create(:user) }
   let(:file_set) { FactoryBot.create(:file_set, user: user) }
