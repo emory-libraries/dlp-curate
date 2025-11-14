@@ -34,7 +34,6 @@ ENV RAILS_SERVE_STATIC_FILES="1"
 ENTRYPOINT ["./scripts/entrypoint.sh"]
 CMD ["bundle", "exec", "puma", "-v", "-b", "tcp://0.0.0.0:3000"]
 
-
 FROM hyrax-base AS hyrax
 
 ARG APP_PATH=.
@@ -66,4 +65,3 @@ ARG BUNDLE_WITHOUT=
 ONBUILD COPY --chown=1001:101 $APP_PATH /app
 ONBUILD RUN bundle install --jobs "$(nproc)"
 ONBUILD RUN RAILS_ENV=production SECRET_KEY_BASE=`bin/rake secret` DATABASE_URL='nulldb:/nulldb' bundle exec rake assets:precompile
-
