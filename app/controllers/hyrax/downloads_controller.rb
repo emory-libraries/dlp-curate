@@ -43,7 +43,7 @@ module Hyrax
                                    DownloadsController.default_content_path
                                  end
         association = dereference_file(default_file_reference)
-        association&.reader || alternate_file_lookup(default_file_reference, asset)
+        association&.reader
       end
   end
 end
