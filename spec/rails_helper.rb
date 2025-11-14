@@ -68,8 +68,6 @@ RSpec.configure do |config|
     allow(Clamby).to receive(:virus?).and_return(false)
   end
 
-<<<<<<< Updated upstream
-=======
   config.after do
     DatabaseCleaner.strategy = :transaction
   end
@@ -82,7 +80,6 @@ RSpec.configure do |config|
     driven_by :selenium_chrome_headless_sandboxless
   end
 
->>>>>>> Stashed changes
   # include Noid::Rails::RSpec
   # config.before(:suite) { disable_production_minter! }
   # config.after(:suite)  { enable_production_minter! }
