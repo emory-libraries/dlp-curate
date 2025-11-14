@@ -1,0 +1,181 @@
+name: dlp-curate
+services:
+  app: &app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: hyrax
+      args:
+        - EXTRA_APK_PACKAGES=git less
+    entrypoint: ./scripts/entrypoint.sh
+    environment:
+      DATABASE_HOST: mysql
+    command: sh -l -c 'bundle && bundle exec puma -v -b tcp://0.0.0.0:3000'
+    stdin_open: true
+    tty: true
+    user: root
+    env_file:
+      - .env.development
+    depends_on:
+      - chrome
+      - db_migrate
+      - fcrepo
+      - memcached
+      - mysql
+      - redis
+      - solr
+    ports:
+      - 3000:3000
+      - 9876:9876
+      - 9515:9515
+    volumes:
+      - .:/app
+      - ./public:/app/public
+      - bundle:/app/bundle
+      - hyrax-storage:/app/storage
+      - hyrax-derivatives:/app/derivatives
+      - hyrax-uploads:/app/uploads
+      - rails-tmp:/app/tmp
+    networks:
+      - curate
+
+  sidekiq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: hyrax-worker
+    entrypoint: ./scripts/entrypoint.sh
+    command: sh -l -c 'bundle && bundle exec sidekiq'
+    user: root
+    env_file:
+      - .env.development
+    depends_on:
+      - db_migrate
+      - fcrepo
+      - memcached
+      - mysql
+      - redis
+      - solr
+    volumes:
+      - .:/app
+      - bundle:/app/bundle
+      - hyrax-storage:/app/storage
+      - hyrax-derivatives:/app/derivatives
+      - hyrax-uploads:/app/uploads
+      - rails-public:/app/public
+      - rails-tmp:/app/tmp
+    networks:
+      - curate
+
+  db_migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: hyrax
+      args:
+        - EXTRA_APK_PACKAGES=git less
+    entrypoint: ./scripts/entrypoint.sh
+    environment:
+      DATABASE_HOST: mysql
+    user: root
+    env_file:
+      - .env.development
+    command: sh -l -c 'bundle && ./scripts/db-migrate-seed.sh'
+    depends_on:
+      - solr
+      - mysql
+    volumes:
+      - .:/app
+      - bundle:/app/bundle
+      - rails-public:/app/public
+      - rails-tmp:/app/tmp
+    networks:
+      - curate
+
+  chrome:
+    image: selenium/standalone-chrome:4.9.0
+    privileged: true
+    volumes:
+      - /dev/shm:/dev/shm
+    shm_size: 2g
+    ports:
+      - 4444:4444
+      - 5900:5900
+      - 7900:7900
+    networks:
+      - curate
+
+  mysql:
+    image: mysql:8.0
+    env_file:
+      - .env.development
+    environment:
+      - MYSQL_DATABASE=curate_development
+      - MYSQL_ROOT_PASSWORD=hyrax_admin_password
+    ports:
+      - 5432:5432
+    depends_on:
+      - solr
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - curate
+
+  fcrepo:
+    image: ghcr.io/samvera/fcrepo4:4.7.5
+    volumes:
+      - fcrepo:/data:cached
+    ports:
+      - 8984:8984
+    networks:
+      - curate
+
+  memcached:
+    image: bitnami/memcached
+    ports:
+      - 11211:11211
+    networks:
+      - curate
+
+  redis:
+    image: redis:5-alpine
+    ports:
+      - 6379:6379
+    env_file:
+      - .env.development
+    volumes:
+      - redis:/data
+    networks:
+      - curate
+
+  solr:
+    image: solr:8.11.1
+    ports:
+      - 8983:8983
+    command:
+      - sh
+      - "-c"
+      - "precreate-core hydra-test /opt/solr/server/configsets/hyraxconf; solr-precreate hydra-development /opt/solr/server/configsets/hyraxconf"
+    volumes:
+      - solr_home:/var/solr/data:cached
+      - ./solr/config:/opt/solr/server/configsets/hyraxconf
+    networks:
+      - curate
+
+volumes:
+  bundle:
+  hyrax-storage:
+  hyrax-derivatives:
+  hyrax-uploads:
+  rails-tmp:
+  rails-public:
+  db:
+  fcrepo:
+  redis:
+  solr_home:
+
+networks:
+  curate:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-curate
