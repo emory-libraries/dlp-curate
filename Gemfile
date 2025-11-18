@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '2.7.4'
+ruby '2.7.5'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
@@ -80,14 +80,14 @@ group :development, :test do
   gem 'rspec-its'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
-  gem 'sqlite3', '~> 1.3.7'
-  gem 'webdrivers'
   gem 'webmock'
   gem 'yard'
 end
 
 group :test do
   gem 'capybara'
+  gem 'capybara-screenshot'
+  gem 'database_cleaner'
   gem 'rspec_junit_formatter'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
   gem 'show_me_the_cookies'
