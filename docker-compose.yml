@@ -26,8 +26,6 @@ services:
       - solr
     ports:
       - 3000:3000
-      - 9876:9876
-      - 9515:9515
     volumes:
       - .:/app
       - ./public:/app/public
@@ -98,10 +96,6 @@ services:
     volumes:
       - /dev/shm:/dev/shm
     shm_size: 2g
-    ports:
-      - 4444:4444
-      - 5900:5900
-      - 7900:7900
     networks:
       - curate
 
@@ -112,12 +106,11 @@ services:
     environment:
       - MYSQL_DATABASE=curate_development
       - MYSQL_ROOT_PASSWORD=hyrax_admin_password
-    ports:
-      - 5432:5432
     depends_on:
       - solr
     volumes:
       - db:/var/lib/mysql
+      - ./docker_mysql:/etc/mysql/conf.d
     networks:
       - curate
 
@@ -125,22 +118,16 @@ services:
     image: ghcr.io/samvera/fcrepo4:4.7.5
     volumes:
       - fcrepo:/data:cached
-    ports:
-      - 8984:8984
     networks:
       - curate
 
   memcached:
     image: bitnami/memcached
-    ports:
-      - 11211:11211
     networks:
       - curate
 
   redis:
     image: redis:5-alpine
-    ports:
-      - 6379:6379
     env_file:
       - .env.development
     volumes:
@@ -150,8 +137,6 @@ services:
 
   solr:
     image: solr:8.11.1
-    ports:
-      - 8983:8983
     command:
       - sh
       - "-c"
