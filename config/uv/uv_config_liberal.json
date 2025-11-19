@@ -3,6 +3,13 @@
         "rightPanelEnabled": true
     },
     "modules": {
+        "contentLeftPanel": {
+            "options": {
+                "thumbsCacheInvalidation": {
+                    "enabled": false
+                }
+            }
+        },
         "footerPanel": {
             "options": {
                 "downloadEnabled": true,
