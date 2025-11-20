@@ -23,12 +23,12 @@ module AlternateFileLookup
 
   def extracted_file_by_logic
     files.select do |f|
-      f&.file_name&.first&.include?('.xml') || f&.file_name&.first&.include?('.pos') && files.size > 1
+      files.size > 1 && f&.file_name&.first&.include?('.xml') || f&.file_name&.first&.include?('.pos')
     end&.first
   end
 
   def transcript_file_by_logic
-    files.select { |f| f&.file_name&.first&.include?('.txt') && files.size > 1 }&.first
+    files.select { |f| files.size > 1 && f&.file_name&.first&.include?('.txt') }&.first
   end
 
   def pulled_preservation_master_file
