@@ -3,17 +3,24 @@
         "rightPanelEnabled": true
     },
     "modules": {
+        "contentLeftPanel": {
+            "options": {
+                "thumbsCacheInvalidation": {
+                    "enabled": false
+                }
+            }
+        },
         "footerPanel": {
             "options": {
                 "downloadEnabled": false,
                 "fullscreenEnabled": false,
                 "shareEnabled": false
             }
-        }
-        "pagingHeaderPanel": {
-          "options": {
-            "pagingToggleEnabled": true
-          }
         },
+        "pagingHeaderPanel": {
+            "options": {
+                "pagingToggleEnabled": true
+            }
+        }
     }
 }
