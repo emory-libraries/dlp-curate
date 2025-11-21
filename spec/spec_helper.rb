@@ -3,9 +3,12 @@
 require 'coveralls'
 require 'active_fedora/cleaner'
 require 'webmock/rspec'
-require 'webdrivers/chromedriver'
 
 WebMock.disable_net_connect!(allow:                     [
+                               'chrome',
+                               'fcrepo',
+                               'solr',
+                               '0.0.0.0',
                                '127.0.0.1',
                                'chromedriver.storage.googleapis.com',
                                'storage.googleapis.com',

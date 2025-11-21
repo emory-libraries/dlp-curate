@@ -46,15 +46,16 @@ RSpec.configure do |config|
   config.before(:suite) do
     # Compile our JavaScript
     `bin/webpack`
-  end
 
-  config.before(:suite) do
     ActiveJob::Base.queue_adapter = :test
+
     ActiveFedora::Cleaner.clean!
+    DatabaseCleaner.clean_with(:truncation)
   end
 
   config.before(clean: true) do
     ActiveFedora::Cleaner.clean!
+    DatabaseCleaner.clean
   end
 
   config.before(admin_set: true) do
@@ -66,6 +67,16 @@ RSpec.configure do |config|
   config.before do
     class_double("Clamby").as_stubbed_const
     allow(Clamby).to receive(:virus?).and_return(false)
+    DatabaseCleaner.start
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  config.before(:each, type: :system, js: true) do
+    driven_by :selenium_chrome_headless_sandboxless
   end
 
   # include Noid::Rails::RSpec
@@ -77,7 +88,7 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  # config.use_transactional_fixtures = true
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and

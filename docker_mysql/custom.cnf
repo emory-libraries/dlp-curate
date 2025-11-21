@@ -1,0 +1,2 @@
+[mysqld]
+innodb_lock_wait_timeout = 600
