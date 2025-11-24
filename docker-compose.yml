@@ -26,6 +26,7 @@ services:
       - solr
     ports:
       - 3000:3000
+      - 3010:3010
     volumes:
       - .:/app
       - ./public:/app/public
@@ -91,8 +92,11 @@ services:
       - curate
 
   chrome:
-    image: selenium/standalone-chrome:4.9.0
-    privileged: true
+    image: seleniarm/standalone-chromium:4.9.0
+    ports:
+      - 4444:4444
+      - 7900:7900
+      - 5900:5900
     volumes:
       - /dev/shm:/dev/shm
     shm_size: 2g
