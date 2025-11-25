@@ -98,7 +98,7 @@ module Hyrax
           'extracted':    :pulled_extracted_file,
           'transcript':   :pulled_transcript_file
         }
-        file_reference_method = file_reference_hash[file_reference_hash.keys.map(&:to_s).find { |ref| file_reference.include?(ref) }&.to_sym]
+        file_reference_method = file_reference_hash[file_reference_hash.keys.map(&:to_s).find { |ref| file_reference&.to_s&.include?(ref) }&.to_sym]
 
         file_reference_method.present? ? file_set.send(file_reference_method) : nil
       end
