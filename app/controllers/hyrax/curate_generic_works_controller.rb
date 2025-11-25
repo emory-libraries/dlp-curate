@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-hyrax-v5.1.0]
+# [Hyrax-overwrite-hyrax-v5.2.0]
 
 module Hyrax
   # Generated controller for CurateGenericWork
