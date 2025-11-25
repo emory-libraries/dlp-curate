@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-hyrax-v5.1.0] FileActor ingest_file method in Hyrax::Actors
+# [Hyrax-overwrite-hyrax-v5.2.0] FileActor ingest_file method in Hyrax::Actors
 # Perform characterize job only on preservation_master_file
 require 'wings'
 Hyrax::Actors::FileActor.class_eval do
