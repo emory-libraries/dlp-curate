@@ -148,6 +148,7 @@ module Hyrax
 
       protected
 
+<<<<<<< HEAD
         def initialize_field(key)
           # rubocop:disable Lint/AssignmentInCondition
           if class_name = model_class.properties[key.to_s].try(:class_name)
@@ -157,6 +158,15 @@ module Hyrax
             super
           end
           # rubocop:enable Lint/AssignmentInCondition
+=======
+      def initialize_field(key)
+        # rubocop:disable Lint/AssignmentInCondition
+        if class_name = model_class.properties[key.to_s].try(:class_name)
+          # Initialize linked properties such as based_near
+          self[key] += [class_name.new]
+        else
+          super
+>>>>>>> 034e5cda40 (batch 6.)
         end
 
       private
