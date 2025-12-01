@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 module CurateCollectionBehavior
-  # Hyrax v3.4.2 Override: reverting back to the non-Valkrie processing because
+  # Hyrax v5.2.0 Override: reverting back to the non-Valkrie processing because
   #   setting `member_of_collection_ids` in the Valkyrie-converted work object doesn't
   #   communicate back to the AF object to persist the same value there.
+  #
+  # We are only using this as a convenience method for Rspec. Shouldn't harm anything else.
   def add_member_objects(new_member_ids)
     Array(new_member_ids).collect do |member_id|
       member = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: member_id, use_valkyrie: false)

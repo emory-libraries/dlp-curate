@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-hyrax-v5.1.0]
+# [Hyrax-overwrite-hyrax-v5.2.0]
 # Note: if issues occur with this controller, try removing all guard_for_workflow_restriction_on! calls.
 
 module Hyrax
@@ -172,7 +172,7 @@ module Hyrax
       return unless @file_set.class == ::FileSet
       # We can tell if a Hyrax::FileSet was improperly cast because this AF method will
       # return nil since its parent is not a ActiveFedora work.
-      @file_set = @file_set.valkyrie_resource if @file_set.parent&.id.nil?
+      @file_set = @file_set.valkyrie_resource if @file_set.respond_to?(:parent) && @file_set.parent&.id.nil?
     end
 
     def parent(file_set: curation_concern)
@@ -257,6 +257,7 @@ module Hyrax
       respond_to do |wants|
         wants.html do
           initialize_edit_form
+          # TODO: return a valuable error message
           flash[:error] = "There was a problem processing your request."
           render 'edit', status: :unprocessable_entity
         end
