@@ -11,12 +11,12 @@ Rails.logger.level = Logger::INFO
 # Remove the existing visibility label constant
 Hyrax::PermissionBadge.send(:remove_const, :VISIBILITY_LABEL_CLASS)
 Hyrax::PermissionBadge::VISIBILITY_LABEL_CLASS = {
-  authenticated: "label-info",
-  embargo:       "label-warning",
-  lease:         "label-warning",
-  open:          "label-success",
-  restricted:    "label-danger",
-  low_res:       "label-success",
-  emory_low:     "label-info",
-  rose_high:     "label-warning"
+  authenticated: "badge-info",
+  embargo:       "badge-warning",
+  lease:         "badge-warning",
+  open:          "badge-success",
+  restricted:    "badge-danger",
+  low_res:       "badge-success",
+  emory_low:     "badge-info",
+  rose_high:     "badge-warning"
 }.freeze

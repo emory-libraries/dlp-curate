@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-hyrax-v5.1.0] - Adds logger info and warning for bad/missing tmp files L#13-L#20
+# [Hyrax-overwrite-hyrax-v5.2.0] - Adds logger info and warning for bad/missing tmp files L#13-L#20
 
 class CreateDerivativesJob < Hyrax::ApplicationJob
   queue_as :derivatives
@@ -12,12 +12,12 @@ class CreateDerivativesJob < Hyrax::ApplicationJob
     # Ensure a fresh copy of the repo file's latest version is being worked on, if no filepath is directly provided
     filepath = Hyrax::WorkingDirectory.copy_repository_resource_to_working_directory(Hydra::PCDM::File.find(file_id), file_set.id) unless filepath && File.exist?(filepath)
     @logger = Logger.new(STDOUT)
-    @logger.info "CreateDerivativesJob for #{filename} started at #{DateTime.current}"
+    @logger.info "CreateDerivativesJob for #{filepath} started at #{DateTime.current}"
 
     begin
       file_set.create_derivatives(filepath)
     rescue
-      @logger.warn "Error occurred in CreateDerivativesJob for #{filename}"
+      @logger.warn "Error occurred in CreateDerivativesJob for #{filepath}"
     end
 
     # Reload from Fedora and reindex for thumbnail and extracted text

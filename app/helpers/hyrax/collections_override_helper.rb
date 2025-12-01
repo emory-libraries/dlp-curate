@@ -12,6 +12,7 @@ module Hyrax
       id.present? ? [::SolrDocument.find(id)] : []
     end
 
+    # [Hyrax-overwrite-hyrax-v5.2.0] We change the pulling of the collection list to our preferred methods above.
     # rubocop:disable Rails/ContentTag
     def render_collection_links(solr_doc)
       return if pull_collection_list(solr_doc).empty?

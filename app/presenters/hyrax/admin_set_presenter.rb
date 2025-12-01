@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-overwrite-hyrax-v5.2.0]
 # Changes behavior of total_viewable_items to match total_items
 
 module Hyrax
@@ -29,6 +29,11 @@ module Hyrax
       return I18n.t('hyrax.admin.admin_sets.delete.error_default_set') if AdminSet.default_set?(id)
 
       I18n.t('hyrax.admin.admin_sets.delete.error_not_empty') if any_items?
+    end
+
+    # Overrides delegate because admin sets do not index collection type gid
+    def collection_type_gid
+      collection_type.to_global_id
     end
 
     def collection_type
