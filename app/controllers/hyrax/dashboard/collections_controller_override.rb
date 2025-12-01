@@ -2,7 +2,7 @@
 module Hyrax
   module Dashboard
     module CollectionsControllerOverride
-      # [Hyrax-overwrite-hyrax-v5.1.0] We are overwriting the `add_new_banner` method because
+      # [Hyrax-overwrite-hyrax-v5.2.0] We are overwriting the `add_new_banner` method because
       # we are using the collection_banner (L#13) column in uploaded_files table
       # instead of the default. Our uploaded_files table is different compared
       # to Hyrax.
@@ -18,7 +18,7 @@ module Hyrax
         banner_info.save f.collection_banner_url
       end
 
-      # [Hyrax-overwrite-hyrax-v5.1.0] Restrict deletion to admins only
+      # [Hyrax-overwrite-hyrax-v5.2.0] Restrict deletion to admins only
       def destroy
         if current_user.admin? && @collection.destroy
           after_destroy(params[:id])

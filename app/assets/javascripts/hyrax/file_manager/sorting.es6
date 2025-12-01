@@ -1,4 +1,4 @@
-// [Hyrax overwrite]
+// [Hyrax v5.2.0 overwrite]
 export default class SortManager {
   constructor(save_manager) {
     this.element = $("#sortable")

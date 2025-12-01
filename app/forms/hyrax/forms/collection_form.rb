@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-hyrax-v5.1.0]
+# [Hyrax-overwrite-hyrax-v5.2.0]
 module Hyrax
   module Forms
     class CollectionForm
@@ -145,6 +145,8 @@ module Hyrax
       def list_child_collections
         collection_member_service.available_member_subcollections.documents
       end
+
+      protected
 
       def initialize_field(key)
         # rubocop:disable Lint/AssignmentInCondition
