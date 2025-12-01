@@ -1,27 +1,31 @@
-<% # [Hyrax-overwrite-v3.4.2] %>
+<% # [Hyrax-overwrite-hyrax-v5.2.0] %>
 <% if embargo_enforced?(f.object) %>
   <%= render 'form_permission_under_embargo', f: f %>
 <% elsif lease_enforced?(f.object) %>
   <%= render 'form_permission_under_lease', f: f %>
 <% else %>
     <fieldset>
-      <legend class="legend-save-work"><%= t('.visibility') %></legend>
+      <% if local_assigns[:save_work] %>
+        <legend class="legend-save-work"><%= t('.visibility') %></legend>
+      <% else %>
+        <legend><%= t('.visibility') %><%= raw(t('.subtitle_html')) %></legend>
+      <% end %>
       <ul class="visibility">
 
         <!-- Public -->
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, data: { 'target': '#collapsePublic' } %>
+        <li class="form-check">
+          <label class="form-check-label">
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, class: 'form-check-input', data: { 'target': '#collapsePublic' } %>
             <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC) %>
             <br />
             <%= t('hyrax.visibility.open.note_html', type: f.object.human_readable_type) %>
           </label>
         </li>
 
-        <!-- Public Low View -->
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES %>
+        <!-- Public Low View (Emory Addition) -->
+        <li class="form-check">
+          <label class="form-check-label">
+            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES, class: 'form-check-input' %>
             <%= visibility_badge(::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES) %>
             <br />
             <%= t('hyrax.visibility.low_res.note_html') %>
@@ -29,29 +33,29 @@
         </li>
 
         <!-- Authenticated / Emory High Download -->
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED %>
+        <li class="form-check">
+          <label class="form-check-label">
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED, class: 'form-check-input' %>
             <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED) %>
             <br />
             <%= t('hyrax.visibility.authenticated.note_html') %>
           </label>
         </li>
 
-        <!-- Emory Low Download -->
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW %>
+        <!-- Emory Low Download (Emory Addition) -->
+        <li class="form-check">
+          <label class="form-check-label">
+            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW, class: 'form-check-input' %>
             <%= visibility_badge(::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW) %>
             <br />
             <%= t('hyrax.visibility.emory_low.note_html') %>
           </label>
         </li>
 
-        <!-- Rose High Resolution -->
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH %>
+        <!-- Rose High Resolution (Emory Addition) -->
+        <li class="form-check">
+          <label class="form-check-label">
+            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH, class: 'form-check-input' %>
             <%= visibility_badge(::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH) %>
             <br />
             <%= t('hyrax.visibility.rose_high.note_html') %>
@@ -59,9 +63,9 @@
         </li>
 
         <!-- Restricted / Private -->
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE %>
+        <li class="form-check">
+          <label class="form-check-label">
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, class: 'form-check-input' %>
             <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) %>
             <br >
             <%= t('hyrax.visibility.restricted.note_html') %>
@@ -69,9 +73,9 @@
         </li>
 
         <!-- Embargo -->
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO, data: { 'target': '#collapseEmbargo' } %>
+        <li class="form-check">
+          <label class="form-check-label">
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO, 'aria-label': 'Embargo', class: 'form-check-input', data: { 'target': '#collapseEmbargo' } %>
             <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO) %>
             <br />
             <%= t('hyrax.visibility.embargo.note_html') %>
@@ -87,9 +91,9 @@
         </li>
 
         <!-- Lease -->
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE, data: { 'target': '#collapseLease' } %>
+        <li class="form-check">
+          <label class="form-check-label">
+            <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE, 'aria-label': 'Lease', class: 'form-check-input', data: { 'target': '#collapseLease' } %>
             <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE) %>
             <br />
             <%= t('hyrax.visibility.lease.note_html') %>
