@@ -1,21 +1,10 @@
-<% # [Hyrax-overwrite-v3.4.2] Remove batch upload link L#17-18 %>
+<% # [Hyrax-overwrite-hyrax-v5.2.0] Remove batch upload link L#17-18 %>
 <%= simple_form_for [main_app, @form],
                     html: {
                       data: { behavior: 'work-form',
                               'param-key' => @form.model_name.param_key },
                       multipart: true
                     } do |f| %>
-  <% if f.object.errors.any? %>
-    <div class="alert alert-danger alert-dismissable" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <%= f.object.errors.full_messages_for(:base).send(SimpleForm.error_method) %>
-      <%= render 'form_in_works_error', f: f %>
-      <%= render 'form_ordered_members_error', f: f %>
-      <%= render 'form_collections_error', f: f %>
-      <%= render 'form_visibility_error', f: f %>
-      <%= render 'form_url_validation_error', f: f %>
-    </div>
-  <% end %>
   <%= render 'hyrax/base/guts4form', f: f, tabs: form_tabs_for(form: f.object) %>
 <% end %>
 

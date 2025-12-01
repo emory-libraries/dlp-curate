@@ -1,13 +1,20 @@
-<% # [Hyrax-overwrite-v3.4.2] Changes column sizing L# 57 and 72 %>
+<%# [Hyrax-overwrite-hyrax-v5.2.0]
+      - Changes divs to headers L#15 and 17
+      - removes `onerror` behavior L#31 and 34
+      - alters column sizing L#63 and 78
+      - changes delivery logic L#79
+      - renders our new partials L#109 and 112
+      - modifies header sizing L#117 and 127
+      - excises span.hide.analytics-event %>
 <% provide :page_title, construct_page_title(@presenter.title) %>
 <div class="hyc-container" itemscope itemtype="http://schema.org/CollectionPage">
   <div class="row hyc-header">
     <div class="col-md-12">
 
-    <% if @presenter.banner_file.present? %>
-          <header class="hyc-banner" style="background-image:url(<%= @presenter.banner_file %>)">
+      <% if @presenter.banner_file.present? %>
+        <header class="hyc-banner" style="background-image:url(<%= @presenter.banner_file %>)">
       <% else %>
-          <header class="hyc-generic">
+        <header class="hyc-generic">
       <% end %>
 
       <div class="hyc-title">
@@ -49,7 +56,6 @@
       <% end %>
 
       </header>
-
     </div>
   </div>
 
@@ -80,11 +86,11 @@
   <!-- Search results label -->
   <% if @members_count > 0 || @presenter.subcollection_count > 0 %>
     <div class="hyc-blacklight hyc-bl-title">
-    <% if collection_search_parameters? %>
-      <h2>
-        <%= t('hyrax.dashboard.collections.show.search_results') %>
-      </h2>
-    <% end %>
+      <% if collection_search_parameters? %>
+        <h2>
+          <%= t('hyrax.dashboard.collections.show.search_results') %>
+        </h2>
+      <% end %>
     </div>
   <% end %>
 

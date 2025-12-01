@@ -1,4 +1,4 @@
-<% # [Hyrax-overwrite-v3.4.2] %>
+<% # [Hyrax-overwrite-hyrax-v5.2.0] %>
 <% provide :page_title, @presenter.page_title %>
 
 <%= render 'shared/citations' %>
@@ -7,14 +7,14 @@
   <div class="col-sm-12">
     <%= render 'work_type', presenter: @presenter %>
   </div>
-  <div itemscope itemtype="http://schema.org/CreativeWork" class="col-xs-12">
+  <div itemscope itemtype="http://schema.org/CreativeWork" class="col-12">
     <%= render 'work_title', presenter: @presenter %>
     <%= render 'show_actions', presenter: @presenter %>
     <% if @presenter&.representative_presenter&.pdf? %>
       <%= render 'representative_media', presenter: @presenter, viewer: false %>
     <% end %>
-    <div class="panel panel-default">
-      <div class="panel-body">
+    <div class="card">
+      <div class="card-body">
         <div class="row">
           <%= render 'workflow_actions_widget', presenter: @presenter %>
           <% if @presenter.iiif_viewer? %>
@@ -34,31 +34,31 @@
           </div>
         </div>
       </div>
-    </div><!-- /panel -->
+    </div><!-- /.card -->
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title"><%= t('hyrax.base.show.preservation_status') %></h3>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t('hyrax.base.show.preservation_status') %></h3>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         <%= render 'preservation_status', presenter: @presenter %>
       </div>
     </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title"><%= t('hyrax.base.show.relationships') %></h3>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t('hyrax.base.show.relationships') %></h3>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         <%= render 'relationships', presenter: @presenter %>
       </div>
     </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title"><%= t('.items') %></h3>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t('.items') %></h3>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         <%= render 'items', presenter: @presenter %>
       </div>
     </div>
@@ -67,9 +67,9 @@
     <%# = render 'sharing_with', presenter: @presenter %>
     <%# = render 'user_activity', presenter: @presenter %>
 
-    <span class='hide analytics-event' data-category="work" data-action="work-view" data-name="<%= @presenter.id %>" >
+    <span class='hide analytics-event' data-category="work" data-action="work-view" data-name="<%= @presenter.id %>" ></span>
     <% @presenter.member_of_collection_ids.each do |collection_id| %>
-      <span class='hide analytics-event' data-category="work-in-collection" data-action="work-in-collection-view" data-name="<%= collection_id %>" >
+      <span class='hide analytics-event' data-category="work-in-collection" data-action="work-in-collection-view" data-name="<%= collection_id %>" ></span>
     <% end %>
   </div>
 </div>

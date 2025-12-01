@@ -1,4 +1,4 @@
-<% # [Hyrax-overwrite-v3.4.2] Inserts source collection link L#64 %>
+<%# [Hyrax-overwrite-hyrax-v5.2.0] Inserts source collection link L#64-80 %>
 <% provide :page_title, construct_page_title(@presenter.title) %>
 
 <% provide :page_header do %>
@@ -6,12 +6,12 @@
 <% end %>
 
 <div class="collections-wrapper">
-  <section class="panel panel-default collections-panel-wrapper admin-show-page">
-    <div class="panel-heading">
+  <section class="card collections-panel-wrapper admin-show-page">
+    <div class="card-header">
       <%= render 'collection_title', presenter: @presenter %>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
       <section>
         <div itemscope itemtype="http://schema.org/CollectionPage" class="row collection">
           <div class="col-sm-3 text-center">
@@ -108,7 +108,7 @@
         <%= render 'hyrax/collections/paginate' %>
       </section>
 
-    </div><!-- /panel-body -->
+    </div><!-- /card-body -->
   </section><!-- /collections-panel-wrapper -->
 </div><!-- /collections-wrapper -->
 
