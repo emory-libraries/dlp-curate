@@ -1,5 +1,6 @@
-<% # [Hyrax-overwrite-v3.4.2] %>
-<footer class="navbar navbar-inverse site-footer">
+<%# [Hyrax-overwrite-hyrax-v5.2.0] We add deployment information L#7 and hardcode the `Hyrax` name into the version L#8 %>
+
+<footer class="navbar navbar-dark bg-dark site-footer">
   <div class="container-fluid">
     <div class="navbar-text text-left">
         <p><%= t('hyrax.footer.service_html') %></p>
@@ -8,7 +9,7 @@
     </div>
     <div class="navbar-right">
       <div class="navbar-text text-right">
-        <p><%= t('hyrax.footer.copyright_html') %></p>
+        <p><%= t('hyrax.footer.copyright_html', current_year: Time.current.year) %></p>
         <p><%= t('hyrax.background_attribution_html') %></p>
       </div>
     </div>

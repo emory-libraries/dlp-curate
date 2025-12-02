@@ -1,4 +1,6 @@
-<%# Hyrax v3.4.2 Override: forgoing the Google Analytics code here for our own. %>
+<%# Hyrax hyrax-v5.2.0 Override: inserting the Google Analytics code directly L#29-39
+      since we haven't instituted the Analytics talk-back piece needed for the rest of the integration. %>
+
 <%= csrf_meta_tag %>
 <meta charset="utf-8" />
 <%# Only display meta tag, which enables creation of the ActionCable
@@ -10,6 +12,7 @@ signed in %>
 <!-- added for use on small devices like phones -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="resourcesync" href="<%= hyrax.capability_list_url %>" />
+<meta name="generator" content="Samvera Hyrax <%= ::Hyrax::VERSION %>" />
 
 <!-- Twitter card metadata -->
 <%= yield :twitter_meta %>
@@ -23,16 +26,19 @@ signed in %>
 
 <!-- application js -->
 <%= javascript_include_tag 'application' %>
+
 <%= render 'shared/appearance_styles' %>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GA_TRACKING_CODE']  %>"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GA_TRACKING_CODE'] %>"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '<%= ENV['GA_TRACKING_CODE']  %>');
+  gtag('config', '<%= ENV['GA_TRACKING_CODE'] %>');
+  window.analytics = gtag;
 </script>
+<meta name="analytics-provider" content="ga4">
 
 <!-- for extras, e.g., a favicon -->
 <%= render partial: '/head_tag_extras', formats: [:html] %>

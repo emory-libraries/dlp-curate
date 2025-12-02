@@ -1,12 +1,16 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Remove social media partial rendering %>
+<%# [Hyrax-overwrite-hyrax-v5.2.0]
+      - deletes turbolink deactivation L#8
+      - cuts workflow restriction check L#11
+      - removed social media partial rendering %>
+
 <div class="form-actions">
-  <% if Hyrax.config.analytics? %>
-    <%= link_to t('.analytics'), @presenter.stats_path, id: 'stats', class: 'btn btn-default' %>
+  <% if Hyrax.config.analytics_reporting? %>
+    <%= link_to t('.analytics'), @presenter.stats_path, id: 'stats', class: 'btn btn-secondary' %>
   <% end %>
 
   <% if @presenter.editor? %>
       <%= link_to t(".edit_this", type: @presenter.human_readable_type), edit_polymorphic_path([main_app, @presenter]),
-                  class: 'btn btn-default' %>
+                  class: 'btn btn-secondary' %>
       <%= link_to t(".delete_this", type: @presenter.human_readable_type), [main_app, @presenter],
                   class: 'btn btn-danger', data: { confirm: t(".confirm_delete_this", type: @presenter.human_readable_type) },
                   method: :delete %>
