@@ -1,7 +1,16 @@
+<%# [Hyrax-overwrite-hyrax-v5.2.0]
+      - replaced Samvera's media_display_partial render with a call to our own helper L#14
+      - removed single_use_links render
+      - adds in our custom buttons for Fixity Checks, Regenerate Derivatives, and Recharacterize L#16-19
+      - inserts our desired FileSet metatdata display before Samvera's `show_details` L#25-43
+      - deletes analytics reporting from this partial
+      - adds header to activity log L#50
+      - injects preservation events partial render L#52 %>
+
 <% provide :page_title, @presenter.page_title %>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-12 col-sm-4">
+    <div class="col-12 col-sm-3">
       <%= media_display @presenter %>
       <%= render 'show_actions', presenter: @presenter %>
       <br>
@@ -9,11 +18,10 @@
       <div><%= button_to t('.regenerate_derivative'), "/concern/file_sets/#{@presenter.id}/clean_up", class: 'btn btn-primary' %></div><br>
       <div><%= button_to t('.recharacterize'), "/concern/file_sets/#{@presenter.id}/re_characterize", class: 'btn btn-primary' %></div>
     </div>
-    <div itemscope itemtype="<%= @presenter.itemtype %>" class="col-xs-12 col-sm-8">
+    <div itemscope itemtype="<%= @presenter.itemtype %>" class="col-12 col-sm-9">
       <header>
         <%= render 'file_set_title', presenter: @presenter %>
       </header>
-      <%# TODO: render 'show_descriptions' See https://github.com/samvera/hyrax/issues/1481 %>
       <div id="fileset-id"><strong ><%= t('.file_set_id') %>:</strong> <%= @presenter.id %></div>
       <div id="fileset-category"><strong ><%= t('.file_set_category') %>:</strong> <%= @fileset_use %></div>
       <div id="fileset-parent"><strong><%= t('.is_part_of') %>:</strong> <%= link_to t('.parent_work'), @parent, class: 'btn-link' %></div>
@@ -35,7 +43,10 @@
       </table>
     </div><!-- /columns second -->
   </div> <!-- /.row -->
-  <%= render 'show_details' %>
+  <% @presenter.show_partials.each do |partial_path| %>
+  <%= render partial_path %>
+  <% end %>
+
   <h2 class="activity-header"><%= t(".activity") %></h2><br>
   <%= render 'hyrax/users/activity_log', events: @presenter.events %>
   <%= render 'preservation_events', presenter: @presenter %>
