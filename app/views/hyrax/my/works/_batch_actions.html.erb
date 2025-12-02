@@ -1,4 +1,5 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] Only display delete, edit, add to collection buttons for admins L#6 %>
+<%# [Hyrax-overwrite-hyrax-v5.2.0] Only display delete, edit, add to collection buttons for admins L#7 %>
+
 <div class="batch-info">
   <%= render 'hyrax/dashboard/collections/form_for_select_collection', user_collections: @user_collections %>
 
@@ -6,7 +7,7 @@
     <% if current_user.admin? %>
       <% session[:batch_edit_state] = "on" %>
       <div class="button_to-inline">
-        <%= button_to t('hyrax.dashboard.my.action.edit_selected'), hyrax.edit_batch_edits_path, method: :get, class: "btn btn-update btn-primary hidden submits-batches", data: { behavior: 'batch-edit' }, id: 'batch-edit' %>
+        <%= button_to t('hyrax.dashboard.my.action.edit_selected'), hyrax.edit_batch_edits_path, method: :get, class: "btn btn-update btn-primary submits-batches", data: { behavior: 'batch-edit' }, id: 'batch-edit' %>
       </div>
       <%= batch_delete %>
       <%= button_tag t('hyrax.dashboard.my.action.add_to_collection'),

@@ -1,4 +1,7 @@
-<% # [Hyrax-overwrite-v3.4.2] %>
+<%# [Hyrax-overwrite-hyrax-v5.2.0]
+      - changes logic to deliver only in file_sets show paths L#5
+      - adds option for PDF viewer when PDF is assigned as representative media L#18-24 %>
+
 <% if display_media_download_link?(file_set: file_set) && request.fullpath.include?('/file_sets/') %>
   <div>
     <h2 class="sr-only"><%= t('hyrax.file_set.show.downloadable_content.heading') %></h2>
@@ -10,7 +13,7 @@
                 download_pdf_for_viewer_path(file_set),
                 target: :_blank,
                 id: "file_download",
-                data: { label: file_set.id } %>
+                data: { label: file_set.id, work_id: @presenter.id, collection_ids: @presenter.member_of_collection_ids } %>
   </div>
 <% elsif display_media_download_link?(file_set: file_set) && !request.fullpath.include?('/file_sets/') %>
   <div>
@@ -20,10 +23,10 @@
           title="PDF Document" src="/pdfjs/web/viewer.html?file=/downloads/pdf_for_viewer/<%= file_set.id %>"></iframe>
   </div>
 <% else %>
-  <div>
-    <%= image_tag thumbnail_url(file_set),
-                  class: "representative-media",
-                  alt: "",
-                  role: "presentation" %>
-  </div>
+    <div>
+      <%= image_tag thumbnail_url(file_set),
+                    class: "representative-media",
+                    alt: "",
+                    role: "presentation" %>
+    </div>
 <% end %>

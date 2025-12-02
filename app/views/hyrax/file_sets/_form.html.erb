@@ -1,13 +1,13 @@
-<% # [Hyrax-overwrite-v3.0.0.pre.rc1] %>
-<!-- Adding fileset use category#L9 -->
+<%# [Hyrax-overwrite-hyrax-v5.2.0] Adding fileset use category #L9-15 %>
+
 <%= simple_form_for [main_app, curation_concern], html: { multipart: true, class: 'nav-safety' } do |f| %>
   <fieldset class="required">
-    <span class="control-label">
+    <span class="col-form-label">
       <%= label_tag 'file_set[title][]', t('.title'),  class: "string optional" %>
     </span>
     <%= text_field_tag 'file_set[title][]', curation_concern.title.first, class: 'form-control', required: true %>
     <!-- fileset-use category input field -->
-    <span class="control-label">
+    <span class="col-form-label">
       <%= label_tag 'file_set[pcdm_use]', t('.pcdm_use'),  class: "string optional" %>
     </span>
     <div>
