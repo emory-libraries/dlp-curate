@@ -7,7 +7,7 @@ module AlternateFileLookup
     if files.size == 1
       files.first
     elsif label.present?
-      files.select { |f| f&.file_name&.first&.include?(label) || f&.file_name&.first&.include?('_ARCH') }&.first
+      files.select { |f| f&.file_path&.first&.include?('preservation_master_file') || f&.file_name&.first&.include?('_ARCH') }&.first
     end
   end
 
