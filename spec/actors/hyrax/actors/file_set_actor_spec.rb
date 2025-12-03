@@ -1,8 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
-# Tests for mime-type have been removed.
-# We are not testing `from_url: true`
-
+# [Hyrax-overwrite-hyrax-v5.2.0] Tests for mime-type have been removed. We are not testing `from_url: true`.
 require 'rails_helper'
 
 RSpec.describe Hyrax::Actors::FileSetActor, :clean do
@@ -230,7 +227,7 @@ RSpec.describe Hyrax::Actors::FileSetActor, :clean do
       let(:work_v1) { FactoryBot.create(:generic_work) } # this version of the work has no members
 
       before do # another version of the same work is saved with a member
-        work_v2 = ActiveFedora::Base.find(work_v1.id)
+        work_v2 = work_v1.clone
         work_v2.ordered_members << FactoryBot.create(:file_set)
         work_v2.save!
       end
