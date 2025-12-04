@@ -20,36 +20,29 @@ gem 'coffee-rails', '~> 4.2'
 gem 'devise'
 gem 'devise-guests', '~> 0.8'
 gem 'dotenv-rails'
-gem 'dry-monads', '~> 1.4.0'
-gem 'edtf', '~> 3.0.0'
 gem 'edtf-humanize', '~> 1.0.0'
 gem 'honeybadger'
 gem 'http'
 gem 'hydra-role-management'
 gem 'hyrax', '~> 5.2'
-gem 'jbuilder', '~> 2.5'
-gem 'jquery-rails'
+gem 'linkeddata', '>= 3.1.6'
 gem 'mysql2'
-gem 'noid-rails'
 gem 'omniauth', '~> 1.9'
 gem 'omniauth-shibboleth', '~> 1.3'
 gem 'puma'
 gem 'rails', '~> 6.1'
-gem 'rdf-vocab', '<= 3.1.4'
 gem 'riiif', '~> 2.1'
-gem 'rsolr', '>= 1.0', '< 3'
-gem 'sass-rails', '~> 6.0'
 gem 'sidekiq', '~> 7.0'
 gem 'sidekiq-limit_fetch'
 gem 'stackprof', require: false
 gem 'turbolinks', '~> 5'
-gem 'twitter-typeahead-rails', '0.11.1.pre.javascript'
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
+gem 'tzinfo-data', platforms: [:windows, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '~> 5.x'
 gem 'whenever', require: false
 # Deprecation Warning: As of Curate v3, Zizia will be removed.
-gem 'zizia', '~> 5.5.0'
+# gem 'zizia', '~> 5.5.0'
 
 group :development do
   gem 'bcrypt_pbkdf'
@@ -62,7 +55,6 @@ group :development do
   gem 'ec2_ipv4_retriever', git: 'https://github.com/emory-libraries/ec2_ipv4_retriever', branch: 'main'
   gem 'ed25519', '>= 1.2', '< 2.0'
   gem 'fcrepo_wrapper'
-  gem 'rubocop-rspec'
   gem 'solr_wrapper', '>= 0.3'
   gem 'web-console', '>= 3.3.0'
   gem 'xray-rails', git: "https://github.com/brentd/xray-rails", branch: "bugs/ruby-3.0.0"
@@ -70,7 +62,6 @@ end
 
 group :development, :test do
   gem 'bixby'
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw] unless ENV['CI'] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'coveralls', require: false
   gem 'factory_bot_rails'
   gem 'ffaker'
@@ -87,8 +78,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'capybara'
   gem 'rspec_junit_formatter'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
-  gem 'show_me_the_cookies'
+  gem 'show_me_the_cookies' # Has capybara as dependency.
 end
