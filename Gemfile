@@ -49,8 +49,8 @@ gem 'sidekiq', '~> 7.0'
 gem 'sidekiq-limit_fetch'
 gem 'stackprof', require: false
 gem 'turbolinks', '~> 5'
-gem 'twitter-typeahead-rails', '0.11.1.pre.javascript'
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
+gem 'tzinfo-data', platforms: [:windows, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'uglifier', '>= 1.3.0'
 gem 'whenever', require: false
 
