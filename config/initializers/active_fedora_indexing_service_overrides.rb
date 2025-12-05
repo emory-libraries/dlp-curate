@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [ActiveFedora-overwrite-v13.3.0] rescues errors that indicate no connection to Fedora.
+# [ActiveFedora-overwrite-v15.0.1] rescues errors that indicate no connection to Fedora.
 ActiveFedora::IndexingService.class_eval do
   # Creates a solr document hash for the {#object}
   # @yield [Hash] yields the solr document

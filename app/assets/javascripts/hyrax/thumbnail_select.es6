@@ -1,5 +1,5 @@
 // Dynamically load the file options into the "Thumbnail" select field.
-// [Hyrax overwrite]
+// [Hyrax overwrite hyrax-v5.2.0]
 export default class {
   /*
    * @param {String} url the search endpoint

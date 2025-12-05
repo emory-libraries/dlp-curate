@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # [Hyrax-overwrite-hyrax-v5.2.0] Changes :og to :pmf as default_content and adds content_path method for
-# fetching `use` for additional files
+#   fetching `use` for additional files
 module Hyrax
   class DownloadsController < ApplicationController
     include Hydra::Controller::DownloadBehavior

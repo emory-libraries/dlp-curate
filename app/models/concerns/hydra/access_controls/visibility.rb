@@ -1,99 +1,116 @@
 # frozen_string_literal: true
-# Hydra::AccessControls v11.0.7 Override: our initializer prepends stopped working,
+# Hydra::AccessControls v13.2.0 Override: our initializer prepends stopped working,
 #   so a straight override is necessary.
 
 module Hydra::AccessControls
   module Visibility
     extend ActiveSupport::Concern
 
-    def visibility=(value)
-      return if value.nil?
-      # only set explicit permissions
-      case value
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-        public_visibility!
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-        registered_visibility!
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-        private_visibility!
-      when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-        low_res_visibility!
-      when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-        emory_low_visibility!
-      when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-        rose_high_visibility!
-      else
-        raise ArgumentError, "Invalid visibility: #{value.inspect}"
-      end
+    included do
+      # ActiveModel::Dirty requires defining the attribute method
+      # @see https://api.rubyonrails.org/classes/ActiveModel/Dirty.html
+      define_attribute_methods :visibility
+      # instance variable needs to be initialized here based upon what is in read_groups
+      after_initialize { @visibility = visibility }
+      # Starting in Rails 7.2, define_attribute_methods creates a module that overrides accessor methods
+      # defined in this module.  In order for the methods in this module to take precedence over those
+      # they need to be defined in a submodule and included after running define_attribute_methods.
+      include InstanceMethods
     end
 
-    def visibility
-      if read_groups.include? Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-      elsif read_groups.include? Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-      elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-        ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-      elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-        ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-      elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-        ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-      else
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    module InstanceMethods
+      def visibility=(value)
+        return if value.nil?
+        # only set explicit permissions
+        case value
+        when AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+          public_visibility!
+        when AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+          registered_visibility!
+        when AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+          private_visibility!
+        when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
+          low_res_visibility!
+        when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
+          emory_low_visibility!
+        when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
+          rose_high_visibility!
+        else
+          raise ArgumentError, "Invalid visibility: #{value.inspect}"
+        end
+        @visibility = value
       end
+
+      def visibility
+        if read_groups.include? AccessRight::PERMISSION_TEXT_VALUE_PUBLIC
+          AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        elsif read_groups.include? AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED
+          AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+        elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
+          ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
+        elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
+          ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
+        elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
+          ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
+        else
+          AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+        end
+      end
+
+      # Overridden for ActiveModel::Dirty tracking of visibility
+      # Required by ActiveModel::AttributeMethods
+      # @see https://api.rubyonrails.org/classes/ActiveModel/AttributeMethods.html
+      # An instance variable is used to avoid infinite recursion caused by calling #visibility
+      # Using this approach requires setting visibility read groups through #visibility=
+      # instead of manipulating them directly if #visibility_changed? is expected to work correctly.
+      def attributes
+        super.merge({ 'visibility' => @visibility })
+      end
+
+      private
+
+        # Override represented_visibility if you want to add another visibility that is
+        # represented as a read group (e.g. on-campus)
+        # @return [Array] a list of visibility types that are represented as read groups
+        def represented_visibility
+          [AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED,
+           AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+        end
+
+        def public_visibility!
+          visibility_will_change! unless visibility == AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+          remove_groups = represented_visibility - [AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+          set_read_groups([AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], remove_groups)
+        end
+
+        def registered_visibility!
+          visibility_will_change! unless visibility == AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+          remove_groups = represented_visibility - [AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
+          set_read_groups([AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED], remove_groups)
+        end
+
+        def private_visibility!
+          visibility_will_change! unless visibility == AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+          set_read_groups([], represented_visibility)
+        end
+
+        def low_res_visibility!
+          visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
+          remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES]
+          set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES], remove_groups)
+        end
+
+        def emory_low_visibility!
+          visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
+          remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW]
+          set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW], remove_groups)
+        end
+
+        def rose_high_visibility!
+          visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
+          remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH]
+          set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH], remove_groups)
+        end
     end
-
-    def visibility_changed?
-      !!@visibility_will_change
-    end
-
-    private
-
-      # Override represented_visibility if you want to add another visibility that is
-      # represented as a read group (e.g. on-campus)
-      # @return [Array] a list of visibility types that are represented as read groups
-      def represented_visibility
-        [AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED,
-         AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
-      end
-
-      def visibility_will_change!
-        @visibility_will_change = true
-      end
-
-      def public_visibility!
-        visibility_will_change! unless visibility == AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-        remove_groups = represented_visibility - [AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
-        set_read_groups([AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], remove_groups)
-      end
-
-      def registered_visibility!
-        visibility_will_change! unless visibility == AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-        remove_groups = represented_visibility - [AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
-        set_read_groups([AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED], remove_groups)
-      end
-
-      def private_visibility!
-        visibility_will_change! unless visibility == AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-        set_read_groups([], represented_visibility)
-      end
-
-      def low_res_visibility!
-        visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
-        remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES]
-        set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES], remove_groups)
-      end
-
-      def emory_low_visibility!
-        visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
-        remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW]
-        set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW], remove_groups)
-      end
-
-      def rose_high_visibility!
-        visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
-        remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH]
-        set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH], remove_groups)
-      end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-hyrax-v5.1.0]
-# Adds redirect on L#28 in create action
+# [Hyrax-overwrite-hyrax-v5.2.0] Adds redirect on L#28 in create action
+
 module Hyrax
   class FixityChecksController < ApplicationController
     before_action :authenticate_user!

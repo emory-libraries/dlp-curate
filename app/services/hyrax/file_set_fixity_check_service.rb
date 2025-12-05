@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Hyrax
-  # [Hyrax-overwrite-v3.4.2: Introduces initiating user for preservation events
+  # [Hyrax-overwrite-hyrax-v5.2.0: Introduces initiating user for preservation events
   # created by the ensuing fixity checks]
   ##
   # This class runs fixity checks on a {FileSetBehavior}, potentially on multiple

@@ -486,3 +486,29 @@ Bulkrax::Exporter.class_eval do
     ]
   end
 end
+
+Bulkrax::DatatablesBehavior.module_eval do
+  def format_importers(importers)
+    result = importers.map do |i|
+      {
+        name: view_context.link_to(i.name, view_context.importer_path(i)),
+        status_message: status_message_for(i),
+        last_imported_at: i.last_imported_at&.strftime("%F %T"),
+        next_import_at: i.next_import_at&.strftime("%F %T"),
+        enqueued_records: i.last_run&.enqueued_records,
+        processed_records: i.last_run&.processed_records || 0,
+        failed_records: i.last_run&.failed_records || 0,
+        deleted_records: i.last_run&.deleted_records,
+        total_collection_entries: i.last_run&.total_collection_entries,
+        total_work_entries: i.last_run&.total_work_entries,
+        total_file_set_entries: i.last_run&.total_file_set_entries,
+        actions: importer_util_links(i)
+      }
+    end
+    {
+      data: result,
+      recordsTotal: Bulkrax::Importer.count,
+      recordsFiltered: Bulkrax::Importer.count
+    }
+  end
+end
