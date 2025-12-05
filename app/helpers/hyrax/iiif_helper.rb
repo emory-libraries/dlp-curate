@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax overwrite hyrax-v5.2.0]
-# Adds additional methods to configure UV
+# [Hyrax overwrite hyrax-v5.2.0] Adds additional methods to configure UV
 
 module Hyrax
   module IiifHelper

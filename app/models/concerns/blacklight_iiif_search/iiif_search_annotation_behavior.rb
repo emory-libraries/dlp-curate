@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Blacklight IIIF Search v1.0.0 Override: per this application's instructions,
+# Blacklight IIIF Search v2.0.0 Override: per this application's instructions,
 #   this module must be overridden if coordinates will be provided within the results
 #   of this Gem's search API. It was also necessary to override #annotation_id and
 #   #canvas_uri_for_annotation so that we can match the format of each canvas' @id

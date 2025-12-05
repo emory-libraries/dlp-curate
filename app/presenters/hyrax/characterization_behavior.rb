@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.4.2]
-# Adds additional fields to characterization_terms
-
+# [Hyrax-overwrite-hyrax-v5.2.0] Adds additional fields to characterization_terms
 module Hyrax
   module CharacterizationBehavior
     extend ActiveSupport::Concern

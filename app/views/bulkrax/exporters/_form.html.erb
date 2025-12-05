@@ -1,4 +1,6 @@
-<%# Bulkrax v4.3.0 override: inserts the new option of `export_source_object_ids` on L#55 %>
+<%# Bulkrax v8.2.3 override:
+      - inserts the new option of `export_source_object_ids` on L#59-68
+      - expounds on hint with desired text L#80 %>
 
 <div class="panel-body">
   <% if exporter.errors.any? %>
@@ -13,7 +15,7 @@
     </div>
   <% end %>
 
-  <%= form.input :name, label: t('bulkrax.exporter.labels.name') %>
+  <%= form.input :name, label: t('bulkrax.exporter.labels.name'), input_html: { class: 'form-control' } %>
 
   <%= form.hidden_field :user_id, value: current_user.id %>
 
@@ -21,20 +23,22 @@
     collection:  form.object.export_type_list,
     label: t('bulkrax.exporter.labels.export_type'),
     required: true,
-    prompt: 'Please select an export type' %>
+    prompt: 'Please select an export type',
+    input_html: { class: 'form-control' } %>
 
   <%= form.input :export_from,
     collection: form.object.export_from_list,
     label: t('bulkrax.exporter.labels.export_from'),
     required: true,
-    prompt: 'Please select an export source' %>
+    prompt: 'Please select an export source',
+    input_html: { class: 'form-control' } %>
 
   <%= form.input :export_source_importer,
     label: t('bulkrax.exporter.labels.importer'),
     required: true,
     prompt: 'Select from the list',
-    label_html: { class: 'importer export-source-option hidden' },
-    input_html: { class: 'importer export-source-option hidden' },
+    label_html: { class: 'importer export-source-option d-none hidden' },
+    input_html: { class: 'importer export-source-option d-none hidden form-control' },
     collection:  form.object.importers_list.sort %>
 
   <%= form.input :export_source_collection,
@@ -42,9 +46,9 @@
     label: t('bulkrax.exporter.labels.collection'),
     required: true,
     placeholder: @collection&.title&.first,
-    label_html: { class: 'collection export-source-option hidden' },
+    label_html: { class: 'collection export-source-option d-none hidden' },
     input_html: {
-      class: 'collection export-source-option hidden',
+      class: 'collection export-source-option d-none hidden form-control',
       data: {
         'autocomplete-url' => '/authorities/search/collections',
         'autocomplete' => 'collection'
@@ -57,9 +61,9 @@
     placeholder: "Enter IDs of only collections or works separated by a pipe (\"|\"). When a collection's ID is provided, the child works of the collection will not automatically be added to the exported CSV. The desired works must be added to the ID list. When works are detected, the associated filesets will be found and added to the list by this application.",
     label: 'Object IDs',
     required: true,
-    label_html: { class: 'object_ids export-source-option hidden' },
+    label_html: { class: 'object_ids export-source-option d-none hidden' },
     input_html: {
-      class: 'object_ids export-source-option hidden'
+      class: 'object_ids export-source-option d-none hidden form-control'
     }
   %>
 
@@ -67,14 +71,15 @@
     label: t('bulkrax.exporter.labels.worktype'),
     required: true,
     prompt: 'Select from the list',
-    label_html: { class: 'worktype export-source-option hidden' },
-    input_html: { class: 'worktype export-source-option hidden' },
-    collection: Hyrax.config.curation_concerns.map {|cc| [cc.to_s, cc.to_s] } %>
+    label_html: { class: 'worktype export-source-option d-none hidden' },
+    input_html: { class: 'worktype export-source-option d-none hidden form-control' },
+    collection: Bulkrax.curation_concerns.map { |cc| [cc.to_s, cc.to_s] } %>
 
   <%= form.input :limit,
     as: :integer,
     hint: 'leave blank or 0 for all records. Note: please use this cautiously. Objects are grouped by class, and limiting may not return the results you expect.',
-    label: t('bulkrax.exporter.labels.limit') %>
+    label: t('bulkrax.exporter.labels.limit'),
+    input_html: { class: 'form-control' } %>
 
   <%= form.input :generated_metadata?,
                  as: :boolean,
@@ -89,58 +94,70 @@
   <%= form.input :date_filter,
                  as: :boolean,
                  label: t('bulkrax.exporter.labels.filter_by_date') %>
-  <div id="date_filter_picker" class="hidden">
+
+  <div id="date_filter_picker" class="d-none hidden">
     <%= form.input :start_date,
                    as: :date,
-                   label: t('bulkrax.exporter.labels.start_date') %>
+                   label: t('bulkrax.exporter.labels.start_date'),
+                   input_html: { class: 'form-control' } %>
 
     <%= form.input :finish_date,
                    as: :date,
-                   label: t('bulkrax.exporter.labels.finish_date') %>
+                   label: t('bulkrax.exporter.labels.finish_date'),
+                   input_html: { class: 'form-control' } %>
   </div>
-  <%= form.input :work_visibility,
-                 collection: form.object.work_visibility_list,
-                 label: t('bulkrax.exporter.labels.visibility') %>
+  <% if defined?(::Hyrax) %>
+    <%= form.input :work_visibility,
+                   collection: form.object.work_visibility_list,
+                  label: t('bulkrax.exporter.labels.visibility'),
+                  input_html: { class: 'form-control' } %>
+  <% end %>
 
-  <%= form.input :workflow_status,
-                 collection: form.object.workflow_status_list,
-                 label: t('bulkrax.exporter.labels.status') %>
+  <% if defined?(::Hyrax) %>
+    <%= form.input :workflow_status,
+                  collection: form.object.workflow_status_list,
+                  label: t('bulkrax.exporter.labels.status'),
+                  input_html: { class: 'form-control' } %>
+  <% end %>
 
   <%= form.input :parser_klass,
     collection: Bulkrax.parsers.map {|p| [p[:name], p[:class_name], {'data-partial' => p[:partial]}] if p[:class_name].constantize.export_supported? }.compact,
-    label: t('bulkrax.exporter.labels.export_format') %>
+    label: t('bulkrax.exporter.labels.export_format'),
+    input_html: { class: 'form-control' } %>
 </div>
 
 <%# Find definitions for the functions called in this script in
     app/assets/javascripts/bulkrax/exporters.js %>
 <script>
-  $(function() {
-    // show the selected export_source option
-    var selectedVal = $('.exporter_export_from option:selected').val();
-    hideUnhide(selectedVal);
+    document.addEventListener("DOMContentLoaded", function() {
+        $(function () {
+            // show the selected export_source option
+            var selectedVal = $('.exporter_export_from option:selected').val();
+            hideUnhide(selectedVal);
 
-    // Select2 dropdowns don't like taking a value param. Thus,
-    // if export_source_collection is present, we populate the input.
-    var selectedCollectionId = "<%= @collection&.id %>"
-    if (selectedCollectionId.length > 0) {
-      $('#exporter_export_source_collection').val(selectedCollectionId)
-    }
+            // Select2 dropdowns don't like taking a value param. Thus,
+            // if export_source_collection is present, we populate the input.
+            var selectedCollectionId = "<%= @collection&.id %>"
+            if (selectedCollectionId.length > 0) {
+                $('#exporter_export_source_collection').val(selectedCollectionId)
+            }
 
-    // get the selected export_from option and show the corresponding export_source
-    $('.exporter_export_from').change(function() {
-      var selectedVal = $('.exporter_export_from option:selected').val();
-      hideUnhide(selectedVal);
+            // get the selected export_from option and show the corresponding export_source
+            $('.exporter_export_from').change(function () {
+                var selectedVal = $('.exporter_export_from option:selected').val();
+                hideUnhide(selectedVal);
+            });
+
+            // get the date filter option and show the corresponding date selectors
+            $('.exporter_date_filter').change(function () {
+                if ($('.exporter_date_filter').find(".boolean").is(":checked"))
+                    $('#date_filter_picker').removeClass('d-none hidden');
+                else
+                    $('#date_filter_picker').addClass('d-none hidden');
+            });
+
+            if ($('.exporter_date_filter').find(".boolean").is(":checked"))
+                $('#date_filter_picker').removeClass('d-none hidden');
+        });
     });
-
-    // get the date filter option and show the corresponding date selectors
-    $('.exporter_date_filter').change(function() {
-        if($('.exporter_date_filter').find(".boolean").is(":checked"))
-            $('#date_filter_picker').removeClass('hidden');
-        else
-            $('#date_filter_picker').addClass('hidden');
-    });
-
-    if($('.exporter_date_filter').find(".boolean").is(":checked"))
-        $('#date_filter_picker').removeClass('hidden');
-  });
 </script>

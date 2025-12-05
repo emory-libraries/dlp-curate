@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-overwrite-hyrax-v5.2.0]
 # ingest_file method in the JobIoWrapper method is modified. We save the response
 # from the `file_actor.ingest_file` method call. If false is returned from L#16 in
 # `config/intializers/file_actor.rb` then a failure event is created, else success
