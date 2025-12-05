@@ -1,4 +1,4 @@
-// [Hyrax-overwrite] Adding response block for displaying request.term as a dynamic option
+// [Hyrax-overwrite-hyrax-v5.2.0] Adding response block for displaying request.term as a dynamic option
 // This script initializes a jquery-ui autocomplete widget
 export default class Default {
   constructor(element, url) {

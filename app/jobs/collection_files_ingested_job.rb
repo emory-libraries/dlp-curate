@@ -60,7 +60,7 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
       # is based solely on the Collection's CollectionType deposit_only_collection
       # attribute. This logic can be changed, but the simplest determination is the
       # CollectionType.
-      Collection.all.select { |c| !c&.collection_type&.deposit_only_collection? }
+      Collection.all.select { |c| !Hyrax::CollectionType&.for(collection: c)&.deposit_only_collection? }
     end
 
     def collections_hasherizer(collection_array)

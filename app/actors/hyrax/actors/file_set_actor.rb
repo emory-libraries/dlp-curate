@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # [Hyrax-overwrite-hyrax-v5.2.0]
 
 module Hyrax

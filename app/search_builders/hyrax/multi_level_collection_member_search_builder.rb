@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.4.2] Modify #member_of_collection to also search against a source collection's deposit collections
+# [Hyrax-overwrite-hyrax-v5.2.0] Modify #member_of_collection to also search against a source collection's deposit collections
 # Change below was necessary to institute Source/Deposit Collection structure.
 # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
 module Hyrax
