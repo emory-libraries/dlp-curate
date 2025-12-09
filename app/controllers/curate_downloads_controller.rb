@@ -7,6 +7,7 @@ class CurateDownloadsController < ApplicationController
   #   can be shared with CurateDownloadsController.
   include CurateDownloadsControllerBehavior
   skip_before_action :authorize_download!
+  skip_before_action :authenticate_user!
 
   def pdf_for_viewer
     if file.is_a?(ActiveFedora::File) && file&.mime_type&.include?('pdf') && !file.new_record?
