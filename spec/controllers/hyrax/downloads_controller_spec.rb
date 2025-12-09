@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Hyrax::DownloadsController, :clean do
-  routes { Hyrax::Engine.routes }
+  # routes { Hyrax::Engine.routes }
 
   describe '#show' do
     let(:user) { FactoryBot.create(:user) }
