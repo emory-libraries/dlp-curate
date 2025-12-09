@@ -11,6 +11,11 @@ module Hyrax
     include CurateDownloadsControllerBehavior
     skip_before_action :authenticate_user!
 
+    # Altered by Emory.
+    def self.default_content_path
+      :preservation_master_file
+    end
+
     # Render the 404 page if the file doesn't exist.
     # Otherwise renders the file.
     def show

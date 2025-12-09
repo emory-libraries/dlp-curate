@@ -9,6 +9,11 @@ class CurateDownloadsController < ApplicationController
   skip_before_action :authorize_download!
   skip_before_action :authenticate_user!
 
+  # Altered by Emory.
+  def self.default_content_path
+    :preservation_master_file
+  end
+
   def pdf_for_viewer
     if file.is_a?(ActiveFedora::File) && file&.mime_type&.include?('pdf') && !file.new_record?
       send_content

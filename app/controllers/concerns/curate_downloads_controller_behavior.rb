@@ -3,11 +3,6 @@
 module CurateDownloadsControllerBehavior
   extend ActiveSupport::Concern
 
-  # Altered by Emory.
-  def self.default_content_path
-    :preservation_master_file
-  end
-
   # Added by Emory.
   def content_path
     params[:use] unless params[:use].nil?
@@ -58,7 +53,7 @@ module CurateDownloadsControllerBehavior
                                elsif content_path
                                  content_path
                                else
-                                 self.default_content_path
+                                 default_content_path
                                end
       association = dereference_file(default_file_reference)
       association&.reader || alternate_file_lookup(default_file_reference, asset)
