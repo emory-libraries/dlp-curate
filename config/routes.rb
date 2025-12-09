@@ -83,7 +83,7 @@ Rails.application.routes.draw do
   get 'aspace/find_by_id', to: 'aspace#find_by_id', defaults: { format: :json }
 
   # Additional Hyrax::DownloadsController action.
-  get 'downloads/pdf_for_viewer/:id', to: 'hyrax/downloads#pdf_for_viewer', as: 'download_pdf_for_viewer'
+  get 'downloads/pdf_for_viewer/:id', to: 'curate_downloads#pdf_for_viewer', as: 'download_pdf_for_viewer'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
