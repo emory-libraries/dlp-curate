@@ -46,19 +46,6 @@ module CurateDownloadsControllerBehavior
       File.exist?(file_path) ? file_path : nil
     end
 
-    # Altered by Emory.
-    def default_file
-      default_file_reference = if asset.class.respond_to?(:default_file_path)
-                                 asset.class.default_file_path
-                               elsif content_path
-                                 content_path
-                               else
-                                 default_content_path
-                               end
-      association = dereference_file(default_file_reference)
-      association&.reader || alternate_file_lookup(default_file_reference, asset)
-    end
-
     def mime_type_for(file)
       MIME::Types.type_for(File.extname(file)).first.content_type
     end

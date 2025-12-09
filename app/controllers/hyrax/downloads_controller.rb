@@ -30,5 +30,20 @@ module Hyrax
         raise Hyrax::ObjectNotFoundError
       end
     end
+
+    private
+
+      # Altered by Emory.
+      def default_file
+        default_file_reference = if asset.class.respond_to?(:default_file_path)
+                                   asset.class.default_file_path
+                                 elsif content_path
+                                   content_path
+                                 else
+                                   DownloadsController.default_content_path
+                                 end
+        association = dereference_file(default_file_reference)
+        association&.reader || alternate_file_lookup(default_file_reference, asset)
+      end
   end
 end
