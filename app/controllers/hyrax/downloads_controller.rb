@@ -7,6 +7,7 @@ module Hyrax
     include Hydra::Controller::DownloadBehavior
     include Hyrax::LocalFileDownloadsControllerBehavior
     skip_before_action :authenticate_user!
+    skip_before_action :authorize_download!, only: :pdf_for_viewer
 
     def self.default_content_path
       :preservation_master_file
@@ -25,6 +26,16 @@ module Hyrax
         super
       when String
         # For derivatives stored on the local file system
+        send_local_content
+      else
+        raise Hyrax::ObjectNotFoundError
+      end
+    end
+
+    def pdf_for_viewer
+      if file.is_a?(ActiveFedora::File) && file&.mime_type&.include?('pdf') && !file.new_record?
+        send_content
+      elsif file.is_a?(String) && file&.include?('pdf')
         send_local_content
       else
         raise Hyrax::ObjectNotFoundError
