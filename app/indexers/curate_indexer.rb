@@ -12,7 +12,7 @@ class CurateIndexer < ActiveFedora::RDF::IndexingService
 
   private
 
-    # This method overrides ActiveFedora::RDF::IndexingService
+    # This method overrides ActiveFedora::RDF::IndexingService (v15.0.1)
     # @return [ActiveFedora::Indexing::Map]
     def index_config
       merge_config(

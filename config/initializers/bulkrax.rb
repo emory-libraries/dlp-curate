@@ -7,7 +7,7 @@ Bulkrax.setup do |config|
   # ]
 
   # WorkType to use as the default if none is specified in the import
-  # Default is the first returned by Hyrax.config.curation_concerns
+  # Default is the first returned by Hyrax.config.curation_concerns, stringified
   config.default_work_type = 'FileSet'
 
   # Path to store pending imports
@@ -51,7 +51,7 @@ Bulkrax.setup do |config|
       "date_created" => { from: ["date_created"], join: '|' },
       "date_digitized" => { from: ["date_digitized"], join: '|' },
       "date_issued" => { from: ["date_issued"], join: '|' },
-      "deduplication_key" => { from: ["deduplication_key"], join: '|', source_identifier: true },
+      "deduplication_key" => { from: ["deduplication_key"], join: '|', source_identifier: true, search_field: 'deduplication_key_tesim' },
       "edition" => { from: ["edition"], join: '|' },
       "emory_ark" => { from: ["emory_ark"], split: '\|', join: '|' },
       "emory_rights_statements" => { from: ["emory_rights_statements"], split: '\|', join: '|' },
@@ -153,17 +153,20 @@ if Object.const_defined?(:Hyrax) && ::Hyrax::DashboardController&.respond_to?(:s
   Hyrax::DashboardController.sidebar_partials[:repository_content] << "hyrax/dashboard/sidebar/bulkrax_sidebar_additions"
 end
 
+# Below are all of the Bulkrax v8.2.3 overrides.
 require_relative '../../lib/bulkrax/override_assistive_methods'
 
 # rubocop:disable Metrics/BlockLength
 # rubocop:disable Lint/UselessAssignment
 Bulkrax::ObjectFactory.class_eval do
   include OverrideAssistiveMethods
-  attr_reader :attributes, :object, :source_identifier_value, :klass, :replace_files, :update_files, :work_identifier, :related_parents_parsed_mapping, :importer_run_id, :parser
+  attr_reader(:attributes, :object, :source_identifier_value, :klass, :replace_files, :update_files,
+              :work_identifier, :related_parents_parsed_mapping, :importer_run_id, :parser, :user,
+              :work_identifier_search_field)
 
   transformation_removes_blank_hash_values = true
 
-  # Bulkrax v4.3.0 Override: as mentioned below, this method's largely mimicing AttachFilesToWorkJob,
+  # As mentioned below, this method's largely mimicing AttachFilesToWorkJob,
   #   which we have extensively customized in Curate to accomodate our needs. Here,
   #   we are purely adapting those customizations.
   #   TODO: To DRY up this code, we should shoot for refactoring these processes into
@@ -194,7 +197,8 @@ Bulkrax::ObjectFactory.class_eval do
     attributes:,
     source_identifier_value:,
     work_identifier:,
-    parser:,
+    work_identifier_search_field:,
+    parser:, # Emory addition
     related_parents_parsed_mapping: nil,
     replace_files:                  false,
     user:                           nil,
@@ -207,11 +211,12 @@ Bulkrax::ObjectFactory.class_eval do
     @update_files = update_files
     @user = user || User.batch_user
     @work_identifier = work_identifier
+    @work_identifier_search_field = work_identifier_search_field
     @related_parents_parsed_mapping = related_parents_parsed_mapping
     @source_identifier_value = source_identifier_value
     @klass = klass || Bulkrax.default_work_type.constantize
     @importer_run_id = importer_run_id
-    @parser = parser
+    @parser = parser # Emory addition
   end
   # rubocop:enable Metrics/ParameterLists
 
@@ -221,7 +226,7 @@ Bulkrax::ObjectFactory.class_eval do
   def import_file(path)
     u = Hyrax::UploadedFile.new
     u.user_id = @user.id
-    u.send("#{process_file_types(path.split('/').last)}=", CarrierWave::SanitizedFile.new(path))
+    u.send("#{process_file_types(path.split('/').last)}=", CarrierWave::SanitizedFile.new(path)) # Altered line
     update_filesets(u)
   end
 end
@@ -237,13 +242,14 @@ Bulkrax::CsvEntry.class_eval do
       attributes:                     parsed_metadata,
       source_identifier_value:        identifier,
       work_identifier:                parser.work_identifier,
+      work_identifier_search_field:   parser.work_identifier_search_field,
       related_parents_parsed_mapping: parser.related_parents_parsed_mapping,
       replace_files:                  replace_files,
       user:                           user,
       klass:                          factory_class,
       importer_run_id:                importerexporter.last_run.id,
       update_files:                   update_files,
-      parser:                         parser
+      parser:                         parser # Emory addition
     )
   end
 
@@ -251,10 +257,10 @@ Bulkrax::CsvEntry.class_eval do
     self.parsed_metadata = {}
 
     build_system_metadata
-    build_files_metadata unless hyrax_record.is_a?(Collection)
+    build_files_metadata if Bulkrax.collection_model_class.present? && !hyrax_record.is_a?(Bulkrax.collection_model_class)
     build_relationship_metadata
     build_mapping_metadata
-    build_preservation_workflow_metadata if hyrax_record.is_a?(CurateGenericWork)
+    build_preservation_workflow_metadata if hyrax_record.is_a?(CurateGenericWork) # Emory addition
     save!
 
     parsed_metadata
@@ -267,7 +273,8 @@ Bulkrax::CsvEntry.class_eval do
     else
       file_mapping = key_for_export('file')
       file_sets = hyrax_record.file_set? ? Array.wrap(hyrax_record) : hyrax_record.file_sets
-      filenames_with_types = map_file_sets(file_sets)
+      filenames_with_types = map_file_sets(file_sets) # Call of Emory-altered `#map_file_sets`, returns filenames with types.
+      # The rest of this altered method allows us to use multiple file types.
       only_filenames = filenames_with_types.map { |str| str.split("|").map { |fwt| fwt.split(":").first }.join(';') }
 
       handle_join_on_export(file_mapping, only_filenames, mapping['file']&.[]('join'))
@@ -292,23 +299,30 @@ Bulkrax::CsvEntry.class_eval do
       values = values.flatten.uniq
       next if values.blank?
 
-      handle_join_on_export(relationship_key, values, '|')
+      handle_join_on_export(relationship_key, values, '|') # Emory Alteration: we hardcode the join with pipes here.
     end
   end
 
-  def build_value(key, value)
-    data = hyrax_record.send(key.to_s)
-    if data.is_a?(ActiveTriples::Relation)
-      build_triples_value(key, value, data)
-    elsif key == 'visibility'
-      parsed_metadata[key_for_export(key)] = CurateMapper.new.visibility_mapping.key(data).titleize
+  def build_value(property_name, mapping_config)
+    return unless hyrax_record.respond_to?(property_name.to_s)
+
+    data = hyrax_record.send(property_name.to_s)
+
+    if property_name == 'visibility' # Emory Addition
+      parsed_metadata[key_for_export(property_name)] = CurateMapper.new.visibility_mapping.key(data).titleize
+    elsif mapping_config['join'] || !data.is_a?(Enumerable)
+      # Emory Replacement: we use our own method with our altered logic instead of Bulkrax' `#prepare_export_data_with_join`.
+      triples_values_joined(property_name, mapping_config, data)
     else
-      parsed_metadata[key_for_export(key)] = prepare_export_data(data)
+      data.each_with_index do |d, i|
+        self.parsed_metadata["#{key_for_export(property_name)}_#{i + 1}"] = prepare_export_data(d)
+      end
     end
   end
 
   def handle_join_on_export(key, values, join)
     if join
+      # Emory Alteration: we pass along the actual `join` character instead of `true`/`false`, and use it below.
       parsed_metadata[key] = values.join(join)
     else
       values.each_with_index do |value, i|
