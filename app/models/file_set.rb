@@ -58,7 +58,7 @@ class FileSet < ActiveFedora::Base
                                                  end
                                                }
 
-  # We override this method which comes from Hydra::Works::VirusCheck and
+  # We override this method which comes from Hydra::Works::VirusCheck (v2.3.0) and
   # is mixed-in through ::Hyrax::FileSetBehavior on L#34
   def viruses?
     return false unless preservation_master_file&.new_record? # We have a new file to check

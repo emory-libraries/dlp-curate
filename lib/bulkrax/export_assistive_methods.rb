@@ -111,18 +111,16 @@ module ExportAssistiveMethods
     end
   end
 
-  def build_triples_value(key, value, data)
-    if value['join']
-      triples_values_joined(key, value, data)
-    else
-      data.each_with_index do |d, i|
-        parsed_metadata["#{key_for_export(key)}_#{i + 1}"] = prepare_export_data(d)
-      end
-    end
-  end
+  def triples_values_joined(property_name, mapping_config, data)
+    # Emory Alteration: for `processed_value` below, we move forward with standard Bulkrax processing only if property_name isn't creator and data isn't from a FileSet
+    processed_value = if property_name == 'creator' && hyrax_record.is_a?(FileSet)
+                        nil
+                      elsif data.is_a?(Enumerable)
+                        data.map { |d| prepare_export_data(d) }.join(mapping_config['join']).to_s
+                      else
+                        data&.to_s
+                      end
 
-  def triples_values_joined(key, value, data)
-    processed_value = key == 'creator' && hyrax_record.is_a?(FileSet) ? nil : data.map { |d| prepare_export_data(d) }.join(value['join']).to_s
-    parsed_metadata[key_for_export(key)] = processed_value
+    parsed_metadata[key_for_export(property_name)] = processed_value
   end
 end
