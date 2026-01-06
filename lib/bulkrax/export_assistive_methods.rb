@@ -18,7 +18,7 @@ module ExportAssistiveMethods
       file_split = file.split(':')
       file_name = file_split.first
       file_type = convert_setter_to_fileset_getter(file_split.last)
-      io = open(file_set.send(file_type).uri)
+      io = file_set.send(file_type).respond_to?(:uri) ? open(file_set.send(file_type).uri) : file_set.send(file_type).file.io
 
       File.open(File.join(path, file_name), 'wb') do |f|
         f.write(io.read)
@@ -39,7 +39,12 @@ module ExportAssistiveMethods
   end
 
   def pull_export_filesets(record)
-    record.file_set? ? Array.wrap(record) : record.file_sets
+    file_sets_to_return = []
+    file_sets_to_return = Array.wrap(record) if record.file_set?
+    if file_sets_to_return.empty? # for valkyrie
+      file_sets_to_return = record.respond_to?(:file_sets) ? record.file_sets : record.members&.select(&:file_set?)
+    end
+    file_sets_to_return
   end
 
   def export_file_path(folder_count)
@@ -80,21 +85,6 @@ module ExportAssistiveMethods
 
     sorted_order = collections_to_write + work_file_set_grouping
     entries_to_write.values_at(*sorted_order)
-  end
-
-  def process_current_record_object_ids
-    ids = importerexporter.export_source.split('|')
-
-    ids.each do |id|
-      record = ActiveFedora::Base.find(id)
-
-      if record.is_a?(Collection)
-        @collection_ids += [id]
-      elsif record.is_a?(CurateGenericWork)
-        @work_ids += [id]
-      end
-    end
-    find_child_file_sets(@work_ids)
   end
 
   def build_preservation_workflow_metadata
