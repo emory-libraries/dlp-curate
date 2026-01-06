@@ -10,6 +10,9 @@ Bulkrax.setup do |config|
   # Default is the first returned by Hyrax.config.curation_concerns, stringified
   config.default_work_type = 'FileSet'
 
+  # Factory Class to use when generating and saving objects
+  config.object_factory = Bulkrax::ObjectFactory
+
   # Path to store pending imports
   # config.import_path = 'tmp/imports'
 
@@ -333,70 +336,72 @@ Bulkrax::CsvEntry.class_eval do
   end
 end
 
-Bulkrax::CsvParser.class_eval do
-  include OverrideAssistiveMethods
-
-  alias create_from_object_ids create_new_entries
-
-  def create_entry_and_job(current_record, type)
+Bulkrax::ApplicationParser.class_eval do
+  def create_entry_and_job(current_record, type, identifier = nil)
+    identifier ||= current_record[source_identifier]&.strip, # Emory Alteration; adds the `#strip` to the value.
     new_entry = find_or_create_entry(send("#{type}_entry_class"),
-                                     current_record[source_identifier]&.strip,
+                                     identifier,
                                      'Bulkrax::Importer',
-                                     current_record.to_h)
-    if current_record[:delete].present?
+                                     record_raw_metadata(current_record))
+    new_entry.status_info('Pending', importer.current_run)
+    if record_deleted?(current_record)
       "Bulkrax::Delete#{type.camelize}Job".constantize.send(perform_method, new_entry, current_run)
+    elsif record_remove_and_rerun?(current_record) || remove_and_rerun
+      delay = calculate_type_delay(type)
+      "Bulkrax::DeleteAndImport#{type.camelize}Job".constantize.set(wait: delay).send(perform_method, new_entry, current_run)
     else
       "Bulkrax::Import#{type.camelize}Job".constantize.send(perform_method, new_entry.id, current_run.id)
     end
   end
+end
 
-  def current_record_ids
-    @work_ids = []
-    @collection_ids = []
-    @file_set_ids = []
+Bulkrax::ParserExportRecordSet.module_eval do
+  class Worktype < Bulkrax::ParserExportRecordSet::Base
+    private
 
-    case importerexporter.export_from
-    when 'all'
-      @work_ids = ActiveFedora::SolrService.query("has_model_ssim:(#{Hyrax.config.curation_concerns.join(' OR ')}) #{extra_filters}", method: :post, rows: 2_147_483_647).map(&:id)
-      @collection_ids = ActiveFedora::SolrService.query("has_model_ssim:Collection #{extra_filters}", method: :post, rows: 2_147_483_647).map(&:id)
-      @file_set_ids = ActiveFedora::SolrService.query("has_model_ssim:FileSet #{extra_filters}", method: :post, rows: 2_147_483_647).map(&:id)
-    when 'collection'
-      work_id_query = "member_of_collection_ids_ssim:#{importerexporter.export_source + extra_filters} AND has_model_ssim:(#{Hyrax.config.curation_concerns.join(' OR ')})"
-      @work_ids = ActiveFedora::SolrService
-                  .query(work_id_query, method: :post, rows: 2_000_000_000)
-                  .map(&:id)
-      # get the parent collection and child collections
-      @collection_ids = ActiveFedora::SolrService.query("id:#{importerexporter.export_source} #{extra_filters}", method: :post, rows: 2_147_483_647).map(&:id)
-      @collection_ids += ActiveFedora::SolrService.query("has_model_ssim:Collection AND member_of_collection_ids_ssim:#{importerexporter.export_source}", method: :post, rows: 2_147_483_647).map(&:id)
-      find_child_file_sets(@work_ids)
-    when 'object_ids'
-      process_current_record_object_ids
-    when 'worktype'
-      @work_ids = ActiveFedora::SolrService.query("has_model_ssim:#{importerexporter.export_source + extra_filters}", method: :post, rows: 2_000_000_000).map(&:id)
-      find_child_file_sets(@work_ids)
-    when 'importer'
-      set_ids_for_exporting_from_importer
+    def current_record_objects
+      @current_record_objects ||=
+        begin
+          object_ids = importerexporter.export_source.split('|')
+
+          object_ids&.map { |id| ActiveFedora::SolrService.query("id: #{id}") }&.flatten&.compact
+        end
     end
 
-    @work_ids + @collection_ids + @file_set_ids
-  end
+    def works
+      @works ||= current_record_objects.select { |object| object['has_model_ssim'].first == 'CurateGenericWork' }
+    end
 
-  # Bulkrax v4.3.0 Override: swaps out Bulkrax' sorting for our own, grouping together
+    def collections
+      @collections ||= current_record_objects.select { |object| object['has_model_ssim'].first == 'Collection' }
+    end
+  end
+end
+
+Bulkrax::CsvParser.class_eval do
+  include OverrideAssistiveMethods
+  alias create_from_object_ids create_new_entries
+
+  # Bulkrax v8.2.3 Override: swaps out Bulkrax' sorting for our own, grouping together
   #   CurateGenericWorks with their associated FileSets.
   # rubocop:disable Metrics/MethodLength
   def write_files
     require 'open-uri'
     folder_count = 0
+    # TODO: This is not performant as well; unclear how to address, but lower priority as of
+    #       <2023-02-21 Tue>.
     entries_to_write = sort_entries_to_write(
       importerexporter.entries.uniq(&:identifier).select { |e| valid_entry_types.include?(e.type) }
     )
 
-    entries_to_write[0..limit || total].in_groups_of(records_split_count, false) do |group|
+    group_size = limit.to_i.zero? ? total : limit.to_i
+    entries_to_write[0..group_size].in_groups_of(records_split_count, false) do |group|
       folder_count += 1
 
       CSV.open(setup_export_file(folder_count), "w", headers: export_headers, write_headers: true) do |csv|
         group.each do |entry|
           csv << entry.parsed_metadata
+          # TODO: This is precarious when we have descendents of Bulkrax::CsvCollectionEntry
           next if importerexporter.metadata_only? || entry.type == 'Bulkrax::CsvCollectionEntry'
 
           store_files(entry.identifier, folder_count.to_s)
@@ -407,7 +412,7 @@ Bulkrax::CsvParser.class_eval do
   # rubocop:enable Metrics/MethodLength
 
   def store_files(identifier, folder_count)
-    record = ActiveFedora::Base.find(identifier)
+    record = Bulkrax.object_factory.find(identifier)
     return unless record
 
     file_sets = pull_export_filesets(record)
@@ -415,17 +420,6 @@ Bulkrax::CsvParser.class_eval do
     process_multiple_file_export(file_sets, folder_count)
   rescue Ldp::Gone
     nil
-  end
-
-  # This is the fix present in v4.3.0
-  # Retrieve the path where we expect to find the files
-  def path_to_files(**args)
-    filename = args.fetch(:filename, '')
-
-    return @path_to_files if @path_to_files.present? && filename.blank?
-    @path_to_files = File.join(
-        zip? ? importer_unzip_path : File.dirname(import_file_path), 'files', filename
-      )
   end
 end
 
@@ -438,7 +432,8 @@ Bulkrax::ScheduleRelationshipsJob.class_eval do
 
     ::AssociateFilesetsWithWorkJob.perform_later(importer)
     importer.last_run.parents.each do |parent_id|
-      ::Bulkrax::CreateRelationshipsJob.perform_later(parent_identifier: parent_id, importer_run_id: importer.last_run.id)
+      Bulkrax.relationship_job_class.constantize.perform_later(parent_identifier: parent_id,
+                                                                 importer_run_id: importer.last_run.id)
     end
   end
 end
@@ -456,9 +451,11 @@ Bulkrax::ExportBehavior.module_eval do
       end
       next if file.blank?
 
-      working_array << "#{file.file_name.first}:extracted_text" if type == 'extracted'
-      working_array << "#{file.file_name.first}:transcript" if type == 'transcript_file'
-      working_array << "#{file.file_name.first}:#{type}" unless type == 'extracted' || type == 'transcript_file'
+      file_name = file.respond_to?(:original_filename) ? file.original_filename : file.file_name.first
+
+      working_array << "#{file_name}:extracted_text" if type == 'extracted'
+      working_array << "#{file_name}:transcript" if type == 'transcript_file'
+      working_array << "#{file_name}:#{type}" unless type == 'extracted' || type == 'transcript_file'
     end
 
     working_array.compact.join('|')
@@ -468,36 +465,28 @@ end
 Bulkrax::Exporter.class_eval do
   delegate :write, :create_from_collection, :create_from_object_ids, :create_from_importer, :create_from_worktype, :create_from_all, to: :parser
 
-  def export
-    current_run && setup_export_path
-    case export_from
-    when 'collection'
-      create_from_collection
-    when 'object_ids'
-      create_from_object_ids
-    when 'importer'
-      create_from_importer
-    when 'worktype'
-      create_from_worktype
-    when 'all'
-      create_from_all
-    end
-  rescue StandardError => e
-    status_info(e)
-  end
-
+  # Emory Addition: create our own export_source rule for object_ids
   def export_source_object_ids
     export_source if export_from == 'object_ids'
   end
 
   def export_from_list
-    [
-      [I18n.t('bulkrax.exporter.labels.importer'), 'importer'],
-      [I18n.t('bulkrax.exporter.labels.collection'), 'collection'],
-      ['Object IDs', 'object_ids'],
-      [I18n.t('bulkrax.exporter.labels.worktype'), 'worktype'],
-      [I18n.t('bulkrax.exporter.labels.all'), 'all']
-    ]
+    if defined?(::Hyrax)
+      [
+        [I18n.t('bulkrax.exporter.labels.importer'), 'importer'],
+        [I18n.t('bulkrax.exporter.labels.collection'), 'collection'],
+        ['Object IDs', 'object_ids'],
+        [I18n.t('bulkrax.exporter.labels.worktype'), 'worktype'],
+        [I18n.t('bulkrax.exporter.labels.all'), 'all']
+      ]
+    else
+      [
+        [I18n.t('bulkrax.exporter.labels.importer'), 'importer'],
+        [I18n.t('bulkrax.exporter.labels.collection'), 'collection'],
+        ['Object IDs', 'object_ids'],
+        [I18n.t('bulkrax.exporter.labels.all'), 'all']
+      ]
+    end
   end
 end
 
