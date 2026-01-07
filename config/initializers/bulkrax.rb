@@ -312,7 +312,7 @@ Bulkrax::CsvEntry.class_eval do
     data = hyrax_record.send(property_name.to_s)
 
     if property_name == 'visibility' # Emory Addition
-      parsed_metadata[key_for_export(property_name)] = CurateMapper.new.visibility_mapping.key(data).titleize
+      parsed_metadata[key_for_export(property_name)] = Bulkrax::CsvMatcher::VISIBILITY_MAPPING.key(data).titleize
     elsif mapping_config['join'] || !data.is_a?(Enumerable)
       # Emory Replacement: we use our own method with our altered logic instead of Bulkrax' `#prepare_export_data_with_join`.
       triples_values_joined(property_name, mapping_config, data)

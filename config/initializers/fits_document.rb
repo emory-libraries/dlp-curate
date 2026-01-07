@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Opens FitsDocument class from Hydra::Works::Characterization
-# and adds fits mapping for extra technical metadata
+# [Hydra-works-v2.3.0-overwrite] Opens FitsDocument class from Hydra::Works::Characterization and adds fits
+#   mapping for extra technical metadata.
 Hydra::Works::Characterization::FitsDocument.class_eval do
   PROXIED_TERMS = Object.const_get 'Hydra::Works::Characterization::FitsDocument::PROXIED_TERMS'
   NEW_PROXIED_TERMS = PROXIED_TERMS.dup + %i[file_path creating_os creating_application_name puid].freeze

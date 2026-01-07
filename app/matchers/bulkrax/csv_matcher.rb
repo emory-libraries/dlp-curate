@@ -4,6 +4,20 @@ module Bulkrax
   class CsvMatcher < ApplicationMatcher
     include CsvMatcherBehavior
 
+    VISIBILITY_MAPPING = {
+      'private' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,
+      'restricted' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,
+      'authenticated' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
+      'registered' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
+      'emory' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
+      'emory network' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
+      'open' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
+      'public' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
+      'public low view' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES,
+      'emory low download' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW,
+      'rose high view' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
+    }.freeze
+
     def result(parser, content)
       return nil if result_nil_rules(content)
 
@@ -54,19 +68,25 @@ module Bulkrax
 
     def parse_visibility(src)
       value_from_csv = src&.squish&.downcase
-      # Deprecation Warning: CurateMapper will be removed along with other Classes
-      #   related to Zizia with the release of Curate v3. The logic for the method call
-      #   below should be plucked from that class before it's removed.
-      CurateMapper.new.visibility_mapping.fetch(
+
+      VISIBILITY_MAPPING.fetch(
         value_from_csv, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
       )
     end
 
     def parse_pcdm_use(src)
-      # Deprecation Warning: CurateMapper will be removed along with other Classes
-      #   related to Zizia with the release of Curate v3. The logic for the method call
-      #   below should be plucked from that class before it's removed.
-      CurateMapper.new.pcdm_value(normalize_term(src))
+      case normalize_term(src)
+      when nil
+        FileSet::PRIMARY
+      when ''
+        FileSet::PRIMARY
+      when 'primary content'
+        FileSet::PRIMARY
+      when 'supplemental content'
+        FileSet::SUPPLEMENTAL
+      when 'supplemental preservation'
+        FileSet::PRESERVATION
+      end
     end
 
     def parse_administrative_unit(src)
