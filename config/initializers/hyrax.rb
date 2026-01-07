@@ -128,8 +128,6 @@ Hyrax.config do |config|
   # Post is suggested to prevent issues with URL length.
   config.solr_default_method = :post
 
-
-
   # Should the acceptance of the licence agreement be active (checkbox), or
   # implied when the save button is pressed? Set to true for active
   # The default is true.

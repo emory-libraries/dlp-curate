@@ -41,8 +41,6 @@ gem 'tzinfo-data', platforms: [:windows, :jruby] # Windows does not include zone
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '~> 5.x'
 gem 'whenever', require: false
-# Deprecation Warning: As of Curate v3, Zizia will be removed.
-# gem 'zizia', '~> 5.5.0'
 
 group :development do
   gem 'bcrypt_pbkdf'

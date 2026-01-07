@@ -6,6 +6,7 @@ namespace :curate do
     task migration_setup: [:environment] do
       collection_pre_reqs
       collections_csv_file = Rails.root.join('config', 'collection_metadata', 'collections.csv')
+      # Zizia Leftover: the following importer call MUST BE replaced with a non-Zizia import process.
       CurateCollectionImporter.new.import(collections_csv_file)
     end
 

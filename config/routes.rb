@@ -14,11 +14,6 @@ Rails.application.routes.draw do
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
 
-  # Deprecation warning: Zizia will be removed with Curate v3.
-  get 'importer_documentation/guide', to: 'metadata_details#show'
-  get 'importer_documentation/profile', to: 'metadata_details#profile'
-  mount Zizia::Engine => '/'
-
   concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
@@ -73,10 +68,6 @@ Rails.application.routes.draw do
   post "/concern/curate_generic_works/:work_id/regen_manifest", to: "manifest_regeneration#regen_manifest", as: 'regen_manifest'
   post "/concern/curate_generic_works/:work_id/full_text_index", to: "full_text_indexing#full_text_index", as: 'full_text_index'
   post "/concern/curate_generic_works/:work_id/full_text_index_with_pages", to: "full_text_indexing#full_text_index_with_pages", as: 'full_text_index_with_pages'
-
-  # Deprecation warning: Zizia will be removed with Curate v3.
-  get 'csv_import_details/index'
-  get 'csv_import_details/show/:id', to: 'csv_import_details#show', as: 'csv_import_detail'
 
   # ArchivesSpace
   get 'aspace/repositories', to: 'aspace#repositories', defaults: { format: :json }

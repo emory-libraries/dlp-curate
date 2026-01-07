@@ -10,8 +10,6 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-// Deprecation warning: Zizia will be removed with Curate v3, and so will the zizia requirement below.
-//
 //=
 //= require turbolinks
 //
@@ -34,6 +32,5 @@
 //= require hyrax
 //= require hyrax/autocomplete/default
 //= require almond
-//= require zizia/application
 //= require bulkrax/application
 //= require newspaper_works/ocr_search

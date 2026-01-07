@@ -97,6 +97,7 @@ end
 namespace :deploy do
   after :finishing, :create_migration_collections do
     on roles(:collection) do
+      # Zizia Leftover: the called rake task MUST BE replaced or refactored to import needed Collections in a different way.
       execute "cd #{current_path} && RAILS_ENV=production bundle exec rake curate:collections:migration_setup"
     end
   end
