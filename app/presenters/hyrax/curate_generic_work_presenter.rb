@@ -14,9 +14,8 @@ module Hyrax
 
     include CuratePurl
 
-    # [Hyrax-overwrite-hyrax-v5.2.0] We might not always have a request and a `base_url`,
-    # therfore, we are using our CurateManifestHelper and passing in a hardcoded
-    # host for creation of manifest_url
+    # [Hyrax-override-hyrax-v5.2.0] We might not always have a request and a `base_url`, therfore, we are using our CurateManifestHelper
+    #   and passing in a hardcoded host for creation of manifest_url.
 
     def manifest_helper
       @manifest_helper ||= if request.nil?

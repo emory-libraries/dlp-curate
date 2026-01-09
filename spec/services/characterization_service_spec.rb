@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hydra-works-overwrite]
+# [Hydra-Works-override-v2.3.0]
 require 'rails_helper'
 require 'support/file_set_helper'
 

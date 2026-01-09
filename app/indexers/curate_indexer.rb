@@ -1,6 +1,6 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] This rewrites Hyrax::BasicMetadataIndexer. This class gets called by ActiveFedora::IndexingService#olrize_rdf_assertions.
 
-# [Hyrax-rewrite-hyrax-v5.2.0] This rewrites Hyrax::BasicMetadataIndexer. This class gets called by ActiveFedora::IndexingService#olrize_rdf_assertions.
 class CurateIndexer < ActiveFedora::RDF::IndexingService
   class_attribute :stored_and_facetable_fields, :stored_fields, :symbol_fields
   self.stored_and_facetable_fields = %i[creator contributors holding_repository primary_language subject_topics subject_names subject_geo]
@@ -12,7 +12,7 @@ class CurateIndexer < ActiveFedora::RDF::IndexingService
 
   private
 
-    # This method overrides ActiveFedora::RDF::IndexingService (v15.0.1)
+    # This method overrides ActiveFedora::RDF::IndexingService [ActiveFedora-override-v15.0.1]
     # @return [ActiveFedora::Indexing::Map]
     def index_config
       merge_config(

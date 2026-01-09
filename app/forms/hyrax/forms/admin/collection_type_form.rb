@@ -1,6 +1,6 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] Adds new field to delegation.
 
-# [Hyrax-overwrite-hyrax-v5.2.0] Adds new field to delegation.
 module Hyrax
   module Forms
     module Admin

@@ -1,5 +1,5 @@
-# [Hyrax-overwrite-v3.0.0.pre.rc1] Attaching multiple files to single fileset
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] Attaching multiple files to single fileset
 require 'rails_helper'
 
 RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWorkJob] do

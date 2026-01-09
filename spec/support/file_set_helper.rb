@@ -1,6 +1,6 @@
 # frozen_string_literal: true
+# [Hydra-Works-override-v2.3.0]
 
-# [Hydra-works-overwrite]
 module FileSetHelper
   # Mocking out the Hydra::Works::FileSet sufficiently to add original_file
   # without a save to fedora. This works by mocking the response from ldp_source.head

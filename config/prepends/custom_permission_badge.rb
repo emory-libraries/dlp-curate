@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v5.2.0] We do not want to display the institution name in the Authenticated permission badge
+# [Hyrax-override-hyrax-v5.2.0] We do not want to display the institution name in the Authenticated permission badge
 
 module CustomPermissionBadge
   private

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite-hyrax-v5.2.0]
+# [Hyrax-override-hyrax-v5.2.0]
 # ingest_file method in the JobIoWrapper method is modified. We save the response
 # from the `file_actor.ingest_file` method call. If false is returned from L#16 in
 # `config/intializers/file_actor.rb` then a failure event is created, else success
@@ -23,6 +22,7 @@
 #  If both are provided: path is used preferentially for access IF it exists;
 #  however, the uploaded_file is used preferentially for default original_name and mime_type,
 #  because it already has that information.
+
 class JobIoWrapper < ApplicationRecord
   include PreservationEvents
   belongs_to :user, optional: false

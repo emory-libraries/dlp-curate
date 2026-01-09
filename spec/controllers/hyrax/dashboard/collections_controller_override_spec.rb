@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0]
 require 'rails_helper'
 
-# [Hyrax-overwrite-hyrax-v5.2.0]
+
 RSpec.describe Hyrax::Dashboard::CollectionsController, :clean do
   routes { Hyrax::Engine.routes }
   let(:admin) { FactoryBot.create(:admin) }

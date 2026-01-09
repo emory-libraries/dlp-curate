@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-hyrax-v5.2.0] - Adds logger info and warning for bad/missing tmp files L#13-L#20
+# [Hyrax-override-hyrax-v5.2.0] Adds logger info and warning for bad/missing tmp files L#13-L#20
 
 class CreateDerivativesJob < Hyrax::ApplicationJob
   queue_as :derivatives

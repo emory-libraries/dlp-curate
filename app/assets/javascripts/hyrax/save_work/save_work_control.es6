@@ -1,4 +1,4 @@
-// [Hyrax-v5.2.0-overwrite]
+// [Hyrax-override-hyrax-v5.2.0]
 
 import { RequiredFields } from './required_fields'
 import { ChecklistItem } from './checklist_item'
