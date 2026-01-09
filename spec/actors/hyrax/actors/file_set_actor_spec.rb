@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-hyrax-v5.2.0] Tests for mime-type have been removed. We are not testing `from_url: true`.
+# [Hyrax-override-hyrax-v5.2.0] Tests for mime-type have been removed. We are not testing `from_url: true`.
 require 'rails_helper'
 
 RSpec.describe Hyrax::Actors::FileSetActor, :clean do

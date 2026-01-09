@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-override-hyrax-v5.2.0]
 require 'rails_helper'
 
 RSpec.describe Hyrax::Forms::CollectionForm do
@@ -101,7 +100,8 @@ RSpec.describe Hyrax::Forms::CollectionForm do
                          { staff_notes: [] }, :system_of_record_ID, { emory_ark: [] },
                          :visibility, :thumbnail_id, { alt_title: [] }, :source_collection_id,
                          { deposit_collection_ids: [] },
-                         { permissions_attributes: [:type, :name, :access, :id, :_destroy] }]
+                         { permissions_attributes: [:type, :name, :access, :id, :_destroy] },
+                         { based_near_attributes: [:id, :_destroy] }]
     end
   end
 end

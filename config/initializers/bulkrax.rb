@@ -382,7 +382,7 @@ Bulkrax::CsvParser.class_eval do
   include OverrideAssistiveMethods
   alias create_from_object_ids create_new_entries
 
-  # Bulkrax v8.2.3 Override: swaps out Bulkrax' sorting for our own, grouping together
+  # Bulkrax v8.2.3 override: swaps out Bulkrax' sorting for our own, grouping together
   #   CurateGenericWorks with their associated FileSets.
   # rubocop:disable Metrics/MethodLength
   def write_files

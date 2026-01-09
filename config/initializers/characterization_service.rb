@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [Hydra-works-v2.3.0-overwrite] CharacterizationService in Hydra::Works
+# [Hydra-Works-override-v2.3.0] CharacterizationService in Hydra::Works
 # Adds 'append_original_checksum' method for adding three types of checksums
 # to the hashValue predicate
 Hydra::Works::CharacterizationService.class_eval do

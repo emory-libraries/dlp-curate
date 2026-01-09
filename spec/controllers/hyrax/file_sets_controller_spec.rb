@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-hyrax-v5.2.0]
+# [Hyrax-override-hyrax-v5.2.0]
 require 'rails_helper'
 require_relative '../../support/response_matchers.rb'
 

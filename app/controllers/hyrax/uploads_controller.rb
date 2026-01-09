@@ -1,6 +1,6 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0]
 
-# [Hyrax-overwrite-hyrax-v5.2.0]
 module Hyrax
   class UploadsController < ApplicationController
     load_and_authorize_resource class: Hyrax::UploadedFile

@@ -73,7 +73,7 @@ class User < ApplicationRecord
   end
 end
 
-# [Hyrax-overwrite-hyrax-v5.2.0] Since in production we're using shibboleth, and this removes the password
+# [Hyrax-override-hyrax-v5.2.0] Since in production we're using shibboleth, and this removes the password
 #   methods from the User model, we need to override it.
 module Hyrax::User
   module ClassMethods

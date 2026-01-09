@@ -1,4 +1,5 @@
-<%# [Hyrax-overwrite-hyrax-v5.2.0] Removes `onclick` behaviors and adds two menu options L#24-31 %>
+<%# [Hyrax-override-hyrax-v5.2.0] Removes `onclick` behaviors and adds two menu options %>
+
   <% if can? :review, :submissions %>
     <li class="h5 nav-item"><%= t('hyrax.admin.sidebar.tasks') %></li>
     <%= menu.nav_link(hyrax.admin_workflows_path, class: "nav-link") do %>

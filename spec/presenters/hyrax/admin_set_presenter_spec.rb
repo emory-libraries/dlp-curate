@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-override-hyrax-v5.2.0] We retain the ActiveFedora models here, unlike
+#   the v5.2.0 changes that only focus on Valkyrie objects.
 require 'rails_helper'
 
 RSpec.describe Hyrax::AdminSetPresenter, :clean do

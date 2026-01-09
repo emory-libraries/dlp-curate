@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] Modify #member_of_collection to also search against a
+#   source collection's deposit collections. Change below was necessary to institute
+#   Source/Deposit Collection structure.
+#
+#   For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
 
-# [Hyrax-overwrite-hyrax-v5.2.0] Modify #member_of_collection to also search against a source collection's deposit collections
-# Change below was necessary to institute Source/Deposit Collection structure.
-# For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
 module Hyrax
   # This search builder requires that a accessor named "collection" exists in the scope
   class MultiLevelCollectionMemberSearchBuilder < ::Hyrax::CollectionMemberSearchBuilder
