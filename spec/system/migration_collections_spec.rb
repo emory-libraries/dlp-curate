@@ -9,7 +9,6 @@ RSpec.describe 'Depositing items into a migration collection', :perform_jobs, :c
   before do
     allow(Role).to receive(:exists?).and_return(true)
     Curate::CollectionType.find_or_create_library_collection_type
-    # Zizia Leftover: needs to be refactored to a FactoryBot collection.
     CurateCollectionImporter.new.import(collections_csv_file, "/dev/null")
   end
   let(:langmuir) { Collection.where(local_call_number: "MSS1218").first }

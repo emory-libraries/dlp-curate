@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe YellowbackPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results
     yearbook_pull_list_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB.csv')
     alma_export_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'yearbooks_marc.xml')
-    preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, 'zizia', :limb)
+    preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, :limb)
     preprocessor.merge
   end
 
@@ -97,7 +96,7 @@ RSpec.describe YellowbackPreprocessor do
   it 'adds handles base-0 numbered works correctly', :aggregate_failures do
     yearbook_pull_list_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-0.csv')
     alma_export_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'yearbooks_marc.xml')
-    base0_preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, 'Yearbooks/Emory', :limb, 0)
+    base0_preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, :limb, 0)
     base0_preprocessor.merge
     base0_import_rows = CSV.read(File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-0-merged.csv'), headers: true).by_row!
 
@@ -120,7 +119,7 @@ RSpec.describe YellowbackPreprocessor do
       # running #merge is expensive, only set it up and run it once and then check the results
       yearbook_pull_list_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB.csv')
       alma_export_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'yearbooks_marc.xml')
-      preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, 'zizia', :limb, 1, "true", "true")
+      preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, :limb, 1, "true", "true")
       preprocessor.merge
     end
 

@@ -7,7 +7,6 @@ RSpec.describe 'viewing a collection', :clean, type: :system, js: true do
   let(:user) { FactoryBot.build(:user) }
   let(:collections_csv) { File.join(fixture_path, 'csv_import', 'collections', 'collections.csv') }
   let(:collection) do
-    # Zizia Leftover: needs to be refactored to a FactoryBot collection.
     CurateCollectionImporter.new.import(collections_csv, "/dev/null")
     Collection.where(local_call_number: "MSS1218").first
   end

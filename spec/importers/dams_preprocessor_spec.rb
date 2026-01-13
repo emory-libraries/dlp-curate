@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe DamsPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results
     dams_sample = File.join(fixture_path, 'csv_import', 'dams', 'dams-unprocessed.csv')
-    preprocessor = described_class.new(dams_sample, "")
+    preprocessor = described_class.new(dams_sample)
     preprocessor.merge
   end
 
