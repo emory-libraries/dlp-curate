@@ -4,11 +4,7 @@ require 'ruby-progressbar'
 
 ##
 # Utility service and methods that merge metadata from a CSV Pull List and MARCXml records
-# into a format suitable for ingest by the curate CSV importer
-# Deprecation Warning: As of Curate v3, Zizia will be removed. This preprocessor contains
-#   custom logic that switches expected output based on whether Bulkrax is or isn't the importer.
-#   This should be refactored to only export Bulkrax expected fields when Zizia is removed.
-
+#   into a format suitable for ingest by the curate CSV importer.
 class YellowbackPreprocessor
   attr_accessor :processed_csv
 
@@ -20,7 +16,6 @@ class YellowbackPreprocessor
   # @param [String] digitization the fileset mappings to use (:limb or :kirtas)
   def initialize(csv,
                  marcxml,
-                 importer,
                  workflow = :kirtas,
                  start_page = 1,
                  add_transcript = false,
@@ -29,9 +24,13 @@ class YellowbackPreprocessor
     @marc_records = Nokogiri::XML(File.open(marcxml))
     @workflow = workflow
     @replacement_path = 'Yellowbacks'
-    @is_for_bulkrax = importer == 'bulkrax'
-    @proper_model_or_type_work = @is_for_bulkrax ? 'CurateGenericWork' : 'work'
-    @proper_model_or_type_fileset = @is_for_bulkrax ? 'FileSet' : 'fileset'
+    @proper_model_or_type_work = 'CurateGenericWork'
+    @proper_model_or_type_fileset = 'FileSet'
+    @default_pcdm_use = 'Primary Content'
+    @pdf_fileset_title = 'PDF for volume'
+    @ocr_fileset_title = 'OCR Output for Volume'
+    @mets_fileset_title = 'METS File'
+    @transcript_fileset_title = 'Transcript for Volume'
     @add_transcript = ActiveModel::Type::Boolean.new.cast(add_transcript)
     @add_ocr_output = ActiveModel::Type::Boolean.new.cast(add_ocr_output)
     directory = File.dirname(csv)
@@ -49,7 +48,7 @@ class YellowbackPreprocessor
       'deduplication_key',
       'pl_row',
       'CSV title',
-      @is_for_bulkrax ? 'model' : 'type',
+      'model',
       'parent',
       # Fields extracted from the csv pull list
       'administrative_unit',
@@ -101,8 +100,11 @@ class YellowbackPreprocessor
 
   def merge
     merge_csv = CSV.open(@processed_csv, 'w+', headers: true, write_headers: true)
+
     merge_csv << header_fields
+
     progressbar = ProgressBar.create(title: "Processing Rows", total: @pull_list.size, format: '%t: |%B| %p%  ')
+
     @pull_list.each.with_index do |row, csv_index|
       record = @marc_records.xpath("//record/controlfield[@tag='001'][text()='#{row['ALMA MMSID']}']/ancestor::record").first
       new_row = context_fields(csv_index, row, @proper_model_or_type_work)
@@ -120,7 +122,7 @@ class YellowbackPreprocessor
 
     def context_fields(csv_index, row, type, for_file_set = false)
       [
-        for_file_set && @is_for_bulkrax ? '' : row['deduplication_key'], # deduplication_key
+        for_file_set ? '' : row['deduplication_key'], # deduplication_key
         csv_index + 2, # pl_row  (original row number from pull list)
         row['CSV Title'], # title
         type, # row type (work | fileset)
@@ -205,7 +207,7 @@ class YellowbackPreprocessor
 
     def pdf_row(csv_index, row)
       pdf = pull_pdf(row)
-      new_row = build_new_row(csv_index, row, pdf_fileset_title)
+      new_row = build_new_row(csv_index, row, @pdf_fileset_title)
       filename = pull_filename_from_path(pdf)
 
       build_complete_pdf_row(new_row, pdf, filename)
@@ -213,7 +215,7 @@ class YellowbackPreprocessor
 
     def ocr_row(csv_index, row)
       ocr = row['OCR_Path'].sub("Volumes", @replacement_path)
-      new_row = build_new_row(csv_index, row, ocr_fileset_title)
+      new_row = build_new_row(csv_index, row, @ocr_fileset_title)
       filename = pull_filename_from_path(ocr)
 
       build_complete_ocr_row(new_row, ocr, filename)
@@ -221,7 +223,7 @@ class YellowbackPreprocessor
 
     def mets_row(csv_index, row)
       mets = pull_mets(row)
-      new_row = build_new_row(csv_index, row, mets_fileset_title)
+      new_row = build_new_row(csv_index, row, @mets_fileset_title)
       filename = pull_filename_from_path(mets)
 
       build_complete_mets_row(new_row, mets, filename)
@@ -229,7 +231,7 @@ class YellowbackPreprocessor
 
     def ondemand_transcript_row(csv_index, row)
       transcript = pull_and_transform_pdf(row, '.txt')
-      new_row = build_new_row(csv_index, row, transcript_fileset_title)
+      new_row = build_new_row(csv_index, row, @transcript_fileset_title)
       filename = pull_filename_from_path(transcript)
 
       build_complete_transcript_row(new_row, transcript, filename)
@@ -237,7 +239,7 @@ class YellowbackPreprocessor
 
     def ondemand_ocr_row(csv_index, row)
       ocr = pull_and_transform_pdf(row, '.xml')
-      new_row = build_new_row(csv_index, row, ocr_fileset_title)
+      new_row = build_new_row(csv_index, row, @ocr_fileset_title)
       filename = pull_filename_from_path(ocr)
 
       build_complete_ocr_row(new_row, ocr, filename)
@@ -252,22 +254,6 @@ class YellowbackPreprocessor
       build_complete_file_row(new_row, fileset_title, image, transcript, extract)
     end
 
-    def pdf_fileset_title
-      'PDF for volume'
-    end
-
-    def ocr_fileset_title
-      'OCR Output for Volume'
-    end
-
-    def mets_fileset_title
-      'METS File'
-    end
-
-    def transcript_fileset_title
-      'Transcript for Volume'
-    end
-
     def pull_file_paths(page_number, extract_field, extract_extension, row)
       [relative_filename(row['Disp_Path'], page_number, 'tif'),
        relative_filename(row['Txt_Path'], page_number, 'txt'),
@@ -280,45 +266,44 @@ class YellowbackPreprocessor
     end
 
     def build_complete_pdf_row(new_row, pdf, filename)
-      generic_complete_row_builder(new_row, pdf, filename, pdf_fileset_title, ::FileSet::PRIMARY)
+      generic_complete_row_builder(new_row, pdf, filename, @pdf_fileset_title, ::FileSet::PRIMARY)
     end
 
     def build_complete_ocr_row(new_row, ocr, filename)
-      generic_complete_row_builder(new_row, ocr, filename, ocr_fileset_title, ::FileSet::SUPPLEMENTAL)
+      generic_complete_row_builder(new_row, ocr, filename, @ocr_fileset_title, ::FileSet::SUPPLEMENTAL)
     end
 
     def build_complete_mets_row(new_row, mets, filename)
-      generic_complete_row_builder(new_row, mets, filename, mets_fileset_title, ::FileSet::PRESERVATION)
+      generic_complete_row_builder(new_row, mets, filename, @mets_fileset_title, ::FileSet::PRESERVATION)
     end
 
     def build_complete_transcript_row(new_row, transcript, filename)
-      generic_complete_row_builder(new_row, transcript, filename, transcript_fileset_title, ::FileSet::PRIMARY)
+      generic_complete_row_builder(new_row, transcript, filename, @transcript_fileset_title, ::FileSet::PRIMARY)
     end
 
     def generic_complete_row_builder(build_on_row, file_path, filename, title, pcdm_use)
       build_on_row + file_mappings(
-        fileset_label:            @is_for_bulkrax ? nil : title,
+        fileset_label:            nil,
         preservation_master_file: file_path,
         pcdm_use:                 pcdm_use,
-        file:                     @is_for_bulkrax && filename.present? ? filename : nil,
-        file_types:               @is_for_bulkrax ? build_file_type_pair(filename, 'preservation_master_file') : nil
+        file:                     filename.presence,
+        file_types:               build_file_type_pair(filename, 'preservation_master_file')
       )
     end
 
     def build_complete_file_row(new_row, fileset_title, image, transcript, extract)
       new_row + file_mappings(
-        fileset_label:            @is_for_bulkrax ? nil : fileset_title,
+        fileset_label:            nil,
         preservation_master_file: image,
         transcript_file:          transcript,
         extracted:                extract,
-        pcdm_use:                 @is_for_bulkrax ? 'Primary Content' : nil,
-        file:                     @is_for_bulkrax ? build_file_list([image, transcript, extract]) : nil,
+        pcdm_use:                 @default_pcdm_use,
+        file:                     build_file_list([image, transcript, extract]),
         file_types:               process_file_file_types(image, transcript, extract)
       )
     end
 
     def process_file_file_types(image, transcript, extract)
-      return unless @is_for_bulkrax
       build_multiple_file_types(
         [
           [pull_filename_from_path(image), 'preservation_master_file'],
@@ -357,6 +342,7 @@ class YellowbackPreprocessor
 
     def pull_and_transform_pdf(row, new_ext)
       unaltered_path = pull_pdf(row)
+
       unaltered_path.gsub('.pdf', new_ext)
     end
 
@@ -365,8 +351,8 @@ class YellowbackPreprocessor
         csv_index,
         row,
         @proper_model_or_type_fileset,
-        @is_for_bulkrax ? true : false
-      ) + pull_list_placeholder + alma_placeholder(@is_for_bulkrax ? fileset_title : false)
+        true
+      ) + pull_list_placeholder + alma_placeholder(fileset_title)
     end
 
     def build_file_list(arr)
@@ -389,16 +375,12 @@ class YellowbackPreprocessor
     end
 
     def populate_parent_field(for_file_set, row)
-      return unless @is_for_bulkrax
-      if for_file_set
-        row['deduplication_key']
-      else
-        row['source_collection_id']
-      end
+      for_file_set ? row['deduplication_key'] : row['source_collection_id']
     end
 
     def relative_filename(source_path, page_number, extension)
       path = source_path.sub("Volumes", @replacement_path)
+
       File.join(path, "#{page_number}.#{extension}")
     end
 
@@ -420,6 +402,7 @@ class YellowbackPreprocessor
     def alma_placeholder(title_to_inject = nil)
       blank_mappings = alma_mappings(Nokogiri::XML("<empty_doc/>"), {}).fill(nil)
       blank_mappings[-2] = title_to_inject if title_to_inject
+
       blank_mappings
     end
 
@@ -454,6 +437,7 @@ class YellowbackPreprocessor
       node_264_date = marc_record.xpath("./datafield[@tag='264']/subfield[@code='c']").text
       publication_date = clean_marc_date(node_260_date)
       production_date = clean_marc_date(node_264_date)
+
       if production_date
         production_date
       elsif publication_date
@@ -465,6 +449,7 @@ class YellowbackPreprocessor
 
     def date_digitized(marc_record)
       dd = extract_datafields(marc_record, '583')
+
       extract_date_digitized(dd)
     end
 
@@ -490,6 +475,7 @@ class YellowbackPreprocessor
 
     def place_of_production(marc_record)
       place_of_production_nodes = marc_record.xpath("./datafield[@tag='264']")
+
       place_of_production_nodes.xpath("./subfield[@code='a']").map { |s| s.text.scan(/(.+)\s[\:\;]$/) }.flatten.join('|')
     end
 
@@ -499,6 +485,7 @@ class YellowbackPreprocessor
 
     def publisher(marc_record)
       publisher_nodes = marc_record.xpath("./datafield[@tag='264']")
+
       publisher_nodes.xpath("./subfield[@code='b']/text()").map { |s| s.text.scan(/(.+)[.,]$/) }.flatten.join('|')
     end
 
@@ -508,6 +495,7 @@ class YellowbackPreprocessor
 
     def subject_geo(marc_record)
       subject_geo_nodes = marc_record.xpath("./datafield[@tag='651']")
+
       subject_geo_nodes.map { |n| n.xpath("./subfield/text()").map(&:text).join("--") }.join('|') #  join subfields with '--' and multiple datafields with '|'
     end
 
@@ -517,6 +505,7 @@ class YellowbackPreprocessor
 
     def subject_topics(marc_record)
       subject_topics_nodes = marc_record.xpath("./datafield[@tag='650']")
+
       subject_topics_nodes.map { |n| n.xpath("./subfield/text()").map(&:text).join("--") }.join('|') #  join subfields with '--' and multiple datafileds with '|'
     end
 
@@ -529,6 +518,7 @@ class YellowbackPreprocessor
       title_segments = title_nodes.xpath("./subfield[@code='a' or @code='b']/text()")
       alma_title = title_segments.map(&:text).join(" ").chomp("/").strip # join title segments with a space, then remove any trailing / or whitespace
       enumeration = csv_row["Enumeration"]
+
       if enumeration
         alma_title + " [#{enumeration.strip}]"
       else
@@ -542,6 +532,7 @@ class YellowbackPreprocessor
 
     def extract_datafields(marc_record, field_no)
       selected_nodes = marc_record.xpath("./datafield[@tag='#{field_no}']")
+
       concatenate_marc_datafields(selected_nodes)
     end
 
@@ -567,6 +558,7 @@ class YellowbackPreprocessor
 
     def extract_date_digitized(datefields)
       first_date = datefields&.split('|')&.first
+
       return first_date[0..3] if !first_date.nil? && first_date.size >= 4
       datefields
     end
