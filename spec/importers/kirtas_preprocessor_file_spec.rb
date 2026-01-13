@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe YellowbackPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results
     yellowback_pull_list_sample = File.join(fixture_path, 'csv_import', 'yellowbacks', 'yellowbacks_pull_list.csv')
     alma_export_sample = File.join(fixture_path, 'csv_import', 'yellowbacks', 'yellowbacks_marc.xml')
-    preprocessor = described_class.new(yellowback_pull_list_sample, alma_export_sample, 'zizia')
+    preprocessor = described_class.new(yellowback_pull_list_sample, alma_export_sample)
     preprocessor.merge
   end
 

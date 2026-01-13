@@ -3,15 +3,12 @@
 require 'rails_helper'
 
 # rubocop:disable Style/LineEndConcatenation
-
-# Deprecation Warning: As of Curate v3, Zizia will be removed. This will be refactored to ignore
-#   Zizia specific headers and values.
 RSpec.describe YellowbackPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results
     yellowback_pull_list_sample = File.join(fixture_path, 'csv_import', 'yellowbacks', 'yellowbacks_pull_list.csv')
     alma_export_sample = File.join(fixture_path, 'csv_import', 'yellowbacks', 'yellowbacks_marc.xml')
-    preprocessor = described_class.new(yellowback_pull_list_sample, alma_export_sample, 'zizia')
+    preprocessor = described_class.new(yellowback_pull_list_sample, alma_export_sample)
     preprocessor.merge
   end
 
