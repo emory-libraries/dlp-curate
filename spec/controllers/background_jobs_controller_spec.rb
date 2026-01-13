@@ -71,6 +71,65 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
         expect(work_members_cleanup).to redirect_to(new_background_job_path)
         expect(WorkMembersCleanUpJob).to have_been_enqueued
       end
+
+      context 'books preprocessor' do
+        let(:preprocessor) { instance_double(YellowbackPreprocessor) }
+        let(:yellowback_pull_list_sample) do
+          fixture_file_upload('csv_import/yellowbacks/yellowbacks_pull_list.csv', 'text/csv')
+        end
+        let(:alma_export_sample) do
+          fixture_file_upload('csv_import/yellowbacks/yellowbacks_marc.xml', 'text/xml')
+        end
+
+        it 'goes through the expected processes' do
+          allow(preprocessor).to receive(:processed_csv)
+          expect(YellowbackPreprocessor).to receive(:new).with(any_args).and_return(preprocessor)
+          expect(preprocessor).to receive(:merge)
+          post :create, params: {
+            jobs:          'book_preprocessor',
+            book_csv:      yellowback_pull_list_sample,
+            book_xml:      alma_export_sample,
+            book_map:      'limb',
+            format:        'json'
+          }
+        end
+      end
+
+      context 'langmuir preprocessor' do
+        let(:preprocessor) { instance_double(LangmuirPreprocessor) }
+        let(:langmuir_sample) do
+          fixture_file_upload('csv_import/langmuir/langmuir-unprocessed.csv', 'text/csv')
+        end
+
+        it 'goes through the expected processes' do
+          allow(preprocessor).to receive(:processed_csv)
+          expect(LangmuirPreprocessor).to receive(:new).with(any_args).and_return(preprocessor)
+          expect(preprocessor).to receive(:merge)
+          post :create, params: {
+            jobs:          'lang_preprocessor',
+            lang_csv:      langmuir_sample,
+            format:        'json'
+          }
+        end
+      end
+
+      context 'DAMS preprocessor' do
+        let(:preprocessor) { instance_double(DamsPreprocessor) }
+        let(:dams_sample) do
+          fixture_file_upload('csv_import/dams/dams-unprocessed.csv', 'text/csv')
+        end
+
+        it 'goes through the expected processes' do
+          allow(preprocessor).to receive(:processed_csv)
+          expect(DamsPreprocessor).to receive(:new).with(any_args).and_return(preprocessor)
+          expect(preprocessor).to receive(:merge)
+          post :create, params: {
+            jobs:          'dams_preprocessor',
+            dams_csv:      dams_sample,
+            format:        'json'
+          }
+        end
+      end
     end
   end
 
