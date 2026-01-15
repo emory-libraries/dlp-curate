@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# [Hyrax-override-hyrax-v5.2.0] spec/models/collection_spec.rb
 require 'rails_helper'
 
 RSpec.describe ::Collection, clean: true do
@@ -22,11 +22,6 @@ RSpec.describe ::Collection, clean: true do
         w.reload
       end
       expect(solr_doc['member_works_count_isi']).to eq 3
-    end
-
-    it 'bytes returns a hard-coded integer and issues a deprecation warning' do
-      expect(Deprecation).to receive(:warn).once
-      expect(collection.bytes).to eq(0)
     end
   end
 

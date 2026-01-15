@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-override-hyrax-v5.2.0]
+# [Hyrax-override-hyrax-v5.2.0] spec/services/hyrax/file_set_fixity_check_service_spec.rb
 require 'rails_helper'
 
 RSpec.describe Hyrax::FileSetFixityCheckService, :clean do

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] lib/hyrax/specs/shared_specs/factories/file_sets.rb
 
 FactoryBot.define do
   factory :file_set do
     transient do
-      user { build(:user) }
+      user { FactoryBot.build(:user) }
       title { nil }
       content { nil }
     end
@@ -30,7 +31,7 @@ FactoryBot.define do
       end
       after(:create) do |file, evaluator|
         Hydra::Works::UploadFileToFileSet.call(file, evaluator.content) if evaluator.content
-        create(:work, user: evaluator.user).members << file
+        FactoryBot.create(:work, user: evaluator.user).members << file
       end
     end
   end

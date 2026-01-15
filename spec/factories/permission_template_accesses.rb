@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# [Hyrax-direct-copy-hyrax-v5.2.0] lib/hyrax/specs/shared_specs/factories/object_id.rb
 
 FactoryBot.define do
   factory :permission_template_access, class: Hyrax::PermissionTemplateAccess do

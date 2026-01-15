@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# [Hyrax-override-hyrax-v5.2.0] spec/models/hyrax/collection_type_spec.rb
 require 'rails_helper'
 
 # Goal: Easily create Collection objects that follow the template laid out by this

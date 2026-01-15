@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-# [Hyrax-override-hyrax-v5.2.0] Adds in Logger and additional tests for bad or missing file.
+# [Hyrax-override-hyrax-v5.2.0] spec/jobs/create_derivatives_job_spec.rb .
+#   Adds in Logger and additional tests for bad or missing file.
 require 'rails_helper'
 
 RSpec.describe CreateDerivativesJob, :clean do

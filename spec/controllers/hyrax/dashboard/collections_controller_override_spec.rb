@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-# [Hyrax-override-hyrax-v5.2.0]
+# [Hyrax-override-hyrax-v5.2.0] spec/controllers/hyrax/dashboard/collections_controller_spec.rb
 require 'rails_helper'
-
 
 RSpec.describe Hyrax::Dashboard::CollectionsController, :clean do
   routes { Hyrax::Engine.routes }

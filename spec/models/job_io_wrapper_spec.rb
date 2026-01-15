@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-# [Hyrax-override-hyrax-v5.2.0] We are only testing the `ingest_file` method here.
+# [Hyrax-override-hyrax-v5.2.0] spec/models/job_io_wrapper_spec.rb .
+#   We are only testing the `ingest_file` method here.
 require 'rails_helper'
 
 RSpec.describe JobIoWrapper, type: :model do

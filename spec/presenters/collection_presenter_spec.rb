@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-# [Hyrax-override-hyrax-v5.2.0] Brings in just the tests affected by the change in behavior of the #total_viewable_items method.
+# [Hyrax-override-hyrax-v5.2.0] spec/presenters/hyrax/collection_presenter_spec.rb .
+#   Brings in just the tests affected by the change in behavior of the #total_viewable_items method.
 require 'rails_helper'
 
 RSpec.describe Hyrax::CollectionPresenter, :clean do

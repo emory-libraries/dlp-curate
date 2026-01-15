@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-# [Hyrax-override-hyrax-v5.2.0] The only thing altered in this controller is the allowed params.
+# [Hyrax-override-hyrax-v5.2.0] spec/controllers/hyrax/admin/collection_types_controller_spec.rb .
+#   The only thing altered in this controller is the allowed params.
 require 'rails_helper'
 
 RSpec.describe Hyrax::Admin::CollectionTypesController, type: :controller, clean: true do
