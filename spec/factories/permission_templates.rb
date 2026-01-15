@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# [Hyrax-direct-copy-hyrax-v5.2.0] lib/hyrax/specs/shared_specs/factories/permission_templates.rb
 
 FactoryBot.define do
   factory :permission_template, class: Hyrax::PermissionTemplate do
@@ -39,7 +40,7 @@ FactoryBot.define do
     after(:create) do |permission_template, evaluator|
       if evaluator.with_workflows
         Hyrax::Workflow::WorkflowImporter.load_workflow_for(permission_template: permission_template)
-        Sipity::Workflow.activate!(permission_template: permission_template, workflow_id: permission_template.available_workflows.pluck(:id).first)
+        Sipity::Workflow.activate!(permission_template: permission_template, workflow_id: permission_template.available_workflows.pick(:id))
       end
       if evaluator.with_active_workflow
         workflow = create(:workflow, active: true, permission_template: permission_template)

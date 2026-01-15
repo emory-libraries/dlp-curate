@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-# [Hyrax-override-hyrax-v5.2.0] We have removed json_response tests from here since we are
-#   no longer rendering json in our create method.
+# [Hyrax-override-hyrax-v5.2.0] spec/controllers/hyrax/fixity_checks_controller_spec.rb .
+#   We have removed json_response tests from here since we are no longer rendering json in our create method.
 require 'rails_helper'
 
 RSpec.describe Hyrax::FixityChecksController do

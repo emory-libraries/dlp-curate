@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] spec/indexers/hyrax/collection_indexer_spec.rb
 require 'rails_helper'
 
 RSpec.describe CurateCollectionIndexer do

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] spec/forms/hyrax/generic_work_form_spec.rb
 require 'rails_helper'
 
 RSpec.describe Hyrax::CurateGenericWorkForm do

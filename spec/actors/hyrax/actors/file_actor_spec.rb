@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-override-hyrax-v5.2.0]
+# [Hyrax-override-hyrax-v5.2.0] spec/actors/hyrax/actors/file_actor_spec.rb
 require 'rails_helper'
 
 RSpec.describe Hyrax::Actors::FileActor, :clean do

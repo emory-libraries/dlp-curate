@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] lib/hyrax/specs/shared_specs/factories/users.rb
 
 FactoryBot.define do
   factory :user do

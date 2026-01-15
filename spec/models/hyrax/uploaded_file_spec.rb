@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# [Hyrax-override-hyrax-v5.2.0] spec/models/hyrax/uploaded_file_spec.rb
 require 'rails_helper'
 
 RSpec.describe Hyrax::UploadedFile, type: :model do

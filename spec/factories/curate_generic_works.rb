@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] lib/hyrax/specs/shared_specs/factories/generic_works.rb
 
 FactoryBot.define do
   factory :work, aliases: [:generic_work, :private_generic_work], class: CurateGenericWork do
     transient do
-      user { create(:user) }
+      user { FactoryBot.create(:user) }
       # Set to true (or a hash) if you want to create an admin set
       with_admin_set { false }
     end
@@ -21,7 +22,7 @@ FactoryBot.define do
     end
 
     after(:create) do |work, _evaluator|
-      work.save! if work.member_of_collections.present?
+      work.save! if work.try(:member_of_collections) && work.member_of_collections.present?
     end
 
     visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
@@ -37,7 +38,7 @@ FactoryBot.define do
       p_w.workflow_rights_basis_reviewer = 'reviewer'
       p_w.workflow_rights_basis_uri = 'uri'
       p_w.persist!
-      work.apply_depositor_metadata(evaluator.user.user_key)
+      work.apply_depositor_metadata(evaluator.user.user_key) if work.try(:apply_depositor_metadata, evaluator.user.user_key)
     end
 
     factory :work_with_full_metadata do
@@ -158,51 +159,51 @@ FactoryBot.define do
 
     factory :work_with_one_file do
       before(:create) do |work, evaluator|
-        work.ordered_members << create(:file_set, user: evaluator.user, title: ['A Contained FileSet'], label: 'filename.pdf')
+        work.ordered_members << FactoryBot.create(:file_set, user: evaluator.user, title: ['A Contained FileSet'], label: 'filename.pdf')
       end
     end
 
     factory :work_with_files do
-      before(:create) { |work, evaluator| 2.times { work.ordered_members << create(:file_set, user: evaluator.user) } }
+      before(:create) { |work, evaluator| 2.times { work.ordered_members << FactoryBot.create(:file_set, user: evaluator.user) } }
     end
 
     factory :work_with_ordered_files do
       before(:create) do |work, evaluator|
-        work.ordered_members << create(:file_set, user: evaluator.user)
-        work.ordered_member_proxies.insert_target_at(0, create(:file_set, user: evaluator.user))
+        work.ordered_members << FactoryBot.create(:file_set, user: evaluator.user)
+        work.ordered_member_proxies.insert_target_at(0, FactoryBot.create(:file_set, user: evaluator.user))
       end
     end
 
     factory :work_with_one_child do
       before(:create) do |work, evaluator|
-        work.ordered_members << create(:work, user: evaluator.user, title: ['A Contained Work'])
+        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: ['A Contained Work'])
       end
     end
 
     factory :work_with_two_children do
       before(:create) do |work, evaluator|
-        work.ordered_members << create(:work, user: evaluator.user, title: ['A Contained Work'], id: "BlahBlah1")
-        work.ordered_members << create(:work, user: evaluator.user, title: ['Another Contained Work'], id: "BlahBlah2")
+        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: ['A Contained Work'], id: "BlahBlah1")
+        work.ordered_members << FactoryBot.create(:work, user: evaluator.user, title: ['Another Contained Work'], id: "BlahBlah2")
       end
     end
 
     factory :work_with_representative_file do
       before(:create) do |work, evaluator|
-        work.ordered_members << create(:file_set, user: evaluator.user, title: ['A Contained FileSet'])
+        work.ordered_members << FactoryBot.create(:file_set, user: evaluator.user, title: ['A Contained FileSet'])
         work.representative_id = work.members[0].id
       end
     end
 
     factory :work_with_file_and_work do
       before(:create) do |work, evaluator|
-        work.ordered_members << create(:file_set, user: evaluator.user)
-        work.ordered_members << create(:work, user: evaluator.user)
+        work.ordered_members << FactoryBot.create(:file_set, user: evaluator.user)
+        work.ordered_members << FactoryBot.create(:work, user: evaluator.user)
       end
     end
 
     factory :with_embargo_date do
       # build with defaults:
-      # let(:work) { create(:embargoed_work) }
+      # let(:work) { FactoryBot.create(:embargoed_work) }
 
       # build with specific values:
       # let(:embargo_attributes) do
@@ -210,7 +211,7 @@ FactoryBot.define do
       #     current_state: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,
       #     future_state: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
       # end
-      # let(:work) { create(:embargoed_work, with_embargo_attributes: embargo_attributes) }
+      # let(:work) { FactoryBot.create(:embargoed_work, with_embargo_attributes: embargo_attributes) }
 
       transient do
         with_embargo_attributes { false }
@@ -243,13 +244,13 @@ FactoryBot.define do
                                evaluator.future_state)
           end
         end
-        after(:create) { |work, evaluator| 2.times { work.ordered_members << create(:file_set, user: evaluator.user) } }
+        after(:create) { |work, evaluator| 2.times { work.ordered_members << FactoryBot.create(:file_set, user: evaluator.user) } }
       end
     end
 
     factory :with_lease_date do
       # build with defaults:
-      # let(:work) { create(:leased_work) }
+      # let(:work) { FactoryBot.create(:leased_work) }
 
       # build with specific values:
       # let(:lease_attributes) do
@@ -257,7 +258,7 @@ FactoryBot.define do
       #     current_state: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       #     future_state: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
       # end
-      # let(:work) { create(:leased_work, with_lease_attributes: lease_attributes) }
+      # let(:work) { FactoryBot.create(:leased_work, with_lease_attributes: lease_attributes) }
 
       transient do
         with_lease_attributes { false }
@@ -290,7 +291,7 @@ FactoryBot.define do
                              evaluator.future_state)
           end
         end
-        after(:create) { |work, evaluator| 2.times { work.ordered_members << create(:file_set, user: evaluator.user) } }
+        after(:create) { |work, evaluator| 2.times { work.ordered_members << FactoryBot.create(:file_set, user: evaluator.user) } }
       end
     end
   end
@@ -298,6 +299,6 @@ FactoryBot.define do
   # Doesn't set up any edit_users
   factory :work_without_access, class: CurateGenericWork do
     title { ['Test title'] }
-    depositor { create(:user).user_key }
+    depositor { FactoryBot.create(:user).user_key }
   end
 end

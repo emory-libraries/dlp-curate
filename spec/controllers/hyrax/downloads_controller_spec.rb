@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-# [Hyrax-override-hyrax-v5.2.0] Adds tests for additional files
+# [Hyrax-override-hyrax-v5.2.0] spec/controllers/hyrax/downloads_controller_spec.rb .
+#   Adds tests for additional files.
 require 'rails_helper'
 
 RSpec.describe Hyrax::DownloadsController, :clean do

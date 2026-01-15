@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# NOTE: not an override. All of the tests below are checking our added logic.
 require 'rails_helper'
 RSpec.describe User, :clean do
   before do

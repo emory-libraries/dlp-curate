@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require "rails_helper"
 
 RSpec.describe "routes for full-text indexing", type: :routing do

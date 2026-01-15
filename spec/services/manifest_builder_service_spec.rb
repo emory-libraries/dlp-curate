@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] spec/services/hyrax/manifest_builder_service_spec.rb
 require 'rails_helper'
 
 RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersistenceJob] do

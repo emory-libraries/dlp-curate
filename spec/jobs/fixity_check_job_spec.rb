@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-# [Hyrax-override-hyrax-v5.2.0] Adds tests for fixity_check preservation_event.
+# [Hyrax-override-hyrax-v5.2.0] spec/jobs/fixity_check_job_spec.rb .
+#   Adds tests for fixity_check preservation_event.
 require 'rails_helper'
 
 RSpec.describe FixityCheckJob, :clean do

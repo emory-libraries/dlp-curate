@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
