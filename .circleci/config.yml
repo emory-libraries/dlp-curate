@@ -67,7 +67,8 @@ jobs:
                 paths:
                     - ~/project/node_modules
 
-            - samvera/install_solr_core
+            - samvera/install_solr_core:
+                solr_port: << parameters.solr_port >>
 
             - samvera/parallel_rspec
 
