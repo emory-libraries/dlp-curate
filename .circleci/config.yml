@@ -21,7 +21,7 @@ jobs:
                 default: 4
                 type: string
             solr_port:
-                default: 8985
+                default: 8983
                 type: string
             solr_version:
                 default: 7-alpine
