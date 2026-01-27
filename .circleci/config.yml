@@ -20,7 +20,7 @@ jobs:
                 default: '10.5'
             redis_version:
                 type: string
-                default: '4'
+                default: '8.4.0'
             solr_port:
                 type: string
                 default: '8983'
