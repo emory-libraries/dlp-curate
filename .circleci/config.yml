@@ -12,10 +12,29 @@ jobs:
             bundler_version:
                 type: string
                 default: 2.1.4
-        executor:
-            name: samvera/ruby_fcrepo_solr_redis
-            ruby_version: << parameters.ruby_version >>
-            solr_version: 7-alpine
+            fcrepo_version:
+                default: 4.7.5
+                type: string
+            mariadb_version:
+                default: 10.5
+            redis_version:
+                default: 4
+                type: string
+            solr_port:
+                default: 8985
+                type: string
+            solr_version:
+                default: 7-alpine
+                type: string
+        docker:
+            - image: cimg/ruby:<< parameters.ruby_version >>-node-browsers-legacy
+            - environment:
+                CATALINA_OPTS: -Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC
+              image: samvera/fcrepo4:<< parameters.fcrepo_version >>
+            - command: bin/solr -cloud -noprompt -f -p << parameters.solr_port >>
+              image: solr:<< parameters.solr_version >>
+            - image: cimg/redis:<< parameters.redis_version >>
+            - image: cimg/mariadb:<< parameters.mariadb_version >>
         working_directory: ~/project
         parallelism: 4
         steps:
@@ -60,8 +79,12 @@ jobs:
                 path: tmp/screenshots
 
     coverage:
+        parameters:
+            ruby_version:
+                type: string
+                default: 2.7.4
         docker:
-            - image: cimg/ruby:2.7.4
+            - image: cimg/ruby:<< parameters.ruby_version >>
         working_directory: ~/project
         parallelism: 1
         steps:

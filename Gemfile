@@ -80,13 +80,13 @@ group :development, :test do
   gem 'rspec-its'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
+  gem 'webdrivers' if ENV['CI']
   gem 'webmock'
   gem 'yard'
 end
 
 group :test do
   gem 'capybara'
-  gem 'capybara-screenshot'
   gem 'database_cleaner'
   gem 'rspec_junit_formatter'
   gem 'shoulda-callback-matchers', '~> 1.1.1'

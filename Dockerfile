@@ -1,24 +1,36 @@
 ARG RUBY_VERSION=2.7.5
-FROM ruby:$RUBY_VERSION-alpine3.15 AS hyrax-base
+FROM ruby:$RUBY_VERSION-bullseye AS hyrax-base
 
-ARG DATABASE_APK_PACKAGE="sqlite-dev mariadb-dev"
-ARG EXTRA_APK_PACKAGES="git"
+ARG DATABASE_DEB_PACKAGE="default-mysql-server"
+ARG EXTRA_DEB_PACKAGES="git"
 
-RUN apk --no-cache upgrade && \
-  apk --no-cache add build-base \
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends build-essential \
   curl \
-  gcompat \
   imagemagick \
   libxml2-dev \
   tzdata \
   nodejs \
   yarn \
-  zip \
-  $DATABASE_APK_PACKAGE \
-  $EXTRA_APK_PACKAGES
+  zip \default-jre-headless \
+  ffmpeg \
+  mediainfo \
+  perl \
+  $DATABASE_DEB_PACKAGE \
+  $EXTRA_DEB_PACKAGES && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* && \
+  mkdir -p /app/fits && \
+  cd /app/fits && \
+  wget https://github.com/harvard-lts/fits/releases/download/1.6.0/fits-1.6.0.zip -O fits.zip && \
+  unzip fits.zip && \
+  rm fits.zip tools/mediainfo/linux/libmediainfo.so.0 tools/mediainfo/linux/libzen.so.0 && \
+  chmod a+x /app/fits/fits.sh && \
+  sed -i 's/\(<tool.*TikaTool.*>\)/<!--\1-->/' /app/fits/xml/fits.xml
+ENV PATH="${PATH}:/app/fits"
 
-RUN addgroup -S --gid 101 app && \
-  adduser -S -G app -u 1001 -s /bin/sh -h /app app
+RUN useradd -m -u 1001 -U -s /bin/bash --home-dir /app app && \
+  chown -R app:app /app
 USER app
 
 RUN gem update bundler
@@ -27,7 +39,7 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY .env.development /app/.env.production
 
-COPY --chown=1001:101 ./scripts/*.sh /app/scripts/
+COPY --chown=1001 ./scripts/*.sh /app/scripts/
 ENV RAILS_ROOT="/app"
 ENV RAILS_SERVE_STATIC_FILES="1"
 
@@ -39,7 +51,7 @@ FROM hyrax-base AS hyrax
 ARG APP_PATH=.
 ARG BUNDLE_WITHOUT=
 
-ONBUILD COPY --chown=1001:101 $APP_PATH /app
+ONBUILD COPY --chown=1001 $APP_PATH /app
 ONBUILD RUN bundle install --jobs "$(nproc)"
 ONBUILD RUN RAILS_ENV=production SECRET_KEY_BASE=`bin/rake secret` DATABASE_URL='nulldb://nulldb' bundle exec rake assets:precompile
 
@@ -48,12 +60,8 @@ FROM hyrax-base AS hyrax-worker-base
 ENV MALLOC_ARENA_MAX=2
 
 USER root
-RUN apk --no-cache add bash \
-  ffmpeg \
-  mediainfo \
-  openjdk11-jre \
-  perl
-USER app
+RUN apt update && \
+    apt install -y --no-install-recommends
 
 CMD bundle exec sidekiq
 
@@ -62,6 +70,6 @@ FROM hyrax-worker-base AS hyrax-worker
 ARG APP_PATH=.
 ARG BUNDLE_WITHOUT=
 
-ONBUILD COPY --chown=1001:101 $APP_PATH /app
+ONBUILD COPY --chown=1001 $APP_PATH /app
 ONBUILD RUN bundle install --jobs "$(nproc)"
 ONBUILD RUN RAILS_ENV=production SECRET_KEY_BASE=`bin/rake secret` DATABASE_URL='nulldb:/nulldb' bundle exec rake assets:precompile

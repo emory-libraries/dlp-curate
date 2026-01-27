@@ -4,7 +4,8 @@ require 'coveralls'
 require 'active_fedora/cleaner'
 require 'webmock/rspec'
 
-WebMock.disable_net_connect!(allow:                     [
+WebMock.disable_net_connect!(allow:
+                             [
                                'chrome',
                                'fcrepo',
                                'solr',

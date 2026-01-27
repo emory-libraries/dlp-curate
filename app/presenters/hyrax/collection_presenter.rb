@@ -34,7 +34,7 @@ module Hyrax
     alias nestable? collection_type_is_nestable?
 
     def collection_type
-      @collection_type ||= Hyrax::CollectionType.find_by_gid!(collection_type_gid)
+      @collection_type ||= Curate::CollectionType.find_by_gid!(collection_type_gid)
     end
 
     CurateGenericWorkAttributes.instance.attributes.each do |key|
