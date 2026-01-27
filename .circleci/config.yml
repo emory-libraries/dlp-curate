@@ -13,19 +13,20 @@ jobs:
                 type: string
                 default: 2.1.4
             fcrepo_version:
+                type: string
                 default: 4.7.5
-                type: string
             mariadb_version:
-                default: 10.5
+                type: string
+                default: '10.5'
             redis_version:
-                default: 4
                 type: string
+                default: '4'
             solr_port:
-                default: 8983
                 type: string
+                default: '8983'
             solr_version:
-                default: 7-alpine
                 type: string
+                default: 7-alpine
         docker:
             - image: cimg/ruby:<< parameters.ruby_version >>-node-browsers-legacy
             - environment:
