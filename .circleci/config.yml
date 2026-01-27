@@ -70,6 +70,14 @@ jobs:
             - samvera/install_solr_core:
                 solr_port: << parameters.solr_port >>
 
+            - run:
+                name: Create DB
+                command: RAILS_ENV="test" RACK_ENV="test" bundle exec rake db:create
+
+            - run:
+                name: Migrate DB
+                command: RAILS_ENV="test" RACK_ENV="test" bundle exec rake db:migrate
+
             - samvera/parallel_rspec
 
             - qlty-orb/coverage_publish:
