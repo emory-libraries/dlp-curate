@@ -31,7 +31,6 @@ jobs:
             - image: cimg/ruby:<< parameters.ruby_version >>-browsers
             - environment:
                 CATALINA_OPTS: -Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC
-                DB_HOST: 127.0.0.1
               image: samvera/fcrepo4:<< parameters.fcrepo_version >>
             - command: bin/solr -cloud -noprompt -f -p << parameters.solr_port >>
               image: solr:<< parameters.solr_version >>
