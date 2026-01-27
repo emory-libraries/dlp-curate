@@ -26,10 +26,10 @@ if ENV['CI']
 else
   Capybara.register_driver :selenium_chrome_headless_sandboxless do |app|
     driver = Capybara::Selenium::Driver.new(app,
-                                        browser: :remote,
-                                        http_client: client,
+                                        browser:      :remote,
+                                        http_client:  client,
                                         capabilities: options,
-                                        url: ENV['HUB_URL'])
+                                        url:          ENV['HUB_URL'])
 
     # Fix for capybara vs remote files. Selenium handles this for us
     driver.browser.file_detector = lambda do |args|
@@ -40,13 +40,12 @@ else
     driver
   end
 
-  Capybara.server_host = '0.0.0.0'
+  Capybara.server_host = 'app'
   Capybara.server_port = 3010
 
   ip = IPSocket.getaddress(Socket.gethostname)
   Capybara.app_host = "http://#{ip}:#{Capybara.server_port}"
 end
-
 
 Capybara.default_driver = :rack_test # This is a faster driver
 Capybara.javascript_driver = :selenium_chrome_headless_sandboxless # This is slower

@@ -93,6 +93,8 @@ services:
   chrome:
     image: selenium/standalone-chrome:4.9.0
     dns: 8.8.8.8
+    environment:
+      - SE_NODE_SESSION_TIMEOUT=600
     logging:
       driver: none
     volumes:
