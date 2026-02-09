@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe Aspace::ApiService do
+describe Aspace::APIService do
   # rubocop:disable Layout/LineLength
   let(:client) { ArchivesSpace::Client.new }
   let(:repository_data) { JSON.parse(File.open(Rails.root.join("spec", "fixtures", "archivesspace_api", "repository.json")).read) }
@@ -113,7 +113,7 @@ describe Aspace::ApiService do
 
       it 'raises error' do
         service = described_class.new
-        expect { service.fetch_resource_by_call_number(call_number, repository_id: '7') }.to raise_error(Aspace::ApiService::ClientError, 'Two or more resources have the same call number Manuscript Collection No. 892')
+        expect { service.fetch_resource_by_call_number(call_number, repository_id: '7') }.to raise_error(Aspace::APIService::ClientError, 'Two or more resources have the same call number Manuscript Collection No. 892')
       end
     end
 
@@ -122,7 +122,7 @@ describe Aspace::ApiService do
 
       it 'raises error' do
         service = described_class.new
-        expect { service.fetch_resource_by_call_number(call_number, repository_id: '7') }.to raise_error(Aspace::ApiService::ClientError, 'No resources match call number Manuscript Collection No. 892')
+        expect { service.fetch_resource_by_call_number(call_number, repository_id: '7') }.to raise_error(Aspace::APIService::ClientError, 'No resources match call number Manuscript Collection No. 892')
       end
     end
   end

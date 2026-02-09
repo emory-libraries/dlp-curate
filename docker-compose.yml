@@ -1,0 +1,56 @@
+services:
+  fcrepo:
+    image: ghcr.io/samvera/fcrepo4:4.7.5
+    volumes:
+      - fcrepo:/data:cached
+    ports:
+      - 8984:8080
+    networks:
+      - curate
+
+  fits:
+    image: ghcr.io/samvera/fitsservlet:1.6.0
+    ports:
+      - 8080:8080
+    networks:
+      - curate
+
+  redis:
+    image: bitnamilegacy/redis:6.2
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - redis:/bitnamilegacy/redis/data
+    ports:
+      - 6379:6379
+    networks:
+      - curate
+
+  solr:
+    image: solr:8.11.1
+    ports:
+      - 8983:8983
+    command:
+      - sh
+      - "-c"
+      - "precreate-core hydra-development /opt/solr/server/configsets/hyraxconf; solr-precreate hydra-test /opt/solr/server/configsets/hyraxconf"
+    volumes:
+      - solr_home:/var/solr:cached
+      - ./solr/config:/opt/solr/server/configsets/hyraxconf
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 524288
+    networks:
+      - curate
+
+volumes:
+  fcrepo:
+  redis:
+  solr_home:
+
+networks:
+  curate:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-curate

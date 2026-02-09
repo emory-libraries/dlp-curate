@@ -4,10 +4,10 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: true, type: :system, js: true do
-  let(:api_service) { instance_double('Aspace::ApiService') }
+  let(:api_service) { instance_double('Aspace::APIService') }
 
   before do
-    allow(Aspace::ApiService).to receive(:new).and_return(api_service)
+    allow(Aspace::APIService).to receive(:new).and_return(api_service)
     allow(api_service).to receive(:authenticate!).and_return(api_service)
     allow(api_service).to receive(:fetch_repositories).and_return([])
   end

@@ -13,25 +13,37 @@ gem 'archivesspace-client'
 gem 'blacklight_iiif_search'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap', '~> 4.0'
-gem 'bootstrap-sass', '~> 3.0'
 gem 'bulkrax', '~> 8.2.0'
-gem 'clamby'
+gem 'clamby', '~> 1.6', require: ENV['HYRAX_CLAMAV'] == 'true'
 gem 'coffee-rails', '~> 4.2'
 gem 'devise'
 gem 'devise-guests', '~> 0.8'
 gem 'dotenv-rails'
 gem 'edtf-humanize', '~> 1.0.0'
+
+if RUBY_PLATFORM =~ /musl/
+# # Disabled due to dependency mismatches in Alpine packages (grpc 1.62.1 needs protobuf ~> 3.25)
+#   path '/usr/lib/ruby/gems/3.3.0' do
+  gem 'google-protobuf', force_ruby_platform: true
+  gem 'grpc', force_ruby_platform: true
+#   end
+end
+
 gem 'honeybadger'
 gem 'http'
 gem 'hydra-role-management'
 gem 'hyrax', '~> 5.2'
+gem 'jbuilder', '~> 2.5'
+gem 'jquery-rails'
 gem 'linkeddata', '>= 3.1.6'
 gem 'mysql2'
 gem 'omniauth', '~> 1.9'
 gem 'omniauth-shibboleth', '~> 1.3'
+gem 'pg', require: false
 gem 'puma'
-gem 'rails', '~> 6.1'
-gem 'riiif', '~> 2.1'
+gem 'rails', '6.1.7.10'
+gem 'riiif', '~> 2.8'
+gem 'sass-rails'
 gem 'sidekiq', '~> 7.0'
 gem 'sidekiq-limit_fetch'
 gem 'stackprof', require: false
@@ -39,7 +51,6 @@ gem 'turbolinks', '~> 5'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'tzinfo-data', platforms: [:windows, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'uglifier', '>= 1.3.0'
-gem 'webpacker', '~> 5.x'
 gem 'whenever', require: false
 
 group :development do
@@ -52,8 +63,6 @@ group :development do
   gem 'capistrano-rails-collection'
   gem 'ec2_ipv4_retriever', git: 'https://github.com/emory-libraries/ec2_ipv4_retriever', branch: 'main'
   gem 'ed25519', '>= 1.2', '< 2.0'
-  gem 'fcrepo_wrapper'
-  gem 'solr_wrapper', '>= 0.3'
   gem 'web-console', '>= 3.3.0'
   gem 'xray-rails', git: "https://github.com/brentd/xray-rails", branch: "bugs/ruby-3.0.0"
 end
@@ -68,7 +77,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'rspec-its'
   gem 'rspec-rails'
-  gem 'selenium-webdriver', '~> 4.4'
+  gem 'selenium-webdriver'
   gem 'sqlite3', '~> 1.3.7'
   gem 'webdrivers'
   gem 'webmock'

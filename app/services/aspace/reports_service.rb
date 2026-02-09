@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Aspace
-  class ReportsService < ApiService
+  class ReportsService < APIService
     PAGE_SIZE = 50
 
     def fetch_repository_last_page(repository_id:)

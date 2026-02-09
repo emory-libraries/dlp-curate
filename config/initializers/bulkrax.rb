@@ -338,7 +338,7 @@ end
 
 Bulkrax::ApplicationParser.class_eval do
   def create_entry_and_job(current_record, type, identifier = nil)
-    identifier ||= current_record[source_identifier]&.strip, # Emory Alteration; adds the `#strip` to the value.
+    identifier ||= current_record[source_identifier]&.strip # Emory Alteration; adds the `#strip` to the value.
     new_entry = find_or_create_entry(send("#{type}_entry_class"),
                                      identifier,
                                      'Bulkrax::Importer',

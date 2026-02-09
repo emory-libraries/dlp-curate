@@ -186,9 +186,6 @@ GEM
     bootstrap (4.6.2.1)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.16.1, < 2)
-    bootstrap-sass (3.4.1)
-      autoprefixer-rails (>= 5.2.1)
-      sassc (>= 2.0.0)
     bootstrap_form (5.4.0)
       actionpack (>= 6.1)
       activemodel (>= 6.1)
@@ -387,7 +384,7 @@ GEM
       logger
     faraday-encoding (0.0.6)
       faraday
-    faraday-follow_redirects (0.4.0)
+    faraday-follow_redirects (0.5.0)
       faraday (>= 1, < 3)
     faraday-multipart (1.1.1)
       multipart-post (~> 2.0)
@@ -395,10 +392,8 @@ GEM
       net-http (~> 0.5)
     faraday-retry (2.3.2)
       faraday (~> 2.0)
-    fcrepo_wrapper (0.9.0)
-      ruby-progressbar
     ffaker (2.25.0)
-    ffi (1.17.2-x86_64-linux-gnu)
+    ffi (1.17.3-x86_64-linux-gnu)
     ffi-compiler (1.3.2)
       ffi (>= 1.15.5)
       rake
@@ -603,7 +598,7 @@ GEM
       tinymce-rails (~> 5.10)
       valkyrie (~> 3.5)
       view_component (~> 2.74.1)
-    i18n (1.14.7)
+    i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iiif-image-api (0.3.0)
@@ -625,7 +620,7 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
-    json (2.17.1)
+    json (2.18.1)
     json-canonicalization (1.0.0)
     json-ld (3.3.2)
       htmlentities (~> 4.3)
@@ -717,7 +712,7 @@ GEM
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     logger (1.7.0)
-    loofah (2.24.1)
+    loofah (2.25.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     mail (2.9.0)
@@ -738,8 +733,8 @@ GEM
     mime-types-data (3.2025.0924)
     mini_magick (4.13.2)
     mini_mime (1.1.5)
-    minitar (1.1.0)
-    minitest (5.26.2)
+    minitest (6.0.1)
+      prism (~> 1.5)
     mize (0.6.1)
     msgpack (1.8.0)
     multi_json (1.18.0)
@@ -753,7 +748,7 @@ GEM
       bigdecimal
     nest (3.2.0)
       redic
-    net-http (0.8.0)
+    net-http (0.9.1)
       uri (>= 0.11.1)
     net-http-persistent (4.0.6)
       connection_pool (~> 2.2, >= 2.2.4)
@@ -776,7 +771,7 @@ GEM
     noid-rails (3.3.0)
       actionpack (>= 5.0.0, < 9)
       noid (~> 0.9)
-    nokogiri (1.18.10-x86_64-linux-gnu)
+    nokogiri (1.19.0-x86_64-linux-gnu)
       racc (~> 1.4)
     oai (1.3.0)
       builder (>= 3.1.0)
@@ -811,8 +806,9 @@ GEM
       ast (~> 2.4.1)
       racc
     parslet (2.0.0)
+    pg (1.6.3-x86_64-linux)
     popper_js (1.16.1)
-    prism (1.6.0)
+    prism (1.9.0)
     pry (0.15.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -839,8 +835,6 @@ GEM
       rack (>= 2.2, < 4)
       rack-rdf (~> 3.3)
     rack-protection (2.2.4)
-      rack
-    rack-proxy (0.7.7)
       rack
     rack-rdf (3.3.0)
       rack (>= 2.2, < 4)
@@ -1078,7 +1072,6 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    semantic_range (3.1.0)
     shacl (0.4.3)
       json-ld (~> 3.3)
       rdf (~> 3.3)
@@ -1127,13 +1120,6 @@ GEM
     snaky_hash (2.0.3)
       hashie (>= 0.1.0, < 6)
       version_gem (>= 1.1.8, < 3)
-    solr_wrapper (4.3.0)
-      faraday (>= 1.0, < 3)
-      faraday-follow_redirects
-      minitar
-      ostruct
-      retriable
-      ruby-progressbar
     sparql (3.3.2)
       builder (~> 3.2, >= 3.2.4)
       ebnf (~> 2.5)
@@ -1177,8 +1163,8 @@ GEM
       tins (~> 1)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
-    thor (1.4.0)
-    tilt (2.6.1)
+    thor (1.5.0)
+    tilt (2.7.0)
     timeout (0.4.4)
     tins (1.47.0)
       bigdecimal
@@ -1237,11 +1223,6 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webpacker (5.4.4)
-      activesupport (>= 5.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
     websocket (1.2.11)
     websocket-driver (0.8.0)
       base64
@@ -1257,7 +1238,7 @@ GEM
       rdf (~> 3.3)
       rdf-xsd (~> 3.3)
     yard (0.9.37)
-    zeitwerk (2.7.3)
+    zeitwerk (2.7.4)
 
 PLATFORMS
   x86_64-linux
@@ -1269,7 +1250,6 @@ DEPENDENCIES
   blacklight_iiif_search
   bootsnap (>= 1.1.0)
   bootstrap (~> 4.0)
-  bootstrap-sass (~> 3.0)
   bulkrax (~> 8.2.0)
   capistrano
   capistrano-bundler (~> 1.3)
@@ -1277,7 +1257,7 @@ DEPENDENCIES
   capistrano-passenger
   capistrano-rails (~> 1.6)
   capistrano-rails-collection
-  clamby
+  clamby (~> 1.6)
   coffee-rails (~> 4.2)
   coveralls
   devise
@@ -1287,31 +1267,33 @@ DEPENDENCIES
   ed25519 (>= 1.2, < 2.0)
   edtf-humanize (~> 1.0.0)
   factory_bot_rails
-  fcrepo_wrapper
   ffaker
   honeybadger
   http
   hydra-role-management
   hyrax (~> 5.2)
+  jbuilder (~> 2.5)
+  jquery-rails
   linkeddata (>= 3.1.6)
   mysql2
   omniauth (~> 1.9)
   omniauth-shibboleth (~> 1.3)
+  pg
   pry
   pry-byebug
   puma
-  rails (~> 6.1)
+  rails (= 6.1.7.10)
   rails-controller-testing
-  riiif (~> 2.1)
+  riiif (~> 2.8)
   rspec-its
   rspec-rails
   rspec_junit_formatter
-  selenium-webdriver (~> 4.4)
+  sass-rails
+  selenium-webdriver
   shoulda-callback-matchers (~> 1.1.1)
   show_me_the_cookies
   sidekiq (~> 7.0)
   sidekiq-limit_fetch
-  solr_wrapper (>= 0.3)
   sqlite3 (~> 1.3.7)
   stackprof
   turbolinks (~> 5)
@@ -1321,7 +1303,6 @@ DEPENDENCIES
   web-console (>= 3.3.0)
   webdrivers
   webmock
-  webpacker (~> 5.x)
   whenever
   xray-rails!
   yard

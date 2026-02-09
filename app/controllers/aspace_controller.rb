@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+require './app/services/aspace/api_service.rb'
+
 class AspaceController < ApplicationController
   class InvalidRequestError < StandardError; end
 
-  API = Aspace::ApiService
+  API = Aspace::APIService
 
   authorize_resource class: :archivesspace
   before_action :verify_json_request
@@ -44,7 +46,7 @@ class AspaceController < ApplicationController
   private
 
     def service
-      @service ||= Aspace::ApiService.new
+      @service ||= Aspace::APIService.new
     end
 
     def formatter
