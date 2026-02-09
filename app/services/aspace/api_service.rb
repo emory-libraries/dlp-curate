@@ -3,7 +3,7 @@ require "uri"
 require "net/http"
 
 module Aspace
-  class ApiService
+  class APIService
     class AuthenticationError < StandardError; end
     class ClientError < StandardError; end
     class ServerError < StandardError; end
