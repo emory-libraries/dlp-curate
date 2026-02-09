@@ -3,7 +3,7 @@ require 'csv'
 
 class CurateCollectionImporter
   def initialize
-    @library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.gid
+    @library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.to_global_id
   end
 
   def import(csv_file, log_location = STDOUT)

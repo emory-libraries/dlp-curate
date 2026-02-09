@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CurateCollectionIndexer do
+  include ActionDispatch::TestProcess
   let(:solr_document) { indexer.generate_solr_document }
   let(:collection) { Collection.new(attributes) }
   let(:indexer) { described_class.new(collection) }
@@ -116,12 +117,13 @@ RSpec.describe CurateCollectionIndexer do
     end
 
     context 'when collection has banner attached' do
-      let(:filename) { '/world.png' }
-      let(:file)     { fixture_file_upload(filename, 'image/png') }
+      let(:filename)  { 'world.png' }
+      let(:file_path) { Rails.root.join('spec', 'fixtures', filename) }
+      let(:file)      { Rack::Test::UploadedFile.new(file_path, 'image/png') }
 
       before do
         banner_info = CollectionBrandingInfo.new(
-          collection_id: collection.id, filename: filename,
+          collection_id: collection.id, filename: "/#{filename}",
           role: "banner", target_url: ""
         )
         banner_info.save file.local_path
@@ -131,7 +133,7 @@ RSpec.describe CurateCollectionIndexer do
         expect(solr_document['banner_path_ss']).to eq(
           '/branding/' +
           collection.id.to_s +
-          '/banner' +
+          '/banner/' +
           filename
         )
       end

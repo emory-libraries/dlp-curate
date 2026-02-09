@@ -33,7 +33,7 @@ RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: t
     end
 
     it "has expected input fields" do
-      visit("dashboard/collections/new?collection_type_id=1")
+      visit("dashboard/collections/new?collection_type_id=#{Curate::CollectionType.find_or_create_default_collection_type.id}")
       expect(page).to have_css("textarea#collection_title")
       click_link('Additional fields')
 
