@@ -27,7 +27,7 @@ RSpec.describe CurateCollectionImporter, :clean do
   end
 
   it 'makes a collection using Curate::CollectionType' do
-    library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.gid
+    library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.to_global_id.to_s
     expect(langmuir_collection.collection_type_gid).to eq library_collection_type_gid
   end
 
