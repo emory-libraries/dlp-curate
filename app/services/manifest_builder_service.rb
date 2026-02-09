@@ -70,7 +70,14 @@ class ManifestBuilderService
     end
 
     def persist_placeholder_manifest(key)
-      manifest_json = ApplicationController.render(template: 'manifest/placeholder.json', assigns: { root_url: @presenter.manifest_url })
+      manifest_json = ApplicationController.render(
+        template: 'manifest/placeholder',
+        formats: [:json],
+        assigns: {
+          root_url: @presenter.manifest_url
+        }
+      )
+
       File.open(File.join(iiif_manifest_cache, key), 'w+') do |f|
         f.write(manifest_json)
       end

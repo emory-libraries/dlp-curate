@@ -4,3 +4,5 @@ env: <%= Socket.gethostname.partition('.')[0] %>
 
 breadcrumbs:
     enabled: true
+
+report_data: <%= Rails.env.production? ? true : false %>

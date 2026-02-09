@@ -15,11 +15,11 @@ RSpec.describe JobIoWrapper, type: :model do
 
     before do
       # ingest_file success
-      described_class.create_with_varied_file_handling!(args).ingest_file
+      described_class.create_with_varied_file_handling!(**args).ingest_file
       # here we are mocking a `false` response from `file_actor.ingest_file`
       Hyrax::Actors::FileActor.any_instance.stub(:ingest_file).and_return(false)
       # ingest_file failure since `false` was returned
-      described_class.create_with_varied_file_handling!(args2).ingest_file
+      described_class.create_with_varied_file_handling!(**args2).ingest_file
       file_set.reload
     end
 
