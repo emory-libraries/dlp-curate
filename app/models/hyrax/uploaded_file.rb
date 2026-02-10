@@ -6,7 +6,7 @@ module Hyrax
   # Store a file uploaded by a user.
   #
   # Eventually these files get attached to {FileSet}s and pushed into Fedora.
-  class UploadedFile < ApplicationRecord
+  class UploadedFile < ActiveRecord::Base
     self.table_name = 'uploaded_files'
     mount_uploader :service_file, UploadedFileUploader
     mount_uploader :preservation_master_file, UploadedFileUploader
