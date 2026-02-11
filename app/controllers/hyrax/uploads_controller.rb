@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+# [Hyrax-overwrite-hyrax-v5.2.0] Kept our override the same same, avoiding the `chunking`
+#   update because we're attaching multiple files to each `UploadedFile`, complicating things.
 
-# [Hyrax-overwrite-v3.4.2]
 module Hyrax
   class UploadsController < ApplicationController
     load_and_authorize_resource class: Hyrax::UploadedFile
