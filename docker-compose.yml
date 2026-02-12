@@ -8,13 +8,6 @@ services:
     networks:
       - curate
 
-  fits:
-    image: ghcr.io/samvera/fitsservlet:1.6.0
-    ports:
-      - 8080:8080
-    networks:
-      - curate
-
   redis:
     image: bitnamilegacy/redis:6.2
     environment:

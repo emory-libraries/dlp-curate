@@ -7,7 +7,7 @@ RSpec.describe FormatLabelService do
 
   describe 'getting the label' do
     it 'provides a string when given a URI' do
-      expect(service.label(uri: uri)).to eq('Audio')
+      expect(service.label(uri:)).to eq('Audio')
     end
   end
 end

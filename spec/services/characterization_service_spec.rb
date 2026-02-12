@@ -11,7 +11,7 @@ describe Hydra::Works::CharacterizationService, :clean do
 
     before do
       skip 'external tools not installed for CI environment' if ENV['CI']
-      described_class.run(file, path_on_disk)
+      described_class.run(file, path_on_disk, **Hyrax.config.characterization_options)
     end
 
     it 'successfully sets the property values' do
@@ -21,7 +21,7 @@ describe Hydra::Works::CharacterizationService, :clean do
       # Persist our file with some content and reload
       file.content = "junk"
       expect(file.save).to be true
-      expect(file.reload).to eq({})
+      expect(file.reload).to be_empty
       # Re-check property values
       expect(file.file_size).to eq(["7618"])
       expect(file.file_title).to eq(["sample-file"])
@@ -264,7 +264,7 @@ describe Hydra::Works::CharacterizationService, :clean do
   describe 'preservation event for message digest' do
     let(:characterization) { class_double("Hydra::FileCharacterization").as_stubbed_const }
     let(:user)             { FactoryBot.create(:user) }
-    let(:file_set)         { FactoryBot.create(:file_set, user: user, title: ['Some title']) }
+    let(:file_set)         { FactoryBot.create(:file_set, user:, title: ['Some title']) }
     let(:filename)         { 'sample-file.pdf' }
     let(:path_on_disk)     { File.join(fixture_path, filename) }
     let(:file)             { File.open(path_on_disk) }
