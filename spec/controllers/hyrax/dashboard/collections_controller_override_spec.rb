@@ -6,7 +6,7 @@ RSpec.describe Hyrax::Dashboard::CollectionsController, :clean do
   routes { Hyrax::Engine.routes }
   let(:admin) { FactoryBot.create(:admin) }
   let(:user) { FactoryBot.create(:user) }
-  let(:collection) { FactoryBot.create(:public_collection_lw, id: '888889', user: user, with_permission_template: true) }
+  let(:collection) { FactoryBot.create(:public_collection_lw, id: '888889', user:, with_permission_template: true) }
 
   describe "#delete" do
     context "when logged in as an admin" do

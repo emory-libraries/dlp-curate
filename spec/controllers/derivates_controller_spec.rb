@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe DerivativesController, type: :controller, clean: true do
   let(:user) { FactoryBot.create(:user) }
-  let(:file_set) { FactoryBot.create(:file_set, user: user) }
+  let(:file_set) { FactoryBot.create(:file_set, user:) }
 
   context "when signed in" do
     describe "POST clean_up" do

@@ -6,7 +6,8 @@ module Hyrax
   class FileSetsController < ApplicationController # rubocop:disable Metrics/ClassLength
     rescue_from WorkflowAuthorizationException, with: :render_unavailable
 
-    include Blacklight::Base
+    include Blacklight::Configurable
+    include Blacklight::SearchContext
     include Blacklight::AccessControls::Catalog
     include Hyrax::Breadcrumbs
 
