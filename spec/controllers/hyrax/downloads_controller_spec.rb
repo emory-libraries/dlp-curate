@@ -8,7 +8,7 @@ RSpec.describe Hyrax::DownloadsController, :clean do
 
   describe '#show' do
     let(:user) { FactoryBot.create(:user) }
-    let(:file_set) { FactoryBot.create(:file_set, user: user, title: ['Some title']) }
+    let(:file_set) { FactoryBot.create(:file_set, user:, title: ['Some title']) }
     let(:file) { File.open(fixture_path + '/image.png') }
     let(:file1) { File.open(fixture_path + '/balloon.jpeg') }
     let(:file2) { File.open(fixture_path + '/jp2_fits.xml') }
@@ -25,7 +25,7 @@ RSpec.describe Hyrax::DownloadsController, :clean do
       sign_in user
       expect do
         get :show, params: { id: '8675309' }
-      end.to raise_error Blacklight::Exceptions::InvalidSolrID
+      end.to raise_error Blacklight::Exceptions::RecordNotFound
     end
 
     context "when user doesn't have access" do
@@ -98,9 +98,10 @@ RSpec.describe Hyrax::DownloadsController, :clean do
             it "head request" do
               request.env["HTTP_RANGE"] = 'bytes=0-15'
               head :show, params: { id: file_set, file: 'thumbnail' }
-              expect(response.headers['Content-Length']).to eq '0'
+              expect(response.headers['Content-Length']).to eq '16'
               expect(response.headers['Accept-Ranges']).to eq 'bytes'
               expect(response.headers['Content-Type']).to start_with 'image/png'
+              expect(response.body).to be_blank
             end
 
             it "sends the whole thing" do
@@ -110,7 +111,7 @@ RSpec.describe Hyrax::DownloadsController, :clean do
               expect(response.headers["Content-Length"]).to eq '4218'
               expect(response.headers['Accept-Ranges']).to eq 'bytes'
               expect(response.headers['Content-Type']).to start_with "image/png"
-              expect(response.headers["Content-Disposition"]).to eq "inline; filename=\"world.png\""
+              expect(response.headers["Content-Disposition"]).to include "inline; filename=\"world.png\""
               expect(response.body).to eq content
               expect(response.status).to eq 206
             end

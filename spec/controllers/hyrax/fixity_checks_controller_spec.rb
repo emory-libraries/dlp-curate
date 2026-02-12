@@ -6,7 +6,7 @@ require 'rails_helper'
 RSpec.describe Hyrax::FixityChecksController do
   routes { Hyrax::Engine.routes }
   let(:user) { FactoryBot.create(:user) }
-  let(:file_set) { FactoryBot.create(:file_set, user: user) }
+  let(:file_set) { FactoryBot.create(:file_set, user:) }
   let(:binary) { File.open(fixture_path + '/world.png') }
   let(:file) { Hydra::Derivatives::IoDecorator.new(binary, 'image/png', 'world.png') }
 

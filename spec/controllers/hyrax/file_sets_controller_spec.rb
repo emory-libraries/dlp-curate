@@ -7,14 +7,17 @@ RSpec.describe Hyrax::FileSetsController, :clean do
   routes { Rails.application.routes }
   let(:user) { FactoryBot.create(:user) }
   let(:actor) { controller.send(:actor) }
+  let(:filename) { 'world.png' }
+  let(:file_path) { Rails.root.join('spec', 'fixtures', filename) }
+  let(:file) { Rack::Test::UploadedFile.new(file_path, 'image/png') }
 
   context "when signed in" do
     before { sign_in user }
 
     describe "#destroy" do
       context "file_set with a parent" do
-        let(:file_set) { FactoryBot.create(:file_set, user: user) }
-        let(:work) { FactoryBot.create(:work, title: ['test title'], user: user) }
+        let(:file_set) { FactoryBot.create(:file_set, user:) }
+        let(:work) { FactoryBot.create(:work, title: ['test title'], user:) }
 
         before do
           work.ordered_members << file_set
@@ -35,10 +38,10 @@ RSpec.describe Hyrax::FileSetsController, :clean do
     end
 
     describe "#edit" do
-      let(:parent) { FactoryBot.create(:work, :public, user: user) }
+      let(:parent) { FactoryBot.create(:work, :public, user:) }
 
       let(:file_set) do
-        FactoryBot.create(:file_set, user: user).tap do |file_set|
+        FactoryBot.create(:file_set, user:).tap do |file_set|
           parent.ordered_members << file_set
           parent.save!
         end
@@ -79,10 +82,10 @@ RSpec.describe Hyrax::FileSetsController, :clean do
     end
 
     describe "#update" do
-      let(:parent) { FactoryBot.create(:work, :public, user: user) }
+      let(:parent) { FactoryBot.create(:work, :public, user:) }
 
       let(:file_set) do
-        FactoryBot.create(:file_set, user: user, title: ['test title']).tap do |file_set|
+        FactoryBot.create(:file_set, user:, title: ['test title']).tap do |file_set|
           parent.ordered_members << file_set
           parent.save!
         end
@@ -112,8 +115,8 @@ RSpec.describe Hyrax::FileSetsController, :clean do
 
       context "when updating the attached file direct upload" do
         let(:actor) { double }
-        let(:pmf) { File.open(fixture_path + '/world.png') }
-        let(:uploaded_file) { Hyrax::UploadedFile.new(user: user, file_set_uri: file_set.uri, preservation_master_file: pmf) }
+        let(:pmf) { File.open(fixture_path + "/#{filename}") }
+        let(:uploaded_file) { Hyrax::UploadedFile.new(user:, file_set_uri: file_set.uri, preservation_master_file: pmf) }
 
         before do
           allow(Hyrax::Actors::FileActor).to receive(:new).and_return(actor)
@@ -123,7 +126,6 @@ RSpec.describe Hyrax::FileSetsController, :clean do
         it "spawns a ContentNewVersionEventJob", perform_enqueued: [IngestJob] do
           expect(ContentNewVersionEventJob).to receive(:perform_later).with(file_set, user)
           expect(actor).to receive(:ingest_file).with(JobIoWrapper).and_return(true)
-          file = fixture_file_upload('/world.png', 'image/png')
           post :update, params: { id: file_set, filedata: file, file_set: { keyword: [''], permissions_attributes: [{ type: 'person', name: 'archivist1', access: 'edit' }] } }
           post :update, params: { id: file_set, file_set: { files: [file], keyword: [''], permissions_attributes: [{ type: 'person', name: 'archivist1', access: 'edit' }] } }
         end
@@ -145,7 +147,6 @@ RSpec.describe Hyrax::FileSetsController, :clean do
             .to receive(:perform_later)
             .with(file_set, user)
 
-          file = fixture_file_upload('/world.png', 'image/png')
           allow(Hyrax::UploadedFile)
             .to receive(:find)
             .with(["1"])
@@ -161,8 +162,9 @@ RSpec.describe Hyrax::FileSetsController, :clean do
       end
 
       context "with two existing versions from different users", :perform_enqueued do
-        let(:file1)       { "world.png" }
-        let(:file2)       { "image.jp2" }
+        let(:file2_name)  { "image.jp2" }
+        let(:file2_path)  { Rails.root.join('spec', 'fixtures', file2_name) }
+        let(:file2)       { Rack::Test::UploadedFile.new(file2_path, 'image/png') }
         let(:second_user) { FactoryBot.create(:user) }
         let(:version1)    { "version1" }
         let(:actor1)      { Hyrax::Actors::FileSetActor.new(file_set, user) }
@@ -170,8 +172,8 @@ RSpec.describe Hyrax::FileSetsController, :clean do
 
         before do
           ActiveJob::Base.queue_adapter.filter = [IngestJob]
-          actor1.create_content(fixture_file_upload(file1), :preservation_master_file, :preservation_master_file)
-          actor2.create_content(fixture_file_upload(file2), :preservation_master_file, :preservation_master_file)
+          actor1.create_content(file, :preservation_master_file, :preservation_master_file)
+          actor2.create_content(file2, :preservation_master_file, :preservation_master_file)
         end
 
         describe "restoring a previous version" do
@@ -240,10 +242,10 @@ RSpec.describe Hyrax::FileSetsController, :clean do
       end
 
       context "when there's an error saving" do
-        let(:parent) { FactoryBot.create(:work, :public, user: user) }
+        let(:parent) { FactoryBot.create(:work, :public, user:) }
 
         let(:file_set) do
-          FactoryBot.create(:file_set, user: user).tap do |file_set|
+          FactoryBot.create(:file_set, user:).tap do |file_set|
             parent.ordered_members << file_set
             parent.save!
           end
@@ -284,9 +286,9 @@ RSpec.describe Hyrax::FileSetsController, :clean do
     end
 
     describe "#show" do
-      let(:work) { FactoryBot.create(:work, title: ['test title'], user: user) }
+      let(:work) { FactoryBot.create(:work, title: ['test title'], user:) }
       let(:file_set) do
-        FactoryBot.create(:file_set, title: ['test file'], user: user).tap do |file_set|
+        FactoryBot.create(:file_set, title: ['test file'], user:).tap do |file_set|
           work.ordered_members << file_set
           work.save!
         end
@@ -346,7 +348,7 @@ RSpec.describe Hyrax::FileSetsController, :clean do
       end
 
       let(:work) do
-        FactoryBot.create(:work, title: ['test title'], user: user)
+        FactoryBot.create(:work, title: ['test title'], user:)
       end
 
       before do
@@ -375,7 +377,7 @@ RSpec.describe Hyrax::FileSetsController, :clean do
   end
 
   context 'when not signed in' do
-    let(:work) { FactoryBot.create(:work, :public, user: user) }
+    let(:work) { FactoryBot.create(:work, :public, user:) }
     let(:private_file_set) { FactoryBot.create(:file_set) }
     let(:public_file_set) { FactoryBot.create(:file_set, read_groups: ['public']) }
 

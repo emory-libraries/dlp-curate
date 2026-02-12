@@ -10,7 +10,6 @@ WebMock.disable_net_connect!(allow:                     [
                                'chromedriver.storage.googleapis.com',
                                'googlechromelabs.github.io',
                                'id.loc.gov',
-                               'iiif-cor-arch.library.emory.edu',
                                'storage.googleapis.com'
                              ],
                              net_http_connect_on_start: true)

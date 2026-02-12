@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe CurateDownloadsController, :clean do
   describe '#pdf_for_viewer' do
     let(:user) { FactoryBot.create(:user) }
-    let(:file_set) { FactoryBot.create(:file_set, user: user, title: ['Some title']) }
+    let(:file_set) { FactoryBot.create(:file_set, user:, title: ['Some title']) }
     let(:file) { File.open(fixture_path + '/sample-file.pdf') }
     before { Hydra::Works::AddFileToFileSet.call(file_set, file, :preservation_master_file) }
 
