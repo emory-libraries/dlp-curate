@@ -1,4 +1,5 @@
 
+
 # DLP-Curate
 
 <table width="100%">
@@ -16,31 +17,39 @@ A repository application for digital curators (preservation, rights and metadata
 </td></tr>
 </table>
 
-# Database Authentication
+## Database Authentication
 
 In a production environment, we will use Shibboleth for authentication. However, in a development environment we will be using a local database.
 
-In order to set up your dev environment for database authentication, you will need to set the following environment variable:
+## Local Development Setup
 
-`export DATABASE_AUTH=true`
+Our new local development environment now utilizes a docker compose container system to run Fedora 4.7.5, Solr 8.11.1, FITS Servlet 1.6.0, and Redis 6.2 servers. However, the following applications must still be installed on the local machine: Mysql2 (or MariaDB), ImageMagick, and LibreOffice (ffmpeg is still optional, but will most likely be incorporated in later versions). Also note that this version of Curate uses Ruby 3.2.9.
 
-# Local Development Setup
+Do the following within the `dlp-curate` directory:
 
-Run each of the following commands in a separate tab within the `dlp-curate` directory:
+1. Copy and rename `dotenv_development.sample` twice, one named `.env.development` and the other `.env.test`.
+2. Within both new `.env` files, assign your username and password to the `DATABASE_USERNAME` and `DATABASE_PASSWORD` variables.
+3. `docker compose up` (Errors here usually indicate the ports are already being used somewhere else on your machine.)
+4. FIRST TIME ONLY: `bundle exec rake db:create` (Errors usually occur here because of Mysql2/MariaDB user/password issues.)
+5. FIRST TIME ONLY (or after a new database migration has been added): `bundle exec rake db:migrate`
+6. FIRST TIME ONLY: `bundle exec rake db:seed`
+    - This sets up an admin user of `dev-admin` and a normal user named `user3`, both with the password of "123456".
+7. FIRST TIME ONLY: `bundle exec rake curate:collections:migration_setup`
+    - This creates the default `AdminSet` and `CollectionType`, as well as the "Library" `CollectionType` and the desired `Workflows`.
+    - Running this command has no real effect on the "Test" environment--but after this rake task is complete, your local users should be able to create any object.
+8. Setup should be complete, which means that `bundle exec rails s` will launch the server access.
+9. Access the app through `http://localhost:3000/`.
 
-1. Setup local Solr instance by running command `solr_wrapper`
-2. Setup local Fedora instance by running command `fcrepo_wrapper`
-3. Setup local app server by running command `rails server`
-4. Access the app through `http://localhost:3000/`
+Refer to the Hyrax local development [guide](https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/documentation/developing-your-hyrax-based-app.md) for more information regarding installation of tools like ImageMagick and LibreOffice.
 
-Refer to the Hyrax local development [guide](https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/documentation/developing-your-hyrax-based-app.md) for more information regarding installing additional tools like Fits and ImageMagick, which are needed to enable file uploads.
+To run the tests locally, fire off `bundle exec rspec` within the `dlp-curate` directory.
 
 # Deployment
 
 1. Connect to `vpn.emory.edu`
 2. Pull the latest version of `main`
 3. Stub AWS' environment variables for `Emory Account 70` within the same terminal window. These can be found in the page loaded after logging into [Emory's AWS](https://aws.emory.edu). Directions below:
-  a. After logging in, the page should be the `AWS access portal`. A table of multiple accounts should be presesnt (typically three). Expand the `Emory Account 70` option.
+  a. After logging in, the page should be the `AWS access portal`. A table of multiple accounts should be present (typically three). Expand the `Emory Account 70` option.
   b. Clicking on `Access keys` will open a modal with multiple credential options. Option 1 (`Set AWS environment variables`) is necessary for successful deployment.
   c. Copy the variables in Option 1, paste them into the terminal window that the deployment script will be processed, and press enter.
 5. To deploy, run `BRANCH={BRANCH_NAME_OR_TAG} bundle exec cap {ENVIRONMENT} deploy`. To deploy main to the arch environment, for instance, you run `BRANCH=main bundle exec cap arch deploy`.
@@ -56,19 +65,6 @@ ARCH_SERVER_IP=
 TEST_SERVER_IP=
 PROD_SERVER_IP=
 ```
-
-# Testing and CI
-
-To run the tests locally, run each of the following commands in a separate tab within the `dlp-curate` directory:
-
-1. Setup local Solr testing instance by running command `solr_wrapper --config config/solr_wrapper_test.yml`
-2. Setup local Fedora testing instance by running command `fcrepo_wrapper --config config/fcrepo_wrapper_test.yml`
-3. Run `rspec` and verify that all tests pass
-
-
-A second option, which has not been working consistently for local testing, is running the test suite with `bin/rails ci`.
-
-For our CI we are using CircleCI that we adopted from hyrax project: [Hyrax CircleCI Config](https://github.com/samvera/hyrax/blob/master/.circleci/config.yml)
 
 # Caching manifests with localhost
 
