@@ -110,7 +110,7 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
       allow(Clamby).to receive(:virus?).and_return(true)
       virus_file_path = "#{::Rails.root}/spec/fixtures/virus_checking/virus_check.txt"
       upload = File.open(virus_file_path) do |virus_file|
-        Hyrax::UploadedFile.create(user: user, preservation_master_file: virus_file)
+        Hyrax::UploadedFile.create(user:, preservation_master_file: virus_file)
       end
       described_class.perform_now(generic_work, [upload])
     end
