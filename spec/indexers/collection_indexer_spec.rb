@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe CurateCollectionIndexer do
-  include ActionDispatch::TestProcess
   let(:solr_document) { indexer.generate_solr_document }
   let(:collection) { Collection.new(attributes) }
   let(:indexer) { described_class.new(collection) }
