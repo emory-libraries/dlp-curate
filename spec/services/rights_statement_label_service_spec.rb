@@ -7,7 +7,7 @@ RSpec.describe RightsStatementLabelService do
 
   describe 'getting the label' do
     it 'provides a string when given a URI' do
-      expect(service.label(uri: uri)).to eq('In Copyright')
+      expect(service.label(uri:)).to eq('In Copyright')
     end
   end
 end

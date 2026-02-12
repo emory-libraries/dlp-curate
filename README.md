@@ -23,7 +23,7 @@ In a production environment, we will use Shibboleth for authentication. However,
 
 ## Local Development Setup
 
-Our new local development environment now utilizes a docker compose container system to run Fedora 4.7.5, Solr 8.11.1, FITS Servlet 1.6.0, and Redis 6.2 servers. However, the following applications must still be installed on the local machine: Mysql2 (or MariaDB), ImageMagick, and LibreOffice (ffmpeg is still optional, but will most likely be incorporated in later versions). Also note that this version of Curate uses Ruby 3.2.9.
+Our new local development environment now utilizes a docker compose container system to run Fedora 4.7.5, Solr 8.11.1, and Redis 6.2 servers. However, the following applications must still be installed on the local machine: Mysql2 (or MariaDB), FITS 1.6.0, ImageMagick, and LibreOffice (ffmpeg is still optional, but will most likely be incorporated in later versions). Also note that this version of Curate uses Ruby 3.2.9.
 
 Do the following within the `dlp-curate` directory:
 
@@ -40,7 +40,9 @@ Do the following within the `dlp-curate` directory:
 8. Setup should be complete, which means that `bundle exec rails s` will launch the server access.
 9. Access the app through `http://localhost:3000/`.
 
-Refer to the Hyrax local development [guide](https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/documentation/developing-your-hyrax-based-app.md) for more information regarding installation of tools like ImageMagick and LibreOffice.
+Refer to the Hyrax local development [guide](https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/documentation/developing-your-hyrax-based-app.md) for more information regarding installation of tools like FITS 1.6.0, ImageMagick and LibreOffice.
+
+NOTE: Please try running FITS on a local file on your machine (e.g. `fits.sh -i "/complete/path/to/file.pdf"`). If you observe the error `ERROR - Jpylyzer:76 - Python and Windows not supported, not running jpylyzer`, refer to [this document](https://github.com/harvard-lts/fits/files/12414194/bb2_4_mac_python_plus_security.docx) for guidance after verifying you have Jpylyzer with `which jpylyzer`.
 
 To run the tests locally, fire off `bundle exec rspec` within the `dlp-curate` directory.
 

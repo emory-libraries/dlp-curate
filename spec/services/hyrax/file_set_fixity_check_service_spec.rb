@@ -39,7 +39,7 @@ RSpec.describe Hyrax::FileSetFixityCheckService, :clean do
       context "existing check and disabled max_days_between_fixity_checks" do
         let(:service_by_object) { described_class.new(f, async_jobs: false, max_days_between_fixity_checks: -1, initiating_user: user.uid) }
         let(:service_by_id)     { described_class.new(f.id, async_jobs: false, max_days_between_fixity_checks: -1, initiating_user: user.uid) }
-        let!(:existing_record) do
+        let(:existing_record) do
           ChecksumAuditLog.create!(passed: true, file_set_id: f.id, checked_uri: f.original_file.versions.first.label, file_id: f.original_file.id)
         end
 
@@ -47,7 +47,7 @@ RSpec.describe Hyrax::FileSetFixityCheckService, :clean do
           existing_record
           expect(check.length).to eq 1
           expect(check.values.flatten.first.id).not_to eq(existing_record.id)
-          expect(check.values.flatten.first.created_at).to be > existing_record.created_at
+          expect(check.values.flatten.first.checked_uri).not_to eq(existing_record.checked_uri)
         end
       end
     end
