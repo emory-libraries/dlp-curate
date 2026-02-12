@@ -19,7 +19,7 @@ RSpec.describe AssociateFilesetsWithWorkJob, :clean, perform_enqueued: [Associat
       parsed_metadata:     { 'parent' => [parent] }
     )
   end
-  let(:file_set) { FactoryBot.create(:file_set, user: user) }
+  let(:file_set) { FactoryBot.create(:file_set, user:) }
   let(:file_set_entries) { described_class.new.send(:pull_file_set_entries, importer) }
   let(:parents) { described_class.new.send(:pull_parents, file_set_entries) }
   let(:fake_factory) { double }

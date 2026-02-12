@@ -7,14 +7,14 @@ RSpec.describe FixityCheckJob, :clean do
   let(:user) { FactoryBot.create(:user) }
 
   let(:file_set) do
-    FactoryBot.create(:file_set, user: user).tap do |file|
+    FactoryBot.create(:file_set, user:).tap do |file|
       Hydra::Works::AddFileToFileSet.call(file, File.open(fixture_path + '/world.png'), :preservation_master_file, versioning: true)
     end
   end
   let(:file_id) { file_set.pulled_preservation_master_file.id }
 
   describe "called with perform_now" do
-    let(:log_record) { described_class.perform_now(uri, file_set_id: file_set.id, file_id: file_id, initiating_user: user.uid) }
+    let(:log_record) { described_class.perform_now(uri, file_set_id: file_set.id, file_id:, initiating_user: user.uid) }
 
     describe 'fixity check the content' do
       let(:uri) { file_set.pulled_preservation_master_file.uri }

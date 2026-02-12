@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+require 'stackprof'
 
 class TransferWorksJob < Hyrax::ApplicationJob
   def perform(import_col_id, true_col_id)
-    StackProf.run(mode: :cpu, out: 'tmp/stackprof-curate.dump', raw: true, ignore_gc: true) do
+    ::StackProf.run(mode: :cpu, out: 'tmp/stackprof-curate.dump', raw: true, ignore_gc: true) do
       import_col = Collection.find(import_col_id)
       true_col = Collection.find(true_col_id)
       import_col.member_works.each do |work|

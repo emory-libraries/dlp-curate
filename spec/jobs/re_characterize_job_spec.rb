@@ -33,7 +33,7 @@ RSpec.describe ReCharacterizeJob, :clean do
 
       expect(ReCharacterizationService).to receive(:empty_out_characterization).with(repository_file)
       expect(CharacterizeJob).to receive(:perform_later).with(file_set, repository_file.id, "", user)
-      described_class.perform_now(file_set: file_set, user: user)
+      described_class.perform_now(file_set:, user:)
     end
   end
 end
