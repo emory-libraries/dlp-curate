@@ -3,10 +3,10 @@
 class UrlValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     if value.class == String
-      record.errors[attribute] << (options[:message] || "is not a valid URL") unless url_valid?(value)
+      record.errors.add attribute, (options[:message] || "is not a valid URL") unless url_valid?(value)
     else
       value.each do |url|
-        record.errors[attribute] << (options[:message] || "is not a valid URL") unless url_valid?(url)
+        record.errors.add attribute, (options[:message] || "is not a valid URL") unless url_valid?(url)
       end
     end
   end
