@@ -9,7 +9,7 @@ services:
       - curate
 
   redis:
-    image: bitnamilegacy/redis:6.2
+    image: redis:alpine
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:
