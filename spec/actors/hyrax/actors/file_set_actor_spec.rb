@@ -8,7 +8,7 @@ RSpec.describe Hyrax::Actors::FileSetActor, :clean do
 
   let(:user)           { FactoryBot.create(:user) }
   let(:file_path)      { File.join(fixture_path, 'balloon.jpeg') }
-  let(:file)           { fixture_file_upload(file_path, 'image/jpeg') } # we will override for the different types of File objects
+  let(:file)           { Rack::Test::UploadedFile.new(file_path, 'image/jpeg') } # we will override for the different types of File objects
   let(:local_file)     { File.open(file_path) }
   let(:file_set)       { FactoryBot.create(:file_set, content: local_file) }
   let(:actor)          { described_class.new(file_set, user) }
@@ -266,14 +266,14 @@ RSpec.describe Hyrax::Actors::FileSetActor, :clean do
   end
 
   describe '#revert_content', perform_enqueued: [IngestJob] do
-    let(:file_set) { FactoryBot.create(:file_set, user: user) }
+    let(:file_set) { FactoryBot.create(:file_set, user:) }
     let(:file1)    { "small_file.txt" }
     let(:version1) { "version1" }
     let(:restored_content) { file_set.reload.original_file }
 
     before do
-      actor.create_content(fixture_file_upload(file1), preferred)
-      actor.create_content(fixture_file_upload('hyrax_generic_stub.txt'), preferred)
+      actor.create_content(Rack::Test::UploadedFile.new(File.join(fixture_path, file1), 'text/plain'), preferred)
+      actor.create_content(Rack::Test::UploadedFile.new(File.join(fixture_path, 'hyrax_generic_stub.txt'), 'text/plain'), preferred)
       actor.file_set.reload
     end
 
