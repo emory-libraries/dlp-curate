@@ -20,7 +20,7 @@ RSpec.describe Hyrax::Actors::CurateGenericWorkActor, :clean do
       stack.build(terminator)
     end
 
-    let(:curation_concern) { FactoryBot.create(:generic_work, user: user) }
+    let(:curation_concern) { FactoryBot.create(:generic_work, user:) }
     let(:attributes) { {} }
     let(:terminator) { Hyrax::Actors::Terminator.new }
 
@@ -43,7 +43,7 @@ RSpec.describe Hyrax::Actors::CurateGenericWorkActor, :clean do
   end
 
   describe '#update' do
-    let(:curation_concern) { FactoryBot.create(:generic_work, user: user) }
+    let(:curation_concern) { FactoryBot.create(:generic_work, user:) }
     let(:work_actor) { Hyrax::CurationConcern.actor }
 
     context 'success' do

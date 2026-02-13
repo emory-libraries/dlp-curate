@@ -3,17 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe Hyrax::Actors::FileActor, :clean do
-  include ActionDispatch::TestProcess
-  # commenting out next line because we are not using mocked file anywhere in this test
-  # include Hyrax::FactoryHelpers
-
   let(:user)     { FactoryBot.create(:user) }
   let(:file_set) { FactoryBot.create(:file_set) }
   let(:relation) { :preservation_master_file }
   let(:actor)    { described_class.new(file_set, relation, user) }
-  let(:fixture)  { fixture_file_upload('/image.png', 'image/png') }
-  let(:huf) { Hyrax::UploadedFile.new(user: user, file_set_uri: file_set.uri, preservation_master_file: fixture) }
-  let(:io) { JobIoWrapper.new(file_set_id: file_set.id, user: user, path: fixture.path, relation: relation, preferred: relation) }
+  let(:file_path) { Rails.root.join('spec', 'fixtures', 'image.png') }
+  let(:fixture) { Rack::Test::UploadedFile.new(file_path, 'image/png') }
+  let(:huf) { Hyrax::UploadedFile.new(user:, file_set_uri: file_set.uri, preservation_master_file: fixture) }
+  let(:io) { JobIoWrapper.new(file_set_id: file_set.id, user:, path: fixture.path, relation:, preferred: relation) }
   let(:pcdmfile) do
     Hydra::PCDM::File.new.tap do |f|
       f.content = File.open(fixture.path).read
@@ -29,7 +26,6 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
         file.apply_depositor_metadata(user.user_key)
       end
     end
-
     before do
       class FileSetWithExtras < FileSet
         directly_contains_one :remastered, through: :files, type: ::RDF::URI('http://pcdm.org/use#IntermediateFile'), class_name: 'Hydra::PCDM::File'
@@ -38,6 +34,7 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
     after do
       Object.send(:remove_const, :FileSetWithExtras)
     end
+
     it 'uses the relation from the actor' do
       expect(CharacterizeJob).not_to receive(:perform_later)
       actor.ingest_file(io)
@@ -62,11 +59,10 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
   context 'with two existing versions from different users' do
     let(:fixture2) { fixture_file_upload('/small_file.txt', 'text/plain') }
     let(:huf2) { Hyrax::UploadedFile.new(user: user2, file_set_uri: file_set.uri, preservation_master_file: fixture2) }
-    let(:io2) { JobIoWrapper.new(file_set_id: file_set.id, user: user2, path: fixture2.path, relation: relation) }
+    let(:io2) { JobIoWrapper.new(file_set_id: file_set.id, user: user2, path: fixture2.path, relation:) }
     let(:user2) { FactoryBot.create(:user) }
     let(:actor2) { described_class.new(file_set, relation, user2) }
     let(:versions) { file_set.reload.original_file.versions }
-
     before do
       allow(Hydra::Works::CharacterizationService).to receive(:run).with(any_args)
       actor.ingest_file(io)
@@ -90,6 +86,7 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
       expect(Hydra::Works::AddFileToFileSet).to receive(:call).with(file_set, io, relation, versioning: false)
       allow(CreateDerivativesJob).to receive(:perform_later).with(file_set, pcdmfile.id, fixture.path)
     end
+
     it 'when the file is available' do
       allow(file_set).to receive(:save).and_return(true)
       allow(file_set).to receive(relation).and_return(pcdmfile)
@@ -97,6 +94,7 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
       expect(CharacterizeJob).to receive(:perform_later).with(file_set, pcdmfile.id, fixture.path)
       actor.ingest_file(io)
     end
+
     it 'returns false when save fails' do
       allow(file_set).to receive(:save).and_return(false)
       expect(actor.ingest_file(io)).to be_falsey
@@ -108,7 +106,8 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
   context 'with two files for a fileset' do
     let(:relation2) { :intermediate_file }
     let(:actor2) { described_class.new(file_set, relation2, user2) }
-    let(:fixture2) { fixture_file_upload('/small_file.txt', 'text/plain') }
+    let(:file_path2) { Rails.root.join('spec', 'fixtures', 'small_file.txt') }
+    let(:fixture2) { Rack::Test::UploadedFile.new(file_path, 'text/plain') }
     let(:io2) { JobIoWrapper.new(file_set_id: file_set.id, user: user2, path: fixture2.path, relation: relation2) }
     let(:user2) { FactoryBot.create(:user) }
     let(:fits_filename) { 'fits_1.4.0_image_png.xml' }
