@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_08_20_121050) do
+ActiveRecord::Schema.define(version: 2026_02_16_142636) do
 
   create_table "bookmarks", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -37,6 +37,12 @@ ActiveRecord::Schema.define(version: 2025_08_20_121050) do
     t.datetime "last_error_at"
     t.datetime "last_succeeded_at"
     t.integer "import_attempts", default: 0
+    t.string "status_message", default: "Pending"
+    t.string "error_class"
+    t.index ["identifier", "importerexporter_id", "importerexporter_type"], name: "bulkrax_identifier_idx"
+    t.index ["importerexporter_id", "importerexporter_type", "id"], name: "index_bulkrax_entries_on_importerexporter_id_type_and_id"
+    t.index ["importerexporter_id", "importerexporter_type"], name: "bulkrax_entries_importerexporter_idx"
+    t.index ["type"], name: "index_bulkrax_entries_on_type"
   end
 
   create_table "bulkrax_exporter_runs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -69,6 +75,8 @@ ActiveRecord::Schema.define(version: 2025_08_20_121050) do
     t.string "workflow_status"
     t.boolean "include_thumbnails", default: false
     t.boolean "generated_metadata", default: false
+    t.string "status_message", default: "Pending"
+    t.string "error_class"
     t.index ["user_id"], name: "index_bulkrax_exporters_on_user_id"
   end
 
@@ -109,6 +117,10 @@ ActiveRecord::Schema.define(version: 2025_08_20_121050) do
     t.boolean "validate_only"
     t.datetime "last_error_at"
     t.datetime "last_succeeded_at"
+    t.string "status_message", default: "Pending"
+    t.datetime "last_imported_at"
+    t.datetime "next_import_at"
+    t.string "error_class"
     t.index ["user_id"], name: "index_bulkrax_importers_on_user_id"
   end
 
@@ -119,7 +131,10 @@ ActiveRecord::Schema.define(version: 2025_08_20_121050) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "order", default: 0
+    t.string "status_message", default: "Pending"
+    t.index ["child_id"], name: "index_bulkrax_pending_relationships_on_child_id"
     t.index ["importer_run_id"], name: "index_bulkrax_pending_relationships_on_importer_run_id"
+    t.index ["parent_id"], name: "index_bulkrax_pending_relationships_on_parent_id"
   end
 
   create_table "bulkrax_statuses", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -133,6 +148,9 @@ ActiveRecord::Schema.define(version: 2025_08_20_121050) do
     t.string "runnable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["error_class"], name: "index_bulkrax_statuses_on_error_class"
+    t.index ["runnable_id", "runnable_type"], name: "bulkrax_statuses_runnable_idx"
+    t.index ["statusable_id", "statusable_type"], name: "bulkrax_statuses_statusable_idx"
   end
 
   create_table "checksum_audit_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -629,6 +647,7 @@ ActiveRecord::Schema.define(version: 2025_08_20_121050) do
     t.string "transcript"
     t.string "fileset_use"
     t.string "collection_banner"
+    t.string "filename"
     t.index ["file_set_uri"], name: "index_uploaded_files_on_file_set_uri"
     t.index ["user_id"], name: "index_uploaded_files_on_user_id"
   end
