@@ -101,4 +101,5 @@ public/branding
 # fits artifacts
 fits.log
 
+config/emory/index_file_set_results.csv
 imports
