@@ -45,21 +45,27 @@ RSpec.describe LangmuirPreprocessor do
   end
 
   it 'sets the row type' do
-    expect(import_rows[0]['type']).to eq('work') # City gates, St. Augustine, Florida
+    expect(import_rows[0]['type']).to be_nil # City gates, St. Augustine, Florida
+    expect(import_rows[0]['model']).to eq('CurateGenericWork')
   end
 
   it 'creates a fileset row for each side/part' do
-    expect(import_rows[13]['type']).to eq('fileset') # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[13]['type']).to be_nil # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[13]['model']).to eq('FileSet')
   end
 
   it 'uses Front/Back as fileset labels for two sided works' do
-    expect(import_rows[1]['fileset_label']).to eq('Front') # City gates, St. Augustine, Florida
-    expect(import_rows[2]['fileset_label']).to eq('Back') # City gates, St. Augustine, Florida
+    expect(import_rows[1]['fileset_label']).to be_nil # City gates, St. Augustine, Florida
+    expect(import_rows[1]['title']).to eq('Front')
+    expect(import_rows[2]['fileset_label']).to be_nil # City gates, St. Augustine, Florida
+    expect(import_rows[2]['title']).to eq('Back')
   end
 
   it 'uses Side # as fileset labels for multi-sided works' do
-    expect(import_rows[13]['fileset_label']).to eq('Image 1') # Advertising : Rafael's, gay 'n frisky
-    expect(import_rows[16]['fileset_label']).to eq('Image 4') # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[13]['fileset_label']).to be_nil # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[13]['title']).to eq('Image 1')
+    expect(import_rows[16]['fileset_label']).to be_nil # Advertising : Rafael's, gay 'n frisky
+    expect(import_rows[16]['title']).to eq('Image 4')
   end
 
   it 'has the expected row length', :aggregate_failures do
@@ -81,9 +87,11 @@ RSpec.describe LangmuirPreprocessor do
   end
 
   it 'attaches the expected files to the expected filesets in the expected order', :aggregate_failures do # Advertising : Rafael's, gay 'n frisky
-    expect(import_rows[14]['fileset_label']).to eq('Image 2') # P0002
+    expect(import_rows[14]['fileset_label']).to be_nil # P0002
+    expect(import_rows[14]['title']).to eq('Image 2')
     expect(import_rows[14]['preservation_master_file']).to match('MSS1218_B028_I091_P0002_ARCH.tif') # ARCH
-    expect(import_rows[15]['fileset_label']).to eq('Image 3') # P0003
+    expect(import_rows[15]['fileset_label']).to be_nil # P0003
+    expect(import_rows[15]['title']).to eq('Image 3')
     expect(import_rows[15]['intermediate_file']).to match('MSS1218_B028_I091_P0003_PROD.tif') # PROD
   end
 

@@ -78,7 +78,7 @@ group :development, :test do
   gem 'rspec-its'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
-  gem 'sqlite3', '~> 1.3.7'
+  gem 'sqlite3', '~> 1.6'
   gem 'webdrivers'
   gem 'webmock'
   gem 'yard'
