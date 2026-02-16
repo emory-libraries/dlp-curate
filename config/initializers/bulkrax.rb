@@ -162,57 +162,67 @@ Bulkrax::DatatablesBehavior.module_eval do
   def format_importers(importers)
     result = importers.map do |i|
       {
-        name: view_context.link_to(i.name, view_context.importer_path(i)),
-        status_message: status_message_for(i),
-        last_imported_at: i.last_imported_at&.strftime("%F %T"),
-        next_import_at: i.next_import_at&.strftime("%F %T"),
-        enqueued_records: i.last_run&.enqueued_records,
-        processed_records: i.last_run&.processed_records || 0,
-        failed_records: i.last_run&.failed_records || 0,
-        deleted_records: i.last_run&.deleted_records,
-        total_collection_entries: i.last_run&.total_collection_entries,
-        total_work_entries: i.last_run&.total_work_entries,
-        total_file_set_entries: i.last_run&.total_file_set_entries,
-        actions: importer_util_links(i)
+        data: result,
+        recordsTotal: item.entries.size,
+        recordsFiltered: item.entries.size
       }
     end
-    {
-      data: result,
-      recordsTotal: Bulkrax::Importer.count,
-      recordsFiltered: Bulkrax::Importer.count
-    }
-  end
 
-  def format_entries(entries, item)
-    result = entries.map do |e|
+    def format_importers(importers)
+      result = importers.map do |i|
+        {
+          name: view_context.link_to(i.name, view_context.importer_path(i)),
+          status_message: status_message_for(i),
+          last_imported_at: i.last_imported_at&.strftime("%F %T"),
+          next_import_at: i.next_import_at&.strftime("%F %T"),
+          enqueued_records: i.last_run&.enqueued_records,
+          processed_records: i.last_run&.processed_records || 0,
+          failed_records: i.last_run&.failed_records || 0,
+          deleted_records: i.last_run&.deleted_records,
+          total_collection_entries: i.last_run&.total_collection_entries,
+          total_work_entries: i.last_run&.total_work_entries,
+          total_file_set_entries: i.last_run&.total_file_set_entries,
+          actions: importer_util_links(i)
+        }
+      end
       {
-        identifier: view_context.link_to(e.identifier, view_context.item_entry_path(item, e)),
-        title: e&.parsed_metadata&.[]('title')&.first,
-        id: e.id,
-        status_message: status_message_for(e),
-        type: e.type,
-        updated_at: e.updated_at,
-        errors: e.status_message == 'Failed' ? view_context.link_to(e.error_class, view_context.item_entry_path(item, e)) : "",
-        curate_id: curate_id_text(e),
-        actions: entry_util_links(e, item)
+        data: result,
+        recordsTotal: Bulkrax::Importer.count,
+        recordsFiltered: Bulkrax::Importer.count
       }
     end
-    {
-      data: result,
-      recordsTotal: item.entries.size,
-      recordsFiltered: item.entries.size
-    }
-  end
 
-  def curate_id_text(entry)
-    file_set_obj = entry&.factory&.find
-    text_array = []
-
-    if file_set_obj.present?
-      text_array << view_context.raw("<span>#{file_set_obj.id}</span>&nbsp;<span>")
-      text_array << view_context.link_to(view_context.raw('<span class="fa fa-solid fa-link"></span>'), main_app.polymorphic_path(file_set_obj))
-      text_array << view_context.raw("</span>")
+    def format_entries(entries, item)
+      result = entries.map do |e|
+        {
+          identifier: view_context.link_to(e.identifier, view_context.item_entry_path(item, e)),
+          title: e&.parsed_metadata&.[]('title')&.first,
+          id: e.id,
+          status_message: status_message_for(e),
+          type: e.type,
+          updated_at: e.updated_at,
+          errors: e.status_message == 'Failed' ? view_context.link_to(e.error_class, view_context.item_entry_path(item, e)) : "",
+          curate_id: curate_id_text(e),
+          actions: entry_util_links(e, item)
+        }
+      end
+      {
+        data: result,
+        recordsTotal: item.entries.size,
+        recordsFiltered: item.entries.size
+      }
     end
-    text_array.join(" ")
+
+    def curate_id_text(entry)
+      file_set_obj = entry&.factory&.find
+      text_array = []
+
+      if file_set_obj.present?
+        text_array << view_context.raw("<span>#{file_set_obj.id}</span>&nbsp;<span>")
+        text_array << view_context.link_to(view_context.raw('<span class="fa fa-solid fa-link"></span>'), main_app.polymorphic_path(file_set_obj))
+        text_array << view_context.raw("</span>")
+      end
+      text_array.join(" ")
+    end
   end
 end
