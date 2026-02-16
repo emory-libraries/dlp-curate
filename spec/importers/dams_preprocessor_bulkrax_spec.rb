@@ -5,7 +5,7 @@ RSpec.describe DamsPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results
     dams_sample = File.join(fixture_path, 'csv_import', 'dams', 'dams-unprocessed.csv')
-    preprocessor = described_class.new(dams_sample, 'bulkrax')
+    preprocessor = described_class.new(dams_sample)
     preprocessor.merge
   end
 

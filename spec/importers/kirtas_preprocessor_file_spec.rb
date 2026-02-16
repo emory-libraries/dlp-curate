@@ -46,28 +46,36 @@ RSpec.describe YellowbackPreprocessor do
 
   it 'adds filesets for PDFs', :aggregate_failures do
     shakespeare_pdf = import_rows[shakespeare_start + pdf_offset] # Shakespeare's comedy of The merchant of Venice
-    expect(shakespeare_pdf['type']).to eq('fileset')
-    expect(shakespeare_pdf['fileset_label']).to eq('PDF for volume')
+    expect(shakespeare_pdf['type']).to be_nil
+    expect(shakespeare_pdf['model']).to eq('FileSet')
+    expect(shakespeare_pdf['fileset_label']).to be_nil
+    expect(shakespeare_pdf['title']).to eq('PDF for volume')
     expect(shakespeare_pdf['preservation_master_file']).to eq('/Yellowbacks/lsdi2/ocm04416480-2987/ocm04416480/Images/Output/Output.pdf')
   end
 
   it 'adds filesets for volume-level OCR', :aggregate_failures do
     shakespeare_pdf = import_rows[shakespeare_start + ocr_offset] # Shakespeare's comedy of The merchant of Venice
-    expect(shakespeare_pdf['type']).to eq('fileset')
-    expect(shakespeare_pdf['fileset_label']).to eq('OCR Output for Volume')
+    expect(shakespeare_pdf['type']).to be_nil
+    expect(shakespeare_pdf['model']).to eq('FileSet')
+    expect(shakespeare_pdf['fileset_label']).to be_nil
+    expect(shakespeare_pdf['title']).to eq('OCR Output for Volume')
     expect(shakespeare_pdf['preservation_master_file']).to eq('/Yellowbacks/lsdi2/ocm04416480-2987/ocm04416480/Images/Output/Output.xml')
   end
 
   it 'adds page-level filesets', :aggregate_failures do
     first_page = import_rows[shakespeare_start + pages_offset + 1] # Shakespeare's comedy of The merchant of Venice
-    expect(first_page['type']).to eq('fileset')
-    expect(first_page['fileset_label']).to eq('Page 1')
+    expect(first_page['type']).to be_nil
+    expect(first_page['model']).to eq('FileSet')
+    expect(first_page['fileset_label']).to be_nil
+    expect(first_page['title']).to eq('Page 1')
     expect(first_page['preservation_master_file']).to eq('/Yellowbacks/lsdi2/ocm04416480-2987/ocm04416480/Images/Output/0001.tif')
     expect(first_page['extracted']).to be_nil
     expect(first_page['transcript_file']).to eq('/Yellowbacks/lsdi2/ocm04416480-2987/ocm04416480/Images/Output/0001.txt')
     last_page = import_rows[shakespeare_start + pages_offset + 198]
-    expect(last_page['type']).to eq('fileset')
-    expect(last_page['fileset_label']).to eq('Page 198')
+    expect(last_page['type']).to be_nil
+    expect(last_page['model']).to eq('FileSet')
+    expect(last_page['fileset_label']).to be_nil
+    expect(last_page['title']).to eq('Page 198')
     expect(last_page['preservation_master_file']).to eq('/Yellowbacks/lsdi2/ocm04416480-2987/ocm04416480/Images/Output/0198.tif')
     expect(last_page['extracted']).to be_nil
     expect(last_page['transcript_file']).to eq('/Yellowbacks/lsdi2/ocm04416480-2987/ocm04416480/Images/Output/0198.txt')
