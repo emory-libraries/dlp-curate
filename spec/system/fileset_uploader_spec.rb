@@ -17,11 +17,12 @@ RSpec.describe 'Fileset upload', integration: true, admin_set: true, clean: true
 
     before do
       login_as user
-      visit("/concern/curate_generic_works/new#files")
+      visit "/concern/curate_generic_works/new"
+      click_link 'Files'
     end
 
     scenario 'without Preservation Master File' do
-      click_on 'Upload Fileset'
+      click_button 'Upload Fileset'
 
       expect(find('#message0').text).to eq 'Preservation Master File cannot be empty'
       expect(page).to have_css('li#required-files.incomplete')
