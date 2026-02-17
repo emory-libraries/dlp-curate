@@ -2,7 +2,7 @@
 require 'rails_helper'
 include Warden::Test::Helpers
 
-RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, type: :system do
+RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, admin_set: true, type: :system do
   context 'field mappings' do
     let(:pulled_field_mappings) { Bulkrax.field_mappings['Bulkrax::CsvParser'] }
     let(:all_mapped_fields) do
@@ -67,7 +67,8 @@ RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, type: :system do
 
   context 'logged in admin user' do
     let(:admin) { FactoryBot.create(:admin) }
-    let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', 'Bulkrax_Test_CSV.csv') }
+    let(:filename) { 'Bulkrax_Test_CSV.csv' }
+    let(:csv_file) { File.join(fixture_path, 'csv_import', 'good', filename) }
 
     before { login_as admin }
 
@@ -91,9 +92,13 @@ RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, type: :system do
       end
 
       it 'accepts a CSV to upload' do
+        fill_in 'Name required', with: 'Test'
+        select('Default Admin Set', from: 'Administrative Set required')
         page.choose('Upload a File')
         attach_file('importer[parser_fields][file]', csv_file, make_visible: true)
-        click_on('Create and Validate')
+        click_on('Create and Import')
+
+        expect(Bulkrax::Importer.last.parser_fields['import_file_path']).to include filename
       end
     end
   end
