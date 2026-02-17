@@ -173,8 +173,8 @@ Bulkrax::DatatablesBehavior.module_eval do
         {
           name: view_context.link_to(i.name, view_context.importer_path(i)),
           status_message: status_message_for(i),
-          last_imported_at: i.last_imported_at&.strftime("%F %T"),
-          next_import_at: i.next_import_at&.strftime("%F %T"),
+          last_imported_at: i.last_imported_at&.strftime("%F %T"), #only altered time format
+          next_import_at: i.next_import_at&.strftime("%F %T"), #only altered time format
           enqueued_records: i.last_run&.enqueued_records,
           processed_records: i.last_run&.processed_records || 0,
           failed_records: i.last_run&.failed_records || 0,
@@ -196,13 +196,13 @@ Bulkrax::DatatablesBehavior.module_eval do
       result = entries.map do |e|
         {
           identifier: view_context.link_to(e.identifier, view_context.item_entry_path(item, e)),
-          title: e&.parsed_metadata&.[]('title')&.first,
+          title: e&.parsed_metadata&.[]('title'),
           id: e.id,
           status_message: status_message_for(e),
           type: e.type,
           updated_at: e.updated_at,
           errors: e.status_message == 'Failed' ? view_context.link_to(e.error_class, view_context.item_entry_path(item, e)) : "",
-          curate_id: curate_id_text(e),
+          curate_obj: curate_obj_text(e),
           actions: entry_util_links(e, item)
         }
       end
@@ -213,15 +213,16 @@ Bulkrax::DatatablesBehavior.module_eval do
       }
     end
 
-    def curate_id_text(entry)
-      file_set_obj = entry&.factory&.find
+    def curate_obj_text(entry)
+      obj = entry.importerexporter_type == "Bulkrax::Exporter" ? entry&.hyrax_record : entry&.factory&.find
       text_array = []
+      link =  if defined?(Hyrax) && entry.factory_class.model_name.human == 'Collection'
+                hyrax.polymorphic_path(obj)
+              else
+                main_app.polymorphic_path(obj)
+              end
 
-      if file_set_obj.present?
-        text_array << view_context.raw("<span>#{file_set_obj.id}</span>&nbsp;<span>")
-        text_array << view_context.link_to(view_context.raw('<span class="fa fa-solid fa-link"></span>'), main_app.polymorphic_path(file_set_obj))
-        text_array << view_context.raw("</span>")
-      end
+      text_array << view_context.link_to(view_context.raw('<span class="fa fa-solid fa-link"></span>'), link) if obj.present?
       text_array.join(" ")
     end
   end
