@@ -67,6 +67,7 @@ RSpec.describe 'Bulkrax CSV exporter', clean: true, js: true, type: :system do
       end
 
       context 'creating a new export' do
+        let(:exporter_id) { Bulkrax::Exporter.last.id }
         before do
           fill_in 'Name required', with: 'ID Test'
           select 'Metadata Only', from: 'exporter_export_type'
@@ -77,14 +78,14 @@ RSpec.describe 'Bulkrax CSV exporter', clean: true, js: true, type: :system do
         end
 
         it 'redirects to index with a Test link present' do
-          expect(page).to have_link('ID Test', href: '/exporters/1?locale=en')
+          expect(page).to have_link('ID Test', href: "/exporters/#{exporter_id}?locale=en")
         end
 
         context 'on exporter show page' do
           it 'has Title as a column on all entry lists' do
             click_link 'ID Test'
 
-            expect(page).to have_selector('th', text: 'Title', count: 3, visible: false)
+            expect(page).to have_selector('th', text: 'Title', count: 1)
           end
         end
       end

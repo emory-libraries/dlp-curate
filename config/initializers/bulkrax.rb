@@ -151,17 +151,17 @@ Bulkrax.setup do |config|
   # config.qa_controlled_properties += ['my_field']
 end
 
-# Sidebar for hyrax 3+ support
-if Object.const_defined?(:Hyrax) && ::Hyrax::DashboardController&.respond_to?(:sidebar_partials)
-  Hyrax::DashboardController.sidebar_partials[:repository_content] << "hyrax/dashboard/sidebar/bulkrax_sidebar_additions"
-end
+Rails.application.reloader.to_prepare do
+  # Sidebar for hyrax 3+ support
+  if Object.const_defined?(:Hyrax) && ::Hyrax::DashboardController&.respond_to?(:sidebar_partials)
+    Hyrax::DashboardController.sidebar_partials[:repository_content] << "hyrax/dashboard/sidebar/bulkrax_sidebar_additions"
+  end
 
-# Below are all of the Bulkrax v8.2.3 overrides.
-require_relative '../../lib/bulkrax/override_assistive_methods'
+  # Below are all of the Bulkrax v8.2.3 overrides.
+  require_relative '../../lib/bulkrax/override_assistive_methods'
 
-# rubocop:disable Metrics/BlockLength
-# rubocop:disable Lint/UselessAssignment
-Rails.application.config.to_prepare do
+  # rubocop:disable Metrics/BlockLength
+  # rubocop:disable Lint/UselessAssignment
   Bulkrax::ObjectFactory.class_eval do
     include OverrideAssistiveMethods
     attr_reader(:attributes, :object, :source_identifier_value, :klass, :replace_files, :update_files,
@@ -239,23 +239,6 @@ Rails.application.config.to_prepare do
 
   Bulkrax::CsvEntry.class_eval do
     include OverrideAssistiveMethods
-
-    def factory
-      of = Bulkrax.object_factory || Bulkrax::ObjectFactory
-      @factory ||= of.new(
-        attributes:                     parsed_metadata,
-        source_identifier_value:        identifier,
-        work_identifier:                parser.work_identifier,
-        work_identifier_search_field:   parser.work_identifier_search_field,
-        related_parents_parsed_mapping: parser.related_parents_parsed_mapping,
-        replace_files:                  replace_files,
-        user:                           user,
-        klass:                          factory_class,
-        importer_run_id:                importerexporter.last_run.id,
-        update_files:                   update_files,
-        parser:                         parser # Emory addition
-      )
-    end
 
     def build_export_metadata
       self.parsed_metadata = {}
@@ -357,9 +340,7 @@ Rails.application.config.to_prepare do
   end
 
   Bulkrax::ParserExportRecordSet.module_eval do
-    class Worktype < Bulkrax::ParserExportRecordSet::Base
-      private
-
+    class ObjectId < Bulkrax::ParserExportRecordSet::Base
       def current_record_objects
         @current_record_objects ||=
           begin
@@ -439,6 +420,25 @@ Rails.application.config.to_prepare do
     end
   end
 
+  Bulkrax::ImportBehavior.module_eval do
+    def factory
+      of = Bulkrax.object_factory || Bulkrax::ObjectFactory
+      @factory ||= of.new(
+        attributes:                     parsed_metadata,
+        source_identifier_value:        identifier,
+        work_identifier:                parser.work_identifier,
+        work_identifier_search_field:   parser.work_identifier_search_field,
+        related_parents_parsed_mapping: parser.related_parents_parsed_mapping,
+        replace_files:                  replace_files,
+        user:                           user,
+        klass:                          factory_class,
+        importer_run_id:                importerexporter.last_run.id,
+        update_files:                   update_files,
+        parser:                         parser # Emory addition
+      )
+    end
+  end
+
   Bulkrax::ExportBehavior.module_eval do
     def filename(file_set)
       uploader_types = ['service_file', 'preservation_master_file', 'intermediate_file',
@@ -492,33 +492,13 @@ Rails.application.config.to_prepare do
   end
 
   Bulkrax::DatatablesBehavior.module_eval do
-    def format_entries(entries, item)
-      byebug
-      result = entries.map do |e|
-        {
-          identifier: view_context.link_to(e.identifier, view_context.item_entry_path(item, e)),
-          id: e.id,
-          status_message: status_message_for(e),
-          type: e.type,
-          updated_at: e.updated_at,
-          errors: e.status_message == 'Failed' ? view_context.link_to(e.error_class, view_context.item_entry_path(item, e)) : "",
-          actions: entry_util_links(e, item)
-        }
-      end
-      {
-        data: result,
-        recordsTotal: item.entries.size,
-        recordsFiltered: item.entries.size
-      }
-    end
-
     def format_importers(importers)
       result = importers.map do |i|
         {
           name: view_context.link_to(i.name, view_context.importer_path(i)),
           status_message: status_message_for(i),
-          last_imported_at: i.last_imported_at&.strftime("%F %T"),
-          next_import_at: i.next_import_at&.strftime("%F %T"),
+          last_imported_at: i.last_imported_at&.strftime("%F %T"), #only altered time format
+          next_import_at: i.next_import_at&.strftime("%F %T"), #only altered time format
           enqueued_records: i.last_run&.enqueued_records,
           processed_records: i.last_run&.processed_records || 0,
           failed_records: i.last_run&.failed_records || 0,
@@ -540,13 +520,13 @@ Rails.application.config.to_prepare do
       result = entries.map do |e|
         {
           identifier: view_context.link_to(e.identifier, view_context.item_entry_path(item, e)),
-          title: e&.parsed_metadata&.[]('title')&.first,
+          title: e&.parsed_metadata&.[]('title'),
           id: e.id,
           status_message: status_message_for(e),
           type: e.type,
           updated_at: e.updated_at,
           errors: e.status_message == 'Failed' ? view_context.link_to(e.error_class, view_context.item_entry_path(item, e)) : "",
-          curate_id: curate_id_text(e),
+          curate_obj: curate_obj_text(e),
           actions: entry_util_links(e, item)
         }
       end
@@ -557,15 +537,16 @@ Rails.application.config.to_prepare do
       }
     end
 
-    def curate_id_text(entry)
-      file_set_obj = entry&.factory&.find
+    def curate_obj_text(entry)
+      obj = entry.importerexporter_type == "Bulkrax::Exporter" ? entry&.hyrax_record : entry&.factory&.find
       text_array = []
+      link =  if defined?(Hyrax) && entry.factory_class.model_name.human == 'Collection'
+                hyrax.polymorphic_path(obj)
+              else
+                main_app.polymorphic_path(obj)
+              end
 
-      if file_set_obj.present?
-        text_array << view_context.raw("<span>#{file_set_obj.id}</span>&nbsp;<span>")
-        text_array << view_context.link_to(view_context.raw('<span class="fa fa-solid fa-link"></span>'), main_app.polymorphic_path(file_set_obj))
-        text_array << view_context.raw("</span>")
-      end
+      text_array << view_context.link_to(view_context.raw('<span class="fa fa-solid fa-link"></span>'), link) if obj.present?
       text_array.join(" ")
     end
   end
