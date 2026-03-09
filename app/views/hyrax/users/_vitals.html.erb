@@ -1,6 +1,7 @@
 <%# [Hyrax-override-hyrax-v5.2.0] Lines 12 and 18 had to be altered from standard Hyrax because of two issues:
     1. the original logic was interpolating the user's email, not the uid that resides in the depositor field, and
-    2. the format of the faceting/querying was not producing any results. %>
+    2. the format of the faceting/querying was not producing any results (NOTE: This has been resolved, which is why
+         we're using their helpers). %>
 
 <div class="list-group-item">
   <span class="fa fa-clock-o" aria-hidden="true"></span> <%= t("hyrax.dashboard.stats.joined_on") %> <%= user.created_at.to_date.strftime("%b %d, %Y") %>
@@ -9,13 +10,13 @@
 <div class="list-group-item">
   <span class="badge dark-text"><%= number_of_collections(user) %></span>
   <span class="fa fa-folder-open" aria-hidden="true"></span>
-  <%= link_to t("hyrax.dashboard.stats.collections"), "/catalog/?f%5Bhas_model_ssim%5D%5B%5D=Collection&f%5Bdepositor_tesim%5D%5B%5D=#{user.uid}" %>
+  <%= link_to_field('', '', t("hyrax.dashboard.stats.collections"), {generic_type: "Collection", depositor: user.uid}) %>
 </div>
 
 <div class="list-group-item">
   <span class="badge dark-text"><%= number_of_works(user) %></span>
   <span class="fa fa-upload" aria-hidden="true"></span>
-  <%= link_to t("hyrax.dashboard.stats.works"), "/catalog/?f%5Bhas_model_ssim%5D%5B%5D=CurateGenericWork&f%5Bdepositor_tesim%5D%5B%5D=#{user.uid}" %>
+  <%= link_to_works(user.uid) %>
 
   <ul class="views-downloads-dashboard list-unstyled">
     <li><span class="badge badge-optional dark-text"><%= user.total_work_views %></span> <%= t("hyrax.dashboard.stats.work_views").pluralize(user.total_work_views) %></li>
