@@ -15,6 +15,7 @@
 //
 // Required by Blacklight
 //= require jquery3
+//= require jquery-validation/dist/jquery.validate
 //= require rails-ujs
 //= require popper
 //= require twitter/typeahead
@@ -34,3 +35,4 @@
 //= require almond
 //= require bulkrax/application
 //= require newspaper_works/ocr_search
+//= require validation/index
