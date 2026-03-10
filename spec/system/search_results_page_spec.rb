@@ -36,19 +36,21 @@ RSpec.describe 'viewing the search results page', type: :system, clean: true do
       'checking for right labels'
   end
 
-  context 'facet_selects' do
-    it 'has the right count of facet_selects' do
-      expect(page).to have_selector('a.facet_select', count: 12)
+  context 'facet buttons' do
+    it 'has the right count' do
+      within('div#facet-panel-collapse') do
+        expect(page).to have_selector('div.facet-limit h3.facet-field-heading button', count: 12)
+      end
     end
   end
 
   context 'result list item' do
     it 'has the right metadata labels' do
-      expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Library:')
-      expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Collection:')
-      expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Visibility:')
-      expect(page).to have_css('.metadata .dl-horizontal dt', text: 'Deduplication Key:')
-      expect(page).to have_css('.metadata .dl-horizontal dt', text: 'ID:')
+      expect(page).to have_css('.metadata dl dt', text: 'Library:')
+      expect(page).to have_css('.metadata dl dt', text: 'Collection:')
+      expect(page).to have_css('.metadata dl dt', text: 'Visibility:')
+      expect(page).to have_css('.metadata dl dt', text: 'Deduplication Key:')
+      expect(page).to have_css('.metadata dl dt', text: 'ID:')
     end
   end
 
