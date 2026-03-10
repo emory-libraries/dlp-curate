@@ -75,6 +75,7 @@ RSpec.describe 'Bulkrax CSV exporter', clean: true, js: true, type: :system do
           fill_in 'Object IDs', with: "#{collection.id}|#{work.id}"
           select 'CSV - Comma Separated Values', from: 'exporter_parser_klass'
           find("input[value='Create and Export']").click
+          sleep 5
         end
 
         it 'redirects to index with a Test link present' do
