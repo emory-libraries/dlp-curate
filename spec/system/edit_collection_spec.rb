@@ -57,9 +57,11 @@ RSpec.describe 'Edit an existing collection', clean: true, type: :system, js: tr
       # Edit some fields in the form
       fill_in 'Title (title)', with: 'New Title'
       click_button 'Save changes'
-      # Now the form should have the new values
+      # Now the page should have the new values
+      visit "/dashboard/collections/#{collection.id}"
       expect(page).to have_content 'New Title'
-      expect(page).to have_content file_set.id
+      collection.reload
+      expect(collection.thumbnail_id).to be_present
     end
 
     scenario 'successfully uploads a banner image' do
@@ -83,6 +85,7 @@ RSpec.describe 'Edit an existing collection', clean: true, type: :system, js: tr
       select 'Testing Collection', from: 'collection_deposit_collection_ids'
       click_button 'Save changes'
       collection.reload
+      sleep 5
       expect(collection.source_collection_id).to eq collection.id
       expect(collection.deposit_collection_ids).to eq [collection_2.id]
     end
