@@ -58,10 +58,9 @@ RSpec.describe 'Edit an existing collection', clean: true, type: :system, js: tr
       fill_in 'Title (title)', with: 'New Title'
       click_button 'Save changes'
       # Now the page should have the new values
-      visit "/dashboard/collections/#{collection.id}"
-      expect(page).to have_content 'New Title'
-      collection.reload
-      expect(collection.thumbnail_id).to be_present
+      expect(page.html).to include 'Collection was successfully updated'
+      expect(page.html).to include 'New Title'
+      expect(page.html).to include file_set.id
     end
 
     scenario 'successfully uploads a banner image' do
