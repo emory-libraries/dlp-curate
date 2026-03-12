@@ -130,7 +130,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
 
     describe "#collections" do
       it 'returns empty array if gid is nil' do
-        FactoryBot.create(:collection_lw, collection_type_gid: collection_type.gid.to_s)
+        FactoryBot.create(:collection_lw, collection_type_gid: collection_type.to_global_id)
         expect(Collection.count).not_to be_zero
         expect(FactoryBot.build(:collection_type).collections).to eq []
       end
