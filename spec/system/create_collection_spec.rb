@@ -29,7 +29,7 @@ RSpec.describe 'Creating a collection', :perform_jobs, clean: true, admin_set: t
       click_link('Additional fields')
       fill_in 'Finding Aid Link (finding_aid_link)', with: 'https://example.org/collection'
       click_button 'Save'
-      expect(page.html).to include 'Collection was successfully created'
+      expect(page.text).to include 'Collection was successfully created'
     end
 
     it "has expected input fields" do
