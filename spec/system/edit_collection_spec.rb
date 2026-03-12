@@ -57,6 +57,7 @@ RSpec.describe 'Edit an existing collection', clean: true, type: :system, js: tr
       # Edit some fields in the form
       fill_in 'Title (title)', with: 'New Title'
       click_button 'Save changes'
+      sleep 3
       # Now the page should have the new values
       expect(page.html).to include 'Collection was successfully updated'
       expect(page.html).to include 'New Title'
@@ -83,10 +84,10 @@ RSpec.describe 'Edit an existing collection', clean: true, type: :system, js: tr
       select 'Robert Langmuir African American Photograph Collection', from: 'collection_source_collection_id'
       select 'Testing Collection', from: 'collection_deposit_collection_ids'
       click_button 'Save changes'
-      collection.reload
-      sleep 5
-      expect(collection.source_collection_id).to eq collection.id
-      expect(collection.deposit_collection_ids).to eq [collection_2.id]
+      reloaded_collection = Collection.find(collection.id)
+
+      expect(reloaded_collection.source_collection_id).to eq reloaded_collection.id
+      expect(reloaded_collection.deposit_collection_ids).to eq [collection_2.id]
     end
   end
 end
