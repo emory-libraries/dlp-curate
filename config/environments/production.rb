@@ -27,7 +27,7 @@ Rails.application.configure do
   # Compress JavaScripts and CSS.
   config.assets.configure do |env|
     env.js_compressor = :uglifier
-    env.css_compressor = nil
+    env.css_compressor = :sass
   end
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.

@@ -151,7 +151,7 @@ Bulkrax.setup do |config|
   # config.qa_controlled_properties += ['my_field']
 end
 
-Rails.application.reloader.to_prepare do
+Rails.application.config.to_prepare do
   # Sidebar for hyrax 3+ support
   if Object.const_defined?(:Hyrax) && ::Hyrax::DashboardController&.respond_to?(:sidebar_partials)
     Hyrax::DashboardController.sidebar_partials[:repository_content] << "hyrax/dashboard/sidebar/bulkrax_sidebar_additions"

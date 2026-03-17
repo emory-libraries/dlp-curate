@@ -3,7 +3,7 @@
 # [Hydra-Works-override-v2.3.0] CharacterizationService in Hydra::Works
 # Adds 'append_original_checksum' method for adding three types of checksums
 # to the hashValue predicate
-Rails.application.reloader.to_prepare do
+Rails.application.config.to_prepare do
   Hydra::Works::CharacterizationService.class_eval do
     include PreservationEvents
 
