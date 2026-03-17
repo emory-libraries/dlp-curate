@@ -12,6 +12,8 @@ ENV['IMPORT_PATH'] ||= Rails.root.join('spec', 'fixtures', 'fake_images').to_s
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 require 'noid/rails/rspec'
+require 'valkyrie'
+Valkyrie::MetadataAdapter.register(Valkyrie::Persistence::Memory::MetadataAdapter.new, :test_adapter)
 # Add additional requires below this line. Rails is not loaded until this point!
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
