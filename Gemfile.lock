@@ -275,6 +275,12 @@ GEM
       rexml
     crass (1.0.6)
     csv (3.3.5)
+    dartsass-sprockets (3.2.1)
+      railties (>= 4.0.0)
+      sassc-embedded (~> 1.80.1)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     date (3.5.0)
     declarative (0.0.20)
     denormalize_fields (1.3.0)
@@ -1069,10 +1075,16 @@ GEM
       logger
     ruby2_keywords (0.0.5)
     rubyzip (2.4.1)
+    sass-embedded (1.98.0-arm64-darwin)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.98.0-x86_64-linux-gnu)
+      google-protobuf (~> 4.31)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
       ffi (~> 1.9)
+    sassc-embedded (1.80.8)
+      sass-embedded (~> 1.80)
     sassc-rails (2.1.2)
       railties (>= 4.0.0)
       sassc (>= 2.0)
@@ -1275,6 +1287,7 @@ DEPENDENCIES
   clamby (~> 1.6)
   coffee-rails (~> 4.2)
   coveralls
+  dartsass-sprockets
   devise
   devise-guests (~> 0.8)
   dotenv-rails
@@ -1303,7 +1316,6 @@ DEPENDENCIES
   rspec-its
   rspec-rails
   rspec_junit_formatter
-  sass-rails
   selenium-webdriver
   shoulda-callback-matchers (~> 1.1.1)
   show_me_the_cookies
