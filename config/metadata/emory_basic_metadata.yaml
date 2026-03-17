@@ -1,0 +1,213 @@
+# [Hyrax-override-v5.2.0] of basic_metadata.yaml
+#   Please be very careful in the changes made to this document.
+#   Generally, it is safe to alter the form options here (please
+#   match the "multiple" settings to the field level, which should
+#   never change).
+#   Altering "primary" and "required" within the form options will
+#   only affect how the form is built, which really doesn't affect
+#   persistence like the other settings.
+#
+# What has been changed:
+#   - `creator` is now maintaining the order of its array values.
+#   - `license` is no longer multiple nor required.
+#   - The following removed from the forms:
+#     - `alternative_title`
+#     - `arkivo_checksum`
+#     - `based_near`
+#     - `contributor`
+#     - `date_created`
+#     - `identifier`
+#     - `label`
+#     - `related_url`
+#     - `resource_type`
+#     - `source`
+#   - The following have been added as shared Emory fields
+#     (common to both works and collections):
+#     - `holding_repository`
+#     - `institution`
+#     - `internal_rights_note`
+#     - `system_of_record_ID`
+#     - `emory_ark`
+#     - `staff_notes`
+---
+attributes:
+  abstract:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "abstract_tesim"
+    predicate: http://purl.org/dc/terms/abstract
+  alternative_title:
+    type: string
+    multiple: true
+    index_keys:
+      - "alternative_title_tesim"
+    predicate: http://purl.org/dc/terms/alternative
+  arkivo_checksum:
+    type: string
+    multiple: false
+    predicate: http://scholarsphere.psu.edu/ns#arkivoChecksum
+  based_near:
+    type: string
+    multiple: true
+    index_keys:
+      - "based_near_sim"
+      - "based_near_tesim"
+    predicate: http://xmlns.com/foaf/0.1/based_near
+  bibliographic_citation:
+    type: string
+    multiple: true
+    predicate: http://purl.org/dc/terms/bibliographicCitation
+  contributor:
+    type: string
+    multiple: true
+    index_keys:
+      - "contributor_tesim"
+      - "contributor_sim"
+    predicate: http://purl.org/dc/elements/1.1/contributor
+  creator:
+    type: string
+    multiple: true
+    ordered: true
+    form:
+      required: true
+      primary: true
+    index_keys:
+      - "creator_tesim"
+      - "creator_ssim"
+    predicate: http://purl.org/dc/elements/1.1/creator
+  date_created:
+    type: date_time
+    multiple: true
+    index_keys:
+      - "date_created_tesim"
+    predicate: http://purl.org/dc/terms/created
+  emory_ark:
+    type: string
+    multiple: true
+    form:
+      primary: true
+    index_keys:
+      - 'emory_ark_tesim'
+    predicate: http://id.loc.gov/vocabulary/identifiers/local#ark
+  holding_repository:
+    type: string
+    multiple: false
+    form:
+      primary: true
+      required: true
+      multiple: false
+    index_keys:
+      - 'holding_repository_ssi'
+      - 'holding_repository_tesi'
+    predicate: http://id.loc.gov/vocabulary/relators/rps
+  identifier:
+    type: string
+    multiple: true
+    index_keys:
+      - "identifier_tesim"
+    predicate: http://purl.org/dc/terms/identifier
+  import_url:
+    type: string
+    predicate: http://scholarsphere.psu.edu/ns#importUrl
+  institution:
+    type: string
+    multiple: false
+    form:
+      primary: true
+      multiple: false
+    index_keys:
+      - 'institution_ssi'
+      - 'institution_tesi'
+    predicate: http://rdaregistry.info/Elements/u/P60402
+  internal_rights_note:
+    type: string
+    multiple: false
+    form:
+      primary: true
+      multiple: false
+    index_keys:
+      - 'internal_rights_note_tesi'
+    predicate: http://metadata.emory.edu/vocab/cor-terms#internalRightsNote
+  keyword:
+    type: string
+    multiple: true
+    index_keys:
+      - "keyword_sim"
+      - "keyword_tesim"
+    form:
+      primary: false
+    predicate: http://schema.org/keywords
+  label:
+    type: string
+    index_keys:
+      - "label_tesim"
+    predicate: info:fedora/fedora-system:def/model#downloadFilename
+  license:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      required: false
+    index_keys:
+      - "license_tesi"
+    predicate: http://purl.org/dc/terms/license
+  relative_path:
+    type: string
+    predicate: http://scholarsphere.psu.edu/ns#relativePath
+  related_url:
+    type: string
+    multiple: true
+    index_keys:
+      - "related_url_tesim"
+    predicate: http://www.w3.org/2000/01/rdf-schema#seeAlso
+  resource_type:
+    type: string
+    multiple: true
+    index_keys:
+      - "resource_type_sim"
+      - "resource_type_tesim"
+    predicate: http://purl.org/dc/terms/type
+  rights_notes:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "rights_notes_tesim"
+    predicate: http://purl.org/dc/elements/1.1/rights
+  source:
+    type: string
+    multiple: true
+    index_keys:
+      - "source_tesim"
+    predicate: http://purl.org/dc/terms/source
+  staff_notes:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - 'staff_notes_tesim'
+    predicate: http://metadata.emory.edu/vocab/cor-terms#staffNote
+  subject:
+    type: string
+    multiple: true
+    index_keys:
+      - "subject_sim"
+      - "subject_tesim"
+    form:
+      primary: false
+    predicate: http://purl.org/dc/elements/1.1/subject
+  system_of_record_ID:
+    type: string
+    multiple: false
+    form:
+      primary: true
+      multiple: false
+    index_keys:
+      - 'system_of_record_ID_ssi'
+      - 'system_of_record_ID_tesi'
+    predicate: http://metadata.emory.edu/vocab/cor-terms#descriptiveSystemID
