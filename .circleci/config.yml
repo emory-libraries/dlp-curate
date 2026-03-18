@@ -12,12 +12,12 @@ jobs:
             bundler_version:
                 type: string
                 default: 2.4.19
-        docker:
-            - image: cimg/mariadb:10.11.4
         executor:
             name: samvera/ruby_fcrepo_solr_redis
             ruby_version: << parameters.ruby_version >>
             solr_version: 8.11.1
+        docker:
+            - image: cimg/mariadb:10.11.4
         working_directory: ~/project
         parallelism: 4
         steps:
