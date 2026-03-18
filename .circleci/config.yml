@@ -28,16 +28,16 @@ jobs:
                 install-npm: false
                 node-version: "v20.20.0"
 
-            - run:
-                name: Install dockerize
-                command: |
-                    # Install dockerize to wait for the database
-                    curl -L https://github.com | tar xz
-                    sudo mv dockerize-linux-amd64-v0.6.1/dockerize /usr/local/bin/dockerize
+            # - run:
+            #     name: Install dockerize
+            #     command: |
+            #         # Install dockerize to wait for the database
+            #         curl -L https://github.com | tar xz
+            #         sudo mv dockerize-linux-amd64-v0.6.1/dockerize /usr/local/bin/dockerize
 
-            - run:
-                name: Wait for MariaDB to be ready
-                command: dockerize -wait tcp://localhost:3306 -timeout 60s
+            # - run:
+            #     name: Wait for MariaDB to be ready
+            #     command: dockerize -wait tcp://localhost:3306 -timeout 60s
 
             - samvera/bundle:
                 ruby_version: << parameters.ruby_version >>
