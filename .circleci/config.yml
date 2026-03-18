@@ -8,14 +8,16 @@ jobs:
         parameters:
             ruby_version:
                 type: string
-                default: 2.7.4
+                default: 3.2.9
             bundler_version:
                 type: string
-                default: 2.1.4
+                default: 2.4.19
+        docker:
+            - image: cimg/mariadb:10.11.4
         executor:
             name: samvera/ruby_fcrepo_solr_redis
             ruby_version: << parameters.ruby_version >>
-            solr_version: 7-alpine
+            solr_version: 8.11.1
         working_directory: ~/project
         parallelism: 4
         steps:
@@ -24,7 +26,18 @@ jobs:
             - node/install:
                 install-yarn: true
                 install-npm: false
-                node-version: "v20.15.1"
+                node-version: "v20.20.0"
+
+            - run:
+                name: Install dockerize
+                command: |
+                    # Install dockerize to wait for the database
+                    curl -L https://github.com | tar xz
+                    sudo mv dockerize-linux-amd64-v0.6.1/dockerize /usr/local/bin/dockerize
+
+            - run:
+                name: Wait for MariaDB to be ready
+                command: dockerize -wait tcp://localhost:3306 -timeout 60s
 
             - samvera/bundle:
                 ruby_version: << parameters.ruby_version >>
@@ -61,7 +74,7 @@ jobs:
 
     coverage:
         docker:
-            - image: cimg/ruby:2.7.4
+            - image: cimg/ruby:3.2.9
         working_directory: ~/project
         parallelism: 1
         steps:
