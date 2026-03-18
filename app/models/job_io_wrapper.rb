@@ -43,7 +43,7 @@ class JobIoWrapper < ApplicationRecord
   # @return [JobIoWrapper]
   # @raise ActiveRecord::RecordInvalid - if the instance is not valid
   def self.create_with_varied_file_handling!(user:, file:, relation:, file_set:, preferred:)
-    args = { user: user, relation: relation.to_s, file_set_id: file_set.id, preferred: preferred.to_s }
+    args = { user:, relation: relation.to_s, file_set_id: file_set.id, preferred: preferred.to_s }
     if file.is_a?(Hyrax::UploadedFile)
       args[:uploaded_file] = file
       args[:path] = file.uploader.path
@@ -98,7 +98,7 @@ class JobIoWrapper < ApplicationRecord
   def to_file_metadata
     Hyrax::FileMetadata.new(label:             original_name,
                             original_filename: original_name,
-                            mime_type:         mime_type,
+                            mime_type:,
                             use:               [Hyrax::FileMetadata::Use::ORIGINAL_FILE])
   end
 

@@ -29,11 +29,7 @@ module Curate
     private
 
       def add_sha1(solr_doc)
-        solr_doc['sha1_tesim'] = [object&.pulled_preservation_master_file&.checksum&.uri&.to_s,
-                                  object&.pulled_intermediate_file&.checksum&.uri&.to_s,
-                                  object&.service_file&.checksum&.uri&.to_s,
-                                  object&.pulled_extracted_file&.checksum&.uri&.to_s,
-                                  object&.pulled_transcript_file&.checksum&.uri&.to_s]
+        solr_doc['sha1_tesim'] = files_sha_uris
       end
 
       # Get all events that appear as nested_objects in fedora
@@ -89,7 +85,7 @@ module Curate
       end
 
       def preservation_event_value(preservation_event)
-        preservation_event.pluck(:value).first
+        preservation_event.pick(:value)
       end
 
       # All fields assigned here are utilized by BlacklightIiifSearch.
@@ -97,6 +93,16 @@ module Curate
         solr_doc['alto_xml_tesi'] = Curate::TextExtraction::AltoReader.new(object.alto_xml, object.width.first, object.height.first).json if object.alto_xml.present?
         solr_doc['transcript_text_tesi'] = object.transcript_text if object.transcript_text.present?
         solr_doc['is_page_of_ssi'] = object.parent.id if object.parent.present?
+      end
+
+      def pull_object_checksum_uris_by_file_type(file_pulling_method_string)
+        object&.send(file_pulling_method_string)&.checksum&.uri&.to_s
+      end
+
+      def files_sha_uris
+        ['pulled_preservation_master_file', 'pulled_intermediate_file', 'service_file', 'pulled_extracted_file', 'pulled_transcript_file'].map do |file_method|
+          pull_object_checksum_uris_by_file_type(file_method)
+        end
       end
   end
 end

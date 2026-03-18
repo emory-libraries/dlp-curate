@@ -43,7 +43,7 @@ class CollectionFilesIngestedJob < Hyrax::ApplicationJob
     def filesets(ids)
       ids.map do |id|
         Hyrax::SolrService.query(
-          Hyrax::SolrQueryBuilderService.construct_query(id: id),
+          Hyrax::SolrQueryBuilderService.construct_query(id:),
           rows: 1_000_000
         )
       end&.flatten

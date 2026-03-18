@@ -9,9 +9,9 @@ RSpec.describe JobIoWrapper, type: :model do
     let(:file_set)      { FactoryBot.create(:file_set) }
     let(:pmf)           { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
     let(:inf)           { File.open(fixture_path + '/book_page/0003_intermediate.jp2') }
-    let(:uploaded_file) { Hyrax::UploadedFile.new(user: user, file_set_uri: file_set.uri, preservation_master_file: pmf, intermediate_file: inf) }
-    let(:args)          { { file_set: file_set, user: user, file: uploaded_file.preservation_master_file, relation: :preservation_master_file, preferred: :preservation_master_file } }
-    let(:args2)         { { file_set: file_set, user: user, file: uploaded_file.intermediate_file, relation: :intermediate_file, preferred: :intermediate_file } }
+    let(:uploaded_file) { Hyrax::UploadedFile.new(user:, file_set_uri: file_set.uri, preservation_master_file: pmf, intermediate_file: inf) }
+    let(:args)          { { file_set:, user:, file: uploaded_file.preservation_master_file, relation: :preservation_master_file, preferred: :preservation_master_file } }
+    let(:args2)         { { file_set:, user:, file: uploaded_file.intermediate_file, relation: :intermediate_file, preferred: :intermediate_file } }
 
     before do
       # ingest_file success
@@ -41,7 +41,7 @@ RSpec.describe JobIoWrapper, type: :model do
     let(:user) { FactoryBot.build(:user) }
     let(:path) { fixture_path + '/world.png' }
     let(:file_set_id) { 'bn999672v' }
-    let(:args) { { file_set_id: file_set_id, user: user, path: path } }
+    let(:args) { { file_set_id:, user:, path: } }
 
     context 'when file responds to :size' do
       before do

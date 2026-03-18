@@ -22,7 +22,7 @@ module Hyrax
       default_set? || any_items?
     end
 
-     # Message to display if deletion is disabled
+    # Message to display if deletion is disabled
     def disabled_message
       return I18n.t('hyrax.admin.admin_sets.delete.error_default_set') if default_set?
       I18n.t('hyrax.admin.admin_sets.delete.error_not_empty') if any_items?
@@ -58,8 +58,8 @@ module Hyrax
 
     private
 
-    def default_set?
-      Hyrax::AdminSetCreateService.default_admin_set?(id: id)
-    end
+      def default_set?
+        Hyrax::AdminSetCreateService.default_admin_set?(id:)
+      end
   end
 end

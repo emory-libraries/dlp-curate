@@ -281,17 +281,17 @@ class YellowbackPreprocessor
       generic_complete_row_builder(new_row, transcript, filename, @transcript_fileset_title, ::FileSet::PRIMARY)
     end
 
-    def generic_complete_row_builder(build_on_row, file_path, filename, title, pcdm_use)
+    def generic_complete_row_builder(build_on_row, file_path, filename, _title, pcdm_use)
       build_on_row + file_mappings(
         fileset_label:            nil,
         preservation_master_file: file_path,
-        pcdm_use:                 pcdm_use,
+        pcdm_use:,
         file:                     filename.presence,
         file_types:               build_file_type_pair(filename, 'preservation_master_file')
       )
     end
 
-    def build_complete_file_row(new_row, fileset_title, image, transcript, extract)
+    def build_complete_file_row(new_row, _fileset_title, image, transcript, extract)
       new_row + file_mappings(
         fileset_label:            nil,
         preservation_master_file: image,

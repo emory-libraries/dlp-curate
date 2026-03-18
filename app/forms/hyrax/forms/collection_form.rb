@@ -108,7 +108,7 @@ module Hyrax
           alttext = banner_info.first.alt_text unless banner_info.empty?
           file_location = banner_info.first.local_path unless banner_info.empty?
           relative_path = "/" + banner_info.first.local_path.split("/")[-4..-1].join("/") unless banner_info.empty?
-          { file: banner_file, full_path: file_location, relative_path: relative_path, alttext: alttext }
+          { file: banner_file, full_path: file_location, relative_path:, alttext: }
         end
       end
 
@@ -122,7 +122,7 @@ module Hyrax
             relative_path = "/" + logo_info.local_path.split("/")[-4..-1].join("/")
             alttext = logo_info.alt_text
             linkurl = logo_info.target_url
-            { file: logo_file, full_path: logo_info.local_path, relative_path: relative_path, alttext: alttext, linkurl: linkurl }
+            { file: logo_file, full_path: logo_info.local_path, relative_path:, alttext:, linkurl: }
           end
         end
       end
@@ -148,16 +148,16 @@ module Hyrax
 
       protected
 
-      def initialize_field(key)
-        # rubocop:disable Lint/AssignmentInCondition
-        if class_name = model_class.properties[key.to_s].try(:class_name)
-          # Initialize linked properties such as based_near
-          self[key] += [class_name.new]
-        else
-          super
+        def initialize_field(key)
+          # rubocop:disable Lint/AssignmentInCondition
+          if class_name = model_class.properties[key.to_s].try(:class_name)
+            # Initialize linked properties such as based_near
+            self[key] += [class_name.new]
+          else
+            super
+          end
+          # rubocop:enable Lint/AssignmentInCondition
         end
-        # rubocop:enable Lint/AssignmentInCondition
-      end
 
       private
 
@@ -172,7 +172,7 @@ module Hyrax
         end
 
         def collection_member_service
-          @collection_member_service ||= membership_service_class.new(scope: scope, collection: collection, params: blacklight_config.default_solr_params)
+          @collection_member_service ||= membership_service_class.new(scope:, collection:, params: blacklight_config.default_solr_params)
         end
 
         def member_presenters(member_ids)

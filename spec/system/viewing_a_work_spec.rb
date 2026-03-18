@@ -6,7 +6,7 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
   let(:admin_user) { FactoryBot.create(:admin) }
   let(:work) { FactoryBot.build(:work_with_full_metadata, user: admin_user) }
   let(:user) { FactoryBot.create(:user) }
-  let(:user_work) { FactoryBot.build(:public_generic_work, user: user) }
+  let(:user_work) { FactoryBot.build(:public_generic_work, user:) }
   let(:work_url) { "/concern/curate_generic_works/#{work.id}" }
   before do
     login_as admin_user

@@ -14,6 +14,6 @@ class ReplaceWorkMembersJob < Hyrax::ApplicationJob
     ability = ManifestAbility.new
     presenter = Hyrax::CurateGenericWorkPresenter.new(solr_doc, ability)
 
-    ManifestBuilderService.regenerate_manifest(presenter: presenter, curation_concern: work)
+    ManifestBuilderService.regenerate_manifest(presenter:, curation_concern: work)
   end
 end

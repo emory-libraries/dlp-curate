@@ -6,7 +6,7 @@ RSpec.describe Hyrax::UploadedFile, type: :model do
   let(:user)          { FactoryBot.build(:user) }
   let(:file_set)      { FactoryBot.create(:file_set) }
   let(:hyrax_resource) { Hyrax::Resource.new(id: 'test_id_123') }
-  let(:uploaded_file) { described_class.new(user: user) }
+  let(:uploaded_file) { described_class.new(user:) }
 
   describe '#add_file_set!' do
     context 'when fileset is ActiveFedora::Base' do
@@ -35,7 +35,7 @@ RSpec.describe Hyrax::UploadedFile, type: :model do
 
     context 'when a file exists' do
       let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
-      let(:uploaded_file) { described_class.new(user: user, preservation_master_file: pmf) }
+      let(:uploaded_file) { described_class.new(user:, preservation_master_file: pmf) }
 
       it 'returns the file' do
         expect(uploaded_file.uploader).to eq(uploaded_file.preservation_master_file)

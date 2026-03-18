@@ -302,7 +302,7 @@ Rails.application.config.to_prepare do
         triples_values_joined(property_name, mapping_config, data)
       else
         data.each_with_index do |d, i|
-          self.parsed_metadata["#{key_for_export(property_name)}_#{i + 1}"] = prepare_export_data(d)
+          parsed_metadata["#{key_for_export(property_name)}_#{i + 1}"] = prepare_export_data(d)
         end
       end
     end
@@ -415,7 +415,7 @@ Rails.application.config.to_prepare do
       ::AssociateFilesetsWithWorkJob.perform_later(importer)
       importer.last_run.parents.each do |parent_id|
         Bulkrax.relationship_job_class.constantize.perform_later(parent_identifier: parent_id,
-                                                                   importer_run_id: importer.last_run.id)
+                                                                 importer_run_id:   importer.last_run.id)
       end
     end
   end
@@ -429,12 +429,12 @@ Rails.application.config.to_prepare do
         work_identifier:                parser.work_identifier,
         work_identifier_search_field:   parser.work_identifier_search_field,
         related_parents_parsed_mapping: parser.related_parents_parsed_mapping,
-        replace_files:                  replace_files,
-        user:                           user,
+        replace_files:,
+        user:,
         klass:                          factory_class,
         importer_run_id:                importerexporter.last_run.id,
-        update_files:                   update_files,
-        parser:                         parser # Emory addition
+        update_files:,
+        parser: # Emory addition
       )
     end
   end
@@ -492,47 +492,49 @@ Rails.application.config.to_prepare do
   end
 
   Bulkrax::DatatablesBehavior.module_eval do
+    # rubocop:disable Metrics/PerceivedComplexity
     def format_importers(importers)
       result = importers.map do |i|
         {
-          name: view_context.link_to(i.name, view_context.importer_path(i)),
-          status_message: status_message_for(i),
-          last_imported_at: i.last_imported_at&.strftime("%F %T"), #only altered time format
-          next_import_at: i.next_import_at&.strftime("%F %T"), #only altered time format
-          enqueued_records: i.last_run&.enqueued_records,
-          processed_records: i.last_run&.processed_records || 0,
-          failed_records: i.last_run&.failed_records || 0,
-          deleted_records: i.last_run&.deleted_records,
+          name:                     view_context.link_to(i.name, view_context.importer_path(i)),
+          status_message:           status_message_for(i),
+          last_imported_at:         i.last_imported_at&.strftime("%F %T"), # only altered time format
+          next_import_at:           i.next_import_at&.strftime("%F %T"), # only altered time format
+          enqueued_records:         i.last_run&.enqueued_records,
+          processed_records:        i.last_run&.processed_records || 0,
+          failed_records:           i.last_run&.failed_records || 0,
+          deleted_records:          i.last_run&.deleted_records,
           total_collection_entries: i.last_run&.total_collection_entries,
-          total_work_entries: i.last_run&.total_work_entries,
-          total_file_set_entries: i.last_run&.total_file_set_entries,
-          actions: importer_util_links(i)
+          total_work_entries:       i.last_run&.total_work_entries,
+          total_file_set_entries:   i.last_run&.total_file_set_entries,
+          actions:                  importer_util_links(i)
         }
       end
       {
-        data: result,
-        recordsTotal: Bulkrax::Importer.count,
+        data:            result,
+        recordsTotal:    Bulkrax::Importer.count,
         recordsFiltered: Bulkrax::Importer.count
       }
     end
+    # rubocop:enable Metrics/PerceivedComplexity
 
     def format_entries(entries, item)
       result = entries.map do |e|
         {
-          identifier: view_context.link_to(e.identifier, view_context.item_entry_path(item, e)),
-          title: e&.parsed_metadata&.[]('title'),
-          id: e.id,
+          identifier:     view_context.link_to(e.identifier, view_context.item_entry_path(item, e)),
+          title:          e&.parsed_metadata&.[]('title'),
+          id:             e.id,
           status_message: status_message_for(e),
-          type: e.type,
-          updated_at: e.updated_at,
-          errors: e.status_message == 'Failed' ? view_context.link_to(e.error_class, view_context.item_entry_path(item, e)) : "",
-          curate_obj: curate_obj_text(e),
-          actions: entry_util_links(e, item)
+          type:           e.type,
+          updated_at:     e.updated_at,
+          errors:         e.status_message == 'Failed' ? view_context.link_to(e.error_class, view_context.item_entry_path(item, e)) : "",
+          curate_obj:     curate_obj_text(e),
+          actions:        entry_util_links(e, item)
         }
       end
       {
-        data: result,
-        recordsTotal: item.entries.size,
+        data:            result,
+        recordsTotal:    item.entries.size,
         recordsFiltered: item.entries.size
       }
     end
@@ -540,11 +542,11 @@ Rails.application.config.to_prepare do
     def curate_obj_text(entry)
       obj = entry.importerexporter_type == "Bulkrax::Exporter" ? entry&.hyrax_record : entry&.factory&.find
       text_array = []
-      link =  if defined?(Hyrax) && entry.factory_class.model_name.human == 'Collection'
-                hyrax.polymorphic_path(obj)
-              else
-                main_app.polymorphic_path(obj)
-              end
+      link = if defined?(Hyrax) && entry.factory_class.model_name.human == 'Collection'
+               hyrax.polymorphic_path(obj)
+             else
+               main_app.polymorphic_path(obj)
+             end
 
       text_array << view_context.link_to(view_context.raw('<span class="fa fa-solid fa-link"></span>'), link) if obj.present?
       text_array.join(" ")

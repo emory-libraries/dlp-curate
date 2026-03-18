@@ -35,7 +35,7 @@ module Hyrax
 
     def manifest
       headers['Access-Control-Allow-Origin'] = '*'
-      render json: ::ManifestBuilderService.build_manifest(presenter: presenter, curation_concern: _curation_concern_type.find(params[:id]))
+      render json: ::ManifestBuilderService.build_manifest(presenter:, curation_concern: _curation_concern_type.find(params[:id]))
     end
 
     # Restrict deletion to admins only

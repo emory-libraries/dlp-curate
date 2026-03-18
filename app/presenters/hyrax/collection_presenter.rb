@@ -116,7 +116,7 @@ module Hyrax
     def total_items
       field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
       SolrQueryService.new
-                      .with_field_pairs(field_pairs: field_pairs)
+                      .with_field_pairs(field_pairs:)
                       .count
     end
 
@@ -130,7 +130,7 @@ module Hyrax
     def total_viewable_works
       field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
       SolrQueryService.new
-                      .with_field_pairs(field_pairs: field_pairs)
+                      .with_field_pairs(field_pairs:)
                       .with_generic_type(generic_type: "Work")
                       .accessible_by(ability: current_ability)
                       .count
@@ -139,7 +139,7 @@ module Hyrax
     def total_viewable_collections
       field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
       SolrQueryService.new
-                      .with_field_pairs(field_pairs: field_pairs)
+                      .with_field_pairs(field_pairs:)
                       .with_generic_type(generic_type: "Collection")
                       .accessible_by(ability: current_ability)
                       .count
@@ -251,7 +251,7 @@ module Hyrax
     end
 
     def deposit_collections
-      deposit_collection_ids&.map { |id| { id: id, title: Collection.find(id).title.first } }
+      deposit_collection_ids&.map { |id| { id:, title: Collection.find(id).title.first } }
     end
   end
 end

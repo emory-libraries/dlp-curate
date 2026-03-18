@@ -23,12 +23,12 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
     end
     let(:admin_set_id) { Hyrax::AdminSetCreateService.find_or_create_default_admin_set.id.to_s }
     let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id) }
-    let(:workflow) { Sipity::Workflow.create!(active: true, name: 'test-workflow', permission_template: permission_template) }
-    let(:collection) { FactoryBot.create(:collection_lw, user: user) }
+    let(:workflow) { Sipity::Workflow.create!(active: true, name: 'test-workflow', permission_template:) }
+    let(:collection) { FactoryBot.create(:collection_lw, user:) }
 
     before do
       # Create a single action that can be taken
-      Sipity::WorkflowAction.create!(name: 'submit', workflow: workflow)
+      Sipity::WorkflowAction.create!(name: 'submit', workflow:)
 
       # Grant the user access to deposit into the admin set.
       Hyrax::PermissionTemplateAccess.create!(
@@ -42,7 +42,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
     end
 
     let(:new_cgw_form) { NewCurateGenericWorkForm.new }
-    let(:cgw) { FactoryBot.create(:work, user: user) }
+    let(:cgw) { FactoryBot.create(:work, user:) }
     let(:cgw_second) { FactoryBot.create(:work, user: user_2) }
 
     scenario "'descriptions' loads with all its inputs", js: true do

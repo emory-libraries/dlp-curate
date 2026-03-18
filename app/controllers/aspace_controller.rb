@@ -33,7 +33,7 @@ class AspaceController < ApplicationController
       data = service.fetch_repository_by_id(params['repository_id'])
       repository = formatter.format_repository(data)
 
-      response = { repository: repository, resource: resource }
+      response = { repository:, resource: }
     rescue InvalidRequestError => e
       response = { error: "Invalid request error: #{e.message}" }
     rescue API::ClientError, API::ServerError => e

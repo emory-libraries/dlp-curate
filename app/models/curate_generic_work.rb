@@ -329,7 +329,7 @@ class CurateGenericWork < ActiveFedora::Base
   def full_text_data
     label = "Full Text Data - #{id}"
     # rubocop:disable Rails/FindBy
-    file_set = FileSet.where(label: label)&.order('date_uploaded_dtsi desc')&.first
+    file_set = FileSet.where(label:)&.order('date_uploaded_dtsi desc')&.first
     # rubocop:enable Rails/FindBy
     file_set.present? ? file_set.pulled_preservation_master_file&.content : nil
   end

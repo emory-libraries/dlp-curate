@@ -9,7 +9,7 @@ Hydra::Works::Characterization::FitsDocument.class_eval do
   def self.terminology
     struct = Struct.new(:proxied_term).new
     terminology = Struct.new(:terms)
-    terminology.new(NEW_PROXIED_TERMS.map { |t| [t, struct] }.to_h)
+    terminology.new(NEW_PROXIED_TERMS.index_with { |_t| struct })
   end
 
   def file_path
