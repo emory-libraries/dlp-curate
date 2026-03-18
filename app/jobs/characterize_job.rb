@@ -40,10 +40,10 @@ class CharacterizeJob < Hyrax::ApplicationJob
     # Ensure a fresh copy of the repo file's latest version is being worked on, if no filepath is directly provided
     filepath = Hyrax::WorkingDirectory.copy_repository_resource_to_working_directory(Hydra::PCDM::File.find(file_id), file_set.id) unless filepath && File.exist?(filepath)
     characterize(
-      file:     file,
-      filepath: filepath,
-      user:     user,
-      file_set: file_set
+      file:,
+      filepath:,
+      user:,
+      file_set:
     )
   end
 

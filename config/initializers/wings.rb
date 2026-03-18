@@ -29,8 +29,8 @@ if Hyrax.config.valkyrie_transition?
     Hyrax.config.index_adapter = :solr_index
 
     Valkyrie::StorageAdapter.register(
-      Valkyrie::Storage::VersionedDisk.new(base_path: Rails.root.join("storage", "files"),
-        file_mover: FileUtils.method(:cp)),
+      Valkyrie::Storage::VersionedDisk.new(base_path:  Rails.root.join("storage", "files"),
+                                           file_mover: FileUtils.method(:cp)),
       :disk
     )
     Valkyrie.config.storage_adapter  = :disk
@@ -51,7 +51,7 @@ if Hyrax.config.valkyrie_transition?
       Hyrax::CustomQueries::FindManyByAlternateIds,
       Hyrax::CustomQueries::FindModelsByAccess,
       Hyrax::CustomQueries::FindCountBy,
-      Hyrax::CustomQueries::FindByDateRange,
+      Hyrax::CustomQueries::FindByDateRange
       # Hyrax::CustomQueries::FindBySourceIdentifier  # from bulkrax
     ].each do |handler|
       Hyrax.query_service.services[0].custom_queries.register_query_handler(handler)

@@ -20,7 +20,7 @@ module NewspaperWorks
       if snippets.length > 1
         snippets_content << render(partial: 'catalog/snippets_more',
                                    locals:  { snippets: snippets.drop(1),
-                                              options:  options })
+                                              options: })
       end
       snippets_content.join("\n").html_safe
     end

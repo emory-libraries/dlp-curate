@@ -49,9 +49,9 @@ class FixityCheckJob < Hyrax::ApplicationJob
       service = fixity_service_for(id: uri)
       expected_result = service.expected_message_digest
 
-      ChecksumAuditLog.create_and_prune!(passed: service.check, file_set_id: file_set_id, checked_uri: uri.to_s, file_id: file_id, expected_result: expected_result)
+      ChecksumAuditLog.create_and_prune!(passed: service.check, file_set_id:, checked_uri: uri.to_s, file_id:, expected_result:)
     rescue Hyrax::Fixity::MissingContentError
-      ChecksumAuditLog.create_and_prune!(passed: false, file_set_id: file_set_id, checked_uri: uri.to_s, file_id: file_id, expected_result: expected_result)
+      ChecksumAuditLog.create_and_prune!(passed: false, file_set_id:, checked_uri: uri.to_s, file_id:, expected_result:)
     end
 
     ##
@@ -79,7 +79,7 @@ class FixityCheckJob < Hyrax::ApplicationJob
     end
 
     def announce_fixity_check_results(file_set, audit, result)
-      Hyrax.publisher.publish('file.set.audited', file_set: file_set, audit_log: audit, result: result)
+      Hyrax.publisher.publish('file.set.audited', file_set:, audit_log: audit, result:)
 
       # @todo remove this callback call for Hyrax 4.0.0
       process_failure_callback(file_set, audit) if should_call_failure_callback(audit)

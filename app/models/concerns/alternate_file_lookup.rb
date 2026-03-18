@@ -4,20 +4,13 @@ module AlternateFileLookup
   extend ActiveSupport::Concern
 
   def preservation_master_file_by_logic
-    if files.size == 1
-      files.first
-    elsif label.present?
-      files.select { |f| f&.file_path&.first&.include?('preservation_master_file') || f&.file_name&.first&.include?('_ARCH') }&.first
-    end
+    return files.first if files.size == 1
+    return process_pmf_by_logic_test if label.present?
   end
 
   def intermediate_file_by_logic
     files.select do |f|
-      files.size > 1 &&
-        ['.xml', '.pos', '.txt'].all? { |ext| !f&.file_name&.first&.include?(ext) } &&
-        label.present? &&
-        !f&.file_name&.first&.include?(label) &&
-        f&.file_name&.first&.include?('_PROD')
+      files.size > 1 && right_file_extensions(f) && label.present? && file_name_not_label(f) && file_name_is_prod(f)
     end&.first
   end
 
@@ -46,4 +39,22 @@ module AlternateFileLookup
   def pulled_transcript_file
     @pulled_transcript_file ||= transcript_file&.file_name&.present? ? transcript_file : transcript_file_by_logic
   end
+
+  private
+
+    def process_pmf_by_logic_test
+      files.select { |f| f&.file_path&.first&.include?('preservation_master_file') || f&.file_name&.first&.include?('_ARCH') }&.first
+    end
+
+    def right_file_extensions(file)
+      ['.xml', '.pos', '.txt'].all? { |ext| !file&.file_name&.first&.include?(ext) }
+    end
+
+    def file_name_not_label(file)
+      !file&.file_name&.first&.include?(label)
+    end
+
+    def file_name_is_prod(file)
+      file&.file_name&.first&.include?('_PROD')
+    end
 end

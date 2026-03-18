@@ -70,13 +70,13 @@ RSpec.describe PreservationEvent do
       let(:different_event_start) { DateTime.current.strftime('%FT%T%:z') }
       let(:preservation_event) do
         work.preservation_event.build(
-          event_type:       event_type,
-          initiating_user:  initiating_user,
+          event_type:,
+          initiating_user:,
           event_start:      different_event_start,
-          event_end:        event_end,
-          outcome:          outcome,
-          software_version: software_version,
-          event_details:    event_details
+          event_end:,
+          outcome:,
+          software_version:,
+          event_details:
         )
       end
 

@@ -79,7 +79,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
       it 'creates admin set collection type' do
         machine_id = described_class::ADMIN_SET_MACHINE_ID
         title = described_class::ADMIN_SET_DEFAULT_TITLE
-        expect(Hyrax::CollectionTypes::CreateService).to receive(:create_collection_type).with(machine_id: machine_id, title: title, options: anything)
+        expect(Hyrax::CollectionTypes::CreateService).to receive(:create_collection_type).with(machine_id:, title:, options: anything)
         admin_collection_type
       end
     end
@@ -88,7 +88,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
       include_context 'with a collection'
 
       it 'returns the collection type for the collection' do
-        expect(described_class.for(collection: collection)).to eq collection_type
+        expect(described_class.for(collection:)).to eq collection_type
       end
     end
 
@@ -138,7 +138,7 @@ RSpec.describe Hyrax::CollectionType, type: :model do
 
     describe "#collections#any?", :clean do
       it 'returns true if there are any collections of this collection type' do
-        FactoryBot.create(:collection_lw, collection_type: collection_type)
+        FactoryBot.create(:collection_lw, collection_type:)
         expect(collection_type.collections?).to eq true
       end
       it 'returns false if there are not any collections of this collection type' do

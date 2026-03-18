@@ -22,12 +22,12 @@ gem 'devise-guests', '~> 0.8'
 gem 'dotenv-rails'
 gem 'edtf-humanize', '~> 1.0.0'
 
-if RUBY_PLATFORM =~ /musl/
-# # Disabled due to dependency mismatches in Alpine packages (grpc 1.62.1 needs protobuf ~> 3.25)
-#   path '/usr/lib/ruby/gems/3.3.0' do
+if RUBY_PLATFORM.match?(/musl/)
+  # # Disabled due to dependency mismatches in Alpine packages (grpc 1.62.1 needs protobuf ~> 3.25)
+  #   path '/usr/lib/ruby/gems/3.3.0' do
   gem 'google-protobuf', force_ruby_platform: true
   gem 'grpc', force_ruby_platform: true
-#   end
+  #   end
 end
 
 gem 'honeybadger'

@@ -4,9 +4,9 @@ include Warden::Test::Helpers
 
 RSpec.describe 'viewing a user page', type: :system, clean: true do
   let(:user) { FactoryBot.create(:admin, uid: 'bob') }
-  let(:admin_collection) { FactoryBot.build(:public_collection_lw, user: user, with_permission_template: true) }
-  let(:work) { FactoryBot.build(:work_with_full_metadata, user: user) }
-  let(:work2) { FactoryBot.build(:public_generic_work, user: user) }
+  let(:admin_collection) { FactoryBot.build(:public_collection_lw, user:, with_permission_template: true) }
+  let(:work) { FactoryBot.build(:work_with_full_metadata, user:) }
+  let(:work2) { FactoryBot.build(:public_generic_work, user:) }
 
   before do
     admin_collection.save!

@@ -4,6 +4,6 @@ class FormatLabelService
   include Singleton
 
   def label(uri:)
-    Qa::Authorities::Local.subauthority_for('resource_types').all.select { |t| t['id'] == uri }[0]['label']
+    Qa::Authorities::Local.subauthority_for('resource_types').all.find { |t| t['id'] == uri }['label']
   end
 end
