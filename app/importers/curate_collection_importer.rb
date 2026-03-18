@@ -46,7 +46,7 @@ class CurateCollectionImporter
       deposit_groups = multivalue_mapping(collection_attrs, "deposit")
       view_groups = multivalue_mapping(collection_attrs, "view")
       access_groups = { 'manage' => manage_groups, 'deposit' => deposit_groups, 'view' => view_groups }
-      CollectionPermissionEnsurer.new(collection: collection, access_permissions: access_groups)
+      CollectionPermissionEnsurer.new(collection:, access_permissions: access_groups)
       @logger = Logger.new(log_location)
       @logger.level = Logger::DEBUG
       @logger.info "#{collection} collection object created"

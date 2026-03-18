@@ -115,74 +115,18 @@ module Hyrax
 
     private
 
-    ##
-    # @api public
-    #
-    # @note this is provided so that implementing application can override this
-    #   behavior and map params to different attributes
-    def update_metadata
-      case file_set
-      when Hyrax::Resource
-        valkyrie_update_metadata
-      else
-        file_attributes = form_class.model_attributes(attributes)
-        actor.update_metadata(file_attributes)
-      end
-    end
-
-    def valkyrie_update_metadata
-      change_set = Hyrax::Forms::ResourceForm.for(resource: file_set)
-
-      attributes = coerce_valkyrie_params
-
-      # TODO: We are not performing any error checks.  So that's something to
-      # correct.
-      result =
-        change_set.validate(attributes) &&
-        transactions['change_set.update_file_set']
-        .with_step_args(
-            'file_set.save_acl' => { permissions_params: change_set.input_params["permissions"] }
-          )
-        .call(change_set).value_or { false }
-      @file_set = result if result
-    end
-
-    def coerce_valkyrie_params
-      attrs = attributes
-      # The HTML form might not submit the required data structure for reform;
-      # namely instead of a hash with positional arguments for nested attributes
-      # of a collection, it is an array.  So we conditionally coerce that Array
-      # to a Hash.
-
-      # TODO: Do we need to concern ourself with embargo_attributes and
-      # lease_attributes?  My suspicion is that since these are singular (for
-      # now), we don't.  But it's a quick add.
-      [:permissions].each do |name|
-        next unless attrs["#{name}_attributes"].is_a?(Array)
-        new_perm_attrs = {}
-        attrs["#{name}_attributes"].each_with_index do |el, i|
-          new_perm_attrs[i] = el
-        end
-
-        attrs["#{name}_attributes"] = new_perm_attrs
-      end
-      attrs
-    end
-
-    def cast_file_set
-      return unless @file_set.class == ::FileSet
-      # We can tell if a Hyrax::FileSet was improperly cast because this AF method will
-      # return nil since its parent is not a ActiveFedora work.
-      @file_set = @file_set.valkyrie_resource if @file_set.respond_to?(:parent) && @file_set.parent&.id.nil?
-    end
-
-    def parent(file_set: curation_concern)
-      @parent ||=
+      ##
+      # @api public
+      #
+      # @note this is provided so that implementing application can override this
+      #   behavior and map params to different attributes
+      def update_metadata
         case file_set
         when Hyrax::Resource
           valkyrie_update_metadata
         else
-          file_set.parent
+          file_attributes = form_class.model_attributes(attributes)
+          actor.update_metadata(file_attributes)
         end
     end
 
@@ -242,7 +186,6 @@ module Hyrax
             file_set.parent
           end
       end
-    end
 
       def attempt_update
         return attempt_update_valkyrie if curation_concern.is_a?(Hyrax::Resource)
@@ -281,24 +224,22 @@ module Hyrax
 
       def general_file_set_update
         if params[:file_set].key?(:files)
-          ValkyrieIngestJob.perform_later(uploaded_file_from_path)
+          actor.update_content(uploaded_file_from_path, @file_set.preferred_file)
         else
           update_metadata
         end
-      elsif params.key?(:files_files) # version file already uploaded with ref id in :files_files array
+      end
+
+      def files_files_file_set_update
         uploaded_files = Array(Hyrax::UploadedFile.find(params[:files_files]))
-        uploaded_files.first.file_set_uri = file_set.id.to_s
-        uploaded_files.first.save
-        ValkyrieIngestJob.perform_later(uploaded_files.first)
+        actor.update_content(uploaded_files.first, @file_set.preferred_file)
         update_metadata
       end
-    end
 
       def uploaded_file_from_path
         uploaded_file = CarrierWave::SanitizedFile.new(params[:file_set][:files].first)
         Hyrax::UploadedFile.create(user_id: current_user.id, file: uploaded_file, file_set_uri: @file_set.id.to_s)
       end
-    end
 
       def after_update_response
         respond_to do |wants|
@@ -312,7 +253,6 @@ module Hyrax
           end
         end
       end
-    end
 
       def after_update_failure_response
         respond_to do |wants|
@@ -325,17 +265,20 @@ module Hyrax
           wants.json { render_json_response(response_type: :unprocessable_entity, options: { errors: curation_concern.errors }) }
         end
       end
-    end
-    # rubocop:enable Metrics/MethodLength
 
-    def unavailable_presenter
-      @presenter ||= show_presenter.new(::SolrDocument.find(params[:id]), current_ability, request)
-    end
+      def add_breadcrumb_for_controller
+        add_breadcrumb I18n.t('hyrax.dashboard.my.works'), hyrax.my_works_path
+      end
 
-    def set_file_set
-      @file_set = ::FileSet.find(params[:id])
-      @file_set.update_index
-    end
+      def add_breadcrumb_for_action
+        case action_name
+        when 'edit'
+          add_breadcrumb I18n.t("hyrax.file_set.browse_view"), main_app.hyrax_file_set_path(params["id"])
+        when 'show'
+          add_breadcrumb presenter.parent.to_s, main_app.polymorphic_path(presenter.parent) if presenter.parent.present?
+          add_breadcrumb presenter.to_s, main_app.polymorphic_path(presenter)
+        end
+      end
 
       def initialize_edit_form
         guard_for_workflow_restriction_on!(parent:)

@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe CollectionPermissionEnsurer, :clean do
   let(:collection) { FactoryBot.create(:collection_lw) }
-  let(:ensurer) { described_class.new(collection: collection, access_permissions: { 'manage' => ["admin", "rose_manager"], 'deposit' => ["admin", "rose_depositor"], 'view' => ["rose_viewer"] }) }
+  let(:ensurer) { described_class.new(collection:, access_permissions: { 'manage' => ["admin", "rose_manager"], 'deposit' => ["admin", "rose_depositor"], 'view' => ["rose_viewer"] }) }
 
   it 'sets the access permssions specified in the permissons array' do
     allow(Role).to receive(:exists?).and_return(true)
