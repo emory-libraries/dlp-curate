@@ -34,7 +34,13 @@ jobs:
 
             - run:
                 name: Wait for MariaDB to be ready
-                command: sleep 5 && nc -vz localhost 3306 # Wait for MariaDB to start
+                command: |
+                    for i in `seq 1 10`; do
+                      nc -z localhost 3306 && echo Success && exit 0 # Use 'localhost' as CircleCI merges the network stacks
+                      echo -n .
+                      sleep 1
+                    done
+                    echo Failed waiting for MySQL && exit 1
 
             - samvera/bundle:
                 ruby_version: << parameters.ruby_version >>
