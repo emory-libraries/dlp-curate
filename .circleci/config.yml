@@ -54,10 +54,6 @@ jobs:
                 install-npm: false
                 node-version: "v20.20.0"
 
-            - run:
-                name: check ruby version and working directory contents
-                command: ruby -v && ls -al
-
             - samvera/bundle:
                 ruby_version: << parameters.ruby_version >>
                 bundler_version: << parameters.bundler_version >>
@@ -80,6 +76,10 @@ jobs:
                     - ~/project/node_modules
 
             - samvera/install_solr_core
+
+            - run:
+                name: Create specific test database
+                command: mysql -h 127.0.0.1 -u root -e "CREATE DATABASE IF NOT EXISTS curate_test;"
 
             - samvera/parallel_rspec
 
