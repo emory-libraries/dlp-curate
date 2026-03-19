@@ -9,30 +9,42 @@ jobs:
             bundler_version:
                 type: string
                 default: 2.4.19
+            fcrepo_version:
+                type: string
+                default: '4.7.5'
             redis_version:
                 type: string
                 default: 7.4.2
+            ruby_type:
+                type: string
+                default: 'ruby'
             ruby_version:
                 type: string
                 default: 3.2.9
+            solr_port:
+                type: string
+                default: '8985'
             solr_version:
                 type: string
                 default: 8.11.1
-        executor:
-            name: samvera/ruby_fcrepo_solr_redis
-            ruby_version: << parameters.ruby_version >>
-            solr_version: << parameters.solr_version >>
-            redis_version: << parameters.redis_version >>
         working_directory: ~/project
         docker:
             - image: cimg/<< parameters.ruby_type >>:<< parameters.ruby_version >>-browsers
             - image: samvera/fcrepo4:<< parameters.fcrepo_version >>
-                environment:
+              environment:
                     CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
             - image: solr:<< parameters.solr_version >>
-                command: bin/solr -cloud -noprompt -f -p << parameters.solr_port >>
+              command: bin/solr -cloud -noprompt -f -p << parameters.solr_port >>
             - image: redis:<< parameters.redis_version >>
             - image: cimg/mariadb:10.11.4
+        environment:
+            BUNDLE_PATH: vendor/bundle
+            BUNDLE_JOBS: 4
+            BUNDLE_RETRY: 3
+            RAILS_ENV: test
+            RACK_ENV: test
+            FCREPO_TEST_PORT: 8080
+            SPEC_OPTS: --profile 10 --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
         parallelism: 4
         steps:
             - checkout
