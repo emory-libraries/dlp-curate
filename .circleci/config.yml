@@ -23,7 +23,7 @@ jobs:
                 default: 3.2.9
             solr_port:
                 type: string
-                default: '8985'
+                default: '8983'
             solr_version:
                 type: string
                 default: 8.11.1
