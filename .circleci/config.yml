@@ -105,6 +105,12 @@ jobs:
                 command: mysql -h 127.0.0.1 -u root -e "CREATE DATABASE IF NOT EXISTS curate_test;"
 
             - run:
+                name: Install MySQL client (if not present in primary image)
+                command: |
+                    apt-get update
+                    apt-get install -y mysql-client
+
+            - run:
                 name: Create specific test database
                 command: mysql -h 127.0.0.1 -u root -e "CREATE DATABASE IF NOT EXISTS curate_test;"
 
