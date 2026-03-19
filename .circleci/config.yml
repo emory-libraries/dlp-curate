@@ -20,8 +20,6 @@ jobs:
                 default: 8.11.1
         executor:
             name: samvera/ruby_fcrepo_solr_redis
-        docker:
-            - image: cimg/mariadb:10.11.4
         working_directory: ~/project
         parallelism: 4
         steps:
