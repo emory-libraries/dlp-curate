@@ -25,6 +25,13 @@ jobs:
             redis_version: << parameters.redis_version >>
         working_directory: ~/project
         docker:
+            - image: cimg/<< parameters.ruby_type >>:<< parameters.ruby_version >>-browsers
+            - image: samvera/fcrepo4:<< parameters.fcrepo_version >>
+                environment:
+                    CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
+            - image: solr:<< parameters.solr_version >>
+                command: bin/solr -cloud -noprompt -f -p << parameters.solr_port >>
+            - image: redis:<< parameters.redis_version >>
             - image: cimg/mariadb:10.11.4
         parallelism: 4
         steps:
