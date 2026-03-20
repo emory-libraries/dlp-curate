@@ -26,7 +26,7 @@ jobs:
                 default: '8983'
             solr_version:
                 type: string
-                default: 8.11.1
+                default: 7.7.2
         working_directory: ~/project
         docker:
             - image: cimg/<< parameters.ruby_type >>:<< parameters.ruby_version >>-browsers
