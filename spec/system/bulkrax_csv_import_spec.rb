@@ -97,6 +97,7 @@ RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, admin_set: true, t
         page.choose('Upload a File')
         attach_file('importer[parser_fields][file]', csv_file, make_visible: true)
         click_on('Create and Import')
+        sleep 10
 
         expect(Bulkrax::Importer.last.parser_fields['import_file_path']).to include filename
       end
