@@ -17,6 +17,7 @@ if Hyrax.config.valkyrie_transition?
     Wings::ModelRegistry.register(AdminSetResource, AdminSet)
     Wings::ModelRegistry.register(FileSet, FileSet)
     Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
+    Wings::ModelRegistry.register(FileSetResource, FileSet)
     Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
     Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
 
@@ -93,7 +94,7 @@ if Hyrax.config.valkyrie_transition?
       elsif 'Hydra::AccessControl' == klass_name
         Hyrax::AccessControl
       elsif 'FileSet' == klass_name
-        Hyrax::FileSet
+        FileSetResource
       elsif 'Hydra::AccessControls::Embargo' == klass_name
         Hyrax::Embargo
       elsif 'Hydra::AccessControls::Lease' == klass_name
