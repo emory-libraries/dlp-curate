@@ -15,7 +15,7 @@ Hyrax.config do |config|
   if Hyrax.config.valkyrie_transition?
     config.collection_model = 'CollectionResource'
     config.admin_set_model = 'AdminSetResource'
-    config.file_set_model = 'Hyrax::FileSet'
+    config.file_set_model = 'FileSetResource'
   else
     # dassie needs legacy AF models
     config.collection_model = '::Collection'
