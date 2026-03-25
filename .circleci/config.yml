@@ -37,7 +37,7 @@ jobs:
               environment:
                     CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
             - image: fcrepo/fcrepo:6.5.1-tomcat9
-                environment:
+              environment:
                     - >-
                         CATALINA_OPTS=-Dfcrepo.home=/fcrepo-home -Djava.awt.headless=true -Dfile.encoding=UTF-8
                         -server -Xms1G -Xmx2G -XX:NewSize=256m -XX:MaxNewSize=1G -Dserver.port=<< parameters.fcrepo6_port >>
