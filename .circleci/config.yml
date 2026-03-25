@@ -14,7 +14,7 @@ jobs:
                 default: '4.7.5'
             fcrepo6_domain:
                 type: string
-                default: fcrepo_six
+                default: fcreposix
             redis_version:
                 type: string
                 default: 7.4.2
