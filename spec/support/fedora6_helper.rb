@@ -7,9 +7,9 @@ module FedoraHelper
     port = ENV.fetch('FCREPO6_TEST_PORT') { 8985 }
     connection_url = fedora_version >= 6 ? "/fcrepo/rest" : "/rest"
     opts = {
-      base_path: base_path,
-      connection: ::Ldp::Client.new(faraday_client("http://#{fedora_auth}localhost:#{port}#{connection_url}")),
-      fedora_version: fedora_version
+      base_path:,
+      connection:     ::Ldp::Client.new(faraday_client("http://#{fedora_auth}localhost:#{port}#{connection_url}")),
+      fedora_version:
     }
     opts[:schema] = schema if schema
     opts[:fedora_pairtree_count] = fedora_pairtree_count
@@ -35,7 +35,7 @@ module FedoraHelper
   end
 
   def wipe_fedora!(base_path:, fedora_version: 6)
-    Valkyrie::Persistence::Fedora::MetadataAdapter.new(**fedora_adapter_config(base_path: base_path, fedora_version: fedora_version)).persister.wipe!
+    Valkyrie::Persistence::Fedora::MetadataAdapter.new(**fedora_adapter_config(base_path:, fedora_version:)).persister.wipe!
   end
 end
 

@@ -102,7 +102,7 @@ RSpec.shared_examples 'a Valkyrie query provider in Curate' do
 
       resource = resource_class.new
       resource.alternate_ids = [Valkyrie::ID.new('p9s0xfj')]
-      resource = persister.save(resource: resource)
+      resource = persister.save(resource:)
 
       found = query_service.find_by_alternate_identifier(alternate_identifier: resource.alternate_ids.first)
       expect(found.id).to eq resource.id
@@ -136,7 +136,7 @@ RSpec.shared_examples 'a Valkyrie query provider in Curate' do
 
       resource = resource_class.new
       resource.alternate_ids = [Valkyrie::ID.new('p9s0xfj'), Valkyrie::ID.new('jks0xfj')]
-      resource = persister.save(resource: resource)
+      resource = persister.save(resource:)
 
       found = query_service.find_by_alternate_identifier(alternate_identifier: resource.alternate_ids.first)
       expect(found.id).to eq resource.id
@@ -551,7 +551,7 @@ RSpec.shared_examples 'a Valkyrie query provider in Curate' do
 
     it "retrieves the lock token and casts it to optimistic_lock_token attribute" do
       resource = CustomLockingQueryResource.new(title: "My Title")
-      resource = persister.save(resource: resource)
+      resource = persister.save(resource:)
       resource = query_service.find_by(id: resource.id)
       # we can't know the value in the general case
       expect(resource[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK]).not_to be_empty
