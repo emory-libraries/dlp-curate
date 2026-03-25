@@ -50,6 +50,7 @@ jobs:
               command: bin/solr -cloud -noprompt -f -p << parameters.solr_port >>
             - image: redis:<< parameters.redis_version >>
             - image: cimg/mariadb:10.11.4
+        resource_class: medium+
         environment:
             BUNDLE_PATH: vendor/bundle
             BUNDLE_JOBS: 4
