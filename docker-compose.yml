@@ -8,6 +8,23 @@ services:
     networks:
       - curate
 
+  fcrepo6:
+    image: fcrepo/fcrepo:6.5.1-tomcat9
+    environment:
+      - >-
+        CATALINA_OPTS=-Dfcrepo.home=/fcrepo-home -Djava.awt.headless=true -Dfile.encoding=UTF-8
+        -server -Xms1G -Xmx2G -XX:NewSize=256m -XX:MaxNewSize=1G
+        -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/mem
+        -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
+        -Dfcrepo.jms.enabled=false -Dfcrepo.metrics.enable=true
+      - JAVA_OPTS=-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
+    volumes:
+      - fcrepo6:/fcrepo-home
+    ports:
+      - 8985:8080
+    networks:
+      - curate
+
   redis:
     image: redis:alpine
     environment:
@@ -39,6 +56,7 @@ services:
 
 volumes:
   fcrepo:
+  fcrepo6:
   redis:
   solr_home:
 
