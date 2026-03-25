@@ -8,6 +8,7 @@ require 'webdrivers/chromedriver'
 WebMock.disable_net_connect!(allow:                     [
                                '127.0.0.1',
                                'chromedriver.storage.googleapis.com',
+                               'fcrepo_six:8080',
                                'googlechromelabs.github.io',
                                'id.loc.gov',
                                'localhost:8080',
