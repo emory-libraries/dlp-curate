@@ -4,11 +4,12 @@ require 'faraday/multipart'
 module FedoraHelper
   def fedora_adapter_config(base_path:, schema: nil, fedora_version: 4, fedora_pairtree_count: 0, # rubocop:disable Metrics/MethodLength
                             fedora_pairtree_length: 0)
-    port = ENV.fetch('FCREPO6_TEST_PORT') { 8985 }
+    port = ENV.fetch('FCREPO_TEST_PORT') { 8985 }
+    domain = ENV.fetch('FCREPO6_DOMAIN') { 'localhost' }
     connection_url = fedora_version >= 6 ? "/fcrepo/rest" : "/rest"
     opts = {
       base_path:,
-      connection:     ::Ldp::Client.new(faraday_client("http://#{fedora_auth}localhost:#{port}#{connection_url}")),
+      connection:     ::Ldp::Client.new(faraday_client("http://#{fedora_auth}#{domain}:#{port}#{connection_url}")),
       fedora_version:
     }
     opts[:schema] = schema if schema
