@@ -29,7 +29,7 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
 
   it "can save a resource" do
     expect(resource).not_to be_persisted
-    saved = persister.save(resource: resource)
+    saved = persister.save(resource:)
     expect(saved).to be_persisted
     expect(saved.id).not_to be_blank
   end
@@ -53,7 +53,7 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
   context "when a persisted resource is not in the database" do
     it "throws an ObjectNotFoundError" do
       expect(resource).not_to be_persisted
-      saved = persister.save(resource: resource)
+      saved = persister.save(resource:)
 
       expect(saved).to be_persisted
       persister.delete(resource: saved)
@@ -62,7 +62,7 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
     end
     it "is okay if it's from another persister" do
       memory_adapter = Valkyrie::Persistence::Memory::MetadataAdapter.new
-      saved = memory_adapter.persister.save(resource: resource)
+      saved = memory_adapter.persister.save(resource:)
 
       expect { persister.save(resource: saved, external_resource: true) }.not_to raise_error
     end
@@ -71,7 +71,7 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
   it "can persist single values" do
     resource.single_value = "A single value"
 
-    output = persister.save(resource: resource)
+    output = persister.save(resource:)
 
     expect(output.single_value).to eq "A single value"
 
@@ -276,7 +276,7 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
 
   it "can override default id generation with a provided id" do
     id = SecureRandom.uuid
-    book = persister.save(resource: resource_class.new(id: id))
+    book = persister.save(resource: resource_class.new(id:))
     reloaded = query_service.find_by(id: book.id)
     expect(reloaded.id).to eq Valkyrie::ID.new(id)
     expect(reloaded).to be_persisted
@@ -315,12 +315,12 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
   end
 
   it "can find that resource again" do
-    id = persister.save(resource: resource).id
-    expect(query_service.find_by(id: id)).to be_kind_of resource_class
+    id = persister.save(resource:).id
+    expect(query_service.find_by(id:)).to be_kind_of resource_class
   end
 
   it "can delete objects" do
-    persisted = persister.save(resource: resource)
+    persisted = persister.save(resource:)
     persister.delete(resource: persisted)
     expect { query_service.find_by(id: persisted.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
   end
@@ -348,7 +348,7 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
       context "when creating a resource" do
         it "returns the value of the system-generated optimistic locking attribute on the resource" do
           resource = MyLockingResource.new(title: ["My Locked Resource"])
-          saved_resource = persister.save(resource: resource)
+          saved_resource = persister.save(resource:)
           expect(saved_resource[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK]).not_to be_empty
         end
       end
@@ -356,7 +356,7 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
       context "when updating a resource with a correct lock token" do
         it "successfully saves the resource and returns the updated value of the optimistic locking attribute" do
           resource = MyLockingResource.new(title: ["My Locked Resource"])
-          initial_resource = persister.save(resource: resource)
+          initial_resource = persister.save(resource:)
           updated_resource = persister.save(resource: initial_resource)
           expect(initial_resource[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK])
             .not_to eq updated_resource[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK]
@@ -366,18 +366,18 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
       context "when updating a resource with an incorrect lock token" do
         it "raises a Valkyrie::Persistence::StaleObjectError" do
           resource = MyLockingResource.new(title: ["My Locked Resource"])
-          resource = persister.save(resource: resource)
+          resource = persister.save(resource:)
           # update the resource in the datastore to make its token stale
-          persister.save(resource: resource)
+          persister.save(resource:)
 
-          expect { persister.save(resource: resource) }.to raise_error(Valkyrie::Persistence::StaleObjectError)
+          expect { persister.save(resource:) }.to raise_error(Valkyrie::Persistence::StaleObjectError)
         end
       end
 
       context "when lock token is nil" do
         it "successfully saves the resource and returns the updated value of the optimistic locking attribute" do
           resource = MyLockingResource.new(title: ["My Locked Resource"])
-          initial_resource = persister.save(resource: resource)
+          initial_resource = persister.save(resource:)
           initial_token = initial_resource[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK].first
           initial_resource.clear_optimistic_lock_token!
           updated_resource = persister.save(resource: initial_resource)
@@ -390,10 +390,10 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
       context "when there is a token, but it's for a different adapter (migration use case)" do
         it "successfully saves the resource and returns a token for the adapter that was saved to" do
           resource = MyLockingResource.new(title: ["My Locked Resource"])
-          initial_resource = persister.save(resource: resource)
+          initial_resource = persister.save(resource:)
           new_token = Valkyrie::Persistence::OptimisticLockToken.new(
             adapter_id: Valkyrie::ID.new("fake_adapter"),
-            token: "token"
+            token:      "token"
           )
           initial_resource.send("#{Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK}=", [new_token])
           updated_resource = persister.save(resource: initial_resource)
@@ -501,7 +501,7 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
 
       resource.ordered_authors = [nested1, "test"]
 
-      output = persister.save(resource: resource)
+      output = persister.save(resource:)
       expect(output.ordered_authors[0].id).to eq nested1.id
       expect(output.ordered_authors[1]).to eq "test"
     end
@@ -514,7 +514,7 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
 
       resource.ordered_nested = values
 
-      output = persister.save(resource: resource)
+      output = persister.save(resource:)
       expect(output.ordered_nested.map(&:id)).to eq values.map(&:id)
 
       reloaded = query_service.find_by(id: output.id)
@@ -523,7 +523,7 @@ RSpec.shared_examples 'a Valkyrie::Persister in Curate' do |*flags|
 
     def validate_order(values)
       resource.ordered_authors = values
-      output = persister.save(resource: resource)
+      output = persister.save(resource:)
       expect(output.ordered_authors).to eq(values)
 
       reloaded = query_service.find_by(id: output.id)
