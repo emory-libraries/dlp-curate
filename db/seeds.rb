@@ -20,3 +20,6 @@ Dir.glob("#{::Rails.root}/config/emory/groups/*.yml") do |yml_file|
     u.setup
   end
 end
+
+roles_hash = YAML.safe_load_file("#{::Rails.root}/config/emory/default_roles.yml")
+roles_hash['roles'].each { |role| Role.find_or_create_by(name: role) }

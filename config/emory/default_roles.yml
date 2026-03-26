@@ -1,0 +1,15 @@
+roles:
+  - health_sciences_manager
+  - health_sciences_depositor
+  - health_sciences_viewer
+  - oxford_manager
+  - oxford_depositor
+  - oxford_viewer
+  - repository_manager
+  - rose_manager
+  - rose_depositor
+  - rose_viewer
+  - pitts_manager
+  - pitts_depositor
+  - pitts_viewer
+  - test_group
