@@ -10,7 +10,7 @@
                   alt: "",
                   role: "presentation" %>
     <%= link_to t('hyrax.file_set.show.downloadable_content.pdf_link'),
-                download_pdf_for_viewer_path(file_set),
+                main_app.download_pdf_for_viewer_path(file_set),
                 target: :_blank,
                 id: "file_download",
                 data: { label: file_set.id, work_id: @presenter.id, collection_ids: @presenter.member_of_collection_ids } %>
