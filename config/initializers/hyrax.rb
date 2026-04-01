@@ -16,6 +16,8 @@ Hyrax.config do |config|
     config.collection_model = 'CollectionResource'
     config.admin_set_model = 'AdminSetResource'
     config.file_set_model = 'FileSetResource'
+    config.file_set_indexer = Curate::FileSetResourceIndexer
+    config.file_set_form = Curate::Forms::FileSetResourceForm
   else
     # dassie needs legacy AF models
     config.collection_model = '::Collection'
