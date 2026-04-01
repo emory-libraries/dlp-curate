@@ -63,7 +63,6 @@ if Hyrax.config.valkyrie_transition?
     # ].each do |handler|
     #   Hyrax.query_service.services[1].custom_queries.register_query_handler(handler)
     # end
-
   end
 
   Rails.application.config.to_prepare do

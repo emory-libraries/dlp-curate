@@ -21,44 +21,44 @@ class CollectionResourceIndexer < Hyrax::PcdmCollectionIndexer
 
   private
 
-  def sort_title
-    return unless resource.title.first
-    resource.title.first.gsub(/^(an?|the)\s/i, '')
-  end
+    def sort_title
+      return unless resource.title.first
+      resource.title.first.gsub(/^(an?|the)\s/i, '')
+    end
 
-  def banner_path
-    cbi = CollectionBrandingInfo.find_by(collection_id: resource.id.to_s, role: 'banner')
-    return if cbi.nil? || cbi.local_path.nil?
-    path = cbi.local_path
-    path.include?('/branding') ? '/branding' + path.split('/branding').last : path
-  end
+    def banner_path
+      cbi = CollectionBrandingInfo.find_by(collection_id: resource.id.to_s, role: 'banner')
+      return if cbi.nil? || cbi.local_path.nil?
+      path = cbi.local_path
+      path.include?('/branding') ? '/branding' + path.split('/branding').last : path
+    end
 
-  def source_collection_title
-    return if resource.source_collection_id.blank?
-    source = Hyrax.query_service.find_by(id: resource.source_collection_id)
-    source&.title
-  rescue Valkyrie::Persistence::ObjectNotFoundError
-    nil
-  end
-
-  def deposit_collection_titles
-    return if resource.deposit_collection_ids.blank?
-    Array(resource.deposit_collection_ids).filter_map do |id|
-      col = Hyrax.query_service.find_by(id: id)
-      col&.title&.first
+    def source_collection_title
+      return if resource.source_collection_id.blank?
+      source = Hyrax.query_service.find_by(id: resource.source_collection_id)
+      source&.title
     rescue Valkyrie::Persistence::ObjectNotFoundError
       nil
     end
-  end
 
-  def member_works_count
-    Hyrax::SolrService.query(
-      Hyrax::SolrQueryBuilderService.construct_query(
-        source_collection_id_tesim: resource.id.to_s,
-        has_model_ssim: "CurateGenericWork"
-      ), rows: 0
-    ).dig('response', 'numFound') || 0
-  rescue StandardError
-    0
-  end
+    def deposit_collection_titles
+      return if resource.deposit_collection_ids.blank?
+      Array(resource.deposit_collection_ids).filter_map do |id|
+        col = Hyrax.query_service.find_by(id:)
+        col&.title&.first
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        nil
+      end
+    end
+
+    def member_works_count
+      Hyrax::SolrService.query(
+        Hyrax::SolrQueryBuilderService.construct_query(
+          source_collection_id_tesim: resource.id.to_s,
+          has_model_ssim:             "CurateGenericWork"
+        ), rows: 0
+      ).dig('response', 'numFound') || 0
+    rescue StandardError
+      0
+    end
 end
