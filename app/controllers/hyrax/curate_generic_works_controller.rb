@@ -9,7 +9,7 @@ module Hyrax
     include Hyrax::BreadcrumbsForWorks
 
     if Hyrax.config.valkyrie_transition?
-      self.curation_concern_type = ::GenericWorkResource
+      self.curation_concern_type = ::CurateGenericWorkResource
       self.work_form_service = Hyrax::FormFactory.new
     else
       self.curation_concern_type = ::CurateGenericWork
