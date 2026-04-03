@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+# NOTE: Please remove this once we start testing Valkyrized objects. The models will automatically revert to
+#   the Valkyrized classes.
+
 ActiveSupport::Reloader.to_prepare do
   Hydra::Derivatives.source_file_service = Hyrax::LocalFileService
   Hydra::Derivatives.output_file_service = Hyrax::PersistDerivatives
