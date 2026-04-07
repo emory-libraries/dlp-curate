@@ -74,7 +74,7 @@
       <div id="fileset-ids-joined-show" class="accordion-collapse collapse" role="tabpanel" aria-labelledby="fileset-ids-joined-heading">
         <div class="accordion-body">
           <% importer_file_sets = @importer.entries.select {|e| e.factory_class == FileSet} %>
-          <%= importer_file_sets&.map { |e| e&.factory&.find&.id }&.compact&.join('|') %>
+          <%= importer_file_sets&.map { |e| e&.factory&.find&.try(:id) }&.compact&.join('|') %>
         </div>
       </div>
     </div>
