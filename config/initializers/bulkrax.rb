@@ -542,7 +542,7 @@ Rails.application.config.to_prepare do
     def curate_obj_text(entry)
       obj = entry.importerexporter_type == "Bulkrax::Exporter" ? entry&.hyrax_record : entry&.factory&.find
       text_array = []
-      link = if defined?(Hyrax) && entry&.factory_class&.model_name&.human == 'Collection' && obj.present?
+      link = if object_present_and_is_a_hyrax_app(entry, obj)
                hyrax.polymorphic_path(obj)
              elsif obj.present?
                main_app.polymorphic_path(obj)
@@ -551,5 +551,11 @@ Rails.application.config.to_prepare do
       text_array << view_context.link_to(view_context.raw('<span class="fa fa-solid fa-link"></span>'), link) if obj.present?
       text_array.join(" ")
     end
+
+    private
+
+      def object_present_and_is_a_hyrax_app(entry, obj)
+        defined?(Hyrax) && entry&.factory_class&.model_name&.human == 'Collection' && obj.present?
+      end
   end
 end
