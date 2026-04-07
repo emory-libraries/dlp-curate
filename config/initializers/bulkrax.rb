@@ -217,9 +217,9 @@ Bulkrax::DatatablesBehavior.module_eval do
     def curate_obj_text(entry)
       obj = entry.importerexporter_type == "Bulkrax::Exporter" ? entry&.hyrax_record : entry&.factory&.find
       text_array = []
-      link = if defined?(Hyrax) && entry.factory_class.model_name.human == 'Collection'
+      link = if defined?(Hyrax) && entry.factory_class.model_name.human == 'Collection' && obj.present?
                hyrax.polymorphic_path(obj)
-             else
+             elsif obj.present?
                main_app.polymorphic_path(obj)
              end
 
