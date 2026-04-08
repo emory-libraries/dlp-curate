@@ -9,7 +9,6 @@ RSpec.describe FileSetResource do
     pcdm_use
     file_type
     deduplication_key
-    preservation_event_ids
   ].each do |attr|
     include_examples('checks model for new attribute response', attr)
   end
@@ -49,10 +48,22 @@ RSpec.describe FileSetResource do
     end
   end
 
-  describe '#preservation_event_ids' do
-    it 'is multi-valued' do
-      file_set.preservation_event_ids = ['event1', 'event2']
-      expect(file_set.preservation_event_ids).to contain_exactly('event1', 'event2')
+  describe '#preservation_event' do
+    let(:preservation_event) do
+      PreservationEventResource.new(
+        event_id:         'wecpo-cwemclk-cvrroi',
+        event_type:       'type',
+        initiating_user:  'default user',
+        event_start:      '2010-02-02',
+        event_end:        '2010-02-03',
+        outcome:          'passed',
+        software_version: 'ClamXav 2.1.7',
+        event_details:    'special details'
+      )
+    end
+    it 'accepts PreservationEventResource' do
+      file_set.preservation_event += [preservation_event]
+      expect(file_set.preservation_event).to contain_exactly(preservation_event)
     end
   end
 end

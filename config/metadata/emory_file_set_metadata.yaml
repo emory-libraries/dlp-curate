@@ -35,11 +35,3 @@ attributes:
     predicate: http://metadata.emory.edu/vocab/predicates#deduplicationKey
     index_keys:
       - "deduplication_key_tesi"
-  preservation_event_ids:
-    type: string
-    multiple: true
-    form:
-      primary: false
-    predicate: http://metadata.emory.edu/vocab/cor-terms#preservationEventIDs
-    index_keys:
-      - "preservation_event_ids_tesim"
