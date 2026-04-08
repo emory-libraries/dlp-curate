@@ -231,6 +231,7 @@ Rails.application.config.to_prepare do
       u = Hyrax::UploadedFile.new
       u.user_id = @user.id
       u.send("#{process_file_types(path.split('/').last)}=", CarrierWave::SanitizedFile.new(path)) # Altered line
+      u.save
       update_filesets(u)
     end
   end
