@@ -78,6 +78,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       click_link('Additional descriptive fields')
       fill_in "curate_generic_work[date_created]", with: "invalid2"
       find('body').click
+      sleep 1
       expect(page).to have_css('.error-validate')
     end
 
