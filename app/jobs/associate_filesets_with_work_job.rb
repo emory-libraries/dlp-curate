@@ -19,7 +19,7 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
 
   def pull_parents(file_set_entries)
     parents_to_return = file_set_entries&.map { |e| e&.parsed_metadata&.[]('parent') }&.compact&.uniq&.flatten
-    raise "There are no parents to iterate over" unless parents_to_return.present?
+    raise "There are no parents to iterate over" if parents_to_return.blank?
     parents_to_return
   end
 
