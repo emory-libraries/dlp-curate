@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# NOTE: We should delete this and remove its call in `ScheduleRelationshipsJob` when we move to Valkyrized imports.
 
 class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
   queue_as :import
@@ -17,7 +18,9 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
   end
 
   def pull_parents(file_set_entries)
-    file_set_entries.map { |e| e.parsed_metadata['parent'] }.compact.uniq.flatten
+    parents_to_return = file_set_entries&.map { |e| e&.parsed_metadata&.[]('parent') }&.compact&.uniq&.flatten
+    raise "There are no parents to iterate over" unless parents_to_return.present?
+    parents_to_return
   end
 
   def pull_work(parent)
@@ -35,8 +38,6 @@ class AssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
   end
 
   def process_file_sets(parents, file_set_entries)
-    raise "There are no parents to iterate over" if parents.blank?
-
     parents.each do |p|
       work = pull_work(p)
       file_sets = pull_file_sets(file_set_entries, p)
