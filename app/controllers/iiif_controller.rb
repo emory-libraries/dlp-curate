@@ -261,7 +261,20 @@ class IiifController < ApplicationController
   def manifest
     headers['Access-Control-Allow-Origin'] = '*'
     solr_doc = SolrDocument.find(identifier)
-    render json: ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: CurateGenericWork.find(identifier))
+    render json: ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: load_curation_concern_for_manifest(identifier))
+  end
+
+  # Loads the curation concern for IIIF manifest rendering. Supports both
+  # AF and Valkyrie works during lazy migration.
+  # @note NOTE: ManifestBuilderService itself is still AF-centric and must be
+  #   updated for full Valkyrie parity. This controller change only ensures
+  #   the right resource class is fetched when Wings is removed.
+  def load_curation_concern_for_manifest(id)
+    if Hyrax.config.valkyrie_transition?
+      Hyrax.query_service.find_by(id:)
+    else
+      CurateGenericWork.find(id)
+    end
   end
 
   ##

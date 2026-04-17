@@ -46,6 +46,20 @@ module Hyrax
 
     private
 
+      CURATE_USE_MAP = {
+        preservation_master_file: :original_file,
+        extracted:                :extracted_file,
+        extracted_text:           :extracted_file,
+        transcript:               :transcript_file
+      }.freeze
+
+      # Overrides ValkyrieDownloadsControllerBehavior#use to support dlp-curate's
+      # params[:use] convention and map custom file type names to standard PCDM use keys.
+      def use
+        raw = (params[:use] || params[:file] || :original_file).to_sym
+        CURATE_USE_MAP.fetch(raw, raw)
+      end
+
       def show_active_fedora
         case file
         when ActiveFedora::File
