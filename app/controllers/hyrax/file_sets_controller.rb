@@ -395,19 +395,78 @@ module Hyrax
         @presenter ||= show_presenter.new(::SolrDocument.find(params[:id]), current_ability, request)
       end
 
+      # Loads the file set (AF or Valkyrie) for the #show action.
+      # AF path additionally reindexes so updated file metadata is reflected.
       def set_file_set
-        @file_set = ::FileSet.find(params[:id])
-        @file_set.update_index
+        if Hyrax.config.valkyrie_transition?
+          @file_set = Hyrax.query_service.find_by(id: params[:id])
+        else
+          @file_set = ::FileSet.find(params[:id])
+          @file_set.update_index
+        end
       end
 
+      # Returns a hash keyed by dlp-curate file type name, with a value that
+      # responds to #file_name (Array) and #create_date for the view partial.
+      # Supports AF files (native interface) and Valkyrie FileMetadata
+      # (wrapped to provide the same interface).
       def set_files
-        {
-          'preservation_master_file': @file_set.pulled_preservation_master_file,
-          'service_file':             @file_set.service_file,
-          'intermediate_file':        @file_set.pulled_intermediate_file,
-          'extracted':                @file_set.pulled_extracted_file,
-          'transcript_file':          @file_set.pulled_transcript_file
-        }
+        case @file_set
+        when Hyrax::Resource
+          set_files_valkyrie
+        else
+          {
+            'preservation_master_file': @file_set.pulled_preservation_master_file,
+            'service_file':             @file_set.service_file,
+            'intermediate_file':        @file_set.pulled_intermediate_file,
+            'extracted':                @file_set.pulled_extracted_file,
+            'transcript_file':          @file_set.pulled_transcript_file
+          }
+        end
+      end
+
+      VALKYRIE_FILE_TYPE_TO_USE = {
+        'preservation_master_file': Hyrax::FileMetadata::Use::ORIGINAL_FILE,
+        'service_file':             Hyrax::FileMetadata::Use::SERVICE_FILE,
+        'intermediate_file':        Hyrax::FileMetadata::Use::INTERMEDIATE_FILE,
+        'extracted':                Hyrax::FileMetadata::Use::EXTRACTED_TEXT,
+        'transcript_file':          Hyrax::FileMetadata::Use::TRANSCRIPT
+      }.freeze
+
+      # @return [Hash{Symbol => FileMetadataPresenter,nil}] hash of file type
+      #   key to a wrapper that mimics the AF file interface for the show view.
+      def set_files_valkyrie
+        VALKYRIE_FILE_TYPE_TO_USE.transform_values do |pcdm_use|
+          file_metadata = find_file_metadata_by_use(pcdm_use)
+          file_metadata && FileMetadataPresenter.new(file_metadata)
+        end
+      end
+
+      def find_file_metadata_by_use(pcdm_use)
+        Hyrax.custom_queries
+             .find_many_file_metadata_by_use(resource: @file_set, use: pcdm_use)
+             .first
+      end
+
+      # Adapts a Hyrax::FileMetadata resource to the interface expected by
+      # the hyrax/file_sets/_file_details.html.erb partial (file.file_name.first
+      # and file.create_date).
+      class FileMetadataPresenter
+        attr_reader :file_metadata
+
+        delegate :id, :mime_type, to: :file_metadata
+
+        def initialize(file_metadata)
+          @file_metadata = file_metadata
+        end
+
+        def file_name
+          Array(file_metadata.original_filename)
+        end
+
+        def create_date
+          file_metadata.date_created&.first || file_metadata.created_at
+        end
       end
   end
 end
