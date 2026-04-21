@@ -46,43 +46,43 @@ class ApplicationController < ActionController::Base
     # Construct a UV configuration with downloads and share enabled
     # @return [UvConfiguration]
     def uv_config_liberal
-      UvConfiguration.new(
-        modules: {
-          footerPanel: {
-            options: {
-              shareEnabled:      true,
-              downloadEnabled:   true,
-              fullscreenEnabled: true
-            }
-          }
-        }
-      )
+      UvConfiguration.new({
+                            modules: {
+                              footerPanel: {
+                                options: {
+                                  shareEnabled:      true,
+                                  downloadEnabled:   true,
+                                  fullscreenEnabled: true
+                                }
+                              }
+                            }
+                          })
     end
 
     # Construct a UV configuration for emory_low visibility with downloads and share enabled,
     # and download dialogue options/content modifications
     # @return [UvConfiguration]
     def uv_config_liberal_low # rubocop:disable Metrics/MethodLength
-      UvConfiguration.new(
-        modules: {
-          footerPanel:      {
-            options: {
-              shareEnabled:      true,
-              downloadEnabled:   true,
-              fullscreenEnabled: true
-            }
-          },
-          downloadDialogue: {
-            options: {
-              currentViewDisabledPercentage: 0, # set to an unreasonably low value so that Current View option is hidden
-              confinedImageSize:             100_000 # set to an unreasonably high value so that Whole Image Low Res option is hidden
-            },
-            content: {
-              wholeImageHighRes: "Whole Image 400px"
-            }
-          }
-        }
-      )
+      UvConfiguration.new({
+                            modules: {
+                              footerPanel:      {
+                                options: {
+                                  shareEnabled:      true,
+                                  downloadEnabled:   true,
+                                  fullscreenEnabled: true
+                                }
+                              },
+                              downloadDialogue: {
+                                options: {
+                                  currentViewDisabledPercentage: 0, # set to an unreasonably low value so that Current View option is hidden
+                                  confinedImageSize:             100_000 # set to an unreasonably high value so that Whole Image Low Res option is hidden
+                                },
+                                content: {
+                                  wholeImageHighRes: "Whole Image 400px"
+                                }
+                              }
+                            }
+                          })
     end # rubocop:enable Metrics/MethodLength
 
     def visibility_lookup(resource_id)

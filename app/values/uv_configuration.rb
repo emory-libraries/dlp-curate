@@ -5,25 +5,25 @@ class UvConfiguration < ActiveSupport::HashWithIndifferentAccess
   # @return [Hash]
   def self.default_values # rubocop:disable Metrics/MethodLength
     {
-      "modules" =>
-      {
-        "footerPanel" =>
-        {
-          "options" =>
-          {
-            "shareEnabled" => false,
-            "downloadEnabled" => false,
-            "fullscreenEnabled" => false
+      "modules": {
+        "footerPanel":        {
+          "options": {
+            "shareEnabled":      false,
+            "downloadEnabled":   false,
+            "fullscreenEnabled": false
           }
         },
-        "pagingHeaderPanel" => {
-          "options" => {
-            "pagingToggleEnabled" => true
+        "pagingHeaderPanel":  {
+          "options": {
+            "galleryButtonEnabled":     true,
+            "imageSelectionBoxEnabled": false,
+            "pageModeEnabled":          false,
+            "pagingToggleEnabled":      true
           }
         },
-        "moreInfoRightPanel" => {
-          "content" => {
-            "manifestHeader" => nil
+        "moreInfoRightPanel": {
+          "content": {
+            "manifestHeader": nil
           }
         }
       }
@@ -33,9 +33,16 @@ class UvConfiguration < ActiveSupport::HashWithIndifferentAccess
   # Constructor
   # @param values [Hash] configuration options for the Universal Viewer
   # @see https://github.com/UniversalViewer/universalviewer/wiki/Configuration
-  def initialize(values = {})
-    build_values = self.class.default_values.deep_merge(values.with_indifferent_access)
+  def initialize(constructor = {})
+    if constructor.respond_to?(:to_hash)
+      super()
+      update(self.class.default_values.deep_merge(constructor))
 
-    super(build_values)
+      hash = constructor.is_a?(Hash) ? constructor : constructor.to_hash
+      self.default = hash.default if hash.default
+      self.default_proc = hash.default_proc if hash.default_proc
+    else
+      super(constructor)
+    end
   end
 end
