@@ -33,9 +33,16 @@ class UvConfiguration < ActiveSupport::HashWithIndifferentAccess
   # Constructor
   # @param values [Hash] configuration options for the Universal Viewer
   # @see https://github.com/UniversalViewer/universalviewer/wiki/Configuration
-  def initialize(values = {})
-    build_values = self.class.default_values.deep_merge(values.with_indifferent_access)
+  def initialize(constructor = {})
+    if constructor.respond_to?(:to_hash)
+      super()
+      update(self.class.default_values.deep_merge(constructor))
 
-    super(build_values)
+      hash = constructor.is_a?(Hash) ? constructor : constructor.to_hash
+      self.default = hash.default if hash.default
+      self.default_proc = hash.default_proc if hash.default_proc
+    else
+      super(constructor)
+    end
   end
 end

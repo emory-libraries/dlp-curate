@@ -6,12 +6,12 @@ describe UvConfiguration do
 
   describe ".default_values" do
     it "generates the default configuration options" do
-      expect(described_class.default_values["modules"]["footerPanel"]).to include "options"
-      expect(described_class.default_values["modules"]["footerPanel"]["options"]).to include(
+      expect(described_class.new["modules"]["footerPanel"]).to include "options"
+      expect(described_class.new["modules"]["footerPanel"]["options"]).to include(
         "shareEnabled" => false,
         "downloadEnabled" => false
       )
-      expect(described_class.default_values["modules"]["moreInfoRightPanel"]["content"]).to include(
+      expect(described_class.new["modules"]["moreInfoRightPanel"]["content"]).to include(
         "manifestHeader" => nil
       )
     end
