@@ -32,8 +32,8 @@
       });
       const manifestPath = new URL(data.iiifManifestId);
       const configOrigin = manifestPath.origin;
-      const configId = manifestPath.pathname.split('/').at(-2)
-      var configUrl = `${configOrigin}/uv/config/${configId}`
+      const configId = manifestPath.pathname.split('/').at(-2);
+      var configUrl = `${configOrigin}/uv/config/${configId}`;
 
       uv = UV.init("uv", data);
 
@@ -43,7 +43,7 @@
             fetch(configUrl).then(function (response) {
               resolve(response.json());
             });
-          })
+          });
         );
       });
     </script>
