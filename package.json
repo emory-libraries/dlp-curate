@@ -14,7 +14,7 @@
     "jquery": "*",
     "jquery-validation": "*",
     "popper.js": "*",
-    "universalviewer": "^4.2.1"
+    "universalviewer": "4.0.0"
   },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",

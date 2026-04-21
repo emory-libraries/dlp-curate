@@ -5,25 +5,25 @@ class UvConfiguration < ActiveSupport::HashWithIndifferentAccess
   # @return [Hash]
   def self.default_values # rubocop:disable Metrics/MethodLength
     {
-      "modules" =>
-      {
-        "footerPanel" =>
-        {
-          "options" =>
-          {
-            "shareEnabled" => false,
-            "downloadEnabled" => false,
-            "fullscreenEnabled" => false
+      "modules": {
+        "footerPanel":        {
+          "options": {
+            "shareEnabled":      false,
+            "downloadEnabled":   false,
+            "fullscreenEnabled": false
           }
         },
-        "pagingHeaderPanel" => {
-          "options" => {
-            "pagingToggleEnabled" => true
+        "pagingHeaderPanel":  {
+          "options": {
+            "galleryButtonEnabled":     true,
+            "imageSelectionBoxEnabled": false,
+            "pageModeEnabled":          false,
+            "pagingToggleEnabled":      true
           }
         },
-        "moreInfoRightPanel" => {
-          "content" => {
-            "manifestHeader" => nil
+        "moreInfoRightPanel": {
+          "content": {
+            "manifestHeader": nil
           }
         }
       }

@@ -9,6 +9,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
+    <meta charset="UTF-8" />
     <link rel="icon" href="favicon.ico" />
     <link rel="stylesheet" type="text/css" href="uv.css" />
     <script type="text/javascript" src="umd/UV.js"></script>
@@ -24,29 +25,31 @@
     <div id="uv" class="uv"></div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        var urlAdapter = new UV.IIIFURLAdapter(true);
+      var urlAdaptor = new UV.IIIFURLAdaptor(true);
 
-        const data = urlAdapter.getInitialData({
-          embedded: true,
-        });
+      const data = urlAdaptor.getInitialData({
+        embedded: true
+      });
+      const manifestPath = new URL(data.iiifManifestId);
+      const configOrigin = manifestPath.origin;
+      const configId = manifestPath.pathname.split('/').at(-2)
+      var configUrl = `${configOrigin}/uv/config/${configId}`
 
-        uv = UV.init("uv", data);
+      uv = UV.init("uv", data);
 
-        console.log(data);
-        const configUrl = urlAdapter.get('config');
-        if (configUrl) {
-          uv.on("configure", function({ config, cb }) {
-            cb(
-              // new Promise(function (resolve) {
-              //   fetch(configUrl).then(function (response) {
-              //     resolve(response.json());
-              //   });
-              // })
-            );
+      uv.on("configure", function ({ config, cb }) {
+        cb(
+          new Promise(function (resolve) {
+            fetch(configUrl).then(function (response) {
+              resolve(response.json());
+            });
           })
-        }
+        );
+      });
+    </script>
 
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
         var $UV = document.getElementById("uv");
 
         function resize() {
@@ -54,7 +57,7 @@
           $UV.setAttribute("style", "height:" + window.innerHeight + "px");
         }
 
-        addEventListener("resize", function() {
+        document.addEventListener("resize", function () {
           resize();
         });
 
