@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+# Valkyrie helper: get mime_type from the original file's FileMetadata
+find_original_file_metadata = lambda { |fs|
+  Hyrax.custom_queries
+       .find_many_file_metadata_by_use(resource: fs, use: Hyrax::FileMetadata::Use::ORIGINAL_FILE)
+       .first
+}
+
+find_file_set_mime_type = lambda { |fs|
+  fm = find_original_file_metadata.call(fs)
+  fm&.mime_type.to_s
+}
+
 json.set! :@context, 'http://iiif.io/api/presentation/2/context.json'
 json.set! :@type, 'sc:Manifest'
 json.set! :@id, @root_url
@@ -36,16 +48,27 @@ json.sequences [''] do
     json.label child['label']
   end
   json.canvases @image_concerns do |child_id|
-    file_set = FileSet.find(child_id)
+    file_set = if Hyrax.config.valkyrie_transition?
+                 Hyrax.query_service.find_by(id: child_id)
+               else
+                 FileSet.find(child_id)
+               end
     mime_types = ['pdf', 'xml', 'text']
-    unless mime_types.any? { |m| file_set.mime_type&.include?(m) } || file_set.visibility == 'restricted'
+    file_set_mime = file_set.is_a?(Hyrax::Resource) ? find_file_set_mime_type.call(file_set) : file_set.mime_type
+    unless mime_types.any? { |m| file_set_mime&.include?(m) } || file_set.visibility == 'restricted'
       child_iiif_service = ManifestBuilderService.new(curation_concern: file_set)
       canvas_uri = "#{@root_url}/canvas/#{child_id}"
       json.set! :@id, canvas_uri
       json.set! :@type, 'sc:Canvas'
-      json.label file_set.title.first
-      json.width file_set.original_file&.width
-      json.height file_set.original_file&.height
+      json.label Array(file_set.title).first
+      if file_set.is_a?(Hyrax::Resource)
+        original_fm = find_original_file_metadata.call(file_set)
+        json.width original_fm&.width&.first
+        json.height original_fm&.height&.first
+      else
+        json.width file_set.original_file&.width
+        json.height file_set.original_file&.height
+      end
       json.images [file_set] do
         json.set! :@type, 'oa:Annotation'
         json.motivation 'sc:painting'
@@ -56,10 +79,7 @@ json.sequences [''] do
           json.height 480
           json.service do
             json.set! :@context, 'http://iiif.io/api/image/2/context.json'
-
-            # The base url for the info.json file
             info_url = child_iiif_service.info_url
-
             json.set! :@id, info_url
             json.profile 'http://iiif.io/api/image/2/level2.json'
           end
