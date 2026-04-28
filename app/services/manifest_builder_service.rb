@@ -2,6 +2,7 @@
 
 require 'iiif_manifest'
 
+# rubocop:disable Metrics/ClassLength
 class ManifestBuilderService
   include IiifManifestCache
 
@@ -89,15 +90,39 @@ class ManifestBuilderService
     end
 
     def preferred_file
-      @curation_concern&.send("pulled_#{@curation_concern&.preferred_file}"&.to_sym)
+      case @curation_concern
+      when Hyrax::Resource
+        preferred_valkyrie_file_metadata
+      else
+        @curation_concern.send(@curation_concern&.preferred_file)
+      end
     end
 
     def preferred_file_id
-      if preferred_file
-        preferred_file.id
+      return @curation_concern.id.to_s unless preferred_file
+
+      case preferred_file
+      when Hyrax::FileMetadata
+        preferred_file.id.to_s
       else
-        @curation_concern.id
+        preferred_file.id
       end
+    end
+
+    PREFERRED_USE_ORDER = [
+      Hyrax::FileMetadata::Use::SERVICE_FILE,
+      Hyrax::FileMetadata::Use::INTERMEDIATE_FILE,
+      Hyrax::FileMetadata::Use::ORIGINAL_FILE
+    ].freeze
+
+    def preferred_valkyrie_file_metadata
+      PREFERRED_USE_ORDER.each do |use|
+        fm = Hyrax.custom_queries
+                  .find_many_file_metadata_by_use(resource: @curation_concern, use:)
+                  .first
+        return fm if fm
+      end
+      nil
     end
 
     #
@@ -113,3 +138,4 @@ class ManifestBuilderService
       renderings.flatten
     end
 end
+# rubocop:enable Metrics/ClassLength
