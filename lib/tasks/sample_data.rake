@@ -11,159 +11,158 @@ namespace :dce do
 
   desc "Clean everything out"
   task clean: :environment do
-    CurateGenericWork.all.each(&:destroy!)
-    Collection.all.each(&:destroy!)
+    if Hyrax.config.valkyrie_transition?
+      work_docs = Hyrax::SolrService.query("has_model_ssim:CurateGenericWork", rows: 1_000_000, fl: "id")
+      work_docs.each do |doc|
+        resource = Hyrax.query_service.find_by(id: doc["id"])
+        Hyrax.persister.delete(resource:)
+      end
+      col_docs = Hyrax::SolrService.query("has_model_ssim:Collection", rows: 1_000_000, fl: "id")
+      col_docs.each do |doc|
+        resource = Hyrax.query_service.find_by(id: doc["id"])
+        Hyrax.persister.delete(resource:)
+      end
+    else
+      CurateGenericWork.all.each(&:destroy!)
+      Collection.all.each(&:destroy!)
+    end
   end
 end
 
+# rubocop:disable Metrics/MethodLength
 def load_sample_data
   collection = make_langmuir_collection
   first_object = load_first_object
   second_object = load_second_object
   third_object = load_third_object
-  [first_object, second_object, third_object].each do |object|
-    object.member_of_collections << collection
-    object.save
+  if Hyrax.config.valkyrie_transition?
+    [first_object, second_object, third_object].each do |object|
+      object.member_of_collection_ids += [collection.id]
+      Hyrax.persister.save(resource: object)
+      Hyrax.index_adapter.save(resource: object)
+    end
+    Hyrax.index_adapter.save(resource: collection)
+  else
+    [first_object, second_object, third_object].each do |object|
+      object.member_of_collections << collection
+      object.save
+    end
+    collection.update_index
   end
-  collection.update_index
 end
+# rubocop:enable Metrics/MethodLength
 
 def make_langmuir_collection
-  col = Collection.new
-  col.title = ["Robert Langmuir African American photograph collection"]
-  col.collection_type_gid = Hyrax::CollectionType.first.gid
-  col.visibility = "open"
-  col.save
-  col
+  if Hyrax.config.valkyrie_transition?
+    col = CollectionResource.new
+    col.title = ["Robert Langmuir African American photograph collection"]
+    col.collection_type_gid = Hyrax::CollectionType.first.gid
+    col.visibility = "open"
+    Hyrax.persister.save(resource: col)
+  else
+    col = Collection.new
+    col.title = ["Robert Langmuir African American photograph collection"]
+    col.collection_type_gid = Hyrax::CollectionType.first.gid
+    col.visibility = "open"
+    col.save
+    col
+  end
 end
 
+# rubocop:disable Metrics/MethodLength
+def build_sample_work(attrs)
+  if Hyrax.config.valkyrie_transition?
+    work = CurateGenericWorkResource.new
+    attrs.each { |key, value| work.public_send("#{key}=", value) if work.respond_to?("#{key}=") }
+    Hyrax.persister.save(resource: work)
+  else
+    work = CurateGenericWork.new
+    attrs.each { |key, value| work.public_send("#{key}=", value) }
+    work.save
+    work
+  end
+end
+# rubocop:enable Metrics/MethodLength
+
+# rubocop:disable Metrics/MethodLength
+def sample_work_base_attrs
+  {
+    depositor:               ::User.last.user_key,
+    administrative_unit:     "Stuart A. Rose Manuscript, Archives and Rare Book Library",
+    local_call_number:       "MSS 1218",
+    contact_information:     "Fake contact information",
+    holding_repository:      "Stuart A. Rose Manuscript, Archives and Rare Book Library",
+    institution:             "Emory University",
+    primary_language:        "Fake Primary Language",
+    notes:                   ["Fake Note"],
+    emory_ark:               ["Fake Legacy Ark"],
+    place_of_production:     "Fake Place of Production",
+    publisher:               "Fake Publisher",
+    emory_rights_statements: ["Emory University does not control copyright for this image."],
+    uniform_title:           "Fake Uniform Title",
+    table_of_contents:       "Fake TOC",
+    content_type:            "http://id.loc.gov/vocabulary/resourceTypes/img",
+    data_classifications:    ["Confidential"],
+    visibility:              "open",
+    copyright_date:          "Fake Copyright Date",
+    rights_holders:          ["Fake Rights Holder"],
+    legacy_rights:           "Emory University does not control copyright for this image.",
+    date_digitized:          "Fake Date Digitized",
+    transfer_engineer:       "Fake Transfer Engineer"
+  }
+end
+# rubocop:enable Metrics/MethodLength
+
 def load_first_object
-  work = CurateGenericWork.new
-  work.depositor = ::User.last.user_key
-  work.other_identifiers = ["dams:179629", "MSS1218_B011_I052"]
-  work.abstract = "Fake Abstract"
-  work.administrative_unit = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
-  work.local_call_number = "MSS 1218"
-  work.contact_information = "Fake contact information"
-  work.creator = ["Fake Creator"]
-  work.date_created = "XXXX"
-  work.date_issued = "XXXX"
-  work.content_genres = ["card photographs (photographs)"]
-  work.holding_repository = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
-  work.institution = "Emory University"
-  work.primary_language = "Fake Primary Language"
-  work.notes = ["Fake Note"]
-  work.emory_ark = ["Fake Legacy Ark"]
-  work.place_of_production = "Fake Place of Production"
-  work.publisher = "Fake Publisher"
-  work.emory_rights_statements = ["Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."]
-  work.rights_statement = ["http://rightsstatements.org/vocab/InC/1.0/"]
-  work.subject_names = ["Fake Subject Name 1", "Fake Subject Name 2"]
-  work.subject_geo = ["Fake Subject Geo 1", "Fake Subject Geo 2"]
-  work.keywords = ["Education: Elementary and Secondary"]
-  work.subject_topics = ["Classrooms.", "Tables.", "Blackboards.", "Furnaces.", "Students.", "Chairs.", "Coats."]
-  work.uniform_title = "Fake Uniform Title"
-  work.table_of_contents = "Fake TOC"
-  work.title = ["Students sitting on floor, chairs and tables in classroom with furnace"]
-  work.content_type = "http://id.loc.gov/vocabulary/resourceTypes/img"
-  work.data_classifications = ["Confidential"]
-  work.visibility = "open"
-  work.copyright_date = "Fake Copyright Date"
-  work.rights_holders = ["Fake Rights Holder"]
-  work.legacy_rights = "Emory University does not control copyright for this image. This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research. Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk. We are always interested in learning more about our collections. If you have information regarding this photograph, please contact marbl@emory.edu."
-  work.date_digitized = "Fake Date Digitized"
-  work.transfer_engineer = "Fake Transfer Engineer"
-  work.save
-  work
+  build_sample_work(sample_work_base_attrs.merge(
+    other_identifiers: ["dams:179629", "MSS1218_B011_I052"],
+    abstract:          "Fake Abstract",
+    creator:           ["Fake Creator"],
+    date_created:      "XXXX",
+    date_issued:       "XXXX",
+    content_genres:    ["card photographs (photographs)"],
+    rights_statement:  ["http://rightsstatements.org/vocab/InC/1.0/"],
+    subject_names:     ["Fake Subject Name 1", "Fake Subject Name 2"],
+    subject_geo:       ["Fake Subject Geo 1", "Fake Subject Geo 2"],
+    keywords:          ["Education: Elementary and Secondary"],
+    subject_topics:    ["Classrooms.", "Tables.", "Blackboards.", "Furnaces.", "Students.", "Chairs.", "Coats."],
+    title:             ["Students sitting on floor, chairs and tables in classroom with furnace"]
+  ))
 end
 
 def load_second_object
-  work = CurateGenericWork.new
-  work.depositor = ::User.last.user_key
-  work.other_identifiers = ["dams:156626", "MSS1218_B011_I052"]
-  work.abstract = "Fake Abstract"
-  work.administrative_unit = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
-  work.local_call_number = "MSS 1218"
-  work.contact_information = "Fake contact information"
-  work.creator = ["Fake Creator"]
-  work.date_created = "XXXX"
-  work.date_issued = "XXXX"
-  work.content_genres = ["card photographs (photographs)"]
-  work.holding_repository = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
-  work.institution = "Emory University"
-  work.primary_language = "Fake Primary Language"
-  work.notes = ["Fake Note"]
-  work.emory_ark = ["Fake Legacy Ark"]
-  work.place_of_production = "Fake Place of Production"
-  work.publisher = "Fake Publisher"
-  work.emory_rights_statements = ["Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."]
-  work.rights_statement = ["http://rightsstatements.org/vocab/InC/1.0/"]
-  work.subject_names = ["Fake Subject Name 1", "Fake Subject Name 2"]
-  work.subject_geo = ["Fake Subject Geo 1", "Fake Subject Geo 2"]
-  work.keywords = ["Education: Elementary and Secondary"]
-  work.subject_topics = ["Classrooms.", "Tables.", "Blackboards.", "Furnaces.", "Students.", "Chairs.", "Coats."]
-  work.uniform_title = "Fake Uniform Title"
-  work.table_of_contents = "Fake TOC"
-  work.title = ["Students sitting on floor, chairs and tables in classroom with furnace"]
-  work.content_type = "http://id.loc.gov/vocabulary/resourceTypes/img"
-  work.data_classifications = ["Confidential"]
-  work.visibility = "open"
-  work.copyright_date = "Fake Copyright Date"
-  work.rights_holders = ["Fake Rights Holder"]
-  work.legacy_rights = "Emory University does not control copyright for this image. This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research. Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk. We are always interested in learning more about our collections. If you have information regarding this photograph, please contact marbl@emory.edu."
-  work.date_digitized = "Fake Date Digitized"
-  work.transfer_engineer = "Fake Transfer Engineer"
-  work.save
-  work
+  build_sample_work(sample_work_base_attrs.merge(
+    other_identifiers: ["dams:156626", "MSS1218_B011_I052"],
+    abstract:          "Fake Abstract",
+    creator:           ["Fake Creator"],
+    date_created:      "XXXX",
+    date_issued:       "XXXX",
+    content_genres:    ["card photographs (photographs)"],
+    rights_statement:  ["http://rightsstatements.org/vocab/NoC-US/1.0/"],
+    subject_names:     ["Fake Subject Name 1", "Fake Subject Name 2"],
+    subject_geo:       ["Fake Subject Geo 1", "Fake Subject Geo 2"],
+    keywords:          ["Education: Elementary and Secondary"],
+    subject_topics:    ["Classrooms.", "Tables.", "Blackboards.", "Furnaces.", "Students.", "Chairs.", "Coats."],
+    title:             ["Students sitting on floor, chairs and tables in classroom with furnace"]
+  ))
 end
 
+# rubocop:disable Metrics/MethodLength
 def load_third_object
-  work = CurateGenericWork.new
-  work.depositor = ::User.last.user_key
-  work.other_identifiers = ["dams:156758", "MSS1218_B011_I026"]
-  work.abstract = "Recto: Faculty and Grauates, University of West Tennessee, 1921, Memphis, Tenn., Hooks Bros. Photo., Nahm Studio, Pueblo, Medicine, E.C. Outten, Panama, P.A. Tirador, P.I., E.P. Henry, Okla., D.W. Briggs, A.B., Ark., J.S. Cobb, M.D., Fla., Nurse Training, E. Cheatham, R.N., C.K. Cribb, R.N., G.M. Moore, Tenn., B.T. Anderson, Miss., L.V. Albudy, Tex., F.L. Avery, Okla., Dentistry, M.R. Ransom, Mo., S.P. Robertson, M.D., S.C., E.L. Hairston, Va., W.H. Young, Tex., B.F. McCleave, M.D., S.C., R.L. Flagg, A.B., M.D., Miss., B.F. McCleave, M.D., T.E. Cox, M.D., F.A. Moore, M.D., B.D. Harrell, M.D., R.L. Flagg, M.D., J.W. Beckette, M.D., N.M. Watson, M.D., O.W. Hooge, M.D., F.W. Thurman, D.D.S., W. Waters, D.D.S., W.E. Cloud, D.D.S., U.S. Walton, D.D.S., O.B. Braithwhite, Dean Dental College, J.C. Hairston, Dean - M.D., C.A. Terrell, M.D., Dean Surgery, B.S. Lynk, Ph.C, Dean - Ph.C., M.V. Lynk, M.S., M.D., LL.G., President"
-  work.administrative_unit = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
-  work.local_call_number = "MSS 1218"
-  work.contact_information = "Fake contact information"
-  work.creator = ["Hooks Brothers."]
-  work.date_created = "1921"
-  work.date_issued = "XXXX"
-  work.content_genres = ["card photographs (photographs)"]
-  work.holding_repository = "Stuart A. Rose Manuscript, Archives and Rare Book Library"
-  work.institution = "Emory University"
-  work.primary_language = "Fake Primary Language"
-  work.notes = ["Fake Note"]
-  work.emory_ark = ["Fake Legacy Ark"]
-  work.place_of_production = "Fake Place of Production"
-  work.publisher = "Fake Publisher"
-  work.emory_rights_statements = ["Emory University does not control copyright for this image.Â¬â€ This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research.Â¬â€ Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk.Â¬â€ We are always interested in learning more about our collections.Â¬â€ If you have information regarding this photograph, please contact marbl@emory.edu."]
-  work.rights_statement = ["http://rightsstatements.org/vocab/NoC-US/1.0/"]
-  work.subject_names = [
-    "University of Tennessee, Memphis.",
-    "Robertson, S. P., M.D.",
-    "Harrell, B. D., M.D."
-  ]
-  work.subject_geo = ["Memphis (Tenn.)"]
-  work.keywords = ["Education: Colleges, universities, and technical colleges"]
-  work.subject_topics = [
-    "College graduates.",
-    "African American photographers.",
-    "Nursing.",
-    "Medicine.",
-    "Dentistry.",
-    "Universities and colleges--Faculty."
-  ]
-  work.uniform_title = "Fake Uniform Title"
-  work.table_of_contents = "Fake TOC"
-  work.title = ["Faculty and graduates of University of West Tennessee, Memphis, Tenn. in medicine, dentistry and nurse training in 1921"]
-  work.content_type = "http://id.loc.gov/vocabulary/resourceTypes/img"
-  work.data_classifications = ["Confidential"]
-  work.visibility = "open"
-  work.copyright_date = "Fake Copyright Date"
-  work.rights_holders = ["Fake Rights Holder"]
-  work.legacy_rights = "Emory University does not control copyright for this image. This image is made available for individual viewing and reference for educational purposes only such as personal study, preparation for teaching, and research. Your reproduction, distribution, public display or other re-use of any content beyond a fair use as codified in section 107 of US Copyright Law is at your own risk. We are always interested in learning more about our collections. If you have information regarding this photograph, please contact marbl@emory.edu."
-  work.date_digitized = "Fake Date Digitized"
-  work.transfer_engineer = "Fake Transfer Engineer"
-  work.save
-  work
+  build_sample_work(sample_work_base_attrs.merge(
+    other_identifiers: ["dams:156758", "MSS1218_B011_I026"],
+    abstract:          "Recto: Faculty and Grauates, University of West Tennessee, 1921, Memphis, Tenn.",
+    creator:           ["Hooks Brothers."],
+    date_created:      "1921",
+    date_issued:       "XXXX",
+    content_genres:    ["card photographs (photographs)"],
+    rights_statement:  ["http://rightsstatements.org/vocab/NoC-US/1.0/"],
+    subject_names:     ["University of Tennessee, Memphis.", "Robertson, S. P., M.D.", "Harrell, B. D., M.D."],
+    subject_geo:       ["Memphis (Tenn.)"],
+    keywords:          ["Education: Colleges, universities, and technical colleges"],
+    subject_topics:    ["Classrooms.", "African American photographers.", "Nursing.", "Medicine.", "Dentistry.",
+                        "Universities and colleges--Faculty."],
+    title:             ["Faculty and graduates of University of West Tennessee, Memphis, Tenn. in medicine, dentistry and nurse training in 1921"]
+  ))
 end
+# rubocop:enable Metrics/MethodLength
