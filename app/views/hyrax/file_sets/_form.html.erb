@@ -11,7 +11,7 @@
       <%= label_tag 'file_set[pcdm_use]', t('.pcdm_use'),  class: "string optional" %>
     </span>
     <div>
-      <%= select_tag 'file_set[pcdm_use]', options_for_select(["#{FileSet::PRIMARY}", "#{FileSet::SUPPLEMENTAL}", "#{FileSet::PRESERVATION}"], curation_concern.pcdm_use), class: 'form-control' %>
+      <%= select_tag 'file_set[pcdm_use]', options_for_select(["#{FileSetResource::PRIMARY}", "#{FileSetResource::SUPPLEMENTAL}", "#{FileSetResource::PRESERVATION}"], curation_concern.pcdm_use), class: 'form-control' %>
     </div>
   </fieldset>
 
