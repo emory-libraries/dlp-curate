@@ -11,7 +11,11 @@ Bulkrax.setup do |config|
   config.default_work_type = 'FileSet'
 
   # Factory Class to use when generating and saving objects
-  config.object_factory = Bulkrax::ObjectFactory
+  config.object_factory = if Hyrax.config.valkyrie_transition?
+                            Bulkrax::ValkyrieObjectFactory
+                          else
+                            Bulkrax::ObjectFactory
+                          end
 
   # Path to store pending imports
   # config.import_path = 'tmp/imports'
@@ -160,82 +164,172 @@ Rails.application.config.to_prepare do
   # Below are all of the Bulkrax v8.2.3 overrides.
   require_relative '../../lib/bulkrax/override_assistive_methods'
 
-  # rubocop:disable Metrics/BlockLength
-  # rubocop:disable Lint/UselessAssignment
-  Bulkrax::ObjectFactory.class_eval do
-    include OverrideAssistiveMethods
-    attr_reader(:attributes, :object, :source_identifier_value, :klass, :replace_files, :update_files,
-                :work_identifier, :related_parents_parsed_mapping, :importer_run_id, :parser, :user,
-                :work_identifier_search_field)
+  # AF-only ObjectFactory overrides (skipped in Valkyrie transition mode)
+  unless Hyrax.config.valkyrie_transition?
+    # rubocop:disable Metrics/BlockLength
+    # rubocop:disable Lint/UselessAssignment
+    Bulkrax::ObjectFactory.class_eval do
+      include OverrideAssistiveMethods
+      attr_reader(:attributes, :object, :source_identifier_value, :klass, :replace_files, :update_files,
+                  :work_identifier, :related_parents_parsed_mapping, :importer_run_id, :parser, :user,
+                  :work_identifier_search_field)
 
-    transformation_removes_blank_hash_values = true
+      transformation_removes_blank_hash_values = true
 
-    # As mentioned below, this method's largely mimicing AttachFilesToWorkJob,
-    #   which we have extensively customized in Curate to accomodate our needs. Here,
-    #   we are purely adapting those customizations.
-    #   TODO: To DRY up this code, we should shoot for refactoring these processes into
-    #   a reusable module.
-    # This method is heavily inspired by Hyrax's AttachFilesToWorkJob
-    def create_file_set(attrs)
-      _, @work = find_record(attributes[related_parents_parsed_mapping].first, importer_run_id)
-      work_permissions = @work.permissions.map(&:to_hash)
-      attrs = clean_attrs(attrs)
-      file_set_attrs = attrs.slice(*object.attributes.keys)
-      object.assign_attributes(file_set_attrs)
-      uploaded_files = attrs['uploaded_files'].map { |ufid| ::Hyrax::UploadedFile.find(ufid) }
-      @preferred = preferred_file(uploaded_files)
+      def create_file_set(attrs)
+        _, @work = find_record(attributes[related_parents_parsed_mapping].first, importer_run_id)
+        work_permissions = @work.permissions.map(&:to_hash)
+        attrs = clean_attrs(attrs)
+        file_set_attrs = attrs.slice(*object.attributes.keys)
+        object.assign_attributes(file_set_attrs)
+        uploaded_files = attrs['uploaded_files'].map { |ufid| ::Hyrax::UploadedFile.find(ufid) }
+        @preferred = preferred_file(uploaded_files)
 
-      uploaded_files.each do |uploaded_file|
-        @uploaded_file = uploaded_file
-        next if @uploaded_file.file_set_uri.present?
+        uploaded_files.each do |uploaded_file|
+          @uploaded_file = uploaded_file
+          next if @uploaded_file.file_set_uri.present?
 
-        process_uploaded_file(work_permissions, file_set_attrs)
+          process_uploaded_file(work_permissions, file_set_attrs)
+        end
+
+        object.save!
       end
 
-      object.save!
-    end
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(
+        attributes:,
+        source_identifier_value:,
+        work_identifier:,
+        work_identifier_search_field:,
+        parser:,
+        related_parents_parsed_mapping: nil,
+        replace_files:                  false,
+        user:                           nil,
+        klass:                          nil,
+        importer_run_id:                nil,
+        update_files:                   false
+      )
+        @attributes = ActiveSupport::HashWithIndifferentAccess.new(attributes)
+        @replace_files = replace_files
+        @update_files = update_files
+        @user = user || User.batch_user
+        @work_identifier = work_identifier
+        @work_identifier_search_field = work_identifier_search_field
+        @related_parents_parsed_mapping = related_parents_parsed_mapping
+        @source_identifier_value = source_identifier_value
+        @klass = klass || Bulkrax.default_work_type.constantize
+        @importer_run_id = importer_run_id
+        @parser = parser
+      end
+      # rubocop:enable Metrics/ParameterLists
 
-    # Overridden because we need parser to process filetypes.
-    # rubocop:disable Metrics/ParameterLists
-    def initialize(
-      attributes:,
-      source_identifier_value:,
-      work_identifier:,
-      work_identifier_search_field:,
-      parser:, # Emory addition
-      related_parents_parsed_mapping: nil,
-      replace_files:                  false,
-      user:                           nil,
-      klass:                          nil,
-      importer_run_id:                nil,
-      update_files:                   false
-    )
-      @attributes = ActiveSupport::HashWithIndifferentAccess.new(attributes)
-      @replace_files = replace_files
-      @update_files = update_files
-      @user = user || User.batch_user
-      @work_identifier = work_identifier
-      @work_identifier_search_field = work_identifier_search_field
-      @related_parents_parsed_mapping = related_parents_parsed_mapping
-      @source_identifier_value = source_identifier_value
-      @klass = klass || Bulkrax.default_work_type.constantize
-      @importer_run_id = importer_run_id
-      @parser = parser # Emory addition
+      def import_file(path)
+        u = Hyrax::UploadedFile.new
+        u.user_id = @user.id
+        u.send("#{process_file_types(path.split('/').last)}=", CarrierWave::SanitizedFile.new(path))
+        update_filesets(u)
+      end
     end
-    # rubocop:enable Metrics/ParameterLists
-
-    # This overrides the method included in this class by the module Bulkrax::FileFactory.
-    # This is needed so that we can distinguish between preservation_master_file, intermediate_file,
-    # service_file, extracted_text, and transcript (#process_file_types).
-    def import_file(path)
-      u = Hyrax::UploadedFile.new
-      u.user_id = @user.id
-      u.send("#{process_file_types(path.split('/').last)}=", CarrierWave::SanitizedFile.new(path)) # Altered line
-      update_filesets(u)
-    end
+    # rubocop:enable Lint/UselessAssignment
+    # rubocop:enable Metrics/BlockLength
   end
-  # rubocop:enable Lint/UselessAssignment
-  # rubocop:enable Metrics/BlockLength
+
+  # Valkyrie-aware ValkyrieObjectFactory overrides (only in transition mode)
+  if Hyrax.config.valkyrie_transition?
+    # rubocop:disable Metrics/BlockLength
+    Bulkrax::ValkyrieObjectFactory.class_eval do
+      include PreservationEvents
+
+      attr_reader :parser
+
+      # Override initialize to accept parser: kwarg (Emory addition)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(attributes:, source_identifier_value:, work_identifier:, work_identifier_search_field:,
+                     parser: nil, related_parents_parsed_mapping: nil, replace_files: false,
+                     user: nil, klass: nil, importer_run_id: nil, update_files: false)
+        @parser = parser
+        super(attributes:, source_identifier_value:, work_identifier:,
+              work_identifier_search_field:, related_parents_parsed_mapping:,
+              replace_files:, user:, klass:, importer_run_id:, update_files:)
+      end
+      # rubocop:enable Metrics/ParameterLists
+
+      # Fix typo in gem (custom_query -> custom_queries) and use search_field instead of name_field.
+      # rubocop:disable Metrics/ParameterLists
+      def self.search_by_property(value:, klass:, field: nil, search_field: nil, **)
+        search_field ||= field
+        raise "Expected search_field or field got nil" if search_field.blank?
+        return if value.blank?
+
+        Hyrax.query_service.custom_queries.find_by_model_and_property_value(model: klass, property: search_field, value:)
+      end
+      # rubocop:enable Metrics/ParameterLists
+
+      def self.add_child_to_parent_work(parent:, child:)
+        return true if parent.member_ids.include?(child.id)
+
+        parent.member_ids += Array(child.id)
+        parent.save
+      end
+
+      def self.add_resource_to_collection(collection:, resource:, user:)
+        resource.member_of_collection_ids += Array(collection.id)
+        save!(resource:, user:)
+      end
+
+      def create_work(attrs)
+        event_start = DateTime.current
+        attrs = HashWithIndifferentAccess.new(attrs)
+        perform_transaction_for(object:, attrs:) do
+          uploaded_files, file_set_params = prep_fileset_content(attrs)
+          transactions["change_set.create_work"]
+            .with_step_args(
+              'work_resource.add_file_sets' => { uploaded_files:, file_set_params: },
+              "change_set.set_user_as_depositor" => { user: @user },
+              "work_resource.change_depositor" => { user: @user },
+              'work_resource.save_acl' => { permissions_params: [attrs.try('visibility') || 'open'].compact }
+            )
+        end
+
+        process_work_creation_preservation_events(event_start)
+      end
+
+      def update_work(attrs)
+        event_start = DateTime.current
+        attrs = HashWithIndifferentAccess.new(attrs)
+        perform_transaction_for(object:, attrs:) do
+          uploaded_files, file_set_params = prep_fileset_content(attrs)
+          transactions["change_set.update_work"]
+            .with_step_args(
+              'work_resource.add_file_sets' => { uploaded_files:, file_set_params: },
+              'work_resource.save_acl' => { permissions_params: [attrs.try('visibility') || 'open'].compact }
+            )
+        end
+
+        pulled_work = pull_work_for_preservation_events
+        create_preservation_event(pulled_work, work_update(event_start:, user_email: @user.email))
+      end
+
+      private
+
+      def pull_work_for_preservation_events
+        Hyrax.query_service.custom_queries.find_by_model_and_property_value(
+          model: CurateGenericWorkResource,
+          property: 'deduplication_key_tesim',
+          value: attributes['deduplication_key']
+        )
+      end
+
+      def process_work_creation_preservation_events(event_start)
+        pulled_work = pull_work_for_preservation_events
+        return unless pulled_work
+
+        create_preservation_event(pulled_work, work_creation(event_start:, user_email: @user.email))
+        create_preservation_event(pulled_work, work_policy(event_start:, visibility: pulled_work.visibility, user_email: @user.email))
+      end
+    end
+    # rubocop:enable Metrics/BlockLength
+  end
 
   Bulkrax::CsvEntry.class_eval do
     include OverrideAssistiveMethods
@@ -247,7 +341,7 @@ Rails.application.config.to_prepare do
       build_files_metadata if Bulkrax.collection_model_class.present? && !hyrax_record.is_a?(Bulkrax.collection_model_class)
       build_relationship_metadata
       build_mapping_metadata
-      build_preservation_workflow_metadata if hyrax_record.is_a?(CurateGenericWork) # Emory addition
+      build_preservation_workflow_metadata if hyrax_record.is_a?(CurateGenericWork) || hyrax_record.is_a?(CurateGenericWorkResource)
       save!
 
       parsed_metadata
@@ -346,7 +440,7 @@ Rails.application.config.to_prepare do
           begin
             object_ids = importerexporter.export_source.split('|')
 
-            object_ids&.map { |id| ActiveFedora::SolrService.query("id: #{id}") }&.flatten&.compact
+            object_ids&.map { |id| Hyrax::SolrService.query("id:#{id}") }&.flatten&.compact
           end
       end
 
@@ -441,6 +535,14 @@ Rails.application.config.to_prepare do
 
   Bulkrax::ExportBehavior.module_eval do
     def filename(file_set)
+      if file_set.is_a?(Hyrax::Resource)
+        filename_valkyrie(file_set)
+      else
+        filename_af(file_set)
+      end
+    end
+
+    def filename_af(file_set)
       uploader_types = ['service_file', 'preservation_master_file', 'intermediate_file',
                         'extracted', 'transcript_file']
       working_array = []
@@ -458,8 +560,36 @@ Rails.application.config.to_prepare do
         working_array << "#{file_name}:transcript" if type == 'transcript_file'
         working_array << "#{file_name}:#{type}" unless type == 'extracted' || type == 'transcript_file'
       end
-
       working_array.compact.join('|')
+    end
+
+    def filename_valkyrie(file_set)
+      file_metadatas = Hyrax.custom_queries.find_files(file_set:)
+      working_array = []
+      file_metadatas.each do |fm|
+        file_name = Array(fm.original_filename).first || fm.label.to_s
+        next if file_name.blank?
+
+        type = valkyrie_file_use_label(fm)
+        working_array << "#{file_name}:#{type}"
+      end
+      working_array.compact.join('|')
+    end
+
+    def valkyrie_file_use_label(file_metadata)
+      use = Array(file_metadata.pcdm_use).first || Array(file_metadata.type).first.to_s
+      case use.to_s
+      when /ExtractedText/, /extracted/i
+        'extracted_text'
+      when /Transcript/, /transcript/i
+        'transcript'
+      when /ServiceFile/, /service/i
+        'service_file'
+      when /IntermediateFile/, /intermediate/i
+        'intermediate_file'
+      else
+        'preservation_master_file'
+      end
     end
   end
 
