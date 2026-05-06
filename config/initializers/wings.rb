@@ -52,17 +52,11 @@ if Hyrax.config.valkyrie_transition?
       Hyrax::CustomQueries::FindManyByAlternateIds,
       Hyrax::CustomQueries::FindModelsByAccess,
       Hyrax::CustomQueries::FindCountBy,
-      Hyrax::CustomQueries::FindByDateRange
-      # Hyrax::CustomQueries::FindBySourceIdentifier  # from bulkrax
+      Hyrax::CustomQueries::FindByDateRange,
+      Curate::CustomQueries::FindBySourceIdentifier
     ].each do |handler|
       Hyrax.query_service.services[0].custom_queries.register_query_handler(handler)
     end
-
-    # [
-    #   Wings::CustomQueries::FindBySourceIdentifier
-    # ].each do |handler|
-    #   Hyrax.query_service.services[1].custom_queries.register_query_handler(handler)
-    # end
   end
 
   Rails.application.config.to_prepare do
