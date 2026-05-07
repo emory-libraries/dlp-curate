@@ -44,6 +44,7 @@ class FixityCheckJob < Hyrax::ApplicationJob
 
     # --- Valkyrie path ---
 
+    # rubocop:disable Metrics/MethodLength
     def perform_valkyrie(file_set_id)
       event_start = DateTime.current
       @file_set = Hyrax.query_service.find_by(id: file_set_id)
@@ -55,19 +56,18 @@ class FixityCheckJob < Hyrax::ApplicationJob
       passed = service.check
       expected_result = service.expected_message_digest
 
-      audit = ChecksumAuditLog.create_and_prune!(
-        passed:,
-        file_set_id: @file_set.id.to_s,
-        checked_uri: service.target,
-        file_id: @file_metadata&.id.to_s,
-        expected_result:
-      )
+      audit = ChecksumAuditLog.create_and_prune!(passed:,
+                                                 file_set_id:     @file_set.id.to_s,
+                                                 checked_uri:     service.target,
+                                                 file_id:         @file_metadata&.id.to_s,
+                                                 expected_result:)
 
       result = audit.failed? ? :failure : :success
       announce_fixity_check_results(@file_set, audit, result)
       valkyrie_preservation_event(audit.passed, event_start)
       audit
     end
+    # rubocop:enable Metrics/MethodLength
 
     def valkyrie_preservation_event(log, event_start)
       file_name = valkyrie_original_file_name
