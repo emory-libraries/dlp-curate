@@ -57,6 +57,10 @@ if Hyrax.config.valkyrie_transition?
     ].each do |handler|
       Hyrax.query_service.services[0].custom_queries.register_query_handler(handler)
     end
+
+    # Register find_by_model_and_property_value with find_single_or_nil strategy so
+    # Freyja's composite dispatch returns nil (not ObjectNotFoundError) when not found.
+    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_model_and_property_value] = :find_single_or_nil
   end
 
   Rails.application.config.to_prepare do
