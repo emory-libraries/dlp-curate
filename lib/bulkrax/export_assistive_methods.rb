@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+
+# rubocop:disable Metrics/ModuleLength
 module ExportAssistiveMethods
   def process_multiple_file_export(file_sets, folder_count)
     file_sets.each { |fileset| process_export_fileset_files(fileset, folder_count) }
@@ -149,3 +151,4 @@ module ExportAssistiveMethods
     parsed_metadata[key_for_export(property_name)] = processed_value
   end
 end
+# rubocop:enable Metrics/ModuleLength
