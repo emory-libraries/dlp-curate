@@ -312,21 +312,21 @@ Rails.application.reloader.to_prepare do
 
       private
 
-      def pull_work_for_preservation_events
-        Hyrax.query_service.custom_queries.find_by_model_and_property_value(
-          model: CurateGenericWorkResource,
-          property: 'deduplication_key_tesim',
-          value: attributes['deduplication_key']
-        )
-      end
+        def pull_work_for_preservation_events
+          Hyrax.query_service.custom_queries.find_by_model_and_property_value(
+            model:    CurateGenericWorkResource,
+            property: 'deduplication_key_tesim',
+            value:    attributes['deduplication_key']
+          )
+        end
 
-      def process_work_creation_preservation_events(event_start)
-        pulled_work = pull_work_for_preservation_events
-        return unless pulled_work
+        def process_work_creation_preservation_events(event_start)
+          pulled_work = pull_work_for_preservation_events
+          return unless pulled_work
 
-        create_preservation_event(pulled_work, work_creation(event_start:, user_email: @user.email))
-        create_preservation_event(pulled_work, work_policy(event_start:, visibility: pulled_work.visibility, user_email: @user.email))
-      end
+          create_preservation_event(pulled_work, work_creation(event_start:, user_email: @user.email))
+          create_preservation_event(pulled_work, work_policy(event_start:, visibility: pulled_work.visibility, user_email: @user.email))
+        end
     end
     # rubocop:enable Metrics/BlockLength
   end
