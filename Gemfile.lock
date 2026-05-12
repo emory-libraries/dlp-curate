@@ -625,6 +625,10 @@ GEM
       json
     iiif_manifest (1.6.0)
       activesupport (>= 4)
+    importmap-rails (2.2.3)
+      actionpack (>= 6.0.0)
+      activesupport (>= 6.0.0)
+      railties (>= 6.0.0)
     io-console (0.8.1)
     iso8601 (0.9.1)
     jbuilder (2.13.0)
@@ -1300,6 +1304,7 @@ DEPENDENCIES
   http
   hydra-role-management
   hyrax (~> 5.2)
+  importmap-rails
   jbuilder (~> 2.5)
   jquery-rails
   linkeddata (>= 3.1.6)

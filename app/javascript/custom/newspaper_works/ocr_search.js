@@ -9,6 +9,6 @@
 /* toggle the ocr snippets collapse link text */
 $(document).ready(function(){
   $('.ocr_snippets_expand').click(function() {
-    $(this).text($(this).text() == '<%= I18n.t('blacklight.search.results.snippets.more') %>' ? '<%= I18n.t('blacklight.search.results.snippets.less') %>' : '<%= I18n.t('blacklight.search.results.snippets.more') %>');
+    $(this).text($(this).text() == 'more >>' ? '<< less' : 'more >>');
   });
 });

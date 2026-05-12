@@ -132,19 +132,6 @@ Hyrax = {
         // Do not create a consumer if user is not logged in
         if ($("meta[name='current-user']").length === 0)
             return;
-        <% if Hyrax.config.realtime_notifications? %>
-        var consumer = ActionCable.createConsumer("<%= Hyrax::Engine.routes.url_helpers.notifications_endpoint_path %>");
-        consumer.subscriptions.create("Hyrax::NotificationsChannel", {
-            connected: function(data) {
-                this.perform("update_locale", { locale: $('html').attr('lang') });
-            },
-
-            received: function(data) {
-                var Notification = require('hyrax/notification');
-                new Notification($('.notify-number')).update(data.notifications_count, data.notifications_label);
-            }
-        });
-        <% end %>
     },
 
     // Search for a user to transfer a work to

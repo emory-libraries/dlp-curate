@@ -4,16 +4,9 @@
   "private": true,
   "repository": "git@github.com:samvera/hyrax.git",
   "dependencies": {
-    "@rails/webpacker": "*",
-    "bootstrap": "^4",
     "datatables.net-bs4": "*",
     "datatables.net-searchpanes-bs4": "*",
     "datatables.net-select-bs4": "*",
-    "edtf": "*",
-    "handlebars": "^4",
-    "jquery": "*",
-    "jquery-validation": "*",
-    "popper.js": "*",
     "universalviewer": "4.0.0"
   },
   "scripts": {
