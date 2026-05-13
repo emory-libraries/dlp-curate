@@ -58,6 +58,16 @@
           </label>
         </li>
 
+        <!-- Irish Partner Sites -->
+        <li class="radio">
+          <label>
+            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER %>
+            <%= visibility_badge(::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER) %>
+            <br />
+            <%= t('hyrax.visibility.irish_partner.note_html') %>
+          </label>
+        </li>
+
         <!-- Restricted / Private -->
         <li class="radio">
           <label>

@@ -148,6 +148,10 @@ FactoryBot.define do
       visibility { ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH }
     end
 
+    factory :irish_partner_work do
+      visibility { ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER }
+    end
+
     factory :registered_generic_work do
       read_groups { ["registered"] }
     end

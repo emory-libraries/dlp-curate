@@ -142,6 +142,13 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       expect(rose_high_label).to eq "Rose High View"
       rose_high_text = rose_high_input.find(:xpath, "..").text.split("\n")[1]
       expect(rose_high_text).to eq "Rose Library reading room access only"
+
+      # Irish Partner Sites
+      irish_partner_input = find("ul.visibility").find("input#curate_generic_work_visibility_irish_partner")
+      irish_partner_label = irish_partner_input.sibling("span").text
+      expect(irish_partner_label).to eq "Irish Partner Sites"
+      irish_partner_text = irish_partner_input.find(:xpath, "..").text.split("\n")[1]
+      expect(irish_partner_text).to eq "Irish Partner sites access only"
     end
 
     scenario "verify work visibility can be edited" do
@@ -154,10 +161,11 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       choose('curate_generic_work_visibility_low_res')
       choose('curate_generic_work_visibility_emory_low')
       choose('curate_generic_work_visibility_rose_high')
+      choose('curate_generic_work_visibility_irish_partner')
       click_on('Save')
 
       cgw.reload
-      expect(cgw.visibility).to eq 'rose_high'
+      expect(cgw.visibility).to eq 'irish_partner'
     end
 
     scenario "verify work authenticated visibility" do

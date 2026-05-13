@@ -95,4 +95,19 @@ RSpec.describe "visibility and access restrictions for lux", :clean do
       expect(work.to_solr["visibility_group_ssi"]).to eq "Reading Room Only"
     end
   end
+
+  # This is the badge called "Irish Partner Sites" in the UI
+  # This does not reflect restrictions by IP address, those will come later
+  context "when an object is marked as Irish Partner Sites in Curate" do
+    let(:work) { FactoryBot.build(:irish_partner_work) }
+    it "is not visible to registered users in Lux" do
+      actor_stack_work
+      work.reload
+      expect(work.to_solr["visibility_ssi"]).to eq "irish_partner"
+      expect(work.to_solr["human_readable_visibility_ssi"]).to eq "Irish Partner Sites"
+      expect(work.to_solr["edit_access_group_ssim"]).to contain_exactly "admin"
+      expect(work.to_solr["read_access_group_ssim"]).to contain_exactly "irish_partner"
+      expect(work.to_solr["visibility_group_ssi"]).to eq "Irish Partner Sites Only"
+    end
+  end
 end

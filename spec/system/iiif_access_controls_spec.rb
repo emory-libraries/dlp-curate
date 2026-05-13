@@ -135,6 +135,20 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
     end
   end
 
+  context "Irish Partner Sites objects" do
+    let(:attributes) do
+      { "id" => work_id,
+        "sha1_tesim" => ["urn:sha1:#{image_sha}"],
+        "visibility_ssi" => "irish_partners" }
+    end
+
+    it 'visits a iiif_url', clean: true do
+      visit iiif_url
+      expect(page).to have_http_status(:forbidden)
+      expect(page.body).to be_empty
+    end
+  end
+
   context "Private objects" do
     let(:attributes) do
       { "id" => work_id,

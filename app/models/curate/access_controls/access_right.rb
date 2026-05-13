@@ -7,6 +7,7 @@ module Curate
       VISIBILITY_TEXT_VALUE_LOW_RES = 'low_res'
       VISIBILITY_TEXT_VALUE_EMORY_LOW = 'emory_low'
       VISIBILITY_TEXT_VALUE_ROSE_HIGH = 'rose_high'
+      VISIBILITY_TEXT_VALUE_IRISH_PARTNER = 'irish_partner'
     end
   end
 end

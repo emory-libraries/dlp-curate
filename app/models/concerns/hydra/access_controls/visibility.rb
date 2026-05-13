@@ -22,6 +22,8 @@ module Hydra::AccessControls
         emory_low_visibility!
       when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
         rose_high_visibility!
+      when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER
+        irish_partner_visibility!
       else
         raise ArgumentError, "Invalid visibility: #{value.inspect}"
       end
@@ -38,6 +40,8 @@ module Hydra::AccessControls
         ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
       elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
         ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
+      elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER
+        ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER
       else
         Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
       end
@@ -94,6 +98,12 @@ module Hydra::AccessControls
         visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
         remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH]
         set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH], remove_groups)
+      end
+
+      def irish_partner_visibility!
+        visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER
+        remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER]
+        set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER], remove_groups)
       end
   end
 end

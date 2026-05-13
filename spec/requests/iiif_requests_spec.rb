@@ -29,6 +29,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
   let(:encrypted_cookie_value) { encrypt_string(time_to_string) }
   let(:non_reading_room_ip) { '198.51.100.255' }
   let(:reading_room_ip) { '192.0.0.255' }
+  let(:irish_partner_ip) { '192.0.0.155' }
 
   before do
     ENV['IIIF_MANIFEST_CACHE'] = Rails.root.join('tmp').to_s
@@ -315,6 +316,59 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
         let(:admin_user) { FactoryBot.create(:admin) }
 
         it "does return the image for a work with 'Rose High View' visibility with Remote Address" do
+          login_as admin_user
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": non_reading_room_ip })
+          expect(response.status).to eq 200
+        end
+      end
+    end
+
+    context "with a Irish Partner Sites object" do
+      let(:attributes) do
+        { "id" => work_id,
+          "sha1_tesim" => ["urn:sha1:#{image_sha}"],
+          "visibility_ssi" => "irish_partner" }
+      end
+      let(:expected_iiif_url) { "https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/#{image_sha}/100,100,800,800/#{size}/0/default.jpg" }
+      context "within a Irish Partner Site" do
+        it "returns the image for a work with 'Irish Partner Sites' visibility with Remote Address" do
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": irish_partner_ip })
+
+          expect(request.headers["REMOTE_ADDR"]).to eq irish_partner_ip
+          expect(response.status).to eq 200
+        end
+
+        it "returns the image for a work with 'Irish Partner Sites' visibility with X-Forwarded-For" do
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "X-Forwarded-For": irish_partner_ip })
+
+          expect(request.headers["X-Forwarded-For"]).to eq irish_partner_ip
+          expect(response.status).to eq 200
+        end
+
+        it "does not change the region" do
+          get("/iiif/2/#{image_sha}/100,100,800,800/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": irish_partner_ip })
+          expect(assigns(:iiif_url)).to eq expected_iiif_url
+        end
+      end
+
+      context "not in a Irish Partner Site" do
+        it "does not return the image for a work with 'Irish Partner Sites' visibility with Remote Address" do
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": non_reading_room_ip })
+          expect(response.status).to eq 403
+          expect(response.body).to be_empty
+        end
+
+        it "does not return the image for a work with 'Irish Partner Sites' visibility with X-Forwarded-For" do
+          get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "X-Forwarded-For": non_reading_room_ip })
+          expect(response.status).to eq 403
+          expect(response.body).to be_empty
+        end
+      end
+
+      context "a Curate admin not in a Irish Partner Site" do
+        let(:admin_user) { FactoryBot.create(:admin) }
+
+        it "does return the image for a work with 'Irish Partner Sites' visibility with Remote Address" do
           login_as admin_user
           get("/iiif/2/#{image_sha}/#{region}/#{size}/#{rotation}/#{quality}.#{format}", headers: { "REMOTE_ADDR": non_reading_room_ip })
           expect(response.status).to eq 200

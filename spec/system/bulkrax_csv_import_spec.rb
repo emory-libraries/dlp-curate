@@ -86,7 +86,7 @@ RSpec.describe 'Bulkrax CSV importer', clean: true, js: true, type: :system do
       it 'has the expected CSV importer fields' do
         expect(find_all('#importer_parser_fields_visibility option').map(&:text)).to match_array(
           ["Emory High Download", "Emory Low Download", "Private", "Public", "Public Low View",
-           "Rose High View"]
+           "Rose High View", "Irish Partner Sites"]
         )
       end
 

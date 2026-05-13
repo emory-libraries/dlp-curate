@@ -88,6 +88,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       expect(visibilities).to include('emory_low')
       expect(visibilities).to include('low_res')
       expect(visibilities).to include('rose_high')
+      expect(visibilities).to include('irish_partner')
       visit "/dashboard/works"
       click_on work.title.first
       expect(page).to have_content work.title.first
@@ -106,6 +107,7 @@ RSpec.describe 'Importing records from a Langmuir CSV', :perform_jobs, :clean, t
       expect(visibilities).to include('emory_low')
       expect(visibilities).to include('low_res')
       expect(visibilities).to include('rose_high')
+      expect(visibilities).to include('irish_partner')
       visit "/dashboard/works"
       click_on work.title.first
       expect(page).to have_content work.title.first

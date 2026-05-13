@@ -4,3 +4,4 @@ all_reading_room_ips:
   # expects a space-delimited list, e.g. "1.2.3 1.2.4 1.2.5"
   rose_reading_room_ip_list: <%= %w[192.0.0.255 192.0.0.250] %>
   pitts_reading_room_ip_list: <%= %w[192.0.0.255 192.0.0.250] %>
+  irish_partner_reading_room_ip_list: <%= %w[192.0.0.155 192.0.0.250] %>
