@@ -18,5 +18,6 @@ Hyrax::PermissionBadge::VISIBILITY_LABEL_CLASS = {
   restricted:    "label-danger",
   low_res:       "label-success",
   emory_low:     "label-info",
-  rose_high:     "label-warning"
+  rose_high:     "label-warning",
+  irish_partner: "label-primary"
 }.freeze

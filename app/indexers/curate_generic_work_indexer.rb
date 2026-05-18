@@ -141,6 +141,8 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       "Log In Required"
     when "rose_high"
       "Reading Room Only"
+    when "irish_partner"
+      "Irish Partner Sites Only"
     end
   end
 
@@ -157,6 +159,8 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
       "Emory High Download"
     when "rose_high"
       "Rose High View"
+    when "irish_partner"
+      "Irish Partner Sites"
     when "restricted"
       "Private"
     end

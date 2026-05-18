@@ -73,6 +73,9 @@ class IiifController < ApplicationController
     when "rose_high"
       return head :forbidden unless user_ip_rose_reading_room?
       send_image
+    when "irish_partner"
+      return head :forbidden unless user_ip_irish_partner?
+      send_image
     else
       head :forbidden
     end
@@ -90,6 +93,9 @@ class IiifController < ApplicationController
       send_thumbnail
     when "rose_high"
       return head :forbidden unless user_ip_rose_reading_room?
+      send_thumbnail
+    when "irish_partner"
+      return head :forbidden unless user_ip_irish_partner?
       send_thumbnail
     else
       head :forbidden
@@ -141,6 +147,12 @@ class IiifController < ApplicationController
     false
   end
 
+  def user_ip_irish_partner?
+    irish_partner_reading_room_ips.include? user_ip
+  rescue
+    false
+  end
+
   ##
   # Determine the user's source IP address to allow restrictions based on reading
   # room location.  Depending on system configuration, X-Forwarded-For headers may
@@ -157,6 +169,10 @@ class IiifController < ApplicationController
   # @return [Array<String>]
   def rose_reading_room_ips
     reading_room_ips["all_reading_room_ips"]["rose_reading_room_ip_list"]
+  end
+
+  def irish_partner_reading_room_ips
+    reading_room_ips["all_reading_room_ips"]["irish_partner_reading_room_ip_list"]
   end
 
   def reading_room_ips
@@ -291,7 +307,7 @@ class IiifController < ApplicationController
       params["region"]
     else
       case visibility
-      when "open", "rose_high", "authenticated", "restricted"
+      when "open", "rose_high", "irish_partner", "authenticated", "restricted"
         params["region"]
       when "low_res", "emory_low"
         low_res_adjusted_region

@@ -104,7 +104,9 @@ RSpec.describe MetadataDetailsController, type: :controller do
       get :profile
       profile_table = CSV.parse(response.body, headers: :first_row)
       definition = profile_table.find { |r| r.field('attribute') == 'visibility' }
-      expect(definition.field('usage')).to include "Private, Restricted, Authenticated, Registered, Emory, Emory Network, Open, Public, Public Low View, Emory Low Download, or Rose High View."
+      expect(definition.field('usage')).to include(
+        "Private, Restricted, Authenticated, Registered, Emory, Emory Network, Open, Public, Public Low View, Emory Low Download, Rose High View, or Irish Partner Sites."
+      )
     end
 
     it 'includes fileset_label' do

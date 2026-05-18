@@ -10,12 +10,14 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
   let(:encrypted_cookie_value) { encrypt_string(time_to_string) }
   let(:non_reading_room_ip) { '198.51.100.255' }
   let(:reading_room_ip) { '192.0.0.255' }
+  let(:irish_partner_ip) { '192.0.0.155' }
   let(:public_file_set_id) { "747dr7sqvt-cor" }
   let(:emory_low_file_set_id) { "emory-low-cor" }
   let(:public_low_view_file_set_id) { "955m905qgg-cor" }
   let(:restricted_file_set_id) { "restricted-fileset-id" }
   let(:emory_high_file_set_id) { "emory-high-cor" }
   let(:rose_high_view_file_set_id) { "rose-high-cor" }
+  let(:irish_partner_file_set_id) { "irish-partner-cor" }
   let(:public_low_view_file_set_attributes) do
     { "id" => public_low_view_file_set_id,
       "has_model_ssim" => "FileSet",
@@ -52,6 +54,12 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
       "visibility_ssi" => "rose_high",
       "read_access_group_ssim" => ["rose_high"] }
   end
+  let(:irish_partner_file_set_attributes) do
+    { "id" => irish_partner_file_set_id,
+      "has_model_ssim" => "FileSet",
+      "visibility_ssi" => "irish_partner",
+      "read_access_group_ssim" => ["irish_partner"] }
+  end
   before do
     solr = Blacklight.default_index.connection
     solr.add([public_low_view_file_set_attributes,
@@ -59,7 +67,8 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
               restricted_file_set_attributes,
               emory_low_file_set_attributes,
               emory_high_file_set_attributes,
-              rose_high_view_file_set_attributes])
+              rose_high_view_file_set_attributes,
+              irish_partner_file_set_attributes])
     solr.commit
     allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).with(any_args).and_return("#{fixture_path}/balloon.jpeg")
   end
@@ -197,6 +206,58 @@ RSpec.describe "download requests", :clean, type: :request, iiif: true do
             get(
               "/iiif/#{rose_high_view_file_set_id}/thumbnail",
               headers: { "X-Forwarded-For": reading_room_ip }
+            )
+            expect(response.status).to eq 200
+          end
+        end
+      end
+    end
+
+    context "a Irish Partner Sites object" do
+      context "thumbnail" do
+        context "outside of a Irish Partner Site" do
+          it "returns a thumbnail for an admin user" do
+            login_as admin
+            get(
+              "/iiif/#{irish_partner_file_set_id}/thumbnail",
+              headers: { "X-Forwarded-For": non_reading_room_ip }
+            )
+            expect(response.status).to eq 200
+          end
+          it "does not return a thumbnail for a user authenticated through Lux" do
+            get(
+              "/iiif/#{irish_partner_file_set_id}/thumbnail",
+              headers: { "HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}", "X-Forwarded-For": non_reading_room_ip }
+            )
+            expect(response.status).to eq 403
+            expect(response.body).to be_empty
+          end
+          it "does not return a thumbnail for a not-logged-in user" do
+            get(
+              "/iiif/#{irish_partner_file_set_id}/thumbnail",
+              headers: { "X-Forwarded-For": non_reading_room_ip }
+            )
+            expect(response.status).to eq 403
+            expect(response.body).to be_empty
+          end
+        end
+        context "in a Irish Partner Site" do
+          it "returns a thumbnail for an admin user" do
+            login_as admin
+            get("/iiif/#{irish_partner_file_set_id}/thumbnail")
+            expect(response.status).to eq 200
+          end
+          it "returns a thumbnail for a user authenticated through Lux" do
+            get(
+              "/iiif/#{irish_partner_file_set_id}/thumbnail",
+              headers: { "HTTP_COOKIE" => "#{cookie_name}=#{encrypted_cookie_value}", "X-Forwarded-For": irish_partner_ip }
+            )
+            expect(response.status).to eq 200
+          end
+          it "returns a thumbnail for a not-logged-in user" do
+            get(
+              "/iiif/#{irish_partner_file_set_id}/thumbnail",
+              headers: { "X-Forwarded-For": irish_partner_ip }
             )
             expect(response.status).to eq 200
           end

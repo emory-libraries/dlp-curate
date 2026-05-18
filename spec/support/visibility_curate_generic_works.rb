@@ -75,3 +75,16 @@ WORK_WITH_PRIVATE_VISIBILITY = {
   visibility_ssi:                ["restricted"],
   human_readable_visibility_ssi: "Private"
 }.freeze
+
+WORK_WITH_IRISH_PARTNER_VISIBILITY = {
+  id:                            '777-321',
+  has_model_ssim:                ['CurateGenericWork'],
+  title_tesim:                   ['Work with Irish Partner Sites visibility'],
+  thumbnail_path_ss:             ['/downloads/777-321?file=thumbnail'],
+  hasRelatedImage_ssim:          ['777-456'],
+  edit_access_group_ssim:        ["admin"],
+  read_access_group_ssim:        ["irish_partner"],
+  visibility_ssi:                ['irish_partner'],
+  visibility_group_ssi:          "Irish Partner Sites Specific",
+  human_readable_visibility_ssi: "Irish Partner Sites"
+}.freeze

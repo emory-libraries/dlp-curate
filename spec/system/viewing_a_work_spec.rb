@@ -279,6 +279,17 @@ RSpec.describe 'viewing the importer guide', type: :system, clean: true do
         expect(badge_text(page)).to eq('Rose High View')
       end
     end
+
+    context 'irish partner sites (irish_partner)' do
+      let(:work) { FactoryBot.create(:irish_partner_work) }
+
+      it "has irish partner sites visibility metadata" do
+        visit(work_url)
+
+        expect(page).to have_css("#visibility", text: 'Irish Partner Sites')
+        expect(badge_text(page)).to eq('Irish Partner Sites')
+      end
+    end
   end
 
   describe 'preservation status block' do

@@ -145,7 +145,8 @@ class CurateMapper < Zizia::HashMapper
       'public' => Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       'public low view' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES,
       'emory low download' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW,
-      'rose high view' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH
+      'rose high view' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH,
+      'irish partner' => ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER
     }.freeze
   end
 

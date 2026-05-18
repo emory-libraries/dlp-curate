@@ -211,6 +211,9 @@ en:
       rose_high:
         note_html: 'Rose Library reading room access only'
         text: 'Rose High View'
+      irish_partner:
+        note_html: 'Irish Partner sites access only'
+        text: 'Irish Partner Sites'
       authenticated:
         note_html: 'Emory users with full resolution view & download'
         text: 'Emory High Download'
