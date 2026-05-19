@@ -64,9 +64,9 @@
         </li>
 
         <!-- Irish Partner Sites -->
-        <li class="radio">
-          <label>
-            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER %>
+        <li class="form-check">
+          <label class="form-check-label">
+            <%= f.radio_button :visibility, ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER, class: 'form-check-input' %>
             <%= visibility_badge(::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER) %>
             <br />
             <%= t('hyrax.visibility.irish_partner.note_html') %>
