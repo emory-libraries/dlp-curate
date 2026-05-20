@@ -8,14 +8,34 @@ jobs:
         parameters:
             ruby_version:
                 type: string
-                default: 2.7.4
+                default: 2.7.5
             bundler_version:
                 type: string
                 default: 2.1.4
-        executor:
-            name: samvera/ruby_fcrepo_solr_redis
-            ruby_version: << parameters.ruby_version >>
-            solr_version: 7-alpine
+            fcrepo_version:
+                type: string
+                default: 4.7.5
+            mariadb_version:
+                type: string
+                default: '10.5'
+            redis_version:
+                type: string
+                default: '8.4.0'
+            solr_port:
+                type: string
+                default: '8983'
+            solr_version:
+                type: string
+                default: 7-alpine
+        docker:
+            - image: circleci/ruby:<< parameters.ruby_version >>-node-browsers-legacy
+            - environment:
+                CATALINA_OPTS: -Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC
+              image: samvera/fcrepo4:<< parameters.fcrepo_version >>
+            - command: bin/solr -cloud -noprompt -f -p << parameters.solr_port >>
+              image: solr:<< parameters.solr_version >>
+            - image: cimg/redis:<< parameters.redis_version >>
+            - image: cimg/mariadb:<< parameters.mariadb_version >>
         working_directory: ~/project
         parallelism: 4
         steps:
@@ -47,7 +67,16 @@ jobs:
                 paths:
                     - ~/project/node_modules
 
-            - samvera/install_solr_core
+            - samvera/install_solr_core:
+                solr_port: << parameters.solr_port >>
+
+            - run:
+                name: Create DB
+                command: RAILS_ENV="test" RACK_ENV="test" bundle exec rake db:create
+
+            - run:
+                name: Migrate DB
+                command: RAILS_ENV="test" RACK_ENV="test" bundle exec rake db:migrate
 
             - samvera/parallel_rspec
 
@@ -60,8 +89,12 @@ jobs:
                 path: tmp/screenshots
 
     coverage:
+        parameters:
+            ruby_version:
+                type: string
+                default: 2.7.4
         docker:
-            - image: cimg/ruby:2.7.4
+            - image: cimg/ruby:<< parameters.ruby_version >>
         working_directory: ~/project
         parallelism: 1
         steps:
