@@ -23,11 +23,11 @@ module Hydra::AccessControls
         return if value.nil?
         # only set explicit permissions
         case value
-        when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        when AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
           public_visibility!
-        when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+        when AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
           registered_visibility!
-        when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+        when AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
           private_visibility!
         when ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
           low_res_visibility!
@@ -44,10 +44,10 @@ module Hydra::AccessControls
       end
 
       def visibility
-        if read_groups.include? Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC
-          Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-        elsif read_groups.include? Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED
-          Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+        if read_groups.include? AccessRight::PERMISSION_TEXT_VALUE_PUBLIC
+          AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        elsif read_groups.include? AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED
+          AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
         elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
           ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES
         elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW
@@ -57,7 +57,7 @@ module Hydra::AccessControls
         elsif read_groups.include? ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER
           ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER
         else
-          Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+          AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
         end
       end
 
@@ -77,25 +77,24 @@ module Hydra::AccessControls
         # represented as a read group (e.g. on-campus)
         # @return [Array] a list of visibility types that are represented as read groups
         def represented_visibility
-          [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED,
-           Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+          [AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED,
+           AccessRight::PERMISSION_TEXT_VALUE_PUBLIC,
+           ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LOW_RES,
+           ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMORY_LOW,
+           ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ROSE_HIGH,
+           ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER]
         end
 
         def public_visibility!
-          visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-          remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
-          set_read_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], remove_groups)
+          visibility_will_change! unless visibility == AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+          remove_groups = represented_visibility - [AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+          set_read_groups([AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], remove_groups)
         end
 
         def registered_visibility!
-          visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-          remove_groups = represented_visibility - [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
-          set_read_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED], remove_groups)
-        end
-
-        def private_visibility!
-          visibility_will_change! unless visibility == Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-          set_read_groups([], represented_visibility)
+          visibility_will_change! unless visibility == AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+          remove_groups = represented_visibility - [AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
+          set_read_groups([AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED], remove_groups)
         end
 
         def low_res_visibility!
@@ -120,6 +119,11 @@ module Hydra::AccessControls
           visibility_will_change! unless visibility == ::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER
           remove_groups = represented_visibility - [::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER]
           set_read_groups([::Curate::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_IRISH_PARTNER], remove_groups)
+        end
+
+        def private_visibility!
+          visibility_will_change! unless visibility == AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+          set_read_groups([], represented_visibility)
         end
     end
   end
