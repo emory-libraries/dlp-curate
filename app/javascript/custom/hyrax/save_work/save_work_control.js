@@ -1,10 +1,10 @@
 // [Hyrax-override-hyrax-v5.2.0]
 
-import { RequiredFields } from './required_fields'
-import { ChecklistItem } from './checklist_item'
-import { UploadedFiles } from './uploaded_files'
-import { DepositAgreement } from './deposit_agreement'
-import VisibilityComponent from './visibility_component'
+import { RequiredFields } from '../../../hyrax/save_work/required_fields'
+import { ChecklistItem } from '../../../hyrax/save_work/checklist_item'
+import { UploadedFiles } from '../../../hyrax/save_work/uploaded_files'
+import { DepositAgreement } from '../../../hyrax/save_work/deposit_agreement'
+import VisibilityComponent from '../../../hyrax/save_work/visibility_component'
 
 /**
  * Polyfill String.prototype.startsWith()
