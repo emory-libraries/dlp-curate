@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // [Hyrax-override-hyrax-v5.2.0] Initializes collectionEditor for collection-form that enables autocomplete
 // Once, javascript is written in a modular format, all initialization
 // code should be called from here.
