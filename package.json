@@ -1,10 +1,9 @@
 {
-  "_comment": "This may need to change if we change universal viewer version",
   "name": "dlp-curate",
   "private": true,
   "repository": "git@github.com:samvera/hyrax.git",
   "dependencies": {
-    "@rails/webpacker": "*",
+    "@rails/webpacker": "6.0.0-rc.6",
     "bootstrap": "^4",
     "datatables.net-bs4": "*",
     "datatables.net-searchpanes-bs4": "*",
@@ -13,13 +12,29 @@
     "handlebars": "^4",
     "jquery": "*",
     "jquery-validation": "*",
+    "mini-css-extract-plugin": "*",
     "popper.js": "*",
-    "universalviewer": "4.0.0"
+    "postcss": "*",
+    "postcss-flexbugs-fixes": "*",
+    "postcss-loader": "*",
+    "postcss-preset-env": "*",
+    "sass": "*",
+    "universalviewer": "4.0.0",
+    "webpack-dev-server": "^5.2.4"
   },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",
     "postinstall": "yarn run uv-install && yarn run uv-config",
     "uv-install": "cp -r ./node_modules/universalviewer/dist ./public/uv",
     "uv-config": "cp ./config/uv/uv.html ./public/uv/uv.html & cp ./config/uv/uv-config.json ./public/uv/ & cp ./config/uv/uv_config_liberal.json ./public/uv/"
-  }
+  },
+  "version": "0.1.0",
+  "babel": {
+    "presets": [
+      "./node_modules/@rails/webpacker/package/babel/preset.js"
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }
