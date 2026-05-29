@@ -1,4 +1,4 @@
-const { webpackConfig, merge } = require("@rails/webpacker")
+const { webpackConfig, merge } = require("shakapacker")
 const customConfig = {
   module: {
     rules: [
@@ -23,4 +23,4 @@ const customConfig = {
   }
 }
 
-module.exports = merge(webpackConfig, customConfig)
+module.exports = merge(customConfig, webpackConfig)

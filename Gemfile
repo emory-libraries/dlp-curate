@@ -44,6 +44,7 @@ gem 'pg', require: false
 gem 'puma'
 gem 'rails', '6.1.7.10'
 gem 'riiif', '~> 2.8'
+gem 'shakapacker', '6.6.0'
 gem 'sidekiq', '~> 7.0'
 gem 'sidekiq-limit_fetch'
 gem 'stackprof', require: false
@@ -51,7 +52,6 @@ gem 'turbolinks', '~> 5'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'uglifier', '>= 1.3.0'
-gem 'webpacker', '6.0.0.rc.6'
 gem 'whenever', require: false
 
 group :development do
