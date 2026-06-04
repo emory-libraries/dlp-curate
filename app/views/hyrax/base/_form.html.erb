@@ -14,5 +14,158 @@
     <%# This causes the page to switch back to the default template if they've
         previously visited the batch download page in this Turbolinks session %>
     $("#fileupload").fileupload('option', 'downloadTemplateId', 'template-download')
+
+    let errorString = "Please specify the correct date range";
+    let apiUrl = "/validations/edtf";
+    console.log("I'm inside index!");
+    $("form[data-param-key='curate_generic_work']").validate({
+      errorPlacement: (label, element) => {
+            label.addClass('error-validate');
+            label.insertAfter(element);
+        },
+        messages: {
+            "curate_generic_work[date_created]": {
+                remote: errorString
+            },
+            "curate_generic_work[date_issued]": {
+                remote: errorString
+            },
+            "curate_generic_work[conference_dates]": {
+                remote: errorString
+            },
+            "curate_generic_work[data_collection_dates]": {
+                remote: errorString
+            },
+            "curate_generic_work[copyright_date]": {
+                remote: errorString
+            },
+            "curate_generic_work[scheduled_rights_review]": {
+                remote: errorString
+            },
+            "curate_generic_work[date_digitized]": {
+                remote: errorString
+            }
+        },
+        rules: {
+            "curate_generic_work[date_created]": {
+                required: true,
+                remote: {
+                    url: apiUrl,
+                    type: "get",
+                    data: {
+                        value: function() {
+                            return $("#curate_generic_work_date_created").val();
+                        }
+                    },
+                    dataFilter: function(data) {
+                        var json = JSON.parse(data);
+                        // Returns "true" or "false" as a string for the validator
+                        return JSON.stringify(json.valid);
+                    }
+                }
+            },
+            "curate_generic_work[date_issued]": {
+                remote: {
+                    url: apiUrl,
+                    type: "get",
+                    data: {
+                        value: function() {
+                            return $("#curate_generic_work_date_issued").val();
+                        }
+                    },
+                    dataFilter: function(data) {
+                        var json = JSON.parse(data);
+                        // Returns "true" or "false" as a string for the validator
+                        return JSON.stringify(json.valid);
+                    }
+                }
+            },
+            "curate_generic_work[conference_dates]": {
+                remote: {
+                    url: apiUrl,
+                    type: "get",
+                    data: {
+                        value: function() {
+                            return $("#curate_generic_work_conference_dates").val();
+                        }
+                    },
+                    dataFilter: function(data) {
+                        var json = JSON.parse(data);
+                        // Returns "true" or "false" as a string for the validator
+                        return JSON.stringify(json.valid);
+                    }
+                }
+            },
+            "curate_generic_work[data_collection_dates]": {
+                remote: {
+                    url: apiUrl,
+                    type: "get",
+                    data: {
+                        value: function() {
+                            return $("#curate_generic_work_data_collection_dates").val();
+                        }
+                    },
+                    dataFilter: function(data) {
+                        var json = JSON.parse(data);
+                        // Returns "true" or "false" as a string for the validator
+                        return JSON.stringify(json.valid);
+                    }
+                }
+            },
+            "curate_generic_work[copyright_date]": {
+                remote: {
+                    url: apiUrl,
+                    type: "get",
+                    data: {
+                        value: function() {
+                            return $("#curate_generic_work_copyright_date").val();
+                        }
+                    },
+                    dataFilter: function(data) {
+                        var json = JSON.parse(data);
+                        // Returns "true" or "false" as a string for the validator
+                        return JSON.stringify(json.valid);
+                    }
+                }
+            },
+            "curate_generic_work[scheduled_rights_review]": {
+                remote: {
+                    url: apiUrl,
+                    type: "get",
+                    data: {
+                        value: function() {
+                            return $("#curate_generic_work_scheduled_rights_review").val();
+                        }
+                    },
+                    dataFilter: function(data) {
+                        var json = JSON.parse(data);
+                        // Returns "true" or "false" as a string for the validator
+                        return JSON.stringify(json.valid);
+                    }
+                }
+            },
+            "curate_generic_work[date_digitized]": {
+                remote: {
+                    url: apiUrl,
+                    type: "get",
+                    data: {
+                        value: function() {
+                            return $("#curate_generic_work_date_digitized").val();
+                        }
+                    },
+                    dataFilter: function(data) {
+                        var json = JSON.parse(data);
+                        // Returns "true" or "false" as a string for the validator
+                        return JSON.stringify(json.valid);
+                    }
+                }
+            }
+        },
+        success: (label,element) => {
+            label.parent().removeClass('error-validate');
+            label.parent().remove();
+        },
+        wrapper: 'div'
+    });
   });
 </script>

@@ -11,7 +11,6 @@
     "datatables.net-bs4": "*",
     "datatables.net-searchpanes-bs4": "*",
     "datatables.net-select-bs4": "*",
-    "edtf": "*",
     "handlebars": "^4",
     "jquery": "*",
     "jquery-validation": "*",
@@ -22,10 +21,9 @@
     "postcss-loader": "*",
     "postcss-preset-env": "*",
     "sass": "*",
-    "shakapacker": "6.0.0",
+    "shakapacker": "6.6.0",
     "terser-webpack-plugin": "^5.6.1",
     "universalviewer": "4.0.0",
-    "webpack-dev-server": "^5.2.4",
     "webpack-sources": "^3.5.0"
   },
   "scripts": {
@@ -50,6 +48,7 @@
     "webpack": "^5.0.0",
     "webpack-assets-manifest": "^5.0.6",
     "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.9.0",
     "webpack-merge": "^5.8.0"
   }
 }

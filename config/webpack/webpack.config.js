@@ -19,7 +19,7 @@ const customConfig = {
     ]
   },
   resolve: {
-    extensions: ['.mjs', '.js', '.sass', '.scss', '.css', '.module.sass', '.module.scss', '.module.css', '.png', '.svg', '.gif', '.jpeg', '.jpg']
+    extensions: ['.mjs', '.js', '.es6', '.sass', '.scss', '.css', '.module.sass', '.module.scss', '.module.css', '.png', '.svg', '.gif', '.jpeg', '.jpg']
   }
 }
 

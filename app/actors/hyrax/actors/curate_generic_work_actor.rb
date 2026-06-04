@@ -14,7 +14,7 @@ module Hyrax
       def apply_save_data_to_curation_concern(env)
         skip_metadata = env.attributes["skip_metadata"]
         env.attributes.delete(:skip_metadata)
-        env.curation_concern.reload.attributes = clean_attributes(env.attributes) unless skip_metadata
+        env.curation_concern.attributes = clean_attributes(env.attributes) unless skip_metadata
         env.curation_concern.date_modified = TimeService.time_in_utc
 
         super

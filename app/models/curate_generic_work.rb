@@ -14,6 +14,13 @@ class CurateGenericWork < ActiveFedora::Base
   validates :related_publications, url: { message: 'requires a valid URL' }, if: -> { related_publications.present? }
   validates :related_datasets, url: { message: 'requires a valid URL' }, if: -> { related_datasets.present? }
   validates :rights_documentation, url: { message: 'requires a valid URL' }, if: -> { rights_documentation.present? }
+  validates :conference_dates, edtf: true, if: -> { conference_dates.present? }
+  validates :copyright_date, edtf: true, if: -> { copyright_date.present? }
+  validates :data_collection_dates, edtf: true, if: -> { data_collection_dates.present? }
+  validates :date_created, edtf: true, if: -> { date_created.present? }
+  validates :date_digitized, edtf: true, if: -> { date_digitized.present? }
+  validates :date_issued, edtf: true, if: -> { date_issued.present? }
+  validates :scheduled_rights_review, edtf: true, if: -> { scheduled_rights_review.present? }
   before_save :index_preservation_workflow_terms
 
   property :abstract, predicate: "http://purl.org/dc/elements/1.1/description", multiple: false do |index|
