@@ -26,6 +26,9 @@ class UvConfiguration < ActiveSupport::HashWithIndifferentAccess
             "manifestHeader": nil
           }
         }
+      },
+      "options": {
+        "pagingEnabled": false
       }
     }
   end # rubocop:enable Metrics/MethodLength
