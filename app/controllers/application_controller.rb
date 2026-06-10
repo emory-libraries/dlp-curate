@@ -78,6 +78,7 @@ class ApplicationController < ActionController::Base
                                   confinedImageSize:             100_000 # set to an unreasonably high value so that Whole Image Low Res option is hidden
                                 },
                                 content: {
+                                  currentViewAsJpg:  "",
                                   wholeImageHighRes: "Whole Image 400px"
                                 }
                               }
