@@ -76,5 +76,7 @@ Rails.application.routes.draw do
   # Additional Hyrax::DownloadsController action.
   get 'downloads/pdf_for_viewer/:id', to: 'curate_downloads#pdf_for_viewer', as: 'download_pdf_for_viewer'
 
+  get 'validations/edtf', to: 'validations#edtf'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

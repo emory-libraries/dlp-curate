@@ -55,7 +55,7 @@ FactoryBot.define do
       copyright_date { '1922' }
       creator { ['the author'] }
       data_classifications { ['open'] }
-      data_collection_dates { ['785'] }
+      data_collection_dates { ['1785'] }
       data_producers { ['Megacorp'] }
       data_source_notes { ['Found materials'] }
       date_created { '1992' }
@@ -98,7 +98,7 @@ FactoryBot.define do
       rights_documentation { 'https://example.com' }
       rights_holders { ['Emory'] }
       rights_statement { ['http://rightsstatements.org/vocab/InC/1.0/'] }
-      scheduled_rights_review { 'true' }
+      scheduled_rights_review { '1905' }
       scheduled_rights_review_note { 'check please' }
       sensitive_material { 'false' }
       sensitive_material_note { 'do not check' }

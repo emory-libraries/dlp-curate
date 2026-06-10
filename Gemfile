@@ -44,6 +44,7 @@ gem 'pg', require: false
 gem 'puma'
 gem 'rails', '6.1.7.10'
 gem 'riiif', '~> 2.8'
+gem 'shakapacker', '6.6.0'
 gem 'sidekiq', '~> 7.0'
 gem 'sidekiq-limit_fetch'
 gem 'stackprof', require: false
