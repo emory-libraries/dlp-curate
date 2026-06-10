@@ -35,4 +35,3 @@
 //= require almond
 //= require bulkrax/application
 //= require newspaper_works/ocr_search
-//= require validation/index
