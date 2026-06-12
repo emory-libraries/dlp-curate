@@ -2,7 +2,7 @@
 # [Hyrax-override-hyrax-v5.2.0] spec/jobs/characterize_job_spec.rb
 require 'rails_helper'
 
-RSpec.describe CharacterizeJob, :clean do
+RSpec.describe CharacterizeJob, :perform_enqueued, :clean do
   let(:file_set_id) { 'abc12345' }
   let(:filename)    { Rails.root.join('tmp', 'uploads', 'ab', 'c1', '23', '45', 'abc12345', 'picture.png').to_s }
   let(:file_set) do

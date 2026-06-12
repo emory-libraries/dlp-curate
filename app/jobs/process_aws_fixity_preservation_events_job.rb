@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class ProcessAwsFixityPreservationEventsJob < Hyrax::ApplicationJob
-  include PreservationEvents
-
   def perform(csv)
     lines = CSV.read(csv, headers: true)
 
@@ -21,6 +19,6 @@ class ProcessAwsFixityPreservationEventsJob < Hyrax::ApplicationJob
       event = event_obj.process_event
       return if check_for_preexisting_preservation_events(file_set, event_obj.sha1, event_obj.fixity_start)
 
-      create_preservation_event(file_set, event)
+      CreatePreservationEventJob.perform_later(object: file_set, event:)
     end
 end

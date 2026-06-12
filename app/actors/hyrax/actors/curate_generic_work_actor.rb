@@ -5,8 +5,8 @@
 module Hyrax
   module Actors
     class CurateGenericWorkActor < Hyrax::Actors::BaseActor
-      include PreservationEvents
       KNOWN_NESTED_ATTRIBUTES = [:preservation_workflow_attributes].freeze
+
       # Some CSV rows have blank metadata and are only used to attach a file.
       # Those rows should come through with env.attributes["skip_metadata"] = true
       # 1. Remove that value from the attributes, since it will cause an error if you try to save it to the object
@@ -31,27 +31,31 @@ module Hyrax
         event_start = DateTime.current # record event_start timestamp
         apply_creation_data_to_curation_concern(env)
         apply_save_data_to_curation_concern(env)
-        save(env) && next_actor.create(env) && run_callbacks(:after_create_concern, env)
+        successfully_processed = save(env) && next_actor.create(env) && run_callbacks(:after_create_concern, env)
+        event_end = DateTime.current # record event_end timestamp
         # Create our three required events
-        work_creation = { 'type' => 'Validation', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Submission package validated',
-                          'software_version' => 'Curate v.1', 'user' => env.user.uid }
-        work_policy = { 'type' => 'Policy Assignment', 'start' => event_start, 'outcome' => 'Success',
-                        'details' => "Visibility/access controls assigned: #{env.curation_concern.visibility}", 'software_version' => 'Curate v.1', 'user' => env.user.uid }
+        work_creation = { 'type' => 'Validation', 'start' => event_start, 'end' => event_end, 'outcome' => 'Success',
+                          'details' => 'Submission package validated', 'software_version' => 'Curate v.1', 'user' => env.user.uid }
+        work_policy = { 'type' => 'Policy Assignment', 'start' => event_start, 'end' => event_end, 'outcome' => 'Success',
+                        'details' => "Visibility/access controls assigned: #{env.curation_concern.visibility}", 'software_version' => 'Curate v.1',
+                        'user' => env.user.uid }
         # Create preservation events
-        create_preservation_event(env.curation_concern, work_creation)
-        create_preservation_event(env.curation_concern, work_policy)
+        CreatePreservationEventJob.perform_later(object: env.curation_concern, event: work_creation) if successfully_processed
+        CreatePreservationEventJob.perform_later(object: env.curation_concern, event: work_policy) if successfully_processed
+        successfully_processed
       end
 
       def update(env)
         event_start = DateTime.current # record event_start timestamp
         apply_update_data_to_curation_concern(env)
         apply_save_data_to_curation_concern(env)
-        next_actor.update(env) && save(env) && run_callbacks(:after_update_metadata, env)
+        successfully_processed = next_actor.update(env) && save(env) && run_callbacks(:after_update_metadata, env)
         # Update work preservation event
-        work_update = { 'type' => 'Modification', 'start' => event_start, 'outcome' => 'Success', 'details' => 'Object updated',
-                          'software_version' => 'Curate v.1', 'user' => env.user.uid }
+        work_update = { 'type' => 'Modification', 'start' => event_start, 'end' => DateTime.current, 'outcome' => 'Success', 'details' => 'Object updated',
+                        'software_version' => 'Curate v.1', 'user' => env.user.uid }
         # Create preservation events
-        create_preservation_event(env.curation_concern, work_update)
+        CreatePreservationEventJob.perform_later(object: env.curation_concern, event: work_update) if successfully_processed
+        successfully_processed
       end
     end
   end

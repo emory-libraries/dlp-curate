@@ -6,7 +6,6 @@ module Hyrax
     # Actions are decoupled from controller logic so that they may be called from a controller or a background job.
     class FileSetActor
       include Lockable
-      include PreservationEvents
       attr_reader :file_set, :user, :attributes
 
       def initialize(file_set, user)

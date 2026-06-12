@@ -5,8 +5,6 @@
 # to the hashValue predicate
 Rails.application.config.to_prepare do
   Hydra::Works::CharacterizationService.class_eval do
-    include PreservationEvents
-
     def self.run(object, source = nil, options = {}, user = nil)
       new(object, source, options, user).characterize
     end
@@ -43,16 +41,16 @@ Rails.application.config.to_prepare do
         value.push(sha256) if sha256
         object.send(:original_checksum=, value)
         # slice the file_set ID from object.id and pass to digest_preservation_event if object is saved
-        digest_preservation_event(object.id.partition("/files").first, event_start, value) if object.id
+        digest_preservation_event(object.id.partition("/files").first, event_start, value, DateTime.current) if object.id
       end
 
-      def digest_preservation_event(file_set_id, event_start, value)
+      def digest_preservation_event(file_set_id, event_start, value, event_end)
         file_set = FileSet.find(file_set_id)
         # create event for digest calculation/failure
-        event = { 'type' => 'Message Digest Calculation', 'start' => event_start, 'details' => value,
+        event = { 'type' => 'Message Digest Calculation', 'start' => event_start, 'end' => event_end, 'details' => value,
                   'software_version' => 'FITS v1.5.0, Fedora v4.7.6, Ruby Digest library', 'user' => @user.presence || file_set.depositor }
         event['outcome'] = value.size == 3 ? 'Success' : 'Failure'
-        create_preservation_event(file_set, event)
+        CreatePreservationEventJob.perform_later(object: file_set, event:)
       end
   end
 end

@@ -20,8 +20,6 @@
 # Override: Adds preservation event for fileset characterization
 
 class CharacterizeJob < Hyrax::ApplicationJob
-  include PreservationEvents
-
   queue_as Hyrax.config.ingest_queue_name
 
   class_attribute :characterization_service
@@ -72,7 +70,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
       file_set.save!
       # commenting this job call since we are doing this in the file_actor
       # CreateDerivativesJob.perform_later(file_set, file_id, filepath)
-      process_preservation_event(file_set, file, user)
+      process_preservation_event(file_set, file, user, DateTime.current)
     end
 
     def clear_metadata(file_set)
@@ -107,17 +105,18 @@ class CharacterizeJob < Hyrax::ApplicationJob
       "The Characterization Service failed."
     end
 
-    def process_preservation_event(file_set, file, user)
+    def process_preservation_event(file_set, file, user, event_end)
       metadata_populated = check_for_populated_metadata(file_set)
       event = {
         'type' => 'Characterization',
         'start' => @event_start,
+        'end' => event_end,
         'outcome' => metadata_populated ? 'Success' : 'Failure',
         'details' => pres_event_details(metadata_populated, file),
         'software_version' => 'FITS v1.5.0',
         'user' => user.presence || file_set.depositor
       }
-      create_preservation_event(file_set, event)
+      CreatePreservationEventJob.perform_later(object: file_set, event:)
     end
 
     def check_for_populated_metadata(file_set)

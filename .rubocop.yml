@@ -97,6 +97,7 @@ Metrics/MethodLength:
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
         - app/jobs/create_work_job.rb
+        - app/jobs/fixity_check_job.rb
         - app/models/bulkrax/exporter.rb
         - app/models/concerns/bulkrax/export_behavior.rb
         - app/models/concerns/bulkrax/import_behavior.rb
@@ -124,8 +125,9 @@ Metrics/ParameterLists:
         - app/factories/bulkrax/object_factory_interface.rb
         - app/importers/yellowback_preprocessor.rb
         - lib/importing_modules/file_set_methods.rb
-        - app/jobs/manifest_persistence_job.rb
         - app/jobs/characterize_job.rb
+        - app/jobs/fixity_check_job.rb
+        - app/jobs/manifest_persistence_job.rb
         - config/initializers/collection_member_search_service_overrides.rb
 
 Metrics/PerceivedComplexity:
