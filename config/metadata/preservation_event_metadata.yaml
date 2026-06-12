@@ -1,0 +1,44 @@
+# Custom metadata properties for the Valkyrie FileSet model.
+# These attributes match the ActiveFedora PreservationEvent model's custom properties.
+
+attributes:
+  event_details:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#eventDetails
+  event_end:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#eventEnd
+  event_id:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#eventIdentifier
+  event_start:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#eventStart
+  event_type:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#eventType
+  fileset_id:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#filesetRelatedObject
+  initiating_user:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#eventUser
+  outcome:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#eventOutcome
+  software_version:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#softwareVersion
+  workflow_id:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#workflowRelatedObject

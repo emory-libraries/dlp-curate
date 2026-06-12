@@ -5,7 +5,7 @@
 if Hyrax.config.valkyrie_transition?
   Rails.application.config.after_initialize do
     [ # List AF work models
-      GenericWork
+      CurateGenericWork
     ].each do |klass|
       Wings::ModelRegistry.register("#{klass}Resource".constantize, klass)
       # we register itself so we can pre-translate the class in Freyja instead of having to translate in each query_service
@@ -17,6 +17,7 @@ if Hyrax.config.valkyrie_transition?
     Wings::ModelRegistry.register(AdminSetResource, AdminSet)
     Wings::ModelRegistry.register(FileSet, FileSet)
     Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
+    Wings::ModelRegistry.register(FileSetResource, FileSet)
     Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
     Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
 
@@ -51,20 +52,15 @@ if Hyrax.config.valkyrie_transition?
       Hyrax::CustomQueries::FindManyByAlternateIds,
       Hyrax::CustomQueries::FindModelsByAccess,
       Hyrax::CustomQueries::FindCountBy,
-      Hyrax::CustomQueries::FindByDateRange
-      # Hyrax::CustomQueries::FindBySourceIdentifier  # from bulkrax
+      Hyrax::CustomQueries::FindByDateRange,
+      Curate::CustomQueries::FindBySourceIdentifier
     ].each do |handler|
       Hyrax.query_service.services[0].custom_queries.register_query_handler(handler)
     end
 
-    # [
-    #   Wings::CustomQueries::FindBySourceIdentifier
-    # ].each do |handler|
-    #   Hyrax.query_service.services[1].custom_queries.register_query_handler(handler)
-    # end
-
-    # Register each work resource pair
-    # Wings::ModelRegistry.register(GenericWorkResource, GenericWork)
+    # Register find_by_model_and_property_value with find_single_or_nil strategy so
+    # Freyja's composite dispatch returns nil (not ObjectNotFoundError) when not found.
+    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_model_and_property_value] = :find_single_or_nil
   end
 
   Rails.application.config.to_prepare do
@@ -76,12 +72,20 @@ if Hyrax.config.valkyrie_transition?
       attribute :internal_resource, Valkyrie::Types::Any.default("Collection"), internal: true
     end
 
+    CurateGenericWorkResource.class_eval do
+      attribute :internal_resource, Valkyrie::Types::Any.default("CurateGenericWork"), internal: true
+    end
+
+    FileSetResource.class_eval do
+      attribute :internal_resource, Valkyrie::Types::Any.default("FileSet"), internal: true
+    end
+
     Valkyrie.config.resource_class_resolver = lambda do |resource_klass_name|
       # TODO: Can we use some kind of lookup.
       klass_name = resource_klass_name.gsub(/^Wings\((.+)\)$/, '\1')
       klass_name = klass_name.gsub(/Resource$/, '')
       if %w[
-        GenericWork
+        CurateGenericWork
       ].include?(klass_name)
         "#{klass_name}Resource".constantize
       elsif 'Collection' == klass_name
@@ -93,7 +97,7 @@ if Hyrax.config.valkyrie_transition?
       elsif 'Hydra::AccessControl' == klass_name
         Hyrax::AccessControl
       elsif 'FileSet' == klass_name
-        Hyrax::FileSet
+        FileSetResource
       elsif 'Hydra::AccessControls::Embargo' == klass_name
         Hyrax::Embargo
       elsif 'Hydra::AccessControls::Lease' == klass_name

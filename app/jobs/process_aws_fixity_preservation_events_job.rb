@@ -16,11 +16,21 @@ class ProcessAwsFixityPreservationEventsJob < Hyrax::ApplicationJob
     def process_line(line)
       event_obj = AwsFixityEvent.new(line)
       return if event_obj.sha1.blank?
-      file_set = FileSet.where(sha1_tesim: event_obj.sha1)&.first
+      file_set = find_file_set_by_sha1(event_obj.sha1)
       return if file_set.blank?
       event = event_obj.process_event
       return if check_for_preexisting_preservation_events(file_set, event_obj.sha1, event_obj.fixity_start)
 
       create_preservation_event(file_set, event)
+    end
+
+    def find_file_set_by_sha1(sha1)
+      if Hyrax.config.valkyrie_transition?
+        results = Hyrax::SolrService.query("sha1_tesim:#{sha1}", rows: 1, fl: "id")
+        return nil if results.blank?
+        Hyrax.query_service.find_by(id: results.first["id"])
+      else
+        FileSet.where(sha1_tesim: sha1)&.first
+      end
     end
 end

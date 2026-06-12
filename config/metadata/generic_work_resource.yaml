@@ -1,0 +1,593 @@
+# Work-specific metadata properties for the Valkyrie GenericWorkResource model.
+# These attributes match the ActiveFedora CurateGenericWork model properties.
+#
+# Complex nested attributes (preservation_workflow, preservation_event) from
+# the AF model are not included here. Those require separate Valkyrie resource
+# models following the SelfDeposit pattern (preservation_workflow_ids /
+# preservation_event_ids as string references).
+
+attributes:
+  access_restriction_notes:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "access_restriction_notes_tesim"
+    predicate: http://purl.org/dc/terms/accessRights
+  administrative_unit:
+    type: string
+    multiple: false
+    form:
+      primary: true
+      multiple: false
+    index_keys:
+      - "administrative_unit_tesi"
+    predicate: http://id.loc.gov/vocabulary/relators/cur
+  alt_title:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "alt_title_tesim"
+    predicate: http://purl.org/dc/terms/alternative
+  author_notes:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "author_notes_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#authorNote
+  conference_dates:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "conference_dates_tesi"
+      - "conference_dates_si"
+    predicate: http://rdaregistry.info/Elements/u/P60526
+  conference_name:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "conference_name_tesi"
+    predicate: http://purl.org/dc/terms/relation#conferenceOrMeeting
+  contact_information:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "contact_information_tesi"
+    predicate: http://www.rdaregistry.info/Elements/u/#P60490
+  content_genres:
+    type: string
+    multiple: true
+    form:
+      primary: true
+    index_keys:
+      - "content_genres_tesim"
+      - "content_genres_sim"
+    predicate: http://www.europeana.edu/schemas/edm/hasType
+  content_type:
+    type: string
+    multiple: false
+    form:
+      primary: true
+      multiple: false
+    index_keys:
+      - "content_type_tesi"
+      - "content_type_si"
+    predicate: http://purl.org/dc/terms/type
+  contributors:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "contributors_tesim"
+      - "contributors_sim"
+    predicate: http://purl.org/dc/elements/1.1/contributor
+  copyright_date:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "copyright_date_tesi"
+      - "copyright_date_si"
+    predicate: http://purl.org/dc/terms/dateCopyrighted
+  data_classifications:
+    type: string
+    multiple: true
+    form:
+      primary: true
+    index_keys:
+      - "data_classifications_tesim"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#dataClassification
+  data_collection_dates:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "data_collection_dates_tesim"
+      - "data_collection_dates_sim"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#dataCollectionDates
+  data_producers:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "data_producers_tesim"
+    predicate: http://id.loc.gov/vocabulary/relators/prv
+  data_source_notes:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "data_source_notes_tesim"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#dataSourcesNote
+  date_digitized:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "date_digitized_tesi"
+      - "date_digitized_si"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#dateDigitized
+  date_issued:
+    type: string
+    multiple: false
+    form:
+      primary: true
+      multiple: false
+    index_keys:
+      - "date_issued_tesi"
+      - "date_issued_si"
+    predicate: http://purl.org/dc/terms/issued
+  deduplication_key:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "deduplication_key_tesi"
+    predicate: http://metadata.emory.edu/vocab/predicates#deduplicationKey
+  edition:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "edition_tesi"
+    predicate: http://id.loc.gov/ontologies/bibframe/editionStatement
+  emory_rights_statements:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "emory_rights_statements_tesim"
+    predicate: http://purl.org/dc/elements/1.1/rights
+  extent:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "extent_tesi"
+    predicate: http://www.rdaregistry.info/Elements/u/#P60550
+  final_published_versions:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "final_published_versions_tesim"
+    predicate: http://purl.org/dc/terms/hasVersion
+  geographic_unit:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "geographic_unit_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#geographicUnit
+  grant_agencies:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "grant_agencies_tesim"
+    predicate: http://id.loc.gov/vocabulary/relators/fnd
+  grant_information:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "grant_information_tesim"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#grantOrFundingNote
+  isbn:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "isbn_tesi"
+    predicate: http://id.loc.gov/vocabulary/identifiers/isbn
+  issn:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "issn_tesi"
+    predicate: http://id.loc.gov/vocabulary/identifiers/issn
+  issue:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "issue_tesi"
+    predicate: http://purl.org/ontology/bibo/issue
+  keywords:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "keywords_tesim"
+      - "keywords_sim"
+    predicate: http://schema.org/keywords
+  legacy_rights:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "legacy_rights_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#legacyRights
+  local_call_number:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "local_call_number_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#localCallNumber
+  notes:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "notes_tesim"
+    predicate: http://www.w3.org/2004/02/skos/core#note
+  other_identifiers:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "other_identifiers_tesim"
+    predicate: http://id.loc.gov/vocabulary/identifiers/local#legacy
+  page_range_end:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "page_range_end_tesi"
+    predicate: http://purl.org/ontology/bibo/pageEnd
+  page_range_start:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "page_range_start_tesi"
+    predicate: http://purl.org/ontology/bibo/pageStart
+  parent_title:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "parent_title_tesi"
+    predicate: http://rdaregistry.info/Elements/u/P60101
+  place_of_production:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "place_of_production_tesi"
+    predicate: http://id.loc.gov/vocabulary/relators/pup
+  preservation_workflow_terms:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "preservation_workflow_terms_tesim"
+      - "preservation_workflow_terms_sim"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#preservation_workflow_attributes
+  primary_language:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "primary_language_tesi"
+      - "primary_language_si"
+    predicate: http://purl.org/dc/elements/1.1/language
+  primary_repository_ID:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "primary_repository_ID_tesi"
+    predicate: http://purl.org/dc/terms/identifier
+  publisher:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "publisher_tesi"
+    predicate: http://purl.org/dc/elements/1.1/publisher
+  publisher_version:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "publisher_version_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#publicationStage
+  re_use_license:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "re_use_license_tesi"
+    predicate: http://schema.org/license
+  related_datasets:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "related_datasets_tesim"
+    predicate: http://purl.org/dc/terms/relation#dataset
+  related_material_notes:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "related_material_notes_tesim"
+    predicate: http://purl.org/dc/elements/1.1/relation
+  related_publications:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "related_publications_tesim"
+    predicate: http://purl.org/dc/terms/relation#publication
+  rights_documentation:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "rights_documentation_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI
+  rights_holders:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "rights_holders_tesim"
+    predicate: http://purl.org/dc/terms/rightsHolder
+  rights_statement:
+    type: string
+    multiple: true
+    form:
+      primary: true
+    index_keys:
+      - "rights_statement_tesim"
+      - "rights_statement_sim"
+    predicate: http://www.europeana.eu/schemas/edm/rights
+  scheduled_rights_review:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "scheduled_rights_review_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#scheduledRightsReview
+  scheduled_rights_review_note:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "scheduled_rights_review_note_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#scheduledRightsReviewNote
+  sensitive_material:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "sensitive_material_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterial
+  sensitive_material_note:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "sensitive_material_note_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterialNote
+  series_title:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "series_title_tesi"
+    predicate: http://id.loc.gov/ontologies/bibframe/seriesStatement
+  source_collection_id:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "source_collection_id_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#sourceCollectionID
+  sponsor:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "sponsor_tesi"
+    predicate: http://id.loc.gov/vocabulary/relators/spn
+  subject_geo:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_geo_tesim"
+      - "subject_geo_sim"
+    predicate: http://purl.org/dc/elements/1.1/coverage
+  subject_names:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_names_tesim"
+      - "subject_names_sim"
+    predicate: http://purl.org/dc/elements/1.1/subject#names
+  subject_time_periods:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_time_periods_tesim"
+    predicate: http://schema.org/temporalCoverage
+  subject_topics:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_topics_tesim"
+      - "subject_topics_sim"
+    predicate: http://purl.org/dc/elements/1.1/subject
+  sublocation:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "sublocation_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#physicalSublocation
+  table_of_contents:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "table_of_contents_tesi"
+    predicate: http://purl.org/dc/terms/tableOfContents
+  technical_note:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "technical_note_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#technicalNote
+  transfer_engineer:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "transfer_engineer_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#fileTransferEngineer
+  uniform_title:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "uniform_title_tesi"
+    predicate: http://purl.org/dc/elements/1.1/title
+  volume:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "volume_tesi"
+    predicate: http://purl.org/ontology/bibo/volume
