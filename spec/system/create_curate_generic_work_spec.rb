@@ -4,7 +4,7 @@ require_relative '../support/new_curate_generic_work_form.rb'
 include Warden::Test::Helpers
 
 # NOTE: If you generated more than one work, you have to set "js: true"
-RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, type: :system do
+RSpec.describe 'Create a CurateGenericWork', :perform_enqueued, :integration, :clean, type: :system do
   context 'a logged in user' do
     let(:user) do
       FactoryBot.create(:admin)

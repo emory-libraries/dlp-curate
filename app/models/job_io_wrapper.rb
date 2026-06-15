@@ -24,12 +24,10 @@
 #  because it already has that information.
 
 class JobIoWrapper < ApplicationRecord
-  include PreservationEvents
   belongs_to :user, optional: false
   belongs_to :uploaded_file, optional: true, class_name: 'Hyrax::UploadedFile'
   validates :uploaded_file, presence: true, if: proc { |x| x.path.blank? }
   validates :file_set_id, presence: true
-
   after_initialize :static_defaults
   delegate :read, to: :file
 
@@ -92,7 +90,7 @@ class JobIoWrapper < ApplicationRecord
       outcome = 'Success'
       details = "#{file_name} submitted for preservation storage"
     end
-    file_set_preservation_event(file_set, event_start, outcome, details)
+    file_set_preservation_event(file_set, event_start, outcome, details, DateTime.current)
   end
 
   def to_file_metadata
@@ -138,9 +136,9 @@ class JobIoWrapper < ApplicationRecord
     end
 
     # create preservation_event for fileset creation (method in PreservationEvents module)
-    def file_set_preservation_event(file_set, event_start, outcome, details)
-      event = { 'type' => 'File submission', 'start' => event_start, 'outcome' => outcome, 'details' => details,
+    def file_set_preservation_event(file_set, event_start, outcome, details, event_end)
+      event = { 'type' => 'File submission', 'start' => event_start, 'end' => event_end, 'outcome' => outcome, 'details' => details,
                 'software_version' => 'Fedora v4.7.6', 'user' => user.uid }
-      create_preservation_event(file_set, event)
+      CreatePreservationEventJob.perform_later(object: file_set, event:)
     end
 end

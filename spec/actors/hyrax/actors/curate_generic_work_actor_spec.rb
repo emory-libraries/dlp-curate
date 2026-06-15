@@ -4,7 +4,7 @@
 #  `rails generate hyrax:work CurateGenericWork`
 require 'rails_helper'
 
-RSpec.describe Hyrax::Actors::CurateGenericWorkActor, :clean do
+RSpec.describe Hyrax::Actors::CurateGenericWorkActor, :perform_enqueued, :clean do
   let(:env) { Hyrax::Actors::Environment.new(curation_concern, ability, attributes) }
   let(:user) { FactoryBot.create(:user) }
   let(:ability) { ::Ability.new(user) }
@@ -32,7 +32,8 @@ RSpec.describe Hyrax::Actors::CurateGenericWorkActor, :clean do
       it "invokes the after_create_concern callback, creates work, and its preservation_events" do
         expect(Hyrax.config.callback).to receive(:run)
           .with(:after_create_concern, curation_concern, user, warn: false)
-        middleware.create(env)
+        middleware.create(env) && curation_concern.reload
+
         expect(curation_concern.preservation_event.pluck(:event_type)).to include ['Validation']
         expect(curation_concern.preservation_event.first.outcome).to eq ['Success']
         expect(curation_concern.preservation_event.first.initiating_user).to eq [user.uid]
@@ -52,7 +53,8 @@ RSpec.describe Hyrax::Actors::CurateGenericWorkActor, :clean do
       it "invokes the after_update_metadata callback, updates work, creates modification preservation_event" do
         expect(Hyrax.config.callback).to receive(:run)
           .with(:after_update_metadata, curation_concern, user, warn: false)
-        work_actor.update(env)
+        work_actor.update(env) && curation_concern.reload
+
         expect(curation_concern.preservation_event.pluck(:event_type)).to include ['Modification']
       end
     end

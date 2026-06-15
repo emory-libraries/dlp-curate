@@ -5,7 +5,6 @@ require 'sidekiq-limit_fetch'
 
 class FixityCheckJob < Hyrax::ApplicationJob
   queue_as :fixity_check_job
-  include PreservationEvents
   # A Job class that runs a fixity check (using Hyrax.config.fixity_service)
   # which contacts fedora and requests a fixity check), and stores the results
   # in an ActiveRecord ChecksumAuditLog row. It also prunes old ChecksumAuditLog
@@ -37,7 +36,7 @@ class FixityCheckJob < Hyrax::ApplicationJob
       file_set = ::FileSet.find(file_set_id)
 
       announce_fixity_check_results(file_set, audit, result)
-      file_set_preservation_event(audit.passed, file_set_id, file_id, event_start, initiating_user)
+      file_set_preservation_event(audit.passed, file_set_id, file_id, event_start, initiating_user, DateTime.current)
     end
   end
 
@@ -61,11 +60,12 @@ class FixityCheckJob < Hyrax::ApplicationJob
       Hyrax.config.fixity_service.new(id)
     end
 
-    def file_set_preservation_event(log, file_set_id, file_id, event_start, initiating_user)
+    def file_set_preservation_event(log, file_set_id, file_id, event_start, initiating_user, event_end)
       @logger = Logger.new(STDOUT)
       fixity_file_set = ::FileSet.find(file_set_id)
       fixity_file = Hydra::PCDM::File.find(file_id)
-      event = { 'type' => 'Fixity Check', 'start' => event_start, 'software_version' => 'Fedora v4.7.6', 'user' => initiating_user }
+      event = { 'type' => 'Fixity Check', 'start' => event_start, 'end' => event_end, 'software_version' => 'Fedora v4.7.6',
+                'user' => initiating_user }
       if log == true
         event['outcome'] = 'Success'
         event['details'] = "Fixity intact for file: #{fixity_file&.original_name}: sha1:#{fixity_file&.checksum&.value}"
@@ -75,7 +75,7 @@ class FixityCheckJob < Hyrax::ApplicationJob
         event['details'] = "Fixity check failed for: #{fixity_file&.original_name}: sha1:#{fixity_file&.checksum&.value}"
         @logger.error "Fixity check failure: Fixity failed for #{fixity_file&.original_name}"
       end
-      create_preservation_event(fixity_file_set, event)
+      CreatePreservationEventJob.perform_later(object: fixity_file_set, event:)
     end
 
     def announce_fixity_check_results(file_set, audit, result)
