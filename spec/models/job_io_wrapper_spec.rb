@@ -3,7 +3,7 @@
 #   We are only testing the `ingest_file` method here.
 require 'rails_helper'
 
-RSpec.describe JobIoWrapper, :clean, :perform_enqueued, type: :model do
+RSpec.describe JobIoWrapper, :clean, perform_enqueued: [CreatePreservationEventJob], type: :model do
   describe "#ingest_file" do
     let(:user)          { FactoryBot.build(:user) }
     let(:file_set)      { FactoryBot.create(:file_set) }
