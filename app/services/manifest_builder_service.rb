@@ -89,7 +89,7 @@ class ManifestBuilderService
     end
 
     def preferred_file
-      @curation_concern.send(@curation_concern&.preferred_file)
+      @curation_concern&.send("pulled_#{@curation_concern&.preferred_file}"&.to_sym)
     end
 
     def preferred_file_id
