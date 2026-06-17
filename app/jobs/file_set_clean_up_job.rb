@@ -36,7 +36,7 @@ class FileSetCleanUpJob < Hyrax::ApplicationJob
 
     def regenerate_derivatives(file_set, csv)
       preferred_file_symbol = file_set.preferred_file
-      preferred_file_uri = file_set.send(preferred_file_symbol).uri.to_s
+      preferred_file_uri = file_set.send("pulled_#{preferred_file_symbol}".to_sym).uri.to_s
       asset_path = preferred_file_uri[preferred_file_uri.index(file_set.id.to_s)..-1]
       CreateDerivativesJob.perform_later(file_set, asset_path)
       csv << [file_set.id, "Thumbnail_path mismatch in solr_doc", "Queued"]

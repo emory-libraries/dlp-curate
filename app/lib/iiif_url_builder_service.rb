@@ -13,7 +13,7 @@ class IiifUrlBuilderService
   end
 
   def sha1
-    sha1_with_urn = file_set&.send(file_set.preferred_file)&.checksum&.value || 'urn:sha1:unknown'
+    sha1_with_urn = file_set&.send("pulled_#{file_set&.preferred_file}"&.to_sym)&.checksum&.value || 'urn:sha1:unknown'
     sha1_with_urn.gsub('urn:sha1:', '')
   end
 

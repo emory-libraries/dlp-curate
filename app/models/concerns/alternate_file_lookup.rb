@@ -25,19 +25,23 @@ module AlternateFileLookup
   end
 
   def pulled_preservation_master_file
-    @pulled_preservation_master_file ||= preservation_master_file&.file_name&.present? ? preservation_master_file : preservation_master_file_by_logic
+    @pulled_preservation_master_file ||= preservation_master_file&.id&.present? ? preservation_master_file : preservation_master_file_by_logic
+  end
+
+  def pulled_service_file
+    service_file
   end
 
   def pulled_intermediate_file
-    @pulled_intermediate_file ||= intermediate_file&.file_name&.present? ? intermediate_file : intermediate_file_by_logic
+    @pulled_intermediate_file ||= intermediate_file&.id&.present? ? intermediate_file : intermediate_file_by_logic
   end
 
   def pulled_extracted_file
-    @pulled_extracted_file ||= extracted&.file_name&.present? ? extracted : extracted_file_by_logic
+    @pulled_extracted_file ||= extracted&.id&.present? ? extracted : extracted_file_by_logic
   end
 
   def pulled_transcript_file
-    @pulled_transcript_file ||= transcript_file&.file_name&.present? ? transcript_file : transcript_file_by_logic
+    @pulled_transcript_file ||= transcript_file&.id&.present? ? transcript_file : transcript_file_by_logic
   end
 
   private
