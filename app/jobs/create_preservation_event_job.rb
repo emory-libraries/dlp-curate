@@ -13,7 +13,7 @@ class CreatePreservationEventJob < Hyrax::ApplicationJob
 
   def report_completely_failed_creation(job:, exception:)
     CSV.open(file_path, "a+", write_headers: !csv_exists?, headers: pres_event_headers) do |csv|
-      row = [job.id, exception.message, object.id, event['details'], event['end'], event['start'],
+      row = [job.job_id, exception.message, job.arguments[:object].id, event['details'], event['end'], event['start'],
              event['type'], event['user'], event['outcome'], event['software_version']]
 
       csv << row
