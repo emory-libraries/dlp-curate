@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jhove xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.openpreservation.org/ois/xml/ns/jhove" xsi:schemaLocation="http://schema.openpreservation.org/ois/xml/ns/jhove https://schema.openpreservation.org/ois/xml/xsd/jhove/1.8/jhove.xsd" name="Jhove" release="1.24.1" date="2020-03-16">
+ <date>2021-06-01T21:36:48-04:00</date>
+ <repInfo uri="/Users/dmatlaw/Downloads/jhove-1.24.1/jhove-core/src/main/examples/tiff/libtiff_v3/smallliz.tif">
+  <reportingModule release="1.9.2" date="2019-12-10">TIFF-hul</reportingModule>
+  <lastModified>2020-02-27T07:06:46-05:00</lastModified>
+  <size>5052</size>
+  <format>TIFF</format>
+  <status>Not well-formed</status>
+  <sigMatch>
+  <module>TIFF-hul</module>
+  </sigMatch>
+  <messages>
+   <message severity="info" id="TIFF-HUL-61">TIFF compression scheme 6 is deprecated</message>
+   <message severity="error" id="TIFF-HUL-7">Type mismatch for tag 532; expecting 5, saw 4</message>
+  </messages>
+  <mimeType>image/tiff</mimeType>
+ </repInfo>
+</jhove>
