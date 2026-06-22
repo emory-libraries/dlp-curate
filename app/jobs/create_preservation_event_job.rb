@@ -13,10 +13,7 @@ class CreatePreservationEventJob < Hyrax::ApplicationJob
 
   def report_completely_failed_creation(job:, exception:)
     CSV.open(file_path, "a+", write_headers: !csv_exists?, headers: pres_event_headers) do |csv|
-      row = [job.job_id, exception.message, job.arguments, job&.arguments&.first&.[](:event)&.[]('details'),
-             job&.arguments&.first&.[](:event)&.[]('end'), job&.arguments&.first&.[](:event)&.[]('start'),
-             job&.arguments&.first&.[](:event)&.[]('type'), job&.arguments&.first&.[](:event)&.[]('user'),
-             job&.arguments&.first&.[](:event)&.[]('outcome'), job&.arguments&.first&.[](:event)&.[]('software_version')]
+      row = process_row(job:, exception:)
 
       csv << row
     end
@@ -33,7 +30,21 @@ class CreatePreservationEventJob < Hyrax::ApplicationJob
     end
 
     def pres_event_headers
-      ['Job ID', 'Exception', 'Arguments', 'event_details', 'event_end', 'event_start',
+      ['Job ID', 'Exception', 'Object ID', 'event_details', 'event_end', 'event_start',
        'event_type', 'initiating_user', 'outcome', 'software_version']
+    end
+
+    def process_row(job:, exception:)
+      [job.job_id, exception.message, pertinent_arguments(job:)&.[](:object)&.id, pertinent_event(job:)&.[]('details'),
+       pertinent_event(job:)&.[]('end'), pertinent_event(job:)&.[]('start'), pertinent_event(job:)&.[]('type'),
+       pertinent_event(job:)&.[]('user'), pertinent_event(job:)&.[]('outcome'), pertinent_event(job:)&.[]('software_version')]
+    end
+
+    def pertinent_arguments(job:)
+      @pertinent_arguments ||= job&.arguments&.first
+    end
+
+    def pertinent_event(job:)
+      @pertinent_event ||= pertinent_arguments(job:)&.[](:event)
     end
 end
