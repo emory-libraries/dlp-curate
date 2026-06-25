@@ -86,6 +86,8 @@ RSpec.describe 'Create a CurateGenericWork', :perform_enqueued, :integration, :c
       click_link('Additional descriptive fields')
       fill_in "curate_generic_work[date_created]", with: "2012/2013"
       expect(page).not_to have_css('#curate_generic_work_date_issued-error')
+      fill_in "curate_generic_work[date_created]", with: "XXXX"
+      expect(page).not_to have_css('#curate_generic_work_date_issued-error')
     end
 
     scenario "metadata fields are validated", js: true do

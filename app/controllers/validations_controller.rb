@@ -2,9 +2,11 @@
 
 class ValidationsController < ApplicationController
   def edtf
+    value = params[:value]
+
     # Returns true if parsed successfully, false otherwise
     is_valid = begin
-           Array(params[:value]).all? { |v| EDTF.parse(v).present? }
+           Array(value).all? { |v| EDTF.parse(v).present? } || value == 'XXXX'
                rescue
                  return false
          end
