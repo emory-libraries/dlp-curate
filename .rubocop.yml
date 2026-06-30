@@ -109,6 +109,7 @@ Metrics/MethodLength:
         - app/presenters/hyrax/collection_presenter.rb
         - app/presenters/hyrax/curate_collection_presenter.rb
         - config/initializers/bulkrax.rb
+        - config/initializers/hydra_access_control_overrides.rb
         - spec/fixtures/manifest_output.rb
         - spec/fixtures/placeholder_manifest_output.rb
 
