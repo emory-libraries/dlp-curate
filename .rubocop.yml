@@ -53,6 +53,7 @@ Metrics/ClassLength:
         - app/controllers/iiif_controller.rb
         - app/factories/bulkrax/object_factory.rb
         - app/factories/bulkrax/object_factory_interface.rb
+        - app/factories/bulkrax/valkyrie_object_factory.rb
         - app/forms/hyrax/forms/collection_form.rb
         - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
@@ -91,6 +92,7 @@ Metrics/MethodLength:
         - app/controllers/hyrax/file_sets_controller.rb
         - app/controllers/iiif_controller.rb
         - app/factories/bulkrax/object_factory_interface.rb
+        - app/factories/bulkrax/valkyrie_object_factory.rb
         - app/forms/hyrax/curate_generic_work_form.rb
         - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
@@ -122,6 +124,7 @@ Metrics/ParameterLists:
     Exclude:
         - app/factories/bulkrax/object_factory.rb
         - app/factories/bulkrax/object_factory_interface.rb
+        - app/factories/bulkrax/valkyrie_object_factory.rb
         - app/importers/yellowback_preprocessor.rb
         - lib/importing_modules/file_set_methods.rb
         - app/jobs/manifest_persistence_job.rb
