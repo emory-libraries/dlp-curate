@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.describe BackgroundJobsController, type: :controller, clean: true do
@@ -8,12 +7,12 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
 
   let(:admin) { FactoryBot.create(:admin) }
   let(:user) { FactoryBot.create(:user) }
-  let(:csv_file) { fixture_file_upload((fixture_path + '/reindex_files.csv'), 'text/csv') }
+  let(:csv_file) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'reindex_files.csv'), 'text/csv') }
   let(:csv_file2) do
-    fixture_file_upload((fixture_path + '/preservation_workflows.csv'), 'text/csv')
+    Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'preservation_workflows.csv'), 'text/csv')
   end
   let(:csv_file3) do
-    fixture_file_upload((fixture_path + '/csv_import/aws_fixity_test.csv'), 'text/csv')
+    Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'csv_import', 'aws_fixity_test.csv'), 'text/csv')
   end
   let(:new_call) { get :new }
 
@@ -72,67 +71,61 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
         expect(WorkMembersCleanUpJob).to have_been_enqueued
       end
 
-      # Deprecation Warning: As of Curate v3, Zizia will be removed. These preprocessors contain
-      #   custom logic that switches expected output based on whether Bulkrax is or isn't the importer.
-      #   This should be refactored to only export Bulkrax expected fields when Zizia is removed.
       context 'books preprocessor' do
         let(:preprocessor) { instance_double(YellowbackPreprocessor) }
-        let(:yellowback_pull_list_sample) do
-          fixture_file_upload('csv_import/yellowbacks/yellowbacks_pull_list.csv', 'text/csv')
+        let(:yellowback_pull_list_path) do
+          Rails.root.join('spec', 'fixtures', 'csv_import', 'yellowbacks', 'yellowbacks_pull_list.csv')
         end
-        let(:alma_export_sample) do
-          fixture_file_upload('csv_import/yellowbacks/yellowbacks_marc.xml', 'text/xml')
+        let(:yellowback_pull_list_sample) { Rack::Test::UploadedFile.new(yellowback_pull_list_path, 'text/csv') }
+        let(:alma_export_path) do
+          Rails.root.join('spec', 'fixtures', 'csv_import', 'yellowbacks', 'yellowbacks_marc.xml')
         end
+        let(:alma_export_sample) { Rack::Test::UploadedFile.new(alma_export_path, 'text/xml') }
 
         it 'goes through the expected processes' do
           allow(preprocessor).to receive(:processed_csv)
           expect(YellowbackPreprocessor).to receive(:new).with(any_args).and_return(preprocessor)
           expect(preprocessor).to receive(:merge)
           post :create, params: {
-            jobs:          'book_preprocessor',
-            book_csv:      yellowback_pull_list_sample,
-            book_importer: 'zizia',
-            book_xml:      alma_export_sample,
-            book_map:      'limb',
-            format:        'json'
+            jobs:     'book_preprocessor',
+            book_csv: yellowback_pull_list_sample,
+            book_xml: alma_export_sample,
+            book_map: 'limb',
+            format:   'json'
           }
         end
       end
 
       context 'langmuir preprocessor' do
         let(:preprocessor) { instance_double(LangmuirPreprocessor) }
-        let(:langmuir_sample) do
-          fixture_file_upload('csv_import/langmuir/langmuir-unprocessed.csv', 'text/csv')
-        end
+        let(:langmuir_path) { Rails.root.join('spec', 'fixtures', 'csv_import', 'langmuir', 'langmuir-unprocessed.csv') }
+        let(:langmuir_sample) { Rack::Test::UploadedFile.new(langmuir_path, 'text/csv') }
 
         it 'goes through the expected processes' do
           allow(preprocessor).to receive(:processed_csv)
           expect(LangmuirPreprocessor).to receive(:new).with(any_args).and_return(preprocessor)
           expect(preprocessor).to receive(:merge)
           post :create, params: {
-            jobs:          'lang_preprocessor',
-            lang_csv:      langmuir_sample,
-            lang_importer: 'zizia',
-            format:        'json'
+            jobs:     'lang_preprocessor',
+            lang_csv: langmuir_sample,
+            format:   'json'
           }
         end
       end
 
       context 'DAMS preprocessor' do
         let(:preprocessor) { instance_double(DamsPreprocessor) }
-        let(:dams_sample) do
-          fixture_file_upload('csv_import/dams/dams-unprocessed.csv', 'text/csv')
-        end
+        let(:dams_path) { Rails.root.join('spec', 'fixtures', 'csv_import', 'dams', 'dams-unprocessed.csv') }
+        let(:dams_sample) { Rack::Test::UploadedFile.new(dams_path, 'text/csv') }
 
         it 'goes through the expected processes' do
           allow(preprocessor).to receive(:processed_csv)
           expect(DamsPreprocessor).to receive(:new).with(any_args).and_return(preprocessor)
           expect(preprocessor).to receive(:merge)
           post :create, params: {
-            jobs:          'dams_preprocessor',
-            dams_csv:      dams_sample,
-            dams_importer: 'zizia',
-            format:        'json'
+            jobs:     'dams_preprocessor',
+            dams_csv: dams_sample,
+            format:   'json'
           }
         end
       end

@@ -19,9 +19,9 @@ RSpec.describe AssociateFilesetsWithWorkJob, :clean, perform_enqueued: [Associat
       parsed_metadata:     { 'parent' => [parent] }
     )
   end
-  let(:file_set) { FactoryBot.create(:file_set, user: user) }
-  let(:file_set_entries) { described_class.new.send(:pull_file_set_entries, importer) }
-  let(:parents) { described_class.new.send(:pull_parents, file_set_entries) }
+  let(:file_set) { FactoryBot.create(:file_set, user:) }
+  let(:file_set_entries) { described_class.new.send(:pull_file_set_entries, importer:) }
+  let(:parents) { described_class.new.send(:pull_parents, file_set_entries:) }
   let(:fake_factory) { double }
   let(:fake_job) { instance_double(described_class) }
 
@@ -35,7 +35,7 @@ RSpec.describe AssociateFilesetsWithWorkJob, :clean, perform_enqueued: [Associat
 
   it '#perform_now associates the file_set with the work' do
     expect(Hyrax.config.callback).to receive(:run)
-    check_for_file_set_association(described_class.perform_now(importer))
+    check_for_file_set_association(described_class.perform_now(importer:))
   end
 
   context '#pull_file_set_entries' do
@@ -74,7 +74,7 @@ RSpec.describe AssociateFilesetsWithWorkJob, :clean, perform_enqueued: [Associat
     it 'associates the file_set with the work' do
       expect(Hyrax.config.callback).to receive(:run)
       check_for_file_set_association(
-        described_class.new.send(:process_file_sets, parents, file_set_entries)
+        described_class.new.send(:process_file_sets, parents:, file_set_entries:)
       )
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] Change `characterization_proxy`
 
-# [Hyrax-overwrite-v3.4.2] Change `characterization_proxy`
 module Hyrax
   class FileSet
     ##

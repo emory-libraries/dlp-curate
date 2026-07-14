@@ -3,7 +3,7 @@ require "uri"
 require "net/http"
 
 module Aspace
-  class ApiService
+  class APIService
     class AuthenticationError < StandardError; end
     class ClientError < StandardError; end
     class ServerError < StandardError; end
@@ -35,24 +35,24 @@ module Aspace
 
     def fetch_repositories
       repositories = process(response: @client.get('/repositories'))
-      repositories.map { |data| extract_repository(data: data) }
+      repositories.map { |data| extract_repository(data:) }
     end
 
     def fetch_repository_by_id(id)
       query = { 'resolve': ['agent_representation'] }
-      data = process(response: @client.get("/repositories/#{id}", { query: query }))
-      extract_repository(data: data)
+      data = process(response: @client.get("/repositories/#{id}", { query: }))
+      extract_repository(data:)
     end
 
     def fetch_resource_by_ref(ref)
       query = { 'resolve': ['subjects', 'linked_agents'] }
-      data = process(response: @client.get(ref, { query: query }))
-      extract_resource(data: data)
+      data = process(response: @client.get(ref, { query: }))
+      extract_resource(data:)
     end
 
     def fetch_resource_by_call_number(call_number, repository_id:)
       query = { 'identifier[]': [call_number].to_s, 'resolve': ['resources'] }
-      data = process(response: @client.get("/repositories/#{repository_id}/find_by_id/resources", { query: query }))
+      data = process(response: @client.get("/repositories/#{repository_id}/find_by_id/resources", { query: }))
       resources = data['resources']
       raise ClientError, "No resources match call number #{call_number}" if resources.empty?
       raise ClientError, "Two or more resources have the same call number #{call_number}" if resources.count > 1
@@ -67,7 +67,7 @@ module Aspace
         administrative_unit: data['name'],
         holding_repository:  data['name'],
         institution:         'Emory University',
-        contact_information: extract_repository_contact(data: data)
+        contact_information: extract_repository_contact(data:)
       }
     end
 
@@ -75,15 +75,15 @@ module Aspace
       {
         resource_id:          data['uri']&.chomp('/')&.split('/')&.last,
         title:                data['title'],
-        description:          extract_resource_description(data: data),
-        creator:              extract_resource_linked_agents(data: data, type: 'creator'),
+        description:          extract_resource_description(data:),
+        creator:              extract_resource_linked_agents(data:, type: 'creator'),
         uri:                  data['uri'],
         call_number:          data['id_0'],
         primary_language:     data['lang_materials']&.first&.dig('language_and_script', 'language'),
-        subject_topics:       extract_resource_subjects(data: data, type: 'topical'),
-        subject_names:        extract_resource_linked_agents(data: data, type: 'subject'),
-        subject_geo:          extract_resource_subjects(data: data, type: 'geographic'),
-        subject_time_periods: extract_resource_subjects(data: data, type: 'temporal')
+        subject_topics:       extract_resource_subjects(data:, type: 'topical'),
+        subject_names:        extract_resource_linked_agents(data:, type: 'subject'),
+        subject_geo:          extract_resource_subjects(data:, type: 'geographic'),
+        subject_time_periods: extract_resource_subjects(data:, type: 'temporal')
       }
     end
 

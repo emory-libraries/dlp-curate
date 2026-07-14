@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] spec/indexers/hyrax/file_set_indexer_spec.rb
 require 'rails_helper'
 
 RSpec.describe Curate::FileSetIndexer, clean: true do

@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 require 'csv'
 
-# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
-#   of the Zizia install that will likely be removed.
 class CurateCollectionImporter
   def initialize
-    @library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.gid
+    @library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.to_global_id
   end
 
   def import(csv_file, log_location = STDOUT)
@@ -48,7 +46,7 @@ class CurateCollectionImporter
       deposit_groups = multivalue_mapping(collection_attrs, "deposit")
       view_groups = multivalue_mapping(collection_attrs, "view")
       access_groups = { 'manage' => manage_groups, 'deposit' => deposit_groups, 'view' => view_groups }
-      CollectionPermissionEnsurer.new(collection: collection, access_permissions: access_groups)
+      CollectionPermissionEnsurer.new(collection:, access_permissions: access_groups)
       @logger = Logger.new(log_location)
       @logger.level = Logger::DEBUG
       @logger.info "#{collection} collection object created"

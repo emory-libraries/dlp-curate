@@ -1,6 +1,6 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0]
 
-# [Hyrax-overwrite-v3.4.2]
 module Hyrax
   module Forms
     class CollectionForm
@@ -40,6 +40,12 @@ module Hyrax
         def can?(*args)
           current_ability.can?(*args)
         end
+      end
+
+      # This describes the parameters we are expecting to receive from the client
+      # @return [Array] a list of parameters used by sanitize_params
+      def self.build_permitted_params
+        super + [{ based_near_attributes: [:id, :_destroy] }]
       end
 
       # @param model [::Collection] the collection model that backs this form
@@ -102,7 +108,7 @@ module Hyrax
           alttext = banner_info.first.alt_text unless banner_info.empty?
           file_location = banner_info.first.local_path unless banner_info.empty?
           relative_path = "/" + banner_info.first.local_path.split("/")[-4..-1].join("/") unless banner_info.empty?
-          { file: banner_file, full_path: file_location, relative_path: relative_path, alttext: alttext }
+          { file: banner_file, full_path: file_location, relative_path:, alttext: }
         end
       end
 
@@ -116,7 +122,7 @@ module Hyrax
             relative_path = "/" + logo_info.local_path.split("/")[-4..-1].join("/")
             alttext = logo_info.alt_text
             linkurl = logo_info.target_url
-            { file: logo_file, full_path: logo_info.local_path, relative_path: relative_path, alttext: alttext, linkurl: linkurl }
+            { file: logo_file, full_path: logo_info.local_path, relative_path:, alttext:, linkurl: }
           end
         end
       end
@@ -140,20 +146,18 @@ module Hyrax
         collection_member_service.available_member_subcollections.documents
       end
 
-      ##
-      # @deprecated this implementation requires an extra db round trip, had a
-      #   buggy cacheing mechanism, and was largely duplicative of other code.
-      #   all versions of this code are replaced by
-      #   {CollectionsHelper#available_parent_collections_data}.
-      def available_parent_collections(scope:)
-        return @available_parents if @available_parents.present?
+      protected
 
-        collection = model_class.find(id)
-        colls = Hyrax::Collections::NestedCollectionQueryService.available_parent_collections(child: collection, scope: scope, limit_to_id: nil)
-        @available_parents = colls.map do |col|
-          { "id" => col.id, "title_first" => col.title.first }
-        end.to_json
-      end
+        def initialize_field(key)
+          # rubocop:disable Lint/AssignmentInCondition
+          if class_name = model_class.properties[key.to_s].try(:class_name)
+            # Initialize linked properties such as based_near
+            self[key] += [class_name.new]
+          else
+            super
+          end
+          # rubocop:enable Lint/AssignmentInCondition
+        end
 
       private
 
@@ -168,7 +172,7 @@ module Hyrax
         end
 
         def collection_member_service
-          @collection_member_service ||= membership_service_class.new(scope: scope, collection: collection, params: blacklight_config.default_solr_params)
+          @collection_member_service ||= membership_service_class.new(scope:, collection:, params: blacklight_config.default_solr_params)
         end
 
         def member_presenters(member_ids)

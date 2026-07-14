@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# NOTE: this isn't a Hyrax override--testing our own logic.
 require 'rails_helper'
 require 'iiif_manifest'
 

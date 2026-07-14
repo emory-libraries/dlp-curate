@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 require "rails_helper"
 include Warden::Test::Helpers
@@ -11,17 +10,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
   let(:rotation) { 0 }
   let(:quality) { "default" }
   let(:format) { "jpg" }
-  let(:params) do
-    {
-      identifier: image_sha,
-      region:     region,
-      size:       size,
-      rotation:   rotation,
-      quality:    quality,
-      format:     format
-    }
-  end
-
+  let(:params) { { identifier: image_sha, region:, size:, rotation:, quality:, format: } }
   let(:cookie_name) { "bearer_token" }
   let(:spoofed_cookie_value) { "DD72652691A4970E4CA56CAC403851D494841D89AD2E7493106BB96FE31E8761" }
   let(:badly_spoofed_cookie_value) { "BE0F7323469F3E7DF86CF9CA95B8ADD5D17753DA4F00BB67F2A9E8EC93E6A370" }
@@ -43,7 +32,7 @@ RSpec.describe "IIIF requests", :clean, type: :request, iiif: true do
         headers: {
           'Connection' => 'close',
           'Host' => 'iiif-cor-arch.library.emory.edu',
-          'User-Agent' => 'http.rb/5.1.0'
+          'User-Agent' => 'http.rb/5.3.1'
         }
       )
       .to_return(status: 200, body: "I am returning an image, but for now I'm words", headers: {})

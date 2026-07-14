@@ -40,14 +40,14 @@ task compile_aspace_resources: :environment do
       repository_name = repository[:name]
 
       # Fetch last page in repository
-      last_page = client.fetch_repository_last_page(repository_id: repository_id)
+      last_page = client.fetch_repository_last_page(repository_id:)
 
       # Iterate from first page to last
       (1..last_page).each do |page|
         File.open(log_path, "a+") { |f| f.write "🤖 Generating page #{page} of ArchivesSpace resources in repository ##{repository_id} (#{repository_name})\n" }
 
         # Fetch resources in corresponding page
-        resources = client.fetch_resources_by_page(page, repository_id: repository_id)
+        resources = client.fetch_resources_by_page(page, repository_id:)
 
         # Write resources to csv file
         CSV.open(report_path, "a+") do |csv|

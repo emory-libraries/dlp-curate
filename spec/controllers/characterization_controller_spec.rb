@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe CharacterizationController, type: :controller, clean: true do
   let(:user) { FactoryBot.create(:user) }
-  let(:file_set) { FactoryBot.create(:file_set, user: user) }
+  let(:file_set) { FactoryBot.create(:file_set, user:) }
 
   context 'when signed in' do
     describe 'POST re_characterize' do
@@ -12,7 +12,7 @@ RSpec.describe CharacterizationController, type: :controller, clean: true do
       end
 
       it 'queues up characterize job' do
-        expect(ReCharacterizeJob).to receive(:perform_later).with(file_set: file_set, user: user.uid)
+        expect(ReCharacterizeJob).to receive(:perform_later).with(file_set:, user: user.uid)
         post :re_characterize, params: { file_set_id: file_set.id }, xhr: true
         expect(response).to be_successful
       end

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] We do not want to display the institution name in the Authenticated permission badge
 
 module CustomPermissionBadge
   private
 
-    # We are overriding this method from Hyrax because we do not want to display the
-    # institution name in the Authenticated permission badge
     def text
-      I18n.t("hyrax.visibility.#{@visibility}.text")
+      visibility_key = @visibility || 'unknown'
+      I18n.t("hyrax.visibility.#{visibility_key}.text")
     rescue
       @visibility.to_s
     end

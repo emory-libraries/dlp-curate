@@ -1,5 +1,6 @@
-# [Hyrax-overwrite-v3.0.0.pre.rc1] Attaching multiple files to single fileset
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] spec/jobs/attach_files_to_work_job_spec.rb .
+#   Attaching multiple files to single fileset.
 require 'rails_helper'
 
 RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWorkJob] do
@@ -109,7 +110,7 @@ RSpec.describe AttachFilesToWorkJob, :clean, perform_enqueued: [AttachFilesToWor
       allow(Clamby).to receive(:virus?).and_return(true)
       virus_file_path = "#{::Rails.root}/spec/fixtures/virus_checking/virus_check.txt"
       upload = File.open(virus_file_path) do |virus_file|
-        Hyrax::UploadedFile.create(user: user, preservation_master_file: virus_file)
+        Hyrax::UploadedFile.create(user:, preservation_master_file: virus_file)
       end
       described_class.perform_now(generic_work, [upload])
     end

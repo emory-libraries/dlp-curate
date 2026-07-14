@@ -41,13 +41,13 @@ class BackgroundJobsController < ApplicationController
     def preprocessor_actions
       if params[:jobs].include?('dams')
         preprocessor_action(
-          params[:dams_csv] && params[:dams_importer],
-          DamsPreprocessor.new(params[:dams_csv].path, params[:dams_importer])
+          params[:dams_csv],
+          DamsPreprocessor.new(params[:dams_csv].path)
         )
       elsif params[:jobs].include?('lang')
         preprocessor_action(
-          params[:lang_csv] && params[:lang_importer],
-          LangmuirPreprocessor.new(params[:lang_csv].path, params[:lang_importer])
+          params[:lang_csv],
+          LangmuirPreprocessor.new(params[:lang_csv].path)
         )
       else
         process_yellowback
@@ -56,11 +56,10 @@ class BackgroundJobsController < ApplicationController
 
     def process_yellowback
       preprocessor_action(
-        params[:book_csv] && params[:book_xml] && params[:book_map] && params[:book_importer],
+        params[:book_csv] && params[:book_xml] && params[:book_map],
         YellowbackPreprocessor.new(
           params[:book_csv].path,
           params[:book_xml].path,
-          params[:book_importer],
           params[:book_map].to_sym,
           params[:book_start_num].to_i,
           params[:add_transcript],

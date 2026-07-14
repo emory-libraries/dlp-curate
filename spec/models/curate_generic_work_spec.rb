@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # Generated via
 #  `rails generate hyrax:work CurateGenericWork`
 require 'rails_helper'
@@ -1459,7 +1458,7 @@ RSpec.describe CurateGenericWork do
   context "saves custom terms for fields that use external vocabs" do
     let(:institution) { 'Test3' }
 
-    let(:curate_generic_work) { FactoryBot.build(:work, institution: institution) }
+    let(:curate_generic_work) { FactoryBot.build(:work, institution:) }
 
     it "selects custom term and saves it", clean: true do
       curate_generic_work.save

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
-#   of the Zizia install that will likely be removed.
 RSpec.describe CurateCollectionImporter, :clean do
   subject(:cci) { described_class.new }
   let(:collections_csv) { File.join(fixture_path, 'csv_import', 'collections', 'collections.csv') }
@@ -29,7 +27,7 @@ RSpec.describe CurateCollectionImporter, :clean do
   end
 
   it 'makes a collection using Curate::CollectionType' do
-    library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.gid
+    library_collection_type_gid = Curate::CollectionType.find_or_create_library_collection_type.to_global_id.to_s
     expect(langmuir_collection.collection_type_gid).to eq library_collection_type_gid
   end
 

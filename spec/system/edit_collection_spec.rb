@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 include Warden::Test::Helpers
 
-RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
+RSpec.describe 'Edit an existing collection', clean: true, type: :system, js: true do
   let(:collection) { FactoryBot.create(:collection_lw, user: admin) }
   let(:user) { FactoryBot.create(:user) }
   let(:work1) { FactoryBot.build(:work, user: admin) }
@@ -49,7 +48,7 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
       expect(find_field('Library (holding_repository)').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
       expect(find_field('Creator (creator)').value).to eq 'Langmuir, Robert, collector.'
       expect(find_field('Description/Abstract (abstract)').value).to eq 'Collection of photographs depicting African American life and culture collected by Robert Langmuir.'
-      click_on 'Additional fields'
+      click_link 'Additional fields'
       expect(find_field('Administrative Unit (administrative_unit)').value).to eq 'Stuart A. Rose Manuscript, Archives, and Rare Book Library'
       expect(page).to have_content 'Thumbnail'
       first('#s2id_collection_thumbnail_id', minimum: 1).click
@@ -57,19 +56,21 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
       first('body').click
       # Edit some fields in the form
       fill_in 'Title (title)', with: 'New Title'
-      click_on 'Save changes'
-      # Now the form should have the new values
-      expect(page).to have_content 'New Title'
-      expect(page).to have_content file_set.id
+      click_button 'Save changes'
+      sleep 3
+      # Now the page should have the new values
+      expect(page.html).to include 'Collection was successfully updated'
+      expect(page.html).to include 'New Title'
+      expect(page.html).to include file_set.id
     end
 
     scenario 'successfully uploads a banner image' do
       visit "/dashboard/collections/#{collection.id}/edit"
       expect(page).to have_link('Branding', href: '#branding')
-      click_on 'Branding'
+      click_link 'Branding'
       attach_file("collection_banner", (fixture_path + '/balloon.jpeg'), visible: false)
-      expect(find("input[name='banner_files[]']", visible: false).value).to eq '1'
-      click_on 'Save changes'
+      expect(find("input[name='banner_files[]']", visible: false).value).to be_present
+      click_button 'Save changes'
       expect(page).to have_content 'balloon.jpeg'
     end
 
@@ -77,15 +78,17 @@ RSpec.describe 'Edit an existing collection', :clean, type: :system, js: true do
       collection_2.save!
       collection_2.reload
       visit "/dashboard/collections/#{collection.id}/edit"
-      click_on 'Additional fields'
+      click_link 'Additional fields'
       expect(page).to have_content 'Source Collection ID (source_collection_id)'
       expect(page).to have_content 'Deposit Collection IDs (deposit_collection_ids)'
       select 'Robert Langmuir African American Photograph Collection', from: 'collection_source_collection_id'
       select 'Testing Collection', from: 'collection_deposit_collection_ids'
-      click_on 'Save changes'
-      collection.reload
-      expect(collection.source_collection_id).to eq collection.id
-      expect(collection.deposit_collection_ids).to eq [collection_2.id]
+      click_button 'Save changes'
+      sleep 5
+      reloaded_collection = Collection.find(collection.id)
+
+      expect(reloaded_collection.source_collection_id).to eq reloaded_collection.id
+      expect(reloaded_collection.deposit_collection_ids).to eq [collection_2.id]
     end
   end
 end

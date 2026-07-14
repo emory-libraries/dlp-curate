@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.describe Hyrax::CurateGenericWorksController, :clean do
-  let(:work) { FactoryBot.create(:public_generic_work, id: '888889', user: user) }
+  let(:work) { FactoryBot.create(:public_generic_work, id: '888889', user:) }
   let(:user) { FactoryBot.create(:user) }
   let(:admin) { FactoryBot.create(:admin) }
 

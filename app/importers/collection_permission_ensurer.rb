@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# Deprecation Warning: As of Curate v3, Zizia will be removed. This is an artifact
-#   of the Zizia install that will likely be removed.
 class CollectionPermissionEnsurer
   AGENT_TYPE = 'group'
 
@@ -10,7 +8,7 @@ class CollectionPermissionEnsurer
       hpt = find_or_create_permission_template(collection)
       groups.select! { |group| Role.exists?(name: group) }
       groups.each do |group|
-        next if group_rights_exists?(hyrax_permission_template: hpt, access_permission: access_permission, group: group)
+        next if group_rights_exists?(hyrax_permission_template: hpt, access_permission:, group:)
         hpta = Hyrax::PermissionTemplateAccess.new
         hpta.permission_template_id = hpt.id
         hpta.agent_type = AGENT_TYPE

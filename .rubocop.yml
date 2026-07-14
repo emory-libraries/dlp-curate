@@ -4,7 +4,7 @@ inherit_gem:
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-    TargetRubyVersion: 2.7
+    TargetRubyVersion: 3.2
     Exclude:
         - bin/**/*
         - db/**/*
@@ -19,11 +19,6 @@ Layout/HashAlignment:
 Layout/IndentationConsistency:
     EnforcedStyle: indented_internal_methods
 
-Layout/LineLength:
-    Exclude:
-        - app/importers/curate_record_importer.rb
-        - spec/importers/curate_mapper_spec.rb
-
 Lint/NonLocalExitFromIterator:
     Exclude:
         - app/importers/collection_permission_ensurer.rb
@@ -34,7 +29,7 @@ Metrics/AbcSize:
         - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
-        - app/lib/metadata_details.rb
+        - app/parsers/bulkrax/csv_parser.rb
         - config/initializers/bulkrax.rb
         - spec/system/import_langmuir_from_csv_spec.rb
 
@@ -56,67 +51,95 @@ Metrics/ClassLength:
         - app/actors/hyrax/actors/file_set_actor.rb
         - app/controllers/catalog_controller.rb
         - app/controllers/iiif_controller.rb
+        - app/factories/bulkrax/object_factory.rb
+        - app/factories/bulkrax/object_factory_interface.rb
         - app/forms/hyrax/forms/collection_form.rb
         - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
+        - app/models/bulkrax/csv_entry.rb
+        - app/models/bulkrax/exporter.rb
+        - app/models/concerns/bulkrax/file_factory.rb
         - app/models/curate_generic_work.rb
         - app/models/solr_document.rb
+        - app/parsers/bulkrax/application_parser.rb
+        - app/parsers/bulkrax/csv_parser.rb
         - app/presenters/hyrax/collection_presenter.rb
         - app/services/aspace/api_service.rb
-        # Deprecation warning: Zizia will be removed with Curate v3.
-        - app/uploaders/zizia/csv_manifest_validator.rb
         - spec/**/*
 
 Metrics/CyclomaticComplexity:
     Exclude:
+        - app/controllers/concerns/bulkrax/datatables_behavior.rb
         - app/controllers/iiif_controller.rb
+        - app/factories/bulkrax/object_factory.rb
         - app/importers/curate_record_importer.rb
         - app/importers/yellowback_preprocessor.rb
         - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
+        - app/models/bulkrax/csv_entry.rb
         - app/models/concerns/hydra/access_controls/visibility.rb
+        - app/parsers/bulkrax/application_parser.rb
+        - app/parsers/bulkrax/csv_parser.rb
         - config/initializers/bulkrax.rb
         - config/initializers/file_actor.rb
 
 Metrics/MethodLength:
     Exclude:
         - app/controllers/background_jobs_controller.rb
+        - app/controllers/concerns/bulkrax/datatables_behavior.rb
         - app/controllers/hyrax/file_sets_controller.rb
         - app/controllers/iiif_controller.rb
+        - app/factories/bulkrax/object_factory_interface.rb
         - app/forms/hyrax/curate_generic_work_form.rb
         - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
         - app/jobs/characterize_job.rb
         - app/jobs/create_work_job.rb
+        - app/jobs/fixity_check_job.rb
+        - app/models/bulkrax/exporter.rb
+        - app/models/concerns/bulkrax/export_behavior.rb
+        - app/models/concerns/bulkrax/import_behavior.rb
+        - app/models/concerns/bulkrax/file_factory.rb
         - app/models/concerns/hydra/access_controls/visibility.rb
+        - app/parsers/bulkrax/application_parser.rb
+        - app/parsers/bulkrax/csv_parser.rb
+        - app/parsers/bulkrax/parser_export_record_set.rb
         - app/presenters/hyrax/collection_presenter.rb
         - app/presenters/hyrax/curate_collection_presenter.rb
-        - app/uploaders/zizia/csv_manifest_validator.rb
         - config/initializers/bulkrax.rb
+        - config/initializers/hydra_access_control_overrides.rb
         - spec/fixtures/manifest_output.rb
         - spec/fixtures/placeholder_manifest_output.rb
 
 Metrics/ModuleLength:
     Exclude:
+        - app/controllers/concerns/bulkrax/datatables_behavior.rb
         - app/lib/metadata_definitions.rb
+        - app/models/concerns/bulkrax/import_behavior.rb
         - app/models/concerns/hyrax/collection_behavior.rb
 
 Metrics/ParameterLists:
     Exclude:
+        - app/factories/bulkrax/object_factory.rb
+        - app/factories/bulkrax/object_factory_interface.rb
         - app/importers/yellowback_preprocessor.rb
         - lib/importing_modules/file_set_methods.rb
-        - app/jobs/manifest_persistence_job.rb
         - app/jobs/characterize_job.rb
+        - app/jobs/fixity_check_job.rb
+        - app/jobs/manifest_persistence_job.rb
         - config/initializers/collection_member_search_service_overrides.rb
 
 Metrics/PerceivedComplexity:
     Exclude:
+        - app/controllers/concerns/bulkrax/datatables_behavior.rb
+        - app/forms/hyrax/curate_generic_work_form.rb
         - app/importers/curate_record_importer.rb
         - app/importers/yellowback_preprocessor.rb
-        - app/forms/hyrax/curate_generic_work_form.rb
         - app/models/concerns/hydra/access_controls/visibility.rb
+        - app/parsers/bulkrax/csv_parser.rb
+        - app/models/bulkrax/csv_entry.rb
 
 Naming/PredicateName:
     Exclude:
@@ -124,11 +147,15 @@ Naming/PredicateName:
 
 Rails/Exit:
     Exclude:
-        - 'config/deploy.rb'
+        - config/deploy.rb
 
 Rails/Output:
     Exclude:
-        - 'config/deploy.rb'
+        - config/deploy.rb
+
+Rails/SkipsModelValidations:
+    Exclude:
+        - app/parsers/bulkrax/application_parser.rb
 
 RSpec/AnyInstance:
     Exclude:

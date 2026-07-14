@@ -1,8 +1,8 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1]
+# [Hyrax-override-hyrax-v5.2.0] spec/jobs/characterize_job_spec.rb
 require 'rails_helper'
 
-RSpec.describe CharacterizeJob, :clean do
+RSpec.describe CharacterizeJob, :perform_enqueued, :clean do
   let(:file_set_id) { 'abc12345' }
   let(:filename)    { Rails.root.join('tmp', 'uploads', 'ab', 'c1', '23', '45', 'abc12345', 'picture.png').to_s }
   let(:file_set) do
@@ -32,8 +32,18 @@ RSpec.describe CharacterizeJob, :clean do
   context 'with valid filepath param' do
     let(:filename) { File.join(fixture_path, 'world.png') }
 
-    it 'skips Hyrax::WorkingDirectory' do
-      expect(Hyrax::WorkingDirectory).not_to receive(:find_or_retrieve)
+    it 'skips Hyrax::WorkingDirectory.copy_repository_resource_to_working_directory' do
+      expect(Hyrax::WorkingDirectory).not_to receive(:copy_repository_resource_to_working_directory)
+      expect(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename, {}, user)
+      described_class.perform_now(file_set, file.id, filename, user)
+    end
+  end
+
+  context 'with no filepath param' do
+    let(:filename) { nil }
+
+    it 'uses Hyrax::WorkingDirectory.copy_repository_resource_to_working_directory to pull the repo file' do
+      expect(Hyrax::WorkingDirectory).to receive(:copy_repository_resource_to_working_directory)
       expect(Hydra::Works::CharacterizationService).to receive(:run).with(file, filename, {}, user)
       described_class.perform_now(file_set, file.id, filename, user)
     end

@@ -12,7 +12,7 @@ RSpec.describe ActiveFedora::Fedora do
           request:  { timeout: 300, open_timeout: 60 } }
       end
       specify do
-        expect(Faraday).to receive(:new).with("https://example.com", request: { timeout: 300, open_timeout: 60 }).and_call_original
+        expect(Faraday).to receive(:new).with("https://example.com", { request: { timeout: 300, open_timeout: 60 } }).and_call_original
         fedora.authorized_connection
       end
     end

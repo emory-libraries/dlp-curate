@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-override-hyrax-v5.2.0]
 
 ##
 # a +ActiveJob+ job to process file characterization.
@@ -20,8 +20,6 @@
 # Override: Adds preservation event for fileset characterization
 
 class CharacterizeJob < Hyrax::ApplicationJob
-  include PreservationEvents
-
   queue_as Hyrax.config.ingest_queue_name
 
   class_attribute :characterization_service
@@ -37,12 +35,13 @@ class CharacterizeJob < Hyrax::ApplicationJob
     @relation = file_set.class.characterization_proxy
     file = file_set.characterization_proxy
     raise "#{@relation} was not found for FileSet #{file_set.id}" unless file_set.characterization_proxy?
-    filepath = Hyrax::WorkingDirectory.find_or_retrieve(file_id, file_set.id) unless filepath && File.exist?(filepath)
+    # Ensure a fresh copy of the repo file's latest version is being worked on, if no filepath is directly provided
+    filepath = Hyrax::WorkingDirectory.copy_repository_resource_to_working_directory(Hydra::PCDM::File.find(file_id), file_set.id) unless filepath && File.exist?(filepath)
     characterize(
-      file:     file,
-      filepath: filepath,
-      user:     user,
-      file_set: file_set
+      file:,
+      filepath:,
+      user:,
+      file_set:
     )
   end
 
@@ -55,7 +54,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
       clear_metadata(file_set)
 
       characterization_service.run(file, filepath, {}, user)
-      Rails.logger.debug "Ran characterization on #{file.id} (#{file.mime_type})"
+      Hyrax.logger.debug "Ran characterization on #{file.id} (#{file.mime_type})"
       file.alpha_channels = channels(filepath) if file_set.image? && Hyrax.config.iiif_image_server?
       file.save!
 
@@ -71,7 +70,7 @@ class CharacterizeJob < Hyrax::ApplicationJob
       file_set.save!
       # commenting this job call since we are doing this in the file_actor
       # CreateDerivativesJob.perform_later(file_set, file_id, filepath)
-      process_preservation_event(file_set, file, user)
+      process_preservation_event(file_set, file, user, DateTime.current)
     end
 
     def clear_metadata(file_set)
@@ -106,17 +105,18 @@ class CharacterizeJob < Hyrax::ApplicationJob
       "The Characterization Service failed."
     end
 
-    def process_preservation_event(file_set, file, user)
+    def process_preservation_event(file_set, file, user, event_end)
       metadata_populated = check_for_populated_metadata(file_set)
       event = {
         'type' => 'Characterization',
         'start' => @event_start,
+        'end' => event_end,
         'outcome' => metadata_populated ? 'Success' : 'Failure',
         'details' => pres_event_details(metadata_populated, file),
         'software_version' => 'FITS v1.5.0',
         'user' => user.presence || file_set.depositor
       }
-      create_preservation_event(file_set, event)
+      CreatePreservationEventJob.perform_later(object: file_set, event:)
     end
 
     def check_for_populated_metadata(file_set)

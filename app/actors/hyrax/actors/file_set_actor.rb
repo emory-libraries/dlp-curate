@@ -1,17 +1,14 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-override-hyrax-v5.2.0]
 
 module Hyrax
   module Actors
     # Actions are decoupled from controller logic so that they may be called from a controller or a background job.
     class FileSetActor
       include Lockable
-      include PreservationEvents
-      attr_reader :file_set, :user, :attributes, :use_valkyrie
+      attr_reader :file_set, :user, :attributes
 
-      def initialize(file_set, user, use_valkyrie: false)
-        @use_valkyrie = use_valkyrie
+      def initialize(file_set, user)
         @file_set = file_set
         @user = user
       end
@@ -29,13 +26,13 @@ module Hyrax
         file_set.title = [file_set.label] if file_set.title.blank?
         return false unless file_set.save # Need to save to get an id
         file_actor = build_file_actor(relation)
-        io_wrapper = wrapper!(file: file, relation: relation, preferred: preferred)
+        io_wrapper = wrapper!(file:, relation:, preferred:)
         if from_url
           # If ingesting from URL, don't spawn an IngestJob; instead
           # reach into the FileActor and run the ingest with the file instance in
           # hand. Do this because we don't have the underlying UploadedFile instance
-          file_actor.ingest_file(wrapper!(file: file, relation: relation, preferred: preferred))
-          parent = parent_for(file_set: file_set)
+          file_actor.ingest_file(wrapper!(file:, relation:, preferred:))
+          parent = parent_for(file_set:)
           VisibilityCopyJob.perform_later(parent)
           InheritPermissionsJob.perform_later(parent)
         else
@@ -53,7 +50,7 @@ module Hyrax
       # @param [Symbol, #to_s] relation
       # @return [IngestJob] the queued job
       def update_content(file, preferred, relation = :preservation_master_file)
-        IngestJob.perform_later(wrapper!(file: file, relation: relation, preferred: preferred), notification: true)
+        IngestJob.perform_later(wrapper!(file:, relation:, preferred:), notification: true)
       end
       # @!endgroup
 
@@ -78,7 +75,7 @@ module Hyrax
       end
 
       def attach_to_work(work, file_set_params = {})
-        # Note: This method no longer associates the file_set to the work. That happens
+        # NOTE: This method no longer associates the file_set to the work. That happens
         #   in AttachFilesToWorkJob#add_file_set_to_work_ordered_members now. This has been changed
         #   so that Bulkrax can still use this actor and associate all of the file_sets
         #   to the work at the very end of the ingest process, which has shown significant
@@ -93,8 +90,6 @@ module Hyrax
         assign_fileset_to_work_display_elements(work, file_set)
         work.save
       end
-      alias attach_file_to_work attach_to_work
-      deprecation_deprecate attach_file_to_work: "use attach_to_work instead"
 
       def assign_fileset_to_work_display_elements(work, file_set)
         work.representative = file_set if work.representative_id.blank?
@@ -137,12 +132,12 @@ module Hyrax
         end
 
         def build_file_actor(relation)
-          file_actor_class.new(file_set, relation, user, use_valkyrie: false)
+          file_actor_class.new(file_set, relation, user)
         end
 
         # uses create! because object must be persisted to serialize for jobs
         def wrapper!(file:, relation:, preferred:)
-          JobIoWrapper.create_with_varied_file_handling!(user: user, file: file, relation: relation, file_set: file_set, preferred: preferred)
+          JobIoWrapper.create_with_varied_file_handling!(user:, file:, relation:, file_set:, preferred:)
         end
 
         # For the label, use the original_filename or original_name if it's there.
@@ -177,7 +172,7 @@ module Hyrax
         # Although ActiveFedora clears the children nodes it leaves those fields in Solr populated.
         # rubocop:disable Metrics/CyclomaticComplexity
         def unlink_from_work
-          work = parent_for(file_set: file_set)
+          work = parent_for(file_set:)
           return unless work && (work.thumbnail_id == file_set.id || work.representative_id == file_set.id || work.rendering_ids.include?(file_set.id))
           work.thumbnail = nil if work.thumbnail_id == file_set.id
           work.representative = nil if work.representative_id == file_set.id

@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.describe AspaceController, type: :controller do
-  let(:service) { instance_double(Aspace::ApiService) }
+  let(:service) { instance_double(Aspace::APIService) }
   let(:admin) { FactoryBot.create(:admin) }
   let(:repository_data) do
     {
@@ -30,7 +29,7 @@ RSpec.describe AspaceController, type: :controller do
   end
 
   before do
-    allow(Aspace::ApiService).to receive(:new).and_return(service)
+    allow(Aspace::APIService).to receive(:new).and_return(service)
   end
 
   describe '#authorize_resource' do
@@ -78,7 +77,7 @@ RSpec.describe AspaceController, type: :controller do
   describe '#authenticate' do
     context 'when an API authentication error is raised' do
       before do
-        allow(service).to receive(:authenticate!).and_raise(Aspace::ApiService::AuthenticationError, 'Unable to authenticate to ArchivesSpace')
+        allow(service).to receive(:authenticate!).and_raise(Aspace::APIService::AuthenticationError, 'Unable to authenticate to ArchivesSpace')
         sign_in(admin)
       end
 
@@ -117,7 +116,7 @@ RSpec.describe AspaceController, type: :controller do
 
     context 'when an API client error is raised' do
       before do
-        allow(service).to receive(:fetch_repositories).and_raise(Aspace::ApiService::ClientError, 'Test client error')
+        allow(service).to receive(:fetch_repositories).and_raise(Aspace::APIService::ClientError, 'Test client error')
       end
 
       it 'returns error response' do
@@ -129,7 +128,7 @@ RSpec.describe AspaceController, type: :controller do
 
     context 'when an API server error is raised' do
       before do
-        allow(service).to receive(:fetch_repositories).and_raise(Aspace::ApiService::ServerError, 'Test server error')
+        allow(service).to receive(:fetch_repositories).and_raise(Aspace::APIService::ServerError, 'Test server error')
       end
 
       it 'returns error response' do
@@ -195,7 +194,7 @@ RSpec.describe AspaceController, type: :controller do
 
     context 'when an API client error is raised' do
       before do
-        allow(service).to receive(:fetch_resource_by_call_number).and_raise(Aspace::ApiService::ClientError, 'Test client error')
+        allow(service).to receive(:fetch_resource_by_call_number).and_raise(Aspace::APIService::ClientError, 'Test client error')
       end
 
       it 'returns error response' do
@@ -207,7 +206,7 @@ RSpec.describe AspaceController, type: :controller do
 
     context 'when an API server error is raised' do
       before do
-        allow(service).to receive(:fetch_resource_by_call_number).and_raise(Aspace::ApiService::ServerError, 'Test server error')
+        allow(service).to receive(:fetch_resource_by_call_number).and_raise(Aspace::APIService::ServerError, 'Test server error')
       end
 
       it 'returns error response' do

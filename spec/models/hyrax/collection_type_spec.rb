@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# [Hyrax-override-hyrax-v5.2.0] spec/models/hyrax/collection_type_spec.rb
 require 'rails_helper'
 
 RSpec.describe Hyrax::CollectionType, type: :model do
@@ -10,24 +10,15 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     let(:collection) { FactoryBot.create(:collection_lw, collection_type_gid: collection_type.to_global_id) }
   end
 
-  describe '.collection_type_settings_methods' do
-    it 'lists collection settings methods' do # deprecated
-      expect(described_class.collection_type_settings_methods)
-        .to include(:nestable?, :discoverable?, :brandable?)
-    end
-  end
+  describe "validations", :clean do
+    let(:collection_type) { FactoryBot.create(:collection_type) }
 
-  describe '#collection_type_settings_methods' do
-    it 'lists collection settings methods' do # deprecated
-      expect(collection_type.collection_type_settings_methods)
-        .to include(:nestable?, :discoverable?, :brandable?)
-    end
-  end
-
-  describe '.settings_attributes' do
-    it 'lists collection settings methods' do
-      expect(described_class.settings_attributes)
-        .to include(:nestable?, :discoverable?, :brandable?)
+    it "ensures the required fields have values" do
+      collection_type.title = nil
+      collection_type.machine_id = nil
+      expect(collection_type).not_to be_valid
+      expect(collection_type.errors.messages[:title]).not_to be_empty
+      expect(collection_type.errors.messages[:machine_id]).not_to be_empty
     end
   end
 
@@ -55,186 +46,170 @@ RSpec.describe Hyrax::CollectionType, type: :model do
     expect(collection_type.assigns_visibility?).to eq false
   end
 
-  describe '#gid' do
-    it 'returns the gid when id exists' do
-      collection_type.id = 5
-      expect(collection_type.gid.to_s).to eq "gid://#{GlobalID.app}/#{described_class}/5"
+  context 'class methods' do
+    describe '.settings_attributes' do
+      it 'lists collection settings methods' do
+        expect(described_class.settings_attributes)
+          .to include(:nestable?, :discoverable?, :brandable?)
+      end
     end
 
-    it 'returns nil when id is nil' do
-      collection_type.id = nil
-      expect(collection_type.gid).to be_nil
-    end
-  end
+    describe ".find_or_create_default_collection_type" do
+      subject(:default_collection_type) { described_class.find_or_create_default_collection_type }
 
-  describe ".find_or_create_default_collection_type" do
-    subject(:default_collection_type) { described_class.find_or_create_default_collection_type }
-
-    it 'creates a default collection type' do
-      expect(Hyrax::CollectionTypes::CreateService).to receive(:create_collection_type)
-      default_collection_type
-    end
-  end
-
-  describe ".gids_that_do_not_allow_multiple_membership" do
-    let(:type_allows_multiple_membership) { FactoryBot.create(:collection_type, allow_multiple_membership: true) }
-    let!(:type_disallows_multiple_membership) { FactoryBot.create(:collection_type, allow_multiple_membership: false) }
-
-    it 'lists the single membership gids' do
-      expect(described_class.gids_that_do_not_allow_multiple_membership)
-        .to match_array(type_disallows_multiple_membership.to_global_id.to_s)
-    end
-  end
-
-  describe ".find_or_create_admin_set_type" do
-    subject(:admin_collection_type) { described_class.find_or_create_admin_set_type }
-
-    it 'creates admin set collection type' do
-      machine_id = described_class::ADMIN_SET_MACHINE_ID
-      title = described_class::ADMIN_SET_DEFAULT_TITLE
-      expect(Hyrax::CollectionTypes::CreateService).to receive(:create_collection_type).with(machine_id: machine_id, title: title, options: anything)
-      admin_collection_type
-    end
-  end
-
-  describe "validations", :clean do
-    let(:collection_type) { FactoryBot.create(:collection_type) }
-
-    it "ensures the required fields have values" do
-      collection_type.title = nil
-      collection_type.machine_id = nil
-      expect(collection_type).not_to be_valid
-      expect(collection_type.errors.messages[:title]).not_to be_empty
-      expect(collection_type.errors.messages[:machine_id]).not_to be_empty
-    end
-  end
-
-  describe '.find_by_gid' do
-    let(:collection_type) { FactoryBot.create(:collection_type) }
-
-    it 'returns the same collection type the gid exists' do
-      expect(described_class.find_by_gid(collection_type.gid)).to eq collection_type
+      it 'creates a default collection type' do
+        expect(Hyrax::CollectionTypes::CreateService).to receive(:create_collection_type)
+        default_collection_type
+      end
     end
 
-    it 'returns the same collection type with `#to_global_id`' do
-      expect(described_class.find_by_gid(collection_type.to_global_id)).to eq collection_type
+    describe ".gids_that_do_not_allow_multiple_membership" do
+      let(:type_allows_multiple_membership) { FactoryBot.create(:collection_type, allow_multiple_membership: true) }
+      let!(:type_disallows_multiple_membership) { FactoryBot.create(:collection_type, allow_multiple_membership: false) }
+
+      it 'lists the single membership gids' do
+        expect(described_class.gids_that_do_not_allow_multiple_membership)
+          .to match_array(type_disallows_multiple_membership.to_global_id.to_s)
+      end
     end
 
-    it 'returns false if collection type with gid does NOT exist' do
-      expect(described_class.find_by_gid('gid://internal/hyrax-collectiontype/NO_EXIST')).to eq false
+    describe ".find_or_create_admin_set_type" do
+      subject(:admin_collection_type) { described_class.find_or_create_admin_set_type }
+
+      it 'creates admin set collection type' do
+        machine_id = described_class::ADMIN_SET_MACHINE_ID
+        title = described_class::ADMIN_SET_DEFAULT_TITLE
+        expect(Hyrax::CollectionTypes::CreateService).to receive(:create_collection_type).with(machine_id:, title:, options: anything)
+        admin_collection_type
+      end
     end
 
-    it 'returns false if gid is nil' do
-      expect(described_class.find_by_gid(nil)).to eq false
-    end
-  end
-
-  describe '.find_by_gid!' do
-    let(:collection_type) { FactoryBot.create(:collection_type) }
-
-    it 'returns instance of collection type when one with the gid exists' do
-      expect(described_class.find_by_gid(collection_type.gid)).to eq collection_type
-    end
-
-    it 'returns the same collection type with `#to_global_id`' do
-      expect(described_class.find_by_gid!(collection_type.to_global_id)).to eq collection_type
-    end
-
-    it 'raises error if collection type with gid does NOT exist' do
-      expect { described_class.find_by_gid!('gid://internal/hyrax-collectiontype/NO_EXIST') }
-        .to raise_error(ActiveRecord::RecordNotFound)
-    end
-
-    it 'raises error if passed nil' do
-      expect { described_class.find_by_gid!(nil) }.to raise_error(URI::InvalidURIError)
-    end
-  end
-
-  describe "collections" do
-    let(:collection_type) { FactoryBot.create(:collection_type) }
-
-    it 'returns empty array if gid is nil' do
-      FactoryBot.create(:collection_lw, collection_type_gid: collection_type.gid.to_s)
-      expect(Collection.count).not_to be_zero
-      expect(FactoryBot.build(:collection_type).collections).to eq []
-    end
-  end
-
-  describe "collections?", :clean do
-    let(:collection_type) { FactoryBot.create(:collection_type) }
-
-    it 'returns true if there are any collections of this collection type' do
-      FactoryBot.create(:collection_lw, collection_type: collection_type)
-      expect(collection_type.collections?).to eq true
-    end
-    it 'returns false if there are not any collections of this collection type' do
-      expect(collection_type.collections?).to eq false
-    end
-  end
-
-  describe "machine_id" do
-    let(:collection_type) { described_class.new }
-
-    it 'assigns machine_id on title=' do
-      expect(collection_type.machine_id).to be_blank
-      collection_type.title = "New Collection Type"
-      expect(collection_type.machine_id).not_to be_blank
-    end
-  end
-
-  describe '#destroy' do
-    include_context 'with a collection'
-    before { reload_context_variables }
-
-    it "fails if collections exist of this type" do
-      expect(collection_type.destroy).to eq false
-      expect(collection_type.errors).not_to be_empty
-    end
-  end
-
-  describe "save (no settings changes)" do
-    include_context 'with a collection'
-    before { reload_context_variables }
-
-    it "succeeds no changes to settings are being made" do
-      expect(collection_type.save).to be true
-      expect(collection_type.errors).to be_empty
-    end
-  end
-
-  describe '#save' do
-    before { collection_type.nestable = !collection_type.nestable }
-
-    context 'for non-special collection type' do
+    describe '.for' do
       include_context 'with a collection'
-      before { collection.reload }
 
-      it "fails if collections exist of this type and settings are changed" do
-        expect(collection_type.save).to be false
-        expect(collection_type.errors.messages[:base].first).to eq "Collection type settings cannot be altered for a type that has collections"
+      it 'returns the collection type for the collection' do
+        expect(described_class.for(collection:)).to eq collection_type
       end
     end
 
-    context 'for admin set collection type' do
-      let(:collection_type) { FactoryBot.create(:admin_set_collection_type) }
+    describe '.find_by_gid' do
+      let(:collection_type) { FactoryBot.create(:collection_type) }
 
-      it 'fails if settings are changed' do
-        expect(collection_type.save).to be false
-        expect(collection_type.errors.messages[:base].first).to eq "Collection type settings cannot be altered for the Administrative Set type"
+      it 'returns the same collection type with `#to_global_id`' do
+        expect(described_class.find_by_gid(collection_type.to_global_id)).to eq collection_type
+      end
+
+      it 'returns false if collection type with gid does NOT exist' do
+        expect(described_class.find_by_gid('gid://internal/hyrax-collectiontype/NO_EXIST')).to eq false
+      end
+
+      it 'returns false if gid is nil' do
+        expect(described_class.find_by_gid(nil)).to eq false
       end
     end
 
-    context 'for user collection type' do
-      let(:collection_type) { FactoryBot.create(:user_collection_type) }
+    describe '.find_by_gid!' do
+      let(:collection_type) { FactoryBot.create(:collection_type) }
 
-      it 'fails if settings are changed' do
-        expect(collection_type.save).to be false
-        expect(collection_type.errors.messages[:base].first).to eq "Collection type settings cannot be altered for the User Collection type"
+      it 'returns the same collection type with `#to_global_id`' do
+        expect(described_class.find_by_gid!(collection_type.to_global_id)).to eq collection_type
+      end
+
+      it 'raises error if collection type with gid does NOT exist' do
+        expect { described_class.find_by_gid!('gid://internal/hyrax-collectiontype/NO_EXIST') }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it 'raises error if passed nil' do
+        expect { described_class.find_by_gid!(nil) }.to raise_error(URI::InvalidURIError)
       end
     end
   end
+  context 'instance methods' do
+    let(:collection_type) { FactoryBot.create(:collection_type) }
 
-  def reload_context_variables
-    [collection_type, collection].each(&:reload)
+    describe "#collections" do
+      it 'returns empty array if gid is nil' do
+        FactoryBot.create(:collection_lw, collection_type_gid: collection_type.to_global_id)
+        expect(Collection.count).not_to be_zero
+        expect(FactoryBot.build(:collection_type).collections).to eq []
+      end
+    end
+
+    describe "#collections#any?", :clean do
+      it 'returns true if there are any collections of this collection type' do
+        FactoryBot.create(:collection_lw, collection_type:)
+        expect(collection_type.collections?).to eq true
+      end
+      it 'returns false if there are not any collections of this collection type' do
+        expect(collection_type.collections?).to eq false
+      end
+    end
+
+    describe "#machine_id" do
+      let(:collection_type) { described_class.new }
+
+      it 'assigns machine_id on title=' do
+        expect(collection_type.machine_id).to be_blank
+        collection_type.title = "New Collection Type"
+        expect(collection_type.machine_id).not_to be_blank
+      end
+    end
+
+    describe '#destroy' do
+      include_context 'with a collection'
+      before { reload_context_variables }
+
+      it "fails if collections exist of this type" do
+        expect(collection_type.destroy).to eq false
+        expect(collection_type.errors).not_to be_empty
+      end
+    end
+
+    describe "#save (no settings changes)" do
+      include_context 'with a collection'
+      before { reload_context_variables }
+
+      it "succeeds no changes to settings are being made" do
+        expect(collection_type.save).to be true
+        expect(collection_type.errors).to be_empty
+      end
+    end
+
+    describe '#save' do
+      before { collection_type.nestable = !collection_type.nestable }
+
+      context 'for non-special collection type' do
+        include_context 'with a collection'
+        before { collection.reload }
+
+        it "fails if collections exist of this type and settings are changed" do
+          expect(collection_type.save).to be false
+          expect(collection_type.errors.messages[:base].first).to eq "Collection type settings cannot be altered for a type that has collections"
+        end
+      end
+
+      context 'for admin set collection type' do
+        let(:collection_type) { FactoryBot.create(:admin_set_collection_type) }
+
+        it 'fails if settings are changed' do
+          expect(collection_type.save).to be false
+          expect(collection_type.errors.messages[:base].first).to eq "Collection type settings cannot be altered for the Administrative Set type"
+        end
+      end
+
+      context 'for user collection type' do
+        let(:collection_type) { FactoryBot.create(:user_collection_type) }
+
+        it 'fails if settings are changed' do
+          expect(collection_type.save).to be false
+          expect(collection_type.errors.messages[:base].first).to eq "Collection type settings cannot be altered for the User Collection type"
+        end
+      end
+    end
+
+    def reload_context_variables
+      [collection_type, collection].each(&:reload)
+    end
   end
 end

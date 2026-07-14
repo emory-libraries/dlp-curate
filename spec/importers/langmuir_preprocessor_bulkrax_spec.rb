@@ -5,7 +5,7 @@ RSpec.describe LangmuirPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results
     langmuir_sample = File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed.csv')
-    preprocessor = described_class.new(langmuir_sample, 'bulkrax')
+    preprocessor = described_class.new(langmuir_sample)
     preprocessor.merge
   end
 
@@ -144,7 +144,7 @@ RSpec.describe LangmuirPreprocessor do
   context 'file has source_collection_id defined' do
     it 'shows assigned values in processed csv' do
       source_langmuir_sample = File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed-with-source-id.csv')
-      preprocessor = described_class.new(source_langmuir_sample, 'bulkrax')
+      preprocessor = described_class.new(source_langmuir_sample)
       preprocessor.merge
       source_processed_csv = File.join(fixture_path, 'csv_import', 'langmuir', 'langmuir-unprocessed-with-source-id-processed.csv')
       source_import_rows = CSV.read(source_processed_csv, headers: true).by_row!

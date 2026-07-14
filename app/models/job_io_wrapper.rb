@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-override-hyrax-v5.2.0]
 # ingest_file method in the JobIoWrapper method is modified. We save the response
 # from the `file_actor.ingest_file` method call. If false is returned from L#16 in
 # `config/intializers/file_actor.rb` then a failure event is created, else success
@@ -23,13 +22,12 @@
 #  If both are provided: path is used preferentially for access IF it exists;
 #  however, the uploaded_file is used preferentially for default original_name and mime_type,
 #  because it already has that information.
+
 class JobIoWrapper < ApplicationRecord
-  include PreservationEvents
   belongs_to :user, optional: false
   belongs_to :uploaded_file, optional: true, class_name: 'Hyrax::UploadedFile'
   validates :uploaded_file, presence: true, if: proc { |x| x.path.blank? }
   validates :file_set_id, presence: true
-
   after_initialize :static_defaults
   delegate :read, to: :file
 
@@ -43,7 +41,7 @@ class JobIoWrapper < ApplicationRecord
   # @return [JobIoWrapper]
   # @raise ActiveRecord::RecordInvalid - if the instance is not valid
   def self.create_with_varied_file_handling!(user:, file:, relation:, file_set:, preferred:)
-    args = { user: user, relation: relation.to_s, file_set_id: file_set.id, preferred: preferred.to_s }
+    args = { user:, relation: relation.to_s, file_set_id: file_set.id, preferred: preferred.to_s }
     if file.is_a?(Hyrax::UploadedFile)
       args[:uploaded_file] = file
       args[:path] = file.uploader.path
@@ -92,13 +90,13 @@ class JobIoWrapper < ApplicationRecord
       outcome = 'Success'
       details = "#{file_name} submitted for preservation storage"
     end
-    file_set_preservation_event(file_set, event_start, outcome, details)
+    file_set_preservation_event(file_set, event_start, outcome, details, DateTime.current)
   end
 
   def to_file_metadata
     Hyrax::FileMetadata.new(label:             original_name,
                             original_filename: original_name,
-                            mime_type:         mime_type,
+                            mime_type:,
                             use:               [Hyrax::FileMetadata::Use::ORIGINAL_FILE])
   end
 
@@ -138,9 +136,9 @@ class JobIoWrapper < ApplicationRecord
     end
 
     # create preservation_event for fileset creation (method in PreservationEvents module)
-    def file_set_preservation_event(file_set, event_start, outcome, details)
-      event = { 'type' => 'File submission', 'start' => event_start, 'outcome' => outcome, 'details' => details,
+    def file_set_preservation_event(file_set, event_start, outcome, details, event_end)
+      event = { 'type' => 'File submission', 'start' => event_start, 'end' => event_end, 'outcome' => outcome, 'details' => details,
                 'software_version' => 'Fedora v4.7.6', 'user' => user.uid }
-      create_preservation_event(file_set, event)
+      CreatePreservationEventJob.perform_later(object: file_set, event:)
     end
 end

@@ -1,4 +1,4 @@
-// [Hyrax-overwrite] Adds autocomplete
+// [Hyrax-override-hyrax-v5.2.0] Adds autocomplete
 import ThumbnailSelect from 'hyrax/thumbnail_select'
 import Participants from 'hyrax/admin/admin_set/participants'
 import tabifyForm from 'hyrax/tabbed_form'

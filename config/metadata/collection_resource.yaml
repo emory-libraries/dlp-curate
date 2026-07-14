@@ -1,0 +1,181 @@
+# Collection-specific metadata properties for the Valkyrie CollectionResource model.
+# These attributes match the ActiveFedora Collection model properties.
+#
+# Fields shared with works are defined in emory_basic_metadata.yaml.
+# Fields here are collection-specific. Note: Dry::Struct does not allow
+# redefining attributes, so fields already in emory_basic_metadata.yaml
+# (e.g. abstract, creator, holding_repository, emory_ark, etc.) must NOT
+# be redeclared here.
+#
+# Generated following the pattern from:
+#   `rails generate hyrax:collection_resource CollectionResource`
+
+attributes:
+  administrative_unit:
+    type: string
+    multiple: true
+    form:
+      primary: true
+    index_keys:
+      - "administrative_unit_tesim"
+    predicate: http://id.loc.gov/vocabulary/relators/cur
+  alt_title:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "alt_title_tesim"
+    predicate: http://purl.org/dc/terms/alternative
+  contact_information:
+    type: string
+    multiple: false
+    form:
+      primary: true
+      multiple: false
+    index_keys:
+      - "contact_information_tesi"
+    predicate: http://www.rdaregistry.info/Elements/u/#P60490
+  contributors:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "contributors_tesim"
+      - "contributors_sim"
+    predicate: http://purl.org/dc/elements/1.1/contributor
+  deduplication_key:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "deduplication_key_tesi"
+    predicate: http://metadata.emory.edu/vocab/predicates#deduplicationKey
+  deposit_collection_ids:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "deposit_collection_ids_tesim"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#depositCollectionID
+  finding_aid_link:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "finding_aid_link_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#findingAid
+  keywords:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "keywords_tesim"
+      - "keywords_sim"
+    predicate: http://schema.org/keywords
+  local_call_number:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "local_call_number_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#localCallNumber
+  notes:
+    type: string
+    multiple: true
+    form:
+      primary: false
+      multiple: true
+    index_keys:
+      - "notes_tesim"
+    predicate: http://www.w3.org/2004/02/skos/core#note
+  primary_language:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "primary_language_tesi"
+      - "primary_language_si"
+    predicate: http://purl.org/dc/elements/1.1/language
+  primary_repository_ID:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "primary_repository_ID_tesi"
+    predicate: http://purl.org/dc/terms/identifier
+  rights_documentation:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "rights_documentation_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI
+  sensitive_material:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "sensitive_material_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterial
+  source_collection_id:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "source_collection_id_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#sourceCollectionID
+  subject_geo:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_geo_tesim"
+      - "subject_geo_sim"
+    predicate: http://purl.org/dc/elements/1.1/coverage
+  subject_names:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_names_tesim"
+      - "subject_names_sim"
+    predicate: http://purl.org/dc/elements/1.1/subject#names
+  subject_time_periods:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_time_periods_tesim"
+    predicate: http://schema.org/temporalCoverage
+  subject_topics:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_topics_tesim"
+      - "subject_topics_sim"
+    predicate: http://purl.org/dc/elements/1.1/subject

@@ -42,7 +42,7 @@ class UserSetup
   # @param [String] the uid of the user
   # @return [User] the user who was just added to the group
   def add_user(uid, user_set, provider = "database")
-    user = ::User.find_by(provider: provider, uid: uid)
+    user = ::User.find_by(provider:, uid:)
     user = create_user(uid, provider) if user.nil?
     user_set << user
     user
@@ -69,7 +69,7 @@ class UserSetup
 
     def create_user(uid, provider)
       @logger.debug "Creating new user #{uid}"
-      user = ::User.create(uid: uid)
+      user = ::User.create(uid:)
       user.password = "123456" if set_default_password?
       user.ppid = uid # temporary ppid, will get replaced when user signs in with shibboleth
       user.provider = provider

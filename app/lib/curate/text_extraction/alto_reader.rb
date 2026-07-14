@@ -121,7 +121,7 @@ module Curate
       def json
         words = @doc_stream.words
         Curate::TextExtraction::WordCoordsBuilder.json_coordinates_for(
-          words:  words,
+          words:,
           width:  @image_width,
           height: @image_height
         )

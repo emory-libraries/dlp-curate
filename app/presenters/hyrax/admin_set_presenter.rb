@@ -1,7 +1,5 @@
 # frozen_string_literal: true
-
-# [Hyrax-overwrite-v3.4.2]
-# Changes behavior of total_viewable_items to match total_items
+# [Hyrax-override-hyrax-v5.2.0] Changes behavior of total_viewable_items to match total_items.
 
 module Hyrax
   class AdminSetPresenter < CollectionPresenter
@@ -21,14 +19,18 @@ module Hyrax
 
     # AdminSet cannot be deleted if default set or non-empty
     def disable_delete?
-      AdminSet.default_set?(id) || any_items?
+      default_set? || any_items?
     end
 
     # Message to display if deletion is disabled
     def disabled_message
-      return I18n.t('hyrax.admin.admin_sets.delete.error_default_set') if AdminSet.default_set?(id)
-
+      return I18n.t('hyrax.admin.admin_sets.delete.error_default_set') if default_set?
       I18n.t('hyrax.admin.admin_sets.delete.error_not_empty') if any_items?
+    end
+
+    # Overrides delegate because admin sets do not index collection type gid
+    def collection_type_gid
+      collection_type.to_global_id
     end
 
     def collection_type
@@ -53,5 +55,11 @@ module Hyrax
       return false unless current_ability.can?(:edit, solr_document)
       !disable_delete?
     end
+
+    private
+
+      def default_set?
+        Hyrax::AdminSetCreateService.default_admin_set?(id:)
+      end
   end
 end

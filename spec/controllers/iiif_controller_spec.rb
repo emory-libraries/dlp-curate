@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
@@ -14,11 +13,11 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
   let(:params) do
     {
       identifier: image_sha,
-      region:     region,
-      size:       size,
-      rotation:   rotation,
-      quality:    quality,
-      format:     format
+      region:,
+      size:,
+      rotation:,
+      quality:,
+      format:
     }
   end
   let(:attributes) do
@@ -41,20 +40,24 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
   end
 
   describe 'a request for a thumbnail' do
-    it "returns thumbnails as expected" do
-      skip("Note that thumbnails are tested in spec/requests/thumbnail_requests_spec.rb")
-    end
+    it("returns thumbnails as expected") { skip("Note that thumbnails are tested in spec/requests/thumbnail_requests_spec.rb") }
   end
+
   describe 'a request without the IIIF_SERVER_URL set' do
-    before do
-      ENV['PROXIED_IIIF_SERVER_URL'] = nil
-    end
-    it "raises an error" do
-      expect { get :show, params: params }.to raise_exception RuntimeError
-    end
+    before { ENV['PROXIED_IIIF_SERVER_URL'] = nil }
+
+    it("raises an error") { expect { get :show, params: }.to raise_exception RuntimeError }
   end
 
   describe "a request for info.json" do
+    let(:image_sha) { "7f15795a197b389f6f2b0cb28362f777e1378f6f" }
+    let(:params) do
+      { identifier: image_sha,
+        info:       "info",
+        format:     "json" }
+    end
+    let(:info_dot_json_from_cantaloupe) { File.open(Rails.root.join("spec", "fixtures", "iiif_responses", "info.json")).read }
+    let(:expected_iiif_url) { 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json' }
     around do |example|
       ENV['IIIF_SERVER_URL'] = 'https://curate.library.emory.edu/iiif/2'
       example.run
@@ -64,18 +67,6 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
       ENV['IIIF_MANIFEST_CACHE'] = Rails.root.join('tmp').to_s
       ENV['PROXIED_IIIF_SERVER_URL'] = 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2'
     end
-    let(:image_sha) { "7f15795a197b389f6f2b0cb28362f777e1378f6f" }
-    let(:params) do
-      {
-        identifier: image_sha,
-        info:       "info",
-        format:     "json"
-      }
-    end
-    let(:info_dot_json_from_cantaloupe) do
-      File.open(Rails.root.join("spec", "fixtures", "iiif_responses", "info.json")).read
-    end
-    let(:expected_iiif_url) { 'https://iiif-cor-arch.library.emory.edu/cantaloupe/iiif/2/7f15795a197b389f6f2b0cb28362f777e1378f6f/info.json' }
 
     context "with an unsuccessful cantaloupe request" do
       before do
@@ -84,7 +75,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
             headers: {
               'Connection' => 'close',
               'Host' => 'iiif-cor-arch.library.emory.edu',
-              'User-Agent' => 'http.rb/5.1.0'
+              'User-Agent' => 'http.rb/5.3.1'
             }
           )
           .to_return(
@@ -93,6 +84,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
             headers: {}
           )
       end
+
       it "constructs the info.json url correctly" do
         get :info, params: params
         expect(assigns(:iiif_url)).to eq expected_iiif_url
@@ -113,7 +105,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
             headers: {
               'Connection' => 'close',
               'Host' => 'iiif-cor-arch.library.emory.edu',
-              'User-Agent' => 'http.rb/5.1.0'
+              'User-Agent' => 'http.rb/5.3.1'
             }
           )
           .to_return(
@@ -172,7 +164,6 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
         "sha1_tesim" => ["urn:sha1:#{image_sha}"],
         "visibility_ssi" => "low_res" }
     end
-
     before do
       solr = Blacklight.default_index.connection
       solr.add([attributes])
@@ -182,6 +173,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     context "a request for full size" do
       let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/,400/0/default.jpg" }
       let(:size) { "full" }
+
       it "alters a full size iiif request to ensure a low resolution image" do
         get :show, params: params
         expect(assigns(:iiif_url)).to eq expected_iiif_url
@@ -192,6 +184,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     context "a request for anything smaller than the full size" do
       let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/,300/0/default.jpg" }
       let(:size) { ",300" }
+
       it "does not alter the iiif request" do
         get :show, params: params
         expect(assigns(:iiif_url)).to eq expected_iiif_url
@@ -202,6 +195,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     context "a request for anything larger than max size" do
       let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/full/,400/0/default.jpg" }
       let(:size) { "800," }
+
       it "alters a full size iiif request to ensure a low resolution image" do
         get :show, params: params
         expect(assigns(:iiif_url)).to eq expected_iiif_url
@@ -212,6 +206,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     context "a request for anything larger than max region" do
       let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/0,0,800,800/,400/0/default.jpg" }
       let(:region) { "0,0,600,600" }
+
       it "alters the iiif request to what is permitted" do
         get :show, params: params
         expect(assigns(:iiif_url)).to eq expected_iiif_url
@@ -222,6 +217,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
     context "a request for anything smaller than max region" do
       let(:expected_iiif_url) { "http://127.0.0.1:8182/iiif/2/#{image_sha}/12,12,800,800/,400/0/default.jpg" }
       let(:region) { "12,12,200,250" }
+
       it "does not alter the iiif region param" do
         get :show, params: params
         expect(assigns(:iiif_url)).to eq expected_iiif_url
@@ -249,17 +245,7 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
         "rights_statement_tesim" => ["http://rightsstatements.org/vocab/InC/1.0/"],
         "manifest_cache_key_tesim" => ["d28c5b20cf9b9663181d02b5ce90fac59fa666d7"] }
     end
-    let(:params) do
-      {
-        identifier: identifier,
-        region:     region,
-        size:       size,
-        rotation:   rotation,
-        quality:    quality,
-        format:     format
-      }
-    end
-
+    let(:params) { { identifier:, region:, size:, rotation:, quality:, format: } }
     before do
       Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
       Hydra::Works::AddFileToFileSet.call(file_set, sf, :service_file)

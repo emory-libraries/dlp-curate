@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-override-hyrax-v5.2.0]
 
 module Hyrax
   class CollectionPresenter
@@ -116,7 +116,7 @@ module Hyrax
     def total_items
       field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
       SolrQueryService.new
-                      .with_field_pairs(field_pairs: field_pairs)
+                      .with_field_pairs(field_pairs:)
                       .count
     end
 
@@ -130,7 +130,7 @@ module Hyrax
     def total_viewable_works
       field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
       SolrQueryService.new
-                      .with_field_pairs(field_pairs: field_pairs)
+                      .with_field_pairs(field_pairs:)
                       .with_generic_type(generic_type: "Work")
                       .accessible_by(ability: current_ability)
                       .count
@@ -139,14 +139,14 @@ module Hyrax
     def total_viewable_collections
       field_pairs = { "member_of_collection_ids_ssim" => id.to_s }
       SolrQueryService.new
-                      .with_field_pairs(field_pairs: field_pairs)
+                      .with_field_pairs(field_pairs:)
                       .with_generic_type(generic_type: "Collection")
                       .accessible_by(ability: current_ability)
                       .count
     end
 
     def collection_type_badge
-      tag.span(collection_type.title, class: "label", style: "background-color: " + collection_type.badge_color + ";")
+      tag.span(collection_type.title, class: "badge", style: "background-color: " + collection_type.badge_color + ";")
     end
 
     # The total number of parents that this collection belongs to, visible or not.
@@ -207,23 +207,6 @@ module Hyrax
       create_work_presenter.first_model
     end
 
-    ##
-    # @deprecated this implementation requires an extra db round trip, had a
-    #   buggy cacheing mechanism, and was largely duplicative of other code.
-    #   all versions of this code are replaced by
-    #   {CollectionsHelper#available_parent_collections_data}.
-    def available_parent_collections(scope:)
-      Deprecation.warn("#{self.class}#available_parent_collections is " \
-                       "deprecated. Use available_parent_collections_data " \
-                       "helper instead.")
-      return @available_parents if @available_parents.present?
-      collection = Hyrax.config.collection_class.find(id)
-      colls = Hyrax::Collections::NestedCollectionQueryService.available_parent_collections(child: collection, scope: scope, limit_to_id: nil)
-      @available_parents = colls.map do |col|
-        { "id" => col.id, "title_first" => col.title.first }
-      end.to_json
-    end
-
     def subcollection_count=(total)
       @subcollection_count = total unless total.nil?
     end
@@ -268,7 +251,7 @@ module Hyrax
     end
 
     def deposit_collections
-      deposit_collection_ids&.map { |id| { id: id, title: Collection.find(id).title.first } }
+      deposit_collection_ids&.map { |id| { id:, title: Collection.find(id).title.first } }
     end
   end
 end

@@ -1,13 +1,12 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 include Warden::Test::Helpers
 
 RSpec.describe "Showing a file:", integration: true, clean: true, type: :system do
   let(:user) { FactoryBot.create(:user) }
   let(:file_title) { 'Some kind of title' }
-  let(:work) { FactoryBot.build(:work, user: user) }
-  let(:file_set) { FactoryBot.create(:file_set, user: user, title: [file_title], pcdm_use: "Primary Content") }
+  let(:work) { FactoryBot.build(:work, user:) }
+  let(:file_set) { FactoryBot.create(:file_set, user:, title: [file_title], pcdm_use: "Primary Content") }
   let(:file) { File.open(fixture_path + '/sun.png') }
 
   before do

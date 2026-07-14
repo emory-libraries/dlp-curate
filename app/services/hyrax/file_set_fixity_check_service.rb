@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Hyrax
-  # [Hyrax-overwrite-v3.4.2: Introduces initiating user for preservation events
+  # [Hyrax-override-hyrax-v5.2.0] Introduces initiating user for preservation events
   # created by the ensuing fixity checks]
   ##
   # This class runs fixity checks on a {FileSetBehavior}, potentially on multiple
@@ -90,9 +90,9 @@ module Hyrax
         return latest_fixity_check unless needs_fixity_check?(latest_fixity_check)
 
         if async_jobs
-          FixityCheckJob.perform_later(version_uri.to_s, file_set_id: file_set.id, file_id: file_id, initiating_user: @initiating_user)
+          FixityCheckJob.perform_later(version_uri.to_s, file_set_id: file_set.id, file_id:, initiating_user: @initiating_user)
         else
-          FixityCheckJob.perform_now(version_uri.to_s, file_set_id: file_set.id, file_id: file_id, initiating_user: @initiating_user)
+          FixityCheckJob.perform_now(version_uri.to_s, file_set_id: file_set.id, file_id:, initiating_user: @initiating_user)
         end
       end
 

@@ -41,8 +41,8 @@ module CsvMatcherBehavior
   end
 
   def pull_transformed_term(term)
-    return false if CurateMapper.new.falsey?(term)
-    return true if CurateMapper.new.truthy?(term)
+    return false if falsey?(term)
+    return true if truthy?(term)
     false
   end
 
@@ -69,5 +69,17 @@ module CsvMatcherBehavior
     else
       process_parse(GENERAL_PARSE_FIELDS)
     end
+  end
+
+  def truthy?(term)
+    return true if term.downcase.strip == "yes"
+    return true if term.downcase.strip == "true"
+    false
+  end
+
+  def falsey?(term)
+    return true if term.downcase.strip == "no"
+    return true if term.downcase.strip == "false"
+    false
   end
 end

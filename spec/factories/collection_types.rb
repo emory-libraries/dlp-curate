@@ -1,6 +1,6 @@
 # frozen_string_literal: true
+# [Hyrax-direct-copy-hyrax-v5.2.0] lib/hyrax/specs/shared_specs/factories/collection_types.rb
 
-# [Hyrax-collection-types-factory]
 FactoryBot.define do
   factory :collection_type, class: Hyrax::CollectionType do
     sequence(:title) { |n| "Collection Type #{n}" }

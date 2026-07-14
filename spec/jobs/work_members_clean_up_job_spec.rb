@@ -30,9 +30,6 @@ RSpec.describe WorkMembersCleanUpJob, :clean do
     end
   end
 
-  # NOTE: We unfortunately cannot save nil objects into the #ordered_members attribute.
-  #   That phenomenon only occurs during Zizia imports using the "shovelling" technique
-  #   of adding FileSets to a Work.
   context 'when called with a work that contains duplicate objects in #ordered_members' do
     before do
       work.ordered_members = [file_set, file_set]

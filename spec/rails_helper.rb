@@ -12,6 +12,8 @@ ENV['IMPORT_PATH'] ||= Rails.root.join('spec', 'fixtures', 'fake_images').to_s
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 require 'noid/rails/rspec'
+require 'valkyrie'
+Valkyrie::MetadataAdapter.register(Valkyrie::Persistence::Memory::MetadataAdapter.new, :test_adapter)
 # Add additional requires below this line. Rails is not loaded until this point!
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -40,13 +42,19 @@ end
 ActiveJob::Base.queue_adapter = :test
 
 RSpec.configure do |config|
+  config.before(:all, type: :feature) do
+    # Assets take a long time to compile. This causes two problems:
+    # 1) the profile will show the first feature test taking much longer than it
+    #    normally would.
+    # 2) The first feature test will trigger rack-timeout
+    #
+    # Precompile the assets to prevent these issues.
+    visit "/assets/application.css"
+    visit "/assets/application.js"
+  end
+
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include ShowMeTheCookies, type: :system
-
-  config.before(:suite) do
-    # Compile our JavaScript
-    `bin/webpack`
-  end
 
   config.before(:suite) do
     ActiveJob::Base.queue_adapter = :test
@@ -58,7 +66,7 @@ RSpec.configure do |config|
   end
 
   config.before(admin_set: true) do
-    admin_set_id = AdminSet.find_or_create_default_admin_set_id
+    admin_set_id = Hyrax::AdminSetCreateService.find_or_create_default_admin_set.id.to_s
     Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id)
     Hyrax::CollectionType.find_or_create_default_collection_type
   end

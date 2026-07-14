@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+require './app/services/aspace/api_service.rb'
+
 class AspaceController < ApplicationController
   class InvalidRequestError < StandardError; end
 
-  API = Aspace::ApiService
+  API = Aspace::APIService
 
   authorize_resource class: :archivesspace
   before_action :verify_json_request
@@ -31,7 +33,7 @@ class AspaceController < ApplicationController
       data = service.fetch_repository_by_id(params['repository_id'])
       repository = formatter.format_repository(data)
 
-      response = { repository: repository, resource: resource }
+      response = { repository:, resource: }
     rescue InvalidRequestError => e
       response = { error: "Invalid request error: #{e.message}" }
     rescue API::ClientError, API::ServerError => e
@@ -44,7 +46,7 @@ class AspaceController < ApplicationController
   private
 
     def service
-      @service ||= Aspace::ApiService.new
+      @service ||= Aspace::APIService.new
     end
 
     def formatter

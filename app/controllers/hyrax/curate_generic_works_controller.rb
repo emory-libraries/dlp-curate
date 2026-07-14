@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-override-hyrax-v5.2.0]
 
 module Hyrax
   # Generated controller for CurateGenericWork
@@ -8,7 +8,12 @@ module Hyrax
     include Hyrax::WorksControllerBehavior
     include Hyrax::BreadcrumbsForWorks
 
-    self.curation_concern_type = ::CurateGenericWork
+    if Hyrax.config.valkyrie_transition?
+      self.curation_concern_type = ::GenericWorkResource
+      self.work_form_service = Hyrax::FormFactory.new
+    else
+      self.curation_concern_type = ::CurateGenericWork
+    end
 
     # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::CurateGenericWorkPresenter
@@ -20,20 +25,17 @@ module Hyrax
         wants.html { presenter && parent_presenter }
         wants.json do
           # load @curation_concern manually because it's skipped for html
-          @curation_concern = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: params[:id])
+          @curation_concern = load_curation_concern
           curation_concern # This is here for authorization checks (we could add authorize! but let's use the same method for CanCanCan)
           render :show, status: :ok
         end
         additional_response_formats(wants)
-        wants.ttl { render body: presenter.export_as_ttl, mime_type: Mime[:ttl] }
-        wants.jsonld { render body: presenter.export_as_jsonld, mime_type: Mime[:jsonld] }
-        wants.nt { render body: presenter.export_as_nt, mime_type: Mime[:nt] }
       end
     end
 
     def manifest
       headers['Access-Control-Allow-Origin'] = '*'
-      render json: ::ManifestBuilderService.build_manifest(presenter: presenter, curation_concern: _curation_concern_type.find(params[:id]))
+      render json: ::ManifestBuilderService.build_manifest(presenter:, curation_concern: _curation_concern_type.find(params[:id]))
     end
 
     # Restrict deletion to admins only

@@ -1,15 +1,14 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.describe IiifUrlBuilderService, :clean do
   let(:iiif_builder_service) { described_class.new(file_set_id: file_set.id, size: '260,') }
-  let(:iiif_builder_service_with_alternate_id) { described_class.new(file_set_id: file_set_id, size: '260,') }
+  let(:iiif_builder_service_with_alternate_id) { described_class.new(file_set_id:, size: '260,') }
   let(:user) { FactoryBot.create(:admin) }
   let(:file_set_id) { '7956djh9wp-cor/files/efce22de-c771-469e-b0df-41094b21684c' }
   let(:file_set_id_base) { '7956djh9wp-cor' }
   let(:file_set) do
-    FactoryBot.create(:file_set, user: user, title: ['Some title'])
+    FactoryBot.create(:file_set, user:, title: ['Some title'])
   end
   let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
   before do
@@ -62,7 +61,7 @@ RSpec.describe IiifUrlBuilderService, :clean do
 
   context 'when given the file_set_id in hyrax.rb' do
     let(:file_set) do
-      FactoryBot.create(:file_set, user: user, id: file_set_id_base, title: ['Some title'])
+      FactoryBot.create(:file_set, user:, id: file_set_id_base, title: ['Some title'])
     end
 
     it 'returns only the base id' do

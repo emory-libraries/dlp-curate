@@ -8,9 +8,12 @@ require 'webdrivers/chromedriver'
 WebMock.disable_net_connect!(allow:                     [
                                '127.0.0.1',
                                'chromedriver.storage.googleapis.com',
-                               'storage.googleapis.com',
+                               'fcreposix:8080',
                                'googlechromelabs.github.io',
-                               'id.loc.gov'
+                               'id.loc.gov',
+                               'localhost:8080',
+                               'localhost:8985',
+                               'storage.googleapis.com'
                              ],
                              net_http_connect_on_start: true)
 Coveralls.wear!('rails')

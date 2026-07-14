@@ -9,17 +9,19 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
 
   def perform(key:, solr_doc:, root_url:, manifest_metadata:, curation_concern:, sequence_rendering:)
     manifest_json = ApplicationController.render(
-      template: 'manifest/manifest.json',
+      template: 'manifest/manifest',
+      formats:  [:json],
       assigns:  {
-        solr_doc:           solr_doc,
-        root_url:           root_url,
-        manifest_metadata:  manifest_metadata,
+        solr_doc:,
+        root_url:,
+        manifest_metadata:,
         manifest_rendering: sequence_rendering,
         image_concerns:     image_concerns(curation_concern)
       }
     )
+
     remove_outdated_manifests(solr_doc[:id])
-    persist_manifest(key: key, manifest_json: manifest_json)
+    persist_manifest(key:, manifest_json:)
   end
 
   private
@@ -39,8 +41,8 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     end
 
     def image_concerns(curation_concern)
-      check_for_nil_in_ordered_members(curation_concern: curation_concern)
-      file_set_ids = pulled_ordered_members(curation_concern: curation_concern)&.compact
+      check_for_nil_in_ordered_members(curation_concern:)
+      file_set_ids = pulled_ordered_members(curation_concern:)&.compact
       if file_set_ids.empty?
         []
       else
@@ -53,7 +55,7 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     end
 
     def check_for_nil_in_ordered_members(curation_concern:)
-      return unless pulled_ordered_members(curation_concern: curation_concern).any?(nil)
+      return unless pulled_ordered_members(curation_concern:).any?(nil)
       Rails.logger.error "The CurateGenericWork with the id #{curation_concern.id} contains nil objects in its ordered_members."
     end
 end

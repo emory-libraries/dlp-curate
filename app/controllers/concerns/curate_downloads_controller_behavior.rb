@@ -10,14 +10,14 @@ module CurateDownloadsControllerBehavior
 
   private
 
-    # Override the Hydra::Controller::DownloadBehavior#content_options so that
-    # we have an attachement rather than 'inline'
+    # Override the Hydra::Controller::DownloadBehavior#content_options(v13.2.0) so that
+    #   we have an attachement rather than 'inline'
     def content_options
       super.merge(disposition: 'attachment')
     end
 
     # Override this method if you want to change the options sent when downloading
-    # a derivative file
+    #   a derivative file
     def derivative_download_options
       { type: mime_type_for(file), disposition: 'inline' }
     end
@@ -32,7 +32,7 @@ module CurateDownloadsControllerBehavior
       send_file unauthorized_image, status: :unauthorized
     end
 
-    # Overrides Hydra::Controller::DownloadBehavior#load_file, which is hard-coded to assume files are in BasicContainer.
+    # Overrides Hydra::Controller::DownloadBehavior#load_file(v13.2.0), which is hard-coded to assume files are in BasicContainer.
     # Override this method to change which file is shown.
     # Loads the file specified by the HTTP parameter `:file`.
     # If this object does not have a file by that name, return the default file

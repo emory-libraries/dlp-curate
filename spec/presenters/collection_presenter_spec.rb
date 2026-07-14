@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.0.0.pre.rc1] Brings in just the tests affected by the change
-# in behavior of the #total_viewable_items method.
+# [Hyrax-override-hyrax-v5.2.0] spec/presenters/hyrax/collection_presenter_spec.rb .
+#   Brings in just the tests affected by the change in behavior of the #total_viewable_items method.
 require 'rails_helper'
 
 RSpec.describe Hyrax::CollectionPresenter, :clean do
   let(:user) { FactoryBot.create(:user) }
-  let(:collection) { FactoryBot.build(:public_collection_lw, user: user, with_permission_template: true) }
+  let(:collection) { FactoryBot.build(:public_collection_lw, user:, with_permission_template: true) }
   let(:ability) { instance_double(Ability) }
   let(:presenter) { described_class.new(solr_doc, ability) }
   let(:solr_doc) { SolrDocument.new(collection.to_solr) }
@@ -55,7 +55,7 @@ RSpec.describe Hyrax::CollectionPresenter, :clean do
   end
 
   describe "#source/deposit related methods" do
-    let(:deposit_collection) { FactoryBot.build(:public_collection_lw, user: user, with_permission_template: true) }
+    let(:deposit_collection) { FactoryBot.build(:public_collection_lw, user:, with_permission_template: true) }
 
     before do
       collection.save!

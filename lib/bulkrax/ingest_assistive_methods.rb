@@ -32,11 +32,10 @@ module IngestAssistiveMethods
   end
 
   def process_file_types(file_name)
-    raw_strings = parser.file_sets.map { |v| v[:file_types] }&.compact
+    raw_strings = @object_factory.parser.file_sets.map { |v| v[:file_types] }&.compact
     split_strings = raw_strings.map { |rs| rs.split('|') }&.flatten
     string_type_hashes = process_string_type_hashes(split_strings)
     pulled_hash = string_type_hashes.select { |h| h[file_name].present? }&.first
-
     pulled_hash[file_name] || "preservation_master_file"
   end
 

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# [Hyrax-override-hyrax-v5.2.0] spec/models/file_set_spec.rb
 require 'rails_helper'
 
 RSpec.describe FileSet, :perform_enqueued, :clean do

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] spec/services/hyrax/manifest_builder_service_spec.rb
 require 'rails_helper'
 
 RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersistenceJob] do
   let(:identifier) { '508hdr7srq-cor' }
-  let(:service) { described_class.new(presenter: presenter, curation_concern: work) }
+  let(:service) { described_class.new(presenter:, curation_concern: work) }
   let(:ability) { instance_double(Ability) }
   let(:request) { instance_double(ActionDispatch::Request, base_url: 'example.com') }
   let(:presenter) { Hyrax::CurateGenericWorkPresenter.new(solr_document, ability, request) }
@@ -48,7 +49,7 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
     end
 
     it 'can be called at the class level' do
-      response_values = JSON.parse(described_class.build_manifest(presenter: presenter, curation_concern: work))
+      response_values = JSON.parse(described_class.build_manifest(presenter:, curation_concern: work))
       expect(response_values["@context"]).to include "http://iiif.io/api/presentation/2/context.json"
     end
   end
@@ -73,39 +74,39 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
     describe "#build_manifest class method" do
       context "when a manifest cache file exists" do
         before do
-          described_class.regenerate_manifest(presenter: presenter, curation_concern: work)
+          described_class.regenerate_manifest(presenter:, curation_concern: work)
         end
 
         it "renders cached file" do
-          service = described_class.new(presenter: presenter, curation_concern: work)
+          service = described_class.new(presenter:, curation_concern: work)
           allow(described_class).to receive(:new).and_return(service)
           expect(cache_file).to exist
           expect(service).not_to receive(:regenerate_manifest_file)
           expect(service).to receive(:render_manifest_file)
-          described_class.build_manifest(presenter: presenter, curation_concern: work)
+          described_class.build_manifest(presenter:, curation_concern: work)
         end
       end
 
       context 'when no manifest cache file exists' do
         it 'saves a placehoder manifest file' do
-          service = described_class.new(presenter: presenter, curation_concern: work)
+          service = described_class.new(presenter:, curation_concern: work)
           allow(described_class).to receive(:new).and_return(service)
           allow(service).to receive(:regenerate_manifest_file).and_return(nil)
-          described_class.build_manifest(presenter: presenter, curation_concern: work)
+          described_class.build_manifest(presenter:, curation_concern: work)
           placeholder_values = JSON.parse(File.open(cache_file).read)
           expect(placeholder_values["label"]).to eq "Content is being assembled - please return soon"
         end
 
         it 'queues regenerating the manifest file' do
-          service = described_class.new(presenter: presenter, curation_concern: work)
+          service = described_class.new(presenter:, curation_concern: work)
           allow(described_class).to receive(:new).and_return(service)
           expect(service).not_to receive(:render_manifest_file)
           expect(service).to receive(:regenerate_manifest_file)
-          described_class.build_manifest(presenter: presenter, curation_concern: work)
+          described_class.build_manifest(presenter:, curation_concern: work)
         end
 
         it 'saves manifest with correct data upon manifest regeneration' do
-          described_class.build_manifest(presenter: presenter, curation_concern: work)
+          described_class.build_manifest(presenter:, curation_concern: work)
           expect(File).to exist(cache_file)
 
           response_values = JSON.parse(File.open(cache_file).read)
@@ -140,7 +141,7 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
           File.open(Rails.root.join('tmp', "outdated_manifest_#{identifier}"), 'w+') do |f|
             f.write("outdated manifest")
           end
-          described_class.build_manifest(presenter: presenter, curation_concern: work)
+          described_class.build_manifest(presenter:, curation_concern: work)
           manifest_file_paths = Dir.glob(Rails.root.join('tmp').to_s + '/*').select do |path|
             path.ends_with?("_#{work.id}")
           end
@@ -151,16 +152,16 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
 
     describe "#regenerate_manifest class method" do
       it "queues regenerating the manifest file" do
-        service = described_class.new(presenter: presenter, curation_concern: work)
+        service = described_class.new(presenter:, curation_concern: work)
         allow(described_class).to receive(:new).and_return(service)
         expect(service).to receive(:regenerate_manifest_file)
-        described_class.regenerate_manifest(presenter: presenter, curation_concern: work)
+        described_class.regenerate_manifest(presenter:, curation_concern: work)
       end
     end
 
     context "#regenerate_manifest_file instance method" do
       it "queues regenerating the manifest file" do
-        service = described_class.new(presenter: presenter, curation_concern: work)
+        service = described_class.new(presenter:, curation_concern: work)
         expect(ManifestPersistenceJob).to receive(:perform_later)
         service.regenerate_manifest_file
       end

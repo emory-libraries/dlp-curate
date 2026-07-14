@@ -10,9 +10,6 @@ RSpec.describe ReplaceWorkMembersJob, :clean do
     work.save
   end
 
-  # NOTE: We unfortunately cannot save nil objects into the #ordered_members attribute.
-  #   That phenomenon only occurs during Zizia imports using the "shovelling" technique
-  #   of adding FileSets to a Work.
   it 'calls the expected methods' do
     expect(FileSet).to receive(:find).with(file_set.id).and_return(file_set)
     expect(work).to receive(:ordered_members=).with([file_set])

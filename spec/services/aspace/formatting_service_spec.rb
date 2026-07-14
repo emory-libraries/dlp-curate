@@ -1,10 +1,9 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 
 describe Aspace::FormattingService do
   let(:formatter) { described_class.new }
-  let(:service) { Aspace::ApiService.new }
+  let(:service) { Aspace::APIService.new }
 
   before do
     allow(ENV).to receive(:[]).with('ARCHIVES_SPACE_PUBLIC_BASE_URL').and_return('aspace_public_base_url')

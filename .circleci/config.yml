@@ -2,21 +2,65 @@ version: 2.1
 orbs:
     node: circleci/node@4.9.0
     qlty-orb: qltysh/qlty-orb@0.1.1
-    samvera: samvera/circleci-orb@1.0.0
+    samvera: samvera/circleci-orb@1.0.1
 jobs:
     build:
         parameters:
-            ruby_version:
-                type: string
-                default: 2.7.4
             bundler_version:
                 type: string
-                default: 2.1.4
-        executor:
-            name: samvera/ruby_fcrepo_solr_redis
-            ruby_version: << parameters.ruby_version >>
-            solr_version: 7-alpine
+                default: 2.4.19
+            fcrepo_version:
+                type: string
+                default: '4.7.5'
+            fcrepo6_domain:
+                type: string
+                default: fcreposix
+            redis_version:
+                type: string
+                default: 7.4.2
+            ruby_type:
+                type: string
+                default: 'ruby'
+            ruby_version:
+                type: string
+                default: 3.2.9
+            solr_port:
+                type: string
+                default: '8983'
+            solr_version:
+                type: string
+                default: 7.7.2
         working_directory: ~/project
+        docker:
+            - image: cimg/<< parameters.ruby_type >>:<< parameters.ruby_version >>-browsers
+            - image: samvera/fcrepo4:<< parameters.fcrepo_version >>
+              environment:
+                    CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
+            - image: fcrepo/fcrepo:6.5.1-tomcat9
+              name: << parameters.fcrepo6_domain >>
+              environment:
+                    - >-
+                        CATALINA_OPTS=-Dfcrepo.home=/fcrepo-home -Djava.awt.headless=true -Dfile.encoding=UTF-8
+                        -server -Xms1G -Xmx2G -XX:NewSize=256m -XX:MaxNewSize=1G
+                        -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/mem
+                        -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
+                        -Dfcrepo.jms.enabled=false -Dfcrepo.metrics.enable=true
+                    - JAVA_OPTS=-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
+            - image: solr:<< parameters.solr_version >>
+              command: bin/solr -cloud -noprompt -f -p << parameters.solr_port >>
+            - image: redis:<< parameters.redis_version >>
+            - image: cimg/mariadb:10.11.4
+        resource_class: medium+
+        environment:
+            BUNDLE_PATH: vendor/bundle
+            BUNDLE_JOBS: 4
+            BUNDLE_RETRY: 3
+            RAILS_ENV: test
+            RACK_ENV: test
+            CIRCLECI_DOMAIN: localhost
+            FCREPO_TEST_PORT: 8080
+            FCREPO6_DOMAIN: << parameters.fcrepo6_domain >>
+            SPEC_OPTS: --profile 10 --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
         parallelism: 4
         steps:
             - checkout
@@ -24,7 +68,7 @@ jobs:
             - node/install:
                 install-yarn: true
                 install-npm: false
-                node-version: "v20.15.1"
+                node-version: "v20.20.0"
 
             - samvera/bundle:
                 ruby_version: << parameters.ruby_version >>
@@ -47,7 +91,18 @@ jobs:
                 paths:
                     - ~/project/node_modules
 
-            - samvera/install_solr_core
+            - samvera/install_solr_core:
+                solr_port: << parameters.solr_port >>
+
+            - run:
+                name: Install MySQL client (if not present in primary image)
+                command: |
+                    sudo apt-get update
+                    sudo apt-get install -y mysql-client
+
+            - run:
+                name: Create specific test database
+                command: mysql -h 127.0.0.1 -u root -e "CREATE DATABASE IF NOT EXISTS curate_test;"
 
             - samvera/parallel_rspec
 
@@ -61,7 +116,7 @@ jobs:
 
     coverage:
         docker:
-            - image: cimg/ruby:2.7.4
+            - image: cimg/ruby:3.2.9
         working_directory: ~/project
         parallelism: 1
         steps:

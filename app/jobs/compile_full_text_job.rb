@@ -3,9 +3,9 @@
 class CompileFullTextJob < Hyrax::ApplicationJob
   def perform(work_id:, user_id:)
     work = CurateGenericWork.find(work_id)
-    path = generate_full_text_data_file_from!(work: work)
+    path = generate_full_text_data_file_from!(work:)
     user = User.find(user_id)
-    generate_file_set_from(path: path, work: work, user: user)
+    generate_file_set_from(path:, work:, user:)
   end
 
   private
@@ -14,7 +14,7 @@ class CompileFullTextJob < Hyrax::ApplicationJob
       path = Rails.root.join('tmp', "full_text_data_#{work.id}.txt")
       File.open(path, "wb+") { |f| f.puts("") }
 
-      map = get_transcript_files(work: work)
+      map = get_transcript_files(work:)
       ordered_page_keys = map.keys.sort_by { |key| key.partition(' ').last.to_i }
 
       ordered_page_keys.each do |key|
@@ -43,7 +43,7 @@ class CompileFullTextJob < Hyrax::ApplicationJob
     def generate_file_set_from(path:, work:, user:)
       file = File.open(path)
       sanitized_file = CarrierWave::SanitizedFile.new(file)
-      uploaded_file = Hyrax::UploadedFile.create(user:                     user,
+      uploaded_file = Hyrax::UploadedFile.create(user:,
                                                  preservation_master_file: sanitized_file,
                                                  file:                     "Full Text Data - #{work.id}",
                                                  fileset_use:              'Primary Content')

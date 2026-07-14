@@ -21,13 +21,12 @@ lib/tasks/ci.rake
 # Ignore coverage report
 coverage
 
-# Ignore webpacker and yarn.
-/public/packs
-/public/packs-test
+# Ignore yarn and pre-compile
 /node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+public/assets/
 
 # Ignore OS-specific files
 **/.DS_Store
@@ -102,4 +101,5 @@ public/branding
 # fits artifacts
 fits.log
 
+config/emory/index_file_set_results.csv
 imports

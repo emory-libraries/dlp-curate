@@ -1,10 +1,9 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.describe ManifestRegenerationController, type: :controller, clean: true do
   let(:user) { FactoryBot.create(:user) }
-  let(:work) { FactoryBot.create(:public_generic_work, user: user) }
+  let(:work) { FactoryBot.create(:public_generic_work, user:) }
   let(:ability) { instance_double(Ability) }
   let(:presenter) { Hyrax::CurateGenericWorkPresenter.new(solr_document, ability) }
   let(:solr_document) { SolrDocument.new(attributes) }
@@ -28,7 +27,7 @@ RSpec.describe ManifestRegenerationController, type: :controller, clean: true do
       end
 
       it "queues up fileset cleanup job" do
-        expect(ManifestBuilderService).to receive(:regenerate_manifest).with(presenter: presenter, curation_concern: work)
+        expect(ManifestBuilderService).to receive(:regenerate_manifest).with(presenter:, curation_concern: work)
         post :regen_manifest, params: { work_id: work }, xhr: true
         expect(response).to be_successful
       end

@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 module Aspace
-  class ReportsService < ApiService
+  class ReportsService < APIService
     PAGE_SIZE = 50
 
     def fetch_repository_last_page(repository_id:)
       query = { 'page': 1, 'page_size': PAGE_SIZE }
-      data = process(response: @client.get("/repositories/#{repository_id}/resources", { query: query }))
+      data = process(response: @client.get("/repositories/#{repository_id}/resources", { query: }))
       data['last_page']
     end
 
     def fetch_resources_by_page(page, repository_id:)
       query = { 'page': page, 'page_size': PAGE_SIZE }
-      data = process(response: @client.get("/repositories/#{repository_id}/resources", { query: query }))
+      data = process(response: @client.get("/repositories/#{repository_id}/resources", { query: }))
       results = data['results']
       results.map { |result| extract_resource(data: result) }
     end

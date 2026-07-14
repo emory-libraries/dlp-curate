@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'rails_helper'
 
 describe Aspace::ReportsService do
@@ -26,11 +25,11 @@ describe Aspace::ReportsService do
 
     it 'fetches first page of the repository' do
       expect(client).to receive(:get).with('/repositories/7/resources', { query: { page: 1, page_size: 50 } })
-      service.fetch_repository_last_page(repository_id: repository_id)
+      service.fetch_repository_last_page(repository_id:)
     end
 
     it 'returns last page number in the repository' do
-      last_page = service.fetch_repository_last_page(repository_id: repository_id)
+      last_page = service.fetch_repository_last_page(repository_id:)
       expect(last_page).to eq 1323
     end
   end
@@ -44,11 +43,11 @@ describe Aspace::ReportsService do
 
     it 'fetches requested page of the repository' do
       expect(client).to receive(:get).with('/repositories/7/resources', { query: { page: 2, page_size: 50 } })
-      service.fetch_resources_by_page(2, repository_id: repository_id)
+      service.fetch_resources_by_page(2, repository_id:)
     end
 
     it 'returns data in valid format' do
-      data = service.fetch_resources_by_page(2, repository_id: repository_id)
+      data = service.fetch_resources_by_page(2, repository_id:)
       valid_format = [
         {
           resource_id:  "1",

@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# NOTE: This isn't an override, but the structure of this file is taken from
+#   spec/matchers/bulkrax/application_matcher_spec.rb (Bulkrax v8.2.3).
 require 'rails_helper'
 
 RSpec.describe Bulkrax::CsvMatcher, :clean do

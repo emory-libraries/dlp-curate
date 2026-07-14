@@ -4,7 +4,7 @@ require_relative '../support/new_curate_generic_work_form.rb'
 include Warden::Test::Helpers
 
 # NOTE: If you generated more than one work, you have to set "js: true"
-RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, type: :system do
+RSpec.describe 'Create a CurateGenericWork', :perform_enqueued, :integration, :clean, type: :system do
   context 'a logged in user' do
     let(:user) do
       FactoryBot.create(:admin)
@@ -21,14 +21,14 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
     let(:user_3) do
       User.new(user_attributes_third) { |u| u.save(validate: false) }
     end
-    let(:admin_set_id) { AdminSet.find_or_create_default_admin_set_id }
+    let(:admin_set_id) { Hyrax::AdminSetCreateService.find_or_create_default_admin_set.id.to_s }
     let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set_id) }
-    let(:workflow) { Sipity::Workflow.create!(active: true, name: 'test-workflow', permission_template: permission_template) }
-    let(:collection) { FactoryBot.create(:collection_lw, user: user) }
+    let(:workflow) { Sipity::Workflow.create!(active: true, name: 'test-workflow', permission_template:) }
+    let(:collection) { FactoryBot.create(:collection_lw, user:) }
 
     before do
       # Create a single action that can be taken
-      Sipity::WorkflowAction.create!(name: 'submit', workflow: workflow)
+      Sipity::WorkflowAction.create!(name: 'submit', workflow:)
 
       # Grant the user access to deposit into the admin set.
       Hyrax::PermissionTemplateAccess.create!(
@@ -42,7 +42,7 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
     end
 
     let(:new_cgw_form) { NewCurateGenericWorkForm.new }
-    let(:cgw) { FactoryBot.create(:work, user: user) }
+    let(:cgw) { FactoryBot.create(:work, user:) }
     let(:cgw_second) { FactoryBot.create(:work, user: user_2) }
 
     scenario "'descriptions' loads with all its inputs", js: true do
@@ -85,6 +85,8 @@ RSpec.describe 'Create a CurateGenericWork', integration: true, clean: true, typ
       new_cgw_form.visit_new_page
       click_link('Additional descriptive fields')
       fill_in "curate_generic_work[date_created]", with: "2012/2013"
+      expect(page).not_to have_css('#curate_generic_work_date_issued-error')
+      fill_in "curate_generic_work[date_created]", with: "XXXX"
       expect(page).not_to have_css('#curate_generic_work_date_issued-error')
     end
 

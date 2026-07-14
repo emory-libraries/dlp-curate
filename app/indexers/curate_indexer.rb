@@ -1,6 +1,6 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0] This rewrites Hyrax::BasicMetadataIndexer. This class gets called by ActiveFedora::IndexingService#olrize_rdf_assertions.
 
-# This class gets called by ActiveFedora::IndexingService#olrize_rdf_assertions
 class CurateIndexer < ActiveFedora::RDF::IndexingService
   class_attribute :stored_and_facetable_fields, :stored_fields, :symbol_fields
   self.stored_and_facetable_fields = %i[creator contributors holding_repository primary_language subject_topics subject_names subject_geo]
@@ -12,7 +12,7 @@ class CurateIndexer < ActiveFedora::RDF::IndexingService
 
   private
 
-    # This method overrides ActiveFedora::RDF::IndexingService
+    # This method overrides ActiveFedora::RDF::IndexingService [ActiveFedora-override-v15.0.1]
     # @return [ActiveFedora::Indexing::Map]
     def index_config
       merge_config(
@@ -32,15 +32,11 @@ class CurateIndexer < ActiveFedora::RDF::IndexingService
     end
 
     def stored_and_facetable_index_config
-      stored_and_facetable_fields.each_with_object({}) do |name, hash|
-        hash[name] = index_object_for(name, as: [:stored_searchable, :facetable])
-      end
+      stored_and_facetable_fields.index_with { |name| index_object_for(name, as: [:stored_searchable, :facetable]) }
     end
 
     def stored_searchable_index_config
-      stored_fields.each_with_object({}) do |name, hash|
-        hash[name] = index_object_for(name, as: [:stored_searchable])
-      end
+      stored_fields.index_with { |name| index_object_for(name, as: [:stored_searchable]) }
     end
 
     def index_object_for(attribute_name, as: [])

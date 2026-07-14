@@ -58,12 +58,12 @@ class FileSet < ActiveFedora::Base
                                                  end
                                                }
 
-  # We override this method which comes from Hydra::Works::VirusCheck and
+  # We override this method which comes from Hydra::Works::VirusCheck (v2.3.0) and
   # is mixed-in through ::Hyrax::FileSetBehavior on L#34
   def viruses?
     return false unless preservation_master_file&.new_record? # We have a new file to check
     event_start = DateTime.current
-    # This method updated to match v3.0.0.rc1
+    # This method updated to match hyrax-v5.2.0
     result = Hyrax::VirusCheckerService.file_has_virus?(preservation_master_file)
     file_set = FileSet.find(preservation_master_file&.id&.partition("/files")&.first)
     event = { 'type' => 'Virus Check', 'start' => event_start, 'outcome' => result, 'software_version' => 'ClamAV 0.101.4', 'user' => file_set.depositor }

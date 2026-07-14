@@ -2,7 +2,7 @@
 require 'rails_helper'
 include PreservationEvents
 
-RSpec.describe ProcessAwsFixityPreservationEventsJob, :clean do
+RSpec.describe ProcessAwsFixityPreservationEventsJob, :perform_enqueued, :clean do
   let(:user) { FactoryBot.create(:user) }
   let(:file_set) { FactoryBot.create(:file_set) }
   let(:csv) { fixture_path + '/csv_import/aws_fixity_test.csv' }
@@ -18,11 +18,11 @@ RSpec.describe ProcessAwsFixityPreservationEventsJob, :clean do
   describe "called with perform_now" do
     it 'changes the number of preversation_events on the file_set' do
       expect { described_class.perform_now(csv) }
-        .to change { file_set.preservation_event.size }.from(1).to(2)
+        .to change { file_set.reload.preservation_event.size }.from(1).to(2)
     end
 
     it 'adds the expected preservation event' do
-      described_class.perform_now(csv)
+      described_class.perform_now(csv) && file_set.reload
 
       expect(file_set.preservation_event.pluck(:event_details))
         .to include(["Fixity intact for sha1:#{sha1} in fedora-cor-arch-binaries"])
@@ -56,7 +56,7 @@ RSpec.describe ProcessAwsFixityPreservationEventsJob, :clean do
 
   def check_for_only_one_fixity_event
     expect(
-      file_set.preservation_event.count { |e| e.event_type == ['Fixity Check'] }
+      file_set.reload.preservation_event.count { |e| e.event_type == ['Fixity Check'] }
     ).to eq(1)
   end
 end

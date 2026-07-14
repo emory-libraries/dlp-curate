@@ -6,7 +6,7 @@ RSpec.describe 'Viewing collections', type: :system, clean: true do
   let(:admin_user) { FactoryBot.create(:admin) }
   let(:admin_collection) { FactoryBot.build(:public_collection_lw, user: admin_user, with_permission_template: true) }
   let(:user) { FactoryBot.create(:user) }
-  let(:user_collection) { FactoryBot.build(:public_collection_lw, user: user, with_permission_template: true) }
+  let(:user_collection) { FactoryBot.build(:public_collection_lw, user:, with_permission_template: true) }
 
   before do
     admin_collection.save!

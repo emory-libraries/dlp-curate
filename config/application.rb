@@ -11,18 +11,16 @@ Bundler.require(*Rails.groups)
 
 module DlpCurate
   class Application < Rails::Application
-    # Deprecation Warning: As of Curate v3, Zizia and this requirement will be removed.
-    require 'zizia'
-
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+    config.load_defaults 6.1
+    config.add_autoload_paths_to_load_path = true
     config.log_formatter = LogFormatter.new
     config.x.curate_template = '-cor'
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.active_job.queue_adapter = :sidekiq
-    config.autoload_paths += %W[#{config.root}/lib]
+    config.autoload_paths += %W[#{config.root}/lib app/lib/**/ app/services/**/]
     # Change below was necessary to institute Source/Deposit Collection structure.
     # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
     config.to_prepare do

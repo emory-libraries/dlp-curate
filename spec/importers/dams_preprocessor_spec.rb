@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe DamsPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results
     dams_sample = File.join(fixture_path, 'csv_import', 'dams', 'dams-unprocessed.csv')
-    preprocessor = described_class.new(dams_sample, "")
+    preprocessor = described_class.new(dams_sample)
     preprocessor.merge
   end
 
@@ -40,16 +39,20 @@ RSpec.describe DamsPreprocessor do
   end
 
   it 'sets the row type' do
-    expect(import_rows[0]['type']).to eq('work') # Fitch's Prescription
+    expect(import_rows[0]['type']).to be_nil # Fitch's Prescription
+    expect(import_rows[0]['model']).to eq('CurateGenericWork')
   end
 
   it 'creates a fileset row for each part' do
-    expect(import_rows[8]['type']).to eq('fileset') # Medical News
+    expect(import_rows[8]['type']).to be_nil # Medical News
+    expect(import_rows[8]['model']).to eq('FileSet')
   end
 
   it 'uses image # as fileset labels for all works' do
-    expect(import_rows[8]['fileset_label']).to eq('Image 1') # Medical News
-    expect(import_rows[10]['fileset_label']).to eq('Image 3') # Medical News
+    expect(import_rows[8]['fileset_label']).not_to eq('Image 1') # Medical News
+    expect(import_rows[8]['title']).to eq('Image 1')
+    expect(import_rows[10]['fileset_label']).not_to eq('Image 3') # Medical News
+    expect(import_rows[10]['title']).to eq('Image 3')
   end
 
   it 'has the expected row length', :aggregate_failures do
@@ -63,7 +66,8 @@ RSpec.describe DamsPreprocessor do
   end
 
   it 'attaches the expected files to the expected filesets in the expected order', :aggregate_failures do # Medical News
-    expect(import_rows[10]['fileset_label']).to eq('Image 3') # P0003
+    expect(import_rows[10]['fileset_label']).not_to eq('Image 3') # P0003
+    expect(import_rows[10]['title']).to eq('Image 3')
     expect(import_rows[10]['preservation_master_file']).to match('HS-S023_B003_P003.tif')
   end
 

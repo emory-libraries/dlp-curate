@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-# Deprecation Warning: As of Curate v3, Zizia and this class will be removed.
 RSpec.describe YellowbackPreprocessor do
   before :all do
     # running #merge is expensive, only set it up and run it once and then check the results
     yearbook_pull_list_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB.csv')
     alma_export_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'yearbooks_marc.xml')
-    preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, 'zizia', :limb)
+    preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, :limb)
     preprocessor.merge
   end
 
@@ -54,41 +53,41 @@ RSpec.describe YellowbackPreprocessor do
 
   it 'adds filesets for PDFs', :aggregate_failures do
     campus_1981_pdf = import_rows[campus_1981_start + pdf_offset] # The Campus '81
-    expect(campus_1981_pdf['type']).to eq('fileset')
-    expect(campus_1981_pdf['fileset_label']).to eq('PDF for volume')
+    expect(campus_1981_pdf['model']).to eq('FileSet')
+    expect(campus_1981_pdf['fileset_label']).to be_nil # NOTE: with the full switch to Bulkrax, these will always be nil.
     expect(campus_1981_pdf['preservation_master_file']).to include('lsdi2/ftp/000011743488/PDF/000011743488.pdf')
   end
 
   it 'adds filesets for volume-level METS', :aggregate_failures do
     campus_1985_mets = import_rows[campus_1985_start + mets_offset] # The Campus '85
-    expect(campus_1985_mets['type']).to eq('fileset')
-    expect(campus_1985_mets['fileset_label']).to eq('METS File')
+    expect(campus_1985_mets['model']).to eq('FileSet')
+    expect(campus_1985_mets['fileset_label']).to be_nil # NOTE: with the full switch to Bulkrax, these will always be nil.
     expect(campus_1985_mets['preservation_master_file']).to include('lsdi2/ftp/000011909908/METS/000011909908.mets.xml')
   end
 
   it 'adds filesets for volume-level OCR', :aggregate_failures do
     campus_1989_ocr = import_rows[campus_1989_start + ocr_offset] # The Campus '89
-    expect(campus_1989_ocr['type']).to eq('fileset')
-    expect(campus_1989_ocr['fileset_label']).to eq('OCR Output for Volume')
+    expect(campus_1989_ocr['model']).to eq('FileSet')
+    expect(campus_1989_ocr['fileset_label']).to be_nil # NOTE: with the full switch to Bulkrax, these will always be nil.
     expect(campus_1989_ocr['preservation_master_file']).to include('lsdi2/ocm25899106-4402/ocm25899106/Output/XML/Output.xml')
   end
 
   it 'skips volume-level OCR if pull list info is missing', :aggregate_failures do
     campus_1981_expected_ocr = import_rows[campus_1981_start + ocr_offset] # The Campus '81
-    expect(campus_1981_expected_ocr['type']).to eq('fileset')
-    expect(campus_1981_expected_ocr['fileset_label']).not_to eq('OCR Output for Volume')
+    expect(campus_1981_expected_ocr['model']).to eq('FileSet')
+    expect(campus_1981_expected_ocr['fileset_label']).to be_nil # NOTE: with the full switch to Bulkrax, these will always be nil.
   end
 
   it 'adds page-level filesets', :aggregate_failures do
     first_page = import_rows[campus_1981_start + campus_81_offset + 1] # The Campus '81
-    expect(first_page['type']).to eq('fileset')
-    expect(first_page['fileset_label']).to eq('Page 1')
+    expect(first_page['model']).to eq('FileSet')
+    expect(first_page['fileset_label']).to be_nil # NOTE: with the full switch to Bulkrax, these will always be nil.
     expect(first_page['preservation_master_file']).to include('lsdi2/ftp/000011743488/TIFF/00000001.tif')
     expect(first_page['extracted']).to include('lsdi2/ftp/000011743488/ALTO/00000001.xml')
     expect(first_page['transcript_file']).to include('lsdi2/ftp/000011743488/OCR/00000001.txt')
     last_page = import_rows[campus_1981_start + campus_81_offset + 304]
-    expect(last_page['type']).to eq('fileset')
-    expect(last_page['fileset_label']).to eq('Page 304')
+    expect(last_page['model']).to eq('FileSet')
+    expect(last_page['fileset_label']).to be_nil # NOTE: with the full switch to Bulkrax, these will always be nil.
     expect(last_page['preservation_master_file']).to include('lsdi2/ftp/000011743488/TIFF/00000304.tif')
     expect(last_page['extracted']).to include('lsdi2/ftp/000011743488/ALTO/00000304.xml')
     expect(last_page['transcript_file']).to include('lsdi2/ftp/000011743488/OCR/00000304.txt')
@@ -97,19 +96,19 @@ RSpec.describe YellowbackPreprocessor do
   it 'adds handles base-0 numbered works correctly', :aggregate_failures do
     yearbook_pull_list_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-0.csv')
     alma_export_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'yearbooks_marc.xml')
-    base0_preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, 'Yearbooks/Emory', :limb, 0)
+    base0_preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, :limb, 0)
     base0_preprocessor.merge
     base0_import_rows = CSV.read(File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-0-merged.csv'), headers: true).by_row!
 
     first_page = base0_import_rows[emocad_1924_start + pages_offset + 1] # Emocad '24
-    expect(first_page['type']).to eq('fileset')
-    expect(first_page['fileset_label']).to eq('Page 0')
+    expect(first_page['model']).to eq('FileSet')
+    expect(first_page['fileset_label']).to be_nil # NOTE: with the full switch to Bulkrax, these will always be nil.
     expect(first_page['preservation_master_file']).to include('lsdi2/ftp/050000084033/TIFF/00000000.tif')
     expect(first_page['extracted']).to include('lsdi2/ftp/050000084033/ALTO/00000000.xml')
     expect(first_page['transcript_file']).to include('lsdi2/ftp/050000084033/OCR/00000000.txt')
     last_page = base0_import_rows[emocad_1924_start + pages_offset + 5]
-    expect(last_page['type']).to eq('fileset')
-    expect(last_page['fileset_label']).to eq('Page 4')
+    expect(last_page['model']).to eq('FileSet')
+    expect(last_page['fileset_label']).to be_nil # NOTE: with the full switch to Bulkrax, these will always be nil.
     expect(last_page['preservation_master_file']).to include('lsdi2/ftp/050000084033/TIFF/00000004.tif')
     expect(last_page['extracted']).to include('lsdi2/ftp/050000084033/ALTO/00000004.xml')
     expect(last_page['transcript_file']).to include('lsdi2/ftp/050000084033/OCR/00000004.txt')
@@ -120,7 +119,7 @@ RSpec.describe YellowbackPreprocessor do
       # running #merge is expensive, only set it up and run it once and then check the results
       yearbook_pull_list_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB.csv')
       alma_export_sample = File.join(fixture_path, 'csv_import', 'yearbooks', 'yearbooks_marc.xml')
-      preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, 'zizia', :limb, 1, "true", "true")
+      preprocessor = described_class.new(yearbook_pull_list_sample, alma_export_sample, :limb, 1, "true", "true")
       preprocessor.merge
     end
 
@@ -132,14 +131,14 @@ RSpec.describe YellowbackPreprocessor do
     # each test inspects the output of the pre-processor, read into the import_rows CSV::Table object
     let(:import_rows) { CSV.read(File.join(fixture_path, 'csv_import', 'yearbooks', 'Yearbooks-LIMB-merged.csv'), headers: true).by_row! }
 
-    it 'has the expected number of transcript rows' do
-      transcript_rows = import_rows.select { |r| r['fileset_label'] == 'Transcript for Volume' }
+    it 'has the expected number of transcript rows' do # NOTE: logic had to change because `fileset_label` isn't necessary in Bulkrax imports.
+      transcript_rows = import_rows.select { |r| r['pcdm_use'] == ::FileSet::PRIMARY && r['preservation_master_file'].include?('.txt') }
 
       expect(transcript_rows.size).to eq(6)
     end
 
-    it 'has the expected number of OCR rows' do
-      ocr_rows = import_rows.select { |r| r['fileset_label'] == 'OCR Output for Volume' }
+    it 'has the expected number of OCR rows' do # NOTE: logic had to change because `fileset_label` isn't necessary in Bulkrax imports.
+      ocr_rows = import_rows.select { |r| r['pcdm_use'] == ::FileSet::SUPPLEMENTAL }
 
       expect(ocr_rows.size).to eq(6)
     end

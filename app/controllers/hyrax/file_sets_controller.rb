@@ -1,18 +1,27 @@
 # frozen_string_literal: true
-# [Hyrax-overwrite-v3.4.2]
+# [Hyrax-override-hyrax-v5.2.0]
 # Note: if issues occur with this controller, try removing all guard_for_workflow_restriction_on! calls.
 
 module Hyrax
   class FileSetsController < ApplicationController # rubocop:disable Metrics/ClassLength
     rescue_from WorkflowAuthorizationException, with: :render_unavailable
 
-    include Blacklight::Base
+    include Blacklight::Configurable
+    include Blacklight::SearchContext
     include Blacklight::AccessControls::Catalog
     include Hyrax::Breadcrumbs
 
     before_action :authenticate_user!
-    load_and_authorize_resource class: ::FileSet, except: :show
+    load_and_authorize_resource class: Hyrax.config.file_set_class
+    # If Hyrax.config.file_set_class is set to ::FileSet, the load above will force-cast
+    # the instance as a ::FileSet, even if it is a Hyrax::FileSet. Re-cast it back to
+    # prevent method errors and nil objects later
+    before_action :cast_file_set
     before_action :build_breadcrumbs, only: [:show, :edit, :stats]
+    before_action do
+      blacklight_config.track_search_session = false
+    end
+    before_action :presenter
     before_action :set_file_set, only: [:show]
 
     # provides the help_text view method
@@ -74,7 +83,7 @@ module Hyrax
 
     # DELETE /concern/file_sets/:id
     def destroy
-      guard_for_workflow_restriction_on!(parent: parent)
+      guard_for_workflow_restriction_on!(parent:)
 
       actor.destroy
       redirect_to [main_app, parent],
@@ -83,7 +92,7 @@ module Hyrax
 
     # PATCH /concern/file_sets/:id
     def update
-      guard_for_workflow_restriction_on!(parent: parent)
+      guard_for_workflow_restriction_on!(parent:)
 
       if attempt_update
         after_update_response
@@ -114,20 +123,64 @@ module Hyrax
       def update_metadata
         case file_set
         when Hyrax::Resource
-          change_set = Hyrax::Forms::ResourceForm.for(file_set)
-
-          change_set.validate(attributes) &&
-            transactions['change_set.apply'].call(change_set).value_or { false }
+          valkyrie_update_metadata
         else
           file_attributes = form_class.model_attributes(attributes)
           actor.update_metadata(file_attributes)
         end
       end
 
+      def valkyrie_update_metadata
+        change_set = Hyrax::Forms::ResourceForm.for(resource: file_set)
+
+        attributes = coerce_valkyrie_params
+
+        # TODO: We are not performing any error checks.  So that's something to
+        # correct.
+        result =
+          change_set.validate(attributes) &&
+          transactions['change_set.update_file_set']
+          .with_step_args(
+              'file_set.save_acl' => { permissions_params: change_set.input_params["permissions"] }
+            )
+          .call(change_set).value_or { false }
+        @file_set = result if result
+      end
+
+      def coerce_valkyrie_params
+        attrs = attributes
+        # The HTML form might not submit the required data structure for reform;
+        # namely instead of a hash with positional arguments for nested attributes
+        # of a collection, it is an array.  So we conditionally coerce that Array
+        # to a Hash.
+
+        # TODO: Do we need to concern ourself with embargo_attributes and
+        # lease_attributes?  My suspicion is that since these are singular (for
+        # now), we don't.  But it's a quick add.
+        [:permissions].each do |name|
+          next unless attrs["#{name}_attributes"].is_a?(Array)
+          new_perm_attrs = {}
+          attrs["#{name}_attributes"].each_with_index do |el, i|
+            new_perm_attrs[i] = el
+          end
+
+          attrs["#{name}_attributes"] = new_perm_attrs
+        end
+        attrs
+      end
+
+      def cast_file_set
+        return unless @file_set.class == ::FileSet
+        # We can tell if a Hyrax::FileSet was improperly cast because this AF method will
+        # return nil since its parent is not a ActiveFedora work.
+        @file_set = @file_set.valkyrie_resource if @file_set.respond_to?(:parent) && @file_set.parent&.id.nil?
+      end
+
       def parent(file_set: curation_concern)
         @parent ||=
           case file_set
           when Hyrax::Resource
+            # TODO: Add Hyrax::FileSet#parent method
             Hyrax.query_service.find_parents(resource: file_set).first
           else
             file_set.parent
@@ -135,6 +188,7 @@ module Hyrax
       end
 
       def attempt_update
+        return attempt_update_valkyrie if curation_concern.is_a?(Hyrax::Resource)
         if wants_to_revert?
           actor.revert_content(params[:revision])
         elsif params.key?(:file_set)
@@ -142,6 +196,30 @@ module Hyrax
         elsif params.key?(:files_files) # version file already uploaded with ref id in :files_files array
           files_files_file_set_update
         end
+      end
+
+      def attempt_update_valkyrie
+        return revert_valkyrie if wants_to_revert_valkyrie?
+        if params.key?(:file_set)
+          if params[:file_set].key?(:files)
+            ValkyrieIngestJob.perform_later(uploaded_file_from_path)
+          else
+            update_metadata
+          end
+        elsif params.key?(:files_files) # version file already uploaded with ref id in :files_files array
+          uploaded_files = Array(Hyrax::UploadedFile.find(params[:files_files]))
+          uploaded_files.first.file_set_uri = file_set.id.to_s
+          uploaded_files.first.save
+          ValkyrieIngestJob.perform_later(uploaded_files.first)
+          update_metadata
+        end
+      end
+
+      def revert_valkyrie
+        Hyrax::VersioningService.create(file_metadata, current_user, Hyrax.storage_adapter.find_by(id: params[:revision]))
+        # update_metadata
+        Hyrax.publisher.publish("file.uploaded", metadata: file_set.original_file)
+        true
       end
 
       def general_file_set_update
@@ -160,14 +238,14 @@ module Hyrax
 
       def uploaded_file_from_path
         uploaded_file = CarrierWave::SanitizedFile.new(params[:file_set][:files].first)
-        Hyrax::UploadedFile.create(user_id: current_user.id, file: uploaded_file)
+        Hyrax::UploadedFile.create(user_id: current_user.id, file: uploaded_file, file_set_uri: @file_set.id.to_s)
       end
 
       def after_update_response
         respond_to do |wants|
           wants.html do
             link_to_file = view_context.link_to(curation_concern, [main_app, curation_concern])
-            redirect_to [main_app, curation_concern], notice: view_context.t('hyrax.file_sets.asset_updated_flash.message', link_to_file: link_to_file)
+            redirect_to [main_app, curation_concern], notice: view_context.t('hyrax.file_sets.asset_updated_flash.message', link_to_file:)
           end
           wants.json do
             @presenter = show_presenter.new(curation_concern, current_ability)
@@ -180,6 +258,7 @@ module Hyrax
         respond_to do |wants|
           wants.html do
             initialize_edit_form
+            # TODO: return a valuable error message
             flash[:error] = "There was a problem processing your request."
             render 'edit', status: :unprocessable_entity
           end
@@ -202,9 +281,16 @@ module Hyrax
       end
 
       def initialize_edit_form
-        guard_for_workflow_restriction_on!(parent: parent)
+        guard_for_workflow_restriction_on!(parent:)
 
-        @version_list = Hyrax::VersionListPresenter.for(file_set: @file_set)
+        case file_set
+        when Hyrax::Resource
+          @form = Hyrax::Forms::ResourceForm.for(resource: file_set)
+          @form.prepopulate!
+        else
+          @form = form_class.new(file_set)
+        end
+        @version_list = Hyrax::VersionListPresenter.for(file_set:)
         @groups = current_user.groups
       end
 
@@ -245,11 +331,19 @@ module Hyrax
       end
 
       def single_item_search_service
-        Hyrax::SearchService.new(config: blacklight_config, user_params: params.except(:q, :page), scope: self, search_builder_class: search_builder_class)
+        Hyrax::SearchService.new(config: blacklight_config, user_params: params.except(:q, :page), scope: self, search_builder_class: blacklight_config.search_builder_class)
       end
 
       def wants_to_revert?
         params.key?(:revision) && params[:revision] != curation_concern.latest_content_version.label
+      end
+
+      def wants_to_revert_valkyrie?
+        params.key?(:revision) && params[:revision] != Hyrax::VersioningService.new(resource: file_metadata).latest_version.version_id.to_s
+      end
+
+      def file_metadata
+        @file_metadata ||= Hyrax.config.file_set_file_service.primary_file_for(file_set:)
       end
 
       # Override this method to add additional response formats to your local app

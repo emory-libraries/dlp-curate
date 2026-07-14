@@ -1,14 +1,17 @@
 # frozen_string_literal: true
 
-# [Hyrax-overwrite-v3.4.2] Changes :og to :pmf as default_content and adds content_path method for
-# fetching `use` for additional files
+# [Hyrax-override-hyrax-v5.2.0] Changes :og to :pmf as default_content and adds content_path method for
+#   fetching `use` for additional files
 module Hyrax
   class DownloadsController < ApplicationController
     include Hydra::Controller::DownloadBehavior
+    include Hyrax::StreamFileDownloadsControllerBehavior
     include Hyrax::LocalFileDownloadsControllerBehavior
     # All of the altered and unchanged methods have been moved to the module below so that they
     #   can be shared with CurateDownloadsController.
     include CurateDownloadsControllerBehavior
+    include Hyrax::ValkyrieDownloadsControllerBehavior
+    include Hyrax::WorkflowsHelper # Provides #workflow_restriction?
     skip_before_action :authenticate_user!
 
     # Altered by Emory.
@@ -16,22 +19,45 @@ module Hyrax
       :preservation_master_file
     end
 
+    # We want to alias the show method for a later use with #show_active_fedora;
+    # because we're adding quite a bit of logic and need a good alias.  Why the
+    # alias?  Because we were using `super' for the show method and that just
+    # doesn't quite work with all of the antics we're performing.
+    alias hydra_show_active_fedora_file show
+
     # Render the 404 page if the file doesn't exist.
     # Otherwise renders the file.
     def show
-      case file
-      when ActiveFedora::File
-        # For original files that are stored in fedora
-        super
-      when String
-        # For derivatives stored on the local file system
-        send_local_content
-      else
-        raise Hyrax::ObjectNotFoundError
+      # We will use the thumbnail from our file system first, if one exists
+      # Otherwise we will fallback to Valkyrie, then the default implementations
+      use = params.fetch(:file, :original_file).to_sym
+      if use == :thumbnail
+        thumbnail = Hyrax::DerivativePath.derivative_path_for_reference(params[:id], 'thumbnail')
+        if thumbnail.present? && File.exist?(thumbnail)
+          @file = thumbnail
+          return send_local_content
+        end
       end
+
+      return show_valkyrie if Hyrax.config.use_valkyrie?
+
+      show_active_fedora
     end
 
     private
+
+      def show_active_fedora
+        case file
+        when ActiveFedora::File
+          # For original files that are stored in fedora
+          hydra_show_active_fedora_file
+        when String
+          # For derivatives stored on the local file system
+          send_local_content
+        else
+          raise Hyrax::ObjectNotFoundError
+        end
+      end
 
       # Altered by Emory.
       def default_file
