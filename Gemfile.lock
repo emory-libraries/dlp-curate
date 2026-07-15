@@ -273,7 +273,7 @@ GEM
     crack (1.0.1)
       bigdecimal
       rexml
-    crass (1.0.6)
+    crass (1.0.7)
     csv (3.3.5)
     dartsass-sprockets (3.2.1)
       railties (>= 4.0.0)
@@ -281,7 +281,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    date (3.5.0)
+    date (3.5.1)
     declarative (0.0.20)
     denormalize_fields (1.3.0)
       activerecord (>= 4.1.14, < 8.0.0)
@@ -387,7 +387,7 @@ GEM
     factory_bot_rails (6.5.1)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faraday (2.14.0)
+    faraday (2.14.3)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -397,7 +397,7 @@ GEM
       faraday (>= 1, < 3)
     faraday-multipart (1.1.1)
       multipart-post (~> 2.0)
-    faraday-net_http (3.4.2)
+    faraday-net_http (3.4.4)
       net-http (~> 0.5)
     faraday-retry (2.3.2)
       faraday (~> 2.0)
@@ -428,7 +428,7 @@ GEM
     geocoder (1.8.6)
       base64 (>= 0.1.0)
       csv (>= 3.0.0)
-    globalid (1.3.0)
+    globalid (1.4.0)
       activesupport (>= 6.1)
     google-analytics-data (0.7.2)
       google-analytics-data-v1beta (>= 0.11, < 2.a)
@@ -614,7 +614,7 @@ GEM
       tinymce-rails (~> 5.10)
       valkyrie (~> 3.5)
       view_component (~> 2.74.1)
-    i18n (1.14.8)
+    i18n (1.15.2)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iiif-image-api (0.3.0)
@@ -626,7 +626,7 @@ GEM
       json
     iiif_manifest (1.6.0)
       activesupport (>= 4)
-    io-console (0.8.1)
+    io-console (0.8.2)
     iso8601 (0.9.1)
     jbuilder (2.13.0)
       actionview (>= 5.0.0)
@@ -636,7 +636,7 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
-    json (2.18.1)
+    json (2.21.1)
     json-canonicalization (1.0.0)
     json-ld (3.3.2)
       htmlentities (~> 4.3)
@@ -728,10 +728,10 @@ GEM
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     logger (1.7.0)
-    loofah (2.25.1)
+    loofah (2.25.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    mail (2.9.0)
+    mail (2.9.1)
       logger
       mini_mime (>= 0.1.1)
       net-imap
@@ -740,7 +740,7 @@ GEM
     mailboxer (0.15.1)
       carrierwave (>= 0.5.8)
       rails (>= 5.0.0)
-    marcel (1.1.0)
+    marcel (1.2.1)
     matrix (0.4.3)
     method_source (1.1.0)
     mime-types (3.7.0)
@@ -769,7 +769,7 @@ GEM
       uri (>= 0.11.1)
     net-http-persistent (4.0.6)
       connection_pool (~> 2.2, >= 2.2.4)
-    net-imap (0.5.12)
+    net-imap (0.6.4.1)
       date
       net-protocol
     net-pop (0.1.2)
@@ -788,9 +788,9 @@ GEM
     noid-rails (3.3.0)
       actionpack (>= 5.0.0, < 9)
       noid (~> 0.9)
-    nokogiri (1.19.3-arm64-darwin)
+    nokogiri (1.19.4-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.3-x86_64-linux-gnu)
+    nokogiri (1.19.4-x86_64-linux-gnu)
       racc (~> 1.4)
     oai (1.3.0)
       builder (>= 3.1.0)
@@ -840,14 +840,13 @@ GEM
     public_suffix (7.0.0)
     puma (7.1.0)
       nio4r (~> 2.0)
-    qa (5.15.0)
+    qa (5.17.0)
       activerecord-import
-      deprecation
       faraday (< 3.0, != 2.0.0)
       geocoder
       ldpath
       nokogiri (~> 1.6)
-      rails (>= 5.0, < 8.1)
+      rails (>= 6.0, < 8.2)
       rdf
     racc (1.8.1)
     rack (2.2.23)
@@ -1201,7 +1200,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 4)
     thor (1.5.0)
     tilt (2.7.0)
-    timeout (0.4.4)
+    timeout (0.6.1)
     tins (1.47.0)
       bigdecimal
       mize (~> 0.6)
@@ -1260,7 +1259,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     websocket (1.2.11)
-    websocket-driver (0.8.0)
+    websocket-driver (0.8.2)
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
