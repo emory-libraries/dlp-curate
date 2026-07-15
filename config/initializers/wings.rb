@@ -53,7 +53,9 @@ if Hyrax.config.valkyrie_transition?
       Hyrax::CustomQueries::FindModelsByAccess,
       Hyrax::CustomQueries::FindCountBy,
       Hyrax::CustomQueries::FindByDateRange,
-      Curate::CustomQueries::FindBySourceIdentifier
+      Hyrax::CustomQueries::Navigators::ParentWorkNavigator,
+      Curate::CustomQueries::FindBySourceIdentifier,
+      Curate::CustomQueries::FindParentWorks
     ].each do |handler|
       Hyrax.query_service.services[0].custom_queries.register_query_handler(handler)
     end
@@ -61,6 +63,7 @@ if Hyrax.config.valkyrie_transition?
     # Register find_by_model_and_property_value with find_single_or_nil strategy so
     # Freyja's composite dispatch returns nil (not ObjectNotFoundError) when not found.
     Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_model_and_property_value] = :find_single_or_nil
+    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_parent_works] = :find_multiple
   end
 
   Rails.application.config.to_prepare do
@@ -110,4 +113,14 @@ if Hyrax.config.valkyrie_transition?
     end
   end
   # rubocop:enable Metrics/BlockLength
+end
+
+# Register app-specific custom queries on the Wings adapter so they are
+# available in both Freyja (valkyrie_transition) and Wings-only (test) modes.
+Rails.application.config.after_initialize do
+  [Curate::CustomQueries::FindParentWorks].each do |handler|
+    Hyrax.query_service.custom_queries.register_query_handler(handler)
+  rescue StandardError
+    nil
+  end
 end

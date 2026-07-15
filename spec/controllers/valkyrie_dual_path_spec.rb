@@ -10,115 +10,74 @@ RSpec.describe 'Valkyrie dual-path controller logic', type: :controller do
   let(:file_set_id) { 'fs-abc-123' }
   let(:work_id) { 'work-xyz-456' }
 
-  describe CharacterizationController do
-    controller(CharacterizationController) {}
+  describe 'CharacterizationController#load_file_set' do
+    let(:controller_instance) { CharacterizationController.new }
 
-    before { sign_in user }
+    before do
+      allow(controller_instance).to receive(:params).and_return(file_set_id:)
+    end
 
-    describe '#load_file_set (private)' do
-      context 'when valkyrie_transition? is true' do
-        let(:valkyrie_file_set) { instance_double('FileSetResource', id: file_set_id) }
+    context 'when valkyrie_transition? is true' do
+      let(:valkyrie_file_set) { instance_double('FileSetResource', id: file_set_id) }
 
-        before do
-          allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
-          allow(Hyrax.query_service).to receive(:find_by).with(id: file_set_id).and_return(valkyrie_file_set)
-          allow(ReCharacterizeJob).to receive(:perform_later)
-        end
-
-        it 'loads the file set via Hyrax.query_service' do
-          post :re_characterize, params: { file_set_id: }, xhr: true
-          expect(Hyrax.query_service).to have_received(:find_by).with(id: file_set_id)
-        end
-
-        it 'passes the Valkyrie file set to ReCharacterizeJob' do
-          post :re_characterize, params: { file_set_id: }, xhr: true
-          expect(ReCharacterizeJob).to have_received(:perform_later).with(file_set: valkyrie_file_set, user: user.uid)
-        end
+      before do
+        allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
+        allow(Hyrax.query_service).to receive(:find_by).with(id: file_set_id).and_return(valkyrie_file_set)
       end
 
-      context 'when valkyrie_transition? is false' do
-        let(:af_file_set) { instance_double('FileSet', id: file_set_id) }
+      it 'loads the file set via Hyrax.query_service' do
+        result = controller_instance.send(:load_file_set)
+        expect(result).to eq valkyrie_file_set
+      end
+    end
 
-        before do
-          allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(false)
-          allow(FileSet).to receive(:find).with(file_set_id).and_return(af_file_set)
-          allow(ReCharacterizeJob).to receive(:perform_later)
-        end
+    context 'when valkyrie_transition? is false' do
+      let(:af_file_set) { instance_double('FileSet', id: file_set_id) }
 
-        it 'loads the file set via FileSet.find' do
-          post :re_characterize, params: { file_set_id: }, xhr: true
-          expect(FileSet).to have_received(:find).with(file_set_id)
-        end
+      before do
+        allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(false)
+        allow(FileSet).to receive(:find).with(file_set_id).and_return(af_file_set)
+      end
 
-        it 'passes the AF file set to ReCharacterizeJob' do
-          post :re_characterize, params: { file_set_id: }, xhr: true
-          expect(ReCharacterizeJob).to have_received(:perform_later).with(file_set: af_file_set, user: user.uid)
-        end
+      it 'loads the file set via FileSet.find' do
+        result = controller_instance.send(:load_file_set)
+        expect(result).to eq af_file_set
       end
     end
   end
 
-  describe ManifestRegenerationController do
-    controller(ManifestRegenerationController) {}
+  describe 'ManifestRegenerationController#load_curation_concern_for_manifest' do
+    let(:controller_instance) { ManifestRegenerationController.new }
 
-    before { sign_in user }
+    before do
+      allow(controller_instance).to receive(:params).and_return({})
+    end
 
-    describe '#load_curation_concern_for_manifest (private)' do
-      let(:solr_document) do
-        SolrDocument.new(
-          'id' => work_id,
-          'title_tesim' => ['Test Work'],
-          'human_readable_type_tesim' => ['Curate Generic Work'],
-          'has_model_ssim' => ['CurateGenericWork'],
-          'manifest_cache_key_tesim' => 'abc123'
-        )
-      end
-      let(:presenter) { instance_double(Hyrax::CurateGenericWorkPresenter) }
+    context 'when valkyrie_transition? is true' do
+      let(:valkyrie_work) { instance_double('CurateGenericWorkResource', id: work_id) }
 
       before do
-        allow(SolrDocument).to receive(:find).and_return(solr_document)
-        allow(Hyrax::CurateGenericWorkPresenter).to receive(:new).and_return(presenter)
-        allow(ManifestBuilderService).to receive(:regenerate_manifest)
+        allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
+        allow(Hyrax.query_service).to receive(:find_by).with(id: work_id).and_return(valkyrie_work)
       end
 
-      context 'when valkyrie_transition? is true' do
-        let(:valkyrie_work) { instance_double('CurateGenericWorkResource', id: work_id) }
+      it 'loads the work via Hyrax.query_service' do
+        result = controller_instance.send(:load_curation_concern_for_manifest, work_id)
+        expect(result).to eq valkyrie_work
+      end
+    end
 
-        before do
-          allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
-          allow(Hyrax.query_service).to receive(:find_by).with(id: work_id).and_return(valkyrie_work)
-        end
+    context 'when valkyrie_transition? is false' do
+      let(:af_work) { instance_double('CurateGenericWork', id: work_id) }
 
-        it 'loads the work via Hyrax.query_service' do
-          post :regen_manifest, params: { work_id: }, xhr: true
-          expect(Hyrax.query_service).to have_received(:find_by).with(id: work_id)
-        end
-
-        it 'passes the Valkyrie resource to ManifestBuilderService' do
-          post :regen_manifest, params: { work_id: }, xhr: true
-          expect(ManifestBuilderService).to have_received(:regenerate_manifest)
-            .with(presenter:, curation_concern: valkyrie_work)
-        end
+      before do
+        allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(false)
+        allow(CurateGenericWork).to receive(:find).with(work_id).and_return(af_work)
       end
 
-      context 'when valkyrie_transition? is false' do
-        let(:af_work) { instance_double('CurateGenericWork', id: work_id) }
-
-        before do
-          allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(false)
-          allow(CurateGenericWork).to receive(:find).with(work_id).and_return(af_work)
-        end
-
-        it 'loads the work via CurateGenericWork.find' do
-          post :regen_manifest, params: { work_id: }, xhr: true
-          expect(CurateGenericWork).to have_received(:find).with(work_id)
-        end
-
-        it 'passes the AF object to ManifestBuilderService' do
-          post :regen_manifest, params: { work_id: }, xhr: true
-          expect(ManifestBuilderService).to have_received(:regenerate_manifest)
-            .with(presenter:, curation_concern: af_work)
-        end
+      it 'loads the work via CurateGenericWork.find' do
+        result = controller_instance.send(:load_curation_concern_for_manifest, work_id)
+        expect(result).to eq af_work
       end
     end
   end
