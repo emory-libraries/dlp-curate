@@ -21,7 +21,7 @@
     "postcss-loader": "*",
     "postcss-preset-env": "*",
     "sass": "*",
-    "shakapacker": "6.6.0",
+    "shakapacker": "9.5.0",
     "terser-webpack-plugin": "^5.6.1",
     "universalviewer": "4.0.0",
     "webpack-sources": "^3.5.0"
