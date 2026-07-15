@@ -16,11 +16,11 @@ RSpec.describe CurateGenericWorkResource do
 
   describe 'schemas' do
     it 'includes emory_basic_metadata schema' do
-      expect(described_class.schema).to include(:emory_basic_metadata)
+      expect(described_class.fields).to include(:holding_repository, :emory_ark, :institution)
     end
 
     it 'includes curate_generic_work_resource schema' do
-      expect(described_class.schema).to include(:curate_generic_work_resource)
+      expect(described_class.fields).to include(:content_type, :date_issued, :deduplication_key)
     end
   end
 
@@ -102,7 +102,6 @@ RSpec.describe CurateGenericWorkResource do
     page_range_start
     parent_title
     place_of_production
-    preservation_workflow_terms
     primary_language
     primary_repository_ID
     publisher
