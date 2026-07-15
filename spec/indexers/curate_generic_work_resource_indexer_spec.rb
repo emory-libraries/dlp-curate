@@ -5,7 +5,11 @@ require 'rails_helper'
 RSpec.describe CurateGenericWorkResourceIndexer do
   let(:indexer) { described_class.new(resource:) }
   let(:solr_document) { indexer.to_solr }
-  let(:resource) { CurateGenericWorkResource.new(attributes) }
+  let(:resource) do
+    r = CurateGenericWorkResource.new(attributes.except(:visibility))
+    allow(r).to receive(:visibility).and_return(attributes[:visibility] || 'restricted')
+    r
+  end
   let(:attributes) do
     {
       title:      ['Test title'],
@@ -247,7 +251,7 @@ RSpec.describe CurateGenericWorkResourceIndexer do
     end
 
     it 'indexes a manifest_cache_key' do
-      expected_input = "Test title0Libraryhttp://rightsstatements.org/vocab/InC/1.0/open"
+      expected_input = "Test title0Libraryhttp://rightsstatements.org/vocab/InC/1.0/open[]"
       expect(solr_document['manifest_cache_key_tesim']).to eq Digest::MD5.hexdigest(expected_input)
     end
   end
@@ -376,7 +380,12 @@ RSpec.describe CurateGenericWorkResourceIndexer do
 
       before do
         allow(Hyrax.query_service).to receive(:find_by).with(id: child_id).and_return(child_work)
-        allow(Hyrax::SolrService).to receive(:query).and_return([{ 'thumbnail_path_ss' => '/thumb.jpg' }])
+        allow(Hyrax::SolrService).to receive(:query)
+          .with("id:#{child_id}", rows: 1)
+          .and_return([{ 'thumbnail_path_ss' => '/thumb.jpg' }])
+        allow(Hyrax::SolrService).to receive(:query)
+          .with(start_with("label_tesim:"), any_args)
+          .and_return([])
       end
 
       it 'indexes formatted child work entries' do
