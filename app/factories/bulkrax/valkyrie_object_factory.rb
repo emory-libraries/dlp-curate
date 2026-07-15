@@ -10,7 +10,7 @@ module Bulkrax
 
     class FileFactoryInnerWorkings < Bulkrax::FileFactory::InnerWorkings
       def remove_file_set(file_set:)
-        file_metadata = Hyrax.custom_queries.find_files(file_set: file_set).first
+        file_metadata = Hyrax.custom_queries.find_files(file_set:).first
         raise "No file metadata records found for #{file_set.class} ID=#{file_set.id}" unless file_metadata
 
         Hyrax::VersioningService.create(file_metadata, user, File.new(Bulkrax.removed_image_path))
@@ -19,7 +19,7 @@ module Bulkrax
       end
 
       def update_file_set(file_set:, uploaded:)
-        file_metadata = Hyrax.custom_queries.find_files(file_set: file_set).first
+        file_metadata = Hyrax.custom_queries.find_files(file_set:).first
         raise "No file metadata records found for #{file_set.class} ID=#{file_set.id}" unless file_metadata
 
         uploaded_file = uploaded.file
@@ -63,7 +63,7 @@ module Bulkrax
     end
 
     def self.field_multi_value?(field:, model:)
-      return false unless field_supported?(field: field, model: model)
+      return false unless field_supported?(field:, model:)
 
       if model.respond_to?(:schema)
         dry_type = model.schema.key(field.to_sym)
@@ -71,7 +71,7 @@ module Bulkrax
 
         false
       else
-        Bulkrax::ObjectFactory.field_multi_value?(field: field, model: model)
+        Bulkrax::ObjectFactory.field_multi_value?(field:, model:)
       end
     end
 
@@ -79,7 +79,7 @@ module Bulkrax
       if model.respond_to?(:schema)
         schema_properties(model).include?(field)
       else
-        Bulkrax::ObjectFactory.field_supported?(field: field, model: model)
+        Bulkrax::ObjectFactory.field_supported?(field:, model:)
       end
     end
 
@@ -87,11 +87,11 @@ module Bulkrax
       return [] if resource.blank?
       return [resource] if resource.is_a?(Bulkrax.file_model_class)
 
-      Hyrax.query_service.custom_queries.find_child_file_sets(resource: resource)
+      Hyrax.query_service.custom_queries.find_child_file_sets(resource:)
     end
 
     def self.find(id)
-      Hyrax.query_service.find_by(id: id)
+      Hyrax.query_service.find_by(id:)
     rescue Hyrax::ObjectNotFoundError => e
       raise ObjectFactoryInterface::ObjectNotFoundError, e.message
     end
@@ -118,13 +118,13 @@ module Bulkrax
       if resource.respond_to?(:save!)
         resource.save!
       else
-        result = Hyrax.persister.save(resource: resource)
+        result = Hyrax.persister.save(resource:)
         raise Valkyrie::Persistence::ObjectNotFoundError unless result
         Hyrax.index_adapter.save(resource: result)
         if result.collection?
-          publish('collection.metadata.updated', collection: result, user: user)
+          publish('collection.metadata.updated', collection: result, user:)
         else
-          publish('object.metadata.updated', object: result, user: user)
+          publish('object.metadata.updated', object: result, user:)
         end
         resource
       end
@@ -132,12 +132,12 @@ module Bulkrax
 
     def self.update_index(resources:)
       Array(resources).each do |resource|
-        Hyrax.index_adapter.save(resource: resource)
+        Hyrax.index_adapter.save(resource:)
       end
     end
 
     def self.update_index_for_file_sets_of(resource:)
-      file_sets = Hyrax.query_service.custom_queries.find_child_file_sets(resource: resource)
+      file_sets = Hyrax.query_service.custom_queries.find_child_file_sets(resource:)
       update_index(resources: file_sets)
     end
 
@@ -179,7 +179,7 @@ module Bulkrax
 
       Hyrax.persister.delete(resource: obj)
       Hyrax.index_adapter.delete(resource: obj)
-      self.class.publish(event: 'object.deleted', object: obj, user: user)
+      self.class.publish(event: 'object.deleted', object: obj, user:)
     end
 
     def run!
@@ -197,7 +197,7 @@ module Bulkrax
 
         @object.depositor = @user.email
         object = Hyrax.persister.save(resource: @object)
-        self.class.publish(event: "object.metadata.updated", object: object, user: @user)
+        self.class.publish(event: "object.metadata.updated", object:, user: @user)
         object
       end
 
@@ -232,9 +232,9 @@ module Bulkrax
       end
 
       def prep_fileset_content(attrs)
-        thumbnail_url = HashWithIndifferentAccess.new(self.attributes)['thumbnail_url']
-        all_remote_files = merge_thumbnails(remote_files: attrs["remote_files"], thumbnail_url: thumbnail_url)
-        all_local_files = self.attributes['file'] || []
+        thumbnail_url = HashWithIndifferentAccess.new(attributes)['thumbnail_url']
+        all_remote_files = merge_thumbnails(remote_files: attrs["remote_files"], thumbnail_url:)
+        all_local_files = attributes['file'] || []
         all_files = all_local_files + all_remote_files
 
         uploaded_local = uploaded_local_files(uploaded_files: attrs[:uploaded_files])
@@ -270,7 +270,7 @@ module Bulkrax
       end
 
       def create_collection(attrs)
-        perform_transaction_for(object: object, attrs: attrs) do
+        perform_transaction_for(object:, attrs:) do
           transactions['change_set.create_collection']
             .with_step_args(
               'change_set.set_user_as_depositor' => { user: @user },
@@ -327,7 +327,7 @@ module Bulkrax
       end
 
       def update_collection(attrs)
-        perform_transaction_for(object: object, attrs: attrs) do
+        perform_transaction_for(object:, attrs:) do
           transactions['change_set.update_collection']
         end
       end
@@ -381,7 +381,7 @@ module Bulkrax
 
       def create_uploaded_file(file_path, file_name)
         file = File.open(file_path)
-        uploaded_file = Hyrax::UploadedFile.create(file: file, user: @user, filename: file_name)
+        uploaded_file = Hyrax::UploadedFile.create(file:, user: @user, filename: file_name)
         file.close
         uploaded_file
       rescue => e
