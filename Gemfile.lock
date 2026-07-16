@@ -1273,7 +1273,7 @@ GEM
       psych (>= 3.3)
       rdf (~> 3.3)
       rdf-xsd (~> 3.3)
-    yard (0.9.37)
+    yard (0.9.45)
     zeitwerk (2.8.2)
 
 PLATFORMS
