@@ -48,7 +48,7 @@
     "webpack": "^5.0.0",
     "webpack-assets-manifest": "^5.0.6",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.9.0",
+    "webpack-dev-server": "^5.2.5",
     "webpack-merge": "^5.8.0"
   }
 }
