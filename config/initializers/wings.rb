@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 # rubocop:disable Metrics/BlockLength
 
-# Freyja setup adapted from hyku
+# Frigg setup adapted from hyku
 if Hyrax.config.valkyrie_transition?
   Rails.application.config.after_initialize do
     [ # List AF work models
       CurateGenericWork
     ].each do |klass|
       Wings::ModelRegistry.register("#{klass}Resource".constantize, klass)
-      # we register itself so we can pre-translate the class in Freyja instead of having to translate in each query_service
+      # we register itself so we can pre-translate the class in Frigg instead of having to translate in each query_service
       Wings::ModelRegistry.register(klass, klass)
     end
     Wings::ModelRegistry.register(Collection, Collection)
@@ -22,10 +22,10 @@ if Hyrax.config.valkyrie_transition?
     Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
 
     Valkyrie::MetadataAdapter.register(
-      Freyja::MetadataAdapter.new,
-      :freyja
+      Frigg::MetadataAdapter.new,
+      :frigg
     )
-    Valkyrie.config.metadata_adapter = :freyja
+    Valkyrie.config.metadata_adapter = :frigg
     Hyrax.config.query_index_from_valkyrie = true
     Hyrax.config.index_adapter = :solr_index
 
@@ -61,7 +61,7 @@ if Hyrax.config.valkyrie_transition?
     end
 
     # Register find_by_model_and_property_value with find_single_or_nil strategy so
-    # Freyja's composite dispatch returns nil (not ObjectNotFoundError) when not found.
+    # Frigg's composite dispatch returns nil (not ObjectNotFoundError) when not found.
     Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_model_and_property_value] = :find_single_or_nil
     Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_parent_works] = :find_multiple
   end
@@ -116,7 +116,7 @@ if Hyrax.config.valkyrie_transition?
 end
 
 # Register app-specific custom queries on the Wings adapter so they are
-# available in both Freyja (valkyrie_transition) and Wings-only (test) modes.
+# available in both Frigg (valkyrie_transition) and Wings-only (test) modes.
 Rails.application.config.after_initialize do
   [Curate::CustomQueries::FindParentWorks].each do |handler|
     Hyrax.query_service.custom_queries.register_query_handler(handler)
