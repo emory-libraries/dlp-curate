@@ -20,6 +20,9 @@ class CurateDownloadsController < ApplicationController
     else
       pdf_for_viewer_af
     end
+  rescue
+    Rails.logger.warn("Valkyrie object not formed yet for id: #{params[:id]}")
+    pdf_for_viewer_af
   end
 
   private
