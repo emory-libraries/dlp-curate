@@ -22,19 +22,19 @@ if Hyrax.config.valkyrie_transition?
     Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
 
     Valkyrie::MetadataAdapter.register(
-      Frigg::MetadataAdapter.new,
-      :frigg
+      Frigg::MetadataAdapter.new(
+        connection:     ::Ldp::Client.new(Hyrax.config.fedora_connection_builder.call(
+          ENV.fetch('FEDORA6_URL') { "http://localhost:8985/fcrepo/rest" }
+        )),
+        base_path:      ENV.fetch('FEDORA_BASE_PATH', Rails.env).gsub(/^\/|\/$/, ''),
+        schema:         Valkyrie::Persistence::Fedora::PermissiveSchema.new(Hyrax::SimpleSchemaLoader.new.permissive_schema_for_valkrie_adapter),
+        fedora_version: 6
+      ), :frigg
     )
     Valkyrie.config.metadata_adapter = :frigg
     Hyrax.config.query_index_from_valkyrie = true
     Hyrax.config.index_adapter = :solr_index
-
-    Valkyrie::StorageAdapter.register(
-      Valkyrie::Storage::VersionedDisk.new(base_path:  Rails.root.join("storage", "files"),
-                                           file_mover: FileUtils.method(:cp)),
-      :disk
-    )
-    Valkyrie.config.storage_adapter  = :disk
+    Valkyrie.config.storage_adapter  = :fedora_storage
     Valkyrie.config.indexing_adapter = :solr_index
 
     # load all the sql based custom queries
