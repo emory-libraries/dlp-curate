@@ -8,6 +8,9 @@
 
 // Dashboard - Works List
 
+.table > tbody .document-title {
+  word-break: normal;
+}
 .media-left {
   margin-right: 0.5rem;
 }
