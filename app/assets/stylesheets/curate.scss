@@ -2,6 +2,22 @@
 @import 'archivesspace_button';
 @import 'work_show_page';
 
+// Homepage
+
+// Search Results
+
+// View Collection
+
+// View Work
+.preservation_failures_absent {
+  color: green;
+}
+
+.preservation_failures_present, .no-preservation-events {
+  color: red;
+}
+
+//  below are existing styles that I'll try to organize as I go. from github as of july/26, it doesn't look like curate styles have been touched in a long time and not by a front end person. i will inevitably rearrange, if only to find whether what i'm working on exists or not. 
 .ui-autocomplete-loading {
   background: #fff url("/assets/loading.gif") right center no-repeat;
 }
@@ -31,13 +47,6 @@
 	height: 100%;
 }
 
-.preservation_failures_absent {
-  color: green;
-}
-
-.preservation_failures_present, .no-preservation-events {
-  color: red;
-}
 
 dl.file-show-details {
   -moz-column-count: 1;
