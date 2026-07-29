@@ -840,14 +840,13 @@ GEM
     public_suffix (7.0.5)
     puma (8.0.2)
       nio4r (~> 2.0)
-    qa (5.15.0)
+    qa (5.17.0)
       activerecord-import
-      deprecation
       faraday (< 3.0, != 2.0.0)
       geocoder
       ldpath
       nokogiri (~> 1.6)
-      rails (>= 5.0, < 8.1)
+      rails (>= 6.0, < 8.2)
       rdf
     racc (1.8.1)
     rack (2.2.23)
