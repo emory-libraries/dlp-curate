@@ -53,7 +53,6 @@ attributes:
       multiple: false
     index_keys:
       - "conference_dates_tesi"
-      - "conference_dates_dtsim"
       - "conference_dates_si"
     predicate: http://rdaregistry.info/Elements/u/P60526
   conference_name:
@@ -111,7 +110,6 @@ attributes:
       multiple: false
     index_keys:
       - "copyright_date_tesi"
-      - "copyright_date_dtsim"
       - "copyright_date_si"
     predicate: http://purl.org/dc/terms/dateCopyrighted
   data_classifications:
@@ -130,7 +128,6 @@ attributes:
       primary: false
     index_keys:
       - "data_collection_dates_tesim"
-      - "data_collection_dates_dtsim"
       - "data_collection_dates_sim"
     predicate: http://metadata.emory.edu/vocab/cor-terms#dataCollectionDates
   data_producers:
@@ -155,10 +152,6 @@ attributes:
     form:
       primary: false
       multiple: false
-    index_keys:
-      - "date_digitized_tesi"
-      - "date_digitized_dtsim"
-      - "date_digitized_si"
     predicate: http://metadata.emory.edu/vocab/cor-terms#dateDigitized
   date_issued:
     type: string
@@ -167,9 +160,7 @@ attributes:
       primary: true
       multiple: false
     index_keys:
-      - "date_issued_tesi"
-      - "date_issued_dtsim"
-      - "date_issued_si"
+      - "date_issued_tesim"
     predicate: http://purl.org/dc/terms/issued
   deduplication_key:
     type: string
