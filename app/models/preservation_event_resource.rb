@@ -3,6 +3,8 @@
 class PreservationEventResource < Valkyrie::Resource
   include Hyrax::Schema(:preservation_event_metadata)
 
+  attribute :internal_resource, Valkyrie::Types::Any.default("PreservationEvent"), internal: true
+
   def preservation_event_terms
     attributes_map = { 'event_details' => event_details,
                        'event_end' => event_end,
