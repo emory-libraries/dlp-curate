@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PreservationEventResource < Valkyrie::Resource
+class PreservationEventResource < Hyrax::Resource
   include Hyrax::Schema(:preservation_event_metadata)
 
   def preservation_event_terms

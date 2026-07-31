@@ -20,6 +20,8 @@ if Hyrax.config.valkyrie_transition?
     Wings::ModelRegistry.register(FileSetResource, FileSet)
     Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
     Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
+    Wings::ModelRegistry.register(PreservationEventResource, PreservationEvent)
+    Wings::ModelRegistry.register(PreservationEvent, PreservationEvent)
 
     Valkyrie::MetadataAdapter.register(
       Frigg::MetadataAdapter.new(
@@ -83,6 +85,10 @@ if Hyrax.config.valkyrie_transition?
       attribute :internal_resource, Valkyrie::Types::Any.default("FileSet"), internal: true
     end
 
+    PreservationEventResource.class_eval do
+      attribute :internal_resource, Valkyrie::Types::Any.default("PreservationEvent"), internal: true
+    end
+
     Valkyrie.config.resource_class_resolver = lambda do |resource_klass_name|
       # TODO: Can we use some kind of lookup.
       klass_name = resource_klass_name.gsub(/^Wings\((.+)\)$/, '\1')
@@ -107,6 +113,8 @@ if Hyrax.config.valkyrie_transition?
         Hyrax::Lease
       elsif 'Hydra::PCDM::File' == klass_name
         Hyrax::FileMetadata
+      elsif 'PreservationEvent' == klass_name
+        PreservationEventResource
       else
         klass_name.constantize
       end
