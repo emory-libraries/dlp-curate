@@ -128,7 +128,7 @@ module Hyrax
           file_attributes = form_class.model_attributes(attributes)
           actor.update_metadata(file_attributes)
         end
-    end
+      end
 
       def valkyrie_update_metadata
         change_set = Hyrax::Forms::ResourceForm.for(resource: file_set)
