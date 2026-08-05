@@ -57,6 +57,8 @@ if Hyrax.config.valkyrie_transition?
       Hyrax::CustomQueries::FindByDateRange,
       Hyrax::CustomQueries::Navigators::ParentWorkNavigator,
       Curate::CustomQueries::FindBySourceIdentifier,
+      Curate::CustomQueries::FindByEmoryPersistentId,
+      Curate::CustomQueries::FindAllObjectsWithAlternateIdsPresent,
       Curate::CustomQueries::FindParentWorks
     ].each do |handler|
       Hyrax.query_service.services[0].custom_queries.register_query_handler(handler)
@@ -65,6 +67,8 @@ if Hyrax.config.valkyrie_transition?
     # Register find_by_model_and_property_value with find_single_or_nil strategy so
     # Frigg's composite dispatch returns nil (not ObjectNotFoundError) when not found.
     Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_model_and_property_value] = :find_single_or_nil
+    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_emory_persistent_id] = :find_single_or_nil
+    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_all_objects_with_alternate_ids_present] = :find_multiple
     Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_parent_works] = :find_multiple
   end
 

@@ -9,7 +9,9 @@ module Curate
     def to_solr
       super.tap do |solr_doc|
         solr_doc['pcdm_use_tesim'] = resource.pcdm_use if resource.pcdm_use.present?
-        solr_doc['alternate_ids_ssim'] = resource.alternate_ids.map(&:id) if resource.respond_to?(:alternate_ids)
+        # Temporary: index alternate_ids for remediation query discovery.
+        # Remove after running migrate_alternate_ids_to_emory_persistent_id.
+        solr_doc['alternate_ids_ssim'] = resource.alternate_ids.map(&:id) if resource.respond_to?(:alternate_ids) && resource.alternate_ids.present?
 
         index_preservation_events(solr_doc)
         index_file_metadata(solr_doc)

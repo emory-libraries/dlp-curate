@@ -8,6 +8,10 @@ class CollectionResourceIndexer < Hyrax::PcdmCollectionIndexer
 
   def to_solr
     super.tap do |solr_doc|
+      # Temporary: index alternate_ids for remediation query discovery.
+      # Remove after running migrate_alternate_ids_to_emory_persistent_id.
+      solr_doc['alternate_ids_ssim'] = resource.alternate_ids.map(&:id) if resource.respond_to?(:alternate_ids) && resource.alternate_ids.present?
+
       solr_doc['member_works_count_isi'] = member_works_count
       solr_doc['title_ssort'] = sort_title
       solr_doc['creator_ssort'] = resource.creator.first

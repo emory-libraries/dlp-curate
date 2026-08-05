@@ -407,8 +407,7 @@ module Bulkrax
       end
 
       def transform_attributes(update: false)
-        attrs = super.merge(alternate_ids: [source_identifier_value])
-                     .symbolize_keys
+        attrs = super.symbolize_keys
 
         attrs[:title] = [''] if attrs[:title].blank?
         attrs[:creator] = [''] if attrs[:creator].blank?

@@ -96,6 +96,12 @@ attributes:
     index_keys:
       - 'emory_ark_tesim'
     predicate: http://id.loc.gov/vocabulary/identifiers/local#ark
+  emory_persistent_id:
+    type: string
+    multiple: false
+    index_keys:
+      - 'emory_persistent_id_ssi'
+    predicate: http://metadata.emory.edu/vocab/cor-terms#emoryPersistentId
   holding_repository:
     type: string
     multiple: false
