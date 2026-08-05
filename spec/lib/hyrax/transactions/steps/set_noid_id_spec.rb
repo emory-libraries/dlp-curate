@@ -14,7 +14,7 @@ RSpec.describe Hyrax::Transactions::Steps::SetNoidId do
   describe '#call' do
     context 'when the change_set supports emory_persistent_id' do
       let(:change_set) do
-        instance_double(
+        double(
           'Hyrax::ChangeSet',
           emory_persistent_id:    nil,
           'emory_persistent_id=': nil,
@@ -24,7 +24,6 @@ RSpec.describe Hyrax::Transactions::Steps::SetNoidId do
 
       before do
         allow(change_set).to receive(:respond_to?).with(:emory_persistent_id=).and_return(true)
-        allow(change_set).to receive(:respond_to?).with(:emory_persistent_id).and_return(true)
         allow(Hyrax).to receive_message_chain(:persister, :save).and_return(change_set)
       end
 
@@ -44,7 +43,7 @@ RSpec.describe Hyrax::Transactions::Steps::SetNoidId do
 
     context 'when emory_persistent_id is already set' do
       let(:change_set) do
-        instance_double(
+        double(
           'Hyrax::ChangeSet',
           emory_persistent_id: '999abc123-cor',
           id:                  Valkyrie::ID.new('abc123')
@@ -53,7 +52,6 @@ RSpec.describe Hyrax::Transactions::Steps::SetNoidId do
 
       before do
         allow(change_set).to receive(:respond_to?).with(:emory_persistent_id=).and_return(true)
-        allow(change_set).to receive(:respond_to?).with(:emory_persistent_id).and_return(true)
       end
 
       it 'does not mint a new NOID' do
@@ -65,7 +63,7 @@ RSpec.describe Hyrax::Transactions::Steps::SetNoidId do
     end
 
     context 'when the change_set does not support emory_persistent_id' do
-      let(:change_set) { instance_double('Hyrax::ChangeSet') }
+      let(:change_set) { double('Hyrax::ChangeSet') }
 
       before do
         allow(change_set).to receive(:respond_to?).with(:emory_persistent_id=).and_return(false)
