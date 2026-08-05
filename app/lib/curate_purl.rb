@@ -7,8 +7,8 @@ module CuratePurl
   def purl
     persistent_id = if respond_to?(:emory_persistent_id) && emory_persistent_id.present?
                       emory_persistent_id
-                    elsif respond_to?(:solr_document) && solr_document['emory_persistent_id_ssi'].present?
-                      solr_document['emory_persistent_id_ssi']
+                    elsif respond_to?(:solr_document) && solr_document&.dig('emory_persistent_id_ssi').present?
+                      solr_document&.dig('emory_persistent_id_ssi')
                     else
                       id
                     end
