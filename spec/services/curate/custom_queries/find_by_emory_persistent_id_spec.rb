@@ -36,9 +36,9 @@ RSpec.describe Curate::CustomQueries::FindByEmoryPersistentId do
       end
 
       it 'raises ObjectNotFoundError' do
-        expect {
+        expect do
           handler.find_by_emory_persistent_id(emory_persistent_id: 'nonexistent-cor')
-        }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        end.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
       end
     end
   end

@@ -16,9 +16,9 @@ RSpec.describe Hyrax::Transactions::Steps::SetNoidId do
       let(:change_set) do
         instance_double(
           'Hyrax::ChangeSet',
-          emory_persistent_id: nil,
-          'emory_persistent_id=': nil,
-          id: Valkyrie::ID.new('abc123')
+          emory_persistent_id:      nil,
+          'emory_persistent_id=':   nil,
+          id:                       Valkyrie::ID.new('abc123')
         )
       end
 
@@ -47,7 +47,7 @@ RSpec.describe Hyrax::Transactions::Steps::SetNoidId do
         instance_double(
           'Hyrax::ChangeSet',
           emory_persistent_id: '999abc123-cor',
-          id: Valkyrie::ID.new('abc123')
+          id:                  Valkyrie::ID.new('abc123')
         )
       end
 

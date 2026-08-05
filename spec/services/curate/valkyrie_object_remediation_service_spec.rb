@@ -19,11 +19,11 @@ RSpec.describe Curate::ValkyrieObjectRemediationService do
       let(:resource) do
         instance_double(
           'Valkyrie::Resource',
-          id: 'abc-123',
-          alternate_ids: [Valkyrie::ID.new('508hdr7srt-cor')],
-          emory_persistent_id: nil,
+          id:                     'abc-123',
+          alternate_ids:          [Valkyrie::ID.new('508hdr7srt-cor')],
+          emory_persistent_id:    nil,
           'emory_persistent_id=': nil,
-          'alternate_ids=': nil
+          'alternate_ids=':       nil
         )
       end
       let(:saved_resource) { resource }
@@ -51,8 +51,8 @@ RSpec.describe Curate::ValkyrieObjectRemediationService do
       let(:resource) do
         instance_double(
           'Valkyrie::Resource',
-          id: 'abc-123',
-          alternate_ids: [Valkyrie::ID.new('508hdr7srt-cor')],
+          id:                  'abc-123',
+          alternate_ids:       [Valkyrie::ID.new('508hdr7srt-cor')],
           emory_persistent_id: 'existing-cor'
         )
       end
