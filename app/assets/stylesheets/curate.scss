@@ -110,7 +110,6 @@ div.row.hyc-body {
   }
 }
 
-
 // View Work
 .view-wrapper {
   max-width: 1200px;
@@ -156,6 +155,21 @@ dl.file-show-details {
   }
 }
 
+.preservation-events-table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  table {
+    word-break: break-word;
+    padding: 0;
+    margin-bottom: 0;
+    border: none;
+    > thead th {
+      word-break: initial;
+    }
+  }
+}
+
 // Set bottom padding to 0px for user activity table
 // [Hyrax-override-hyrax-v5.2.0]
 .activity-display {
@@ -166,6 +180,9 @@ dl.file-show-details {
 
   .activity-date {
     padding-right: 130px;
+  }
+  table td {
+    word-break: normal;
   }
 }
 
@@ -179,8 +196,3 @@ dl.file-show-details {
 .missing {
   color: grey;
 }
-
-
-
-
-
