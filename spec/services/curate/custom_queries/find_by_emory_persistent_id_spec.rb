@@ -6,7 +6,7 @@ RSpec.describe Curate::CustomQueries::FindByEmoryPersistentId do
   let(:connection) { instance_double(RSolr::Client) }
   let(:query_service) { instance_double('QueryService', find_by: resource) }
   let(:handler) { described_class.new(query_service:) }
-  let(:resource) { instance_double('Valkyrie::Resource', id: 'abc-123') }
+  let(:resource) { double('Valkyrie::Resource', id: 'abc-123') }
 
   before do
     allow(Hyrax).to receive_message_chain(:index_adapter, :connection).and_return(connection)
