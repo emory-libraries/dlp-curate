@@ -17,7 +17,7 @@ RSpec.describe Curate::ValkyrieObjectRemediationService do
 
     context 'when objects with alternate_ids exist' do
       let(:resource) do
-        instance_double(
+        double(
           'Valkyrie::Resource',
           id:                     'abc-123',
           alternate_ids:          [Valkyrie::ID.new('508hdr7srt-cor')],
@@ -49,7 +49,7 @@ RSpec.describe Curate::ValkyrieObjectRemediationService do
 
     context 'when emory_persistent_id is already set' do
       let(:resource) do
-        instance_double(
+        double(
           'Valkyrie::Resource',
           id:                  'abc-123',
           alternate_ids:       [Valkyrie::ID.new('508hdr7srt-cor')],
