@@ -14,6 +14,21 @@ RSpec.describe CurateGenericWorkResource do
     end
   end
 
+  describe 'ValkyrieLazyMigration', if: Hyrax.config.valkyrie_transition? do
+    it 'sets to_rdf_representation to the AF model name for Solr compatibility' do
+      expect(described_class.to_rdf_representation).to eq 'CurateGenericWork'
+    end
+
+    it 'matches the registered curation concern type' do
+      expect(Hyrax.config.registered_curation_concern_types).to include('CurateGenericWork')
+      expect(described_class.to_rdf_representation).to eq 'CurateGenericWork'
+    end
+
+    it 'knows its migration source' do
+      expect(described_class.migrating_from).to eq CurateGenericWork
+    end
+  end
+
   describe 'schemas' do
     it 'includes emory_basic_metadata schema' do
       expect(described_class.fields).to include(:holding_repository, :emory_ark, :institution)
