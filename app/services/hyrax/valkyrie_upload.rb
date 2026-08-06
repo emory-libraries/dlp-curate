@@ -21,10 +21,10 @@ class Hyrax::ValkyrieUpload
     use: Hyrax::FileMetadata::Use::ORIGINAL_FILE,
     user: nil,
     mime_type: nil,
-    skip_derivatives: false
+    skip_derivatives: false,
+    identifier_endpath: 'original'
   )
-    new(storage_adapter:)
-      .upload(filename:, file_set:, io:, use:, user:, mime_type:, skip_derivatives:)
+    new(storage_adapter:).upload(filename:, file_set:, io:, use:, user:, mime_type:, skip_derivatives:, identifier_endpath:)
   end
 
   ##
@@ -39,24 +39,15 @@ class Hyrax::ValkyrieUpload
     @file_set_file_service = file_set_file_service
   end
 
-  def upload(filename:, file_set:, io:, use: Hyrax::FileMetadata::Use::ORIGINAL_FILE, user: nil, mime_type: nil, skip_derivatives: false) # rubocop:disable Metrics/AbcSize
+  def upload(filename:, file_set:, io:, use: Hyrax::FileMetadata::Use::ORIGINAL_FILE, user: nil, mime_type: nil, skip_derivatives: false, identifier_endpath: 'original') # rubocop:disable Metrics/AbcSize
     return version_upload(file_set:, io:, user:) if use == Hyrax::FileMetadata::Use::ORIGINAL_FILE && file_set.original_file_id && storage_adapter.supports?(:versions)
-    streamfile = storage_adapter.upload(file: io, original_filename: filename, resource: file_set, content_type: mime_type)
+    streamfile = storage_adapter.upload(file: io, original_filename: filename, resource: file_set, content_type: mime_type, identifier_endpath:)
     file_metadata = Hyrax::FileMetadata(streamfile)
     file_metadata.file_set_id = file_set.id
     file_metadata.pcdm_use = Array(use)
     file_metadata.recorded_size = Array(io.size)
     file_metadata.mime_type = mime_type if mime_type
     file_metadata.original_filename = File.basename(filename).to_s || File.basename(io)
-
-    if use == Hyrax::FileMetadata::Use::ORIGINAL_FILE
-      # Set file set label.
-      reset_title = file_set.title.first == file_set.label
-      # set title to label if that's how it was before this characterization
-      file_set.title = file_metadata.original_filename if reset_title
-      # always set the label to the original_name
-      file_set.label = file_metadata.original_filename
-    end
 
     saved_metadata = Hyrax.persister.save(resource: file_metadata)
     saved_metadata.original_filename = filename if saved_metadata.original_filename.blank?

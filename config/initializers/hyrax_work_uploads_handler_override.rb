@@ -40,7 +40,7 @@ if Hyrax.config.valkyrie_transition?
         end
 
         def file_label(file)
-          file.uploader&.filename.presence || file.uploader&.file&.original_filename
+          file&.file.presence || file.uploader&.filename.presence || file.uploader&.file&.original_filename
         end
 
         def record_file_submission_event(file_set, event_start, file)
