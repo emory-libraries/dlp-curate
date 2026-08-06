@@ -30,8 +30,15 @@ module Hyrax
         # return even if there are no 'fresh' ones on record. Otherwise, we'd
         # have to sometimes return a 'in progress' status for some bytestreams,
         # which is a possible future enhancement.
+        #
+        # Pass the file_set_id string rather than a found AF ::FileSet so the
+        # service can resolve it against either AF or Valkyrie (FileSetResource)
+        # once the service gains a Valkyrie branch. Today the service still
+        # loads via ::FileSet.find, which Wings will projection-translate for
+        # Valkyrie-born file sets. Post-Wings this will require the service
+        # itself to be Valkyrie-aware (see FileSetFixityCheckService#file_set).
         @fixity_check_service ||=
-          FileSetFixityCheckService.new(::FileSet.find(params[:file_set_id]), async_jobs: false, initiating_user: current_user.uid)
+          FileSetFixityCheckService.new(params[:file_set_id], async_jobs: false, initiating_user: current_user.uid)
       end
   end
 end

@@ -12,18 +12,32 @@ module NewspaperWorks
     #
     # @param options [Hash] options hash provided by Blacklight
     # @return [String] snippets HTML to be rendered
-    # rubocop:disable Rails/OutputSafety
     def render_ocr_snippets(options = {})
       snippets = options[:value]
-      snippets_content = [tag.div("... #{snippets.first} ...".html_safe,
-                                      class: 'ocr_snippet first_snippet')]
+      snippets_content = [tag.div(safe_join(['... ', snippets.first, ' ...']), class: 'ocr_snippet first_snippet')]
       if snippets.length > 1
         snippets_content << render(partial: 'catalog/snippets_more',
-                                   locals:  { snippets: snippets.drop(1),
-                                              options: })
+                                   locals:  { snippets: snippets.drop(1), options: })
       end
-      snippets_content.join("\n").html_safe
+
+      full_text_no_emphasis_text(snippets) ? multiple_match_text(id: options[:document][:id]) : safe_join(snippets_content)
     end
-    # rubocop:enable Rails/OutputSafety
+
+    private
+
+      def full_text_no_emphasis_text(snippets_array)
+        snippets_array.length == 1 && !snippets_array.first.include?('<em>')
+      end
+
+      def multiple_match_text(id:)
+        tag.div(
+          safe_join(['Multiple matches found. Please ', work_show_page_link(id:), ' for more search options.']),
+          class: 'ocr_snippet first_snippet'
+        )
+      end
+
+      def work_show_page_link(id:)
+        link_to('view the work file', hyrax_curate_generic_work_path(id))
+      end
   end
 end
