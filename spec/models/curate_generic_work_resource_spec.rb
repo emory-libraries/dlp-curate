@@ -14,7 +14,7 @@ RSpec.describe CurateGenericWorkResource do
     end
   end
 
-  describe 'ValkyrieLazyMigration' do
+  describe 'ValkyrieLazyMigration', if: Hyrax.config.valkyrie_transition? do
     it 'sets to_rdf_representation to the AF model name for Solr compatibility' do
       expect(described_class.to_rdf_representation).to eq 'CurateGenericWork'
     end

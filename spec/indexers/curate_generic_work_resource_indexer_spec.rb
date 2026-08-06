@@ -28,7 +28,7 @@ RSpec.describe CurateGenericWorkResourceIndexer do
       expect(solr_document).to be_a(Hash)
     end
 
-    it 'indexes has_model_ssim as the AF model name for search compatibility' do
+    it 'indexes has_model_ssim as the AF model name for search compatibility', if: Hyrax.config.valkyrie_transition? do
       expect(solr_document['has_model_ssim']).to eq 'CurateGenericWork'
     end
   end
