@@ -13,7 +13,7 @@ RSpec.describe CurateValkyrieIngestJob do
   let(:extracted_text_uploader) { instance_double('CarrierWave::Uploader::Base') }
   let(:transcript_uploader) { instance_double('CarrierWave::Uploader::Base') }
 
-  let(:carrier_wave_file) { instance_double('CarrierWave::SanitizedFile', original_filename: 'test.tif', to_file: file_io) }
+  let(:carrier_wave_file) { instance_double('CarrierWave::SanitizedFile', original_filename: 'test.tif', to_file: file_io, content_type: 'image/tiff') }
   let(:file_io) { instance_double('File') }
 
   let(:uploaded_file) do
@@ -45,12 +45,14 @@ RSpec.describe CurateValkyrieIngestJob do
 
       it 'uploads the preservation master with ORIGINAL_FILE use' do
         expect(Hyrax::ValkyrieUpload).to receive(:file).with(
-          io:               file_io,
-          filename:         'test.tif',
+          io:                 file_io,
+          filename:           'test.tif',
           file_set:,
-          use:              Hyrax::FileMetadata::Use::ORIGINAL_FILE,
+          use:                Hyrax::FileMetadata::Use::ORIGINAL_FILE,
           user:,
-          skip_derivatives: false
+          skip_derivatives:   false,
+          mime_type:          'image/tiff',
+          identifier_endpath: 'original'
         )
 
         job.perform(uploaded_file)
@@ -58,7 +60,7 @@ RSpec.describe CurateValkyrieIngestJob do
     end
 
     context 'with service_file present (preferred for derivatives)' do
-      let(:service_carrier) { instance_double('CarrierWave::SanitizedFile', original_filename: 'service.jpg', to_file: file_io) }
+      let(:service_carrier) { instance_double('CarrierWave::SanitizedFile', original_filename: 'service.jpg', to_file: file_io, content_type: 'image/jpeg') }
       let(:uploaded_file) do
         instance_double(
           'Hyrax::UploadedFile',
@@ -84,8 +86,9 @@ RSpec.describe CurateValkyrieIngestJob do
       it 'uploads preservation_master with skip_derivatives: true' do
         expect(Hyrax::ValkyrieUpload).to receive(:file).with(
           hash_including(
-            use:              Hyrax::FileMetadata::Use::ORIGINAL_FILE,
-            skip_derivatives: true
+            use:                Hyrax::FileMetadata::Use::ORIGINAL_FILE,
+            skip_derivatives:   true,
+            identifier_endpath: 'original'
           )
         )
         allow(Hyrax::ValkyrieUpload).to receive(:file).with(
@@ -101,8 +104,9 @@ RSpec.describe CurateValkyrieIngestJob do
         )
         expect(Hyrax::ValkyrieUpload).to receive(:file).with(
           hash_including(
-            use:              Hyrax::FileMetadata::Use::SERVICE_FILE,
-            skip_derivatives: false
+            use:                Hyrax::FileMetadata::Use::SERVICE_FILE,
+            skip_derivatives:   false,
+            identifier_endpath: 'service'
           )
         )
 
@@ -111,7 +115,7 @@ RSpec.describe CurateValkyrieIngestJob do
     end
 
     context 'with intermediate_file present (preferred when no service_file)' do
-      let(:intermediate_carrier) { instance_double('CarrierWave::SanitizedFile', original_filename: 'intermediate.tif', to_file: file_io) }
+      let(:intermediate_carrier) { instance_double('CarrierWave::SanitizedFile', original_filename: 'intermediate.tif', to_file: file_io, content_type: 'image/tiff') }
       let(:uploaded_file) do
         instance_double(
           'Hyrax::UploadedFile',
@@ -137,8 +141,9 @@ RSpec.describe CurateValkyrieIngestJob do
       it 'uploads preservation_master with skip_derivatives: true' do
         expect(Hyrax::ValkyrieUpload).to receive(:file).with(
           hash_including(
-            use:              Hyrax::FileMetadata::Use::ORIGINAL_FILE,
-            skip_derivatives: true
+            use:                Hyrax::FileMetadata::Use::ORIGINAL_FILE,
+            skip_derivatives:   true,
+            identifier_endpath: 'original'
           )
         )
         allow(Hyrax::ValkyrieUpload).to receive(:file).with(
@@ -154,8 +159,9 @@ RSpec.describe CurateValkyrieIngestJob do
         )
         expect(Hyrax::ValkyrieUpload).to receive(:file).with(
           hash_including(
-            use:              Hyrax::FileMetadata::Use::INTERMEDIATE_FILE,
-            skip_derivatives: false
+            use:                Hyrax::FileMetadata::Use::INTERMEDIATE_FILE,
+            skip_derivatives:   false,
+            identifier_endpath: 'intermediate'
           )
         )
 
@@ -164,7 +170,7 @@ RSpec.describe CurateValkyrieIngestJob do
     end
 
     context 'with all file types present' do
-      let(:all_carrier) { instance_double('CarrierWave::SanitizedFile', original_filename: 'file.dat', to_file: file_io) }
+      let(:all_carrier) { instance_double('CarrierWave::SanitizedFile', original_filename: 'file.dat', to_file: file_io, content_type: 'text/plain') }
       let(:uploaded_file) do
         instance_double(
           'Hyrax::UploadedFile',
