@@ -48,14 +48,28 @@ class CurateValkyrieIngestJob < Hyrax::ApplicationJob
     def upload_single_file(uploaded_file:, file_set:, uploader:, pcdm_use:, skip_derivatives:)
       carrier_wave_file = uploader.file
       file_io = carrier_wave_file.to_file
+      identifier_endpath = resolved_identifier_endpath(pcdm_use)
 
       ::Hyrax::ValkyrieUpload.file(
-        io:               file_io,
-        filename:         carrier_wave_file.original_filename,
+        io:                 file_io,
+        filename:           carrier_wave_file.original_filename,
         file_set:,
-        use:              pcdm_use,
-        user:             uploaded_file.user,
-        skip_derivatives:
+        use:                pcdm_use,
+        user:               uploaded_file.user,
+        skip_derivatives:,
+        mime_type:          carrier_wave_file.content_type,
+        identifier_endpath:
       )
+    end
+
+    def resolved_identifier_endpath(pcdm_use)
+      case pcdm_use
+      when Hyrax::FileMetadata::Use::EXTRACTED_TEXT
+        'extracted'
+      when Hyrax::FileMetadata::Use::TRANSCRIPT
+        'transcript'
+      else
+        pcdm_use.to_s.split('#').last.sub("File", "").downcase
+      end
     end
 end

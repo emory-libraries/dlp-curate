@@ -202,7 +202,7 @@ module Hyrax
         return revert_valkyrie if wants_to_revert_valkyrie?
         if params.key?(:file_set)
           if params[:file_set].key?(:files)
-            ValkyrieIngestJob.perform_later(uploaded_file_from_path)
+            CurateValkyrieIngestJob.perform_later(uploaded_file_from_path)
           else
             update_metadata
           end
@@ -210,7 +210,7 @@ module Hyrax
           uploaded_files = Array(Hyrax::UploadedFile.find(params[:files_files]))
           uploaded_files.first.file_set_uri = file_set.id.to_s
           uploaded_files.first.save
-          ValkyrieIngestJob.perform_later(uploaded_files.first)
+          CurateValkyrieIngestJob.perform_later(uploaded_files.first)
           update_metadata
         end
       end
