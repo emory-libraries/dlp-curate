@@ -16,7 +16,9 @@ class ReCharacterizeJob < Hyrax::ApplicationJob
     :alpha_channels
   ].freeze
 
-  def perform(file_set:, user: nil)
+  def perform(file_set_id:, user: nil)
+    file_set = load_file_set(file_set_id)
+
     case file_set
     when Hyrax::Resource
       perform_valkyrie(file_set, user)
@@ -26,6 +28,14 @@ class ReCharacterizeJob < Hyrax::ApplicationJob
   end
 
   private
+
+    def load_file_set(file_set_id)
+      if file_set_id.length == 36
+        Hyrax.query_service.find_by(id: file_set_id)
+      else
+        FileSet.find(file_set_id)
+      end
+    end
 
     def perform_af(file_set, user)
       repository_file = file_set.pulled_preservation_master_file

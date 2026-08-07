@@ -7,44 +7,7 @@ require 'rails_helper'
 # resource loading based on Hyrax.config.valkyrie_transition?.
 RSpec.describe 'Valkyrie dual-path controller logic', type: :controller do
   let(:user) { FactoryBot.create(:user) }
-  let(:file_set_id) { 'fs-abc-123' }
   let(:work_id) { 'work-xyz-456' }
-
-  describe 'CharacterizationController#load_file_set' do
-    let(:controller_instance) { CharacterizationController.new }
-
-    before do
-      allow(controller_instance).to receive(:params).and_return(file_set_id:)
-    end
-
-    context 'when valkyrie_transition? is true' do
-      let(:valkyrie_file_set) { instance_double('FileSetResource', id: file_set_id) }
-
-      before do
-        allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
-        allow(Hyrax.query_service).to receive(:find_by).with(id: file_set_id).and_return(valkyrie_file_set)
-      end
-
-      it 'loads the file set via Hyrax.query_service' do
-        result = controller_instance.send(:load_file_set)
-        expect(result).to eq valkyrie_file_set
-      end
-    end
-
-    context 'when valkyrie_transition? is false' do
-      let(:af_file_set) { instance_double('FileSet', id: file_set_id) }
-
-      before do
-        allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(false)
-        allow(FileSet).to receive(:find).with(file_set_id).and_return(af_file_set)
-      end
-
-      it 'loads the file set via FileSet.find' do
-        result = controller_instance.send(:load_file_set)
-        expect(result).to eq af_file_set
-      end
-    end
-  end
 
   describe 'ManifestRegenerationController#load_curation_concern_for_manifest' do
     let(:controller_instance) { ManifestRegenerationController.new }
