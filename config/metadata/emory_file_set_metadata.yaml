@@ -1,9 +1,5 @@
 # Custom metadata properties for the Valkyrie FileSet model.
 # These attributes match the ActiveFedora FileSet model's custom properties.
-#
-# The complex nested `preservation_event` from the AF model is replaced
-# with `preservation_event_ids` (string references), following the
-# SelfDeposit pattern.
 
 attributes:
   pcdm_use:

@@ -12,6 +12,8 @@ class CurateGenericWorkResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer(Cura
       # Temporary: index alternate_ids for remediation query discovery.
       # Remove after running migrate_alternate_ids_to_emory_persistent_id.
       solr_doc['alternate_ids_ssim'] = resource.alternate_ids.map(&:id) if resource.respond_to?(:alternate_ids) && resource.alternate_ids.present?
+      solr_doc['failed_preservation_events_ssim'] = [failed_preservation_events] if failed_preservation_events.present?
+      solr_doc['preservation_event_tesim'] = [resource.preservation_event.map(&:preservation_event_terms)] if resource.preservation_event.present?
 
       add_sort_and_date_fields(solr_doc)
       add_relationship_fields(solr_doc)
@@ -22,6 +24,12 @@ class CurateGenericWorkResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer(Cura
   end
 
   private
+
+    def failed_preservation_events
+      failures = resource.preservation_event.select { |event| event.outcome == ["Failure"] }
+      return if failures.blank?
+      failures.map(&:failed_event_json)
+    end
 
     def add_sort_and_date_fields(solr_doc)
       solr_doc['year_created_isim'] = year_created
