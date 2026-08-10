@@ -10,7 +10,7 @@ Rails.application.config.to_prepare do
     DESIRED_DIGESTS = {
       sha1:   Digest::SHA1.new,
       sha256: Digest::SHA256.new
-    }
+    }.freeze
 
     def self.run(metadata:, file:, user: ::User.system_user, **options)
       event_start = DateTime.current
