@@ -7,6 +7,10 @@
 Rails.application.config.to_prepare do
   Hyrax::Characterization::ValkyrieCharacterizationService.class_eval do
     include PreservationEvents
+    DESIRED_DIGESTS = {
+      sha1:   Digest::SHA1.new,
+      sha256: Digest::SHA256.new
+    }.freeze
 
     def self.run(metadata:, file:, user: ::User.system_user, **options)
       event_start = DateTime.current
@@ -36,7 +40,7 @@ Rails.application.config.to_prepare do
       return if value.blank?
 
       value.first.prepend("urn:md5:").to_s
-      value.push(digest_sha1, digest_sha256)
+      value.push(*desired_shas)
     end
 
     def detect_alpha_channels
@@ -79,18 +83,10 @@ Rails.application.config.to_prepare do
 
     private
 
-      def digest_sha256
-        sha = Digest::SHA256.new
-        source.rewind
-        sha << source.read(4096) until source.eof?
-        "urn:sha256:#{sha.hexdigest}"
-      end
-
-      def digest_sha1
-        sha = Digest::SHA1.new
-        source.rewind
-        sha << source.read(4096) until source.eof?
-        "urn:sha1:#{sha.hexdigest}"
+      def desired_shas
+        DESIRED_DIGESTS.map do |sha_string, digester|
+          "urn:#{sha_string}:#{source.checksum(digests: [digester]).first}"
+        end
       end
 
       def check_populated_metadata(saved_metadata)
@@ -126,7 +122,7 @@ Rails.application.config.to_prepare do
       end
 
       def digest_version_string
-        "#{fits_version_string}, #{ENV.fetch('FEDORA_VERSION', 'Fedora v4.7.6')}, Ruby Digest library"
+        "#{fits_version_string}, #{ENV.fetch('FEDORA_VERSION', 'Fedora v6.5.0')}, Ruby Digest library"
       end
   end
 end
