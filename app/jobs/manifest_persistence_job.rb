@@ -7,7 +7,9 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     Rails.logger.error(error.message)
   end
 
-  def perform(key:, solr_doc:, root_url:, manifest_metadata:, curation_concern:, sequence_rendering:)
+  def perform(key:, solr_doc:, root_url:, manifest_metadata:, sequence_rendering:,
+              curation_concern_id: nil, curation_concern: nil)
+    concern = curation_concern || load_curation_concern(curation_concern_id)
     manifest_json = ApplicationController.render(
       template: 'manifest/manifest',
       formats:  [:json],
@@ -16,7 +18,7 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
         root_url:,
         manifest_metadata:,
         manifest_rendering: sequence_rendering,
-        image_concerns:     image_concerns(curation_concern)
+        image_concerns:     image_concerns(concern)
       }
     )
 
@@ -25,6 +27,14 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
   end
 
   private
+
+    def load_curation_concern(id)
+      if Hyrax.config.valkyrie_transition?
+        Hyrax.query_service.find_by(id:)
+      else
+        CurateGenericWork.find(id)
+      end
+    end
 
     def persist_manifest(key:, manifest_json:)
       File.open(File.join(iiif_manifest_cache, key), 'w+') do |f|
