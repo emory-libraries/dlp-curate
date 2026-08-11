@@ -26,8 +26,8 @@ module Curate
       # @return [Hyrax::FileMetadata]
       def find_intermediate_file(file_set:)
         find_exactly_one_file_by_use(
-          file_set: file_set,
-          use: Hyrax::FileMetadata::Use::INTERMEDIATE_FILE
+          file_set:,
+          use:      Hyrax::FileMetadata::Use::INTERMEDIATE_FILE
         )
       end
 
@@ -36,24 +36,24 @@ module Curate
       # @return [Hyrax::FileMetadata]
       def find_service_file(file_set:)
         find_exactly_one_file_by_use(
-          file_set: file_set,
-          use: Hyrax::FileMetadata::Use::SERVICE_FILE
+          file_set:,
+          use:      Hyrax::FileMetadata::Use::SERVICE_FILE
         )
       end
 
       private
 
-      ##
-      # @api private
-      #
-      # @return [Hyrax::FileMetadata]
-      # @raise [Valkyrie::Persistence::ObjectNotFoundError]
-      def find_exactly_one_file_by_use(file_set:, use:)
-        files =
-          query_service.custom_queries.find_many_file_metadata_by_use(resource: file_set, use: use)
+        ##
+        # @api private
+        #
+        # @return [Hyrax::FileMetadata]
+        # @raise [Valkyrie::Persistence::ObjectNotFoundError]
+        def find_exactly_one_file_by_use(file_set:, use:)
+          files =
+            query_service.custom_queries.find_many_file_metadata_by_use(resource: file_set, use:)
 
-        files.first || raise(Valkyrie::Persistence::ObjectNotFoundError, "FileSet #{file_set.id}'s #{use.fragment} is missing.")
-      end
+          files.first || raise(Valkyrie::Persistence::ObjectNotFoundError, "FileSet #{file_set.id}'s #{use.fragment} is missing.")
+        end
     end
   end
 end

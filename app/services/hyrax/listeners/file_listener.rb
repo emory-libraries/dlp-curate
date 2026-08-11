@@ -18,15 +18,15 @@ module Hyrax
         Hyrax.index_adapter.save(resource: file_set)
         preferred_file_metadata = file_set.public_send(file_set.preferred_file)
 
-        if preferred_file_metadata.present?
-          case file_set
-          when ActiveFedora::Base # ActiveFedora
-            CreateDerivativesJob
-              .perform_later(file_set, preferred_file_metadata.id.to_s, event[:path_hint]) # Emory Alteration
-          else
-            ValkyrieCreateDerivativesJob
-              .perform_later(file_set.id.to_s, preferred_file_metadata.id.to_s) # Emory Alteration
-          end
+        return if preferred_file_metadata.blank?
+
+        case file_set
+        when ActiveFedora::Base # ActiveFedora
+          CreateDerivativesJob
+            .perform_later(file_set, preferred_file_metadata.id.to_s, event[:path_hint]) # Emory Alteration
+        else
+          ValkyrieCreateDerivativesJob
+            .perform_later(file_set.id.to_s, preferred_file_metadata.id.to_s) # Emory Alteration
         end
       end
 
