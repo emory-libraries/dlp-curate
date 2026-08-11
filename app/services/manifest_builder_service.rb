@@ -42,7 +42,7 @@ class ManifestBuilderService
                                          solr_doc:,
                                          root_url:           @presenter.manifest_url,
                                          manifest_metadata:  @presenter.manifest_metadata,
-                                         curation_concern:   @curation_concern,
+                                         curation_concern_id: @curation_concern.id.to_s,
                                          sequence_rendering:)
   end
 
