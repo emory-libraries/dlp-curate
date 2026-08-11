@@ -45,19 +45,11 @@ class ReCharacterizeJob < Hyrax::ApplicationJob
     end
 
     def perform_valkyrie(file_set, _user)
-      file_metadata = original_file_metadata(file_set)
+      file_metadata = file_set.preservation_master_file
       return unless file_metadata
 
       empty_valkyrie_characterization(file_metadata)
       ValkyrieCharacterizationJob.perform_later(file_metadata.id.to_s)
-    end
-
-    # Finds the Hyrax::FileMetadata flagged as ORIGINAL_FILE (equivalent to
-    # AF's preservation_master_file) on the FileSetResource.
-    def original_file_metadata(file_set)
-      Hyrax.custom_queries
-           .find_many_file_metadata_by_use(resource: file_set, use: Hyrax::FileMetadata::Use::ORIGINAL_FILE)
-           .first
     end
 
     # Valkyrie counterpart to ReCharacterizationService.empty_out_characterization.

@@ -57,7 +57,7 @@ class Hyrax::ValkyrieUpload
                          user:)
 
     Hyrax.publisher.publish("file.uploaded", metadata: saved_metadata, skip_derivatives:)
-    Hyrax.publisher.publish('file.metadata.updated', metadata: saved_metadata, user:, skip_derivatices: skip_derivatives)
+    Hyrax.publisher.publish('file.metadata.updated', metadata: saved_metadata, user:, skip_derivatives:)
 
     saved_metadata
   end
