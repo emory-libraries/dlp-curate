@@ -40,8 +40,8 @@ class ManifestBuilderService
     key = solr_doc[:manifest_cache_key_tesim]&.first.to_s + '_' + solr_doc[:id]
     ManifestPersistenceJob.perform_later(key:,
                                          solr_doc:,
-                                         root_url:           @presenter.manifest_url,
-                                         manifest_metadata:  @presenter.manifest_metadata,
+                                         root_url:            @presenter.manifest_url,
+                                         manifest_metadata:   @presenter.manifest_metadata,
                                          curation_concern_id: @curation_concern.id.to_s,
                                          sequence_rendering:)
   end

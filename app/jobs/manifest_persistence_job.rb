@@ -30,7 +30,7 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
 
     def load_curation_concern(id)
       if Hyrax.config.valkyrie_transition?
-        Hyrax.query_service.find_by(id: id)
+        Hyrax.query_service.find_by(id:)
       else
         CurateGenericWork.find(id)
       end
