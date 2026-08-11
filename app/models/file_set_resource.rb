@@ -8,4 +8,33 @@ class FileSetResource < Hyrax::FileSet
   include PreservationEvents
 
   attribute :preservation_event, Valkyrie::Types::Set.of(::PreservationEventResource)
+
+  # @return [Hyrax::FileMetadata, nil]
+  def preservation_master_file
+    original_file
+  end
+
+  # @return [Hyrax::FileMetadata, nil]
+  def intermediate_file
+    Hyrax.custom_queries.find_intermediate_file(file_set: self)
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    nil
+  end
+
+  # @return [Hyrax::FileMetadata, nil]
+  def service_file
+    Hyrax.custom_queries.find_service_file(file_set: self)
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    nil
+  end
+
+  def preferred_file
+    if service_file.present?
+      :service_file
+    elsif intermediate_file.present?
+      :intermediate_file
+    else
+      :preservation_master_file
+    end
+  end
 end

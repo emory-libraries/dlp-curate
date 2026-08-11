@@ -59,7 +59,8 @@ if Hyrax.config.valkyrie_transition?
       Curate::CustomQueries::FindBySourceIdentifier,
       Curate::CustomQueries::FindByEmoryPersistentId,
       Curate::CustomQueries::FindAllObjectsWithAlternateIdsPresent,
-      Curate::CustomQueries::FindParentWorks
+      Curate::CustomQueries::FindParentWorks,
+      Curate::CustomQueries::FindFiles
     ].each do |handler|
       Hyrax.query_service.services[0].custom_queries.register_query_handler(handler)
     end
