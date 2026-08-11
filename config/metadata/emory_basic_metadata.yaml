@@ -72,7 +72,7 @@ attributes:
     multiple: true
     ordered: true
     form:
-      required: true
+      required: false
       primary: true
     index_keys:
       - "creator_tesim"
