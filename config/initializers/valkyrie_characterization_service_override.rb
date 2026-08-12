@@ -13,24 +13,23 @@ Rails.application.config.to_prepare do
     }.freeze
 
     def self.run(metadata:, file:, user: ::User.system_user, **options)
-      if metadata.pcdm_use.first == Hyrax::FileMetadata::Use::ORIGINAL_FILE
-        event_start = DateTime.current
-        characterizer_obj = new(metadata:, file:, **options)
-        characterizer_obj.characterize
-        characterizer_obj.detect_alpha_channels
-        saved = Hyrax.persister.save(resource: metadata)
-        file_set = Hyrax.query_service.find_by(id: saved.file_set_id)
+      event_start = DateTime.current
+      characterizer_obj = new(metadata:, file:, **options)
+      characterizer_obj.characterize
+      characterizer_obj.detect_alpha_channels
+      saved = Hyrax.persister.save(resource: metadata)
+      file_set = Hyrax.query_service.find_by(id: saved.file_set_id)
 
-        characterizer_obj.process_characterization_event(saved, user, file_set, event_start)
-        characterizer_obj.process_digest_event(saved.file_set_id, user, event_start, saved.original_checksum)
-      end
-      freshly_pulled_file_set = Hyrax.query_service.find_by(id: metadata.file_set_id)
-      freshly_pulled_metadata = Hyrax.query_service.find_by(id: metadata.id)
-      Hyrax.publisher.publish('file.metadata.updated', metadata: freshly_pulled_metadata, user:)
+      characterizer_obj.process_characterization_event(saved, user, file_set, event_start)
+      characterizer_obj.process_digest_event(saved.file_set_id, user, event_start, saved.original_checksum)
+      Hyrax.publisher.publish('file.metadata.updated', metadata: saved, user:)
+
+      return unless file_set.preferred_file == :preservation_master_file
+
       Hyrax.publisher.publish('file.characterized',
-                              file_set:  freshly_pulled_file_set,
-                              file_id:   freshly_pulled_metadata.id.to_s,
-                              path_hint: freshly_pulled_metadata.file_identifier.to_s)
+                              file_set:,
+                              file_id:   saved.id.to_s,
+                              path_hint: saved.file_identifier.to_s)
     end
 
     def characterize

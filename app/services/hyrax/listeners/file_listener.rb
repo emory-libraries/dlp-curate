@@ -15,18 +15,14 @@ module Hyrax
       # @return [void]
       def on_file_characterized(event)
         file_set = event[:file_set]
-        Hyrax.index_adapter.save(resource: file_set)
-        preferred_file_metadata = file_set.public_send(file_set.preferred_file)
-
-        return if preferred_file_metadata.blank?
 
         case file_set
         when ActiveFedora::Base # ActiveFedora
           CreateDerivativesJob
-            .perform_later(file_set, preferred_file_metadata.id.to_s, event[:path_hint]) # Emory Alteration
+            .perform_later(file_set, event[:file_id], event[:path_hint])
         else
           ValkyrieCreateDerivativesJob
-            .perform_later(file_set.id.to_s, preferred_file_metadata.id.to_s) # Emory Alteration
+            .perform_later(file_set.id.to_s, event[:file_id])
         end
       end
 
@@ -35,9 +31,28 @@ module Hyrax
       # @param [Dry::Events::Event] event
       # @return [void]
       def on_file_uploaded(event)
-        # Run characterization for original file only and allow optional skip paramater
-        ValkyrieCharacterizationJob.perform_later(event[:metadata].id.to_s)
+        if event[:metadata]&.original_file?
+          # Run characterization for original file only and allow optional skip paramater
+          ValkyrieCharacterizationJob.perform_later(event[:metadata].id.to_s)
+        elsif curate_preferred_derivative_files.include?(event[:metadata].pcdm_use.first) # Emory Addition
+          file_set = Hyrax.query_service.find_by(id: event[:metadata].file_set_id)
+
+          case file_set
+          when ActiveFedora::Base # ActiveFedora
+            CreateDerivativesJob
+              .perform_later(file_set, event[:metadata].id.to_s, event[:metadata].file_identifier.to_s)
+          else
+            ValkyrieCreateDerivativesJob
+              .perform_later(file_set.id.to_s, event[:metadata].id.to_s)
+          end
+        end
       end
+
+      private
+
+        def curate_preferred_derivative_files
+          [Hyrax::FileMetadata::Use::INTERMEDIATE_FILE, Hyrax::FileMetadata::Use::SERVICE_FILE]
+        end
     end
   end
 end

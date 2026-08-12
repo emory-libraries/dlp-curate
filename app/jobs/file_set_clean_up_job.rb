@@ -57,23 +57,12 @@ class FileSetCleanUpJob < Hyrax::ApplicationJob
     end
 
     def process_valkyrie_fileset(file_set, csv)
-      fm = original_file_metadata(file_set)
+      fm = file_set.public_send(file_set.preferred_file)
       if fm.nil? || fm.mime_type.blank?
         csv << [file_set.id.to_s, "Fileset not characterized", "Not fixed"]
       else
-        solr_doc = SolrDocument.find(file_set.id.to_s)
-        if solr_doc.mime_type.nil?
-          reindex_valkyrie_file_set(file_set, csv)
-        elsif solr_doc.thumbnail_path.to_s.start_with?("/assets/default-")
-          regenerate_valkyrie_derivatives(file_set, fm, csv)
-        end
+        regenerate_valkyrie_derivatives(file_set, fm, csv)
       end
-    end
-
-    def original_file_metadata(file_set)
-      Hyrax.custom_queries
-           .find_many_file_metadata_by_use(resource: file_set, use: Hyrax::FileMetadata::Use::ORIGINAL_FILE)
-           .first
     end
 
     def reindex_af_file_set(file_set, csv)
@@ -96,10 +85,10 @@ class FileSetCleanUpJob < Hyrax::ApplicationJob
     end
 
     def regenerate_valkyrie_derivatives(file_set, file_metadata, csv)
-      Hyrax.publisher.publish('file.characterized',
-                              file_set:,
-                              file_id:   file_metadata.id.to_s,
-                              path_hint: file_metadata.file_identifier.to_s)
+      Hyrax.persister.delete(resource: file_set.thumbnail) if file_set.thumbnail.present?
+      ValkyrieCreateDerivativesJob
+        .perform_later(file_set.id.to_s, file_metadata.id.to_s)
+      reindex_valkyrie_file_set(file_set, csv)
       csv << [file_set.id.to_s, "Thumbnail_path mismatch in solr_doc", "Queued"]
     end
 end
