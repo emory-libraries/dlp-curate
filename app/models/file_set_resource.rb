@@ -6,6 +6,7 @@ class FileSetResource < Hyrax::FileSet
   PRESERVATION = 'Supplemental Preservation'
   include Hyrax::Schema(:emory_file_set_metadata)
   include PreservationEvents
+  Hyrax::ValkyrieLazyMigration.migrating(self, from: ::FileSet) if Hyrax.config.valkyrie_transition?
 
   attribute :preservation_event, Valkyrie::Types::Set.of(::PreservationEventResource)
 
