@@ -11,7 +11,8 @@ module Curate
     class FindFiles
       def self.queries
         [:find_intermediate_file,
-         :find_service_file]
+         :find_service_file,
+         :find_transcript_file]
       end
 
       def initialize(query_service:)
