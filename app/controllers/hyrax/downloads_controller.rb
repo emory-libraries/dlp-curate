@@ -40,7 +40,7 @@ module Hyrax
       end
 
       return show_valkyrie if Hyrax.config.use_valkyrie?
-
+    rescue
       show_active_fedora
     end
 
