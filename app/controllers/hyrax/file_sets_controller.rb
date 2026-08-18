@@ -22,7 +22,6 @@ module Hyrax
       blacklight_config.track_search_session = false
     end
     before_action :presenter
-    before_action :set_file_set, only: [:show]
 
     # provides the help_text view method
     helper PermissionsHelper
@@ -85,7 +84,7 @@ module Hyrax
     def destroy
       guard_for_workflow_restriction_on!(parent:)
 
-      actor.destroy
+      delete(file_set: curation_concern)
       redirect_to [main_app, parent],
                   notice: view_context.t('hyrax.file_sets.asset_deleted_flash.message')
     end
@@ -114,6 +113,21 @@ module Hyrax
     def citation; end
 
     private
+
+      ##
+      # @api public
+      def delete(file_set:)
+        case file_set
+        when Hyrax::Resource
+          transactions['file_set.destroy']
+            .with_step_args('file_set.remove_from_work' => { user: current_user },
+                            'file_set.delete' => { user: current_user })
+            .call(curation_concern)
+            .value!
+        else
+          actor.destroy
+        end
+      end
 
       ##
       # @api public
@@ -395,57 +409,30 @@ module Hyrax
         @presenter ||= show_presenter.new(::SolrDocument.find(params[:id]), current_ability, request)
       end
 
-      # Loads the file set (AF or Valkyrie) for the #show action.
-      # AF path additionally reindexes so updated file metadata is reflected.
-      def set_file_set
-        if Hyrax.config.valkyrie_transition?
-          @file_set = Hyrax.query_service.find_by(id: params[:id])
-        else
-          @file_set = ::FileSet.find(params[:id])
-          @file_set.update_index
-        end
-      end
-
       # Returns a hash keyed by dlp-curate file type name, with a value that
       # responds to #file_name (Array) and #create_date for the view partial.
       # Supports AF files (native interface) and Valkyrie FileMetadata
       # (wrapped to provide the same interface).
       def set_files
-        case @file_set
-        when Hyrax::Resource
-          set_files_valkyrie
-        else
-          {
-            'preservation_master_file': @file_set.pulled_preservation_master_file,
-            'service_file':             @file_set.service_file,
-            'intermediate_file':        @file_set.pulled_intermediate_file,
-            'extracted':                @file_set.pulled_extracted_file,
-            'transcript_file':          @file_set.pulled_transcript_file
-          }
-        end
+        active_fedora_file_set = ::FileSet.find(file_set.id.to_s)
+
+        ['preservation_master_file', 'service_file', 'intermediate_file', 'extracted', 'transcript_file'].map do |file_lookup|
+          file_metadata = lookup_file_metadata(file_lookup)
+          [file_lookup.to_s,
+           if file_metadata.present?
+             FileMetadataPresenter.new(file_metadata)
+           else
+             active_fedora_file_set.public_send("pulled_#{file_lookup}#{file_lookup == 'extracted' ? '_file' : ''}")
+           end]
+        end.to_h
       end
 
-      VALKYRIE_FILE_TYPE_TO_USE = {
-        'preservation_master_file': Hyrax::FileMetadata::Use::ORIGINAL_FILE,
-        'service_file':             Hyrax::FileMetadata::Use::SERVICE_FILE,
-        'intermediate_file':        Hyrax::FileMetadata::Use::INTERMEDIATE_FILE,
-        'extracted':                Hyrax::FileMetadata::Use::EXTRACTED_TEXT,
-        'transcript_file':          Hyrax::FileMetadata::Use::TRANSCRIPT
-      }.freeze
-
-      # @return [Hash{Symbol => FileMetadataPresenter,nil}] hash of file type
-      #   key to a wrapper that mimics the AF file interface for the show view.
-      def set_files_valkyrie
-        VALKYRIE_FILE_TYPE_TO_USE.transform_values do |pcdm_use|
-          file_metadata = find_file_metadata_by_use(pcdm_use)
-          file_metadata && FileMetadataPresenter.new(file_metadata)
-        end
-      end
-
-      def find_file_metadata_by_use(pcdm_use)
-        Hyrax.custom_queries
-             .find_many_file_metadata_by_use(resource: @file_set, use: pcdm_use)
-             .first
+      def lookup_file_metadata(file_lookup)
+        return Hyrax.custom_queries.find_original_file(file_set:) if file_lookup == 'preservation_master_file'
+        return Hyrax.custom_queries.find_extracted_text(file_set:) if file_lookup == 'extracted'
+        Hyrax.custom_queries.public_send("find_#{file_lookup}".to_sym, file_set:)
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        nil
       end
 
       # Adapts a Hyrax::FileMetadata resource to the interface expected by

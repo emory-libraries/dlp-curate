@@ -41,6 +41,16 @@ module Curate
         )
       end
 
+      # Find transcript file id of a given file set resource, and map to file metadata resource
+      # @param file_set [Hyrax::FileSet]
+      # @return [Hyrax::FileMetadata]
+      def find_transcript_file(file_set:)
+        find_exactly_one_file_by_use(
+          file_set:,
+          use:      Valkyrie::Vocab::PCDMUse.Transcript
+        )
+      end
+
       private
 
         ##
