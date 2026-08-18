@@ -414,14 +414,14 @@ module Hyrax
       # Supports AF files (native interface) and Valkyrie FileMetadata
       # (wrapped to provide the same interface).
       def set_files
-        active_fedora_file_set = ::FileSet.find(file_set.id.to_s)
+        active_fedora_file_set = lookup_active_fedora_file_set
 
         ['preservation_master_file', 'service_file', 'intermediate_file', 'extracted', 'transcript_file'].map do |file_lookup|
           file_metadata = lookup_file_metadata(file_lookup)
           [file_lookup.to_s,
            if file_metadata.present?
              FileMetadataPresenter.new(file_metadata)
-           else
+           elsif active_fedora_file_set.present?
              active_fedora_file_set.public_send("pulled_#{file_lookup}#{file_lookup == 'extracted' ? '_file' : ''}")
            end]
         end.to_h
@@ -432,6 +432,12 @@ module Hyrax
         return Hyrax.custom_queries.find_extracted_text(file_set:) if file_lookup == 'extracted'
         Hyrax.custom_queries.public_send("find_#{file_lookup}".to_sym, file_set:)
       rescue Valkyrie::Persistence::ObjectNotFoundError
+        nil
+      end
+
+      def lookup_active_fedora_file_set
+        ::FileSet.find(file_set.id.to_s)
+      rescue ActiveFedora::ObjectNotFoundError
         nil
       end
 
