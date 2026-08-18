@@ -313,6 +313,8 @@ Hyrax.config do |config|
   # mount point.
   #
   # config.whitelisted_ingest_dirs = []
+
+  config.visibility_map = Curate::VisibilityMap.instance
 end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
