@@ -431,7 +431,7 @@ module Hyrax
         return Hyrax.custom_queries.find_original_file(file_set:) if file_lookup == 'preservation_master_file'
         return Hyrax.custom_queries.find_extracted_text(file_set:) if file_lookup == 'extracted'
         Hyrax.custom_queries.public_send("find_#{file_lookup}".to_sym, file_set:)
-      rescue Valkyrie::Persistence::ObjectNotFoundError
+      rescue Valkyrie::Persistence::ObjectNotFoundError, NoMethodError
         nil
       end
 
