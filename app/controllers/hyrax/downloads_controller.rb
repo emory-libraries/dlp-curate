@@ -79,10 +79,19 @@ module Hyrax
         file_set = Hyrax.query_service.find_by(id: file_set_id)
 
         possible_file_metadatas = [
-          file_set.preservation_master_file, file_set.intermediate_file, file_set.transcript_file, file_set.extracted_text
+          call_custom_queries(file_set, 'find_original_file'),
+          call_custom_queries(file_set, 'find_intermediate_file'),
+          call_custom_queries(file_set, 'find_transcript_file'),
+          call_custom_queries(file_set, 'find_extracted_text')
         ].compact
 
         possible_file_metadatas.present?
+      end
+
+      def call_custom_queries(file_set, file_method)
+        Hyrax.custom_queries.public_send(file_method, file_set:)
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        nil
       end
   end
 end
