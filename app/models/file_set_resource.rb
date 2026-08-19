@@ -29,6 +29,13 @@ class FileSetResource < Hyrax::FileSet
     nil
   end
 
+  # @return [Hyrax::FileMetadata, nil]
+  def transcript_file
+    Hyrax.custom_queries.find_transcript_file(file_set: self)
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    nil
+  end
+
   def preferred_file
     if service_file.present?
       :service_file
