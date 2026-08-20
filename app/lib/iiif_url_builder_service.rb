@@ -67,10 +67,25 @@ class IiifUrlBuilderService
 
     def extract_valkyrie_sha1
       file_metadata = preferred_file_metadata
-      return nil unless file_metadata
+      if file_metadata
+        checksums = Array(file_metadata.original_checksum)
+        result = checksums.find { |c| c.to_s.start_with?('urn:sha1:') }
+        return result if result
+      end
 
-      checksums = Array(file_metadata.original_checksum)
-      checksums.find { |c| c.to_s.start_with?('urn:sha1:') }
+      extract_sha1_from_solr
+    end
+
+    # AF-origin file sets lack Valkyrie FileMetadata; fall back to the
+    # sha1_tesim field indexed by the AF FileSetIndexer.
+    # Order mirrors PREFERRED_USE_ORDER: service(2), intermediate(1), original(0).
+    def extract_sha1_from_solr
+      solr_doc = SolrDocument.find(file_set.id.to_s)
+      sha1_values = Array(solr_doc['sha1_tesim']).compact.reject(&:blank?)
+      [2, 1, 0].each { |i| return sha1_values[i] if sha1_values.length > i && sha1_values[i].present? }
+      sha1_values.first
+    rescue Blacklight::Exceptions::RecordNotFound
+      nil
     end
 
     def preferred_file_metadata

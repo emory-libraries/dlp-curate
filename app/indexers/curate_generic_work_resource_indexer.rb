@@ -151,7 +151,9 @@ class CurateGenericWorkResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer(Cura
     end
 
     def manifest_cache_components
-      file_sets = Hyrax.custom_queries.find_child_file_sets(resource:)
+      file_sets = Hyrax.query_service
+                       .find_members(resource:)
+                       .select(&:file_set?)
       [
         resource.title.first.to_s,
         file_sets.count.to_s,

@@ -1,15 +1,27 @@
 # frozen_string_literal: true
 
-# Valkyrie helper: get mime_type from the original file's FileMetadata
+# Valkyrie helper: get mime_type from the original file's FileMetadata,
+# falling back to Solr for AF-origin file sets that lack Valkyrie FileMetadata.
 find_original_file_metadata = lambda { |fs|
   Hyrax.custom_queries
        .find_many_file_metadata_by_use(resource: fs, use: Hyrax::FileMetadata::Use::ORIGINAL_FILE)
        .first
+rescue StandardError
+  nil
+}
+
+find_file_set_solr_doc = lambda { |fs|
+  SolrDocument.find(fs.id.to_s)
+rescue Blacklight::Exceptions::RecordNotFound
+  nil
 }
 
 find_file_set_mime_type = lambda { |fs|
   fm = find_original_file_metadata.call(fs)
-  fm&.mime_type.to_s
+  return fm.mime_type.to_s if fm&.mime_type.present?
+
+  solr_doc = find_file_set_solr_doc.call(fs)
+  solr_doc&.[]('mime_type_ssi').to_s
 }
 
 json.set! :@context, 'http://iiif.io/api/presentation/2/context.json'
@@ -63,8 +75,15 @@ json.sequences [''] do
       json.label Array(file_set.title).first
       if file_set.is_a?(Hyrax::Resource)
         original_fm = find_original_file_metadata.call(file_set)
-        json.width original_fm&.width&.first
-        json.height original_fm&.height&.first
+        canvas_width = original_fm&.width&.first
+        canvas_height = original_fm&.height&.first
+        unless canvas_width && canvas_height
+          fs_solr = find_file_set_solr_doc.call(file_set)
+          canvas_width ||= fs_solr&.[]('width_is')
+          canvas_height ||= fs_solr&.[]('height_is')
+        end
+        json.width canvas_width
+        json.height canvas_height
       else
         json.width file_set.original_file&.width
         json.height file_set.original_file&.height

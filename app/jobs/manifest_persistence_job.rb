@@ -71,8 +71,9 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     end
 
     def valkyrie_file_set_ids(curation_concern)
-      Hyrax.custom_queries
-           .find_child_file_sets(resource: curation_concern)
+      Hyrax.query_service
+           .find_members(resource: curation_concern)
+           .select(&:file_set?)
            .map { |fs| fs.id.to_s }
     end
 
