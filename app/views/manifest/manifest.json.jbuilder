@@ -2,27 +2,27 @@
 
 # Valkyrie helper: get mime_type from the original file's FileMetadata,
 # falling back to Solr for AF-origin file sets that lack Valkyrie FileMetadata.
-find_original_file_metadata = lambda { |fs|
+find_original_file_metadata = lambda do |fs|
   Hyrax.custom_queries
        .find_many_file_metadata_by_use(resource: fs, use: Hyrax::FileMetadata::Use::ORIGINAL_FILE)
        .first
 rescue StandardError
   nil
-}
+end
 
-find_file_set_solr_doc = lambda { |fs|
+find_file_set_solr_doc = lambda do |fs|
   SolrDocument.find(fs.id.to_s)
 rescue Blacklight::Exceptions::RecordNotFound
   nil
-}
+end
 
-find_file_set_mime_type = lambda { |fs|
+find_file_set_mime_type = lambda do |fs|
   fm = find_original_file_metadata.call(fs)
   return fm.mime_type.to_s if fm&.mime_type.present?
 
   solr_doc = find_file_set_solr_doc.call(fs)
   solr_doc&.[]('mime_type_ssi').to_s
-}
+end
 
 json.set! :@context, 'http://iiif.io/api/presentation/2/context.json'
 json.set! :@type, 'sc:Manifest'
