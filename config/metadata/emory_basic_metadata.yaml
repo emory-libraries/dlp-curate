@@ -45,6 +45,14 @@ attributes:
     index_keys:
       - "alternative_title_tesim"
     predicate: http://purl.org/dc/terms/alternative
+  alt_title:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "alt_title_tesim"
+    predicate: http://purl.org/dc/terms/alternative
   arkivo_checksum:
     type: string
     multiple: false
@@ -78,16 +86,15 @@ attributes:
       - "creator_tesim"
       - "creator_ssim"
     predicate: http://purl.org/dc/elements/1.1/creator
-  date_created:
-    type: date_time
-    multiple: true
+  deduplication_key:
+    type: string
+    multiple: false
     form:
-      required: true
-      primary: true
+      primary: false
       multiple: false
     index_keys:
-      - "date_created_tesim"
-    predicate: http://purl.org/dc/terms/created
+      - "deduplication_key_tesi"
+    predicate: http://metadata.emory.edu/vocab/predicates#deduplicationKey
   emory_ark:
     type: string
     multiple: true
@@ -150,6 +157,15 @@ attributes:
     form:
       primary: false
     predicate: http://schema.org/keywords
+  keywords:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "keywords_tesim"
+      - "keywords_sim"
+    predicate: http://schema.org/keywords
   label:
     type: string
     index_keys:
@@ -164,6 +180,24 @@ attributes:
     index_keys:
       - "license_tesi"
     predicate: http://purl.org/dc/terms/license
+  local_call_number:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "local_call_number_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#localCallNumber
+  primary_repository_ID:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "primary_repository_ID_tesi"
+    predicate: http://purl.org/dc/terms/identifier
   relative_path:
     type: string
     predicate: http://scholarsphere.psu.edu/ns#relativePath
@@ -180,6 +214,15 @@ attributes:
       - "resource_type_sim"
       - "resource_type_tesim"
     predicate: http://purl.org/dc/terms/type
+  rights_documentation:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "rights_documentation_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI
   rights_notes:
     type: string
     multiple: true
@@ -188,12 +231,30 @@ attributes:
     index_keys:
       - "rights_notes_tesim"
     predicate: http://purl.org/dc/elements/1.1/rights
+  sensitive_material:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "sensitive_material_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterial
   source:
     type: string
     multiple: true
     index_keys:
       - "source_tesim"
     predicate: http://purl.org/dc/terms/source
+  source_collection_id:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    index_keys:
+      - "source_collection_id_tesi"
+    predicate: http://metadata.emory.edu/vocab/cor-terms#sourceCollectionID
   staff_notes:
     type: string
     multiple: true
@@ -210,6 +271,41 @@ attributes:
       - "subject_tesim"
     form:
       primary: false
+    predicate: http://purl.org/dc/elements/1.1/subject
+  subject_geo:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_geo_tesim"
+      - "subject_geo_sim"
+    predicate: http://purl.org/dc/elements/1.1/coverage
+  subject_names:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_names_tesim"
+      - "subject_names_sim"
+    predicate: http://purl.org/dc/elements/1.1/subject#names
+  subject_time_periods:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_time_periods_tesim"
+    predicate: http://schema.org/temporalCoverage
+  subject_topics:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "subject_topics_tesim"
+      - "subject_topics_sim"
     predicate: http://purl.org/dc/elements/1.1/subject
   system_of_record_ID:
     type: string
