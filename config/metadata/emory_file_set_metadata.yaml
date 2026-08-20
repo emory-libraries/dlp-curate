@@ -2,26 +2,6 @@
 # These attributes match the ActiveFedora FileSet model's custom properties.
 
 attributes:
-  pcdm_use:
-    type: string
-    multiple: false
-    form:
-      primary: true
-      multiple: false
-    predicate: http://pcdm.org/use
-    index_keys:
-      - "pcdm_use_sim"
-      - "pcdm_use_tesi"
-  file_type:
-    type: string
-    multiple: false
-    form:
-      primary: false
-      multiple: false
-    predicate: http://purl.org/dc/elements/1.1/format
-    index_keys:
-      - "file_type_sim"
-      - "file_type_tesi"
   deduplication_key:
     type: string
     multiple: false
@@ -37,3 +17,23 @@ attributes:
     index_keys:
       - 'emory_persistent_id_ssi'
     predicate: http://metadata.emory.edu/vocab/cor-terms#emoryPersistentId
+  file_type:
+    type: string
+    multiple: false
+    form:
+      primary: false
+      multiple: false
+    predicate: http://purl.org/dc/elements/1.1/format
+    index_keys:
+      - "file_type_sim"
+      - "file_type_tesi"
+  pcdm_use:
+    type: string
+    multiple: false
+    form:
+      primary: true
+      multiple: false
+    predicate: http://pcdm.org/use
+    index_keys:
+      - "pcdm_use_sim"
+      - "pcdm_use_tesi"
