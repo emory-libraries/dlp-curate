@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# [Hyrax-override-hyrax-v5.2.0]- Removes the setting of `:alternate_ids` and opts for `:emory_persistent_id` instead.
+#   Also sets `:internal_resource` within the `.tap` since setting it anywhere else pulls in a trash generic class that causes errors.
 Rails.application.config.after_initialize do
   Wings::ModelTransformer.class_eval do
     ##
