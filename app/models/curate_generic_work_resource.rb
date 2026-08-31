@@ -8,5 +8,5 @@ class CurateGenericWorkResource < Hyrax::Work
   include PreservationEvents
   Hyrax::ValkyrieLazyMigration.migrating(self, from: ::CurateGenericWork) if Hyrax.config.valkyrie_transition?
 
-  attribute :preservation_event, Valkyrie::Types::Set.of(::PreservationEventResource)
+  attribute :preservation_event, SafePreservationEventType::TYPE
 end
