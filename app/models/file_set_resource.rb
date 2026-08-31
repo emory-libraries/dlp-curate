@@ -8,7 +8,7 @@ class FileSetResource < Hyrax::FileSet
   include PreservationEvents
   Hyrax::ValkyrieLazyMigration.migrating(self, from: FileSet) if Hyrax.config.valkyrie_transition?
 
-  attribute :preservation_event, Valkyrie::Types::Set.of(::PreservationEventResource)
+  attribute :preservation_event, SafePreservationEventType::TYPE
 
   # @return [Hyrax::FileMetadata, nil]
   def preservation_master_file
