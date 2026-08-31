@@ -5,12 +5,12 @@
 # lenient type silently drops non-convertible values (RDF::URI, etc.) so the
 # resource can still be loaded during the Valkyrie transition.
 module SafePreservationEventType
-  MEMBER = Valkyrie::Types::Any.constructor do |value|
-    case value
-    when ::PreservationEventResource then value
-    when Hash                        then ::PreservationEventResource.new(value)
+  TYPE = Valkyrie::Types::Set.constructor do |value|
+    Array.wrap(value).filter_map do |v|
+      case v
+      when ::PreservationEventResource then v
+      when Hash                        then ::PreservationEventResource.new(v)
+      end
     end
   end
-
-  TYPE = Valkyrie::Types::Set.of(MEMBER).constructor(&:compact)
 end
