@@ -86,6 +86,7 @@ Metrics/CyclomaticComplexity:
         - app/parsers/bulkrax/csv_parser.rb
         - config/initializers/bulkrax.rb
         - config/initializers/file_actor.rb
+        - config/initializers/wings_model_transformer_override.rb
 
 Metrics/MethodLength:
     Exclude:

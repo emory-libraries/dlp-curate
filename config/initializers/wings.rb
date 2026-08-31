@@ -74,26 +74,6 @@ if Hyrax.config.valkyrie_transition?
   end
 
   Rails.application.config.to_prepare do
-    AdminSetResource.class_eval do
-      attribute :internal_resource, Valkyrie::Types::Any.default("AdminSet"), internal: true
-    end
-
-    CollectionResource.class_eval do
-      attribute :internal_resource, Valkyrie::Types::Any.default("Collection"), internal: true
-    end
-
-    CurateGenericWorkResource.class_eval do
-      attribute :internal_resource, Valkyrie::Types::Any.default("CurateGenericWork"), internal: true
-    end
-
-    FileSetResource.class_eval do
-      attribute :internal_resource, Valkyrie::Types::Any.default("FileSet"), internal: true
-    end
-
-    PreservationEventResource.class_eval do
-      attribute :internal_resource, Valkyrie::Types::Any.default("PreservationEvent"), internal: true
-    end
-
     Valkyrie.config.resource_class_resolver = lambda do |resource_klass_name|
       # TODO: Can we use some kind of lookup.
       klass_name = resource_klass_name.gsub(/^Wings\((.+)\)$/, '\1')

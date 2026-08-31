@@ -117,8 +117,8 @@ attributes:
       required: true
       multiple: false
     index_keys:
-      - 'holding_repository_ssi'
-      - 'holding_repository_tesi'
+      - 'holding_repository_sim'
+      - 'holding_repository_tesim'
     predicate: http://id.loc.gov/vocabulary/relators/rps
   identifier:
     type: string
