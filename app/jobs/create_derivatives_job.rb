@@ -4,6 +4,8 @@
 class CreateDerivativesJob < Hyrax::ApplicationJob
   queue_as :derivatives
 
+  retry_on Ldp::HttpError, wait: :polynomially_longer, attempts: 5
+
   # @param [FileSet] file_set
   # @param [String] file_id identifier for a Hydra::PCDM::File
   # @param [String, NilClass] filepath the cached file within the Hyrax.config.working_path

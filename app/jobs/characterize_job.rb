@@ -22,6 +22,8 @@
 class CharacterizeJob < Hyrax::ApplicationJob
   queue_as Hyrax.config.ingest_queue_name
 
+  retry_on Ldp::HttpError, wait: :polynomially_longer, attempts: 5
+
   class_attribute :characterization_service
   self.characterization_service = Hydra::Works::CharacterizationService
 
