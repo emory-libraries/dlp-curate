@@ -55,8 +55,16 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
 
     def label_for_file_set(uploaded_file)
       uploaded_file.file.presence ||
-        uploaded_file.uploader&.filename.presence ||
+        first_available_filename(uploaded_file) ||
         'Untitled'
+    end
+
+    def first_available_filename(uploaded_file)
+      [:preservation_master_file, :intermediate_file, :service_file, :extracted_text, :transcript].each do |type|
+        uploader = uploaded_file.public_send(type)
+        return uploader.filename if uploader.present? && uploader.respond_to?(:filename)
+      end
+      nil
     end
 
     def add_file_set_to_work_ordered_members(work, actor)
