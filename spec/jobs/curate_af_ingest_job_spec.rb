@@ -32,10 +32,10 @@ RSpec.describe CurateAfIngestJob, :clean, perform_enqueued: [CurateAfIngestJob, 
         described_class.perform_now(file_set, uploaded_file, user, :preservation_master_file)
         file_set.reload
 
-        details = file_set.preservation_event.pluck(:event_details).flatten.compact
-        expect(details).to include(a_string_matching(/preservation_master.*submitted for preservation storage/))
-        expect(details).to include(a_string_matching(/intermediate.*submitted for preservation storage/))
-        expect(details).to include(a_string_matching(/transcript.*submitted for preservation storage/))
+        details = file_set.preservation_event.pluck(:event_details)
+        expect(details).to include(['0003_preservation_master.tif submitted for preservation storage'])
+        expect(details).to include(['0003_intermediate.jp2 submitted for preservation storage'])
+        expect(details).to include(['0003_transcript.txt submitted for preservation storage'])
       end
 
       it 'triggers characterization only for the preservation master' do
@@ -75,8 +75,7 @@ RSpec.describe CurateAfIngestJob, :clean, perform_enqueued: [CurateAfIngestJob, 
         described_class.perform_now(file_set, uploaded_file, user, :preservation_master_file)
         file_set.reload
 
-        outcomes = file_set.preservation_event.pluck(:outcome).flatten.compact
-        expect(outcomes).to include('Failure')
+        expect(file_set.preservation_event.pluck(:outcome)).to include(['Failure'])
       end
     end
   end
