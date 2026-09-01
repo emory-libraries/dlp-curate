@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe CurateAfIngestJob, :clean, perform_enqueued: [described_class, CreatePreservationEventJob] do
+RSpec.describe CurateAfIngestJob, :clean, perform_enqueued: [CurateAfIngestJob, CreatePreservationEventJob] do
   let(:user)     { FactoryBot.create(:user) }
   let(:file_set) { FactoryBot.create(:file_set) }
   let(:pmf)      { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
