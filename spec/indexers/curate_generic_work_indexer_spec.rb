@@ -333,7 +333,7 @@ RSpec.describe CurateGenericWorkIndexer do
     end
   end
 
-  describe 'when full text file set is available', :clean, perform_enqueued: [IngestJob] do
+  describe 'when full text file set is available', :clean, perform_enqueued: [CurateAfIngestJob] do
     let(:uploaded_file_1) do
       FactoryBot.build(:uploaded_file,
                        file:                     'Page 1',

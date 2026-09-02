@@ -7,17 +7,9 @@ module IngestAssistiveMethods
     actor.file_set.permissions_attributes = work_permissions
     actor.create_metadata(@uploaded_file.fileset_use, file_set_attrs)
     actor.fileset_name(@uploaded_file.file.to_s) if @uploaded_file.file.present?
-    create_content_for_actor(actor, @uploaded_file)
-    actor.file_set.save
+    actor.file_set.save!
+    CurateAfIngestJob.perform_later(actor.file_set, @uploaded_file, @user, @preferred)
     actor.attach_to_work(@work, file_set_attrs)
-  end
-
-  def create_content_for_actor(actor, uploaded_file)
-    actor.create_content(uploaded_file.preservation_master_file, @preferred, :preservation_master_file) if uploaded_file.preservation_master_file.present?
-    actor.create_content(uploaded_file.intermediate_file, @preferred, :intermediate_file) if uploaded_file.intermediate_file.present?
-    actor.create_content(uploaded_file.service_file, @preferred, :service_file) if uploaded_file.service_file.present?
-    actor.create_content(uploaded_file.extracted_text, @preferred, :extracted) if uploaded_file.extracted_text.present?
-    actor.create_content(uploaded_file.transcript, @preferred, :transcript_file) if uploaded_file.transcript.present?
   end
 
   def preferred_file(uploaded_files)

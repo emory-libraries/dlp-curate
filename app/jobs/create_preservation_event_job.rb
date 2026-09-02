@@ -3,6 +3,10 @@
 class CreatePreservationEventJob < Hyrax::ApplicationJob
   include PreservationEvents
 
+  retry_on(Ldp::HttpError, wait: :polynomially_longer, attempts: 5) do |job, error|
+    job.report_completely_failed_creation(job:, exception: error)
+  end
+
   retry_on(Exception) do |job, exception|
     job.report_completely_failed_creation(job:, exception:) if exception&.message&.present?
   end

@@ -34,7 +34,9 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       actor.fileset_name(uploaded_file.file.to_s) if uploaded_file.file.present?
       preferred = preferred_file(uploaded_file)
 
-      create_content_based_on_type(actor, uploaded_file, preferred)
+      ensure_file_set_persisted(actor, uploaded_file)
+      CurateAfIngestJob.perform_later(actor.file_set, uploaded_file, actor.user, preferred)
+
       # For Bulkrax importing purposes, the method below no longer actually attaches the
       #   file_set to the work. This is done in the next method after (add_file_set_to_work_ordered_members)
       #   so that the FileSetActor can still be used in both Bulkrax and UI importing.
@@ -44,12 +46,25 @@ class AttachFilesToWorkJob < Hyrax::ApplicationJob
       add_file_set_to_work_ordered_members(work, actor)
     end
 
-    def create_content_based_on_type(actor, uploaded_file, preferred)
-      actor.create_content(uploaded_file.preservation_master_file, preferred, :preservation_master_file) if uploaded_file.preservation_master_file.present?
-      actor.create_content(uploaded_file.intermediate_file, preferred, :intermediate_file) if uploaded_file.intermediate_file.present?
-      actor.create_content(uploaded_file.service_file, preferred, :service_file) if uploaded_file.service_file.present?
-      actor.create_content(uploaded_file.extracted_text, preferred, :extracted) if uploaded_file.extracted_text.present?
-      actor.create_content(uploaded_file.transcript, preferred, :transcript_file) if uploaded_file.transcript.present?
+    def ensure_file_set_persisted(actor, uploaded_file)
+      fs = actor.file_set
+      fs.label ||= label_for_file_set(uploaded_file)
+      fs.title = [fs.label] if fs.title.blank?
+      fs.save!
+    end
+
+    def label_for_file_set(uploaded_file)
+      uploaded_file.file.presence ||
+        first_available_filename(uploaded_file) ||
+        'Untitled'
+    end
+
+    def first_available_filename(uploaded_file)
+      [:preservation_master_file, :intermediate_file, :service_file, :extracted_text, :transcript].each do |type|
+        uploader = uploaded_file.public_send(type)
+        return uploader.filename if uploader.present? && uploader.respond_to?(:filename)
+      end
+      nil
     end
 
     def add_file_set_to_work_ordered_members(work, actor)
