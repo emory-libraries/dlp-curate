@@ -19,7 +19,7 @@ services:
         -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/mem
         -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
         -Dfcrepo.jms.enabled=false -Dfcrepo.metrics.enable=true
-      - JAVA_OPTS=-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
+      - ENCODED_SOLIDUS_HANDLING=passthrough
     volumes:
       - fcrepo6:/var/lib/fcrepo6-home
     ports:
