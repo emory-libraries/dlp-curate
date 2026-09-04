@@ -20,7 +20,7 @@ module Curate
       # @return [NilClass] when no record was found
       # @return [Valkyrie::Resource] when a record was found
       def find_by_model_and_property_value(model:, property:, value:)
-        @model = model
+        @model = Wings::ModelRegistry.lookup(model)
         @property = property
         @value = value
 
