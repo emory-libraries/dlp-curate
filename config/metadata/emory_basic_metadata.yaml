@@ -94,6 +94,7 @@ attributes:
       multiple: false
     index_keys:
       - "deduplication_key_tesi"
+      - "deduplication_key_tesim"
     predicate: http://metadata.emory.edu/vocab/predicates#deduplicationKey
   emory_ark:
     type: string

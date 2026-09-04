@@ -11,6 +11,7 @@ attributes:
     predicate: http://metadata.emory.edu/vocab/predicates#deduplicationKey
     index_keys:
       - "deduplication_key_tesi"
+      - "deduplication_key_tesim"
   emory_persistent_id:
     type: string
     multiple: false

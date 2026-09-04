@@ -322,7 +322,7 @@ module Bulkrax
             )
         end
 
-        pulled_work = pull_work_for_preservation_events
+        pulled_work = search_by_identifier
         create_preservation_event(pulled_work, work_update(event_start:, user_email: @user.email))
       end
 
@@ -414,16 +414,8 @@ module Bulkrax
         attrs
       end
 
-      def pull_work_for_preservation_events
-        Hyrax.query_service.custom_queries.find_by_model_and_property_value(
-          model:    CurateGenericWorkResource,
-          property: 'deduplication_key_tesim',
-          value:    attributes['deduplication_key']
-        )
-      end
-
       def process_work_creation_preservation_events(event_start)
-        pulled_work = pull_work_for_preservation_events
+        pulled_work = search_by_identifier
         return unless pulled_work
 
         create_preservation_event(pulled_work, work_creation(event_start:, user_email: @user.email))
