@@ -147,7 +147,7 @@ module Bulkrax
       build_files_metadata if Bulkrax.collection_model_class.present? && !hyrax_record.is_a?(Bulkrax.collection_model_class)
       build_relationship_metadata
       build_mapping_metadata
-      build_preservation_workflow_metadata if hyrax_record.is_a?(CurateGenericWork) # Emory addition
+      build_preservation_workflow_metadata if hyrax_record.is_a?(CurateGenericWork) || hyrax_record.is_a?(CurateGenericWorkResource)
       save!
 
       parsed_metadata

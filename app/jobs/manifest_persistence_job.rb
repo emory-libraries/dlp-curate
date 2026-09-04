@@ -7,7 +7,9 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     Rails.logger.error(error.message)
   end
 
-  def perform(key:, solr_doc:, root_url:, manifest_metadata:, curation_concern:, sequence_rendering:)
+  def perform(key:, solr_doc:, root_url:, manifest_metadata:, sequence_rendering:,
+              curation_concern_id: nil, curation_concern: nil)
+    concern = curation_concern || load_curation_concern(curation_concern_id)
     manifest_json = ApplicationController.render(
       template: 'manifest/manifest',
       formats:  [:json],
@@ -16,7 +18,7 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
         root_url:,
         manifest_metadata:,
         manifest_rendering: sequence_rendering,
-        image_concerns:     image_concerns(curation_concern)
+        image_concerns:     image_concerns(concern)
       }
     )
 
@@ -25,6 +27,14 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
   end
 
   private
+
+    def load_curation_concern(id)
+      if Hyrax.config.valkyrie_transition?
+        Hyrax.query_service.find_by(id:)
+      else
+        CurateGenericWork.find(id)
+      end
+    end
 
     def persist_manifest(key:, manifest_json:)
       File.open(File.join(iiif_manifest_cache, key), 'w+') do |f|
@@ -41,21 +51,33 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     end
 
     def image_concerns(curation_concern)
-      check_for_nil_in_ordered_members(curation_concern:)
-      file_set_ids = pulled_ordered_members(curation_concern:)&.compact
-      if file_set_ids.empty?
-        []
+      file_set_ids = file_set_member_ids(curation_concern).compact
+      file_set_ids.presence || []
+    end
+
+    def file_set_member_ids(curation_concern)
+      case curation_concern
+      when Hyrax::Resource
+        valkyrie_file_set_ids(curation_concern)
       else
-        file_set_ids
+        af_file_set_ids(curation_concern)
       end
     end
 
-    def pulled_ordered_members(curation_concern:)
-      curation_concern.ordered_member_ids - curation_concern.child_work_ids
+    def af_file_set_ids(curation_concern)
+      ids = curation_concern.ordered_member_ids
+      log_nil_members(curation_concern) if ids.any?(nil)
+      ids - curation_concern.child_work_ids
     end
 
-    def check_for_nil_in_ordered_members(curation_concern:)
-      return unless pulled_ordered_members(curation_concern:).any?(nil)
+    def valkyrie_file_set_ids(curation_concern)
+      Hyrax.query_service
+           .find_members(resource: curation_concern)
+           .select(&:file_set?)
+           .map { |fs| fs.id.to_s }
+    end
+
+    def log_nil_members(curation_concern)
       Rails.logger.error "The CurateGenericWork with the id #{curation_concern.id} contains nil objects in its ordered_members."
     end
 end

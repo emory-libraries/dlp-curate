@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 # rubocop:disable Metrics/BlockLength
 
-# Freyja setup adapted from hyku
+# Frigg setup adapted from hyku
 if Hyrax.config.valkyrie_transition?
   Rails.application.config.after_initialize do
     [ # List AF work models
-      GenericWork
+      CurateGenericWork
     ].each do |klass|
       Wings::ModelRegistry.register("#{klass}Resource".constantize, klass)
-      # we register itself so we can pre-translate the class in Freyja instead of having to translate in each query_service
+      # we register itself so we can pre-translate the class in Frigg instead of having to translate in each query_service
       Wings::ModelRegistry.register(klass, klass)
     end
     Wings::ModelRegistry.register(Collection, Collection)
@@ -17,23 +17,26 @@ if Hyrax.config.valkyrie_transition?
     Wings::ModelRegistry.register(AdminSetResource, AdminSet)
     Wings::ModelRegistry.register(FileSet, FileSet)
     Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
+    Wings::ModelRegistry.register(FileSetResource, FileSet)
     Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
     Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
+    Wings::ModelRegistry.register(PreservationEventResource, PreservationEvent)
+    Wings::ModelRegistry.register(PreservationEvent, PreservationEvent)
 
     Valkyrie::MetadataAdapter.register(
-      Freyja::MetadataAdapter.new,
-      :freyja
+      Frigg::MetadataAdapter.new(
+        connection:     ::Ldp::Client.new(Hyrax.config.fedora_connection_builder.call(
+          ENV.fetch('FEDORA6_URL') { "http://localhost:8985/fcrepo/rest" }
+        )),
+        base_path:      ENV.fetch('FEDORA_BASE_PATH', Rails.env).gsub(/^\/|\/$/, ''),
+        schema:         Valkyrie::Persistence::Fedora::PermissiveSchema.new(Hyrax::SimpleSchemaLoader.new.permissive_schema_for_valkrie_adapter),
+        fedora_version: 6
+      ), :frigg
     )
-    Valkyrie.config.metadata_adapter = :freyja
+    Valkyrie.config.metadata_adapter = :frigg
     Hyrax.config.query_index_from_valkyrie = true
     Hyrax.config.index_adapter = :solr_index
-
-    Valkyrie::StorageAdapter.register(
-      Valkyrie::Storage::VersionedDisk.new(base_path:  Rails.root.join("storage", "files"),
-                                           file_mover: FileUtils.method(:cp)),
-      :disk
-    )
-    Valkyrie.config.storage_adapter  = :disk
+    Valkyrie.config.storage_adapter  = :fedora_storage
     Valkyrie.config.indexing_adapter = :solr_index
 
     # load all the sql based custom queries
@@ -51,37 +54,32 @@ if Hyrax.config.valkyrie_transition?
       Hyrax::CustomQueries::FindManyByAlternateIds,
       Hyrax::CustomQueries::FindModelsByAccess,
       Hyrax::CustomQueries::FindCountBy,
-      Hyrax::CustomQueries::FindByDateRange
-      # Hyrax::CustomQueries::FindBySourceIdentifier  # from bulkrax
+      Hyrax::CustomQueries::FindByDateRange,
+      Hyrax::CustomQueries::Navigators::ParentWorkNavigator,
+      Curate::CustomQueries::FindBySourceIdentifier,
+      Curate::CustomQueries::FindByEmoryPersistentId,
+      Curate::CustomQueries::FindAllObjectsWithAlternateIdsPresent,
+      Curate::CustomQueries::FindParentWorks,
+      Curate::CustomQueries::FindFiles
     ].each do |handler|
       Hyrax.query_service.services[0].custom_queries.register_query_handler(handler)
     end
 
-    # [
-    #   Wings::CustomQueries::FindBySourceIdentifier
-    # ].each do |handler|
-    #   Hyrax.query_service.services[1].custom_queries.register_query_handler(handler)
-    # end
-
-    # Register each work resource pair
-    # Wings::ModelRegistry.register(GenericWorkResource, GenericWork)
+    # Register find_by_model_and_property_value with find_single_or_nil strategy so
+    # Frigg's composite dispatch returns nil (not ObjectNotFoundError) when not found.
+    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_model_and_property_value] = :find_single_or_nil
+    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_emory_persistent_id] = :find_single_or_nil
+    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_all_objects_with_alternate_ids_present] = :find_multiple
+    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_parent_works] = :find_multiple
   end
 
   Rails.application.config.to_prepare do
-    AdminSetResource.class_eval do
-      attribute :internal_resource, Valkyrie::Types::Any.default("AdminSet"), internal: true
-    end
-
-    CollectionResource.class_eval do
-      attribute :internal_resource, Valkyrie::Types::Any.default("Collection"), internal: true
-    end
-
     Valkyrie.config.resource_class_resolver = lambda do |resource_klass_name|
       # TODO: Can we use some kind of lookup.
       klass_name = resource_klass_name.gsub(/^Wings\((.+)\)$/, '\1')
       klass_name = klass_name.gsub(/Resource$/, '')
       if %w[
-        GenericWork
+        CurateGenericWork
       ].include?(klass_name)
         "#{klass_name}Resource".constantize
       elsif 'Collection' == klass_name
@@ -93,17 +91,29 @@ if Hyrax.config.valkyrie_transition?
       elsif 'Hydra::AccessControl' == klass_name
         Hyrax::AccessControl
       elsif 'FileSet' == klass_name
-        Hyrax::FileSet
+        FileSetResource
       elsif 'Hydra::AccessControls::Embargo' == klass_name
         Hyrax::Embargo
       elsif 'Hydra::AccessControls::Lease' == klass_name
         Hyrax::Lease
       elsif 'Hydra::PCDM::File' == klass_name
         Hyrax::FileMetadata
+      elsif 'PreservationEvent' == klass_name
+        PreservationEventResource
       else
         klass_name.constantize
       end
     end
   end
   # rubocop:enable Metrics/BlockLength
+end
+
+# Register app-specific custom queries on the Wings adapter so they are
+# available in both Frigg (valkyrie_transition) and Wings-only (test) modes.
+Rails.application.config.after_initialize do
+  [Curate::CustomQueries::FindParentWorks].each do |handler|
+    Hyrax.query_service.custom_queries.register_query_handler(handler)
+  rescue StandardError
+    nil
+  end
 end
