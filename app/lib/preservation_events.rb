@@ -21,6 +21,22 @@ module PreservationEvents
     matching_preservation_events.select { |mpe| mpe.event_details.first.include? sha1 }.present?
   end
 
+  def work_creation(event_start:, user_email:)
+    { 'type' => 'Validation', 'start' => event_start, 'end' => DateTime.current, 'outcome' => 'Success',
+      'details' => 'Submission package validated', 'software_version' => 'Curate v.1', 'user' => user_email }
+  end
+
+  def work_policy(event_start:, visibility:, user_email:)
+    { 'type' => 'Policy Assignment', 'start' => event_start, 'end' => DateTime.current, 'outcome' => 'Success',
+      'details' => "Visibility/access controls assigned: #{visibility}", 'software_version' => 'Curate v.1',
+      'user' => user_email }
+  end
+
+  def work_update(event_start:, user_email:)
+    { 'type' => 'Modification', 'start' => event_start, 'end' => DateTime.current, 'outcome' => 'Success',
+      'details' => 'Object updated', 'software_version' => 'Curate v.1', 'user' => user_email }
+  end
+
   private
 
     def active_fedora_create(object, event)
