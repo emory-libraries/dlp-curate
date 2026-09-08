@@ -24,6 +24,30 @@ find_file_set_mime_type = lambda do |fs|
   solr_doc&.[]('mime_type_ssi').to_s
 end
 
+# Loads a file set by ID with fallback: Valkyrie query service first (handles
+# both Fedora 6 and AF via Wings), then direct AF lookup as a last resort.
+find_file_set_by_id = lambda do |child_id|
+  if Hyrax.config.valkyrie_transition?
+    begin
+      Hyrax.query_service.find_by(id: child_id)
+    rescue Valkyrie::Persistence::ObjectNotFoundError, Ldp::HttpError, Ldp::BadRequest, Faraday::Error
+      FileSet.find(child_id)
+    end
+  else
+    FileSet.find(child_id)
+  end
+end
+
+# Determines visibility for a file set with a Solr-based fallback.
+# Wings-wrapped AF file sets can fail on the permission_manager path
+# during lazy migration, so we fall back to the indexed visibility.
+file_set_visibility = lambda do |fs|
+  fs.visibility
+rescue StandardError
+  solr_doc = find_file_set_solr_doc.call(fs)
+  solr_doc&.[]('visibility_ssi') || 'restricted'
+end
+
 json.set! :@context, 'http://iiif.io/api/presentation/2/context.json'
 json.set! :@type, 'sc:Manifest'
 json.set! :@id, @root_url
@@ -60,51 +84,54 @@ json.sequences [''] do
     json.label child['label']
   end
   json.canvases @image_concerns do |child_id|
-    file_set = if Hyrax.config.valkyrie_transition?
-                 Hyrax.query_service.find_by(id: child_id)
-               else
-                 FileSet.find(child_id)
-               end
-    mime_types = ['pdf', 'xml', 'text']
-    file_set_mime = file_set.is_a?(Hyrax::Resource) ? find_file_set_mime_type.call(file_set) : file_set.mime_type
-    unless mime_types.any? { |m| file_set_mime&.include?(m) } || file_set.visibility == 'restricted'
-      child_iiif_service = ManifestBuilderService.new(curation_concern: file_set)
-      canvas_uri = "#{@root_url}/canvas/#{child_id}"
-      json.set! :@id, canvas_uri
-      json.set! :@type, 'sc:Canvas'
-      json.label Array(file_set.title).first
-      if file_set.is_a?(Hyrax::Resource)
-        original_fm = find_original_file_metadata.call(file_set)
-        canvas_width = original_fm&.width&.first
-        canvas_height = original_fm&.height&.first
-        unless canvas_width && canvas_height
-          fs_solr = find_file_set_solr_doc.call(file_set)
-          canvas_width ||= fs_solr&.[]('width_is')
-          canvas_height ||= fs_solr&.[]('height_is')
-        end
-        json.width canvas_width
-        json.height canvas_height
-      else
-        json.width file_set.original_file&.width
-        json.height file_set.original_file&.height
-      end
-      json.images [file_set] do
-        json.set! :@type, 'oa:Annotation'
-        json.motivation 'sc:painting'
-        json.resource do
-          json.set! :@type, 'dctypes:Image'
-          json.set! :@id, child_iiif_service.iiif_url
-          json.width 640
-          json.height 480
-          json.service do
-            json.set! :@context, 'http://iiif.io/api/image/2/context.json'
-            info_url = child_iiif_service.info_url
-            json.set! :@id, info_url
-            json.profile 'http://iiif.io/api/image/2/level2.json'
+    begin
+      file_set = find_file_set_by_id.call(child_id)
+      mime_types = ['pdf', 'xml', 'text']
+      file_set_mime = file_set.is_a?(Hyrax::Resource) ? find_file_set_mime_type.call(file_set) : file_set.mime_type
+      visibility = file_set_visibility.call(file_set)
+
+      unless mime_types.any? { |m| file_set_mime&.include?(m) } || visibility == 'restricted'
+        child_iiif_service = ManifestBuilderService.new(curation_concern: file_set)
+        canvas_uri = "#{@root_url}/canvas/#{child_id}"
+        json.set! :@id, canvas_uri
+        json.set! :@type, 'sc:Canvas'
+        json.label Array(file_set.title).first
+        if file_set.is_a?(Hyrax::Resource)
+          original_fm = find_original_file_metadata.call(file_set)
+          canvas_width = original_fm&.width&.first
+          canvas_height = original_fm&.height&.first
+          unless canvas_width && canvas_height
+            fs_solr = find_file_set_solr_doc.call(file_set)
+            canvas_width ||= fs_solr&.[]('width_is')
+            canvas_height ||= fs_solr&.[]('height_is')
           end
+          json.width canvas_width
+          json.height canvas_height
+        else
+          json.width file_set.original_file&.width
+          json.height file_set.original_file&.height
         end
-        json.on canvas_uri
+        json.images [file_set] do
+          json.set! :@type, 'oa:Annotation'
+          json.motivation 'sc:painting'
+          json.resource do
+            json.set! :@type, 'dctypes:Image'
+            json.set! :@id, child_iiif_service.iiif_url
+            json.width 640
+            json.height 480
+            json.service do
+              json.set! :@context, 'http://iiif.io/api/image/2/context.json'
+              info_url = child_iiif_service.info_url
+              json.set! :@id, info_url
+              json.profile 'http://iiif.io/api/image/2/level2.json'
+            end
+          end
+          json.on canvas_uri
+        end
       end
+    rescue StandardError => e
+      Rails.logger.error("[ManifestTemplate] Skipping canvas for file_set #{child_id}: #{e.class} — #{e.message}")
+      next
     end
   end
 end

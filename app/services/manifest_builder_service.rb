@@ -121,6 +121,9 @@ class ManifestBuilderService
                   .find_many_file_metadata_by_use(resource: @curation_concern, use:)
                   .first
         return fm if fm
+      rescue StandardError => e
+        Rails.logger.debug { "[ManifestBuilderService] Error finding file metadata for use #{use}: #{e.class}" }
+        next
       end
       nil
     end
