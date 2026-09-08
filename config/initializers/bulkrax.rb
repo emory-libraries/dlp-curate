@@ -6,10 +6,6 @@ Bulkrax.setup do |config|
   #   { name: 'MODS - My Local MODS parser', class_name: 'Bulkrax::ModsXmlParser', partial: 'mods_fields' },
   # ]
 
-  # WorkType to use as the default if none is specified in the import
-  # Default is the first returned by Hyrax.config.curation_concerns, stringified
-  config.default_work_type = 'FileSetResource'
-
   # Factory Class to use when generating and saving objects
   config.object_factory = if Hyrax.config.valkyrie_transition?
                             Bulkrax::ValkyrieObjectFactory

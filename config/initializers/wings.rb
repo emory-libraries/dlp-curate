@@ -104,6 +104,10 @@ if Hyrax.config.valkyrie_transition?
         klass_name.constantize
       end
     end
+
+    Bulkrax.config.default_work_type = FileSetResource
+    Bulkrax.config.collection_model_class = CollectionResource
+    Bulkrax.config.file_model_class = FileSetResource
   end
   # rubocop:enable Metrics/BlockLength
 end
