@@ -82,10 +82,17 @@ module Hyrax
       end
 
       # Loads the curation concern for IIIF manifest rendering, supporting both
-      # AF and Valkyrie resources during lazy migration.
+      # AF and Valkyrie resources during lazy migration. Falls back to a direct
+      # AF lookup if the Valkyrie composite query service fails (e.g. Fedora 6
+      # unreachable but AF/Fedora 4 still available).
       def load_curation_concern_for_manifest
         if Hyrax.config.valkyrie_transition?
-          Hyrax.query_service.find_by(id: params[:id])
+          begin
+            Hyrax.query_service.find_by(id: params[:id])
+          rescue Valkyrie::Persistence::ObjectNotFoundError, Ldp::HttpError, Faraday::Error => e
+            Rails.logger.warn("[ManifestController] Valkyrie query failed for #{params[:id]}, falling back to AF: #{e.class}")
+            CurateGenericWork.find(params[:id])
+          end
         else
           _curation_concern_type.find(params[:id])
         end

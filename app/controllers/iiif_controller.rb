@@ -281,13 +281,16 @@ class IiifController < ApplicationController
   end
 
   # Loads the curation concern for IIIF manifest rendering. Supports both
-  # AF and Valkyrie works during lazy migration.
-  # @note NOTE: ManifestBuilderService itself is still AF-centric and must be
-  #   updated for full Valkyrie parity. This controller change only ensures
-  #   the right resource class is fetched when Wings is removed.
+  # AF and Valkyrie works during lazy migration. Falls back to a direct
+  # AF lookup if the Valkyrie composite query service fails.
   def load_curation_concern_for_manifest(id)
     if Hyrax.config.valkyrie_transition?
-      Hyrax.query_service.find_by(id:)
+      begin
+        Hyrax.query_service.find_by(id:)
+      rescue Valkyrie::Persistence::ObjectNotFoundError, Ldp::HttpError, Faraday::Error => e
+        Rails.logger.warn("[IiifController] Valkyrie query failed for #{id}, falling back to AF: #{e.class}")
+        CurateGenericWork.find(id)
+      end
     else
       CurateGenericWork.find(id)
     end

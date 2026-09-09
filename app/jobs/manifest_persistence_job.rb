@@ -3,8 +3,15 @@
 class ManifestPersistenceJob < Hyrax::ApplicationJob
   include IiifManifestCache
 
-  retry_on(ActionView::Template::Error) do |_job, error|
-    Rails.logger.error(error.message)
+  # Retry on template errors (e.g., Fedora connectivity, Wings wrapping
+  # failures) and LDP errors (e.g., Fedora 4/6 transient issues).
+  retry_on ActionView::Template::Error, Ldp::HttpError, Ldp::BadRequest,
+           wait: :polynomially_longer, attempts: 5 do |job, error|
+    Rails.logger.error(
+      "[ManifestPersistenceJob] Failed after all retries for " \
+      "curation_concern_id=#{job.arguments.first[:curation_concern_id]}: " \
+      "#{error.class} — #{error.message}"
+    )
   end
 
   def perform(key:, solr_doc:, root_url:, manifest_metadata:, sequence_rendering:,
@@ -30,7 +37,12 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
 
     def load_curation_concern(id)
       if Hyrax.config.valkyrie_transition?
-        Hyrax.query_service.find_by(id:)
+        begin
+          Hyrax.query_service.find_by(id:)
+        rescue Valkyrie::Persistence::ObjectNotFoundError, Ldp::HttpError, Faraday::Error => e
+          Rails.logger.warn("[ManifestPersistenceJob] Valkyrie query failed for #{id}, falling back to AF: #{e.class}")
+          CurateGenericWork.find(id)
+        end
       else
         CurateGenericWork.find(id)
       end
@@ -58,7 +70,12 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     def file_set_member_ids(curation_concern)
       case curation_concern
       when Hyrax::Resource
-        valkyrie_file_set_ids(curation_concern)
+        ids = valkyrie_file_set_ids(curation_concern)
+        return ids if ids.present?
+
+        # Valkyrie find_members returned empty — Wings may not have populated
+        # member_ids from AF ordered_members. Fall back to direct AF lookup.
+        af_file_set_ids_from_solr_or_af(curation_concern)
       else
         af_file_set_ids(curation_concern)
       end
@@ -75,6 +92,21 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
            .find_members(resource: curation_concern)
            .select(&:file_set?)
            .map { |fs| fs.id.to_s }
+    rescue StandardError => e
+      Rails.logger.warn("[ManifestPersistenceJob] find_members failed for #{curation_concern.id}: #{e.class}")
+      []
+    end
+
+    # Last-resort fallback: try loading the AF work directly to get
+    # ordered_member_ids when Valkyrie find_members returns empty.
+    def af_file_set_ids_from_solr_or_af(curation_concern)
+      af_work = CurateGenericWork.find(curation_concern.id.to_s)
+      ids = af_work.ordered_member_ids
+      log_nil_members(af_work) if ids.any?(nil)
+      ids.compact - af_work.child_work_ids
+    rescue ActiveFedora::ObjectNotFoundError, StandardError => e
+      Rails.logger.warn("[ManifestPersistenceJob] AF fallback for members also failed for #{curation_concern.id}: #{e.class}")
+      []
     end
 
     def log_nil_members(curation_concern)

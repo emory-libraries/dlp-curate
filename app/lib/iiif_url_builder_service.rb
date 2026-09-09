@@ -44,7 +44,8 @@ class IiifUrlBuilderService
       else
         FileSet.find(file_set_id_base)
       end
-    rescue Hyrax::ObjectNotFoundError, Valkyrie::Persistence::ObjectNotFoundError
+    rescue Hyrax::ObjectNotFoundError, Valkyrie::Persistence::ObjectNotFoundError,
+           Ldp::HttpError, Ldp::BadRequest, Faraday::Error
       nil
     end
 
@@ -94,6 +95,8 @@ class IiifUrlBuilderService
                   .find_many_file_metadata_by_use(resource: file_set, use:)
                   .first
         return fm if fm
+      rescue StandardError
+        next
       end
       nil
     end
