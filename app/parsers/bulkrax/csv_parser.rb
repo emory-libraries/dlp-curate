@@ -38,9 +38,9 @@ module Bulkrax
             model = r[model_mapping].nil? ? "" : r[model_mapping].strip
             # TODO: Eventually this should be refactored to us Hyrax.config.collection_model
             #       We aren't right now because so many Bulkrax users are in between Fedora and Valkyrie
-            if model.casecmp('collection').zero? || model.casecmp('collectionresource').zero?
+            if model.match?(/collection/i)
               @collections << r
-            elsif model.casecmp('fileset').zero?
+            elsif model.match?(/fileset/i)
               @file_sets << r
             else
               @works << r

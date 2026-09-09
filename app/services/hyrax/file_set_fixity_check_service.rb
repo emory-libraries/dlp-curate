@@ -29,14 +29,13 @@ module Hyrax
     attr_reader :id, :latest_version_only,
                 :async_jobs, :max_days_between_fixity_checks
 
-    # @param file_set [ActiveFedora::Base, String] file_set
+    # @param file_set [ActiveFedora::Base, Hyrax::Resource, String] file_set or its ID
     # @param async_jobs [Boolean] Run actual fixity checks in background. Default true.
-    # @param max_days_between_fixity_checks [int] if an exisitng fixity check is
+    # @param max_days_between_fixity_checks [int] if an existing fixity check is
     #   recorded within this window, no new one will be created. Default
-    #   {Hyrax::Configuration#max_days_between_fixity_checks}. Set to -1 to force
-    #   check.
-    # @param latest_version_only [Booelan]. Check only latest version instead of all
-    #   versions. Default false.
+    #   {Hyrax::Configuration#max_days_between_fixity_checks}. Set to -1 to force check.
+    # @param latest_version_only [Boolean]. Check only latest version instead of all
+    #   versions. Default false. (AF-only, ignored for Valkyrie)
     def initialize(file_set,
                    async_jobs: true,
                    max_days_between_fixity_checks: Hyrax.config.max_days_between_fixity_checks,
@@ -49,36 +48,69 @@ module Hyrax
       if file_set.is_a?(String)
         @id = file_set
       else
-        @id = file_set.id
+        @id = file_set.id.to_s
         @file_set = file_set
       end
     end
 
-    # Fixity checks each version of each file if it hasn't been checked recently
-    # If object async_jobs is false, will returns the set of most recent fixity check
+    # Fixity checks each version of each file if it hasn't been checked recently.
+    # For AF file sets, checks all file versions (or latest only if configured).
+    # For Valkyrie file sets, checks the original file via checksum comparison.
+    #
+    # If async_jobs is false, returns the set of most recent fixity check
     # status for each version of the content file(s). As a hash keyed by file_id,
     # values arrays of possibly multiple version checks.
     #
     # If async_jobs is true (default), just returns nil, stuff is still going on.
     def fixity_check
-      results = file_set.files.collect { |f| fixity_check_file(f) }
-
-      return if async_jobs
-
-      results.flatten.group_by(&:file_id)
+      if file_set.is_a?(Hyrax::Resource)
+        fixity_check_valkyrie
+      else
+        fixity_check_af
+      end
     end
 
     private
 
+      # --- Valkyrie path ---
+
+      def fixity_check_valkyrie
+        fm = original_file_metadata
+        return if fm.blank?
+
+        checked_uri = fm.file_identifier.to_s
+        latest_fixity_check = ChecksumAuditLog.logs_for(id, checked_uri:).first
+        return latest_fixity_check unless needs_fixity_check?(latest_fixity_check)
+
+        if async_jobs
+          FixityCheckJob.perform_later(file_set_id: id, initiating_user: @initiating_user)
+        else
+          FixityCheckJob.perform_now(file_set_id: id, initiating_user: @initiating_user)
+        end
+      end
+
+      def original_file_metadata
+        Hyrax.custom_queries
+             .find_many_file_metadata_by_use(resource: file_set, use: Hyrax::FileMetadata::Use::ORIGINAL_FILE)
+             .first
+      end
+
+      # --- ActiveFedora path ---
+
+      def fixity_check_af
+        results = file_set.files.collect { |f| fixity_check_file(f) }
+
+        return if async_jobs
+
+        results.flatten.group_by(&:file_id)
+      end
+
       # Retrieve or generate the fixity check for a file
       # (all versions are checked for versioned files unless latest_version_only set)
       # @param [ActiveFedora::File] file to fixity check
-      # @param [Array] log container for messages
       def fixity_check_file(file)
         versions = file.has_versions? ? file.versions.all : [file]
-
         versions = [versions.max_by(&:created)] if file.has_versions? && latest_version_only
-
         versions.collect { |v| fixity_check_file_version(file.id, v.uri.to_s) }.flatten
       end
 
@@ -96,12 +128,15 @@ module Hyrax
         end
       end
 
+      # --- Shared helpers ---
+
       # Check if time since the last fixity check is greater than the maximum days allowed between fixity checks
       # @param [ChecksumAuditLog] latest_fixity_check the most recent fixity check
       def needs_fixity_check?(latest_fixity_check)
         return true unless latest_fixity_check
         unless latest_fixity_check.updated_at
-          logger.warn "***FIXITY*** problem with fixity check log! Latest Fixity check is not nil, but updated_at is not set #{latest_fixity_check}"
+          logger.warn "***FIXITY*** problem with fixity check log! Latest Fixity check is not nil, " \
+                      "but updated_at is not set #{latest_fixity_check}"
           return true
         end
         days_since_last_fixity_check(latest_fixity_check) >= max_days_between_fixity_checks
@@ -113,9 +148,16 @@ module Hyrax
         (DateTime.current - latest_fixity_check.updated_at.to_date).to_i
       end
 
-      # Loads the FileSet from Fedora if needed
       def file_set
-        @file_set ||= ::FileSet.find(id)
+        @file_set ||= find_file_set
+      end
+
+      def find_file_set
+        if Hyrax.config.valkyrie_transition?
+          Hyrax.query_service.find_by(id:)
+        else
+          ::FileSet.find(id)
+        end
       end
   end
 end

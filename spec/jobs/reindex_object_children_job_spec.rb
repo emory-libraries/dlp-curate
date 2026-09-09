@@ -3,35 +3,34 @@ require 'rails_helper'
 
 RSpec.describe ReindexObjectChildrenJob, :clean do
   let(:work) { FactoryBot.create(:public_generic_work) }
-  let(:job_instance) { described_class.new }
   let(:file_set) { FactoryBot.create(:file_set, read_groups: ['public']) }
   let(:pmf) { File.open(fixture_path + '/book_page/0003_preservation_master.tif') }
 
-  before { job_instance.instance_variable_set(:@id, work.id) }
+  before do
+    allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(false)
+  end
 
-  context '#object_children' do
-    it 'logs an empty array with object with no member ids' do
-      expect(job_instance.object_children).to eq([])
+  describe '#perform' do
+    context 'when the work has no children' do
+      it 'completes without error' do
+        expect { described_class.perform_now(work.id) }.not_to raise_error
+      end
     end
 
-    describe 'object with member ids' do
-      it 'logs an array of objects' do
+    context 'when the work has children' do
+      before do
         Hydra::Works::AddFileToFileSet.call(file_set, pmf, :preservation_master_file)
         work.ordered_members << file_set
         work.save!
-
-        expect(job_instance.object_children).not_to eq([])
       end
-    end
-  end
 
-  context '#pull_child_objects' do
-    it 'returns an empty array when given an empty array' do
-      expect(job_instance.pull_child_objects([])).to eq([])
-    end
+      it 'reindexes child objects' do
+        expect(file_set).to receive(:update_index)
+        allow(ActiveFedora::Base).to receive(:find).and_call_original
+        allow(ActiveFedora::Base).to receive(:find).with(file_set.id).and_return(file_set)
 
-    it 'returns an array of objects when given an array of ids' do
-      expect(job_instance.pull_child_objects([file_set.id])).not_to eq([])
+        described_class.perform_now(work.id)
+      end
     end
   end
 end

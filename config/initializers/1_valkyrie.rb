@@ -24,3 +24,17 @@ Valkyrie::StorageAdapter.register(
 
 Valkyrie.config.metadata_adapter = ENV.fetch('VALKYRIE_METADATA_ADAPTER') { :fedora_metadata }.to_sym
 Valkyrie.config.storage_adapter  = ENV.fetch('VALKYRIE_STORAGE_ADAPTER') { :fedora_storage }.to_sym
+
+Rails.application.config.to_prepare do
+  Valkyrie::Storage::Fedora.class_eval do
+    def upload(file:, original_filename:, resource:, content_type: "application/octet-stream", # rubocop:disable Metrics/ParameterLists
+               resource_uri_transformer: uri_transformer, identifier_endpath: 'original', **_extra_arguments)
+      identifier = resource_uri_transformer.call(resource, base_url) + "/#{identifier_endpath}"
+      upload_file(fedora_uri: identifier, io: file, content_type:, original_filename:)
+      # Fedora 6 auto versions, so check to see if there's a version for this
+      # initial upload. If not, then mint one (fedora 4/5)
+      version_id = current_version_id(id: valkyrie_identifier(uri: identifier)) || mint_version(identifier, latest_version(identifier))
+      perform_find(id: Valkyrie::ID.new(identifier.to_s.sub(/^.+\/\//, protocol)), version_id:)
+    end
+  end
+end
