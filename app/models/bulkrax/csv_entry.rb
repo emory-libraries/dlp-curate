@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: #build_export_metadata, #build_files_metadata, #build_relationship_metadata, #build_value, and #handle_join_on_export
+# Bulkrax v9.3.5 override: #build_export_metadata, #build_files_metadata, #build_relationship_metadata, #build_value, and #handle_join_on_export
 require 'bulkrax/override_assistive_methods'
 
 module Bulkrax
@@ -8,7 +8,29 @@ module Bulkrax
   # entry models into a module that can be shared between them.
   class CsvEntry < Entry
     include OverrideAssistiveMethods
-    serialize :raw_metadata, Bulkrax::NormalizedJson
+    class CsvPathError < StandardError
+      def initialize(message)
+        super(message)
+      end
+    end
+
+    class RecordNotFound < StandardError
+      def initialize(message)
+        super(message)
+      end
+    end
+
+    class MissingMetadata < StandardError
+      def initialize(message)
+        super(message)
+      end
+    end
+
+    if Rails.version < '7.1'
+      serialize :raw_metadata, Bulkrax::NormalizedJson
+    else
+      serialize :raw_metadata, coder: Bulkrax::NormalizedJson
+    end
 
     def self.fields_from_data(data)
       data.headers.flatten.compact.uniq
@@ -19,7 +41,7 @@ module Bulkrax
     # there's a risk that this reads the whole file into memory and could cause a memory leak
     # we strip any special characters out of the headers. looking at you Excel
     def self.read_data(path)
-      raise StandardError, 'CSV path empty' if path.blank?
+      raise CsvPathError, 'CSV path empty' if path.blank?
       options = {
         headers:           true,
         header_converters: ->(h) { h.to_s.gsub(/[^\w\d\. -]+/, '').strip.to_sym },
@@ -88,10 +110,23 @@ module Bulkrax
       parsed_metadata
     end
 
-    def validate_record
-      raise StandardError, 'Record not found' if record.nil?
-      raise StandardError, "Missing required elements, missing element(s) are: #{importerexporter.parser.missing_elements(record).join(', ')}" unless importerexporter.parser.required_elements?(record)
+    # limited metadata is needed for delete jobs
+    def build_metadata_for_delete
+      self.parsed_metadata = {}
+      establish_factory_class
+      add_ingested_metadata
+      parsed_metadata
     end
+
+    # rubocop:disable Style/GuardClause
+    def validate_record
+      raise RecordNotFound, 'Record not found' if record.nil?
+      unless importerexporter.parser.required_elements?(record)
+        raise MissingMetadata,
+"Missing required elements, missing element(s) are: #{importerexporter.parser.missing_elements(record).join(', ')}"
+      end
+    end
+    # rubocop:enable Style/GuardClause
 
     def add_identifier
       parsed_metadata[work_identifier] = [record[source_identifier]]
@@ -140,6 +175,7 @@ module Bulkrax
       end.compact
     end
 
+    # Emory Alteration: adds PreservationWorkflow creation.
     def build_export_metadata
       self.parsed_metadata = {}
 
@@ -161,10 +197,11 @@ module Bulkrax
       source_id = source_id.to_a if source_id.is_a?(ActiveTriples::Relation)
       source_id = Array.wrap(source_id).first
       parsed_metadata[source_identifier] = source_id
-      model_name = hyrax_record.respond_to?(:to_rdf_representation) ? hyrax_record.to_rdf_representation : hyrax_record.has_model.first
+      model_name = Bulkrax.object_factory.model_name(resource: hyrax_record)
       parsed_metadata[key_for_export('model')] = model_name
     end
 
+    # Emory Alteration
     def build_files_metadata
       # attaching files to the FileSet row only so we don't have duplicates when importing to a new tenant
       if hyrax_record.work?
@@ -183,9 +220,13 @@ module Bulkrax
 
     def build_relationship_metadata
       # Includes all relationship methods for all exportable record types (works, Collections, FileSets)
+      # @TODO: this logic assumes that the relationships are all available via a method that can be called
+      #        on the object. With Valkyrie, this is only true for Hyrax-based models which include the
+      #        ArResource module. We need to consider reworking this logic into an object factory method
+      #        that can handle different types of models.
       relationship_methods = {
-        related_parents_parsed_mapping => %i[member_of_collection_ids member_of_work_ids in_work_ids],
-        related_children_parsed_mapping => %i[member_collection_ids member_work_ids file_set_ids]
+        related_parents_parsed_mapping => %i[member_of_collection_ids member_of_work_ids in_work_ids parent],
+        related_children_parsed_mapping => %i[member_collection_ids member_work_ids file_set_ids member_ids]
       }
 
       relationship_methods.each do |relationship_key, methods|
@@ -193,7 +234,9 @@ module Bulkrax
 
         values = []
         methods.each do |m|
-          values << hyrax_record.public_send(m) if hyrax_record.respond_to?(m)
+          value = hyrax_record.public_send(m) if hyrax_record.respond_to?(m)
+          value_id = value.try(:id)&.to_s || value # get the id if it's an object
+          values << value_id if value_id.present?
         end
         values = values.flatten.uniq
         next if values.blank?
@@ -251,6 +294,7 @@ module Bulkrax
       object_metadata(Array.wrap(data))
     end
 
+    # Emory Alteration
     def build_value(property_name, mapping_config)
       return unless hyrax_record.respond_to?(property_name.to_s)
 
@@ -323,11 +367,11 @@ module Bulkrax
 
     def build_thumbnail_files
       return unless importerexporter.include_thumbnails
+      thumbnail = Bulkrax.object_factory.thumbnail_for(resource: hyrax_record)
+      return unless thumbnail
 
+      filenames = map_file_sets(Array.wrap(thumbnail))
       thumbnail_mapping = 'thumbnail_file'
-      file_sets = Array.wrap(hyrax_record.thumbnail)
-
-      filenames = map_file_sets(file_sets)
       handle_join_on_export(thumbnail_mapping, filenames, false)
     end
 

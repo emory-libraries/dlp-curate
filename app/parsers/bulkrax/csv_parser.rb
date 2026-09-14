@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: #write_files, #store_files, and create create_from_object_ids alias
+# Bulkrax v9.3.5 override: #write_files, #store_files, and create create_from_object_ids alias
 require 'bulkrax/override_assistive_methods'
 
 module Bulkrax
@@ -25,6 +25,7 @@ module Bulkrax
       @records = csv_data.map { |record_data| entry_class.data_for_entry(record_data, nil, self) }
     end
 
+    # Emory Alteration: `#casecmp` doesn't work for us since we're using our own class names (L#42, L#44).
     def build_records
       @collections = []
       @works = []
@@ -153,7 +154,7 @@ module Bulkrax
     alias create_from_importer create_new_entries
     alias create_from_worktype create_new_entries
     alias create_from_all create_new_entries
-    alias create_from_object_ids create_new_entries
+    alias create_from_object_ids create_new_entries # Emory Addition
 
     def entry_class
       CsvEntry
@@ -218,7 +219,7 @@ module Bulkrax
 
     # export methods
 
-    # Bulkrax v8.2.3 override: swaps out Bulkrax' sorting for our own, grouping together
+    # Emory Alteration: swaps out Bulkrax' sorting for our own, grouping together
     #   CurateGenericWorks with their associated FileSets.
     def write_files
       require 'open-uri'
@@ -254,6 +255,8 @@ module Bulkrax
       process_multiple_file_export(file_sets, folder_count)
     rescue Ldp::Gone
       nil
+    rescue StandardError => e
+      raise StandardError, "Unable to retrieve files for identifier #{identifier} - #{e.message}"
     end
 
     def export_key_allowed(key)
@@ -332,7 +335,16 @@ module Bulkrax
         file_mapping = Bulkrax.field_mappings.dig(self.class.to_s, 'file', :from)&.first&.to_sym || :file
         next if r[file_mapping].blank?
 
-        r[file_mapping].split(Bulkrax.multi_value_element_split_on).map do |f|
+        split_value = Bulkrax.field_mappings.dig(self.class.to_s, :file, :split)
+        split_pattern = case split_value
+                        when Regexp
+                          split_value
+                        when String
+                          Regexp.new(split_value)
+                        else
+                          Bulkrax.multi_value_element_split_on
+                        end
+        r[file_mapping].split(split_pattern).map do |f|
           file = File.join(path_to_files, f.tr(' ', '_'))
           raise "File #{file} does not exist" unless File.exist?(file)
           file
@@ -345,9 +357,13 @@ module Bulkrax
       filename = args.fetch(:filename, '')
 
       return @path_to_files if @path_to_files.present? && filename.blank?
-      @path_to_files = File.join(
-          zip? ? importer_unzip_path : File.dirname(import_file_path), 'files', filename
-        )
+      path_start = zip? ? importer_unzip_path : File.dirname(import_file_path)
+      @path_to_files = File.join(path_start, 'files', filename)
+
+      return @path_to_files if File.exist?(@path_to_files)
+
+      # TODO: This method silently returns nil if there is no file & no zip file
+      File.join(importer_unzip_path, 'files', filename) if file? && zip?
     end
 
     private
@@ -367,9 +383,15 @@ module Bulkrax
       # We expect a single CSV at the top level of the zip in the CSVParser
       # but we are willing to go look for it if need be
       def real_import_file_path
-        return Dir["#{importer_unzip_path}/**/*.csv"].first if file? && zip?
+        return Dir["#{importer_unzip_path}/**/*.csv"].reject { |path| in_files_dir?(path) }.first if file? && zip?
 
         parser_fields['import_file_path']
+      end
+
+      # If there are CSVs that are meant to be attachments in the files directory,
+      # we don't want to consider them as the import CSV
+      def in_files_dir?(path)
+        File.dirname(path).ends_with?('files')
       end
   end
 end

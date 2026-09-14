@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: #filename (AF + Valkyrie dual-path)
+# Bulkrax v9.3.5 override: #filename (AF + Valkyrie dual-path)
 
 module Bulkrax
   module ExportBehavior

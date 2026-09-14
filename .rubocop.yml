@@ -29,6 +29,7 @@ Metrics/AbcSize:
         - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
+        - app/parsers/bulkrax/application_parser.rb
         - app/parsers/bulkrax/csv_parser.rb
         - config/initializers/bulkrax.rb
         - config/initializers/hyrax_visibility_reader_override.rb
@@ -103,6 +104,7 @@ Metrics/MethodLength:
         - app/jobs/characterize_job.rb
         - app/jobs/create_work_job.rb
         - app/jobs/fixity_check_job.rb
+        - app/models/bulkrax/csv_entry.rb
         - app/models/bulkrax/exporter.rb
         - app/models/concerns/bulkrax/export_behavior.rb
         - app/models/concerns/bulkrax/import_behavior.rb
