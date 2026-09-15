@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_04_15_140407) do
+ActiveRecord::Schema.define(version: 2026_09_15_120000) do
 
   create_table "bookmarks", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -265,6 +265,12 @@ ActiveRecord::Schema.define(version: 2026_04_15_140407) do
     t.string "badge_color", default: "#663333"
     t.boolean "deposit_only_collection", default: false, null: false
     t.index ["machine_id"], name: "index_hyrax_collection_types_on_machine_id", unique: true
+  end
+
+  create_table "hyrax_default_administrative_set", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "default_admin_set_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "hyrax_counter_metrics", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
