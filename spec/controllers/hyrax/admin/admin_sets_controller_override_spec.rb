@@ -5,7 +5,7 @@ RSpec.describe Hyrax::Admin::AdminSetsController, type: :controller, clean: true
   routes { Hyrax::Engine.routes }
 
   let(:admin) { FactoryBot.create(:admin) }
-  let(:admin_set) do
+  let!(:admin_set) do
     FactoryBot.create(:admin_set, title: ['Default Admin Set'], with_permission_template: true)
   end
 
@@ -27,7 +27,6 @@ RSpec.describe Hyrax::Admin::AdminSetsController, type: :controller, clean: true
     context 'when persistence lookup fails but Solr has the document' do
       before do
         allow(Hyrax.query_service).to receive(:find_by)
-          .with(id: admin_set.id)
           .and_raise(Valkyrie::Persistence::ObjectNotFoundError)
       end
 

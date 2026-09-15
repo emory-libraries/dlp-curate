@@ -30,7 +30,15 @@ module Hyrax
         def find_admin_set_for_show
           Hyrax.query_service.find_by(id: params[:id])
         rescue Valkyrie::Persistence::ObjectNotFoundError, Hyrax::ObjectNotFoundError, Ldp::BadRequest, Ldp::HttpError, Faraday::Error
-          SolrDocument.find(params[:id])
+          solr_document_for_admin_set
+        end
+
+        # SolrDocument.find uses Blacklight's /get document handler, which this
+        # app's Solr config does not define. The show presenter already loads
+        # via SearchService (select + {!raw f=id}), so reuse that.
+        def solr_document_for_admin_set
+          response, = search_service.search_results
+          response.documents.first || raise(Hyrax::ObjectNotFoundError)
         end
     end
   end
