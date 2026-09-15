@@ -157,7 +157,7 @@ Rails.application.reloader.to_prepare do
     Hyrax::DashboardController.sidebar_partials[:repository_content] << "hyrax/dashboard/sidebar/bulkrax_sidebar_additions"
   end
 
-  # Bulkrax v8.2.3 overrides live in their own files under app/ (factories, models, parsers, etc.)
+  # Bulkrax v9.3.5 overrides live in their own files under app/ (factories, models, parsers, etc.)
   # See: app/factories/bulkrax/, app/models/bulkrax/, app/models/concerns/bulkrax/,
   #      app/parsers/bulkrax/, app/controllers/concerns/bulkrax/, app/jobs/bulkrax/
   require_relative '../../lib/bulkrax/override_assistive_methods'

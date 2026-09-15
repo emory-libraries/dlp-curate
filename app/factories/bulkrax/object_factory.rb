@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: #create_file_set
+# Bulkrax v9.3.5 override: #create_file_set
 require 'bulkrax/override_assistive_methods'
 require 'wings/active_fedora_classifier'
 
@@ -33,6 +33,40 @@ module Bulkrax
 
     def self.update_index_for_file_sets_of(resource:)
       resource.file_sets.each(&:update_index) if resource.respond_to?(:file_sets)
+    end
+
+    ##
+    # @return [String] the name of the model class for the given resource/object.
+    def self.model_name(resource:)
+      resource.has_model.first
+    end
+
+    ##
+    # A thumbnail is linked to a work rather than the file set itself.
+    # @return [File or FileMetadata] the thumbnail file for the given resource
+    def self.thumbnail_for(resource:)
+      return nil unless resource.respond_to?(:thumbnail)
+      return resource.thumbnail if resource.thumbnail.present?
+      return nil unless resource.respond_to?(:parent) && resource.parent.present?
+      return nil unless resource.parent.respond_to?(:thumbnail)
+      resource.parent.thumbnail
+    end
+
+    ##
+    # @input [Fileset]
+    # @return [File] the original file.
+    def self.original_file(fileset:)
+      fileset.try(:original_file)
+    end
+
+    ##
+    # #input [Fileset or FileMetadata]
+    # @return [String] the file name for the given fileset
+    def self.filename_for(fileset:)
+      file = original_file(fileset:)
+      file.file_name.first
+    rescue NoMethodError
+      nil
     end
 
     ##
@@ -97,7 +131,7 @@ module Bulkrax
     # @note HEY WE'RE USING THIS FOR A WINGS CUSTOM QUERY.  BE CAREFUL WITH
     #       REMOVING IT.
     #
-    # @see # {Wings::CustomQueries::FindBySourceIdentifier#find_by_model_and_property_value}
+    # @see # {Wings::CustomQueries::FindBySourceIdentifier#find_by_property_value}
     def self.search_by_property(value:, klass:, field: nil, search_field: nil, name_field: nil, verify_property: false)
       return nil unless klass.respond_to?(:where)
       # We're not going to try to match nil nor "".
@@ -170,7 +204,10 @@ module Bulkrax
     end
 
     def delete(_user)
-      find&.delete(eradicate: true)
+      obj = find
+      raise ObjectFactoryInterface::ObjectNotFoundError, "Object not found to delete" unless obj
+
+      obj.delete(eradicate: true)
     end
 
     private
@@ -205,11 +242,6 @@ module Bulkrax
         object.save!
       end
 
-      # As mentioned below, this method's largely mimicing AttachFilesToWorkJob,
-      #   which we have extensively customized in Curate to accomodate our needs. Here,
-      #   we are purely adapting those customizations.
-      #   TODO: To DRY up this code, we should shoot for refactoring these processes into
-      #   a reusable module.
       # This method is heavily inspired by Hyrax's AttachFilesToWorkJob
       def create_file_set(attrs)
         _, @work = find_record(attributes[related_parents_parsed_mapping].first, importer_run_id)

@@ -11,17 +11,15 @@ module Curate
     #     model: CurateGenericWorkResource, property: 'deduplication_key_tesim', value: 'abc123'
     #   )
     class FindBySourceIdentifier < SolrDocumentQuery
-      self.queries = [:find_by_model_and_property_value]
+      self.queries = [:find_by_property_value]
 
-      # @param model [Class] the Valkyrie resource class (e.g. CurateGenericWorkResource)
       # @param property [#to_s] the Solr field name to query
       # @param value [#to_s] the value to match
       #
       # @return [NilClass] when no record was found
       # @return [Valkyrie::Resource] when a record was found
-      def find_by_model_and_property_value(model:, property:, value:)
-        @model = Wings::ModelRegistry.lookup(model)
-        @property = property
+      def find_by_property_value(property:, value:, **args)
+        @property = args[:search_field].presence || property
         @value = value
 
         return if resource.blank?
@@ -29,7 +27,7 @@ module Curate
       end
 
       def query
-        "has_model_ssim:#{@model} AND #{@property}:#{@value}"
+        "#{@property}:#{@value}"
       end
     end
   end

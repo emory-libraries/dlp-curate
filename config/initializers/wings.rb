@@ -67,7 +67,7 @@ if Hyrax.config.valkyrie_transition?
 
     # Register find_by_model_and_property_value with find_single_or_nil strategy so
     # Frigg's composite dispatch returns nil (not ObjectNotFoundError) when not found.
-    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_model_and_property_value] = :find_single_or_nil
+    Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_property_value] = :find_single_or_nil
     Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_by_emory_persistent_id] = :find_single_or_nil
     Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_all_objects_with_alternate_ids_present] = :find_multiple
     Goddess::CustomQueryContainer.known_custom_queries_and_their_strategies[:find_parent_works] = :find_multiple
