@@ -45,4 +45,8 @@ class FileSetResource < Hyrax::FileSet
       :preservation_master_file
     end
   end
+
+  def parent
+    Hyrax.query_service.find_parents(resource: self)&.first
+  end
 end
