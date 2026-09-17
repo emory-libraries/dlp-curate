@@ -387,9 +387,6 @@ module Bulkrax
         # combine remote_files + thumbnail_url [Array < { url:, file_name:, * }]
         thumbnail_url = HashWithIndifferentAccess.new(attributes)['thumbnail_url']
         all_remote_files = merge_thumbnails(remote_files: attrs["remote_files"], thumbnail_url:)
-        # combine local & remote files [Array < Hash &/or String]
-        all_local_files = attributes['file'] || []
-        all_files = all_local_files + all_remote_files
 
         # collect all uploaded files [Array < Hyrax::UploadedFile]
         uploaded_local = uploaded_local_files(uploaded_files: attrs[:uploaded_files])
