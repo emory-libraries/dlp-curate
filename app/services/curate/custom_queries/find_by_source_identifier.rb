@@ -27,7 +27,7 @@ module Curate
       end
 
       def query
-        "#{@property}:#{@value}"
+        "#{@property}:\"#{@value}\""
       end
     end
   end

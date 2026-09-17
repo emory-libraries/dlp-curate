@@ -387,9 +387,6 @@ module Bulkrax
         # combine remote_files + thumbnail_url [Array < { url:, file_name:, * }]
         thumbnail_url = HashWithIndifferentAccess.new(attributes)['thumbnail_url']
         all_remote_files = merge_thumbnails(remote_files: attrs["remote_files"], thumbnail_url:)
-        # combine local & remote files [Array < Hash &/or String]
-        all_local_files = attributes['file'] || []
-        all_files = all_local_files + all_remote_files
 
         # collect all uploaded files [Array < Hyrax::UploadedFile]
         uploaded_local = uploaded_local_files(uploaded_files: attrs[:uploaded_files])
@@ -400,7 +397,7 @@ module Bulkrax
         remaining_files = Array.wrap(uploaded_files) - Array.wrap(pres_master_file)
         add_secondary_files_to_pres_master_file_uploaded_file_object(remaining_files:, pres_master_file:) if remaining_files.present?
         # add in other attributes
-        file_set_params = file_set_params_for(uploads: [pres_master_file], files: all_files)
+        file_set_params = file_set_params_for(uploads: [pres_master_file], files: [pres_master_file.preservation_master_file.file.file])
         # return data for filesets
         [[pres_master_file], file_set_params]
       end
@@ -630,7 +627,6 @@ module Bulkrax
             next if rf.public_send(file_type).file.blank?
             pres_master_file.public_send("#{file_type}=", CarrierWave::SanitizedFile.new(rf.public_send(file_type).file.file))
             pres_master_file.save
-            rf.destroy
           end
         end
       end

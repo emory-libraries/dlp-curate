@@ -29,18 +29,19 @@ if Hyrax.config.valkyrie_transition?
 
         def file_set_args(file)
           {
-            depositor:     file.user.user_key,
-            creator:       file.user.user_key,
-            date_uploaded: file.created_at,
-            date_modified: Hyrax::TimeService.time_in_utc,
-            label:         file_label(file),
-            title:         file_label(file),
-            pcdm_use:      file.fileset_use
+            depositor:         file.user.user_key,
+            creator:           file.user.user_key,
+            date_uploaded:     file.created_at,
+            date_modified:     Hyrax::TimeService.time_in_utc,
+            label:             file_label(file),
+            title:             file_label(file),
+            pcdm_use:          file_set_param_hash_value(:pcdm_use)&.presence || file.fileset_use,
+            deduplication_key: file_set_param_hash_value(:deduplication_key)
           }
         end
 
         def file_label(file)
-          file&.file.presence || file.uploader&.filename.presence || file.uploader&.file&.original_filename
+          file_set_param_hash_value(:title)&.first&.presence || file&.file.presence || file.uploader&.filename.presence || file.uploader&.file&.original_filename
         end
 
         def record_file_submission_event(file_set, event_start, file)
@@ -59,6 +60,10 @@ if Hyrax.config.valkyrie_transition?
             'software_version' => "Fedora #{ENV.fetch('FEDORA_VERSION', 'v6.5.0')}",
             'user' => file.user.to_s
           }
+        end
+
+        def file_set_param_hash_value(symb)
+          @file_set_params&.first&.[](symb)
         end
     end
   end
