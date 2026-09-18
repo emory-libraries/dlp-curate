@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jhove xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.openpreservation.org/ois/xml/ns/jhove" xsi:schemaLocation="http://schema.openpreservation.org/ois/xml/ns/jhove https://schema.openpreservation.org/ois/xml/xsd/jhove/1.8/jhove.xsd" name="Jhove" release="1.24.1" date="2020-03-16">
+ <date>2021-06-01T21:26:57-04:00</date>
+ <repInfo uri="/Users/dmatlaw/rails_apps/dlp-curate/spec/fixtures/book_page/0003_preservation_master.tif">
+  <reportingModule release="1.9.2" date="2019-12-10">TIFF-hul</reportingModule>
+  <lastModified>2020-11-11T17:15:12-05:00</lastModified>
+  <size>32204</size>
+  <format>TIFF</format>
+  <version>4.0</version>
+  <status>Well-Formed and valid</status>
+  <sigMatch>
+  <module>TIFF-hul</module>
+  </sigMatch>
+  <mimeType>image/tiff</mimeType>
+  <profiles>
+   <profile>TIFF/IT-BP/P2 (ISO 12639:1998)</profile>
+  </profiles>
+  <properties>
+   <property>
+    <name>TIFFMetadata</name>
+    <values arity="Array" type="Property">
+    <property>
+     <name>ByteOrder</name>
+     <values arity="Scalar" type="String">
+      <value>little-endian</value>
+     </values>
+    </property>
+    <property>
+     <name>IFDs</name>
+     <values arity="List" type="Property">
+     <property>
+      <name>Number</name>
+      <values arity="Scalar" type="Integer">
+       <value>1</value>
+      </values>
+     </property>
+     <property>
+      <name>IFD</name>
+      <values arity="Array" type="Property">
+      <property>
+       <name>Offset</name>
+       <values arity="Scalar" type="Long">
+        <value>32014</value>
+       </values>
+      </property>
+      <property>
+       <name>Type</name>
+       <values arity="Scalar" type="String">
+        <value>TIFF</value>
+       </values>
+      </property>
+      <property>
+       <name>Entries</name>
+       <values arity="List" type="Property">
+       <property>
+        <name>NisoImageMetadata</name>
+        <values arity="Scalar" type="NISOImageMetadata">
+         <value>
+       <mix:mix xmlns:mix="http://www.loc.gov/mix/v20" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mix/v20 http://www.loc.gov/standards/mix/mix20/mix20.xsd">
+        <mix:BasicDigitalObjectInformation>
+         <mix:ObjectIdentifier>
+          <mix:objectIdentifierType>JHOVE</mix:objectIdentifierType>
+         </mix:ObjectIdentifier>
+         <mix:FormatDesignation>
+          <mix:formatName>image/tiff</mix:formatName>
+         </mix:FormatDesignation>
+         <mix:byteOrder>little endian</mix:byteOrder>
+         <mix:Compression>
+          <mix:compressionScheme>Group 4 Fax</mix:compressionScheme>
+         </mix:Compression>
+        </mix:BasicDigitalObjectInformation>
+        <mix:BasicImageInformation>
+         <mix:BasicImageCharacteristics>
+          <mix:imageWidth>1800</mix:imageWidth>
+          <mix:imageHeight>2400</mix:imageHeight>
+          <mix:PhotometricInterpretation>
+           <mix:colorSpace>WhiteIsZero</mix:colorSpace>
+          </mix:PhotometricInterpretation>
+         </mix:BasicImageCharacteristics>
+        </mix:BasicImageInformation>
+        <mix:ImageCaptureMetadata>
+         <mix:orientation>normal*</mix:orientation>
+        </mix:ImageCaptureMetadata>
+        <mix:ImageAssessmentMetadata>
+         <mix:SpatialMetrics>
+          <mix:samplingFrequencyUnit>in.</mix:samplingFrequencyUnit>
+          <mix:xSamplingFrequency>
+           <mix:numerator>629145600</mix:numerator>
+           <mix:denominator>2097152</mix:denominator>
+          </mix:xSamplingFrequency>
+          <mix:ySamplingFrequency>
+           <mix:numerator>629145600</mix:numerator>
+           <mix:denominator>2097152</mix:denominator>
+          </mix:ySamplingFrequency>
+         </mix:SpatialMetrics>
+         <mix:ImageColorEncoding>
+          <mix:BitsPerSample>
+           <mix:bitsPerSampleValue>1</mix:bitsPerSampleValue>
+           <mix:bitsPerSampleUnit>integer</mix:bitsPerSampleUnit>
+          </mix:BitsPerSample>
+          <mix:samplesPerPixel>1</mix:samplesPerPixel>
+         </mix:ImageColorEncoding>
+        </mix:ImageAssessmentMetadata>
+       </mix:mix>
+         </value>
+        </values>
+       </property>
+       <property>
+        <name>NewSubfileType</name>
+        <values arity="Scalar" type="Long">
+         <value>0</value>
+        </values>
+       </property>
+       <property>
+        <name>SampleFormat</name>
+        <values arity="Array" type="Integer">
+         <value>1</value>
+        </values>
+       </property>
+       <property>
+        <name>MinSampleValue</name>
+        <values arity="Array" type="Integer">
+         <value>0</value>
+        </values>
+       </property>
+       <property>
+        <name>MaxSampleValue</name>
+        <values arity="Array" type="Integer">
+         <value>1</value>
+        </values>
+       </property>
+       <property>
+        <name>Threshholding</name>
+        <values arity="Scalar" type="Integer">
+         <value>1</value>
+        </values>
+       </property>
+       <property>
+        <name>T6Options</name>
+        <values arity="Scalar" type="Long">
+         <value>0</value>
+        </values>
+       </property>
+       <property>
+        <name>TIFFITProperties</name>
+        <values arity="List" type="Property">
+        <property>
+         <name>BackgroundColorIndicator</name>
+         <values arity="Scalar" type="String">
+          <value>background not defined</value>
+         </values>
+        </property>
+        <property>
+         <name>ImageColorIndicator</name>
+         <values arity="Scalar" type="String">
+          <value>image not defined</value>
+         </values>
+        </property>
+        <property>
+         <name>TransparencyIndicator</name>
+         <values arity="Scalar" type="String">
+          <value>no transparency</value>
+         </values>
+        </property>
+        <property>
+         <name>PixelIntensityRange</name>
+         <values arity="Array" type="Integer">
+          <value>0</value>
+          <value>1</value>
+         </values>
+        </property>
+        <property>
+         <name>RasterPadding</name>
+         <values arity="Scalar" type="String">
+          <value>1 byte</value>
+         </values>
+        </property>
+        <property>
+         <name>BitsPerRunLength</name>
+         <values arity="Scalar" type="Integer">
+          <value>8</value>
+         </values>
+        </property>
+        <property>
+         <name>BitsPerExtendedRunLength</name>
+         <values arity="Scalar" type="Integer">
+          <value>16</value>
+         </values>
+        </property>
+        </values>
+       </property>
+       </values>
+      </property>
+      </values>
+     </property>
+     </values>
+    </property>
+    </values>
+   </property>
+  </properties>
+ </repInfo>
+</jhove>
