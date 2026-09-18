@@ -1,13 +1,18 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: create our own export_source rule for object_ids
+# Bulkrax v9.3.5 override: create our own export_source rule for object_ids
 
 module Bulkrax
   class Exporter < ApplicationRecord
     include Bulkrax::ImporterExporterBehavior
     include Bulkrax::StatusInfo
 
-    serialize :parser_fields, JSON
-    serialize :field_mapping, JSON
+    if Rails.version < '7.1'
+      serialize :parser_fields, JSON
+      serialize :field_mapping, JSON
+    else
+      serialize :parser_fields, coder: JSON
+      serialize :field_mapping, coder: JSON
+    end
 
     belongs_to :user
     has_many :exporter_runs, dependent: :destroy
@@ -16,6 +21,7 @@ module Bulkrax
     validates :name, presence: true
     validates :parser_klass, presence: true
 
+    # Emory Addition: `:create_from_object_ids`
     delegate :write, :create_from_collection, :create_from_object_ids, :create_from_importer, :create_from_worktype, :create_from_all, to: :parser
 
     def export
@@ -85,6 +91,7 @@ module Bulkrax
                    [{}]
     end
 
+    # Emory Addition: "Object IDs"
     def export_from_list
       if defined?(::Hyrax)
         [

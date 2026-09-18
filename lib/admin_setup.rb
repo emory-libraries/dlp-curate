@@ -57,16 +57,18 @@ class AdminSetup
   end
 
   def everyone_can_deposit_everywhere
-    AdminSet.all.each do |admin_set|
+    find_all_admin_sets.each do |admin_set|
+      permission_template = permission_template_for(admin_set)
+      next unless permission_template
       next if Hyrax::PermissionTemplateAccess
-              .find_by(permission_template_id: admin_set.permission_template.id,
+              .find_by(permission_template_id: permission_template.id,
                        agent_id:               'registered',
                        access:                 'deposit',
                        agent_type:             'group')
 
-      admin_set.permission_template.access_grants.create(agent_type: 'group', agent_id: 'registered', access: 'deposit')
+      permission_template.access_grants.create(agent_type: 'group', agent_id: 'registered', access: 'deposit')
       deposit = Sipity::Role.find_by!(name: 'depositing')
-      admin_set.permission_template.available_workflows.each do |workflow|
+      permission_template.available_workflows.each do |workflow|
         workflow.update_responsibilities(role: deposit, agents: Hyrax::Group.new('registered'))
       end
     end
@@ -83,4 +85,22 @@ class AdminSetup
     raise "No admins are defined" unless admin_role.users.count.positive?
     admin_role.users
   end
+
+  private
+
+    def find_all_admin_sets
+      if Hyrax.config.valkyrie_transition?
+        Hyrax.query_service.find_all_of_model(model: AdminSetResource)
+      else
+        AdminSet.all
+      end
+    end
+
+    def permission_template_for(admin_set)
+      if admin_set.is_a?(Valkyrie::Resource)
+        Hyrax::PermissionTemplate.find_by(source_id: admin_set.id.to_s)
+      else
+        admin_set.permission_template
+      end
+    end
 end

@@ -39,12 +39,28 @@ module Hyrax
         end
       end
 
-      return show_valkyrie if Hyrax.config.use_valkyrie?
-
-      show_active_fedora
+      if Hyrax.config.use_valkyrie? && test_for_file_metadatas
+        show_valkyrie
+      else
+        show_active_fedora
+      end
     end
 
     private
+
+      CURATE_USE_MAP = {
+        preservation_master_file: :original_file,
+        extracted:                :extracted_file,
+        extracted_text:           :extracted_file,
+        transcript:               :transcript_file
+      }.freeze
+
+      # Overrides ValkyrieDownloadsControllerBehavior#use to support dlp-curate's
+      # params[:use] convention and map custom file type names to standard PCDM use keys.
+      def use
+        raw = (params[:use] || params[:file] || :original_file).to_sym
+        CURATE_USE_MAP.fetch(raw, raw)
+      end
 
       def show_active_fedora
         case file
@@ -70,6 +86,26 @@ module Hyrax
                                  end
         association = dereference_file(default_file_reference)
         association&.reader || alternate_file_lookup(default_file_reference, asset)
+      end
+
+      def test_for_file_metadatas
+        file_set_id = params.require(:id)
+        file_set = Hyrax.query_service.find_by(id: file_set_id)
+
+        possible_file_metadatas = [
+          call_custom_queries(file_set, 'find_original_file'),
+          call_custom_queries(file_set, 'find_intermediate_file'),
+          call_custom_queries(file_set, 'find_transcript_file'),
+          call_custom_queries(file_set, 'find_extracted_text')
+        ].compact
+
+        possible_file_metadatas.present?
+      end
+
+      def call_custom_queries(file_set, file_method)
+        Hyrax.custom_queries.public_send(file_method, file_set:)
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        nil
       end
   end
 end

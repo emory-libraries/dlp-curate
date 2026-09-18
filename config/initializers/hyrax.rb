@@ -15,7 +15,9 @@ Hyrax.config do |config|
   if Hyrax.config.valkyrie_transition?
     config.collection_model = 'CollectionResource'
     config.admin_set_model = 'AdminSetResource'
-    config.file_set_model = 'Hyrax::FileSet'
+    config.file_set_model = 'FileSetResource'
+    config.file_set_indexer = Curate::FileSetResourceIndexer
+    config.file_set_form = Curate::Forms::FileSetResourceForm
   else
     # dassie needs legacy AF models
     config.collection_model = '::Collection'
@@ -311,6 +313,8 @@ Hyrax.config do |config|
   # mount point.
   #
   # config.whitelisted_ingest_dirs = []
+
+  config.visibility_map = Curate::VisibilityMap.instance
 end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
