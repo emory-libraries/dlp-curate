@@ -14,6 +14,10 @@ module Frigg
     #   was modified in the database between been read into memory and persisted
     # rubocop:disable Lint/UnusedMethodArgument
     def save(resource:, external_resource: false, perform_af_validation: false)
+      retries = 0
+      max_retries = 5
+      interval_of_sleep = 5
+
       was_wings = resource.respond_to?(:wings?) && resource.wings?
       initialize_repository
       internal_resource = resource.dup
@@ -37,6 +41,10 @@ module Frigg
       convert_and_migrate_resource(orm, was_wings)
 
     rescue Ldp::PreconditionFailed
+      Rails.logger.warn("Failed to persist #{internal_resource.id}")
+      retries += 1
+      sleep(retries * interval_of_sleep)
+      retry if retries <= max_retries
       raise Valkyrie::Persistence::StaleObjectError, "The object #{internal_resource.id} has been updated by another process."
     rescue Ldp::Gone
       raise Valkyrie::Persistence::ObjectNotFoundError, "The object #{resource.id} is previously persisted but not found at save time."
