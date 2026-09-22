@@ -277,7 +277,7 @@ class IiifController < ApplicationController
   def manifest
     headers['Access-Control-Allow-Origin'] = '*'
     solr_doc = SolrDocument.find(identifier)
-    render json: ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: CurateGenericWork.find(identifier))
+    render json: ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: ManifestValkyrieCompat.find_work(identifier))
   end
 
   ##

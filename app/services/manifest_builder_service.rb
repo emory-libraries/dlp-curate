@@ -89,15 +89,11 @@ class ManifestBuilderService
     end
 
     def preferred_file
-      @curation_concern&.send("pulled_#{@curation_concern&.preferred_file}"&.to_sym)
+      ManifestValkyrieCompat.preferred_file(@curation_concern)
     end
 
     def preferred_file_id
-      if preferred_file
-        preferred_file.id
-      else
-        @curation_concern.id
-      end
+      ManifestValkyrieCompat.preferred_file_id(@curation_concern)
     end
 
     #

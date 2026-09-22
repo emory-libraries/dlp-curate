@@ -36,16 +36,18 @@ json.sequences [''] do
     json.label child['label']
   end
   json.canvases @image_concerns do |child_id|
-    file_set = FileSet.find(child_id)
+    file_set = ManifestValkyrieCompat.find_file_set(child_id)
     mime_types = ['pdf', 'xml', 'text']
-    unless mime_types.any? { |m| file_set.mime_type&.include?(m) } || file_set.visibility == 'restricted'
+    unless mime_types.any? { |m| ManifestValkyrieCompat.file_set_mime_type(file_set)&.include?(m) } ||
+           ManifestValkyrieCompat.file_set_visibility(file_set) == 'restricted'
       child_iiif_service = ManifestBuilderService.new(curation_concern: file_set)
       canvas_uri = "#{@root_url}/canvas/#{child_id}"
       json.set! :@id, canvas_uri
       json.set! :@type, 'sc:Canvas'
-      json.label file_set.title.first
-      json.width file_set.original_file&.width
-      json.height file_set.original_file&.height
+      json.label Array(file_set.title).first
+      width, height = ManifestValkyrieCompat.file_set_dimensions(file_set)
+      json.width width
+      json.height height
       json.images [file_set] do
         json.set! :@type, 'oa:Annotation'
         json.motivation 'sc:painting'

@@ -288,5 +288,26 @@ RSpec.describe IiifController, type: :controller, clean: true, iiif: true do
         "/images/9010p2ngfn-cor%2Ffiles%2F#{file_set.service_file.id.split('/').last}/full/600,/0/default.jpg"
       )
     end
+
+    context 'when valkyrie_transition is enabled' do
+      before do
+        allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
+        allow(Hyrax.query_service).to receive(:find_by) do |args|
+          raise Valkyrie::Persistence::ObjectNotFoundError unless args[:id].to_s == identifier
+          work
+        end
+      end
+
+      it "falls back to the ActiveFedora work and still caches the manifest" do
+        FileUtils.rm_f("./tmp/d28c5b20cf9b9663181d02b5ce90fac59fa666d7_508hdr7srt-cor")
+
+        get :manifest, params: params
+        expect(File).to exist(cache_file)
+
+        response_values = JSON.parse(File.open(cache_file).read)
+        expect(response_values["@type"]).to include "sc:Manifest"
+        expect(response_values["sequences"].first["canvases"].first["@id"]).to include "/iiif/#{work.id}/manifest/canvas/9010p2ngfn-cor"
+      end
+    end
   end
 end

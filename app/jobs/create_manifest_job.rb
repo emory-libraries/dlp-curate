@@ -15,7 +15,7 @@ class CreateManifestJob < Hyrax::ApplicationJob
 
     def process_work(work_id)
       solr_doc = ::SolrDocument.find(work_id)
-      ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: CurateGenericWork.find(work_id))
+      ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: ManifestValkyrieCompat.find_work(work_id))
     end
 
     # @param [SolrDocument] document

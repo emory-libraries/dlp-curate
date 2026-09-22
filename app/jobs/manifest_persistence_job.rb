@@ -51,7 +51,7 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     end
 
     def pulled_ordered_members(curation_concern:)
-      curation_concern.ordered_member_ids - curation_concern.child_work_ids
+      ManifestValkyrieCompat.file_set_member_ids(curation_concern)
     end
 
     def check_for_nil_in_ordered_members(curation_concern:)

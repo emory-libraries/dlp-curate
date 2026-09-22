@@ -6,7 +6,7 @@ class ManifestRegenerationController < ApplicationController
 
   def regen_manifest
     solr_doc = SolrDocument.find(params[:work_id])
-    ManifestBuilderService.regenerate_manifest(presenter: presenter(solr_doc), curation_concern: CurateGenericWork.find(params[:work_id]))
+    ManifestBuilderService.regenerate_manifest(presenter: presenter(solr_doc), curation_concern: ManifestValkyrieCompat.find_work(params[:work_id]))
     redirect_to hyrax_curate_generic_work_path(params[:work_id])
   end
 

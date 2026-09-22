@@ -31,6 +31,19 @@ RSpec.describe ManifestRegenerationController, type: :controller, clean: true do
         post :regen_manifest, params: { work_id: work }, xhr: true
         expect(response).to be_successful
       end
+
+      context 'when valkyrie_transition is enabled' do
+        before do
+          allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
+          allow(ManifestValkyrieCompat).to receive(:find_work).and_return(work)
+        end
+
+        it "loads the work through ManifestValkyrieCompat" do
+          expect(ManifestBuilderService).to receive(:regenerate_manifest).with(presenter:, curation_concern: work)
+          post :regen_manifest, params: { work_id: work }, xhr: true
+          expect(response).to be_successful
+        end
+      end
     end
   end
 

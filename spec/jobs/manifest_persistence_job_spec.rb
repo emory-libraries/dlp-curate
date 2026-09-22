@@ -37,4 +37,14 @@ RSpec.describe ManifestPersistenceJob, :clean do
       expect(described_class.new.send(:image_concerns, work)).to match_array [file_set.id, file_set2.id, file_set3.id]
     end
   end
+
+  context 'when the curation concern is a Valkyrie resource' do
+    let(:valkyrie_work) { Hyrax::Work.new(id: 'val-work', member_ids: ['fs-1', 'fs-2', 'child-1']) }
+
+    it 'returns file set member ids excluding child works' do
+      allow(Hyrax.custom_queries).to receive(:find_child_work_ids).with(resource: valkyrie_work).and_return(['child-1'])
+
+      expect(described_class.new.send(:image_concerns, valkyrie_work)).to eq ['fs-1', 'fs-2']
+    end
+  end
 end

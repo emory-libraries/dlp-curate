@@ -68,4 +68,20 @@ RSpec.describe IiifUrlBuilderService, :clean do
       expect(iiif_builder_service_with_alternate_id.file_set_id_base).to eq(file_set_id_base)
     end
   end
+
+  context 'when valkyrie_transition is enabled' do
+    let(:valkyrie_file_set) { Hyrax::FileSet.new(id: file_set.id) }
+    let(:checksum) { double(value: 'urn:sha1:valkyriechecksum') }
+    let(:original_file) { instance_double(Hyrax::FileMetadata, checksum: [checksum]) }
+
+    before do
+      allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
+      allow(Hyrax.query_service).to receive(:find_by).with(id: file_set.id).and_return(valkyrie_file_set)
+      allow(valkyrie_file_set).to receive(:original_file).and_return(original_file)
+    end
+
+    it 'reads the sha1 from the Valkyrie original file' do
+      expect(described_class.new(file_set_id: file_set.id, size: '260,').sha1).to eq('valkyriechecksum')
+    end
+  end
 end

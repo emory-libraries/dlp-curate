@@ -14,6 +14,21 @@ RSpec.describe Hyrax::CurateGenericWorksController, :clean do
       get :manifest, params: { id: work.id, format: 'json' }
       expect(response).to have_http_status(:success)
     end
+
+    context 'when valkyrie_transition is enabled' do
+      before do
+        allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
+        allow(ManifestValkyrieCompat).to receive(:find_work).with(work.id).and_return(work)
+        allow(ManifestBuilderService).to receive(:build_manifest).and_return('{}')
+      end
+
+      it 'loads the work through ManifestValkyrieCompat' do
+        sign_in user
+        get :manifest, params: { id: work.id, format: 'json' }
+        expect(response).to have_http_status(:success)
+        expect(ManifestValkyrieCompat).to have_received(:find_work).with(work.id)
+      end
+    end
   end
 
   describe "#delete" do

@@ -191,6 +191,15 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
           expect(service.info_url).to include "example.com/iiif/2/"
         end
       end
+
+      context 'when the file set is a Valkyrie resource' do
+        let(:valkyrie_file_set) { Hyrax::FileSet.new(id: 'val-fs-1') }
+        let(:service) { described_class.new(curation_concern: valkyrie_file_set) }
+
+        it 'uses the file set id as the preferred file id' do
+          expect(service.send(:preferred_file_id)).to eq 'val-fs-1'
+        end
+      end
     end
 
     describe "#sequence_rendering" do

@@ -5,15 +5,15 @@ class IiifUrlBuilderService
 
   def initialize(file_set_id:, size:)
     @file_set_id = file_set_id
-    @file_set = begin FileSet.find(file_set_id_base)
-                rescue Hyrax::ObjectNotFoundError
+    @file_set = begin ManifestValkyrieCompat.find_file_set(file_set_id_base)
+                rescue Hyrax::ObjectNotFoundError, ActiveFedora::ObjectNotFoundError, Valkyrie::Persistence::ObjectNotFoundError
                   nil
                 end
     @size = size
   end
 
   def sha1
-    sha1_with_urn = file_set&.send("pulled_#{file_set&.preferred_file}"&.to_sym)&.checksum&.value || 'urn:sha1:unknown'
+    sha1_with_urn = ManifestValkyrieCompat.checksum_urn(file_set)
     sha1_with_urn.gsub('urn:sha1:', '')
   end
 

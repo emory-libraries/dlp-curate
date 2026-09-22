@@ -32,4 +32,14 @@ RSpec.describe CreateManifestJob, :clean do
     described_class.perform_now
     expect(File).to exist("./tmp/d28c5b20cf9b9663181d02b5ce90fac59fa666d7_888888")
   end
+
+  context 'when valkyrie_transition is enabled' do
+    before { allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true) }
+
+    it 'loads the work through ManifestValkyrieCompat' do
+      expect(ManifestValkyrieCompat).to receive(:find_work).with(generic_work.id).and_return(generic_work)
+      expect(ManifestBuilderService).to receive(:build_manifest).and_return('{}')
+      described_class.perform_now(generic_work.id)
+    end
+  end
 end
