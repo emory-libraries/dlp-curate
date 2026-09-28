@@ -2,7 +2,7 @@
   Change below was necessary to institute Source/Deposit Collection structure.
   For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
 -->
-<% if @curation_concern.class == CurateGenericWork %>
+<% if @curation_concern.is_a?(CurateGenericWork) || @curation_concern.is_a?(CurateGenericWorkResource) %>
   <%=
     f.input key,
     collection: all_collections_collection,

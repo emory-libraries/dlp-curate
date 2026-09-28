@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+
+# rubocop:disable Metrics/ModuleLength
 module ExportAssistiveMethods
   def process_multiple_file_export(file_sets, folder_count)
     file_sets.each { |fileset| process_export_fileset_files(fileset, folder_count) }
@@ -14,6 +16,14 @@ module ExportAssistiveMethods
   end
 
   def shovel_files_into_folder(files, file_set, path)
+    if file_set.is_a?(Hyrax::Resource)
+      shovel_valkyrie_files(files, file_set, path)
+    else
+      shovel_af_files(files, file_set, path)
+    end
+  end
+
+  def shovel_af_files(files, file_set, path)
     files.each do |file|
       file_split = file.split(':')
       file_name = file_split.first
@@ -25,6 +35,28 @@ module ExportAssistiveMethods
         f.close
       end
     end
+  end
+
+  def shovel_valkyrie_files(files, file_set, path)
+    file_metadatas = Hyrax.custom_queries.find_files(file_set:)
+    files.each do |file|
+      export_single_valkyrie_file(file, file_metadatas, path)
+    end
+  end
+
+  def export_single_valkyrie_file(file, file_metadatas, path)
+    file_split = file.split(':')
+    file_name = file_split.first
+    fm = file_metadatas.find { |m| Array(m.original_filename).first == file_name || m.label.to_s == file_name }
+    return unless fm&.file_identifier
+
+    stored_file = Hyrax.storage_adapter.find_by(id: fm.file_identifier)
+    File.open(File.join(path, file_name), 'wb') do |f|
+      f.write(stored_file.read)
+      f.close
+    end
+  rescue Valkyrie::StorageAdapter::FileNotFound
+    nil
   end
 
   def convert_setter_to_fileset_getter(setter)
@@ -41,8 +73,14 @@ module ExportAssistiveMethods
   def pull_export_filesets(record)
     file_sets_to_return = []
     file_sets_to_return = Array.wrap(record) if record.file_set?
-    if file_sets_to_return.empty? # for valkyrie
-      file_sets_to_return = record.respond_to?(:file_sets) ? record.file_sets : record.members&.select(&:file_set?)
+    if file_sets_to_return.empty?
+      file_sets_to_return = if record.is_a?(Hyrax::Resource)
+                              Hyrax.custom_queries.find_child_file_sets(resource: record)
+                            elsif record.respond_to?(:file_sets)
+                              record.file_sets
+                            else
+                              record.members&.select(&:file_set?) || []
+                            end
     end
     file_sets_to_return
   end
@@ -102,8 +140,7 @@ module ExportAssistiveMethods
   end
 
   def triples_values_joined(property_name, mapping_config, data)
-    # Emory Alteration: for `processed_value` below, we move forward with standard Bulkrax processing only if property_name isn't creator and data isn't from a FileSet
-    processed_value = if property_name == 'creator' && hyrax_record.is_a?(FileSet)
+    processed_value = if property_name == 'creator' && (hyrax_record.is_a?(FileSet) || hyrax_record.is_a?(FileSetResource))
                         nil
                       elsif data.is_a?(Enumerable)
                         data.map { |d| prepare_export_data(d) }.join(mapping_config['join']).to_s
@@ -114,3 +151,4 @@ module ExportAssistiveMethods
     parsed_metadata[key_for_export(property_name)] = processed_value
   end
 end
+# rubocop:enable Metrics/ModuleLength
