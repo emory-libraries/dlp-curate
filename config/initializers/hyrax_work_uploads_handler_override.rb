@@ -9,6 +9,27 @@ if Hyrax.config.valkyrie_transition?
     Hyrax::WorkUploadsHandler.class_eval do
       include PreservationEvents
 
+      ##
+      # @api public
+      #
+      # Create filesets for each added file
+      #
+      # @return [Boolean] true if all requested files were attached
+      def attach
+        return true if Array.wrap(files).empty? # short circuit to avoid aquiring a lock we won't use
+
+        acquire_lock_for(work.id) do
+          reload_work
+          event_payloads = files.each_with_object([]) { |file, arry| arry << make_file_set_and_ingest(file) }
+          @persister.save(resource: work)
+          Hyrax.publisher.publish('object.metadata.updated', object: work, user: files.first.user)
+          event_payloads.each do |payload|
+            payload.delete(:job).enqueue
+            Hyrax.publisher.publish('file.set.attached', payload)
+          end
+        end
+      end
+
       private
 
         def make_file_set_and_ingest(file) # rubocop:disable Metrics/AbcSize
@@ -64,6 +85,10 @@ if Hyrax.config.valkyrie_transition?
 
         def file_set_param_hash_value(symb)
           @file_set_params&.first&.[](symb)
+        end
+
+        def reload_work
+          @work = Hyrax.query_service.find_by(id: work.id)
         end
     end
   end
