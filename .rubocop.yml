@@ -101,6 +101,7 @@ Metrics/MethodLength:
         - app/importers/*
         - app/indexers/curate_generic_work_indexer.rb
         - app/indexers/curate/file_set_indexer.rb
+        - app/jobs/bulkrax/import_file_set_job.rb
         - app/jobs/characterize_job.rb
         - app/jobs/create_work_job.rb
         - app/jobs/fixity_check_job.rb
