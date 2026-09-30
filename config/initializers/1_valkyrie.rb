@@ -66,7 +66,7 @@ Rails.application.config.to_prepare do
       rescue Ldp::HttpError => e
         retries += 1
 
-        Rails.logger.error("LDP Put failed (HTTP #{e&.response&.status || '?'}). Retry #{retries}/#{max_retries}...")
+        Rails.logger.error("LDP Put failed (HTTP #{e.respond_to?(:response) ? e.response.status : '?'}). Retry #{retries}/#{max_retries}...")
         raise e unless retries < max_retries
 
         sleep(5 * retries)
