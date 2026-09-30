@@ -39,63 +39,39 @@ Rails.application.config.to_prepare do
                resource_uri_transformer: uri_transformer, identifier_endpath: 'original', **_extra_arguments)
       identifier = resource_uri_transformer.call(resource, base_url) + "/#{identifier_endpath}"
       upload_file(fedora_uri: identifier, io: file, content_type:, original_filename:)
-      # Fedora 6 auto versions, so check to see if there's a version for this
-      # initial upload. If not, then mint one (fedora 4/5)
       version_id = current_version_id(id: valkyrie_identifier(uri: identifier)) || mint_version(identifier, latest_version(identifier))
-      # version_id = resolve_version_id(identifier)
       perform_find(id: Valkyrie::ID.new(identifier.to_s.sub(/^.+\/\//, protocol)), version_id:)
     end
 
-    # private
+    def upload_file(fedora_uri:, io:, content_type: "application/octet-stream", original_filename: "default")
+      sha1 = fedora_version >= 5 ? "sha" : "sha1"
+      retries = 0
+      max_retries = 5
 
-    #   # Resolves the version ID for a freshly uploaded file in Fedora 6.
-    #   # Fedora 6 auto-versions, so we check for the auto-created version first.
-    #   # If the auto-version isn't yet visible (timing gap), we retry once after
-    #   # a brief sleep. Only falls through to mint_version for Fedora 4/5.
-    #   def resolve_version_id(identifier)
-    #     valkyrie_id = valkyrie_identifier(uri: identifier)
-    #     vid = current_version_id(id: valkyrie_id)
-    #     return vid if vid
+      begin
+        response = connection.http.put do |request|
+          request.url fedora_uri
+          request.headers['Content-Type'] = content_type
+          io_size = (io.length if io.respond_to?(:length)) || (io.size if io.respond_to?(:size))
+          request.headers['Content-Length'] = io_size.to_s if io_size
+          request.headers['Content-Disposition'] = "attachment; filename=\"#{original_filename}\""
+          request.headers['digest'] = "#{sha1}=#{Digest::SHA1.file(io)}" if io.respond_to?(:to_str)
+          request.headers['link'] = "<http://www.w3.org/ns/ldp#NonRDFSource>; rel=\"type\""
+          io = Faraday::UploadIO.new(io, content_type, original_filename)
+          request.body = io
+        end
 
-    #     # Fedora 6 auto-version may not be immediately visible; retry once.
-    #     if fedora_version >= 6
-    #       sleep(0.5)
-    #       vid = current_version_id(id: valkyrie_id)
-    #       return vid if vid
-    #     end
+        Rails.logger.info("LDP Put Response Status: #{response.status}")
+        raise Ldp::HttpError unless [201, 204].include?(response.status)
+      rescue Ldp::HttpError => e
+        retries += 1
 
-    #     mint_version_with_conflict_retry(identifier, latest_version(identifier))
-    #   end
+        Rails.logger.error("LDP Put failed (HTTP #{e&.response&.status || '?'}). Retry #{retries}/#{max_retries}...")
+        raise e unless retries < max_retries)
 
-    #   # Restores the 409-conflict retry removed in Valkyrie 3.6.1.
-    #   # Fedora 6 Memento versions are timestamp-based at per-second granularity;
-    #   # a 409 means a version already exists for this second.
-    #   def mint_version_with_conflict_retry(identifier, version_name = "version1")
-    #     retries = 0
-    #     max_retries = 5
-    #     current_status = 500
-    #     final_response = nil
-
-    #     until current_status == 201 || retries >= max_retries
-    #       retries += 1
-    #       response = connection.http.post do |request|
-    #         request.url "#{identifier}/fcr:versions"
-    #         request.headers['Slug'] = version_name if fedora_version == 4
-    #       end
-
-    #       if response.status != 201 && response.status != 410
-    #         current_status = response.status
-    #         sleep(1)
-    #       elsif response.status == 410
-    #         return nil
-    #       else
-    #         current_status = response.status
-    #         final_response = response
-    #       end
-    #     end
-
-    #     raise "Version unable to be created (HTTP #{current_status})" if current_status != 201
-    #     valkyrie_identifier(uri: final_response.headers["location"].gsub("/fcr:metadata", ""))
-    #   end
+        sleep(5 * retries)
+        retry
+      end
+    end
   end
 end
