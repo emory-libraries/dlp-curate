@@ -67,7 +67,7 @@ Rails.application.config.to_prepare do
         retries += 1
 
         Rails.logger.error("LDP Put failed (HTTP #{e&.response&.status || '?'}). Retry #{retries}/#{max_retries}...")
-        raise e unless retries < max_retries)
+        raise e unless retries < max_retries
 
         sleep(5 * retries)
         retry
