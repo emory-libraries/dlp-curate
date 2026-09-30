@@ -39,60 +39,63 @@ Rails.application.config.to_prepare do
                resource_uri_transformer: uri_transformer, identifier_endpath: 'original', **_extra_arguments)
       identifier = resource_uri_transformer.call(resource, base_url) + "/#{identifier_endpath}"
       upload_file(fedora_uri: identifier, io: file, content_type:, original_filename:)
-      version_id = resolve_version_id(identifier)
+      # Fedora 6 auto versions, so check to see if there's a version for this
+      # initial upload. If not, then mint one (fedora 4/5)
+      version_id = current_version_id(id: valkyrie_identifier(uri: identifier)) || mint_version(identifier, latest_version(identifier))
+      # version_id = resolve_version_id(identifier)
       perform_find(id: Valkyrie::ID.new(identifier.to_s.sub(/^.+\/\//, protocol)), version_id:)
     end
 
-    private
+    # private
 
-      # Resolves the version ID for a freshly uploaded file in Fedora 6.
-      # Fedora 6 auto-versions, so we check for the auto-created version first.
-      # If the auto-version isn't yet visible (timing gap), we retry once after
-      # a brief sleep. Only falls through to mint_version for Fedora 4/5.
-      def resolve_version_id(identifier)
-        valkyrie_id = valkyrie_identifier(uri: identifier)
-        vid = current_version_id(id: valkyrie_id)
-        return vid if vid
+    #   # Resolves the version ID for a freshly uploaded file in Fedora 6.
+    #   # Fedora 6 auto-versions, so we check for the auto-created version first.
+    #   # If the auto-version isn't yet visible (timing gap), we retry once after
+    #   # a brief sleep. Only falls through to mint_version for Fedora 4/5.
+    #   def resolve_version_id(identifier)
+    #     valkyrie_id = valkyrie_identifier(uri: identifier)
+    #     vid = current_version_id(id: valkyrie_id)
+    #     return vid if vid
 
-        # Fedora 6 auto-version may not be immediately visible; retry once.
-        if fedora_version >= 6
-          sleep(0.5)
-          vid = current_version_id(id: valkyrie_id)
-          return vid if vid
-        end
+    #     # Fedora 6 auto-version may not be immediately visible; retry once.
+    #     if fedora_version >= 6
+    #       sleep(0.5)
+    #       vid = current_version_id(id: valkyrie_id)
+    #       return vid if vid
+    #     end
 
-        mint_version_with_conflict_retry(identifier, latest_version(identifier))
-      end
+    #     mint_version_with_conflict_retry(identifier, latest_version(identifier))
+    #   end
 
-      # Restores the 409-conflict retry removed in Valkyrie 3.6.1.
-      # Fedora 6 Memento versions are timestamp-based at per-second granularity;
-      # a 409 means a version already exists for this second.
-      def mint_version_with_conflict_retry(identifier, version_name = "version1")
-        retries = 0
-        max_retries = 5
-        current_status = 500
-        final_response = nil
+    #   # Restores the 409-conflict retry removed in Valkyrie 3.6.1.
+    #   # Fedora 6 Memento versions are timestamp-based at per-second granularity;
+    #   # a 409 means a version already exists for this second.
+    #   def mint_version_with_conflict_retry(identifier, version_name = "version1")
+    #     retries = 0
+    #     max_retries = 5
+    #     current_status = 500
+    #     final_response = nil
 
-        until current_status == 201 || retries >= max_retries
-          retries += 1
-          response = connection.http.post do |request|
-            request.url "#{identifier}/fcr:versions"
-            request.headers['Slug'] = version_name if fedora_version == 4
-          end
+    #     until current_status == 201 || retries >= max_retries
+    #       retries += 1
+    #       response = connection.http.post do |request|
+    #         request.url "#{identifier}/fcr:versions"
+    #         request.headers['Slug'] = version_name if fedora_version == 4
+    #       end
 
-          if response.status != 201 && response.status != 410
-            current_status = response.status
-            sleep(1)
-          elsif response.status == 410
-            return nil
-          else
-            current_status = response.status
-            final_response = response
-          end
-        end
+    #       if response.status != 201 && response.status != 410
+    #         current_status = response.status
+    #         sleep(1)
+    #       elsif response.status == 410
+    #         return nil
+    #       else
+    #         current_status = response.status
+    #         final_response = response
+    #       end
+    #     end
 
-        raise "Version unable to be created (HTTP #{current_status})" if current_status != 201
-        valkyrie_identifier(uri: final_response.headers["location"].gsub("/fcr:metadata", ""))
-      end
+    #     raise "Version unable to be created (HTTP #{current_status})" if current_status != 201
+    #     valkyrie_identifier(uri: final_response.headers["location"].gsub("/fcr:metadata", ""))
+    #   end
   end
 end
