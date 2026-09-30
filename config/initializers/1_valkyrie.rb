@@ -68,17 +68,31 @@ Rails.application.config.to_prepare do
       # Fedora 6 Memento versions are timestamp-based at per-second granularity;
       # a 409 means a version already exists for this second.
       def mint_version_with_conflict_retry(identifier, version_name = "version1")
-        response = connection.http.post do |request|
-          request.url "#{identifier}/fcr:versions"
-          request.headers['Slug'] = version_name if fedora_version == 4
+        retries = 0
+        max_retries = 5
+        current_status = 500
+        final_response = nil
+
+        until current_status == 201 || retries >= max_retries
+          retries += 1
+          response = connection.http.post do |request|
+            request.url "#{identifier}/fcr:versions"
+            request.headers['Slug'] = version_name if fedora_version == 4
+          end
+
+          if response.status != 201 && response.status != 410
+            current_status = response.status
+            sleep(1)
+          elsif response.status == 410
+            return nil
+          else
+            current_status = response.status
+            final_response = response
+          end
         end
-        return nil if response.status == 410
-        if response.status == 409
-          sleep(0.5)
-          return mint_version_with_conflict_retry(identifier, version_name)
-        end
-        raise "Version unable to be created (HTTP #{response.status})" unless response.status == 201
-        valkyrie_identifier(uri: response.headers["location"].gsub("/fcr:metadata", ""))
+
+        raise "Version unable to be created (HTTP #{current_status})" if current_status != 201
+        valkyrie_identifier(uri: final_response.headers["location"].gsub("/fcr:metadata", ""))
       end
   end
 end

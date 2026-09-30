@@ -116,6 +116,7 @@ Metrics/MethodLength:
         - app/parsers/bulkrax/parser_export_record_set.rb
         - app/presenters/hyrax/collection_presenter.rb
         - app/presenters/hyrax/curate_collection_presenter.rb
+        - config/initializers/1_valkyrie.rb
         - config/initializers/bulkrax.rb
         - config/initializers/hydra_access_control_overrides.rb
         - config/initializers/hyrax_visibility_reader_override.rb
