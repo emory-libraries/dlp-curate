@@ -50,7 +50,7 @@ if Hyrax.config.valkyrie_transition?
         end
 
         def submission_event_hash(file, event_start, outcome)
-          file_name = file_label(file).to_s
+          file_name = file&.preservation_master_file&.file&.file&.split('/')&.last
           verb = outcome == 'Success' ? 'submitted for' : 'could not be submitted for'
           {
             'type' => 'File submission',
