@@ -31,6 +31,7 @@ Metrics/AbcSize:
         - app/indexers/curate/file_set_indexer.rb
         - app/parsers/bulkrax/application_parser.rb
         - app/parsers/bulkrax/csv_parser.rb
+        - config/initializers/1_valkyrie.rb
         - config/initializers/bulkrax.rb
         - config/initializers/hyrax_visibility_reader_override.rb
         - lib/frigg/persister.rb
@@ -85,6 +86,7 @@ Metrics/CyclomaticComplexity:
         - app/models/concerns/hydra/access_controls/visibility.rb
         - app/parsers/bulkrax/application_parser.rb
         - app/parsers/bulkrax/csv_parser.rb
+        - config/initializers/1_valkyrie.rb
         - config/initializers/bulkrax.rb
         - config/initializers/file_actor.rb
         - config/initializers/wings_model_transformer_override.rb
