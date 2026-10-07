@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: #build_export_metadata, #build_files_metadata, #build_relationship_metadata, #build_value, and #handle_join_on_export
+# Bulkrax v9.3.5 override: #build_export_metadata, #build_files_metadata, #build_relationship_metadata, #build_value, and #handle_join_on_export
 
 module Bulkrax
   module DatatablesBehavior

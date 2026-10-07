@@ -1,5 +1,6 @@
 <%# [Hyrax-override-hyrax-v5.2.0] %>
 
+<% abstract_value = f.object.abstract.is_a?(Array) ? f.object.abstract.first.to_s : f.object.abstract.to_s %>
 <div>
-  <%= f.input :abstract, as: :text, input_html: { rows: '10' } %>
+  <%= f.input :abstract, as: :text, input_html: { rows: '10', value: abstract_value } %>
 </div>

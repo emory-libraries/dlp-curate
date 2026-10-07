@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: #perform
+# Bulkrax v9.3.5 override: #perform
 
 module Bulkrax
   class ScheduleRelationshipsJob < ApplicationJob
