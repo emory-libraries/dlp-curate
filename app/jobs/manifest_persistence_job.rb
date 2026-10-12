@@ -5,8 +5,10 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
 
   # Retry on template errors (e.g., Fedora connectivity, Wings wrapping
   # failures) and LDP errors (e.g., Fedora 4/6 transient issues).
+  # NOTE: Rails 6.1 only supports :exponentially_longer; :polynomially_longer
+  #   (Rails 7.1+) raises a RuntimeError instead of retrying.
   retry_on ActionView::Template::Error, Ldp::HttpError, Ldp::BadRequest,
-           wait: :polynomially_longer, attempts: 5 do |job, error|
+           wait: :exponentially_longer, attempts: 5 do |job, error|
     Rails.logger.error(
       "[ManifestPersistenceJob] Failed after all retries for " \
       "curation_concern_id=#{job.arguments.first[:curation_concern_id]}: " \
@@ -49,14 +51,16 @@ class ManifestPersistenceJob < Hyrax::ApplicationJob
     end
 
     def persist_manifest(key:, manifest_json:)
-      File.open(File.join(iiif_manifest_cache, key), 'w+') do |f|
+      File.open(manifest_cache_path(key), 'w+') do |f|
         f.write(manifest_json)
       end
     end
 
+    # Removes cached manifests and pending-regeneration markers for every
+    # cache key belonging to this work.
     def remove_outdated_manifests(solr_doc_id)
       outdated_manifests = Dir.glob(iiif_manifest_cache + '/*').select do |path|
-        path.ends_with?("_#{solr_doc_id}")
+        path.end_with?("_#{solr_doc_id}", "_#{solr_doc_id}#{PENDING_MANIFEST_SUFFIX}")
       end
 
       outdated_manifests.each { |path| File.delete(path) if File.exist?(path) }
