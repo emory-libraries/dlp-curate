@@ -49,10 +49,15 @@ class IiifUrlBuilderService
       nil
     end
 
+    # For Valkyrie works, ManifestBuilderService passes the preferred file's
+    # FileMetadata id rather than the FileSet id, so the lookup may return a
+    # Hyrax::FileMetadata (which is not a Hyrax::Resource).
     def extract_sha1_checksum
       return nil unless file_set
 
       case file_set
+      when Hyrax::FileMetadata
+        sha1_from_file_metadata(file_set)
       when Hyrax::Resource
         extract_valkyrie_sha1
       else
@@ -68,13 +73,14 @@ class IiifUrlBuilderService
 
     def extract_valkyrie_sha1
       file_metadata = preferred_file_metadata
-      if file_metadata
-        checksums = Array(file_metadata.original_checksum)
-        result = checksums.find { |c| c.to_s.start_with?('urn:sha1:') }
-        return result if result
-      end
+      result = sha1_from_file_metadata(file_metadata) if file_metadata
+      return result if result
 
       extract_sha1_from_solr
+    end
+
+    def sha1_from_file_metadata(file_metadata)
+      Array(file_metadata.original_checksum).map(&:to_s).find { |c| c.start_with?('urn:sha1:') }
     end
 
     # AF-origin file sets lack Valkyrie FileMetadata; fall back to the
