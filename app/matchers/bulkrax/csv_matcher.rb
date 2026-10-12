@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# Bulkrax v9.3.5 override: Technically an override but the original file has no methods.
 
 module Bulkrax
   class CsvMatcher < ApplicationMatcher

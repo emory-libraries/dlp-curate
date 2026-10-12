@@ -12,6 +12,7 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
   let(:work) { FactoryBot.create(:public_generic_work, id: identifier) }
   let(:solr_document) { SolrDocument.new(attributes) }
   let(:cache_file) { Rails.root.join('tmp', "d28c5b20cf9b9663181d02b5ce90fac59fa666d7_#{identifier}") }
+  let(:pending_marker) { Pathname.new("#{cache_file}.pending") }
   let(:attributes) do
     { "id" => identifier,
       "title_tesim" => [work.title.first],
@@ -37,9 +38,9 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
   end
 
   around do |example|
-    File.delete(cache_file) if File.exist?(cache_file)
+    FileUtils.rm_f([cache_file, pending_marker])
     example.run
-    File.delete(cache_file) if File.exist?(cache_file)
+    FileUtils.rm_f([cache_file, pending_marker])
   end
 
   context "returning a iiif manifest" do
@@ -51,6 +52,84 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
     it 'can be called at the class level' do
       response_values = JSON.parse(described_class.build_manifest(presenter:, curation_concern: work))
       expect(response_values["@context"]).to include "http://iiif.io/api/presentation/2/context.json"
+    end
+  end
+
+  describe "placeholder handling" do
+    let(:placeholder_label) { "Content is being assembled - please return soon" }
+
+    before do
+      allow(described_class).to receive(:new).and_return(service)
+      allow(service).to receive(:regenerate_manifest_file)
+    end
+
+    it 'returns a placeholder without caching it and queues regeneration' do
+      placeholder_values = JSON.parse(described_class.build_manifest(presenter:, curation_concern: work))
+
+      expect(placeholder_values["label"]).to eq placeholder_label
+      expect(cache_file).not_to exist
+      expect(pending_marker).to exist
+      expect(service).to have_received(:regenerate_manifest_file).once
+    end
+
+    it 'does not queue again while a regeneration is pending' do
+      2.times { described_class.build_manifest(presenter:, curation_concern: work) }
+
+      expect(service).to have_received(:regenerate_manifest_file).once
+    end
+
+    it 'queues again once the pending regeneration is older than the TTL' do
+      described_class.build_manifest(presenter:, curation_concern: work)
+      stale = (described_class::PENDING_REGENERATION_TTL + 1.minute).ago.to_time
+      File.utime(stale, stale, pending_marker)
+      described_class.build_manifest(presenter:, curation_concern: work)
+
+      expect(service).to have_received(:regenerate_manifest_file).twice
+    end
+
+    it 'treats a placeholder cached by an earlier version as missing' do
+      File.write(cache_file, service.send(:render_placeholder_manifest))
+      placeholder_values = JSON.parse(described_class.build_manifest(presenter:, curation_concern: work))
+
+      expect(placeholder_values["label"]).to eq placeholder_label
+      expect(service).to have_received(:regenerate_manifest_file).once
+    end
+
+    it 'clears the pending marker when queueing fails' do
+      allow(service).to receive(:regenerate_manifest_file).and_raise(StandardError, 'queue unavailable')
+
+      expect { described_class.build_manifest(presenter:, curation_concern: work) }.to raise_error(StandardError, 'queue unavailable')
+      expect(pending_marker).not_to exist
+    end
+  end
+
+  describe "#iiif_url and #info_url for a Valkyrie FileSet on an external iiif_server" do
+    let(:file_set_resource) { FileSetResource.new(id: Valkyrie::ID.new('fs-123')) }
+    let(:service_file) do
+      Hyrax::FileMetadata.new(id: Valkyrie::ID.new('fm-service'), file_set_id: file_set_resource.id,
+                              original_checksum: ['urn:md5:5b8fdd56bd296b2758c9e993175a7db7', 'urn:sha1:7b16f8f03531aea38080f6c9b69792f3dae65e64'])
+    end
+    let(:service) { described_class.new(curation_concern: file_set_resource) }
+
+    around do |example|
+      ENV['IIIF_SERVER_URL'] = 'example.com/iiif/2/'
+      ENV['FEDORA_ADAPTER'] = 's3'
+      example.run
+      ENV['IIIF_SERVER_URL'] = nil
+      ENV['FEDORA_ADAPTER'] = nil
+    end
+
+    before do
+      allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
+      allow(Hyrax.custom_queries).to receive(:find_many_file_metadata_by_use) do |use:, **|
+        use == Hyrax::FileMetadata::Use::SERVICE_FILE ? [service_file] : []
+      end
+      allow(Hyrax.query_service).to receive(:find_by).with(id: 'fm-service').and_return(service_file)
+    end
+
+    it "builds the urls from the preferred FileMetadata's sha1" do
+      expect(service.iiif_url).to start_with 'example.com/iiif/2/7b16f8f03531aea38080f6c9b69792f3dae65e64/full/'
+      expect(service.info_url).to eq 'example.com/iiif/2/7b16f8f03531aea38080f6c9b69792f3dae65e64'
     end
   end
 
@@ -82,21 +161,12 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
           allow(described_class).to receive(:new).and_return(service)
           expect(cache_file).to exist
           expect(service).not_to receive(:regenerate_manifest_file)
-          expect(service).to receive(:render_manifest_file)
+          expect(service).to receive(:render_manifest_file).and_call_original
           described_class.build_manifest(presenter:, curation_concern: work)
         end
       end
 
       context 'when no manifest cache file exists' do
-        it 'saves a placehoder manifest file' do
-          service = described_class.new(presenter:, curation_concern: work)
-          allow(described_class).to receive(:new).and_return(service)
-          allow(service).to receive(:regenerate_manifest_file).and_return(nil)
-          described_class.build_manifest(presenter:, curation_concern: work)
-          placeholder_values = JSON.parse(File.open(cache_file).read)
-          expect(placeholder_values["label"]).to eq "Content is being assembled - please return soon"
-        end
-
         it 'queues regenerating the manifest file' do
           service = described_class.new(presenter:, curation_concern: work)
           allow(described_class).to receive(:new).and_return(service)
@@ -146,6 +216,7 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
             path.ends_with?("_#{work.id}")
           end
           expect(manifest_file_paths). to eq([cache_file.to_s])
+          expect(pending_marker).not_to exist
         end
       end
     end

@@ -2,6 +2,45 @@
 @import 'archivesspace_button';
 @import 'work_show_page';
 
+// Homepage
+
+// Search Results
+
+// Dashboard Homepage
+.dashboard {
+  .clearfix #admin_sets {
+    h5.card-title {
+      display: none;
+    }
+  }
+
+  // Dashboard - Works List
+  .table > tbody .document-title {
+    word-break: normal;
+  }
+  .media-left {
+    margin-right: 0.5rem;
+  }
+
+  // Dashboard - Collections List
+  .constraints-container {
+    align-items: baseline;
+    .catalog_startOverLink {
+      font-size: 1rem;
+      // border: 1px solid #6c757d;
+      // border-radius: 0.2rem;
+    }
+    span.constraints-label {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-right: 0.5rem;
+    }
+    span.fa-times {
+      padding-bottom: 0.25rem;
+    }
+  }
+}
+// New/Edit Collection
 .ui-autocomplete-loading {
   background: #fff url("/assets/loading.gif") right center no-repeat;
 }
@@ -11,53 +50,18 @@
     overflow-y: auto;
 }
 
-.collapsing {
-    -webkit-transition: none;
-    transition: none;
-    display: none;
-}
-
-.error-validate{
-	display: block;
-	height: 20px;
-}
-
-.missing {
-  color: grey;
-}
-
-#s2id_collection_thumbnail_id{
+#s2id_collection_thumbnail_id {
 	padding: 0px;
 	height: 100%;
 }
 
-.preservation_failures_absent {
-  color: green;
+// New/Edit Work
+.error-validate {
+	display: block;
+	height: 20px;
 }
 
-.preservation_failures_present, .no-preservation-events {
-  color: red;
-}
-
-dl.file-show-details {
-  -moz-column-count: 1;
-  -webkit-column-count: 1;
-  column-count: 1;
-  -moz-column-width: unset;
-  -webkit-column-width: unset;
-  column-width: unset;
-  border-top: none;
-  padding-top: 0.70rem;
-
-  dt {
-    text-align: left;
-  }
-
-  dd {
-    padding-bottom: 0.70rem;
-  }
-}
-
+// View Collection
 div.hyc-metadata {
   dl {
     border-top: none;
@@ -83,27 +87,6 @@ div.row.hyc-body {
   margin-right: 0px;
 }
 
-// Set bottom padding to 0px for user activity table
-// [Hyrax-override-hyrax-v5.2.0]
-.activity-display {
-  max-height: 100%;
-  overflow: scroll;
-  padding-bottom: 0px !important; // adding important so it doesn't fall back on hyrax's styling
-  position: relative;
-
-  .activity-date {
-    padding-right: 130px;
-  }
-}
-
-.view-wrapper {
-  max-width: 1200px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
 // Change below was necessary to institute Source/Deposit Collection structure.
 // For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
 .hyc-blacklight.hyc-bl-source-link {
@@ -127,3 +110,89 @@ div.row.hyc-body {
   }
 }
 
+// View Work
+.view-wrapper {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.preservation_failures_absent {
+  color: green;
+}
+
+.preservation_failures_present, .no-preservation-events {
+  color: red;
+}
+
+
+// View Fileset
+.filesets-1st-col {
+  a, input.btn {
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+}
+
+dl.file-show-details {
+  -moz-column-count: 1;
+  -webkit-column-count: 1;
+  column-count: 1;
+  -moz-column-width: unset;
+  -webkit-column-width: unset;
+  column-width: unset;
+  border-top: none;
+  padding-top: 0.70rem;
+
+  dt {
+    text-align: left;
+  }
+
+  dd {
+    padding-bottom: 0.70rem;
+  }
+}
+
+.preservation-events-table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  table {
+    word-break: break-word;
+    padding: 0;
+    margin-bottom: 0;
+    border: none;
+    > thead th {
+      word-break: initial;
+    }
+  }
+}
+
+// Set bottom padding to 0px for user activity table
+// [Hyrax-override-hyrax-v5.2.0]
+.activity-display {
+  max-height: 100%;
+  overflow: scroll;
+  padding-bottom: 0px !important; // adding important so it doesn't fall back on hyrax's styling
+  position: relative;
+
+  .activity-date {
+    padding-right: 130px;
+  }
+  table td {
+    word-break: normal;
+  }
+}
+
+// below are existing styles that I have yet to organize as I go. from github as of july/26, it doesn't look like curate styles have been touched in a long time and not by a front end person. so i have had to rearrange, if only to find whether what i'm working on exists or not. 
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
+
+.missing {
+  color: grey;
+}

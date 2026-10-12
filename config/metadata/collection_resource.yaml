@@ -19,14 +19,6 @@ attributes:
     index_keys:
       - "administrative_unit_tesim"
     predicate: http://id.loc.gov/vocabulary/relators/cur
-  alt_title:
-    type: string
-    multiple: true
-    form:
-      primary: false
-    index_keys:
-      - "alt_title_tesim"
-    predicate: http://purl.org/dc/terms/alternative
   contact_information:
     type: string
     multiple: false
@@ -45,15 +37,12 @@ attributes:
       - "contributors_tesim"
       - "contributors_sim"
     predicate: http://purl.org/dc/elements/1.1/contributor
-  deduplication_key:
-    type: string
-    multiple: false
-    form:
-      primary: false
-      multiple: false
+  date_created:
+    type: date_time
+    multiple: true
     index_keys:
-      - "deduplication_key_tesi"
-    predicate: http://metadata.emory.edu/vocab/predicates#deduplicationKey
+      - "date_created_tesim"
+    predicate: http://purl.org/dc/terms/created
   deposit_collection_ids:
     type: string
     multiple: true
@@ -71,24 +60,6 @@ attributes:
     index_keys:
       - "finding_aid_link_tesi"
     predicate: http://metadata.emory.edu/vocab/cor-terms#findingAid
-  keywords:
-    type: string
-    multiple: true
-    form:
-      primary: false
-    index_keys:
-      - "keywords_tesim"
-      - "keywords_sim"
-    predicate: http://schema.org/keywords
-  local_call_number:
-    type: string
-    multiple: false
-    form:
-      primary: false
-      multiple: false
-    index_keys:
-      - "local_call_number_tesi"
-    predicate: http://metadata.emory.edu/vocab/cor-terms#localCallNumber
   notes:
     type: string
     multiple: true
@@ -108,74 +79,3 @@ attributes:
       - "primary_language_tesi"
       - "primary_language_si"
     predicate: http://purl.org/dc/elements/1.1/language
-  primary_repository_ID:
-    type: string
-    multiple: false
-    form:
-      primary: false
-      multiple: false
-    index_keys:
-      - "primary_repository_ID_tesi"
-    predicate: http://purl.org/dc/terms/identifier
-  rights_documentation:
-    type: string
-    multiple: false
-    form:
-      primary: false
-      multiple: false
-    index_keys:
-      - "rights_documentation_tesi"
-    predicate: http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI
-  sensitive_material:
-    type: string
-    multiple: false
-    form:
-      primary: false
-      multiple: false
-    index_keys:
-      - "sensitive_material_tesi"
-    predicate: http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterial
-  source_collection_id:
-    type: string
-    multiple: false
-    form:
-      primary: false
-      multiple: false
-    index_keys:
-      - "source_collection_id_tesi"
-    predicate: http://metadata.emory.edu/vocab/cor-terms#sourceCollectionID
-  subject_geo:
-    type: string
-    multiple: true
-    form:
-      primary: false
-    index_keys:
-      - "subject_geo_tesim"
-      - "subject_geo_sim"
-    predicate: http://purl.org/dc/elements/1.1/coverage
-  subject_names:
-    type: string
-    multiple: true
-    form:
-      primary: false
-    index_keys:
-      - "subject_names_tesim"
-      - "subject_names_sim"
-    predicate: http://purl.org/dc/elements/1.1/subject#names
-  subject_time_periods:
-    type: string
-    multiple: true
-    form:
-      primary: false
-    index_keys:
-      - "subject_time_periods_tesim"
-    predicate: http://schema.org/temporalCoverage
-  subject_topics:
-    type: string
-    multiple: true
-    form:
-      primary: false
-    index_keys:
-      - "subject_topics_tesim"
-      - "subject_topics_sim"
-    predicate: http://purl.org/dc/elements/1.1/subject
