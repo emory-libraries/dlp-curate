@@ -7,15 +7,13 @@
 if Hyrax.config.valkyrie_transition?
   Rails.application.config.to_prepare do
     Hyrax::WorkUploadsHandler.class_eval do
-      include PreservationEvents
-
       private
 
         def make_file_set_and_ingest(file) # rubocop:disable Metrics/AbcSize
           event_start = DateTime.current
           file_set = @persister.save(resource: ::FileSetResource.new(file_set_args(file)))
           Hyrax.publisher.publish('object.deposited', object: file_set, user: file.user)
-          record_file_submission_event(file_set, event_start, file)
+          CreatePreservationEventJob.perform_later(object: file_set, event: submission_event_hash(file:, file_set:, event_start:))
           file.add_file_set!(file_set)
 
           Hyrax::AccessControlList.copy_permissions(source: target_permissions, target: file_set)
@@ -44,19 +42,14 @@ if Hyrax.config.valkyrie_transition?
           file_set_param_hash_value(:title)&.first&.presence || file&.file.presence || file.uploader&.filename.presence || file.uploader&.file&.original_filename
         end
 
-        def record_file_submission_event(file_set, event_start, file)
+        def submission_event_hash(file:, file_set:, event_start:)
           outcome = file_set.persisted? ? 'Success' : 'Failure'
-          create_preservation_event(file_set, submission_event_hash(file, event_start, outcome))
-        end
-
-        def submission_event_hash(file, event_start, outcome)
-          file_name = file&.preservation_master_file&.file&.file&.split('/')&.last
           verb = outcome == 'Success' ? 'submitted for' : 'could not be submitted for'
           {
             'type' => 'File submission',
             'start' => event_start,
             'outcome' => outcome,
-            'details' => "#{file_name} #{verb} preservation storage",
+            'details' => "#{file.filenames_for_preservation_event} #{verb} preservation storage",
             'software_version' => "Fedora #{ENV.fetch('FEDORA_VERSION', 'v6.5.0')}",
             'user' => file.user.to_s
           }
