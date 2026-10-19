@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+// fonts
+$emory-serif: "Crimson Pro", serif; // primary
+$emory-sans: "Open Sans", sans-serif; // secondary
+//font weights
+$serif-xlight: 200; //for most titles, headings, and body copy (except digital!)
+$serif-regular: 400; // for <= 11pt text
+$sans-regular: 400; // for on digital platforms, use instead of CP for long blocks of text
+$sans-semibold: 600; // for legal copy
+$sans-bold: 700; // for eyebrows and titles in body copy

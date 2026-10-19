@@ -1,6 +1,66 @@
+@import 'fonts.scss';
+@import 'colors.scss';
 @import 'search_results';
 @import 'archivesspace_button';
 @import 'work_show_page';
+
+//***  SITE BASICS ***//
+body {
+  font-family: $emory-sans;
+  font-weight: $sans-regular;
+  color: $charcoal;
+  font-size: 1rem;
+}
+
+/** Headings & Links **/
+h1, h4, h5 {
+  font-family: $emory-serif;
+  font-weight: $serif-xlight;
+  color: $emory-blue;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-family: $emory-serif;
+  font-weight: $serif-xlight;
+  font-size: 2rem;
+  color: $emory-blue;
+  margin-bottom: 0.9375rem;
+
+  &.alt {
+    color: $charcoal;
+    text-align: center;
+    width: 100%;
+
+    &::after {
+      display: block;
+      margin: 0 auto;
+      width: 3.75rem;
+      color: $black;
+      background-color: $black;
+      content: "";
+      border-top-width: 0.375rem;
+      border-top-style: solid;
+      border-top-color: $emory-yellow;
+      margin-top: 0.625rem;
+    }
+  }
+}
+
+h3 {
+  font-family: $emory-sans;
+  color: $charcoal;
+  font-weight: $sans-bold;
+  font-size: 1.75rem;
+}
+
+a {
+  color: $waterhub-blue;
+  text-decoration: none;
+}
 
 // Homepage
 
@@ -42,7 +102,7 @@
 }
 // New/Edit Collection
 .ui-autocomplete-loading {
-  background: #fff url("/assets/loading.gif") right center no-repeat;
+  background: $dogwood-white url("/assets/loading.gif") right center no-repeat;
 }
 
 .ui-autocomplete {
@@ -73,7 +133,7 @@ div.hyc-metadata {
 
   div.metadata-line {
     border-bottom: 1px solid #ddd;
-    display: flow-root; 
+    display: flow-root;
 
     div {
       dt, dd { width: 100%; }
@@ -82,7 +142,7 @@ div.hyc-metadata {
   }
 }
 
-div.row.hyc-body { 
+div.row.hyc-body {
   margin-left: 0px;
   margin-right: 0px;
 }
@@ -92,7 +152,7 @@ div.row.hyc-body {
 .hyc-blacklight.hyc-bl-source-link {
   margin-bottom: 3rem;
   padding: 0 1.5rem;
-} 
+}
 
 .table.table-striped.preprocessors {
   td > input.book_start_num {
