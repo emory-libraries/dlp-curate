@@ -50,13 +50,12 @@ if Hyrax.config.valkyrie_transition?
         end
 
         def submission_event_hash(file, event_start, outcome)
-          file_name = file&.preservation_master_file&.file&.file&.split('/')&.last
           verb = outcome == 'Success' ? 'submitted for' : 'could not be submitted for'
           {
             'type' => 'File submission',
             'start' => event_start,
             'outcome' => outcome,
-            'details' => "#{file_name} #{verb} preservation storage",
+            'details' => "#{file.filenames_for_preservation_event} #{verb} preservation storage",
             'software_version' => "Fedora #{ENV.fetch('FEDORA_VERSION', 'v6.5.0')}",
             'user' => file.user.to_s
           }

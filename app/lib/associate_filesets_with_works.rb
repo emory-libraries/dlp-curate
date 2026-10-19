@@ -76,7 +76,7 @@ module AssociateFilesetsWithWorks
   def associate_valkyrie(work, file_sets)
     raise "All FileSetResources haven't been persisted yet" unless pull_fileset_entries_for_parent(work.deduplication_key).size == file_sets.size
 
-    work.member_ids = file_sets.map(&:id)
+    work.member_ids += file_sets.map(&:id)
     Hyrax.persister.save(resource: work)
     Hyrax.index_adapter.save(resource: work)
   end
