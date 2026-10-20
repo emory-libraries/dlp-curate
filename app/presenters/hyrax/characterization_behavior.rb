@@ -5,12 +5,14 @@ module Hyrax
   module CharacterizationBehavior
     extend ActiveSupport::Concern
 
+    TERM_LABELS = { creating_os: 'Creating OS' }.freeze
+
     class_methods do
       def characterization_terms
         [
           :original_checksum, :file_name, :file_path, :file_size, :mime_type,
           :created, :format_label, :valid, :well_formed, :creating_application_name,
-          :puid, :height, :width, :page_count, :character_set, :byte_order,
+          :creating_os, :puid, :height, :width, :page_count, :character_set, :byte_order,
           :color_space, :compression, :profile_name, :profile_version, :orientation,
           :color_map, :image_producer, :capture_device, :scanning_software,
           :gps_timestamp, :latitude, :longitude, :file_format, :duration,
@@ -43,7 +45,7 @@ module Hyrax
     end
 
     def label_for_term(term)
-      term.to_s.titleize
+      TERM_LABELS.fetch(term.to_sym) { term.to_s.titleize }
     end
 
     # Returns an array of characterization values truncated to 250 characters limited

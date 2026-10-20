@@ -31,7 +31,17 @@ module Curate
         index_fm_field(solr_doc, fm, :puid, 'puid_ssim')
         index_fm_field(solr_doc, fm, :original_checksum, 'original_checksum_ssim')
         index_fm_field(solr_doc, fm, :original_filename, 'file_name_ssim')
-        index_fm_field(solr_doc, fm, :file_size, 'file_size_ssim')
+        index_fm_field(solr_doc, fm, :date_created, 'date_created_ssim')
+        index_alpha_channels(solr_doc, fm)
+      end
+
+      # Hyrax fills alpha_channels_ssi from the FITS `channels` value (the audio
+      # channel count, still indexed as channels_tesim). As with the AF indexer,
+      # Curate uses it for the ImageMagick-detected `alpha_channels` instead.
+      def index_alpha_channels(solr_doc, fm)
+        solr_doc.delete('alpha_channels_ssi')
+        alpha_channels = fm.respond_to?(:alpha_channels) ? Array(fm.alpha_channels) : []
+        solr_doc['alpha_channels_ssi'] = alpha_channels.first if alpha_channels.present?
       end
 
       def index_fm_field(solr_doc, fm, attr, solr_key)

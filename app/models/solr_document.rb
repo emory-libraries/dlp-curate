@@ -45,8 +45,10 @@ class SolrDocument
     self['file_path_ssim']
   end
 
+  # Characterization readers check the field written by the AF Curate::FileSetIndexer
+  # first, then the one written by Hyrax's Valkyrie FileSet indexer.
   def file_size
-    self['file_size_ssim']
+    characterization_value('file_size_ssim', 'file_size_lts')
   end
 
   def created
@@ -54,43 +56,51 @@ class SolrDocument
   end
 
   def valid
-    self['valid_ssim']
+    characterization_value('valid_ssim', 'valid_tesim')
   end
 
   def well_formed
-    self['well_formed_ssim']
+    characterization_value('well_formed_ssim', 'well_formed_tesim')
   end
 
   def creating_application_name
     self['creating_application_name_ssim']
   end
 
+  def creating_os
+    self['creating_os_ssim']
+  end
+
   def puid
     self['puid_ssim']
   end
 
+  def original_checksum
+    characterization_value('original_checksum_tesim', 'original_checksum_ssim')
+  end
+
   def character_set
-    self['character_set_ssim']
+    characterization_value('character_set_ssim', 'character_set_tesim')
   end
 
   def byte_order
-    self['byte_order_ssim']
+    characterization_value('byte_order_ssim', 'byte_order_tesim')
   end
 
   def color_space
-    self['color_space_ssim']
+    characterization_value('color_space_ssim', 'color_space_tesim')
   end
 
   def compression
-    self['compression_ssim']
+    characterization_value('compression_ssim', 'compression_tesim')
   end
 
   def profile_name
-    self['profile_name_ssim']
+    characterization_value('profile_name_ssim', 'profile_name_tesim')
   end
 
   def profile_version
-    self['profile_version_ssim']
+    characterization_value('profile_version_ssim', 'profile_version_tesim')
   end
 
   def human_readable_content_type
@@ -171,4 +181,14 @@ class SolrDocument
 
     base_path + '/catalog/' + self['id'] + '/iiif_search'
   end
+
+  private
+
+    def characterization_value(*fields)
+      fields.each do |field|
+        value = self[field]
+        return value if value.present?
+      end
+      nil
+    end
 end
