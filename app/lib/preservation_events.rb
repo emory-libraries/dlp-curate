@@ -52,7 +52,14 @@ module PreservationEvents
     end
 
     def valkyrie_create(object, event)
-      preservation_event = Hyrax.persister.save(resource: PreservationEventResource.new(
+      object.preservation_event += [persist_valkyrie_preservation_event(event)]
+
+      Hyrax.persister.save(resource: object)
+    end
+
+    # Persists the event without saving the object it belongs to.
+    def persist_valkyrie_preservation_event(event)
+      Hyrax.persister.save(resource: PreservationEventResource.new(
         event_details:    event['details'],
         event_end:        event['end'] || DateTime.current,
         event_start:      event['start'],
@@ -61,8 +68,5 @@ module PreservationEvents
         outcome:          event['outcome'],
         software_version: event['software_version']
       ))
-      object.preservation_event += [preservation_event]
-
-      Hyrax.persister.save(resource: object)
     end
 end

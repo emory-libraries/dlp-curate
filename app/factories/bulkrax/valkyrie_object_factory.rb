@@ -359,24 +359,22 @@ module Bulkrax
         end
       end
 
-      # Emory override: adds preservation event creation after work creation
+      # Emory override: records the importing user on the work creation preservation
+      # events, which the create_work transaction attaches before the work's first save.
       def create_work(attrs)
         # NOTE: We do not add relationships here; that is part of the create relationships job.
-        event_start = DateTime.current
         attrs = HashWithIndifferentAccess.new(attrs)
-        object = perform_transaction_for(object: @object, attrs:) do
+        perform_transaction_for(object: @object, attrs:) do
           uploaded_files, file_set_params = prep_fileset_content(attrs)
           transactions["change_set.create_work"]
             .with_step_args(
               'work_resource.add_file_sets' => { uploaded_files:, file_set_params: },
               "change_set.set_user_as_depositor" => { user: @user },
+              'change_set.add_work_creation_events' => { initiating_user: @user.email },
               "work_resource.change_depositor" => { user: @user },
               'work_resource.save_acl' => { permissions_params: [attrs.try('visibility') || 'open'].compact }
             )
         end
-
-        process_work_creation_preservation_events(event_start)
-        object
       end
 
       ## Prepare fileset data in the required format for creating or updating a work
@@ -610,15 +608,6 @@ module Bulkrax
 
         attrs[:title] = [] if attrs[:title].blank?
         attrs
-      end
-
-      # Emory addition: adds preservation event creation after work update
-      def process_work_creation_preservation_events(event_start)
-        pulled_work = search_by_identifier
-        return unless pulled_work
-
-        create_preservation_event(pulled_work, work_creation(event_start:, user_email: @user.email))
-        create_preservation_event(pulled_work, work_policy(event_start:, visibility: pulled_work.visibility, user_email: @user.email))
       end
 
       def add_secondary_files_to_pres_master_file_uploaded_file_object(remaining_files:, pres_master_file:)
