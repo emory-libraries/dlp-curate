@@ -6,17 +6,18 @@
 
 //***  SITE BASICS ***//
 body {
-  font-family: $emory-sans;
-  font-weight: $sans-regular;
+  font-family: $eul-sans;
+  font-weight: 400;
   color: $charcoal;
   font-size: 1rem;
 }
 
+
 /** Headings & Links **/
-h1, h4, h5 {
-  font-family: $emory-serif;
-  font-weight: $serif-xlight;
-  color: $emory-blue;
+h1, h2, h4, h5 {
+  font-family: $eul-serif;
+  font-weight: 400;
+  color: $base-blue;
 }
 
 h1 {
@@ -24,10 +25,7 @@ h1 {
 }
 
 h2 {
-  font-family: $emory-serif;
-  font-weight: $serif-xlight;
   font-size: 2rem;
-  color: $emory-blue;
   margin-bottom: 0.9375rem;
 
   &.alt {
@@ -44,22 +42,26 @@ h2 {
       content: "";
       border-top-width: 0.375rem;
       border-top-style: solid;
-      border-top-color: $emory-yellow;
+      border-top-color: $gold;
       margin-top: 0.625rem;
     }
   }
 }
 
 h3 {
-  font-family: $emory-sans;
+  font-family: $eul-sans;
   color: $charcoal;
-  font-weight: $sans-bold;
+  font-weight: 700;
   font-size: 1.75rem;
 }
 
 a {
-  color: $waterhub-blue;
+  color: $bright-blue;
   text-decoration: none;
+}
+
+.badge {
+  font-family: $eul-sans;
 }
 
 // Homepage
@@ -72,6 +74,10 @@ a {
     h5.card-title {
       display: none;
     }
+  }
+
+  .svg > text {
+    font-family: $eul-sans;
   }
 
   // Dashboard - Works List
@@ -102,7 +108,7 @@ a {
 }
 // New/Edit Collection
 .ui-autocomplete-loading {
-  background: $dogwood-white url("/assets/loading.gif") right center no-repeat;
+  background: $white url("/assets/loading.gif") right center no-repeat;
 }
 
 .ui-autocomplete {
