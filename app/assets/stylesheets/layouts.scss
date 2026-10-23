@@ -12,7 +12,6 @@ body {
   font-size: 1rem;
 }
 
-
 /** Headings & Links **/
 h1, h2, h4, h5 {
   font-family: $eul-serif;
@@ -75,11 +74,7 @@ a {
       display: none;
     }
   }
-
-  .svg > text {
-    font-family: $eul-sans;
-  }
-
+  
   // Dashboard - Works List
   .table > tbody .document-title {
     word-break: normal;
