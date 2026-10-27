@@ -31,10 +31,10 @@ module Hyrax
       # @param [Dry::Events::Event] event
       # @return [void]
       def on_file_uploaded(event)
-        if event[:metadata]&.original_file?
+        if curate_preferred_derivative_files.include?(event[:metadata].pcdm_use.first) # Emory Addition
           # Run characterization for original file only and allow optional skip paramater
           ValkyrieCharacterizationJob.perform_later(event[:metadata].id.to_s)
-        elsif curate_preferred_derivative_files.include?(event[:metadata].pcdm_use.first) # Emory Addition
+
           file_set = Hyrax.query_service.find_by(id: event[:metadata].file_set_id)
 
           case file_set
@@ -45,6 +45,9 @@ module Hyrax
             ValkyrieCreateDerivativesJob
               .perform_later(file_set.id.to_s, event[:metadata].id.to_s)
           end
+        else
+          # Run characterization for original file only and allow optional skip paramater
+          ValkyrieCharacterizationJob.perform_later(event[:metadata].id.to_s)
         end
       end
 
