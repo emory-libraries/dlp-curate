@@ -62,6 +62,16 @@ module Hyrax
 
     private
 
+      # [Hyrax-override-hyrax-v5.2.0] Compares Valkyrie permissions as a set.
+      # Fedora does not preserve the order of an ACL's permissions and a save can
+      # return them reordered, so Hyrax's array comparison prompted to apply access
+      # changes to the files after every save (samvera/hyrax#6537).
+      def permissions_changed?
+        return super if curation_concern.is_a?(ActiveFedora::Base)
+
+        @saved_permissions.to_set != Hyrax::AccessControl.for(resource: curation_concern).permissions.to_set
+      end
+
       # @return [String, nil] the title to display in the flash, or nil if destroy
       #   failed (in which case `actor.destroy` has already rendered a response).
       def destroy_af_work
