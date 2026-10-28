@@ -27,29 +27,27 @@ module Hyrax
       end
 
       ##
+      # Emory Alteration
       # Called when 'file.uploaded' event is published
       # @param [Dry::Events::Event] event
       # @return [void]
       def on_file_uploaded(event)
-        if curate_preferred_derivative_files.include?(event[:metadata].pcdm_use.first) # Emory Addition
-          # Run characterization for original file only and allow optional skip paramater
-          ValkyrieCharacterizationJob.perform_later(event[:metadata].id.to_s)
+        # Run characterization for original file only and allow optional skip paramater
+        ValkyrieCharacterizationJob.perform_later(event[:metadata].id.to_s)
+        return unless curate_preferred_derivative_files.include?(event[:metadata].pcdm_use.first)
 
-          file_set = Hyrax.query_service.find_by(id: event[:metadata].file_set_id)
+        file_set = Hyrax.query_service.find_by(id: event[:metadata].file_set_id)
 
-          case file_set
-          when ActiveFedora::Base # ActiveFedora
-            CreateDerivativesJob
-              .perform_later(file_set, event[:metadata].id.to_s, event[:metadata].file_identifier.to_s)
-          else
-            ValkyrieCreateDerivativesJob
-              .perform_later(file_set.id.to_s, event[:metadata].id.to_s)
-          end
+        case file_set
+        when ActiveFedora::Base # ActiveFedora
+          CreateDerivativesJob
+            .perform_later(file_set, event[:metadata].id.to_s, event[:metadata].file_identifier.to_s)
         else
-          # Run characterization for original file only and allow optional skip paramater
-          ValkyrieCharacterizationJob.perform_later(event[:metadata].id.to_s)
+          ValkyrieCreateDerivativesJob
+            .perform_later(file_set.id.to_s, event[:metadata].id.to_s)
         end
       end
+      # End of Emory Alteration
 
       private
 
