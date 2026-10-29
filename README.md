@@ -58,6 +58,7 @@ To run the tests locally, fire off `bundle exec rspec` within the `dlp-curate` d
   b. Clicking on `Access keys` will open a modal with multiple credential options. Option 1 (`Set AWS environment variables`) is necessary for successful deployment.
   c. Copy the variables in Option 1, paste them into the terminal window that the deployment script will be processed, and press enter.
 5. To deploy, run `BRANCH={BRANCH_NAME_OR_TAG} bundle exec cap {ENVIRONMENT} deploy`. To deploy main to the arch environment, for instance, you run `BRANCH=main bundle exec cap arch deploy`.
+    - Deploys only run `curate:collections:migration_setup` (which creates the collections in `config/collection_metadata/collections.csv`) when `CREATE_MIGRATION_COLLECTIONS=true` is set, e.g. when setting up a new environment.
 
 ## Deployment Troubleshooting
 

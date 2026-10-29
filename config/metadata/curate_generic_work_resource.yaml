@@ -64,6 +64,7 @@ attributes:
       multiple: false
     index_keys:
       - "contact_information_tesi"
+      - "contact_information_tesim"
     predicate: http://www.rdaregistry.info/Elements/u/#P60490
   content_genres:
     type: string
@@ -320,6 +321,7 @@ attributes:
       multiple: false
     index_keys:
       - "primary_language_tesi"
+      - "primary_language_tesim"
       - "primary_language_si"
     predicate: http://purl.org/dc/elements/1.1/language
   publisher:

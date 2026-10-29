@@ -139,6 +139,7 @@ attributes:
     index_keys:
       - 'institution_ssi'
       - 'institution_tesi'
+      - 'institution_tesim'
     predicate: http://rdaregistry.info/Elements/u/P60402
   internal_rights_note:
     type: string
@@ -148,6 +149,7 @@ attributes:
       multiple: false
     index_keys:
       - 'internal_rights_note_tesi'
+      - 'internal_rights_note_tesim'
     predicate: http://metadata.emory.edu/vocab/cor-terms#internalRightsNote
   keyword:
     type: string
@@ -189,6 +191,7 @@ attributes:
       multiple: false
     index_keys:
       - "local_call_number_tesi"
+      - "local_call_number_tesim"
     predicate: http://metadata.emory.edu/vocab/cor-terms#localCallNumber
   primary_repository_ID:
     type: string
@@ -198,6 +201,7 @@ attributes:
       multiple: false
     index_keys:
       - "primary_repository_ID_tesi"
+      - "primary_repository_ID_tesim"
     predicate: http://purl.org/dc/terms/identifier
   relative_path:
     type: string
@@ -223,6 +227,7 @@ attributes:
       multiple: false
     index_keys:
       - "rights_documentation_tesi"
+      - "rights_documentation_tesim"
     predicate: http://metadata.emory.edu/vocab/cor-terms#rightsDocumentationURI
   rights_notes:
     type: string
@@ -240,6 +245,7 @@ attributes:
       multiple: false
     index_keys:
       - "sensitive_material_tesi"
+      - "sensitive_material_tesim"
     predicate: http://metadata.emory.edu/vocab/cor-terms#sensitiveMaterial
   source:
     type: string
@@ -317,4 +323,5 @@ attributes:
     index_keys:
       - 'system_of_record_ID_ssi'
       - 'system_of_record_ID_tesi'
+      - 'system_of_record_ID_tesim'
     predicate: http://metadata.emory.edu/vocab/cor-terms#descriptiveSystemID
