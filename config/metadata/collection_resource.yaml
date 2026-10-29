@@ -27,6 +27,7 @@ attributes:
       multiple: false
     index_keys:
       - "contact_information_tesi"
+      - "contact_information_tesim"
     predicate: http://www.rdaregistry.info/Elements/u/#P60490
   contributors:
     type: string
@@ -59,6 +60,7 @@ attributes:
       multiple: false
     index_keys:
       - "finding_aid_link_tesi"
+      - "finding_aid_link_ssm"
     predicate: http://metadata.emory.edu/vocab/cor-terms#findingAid
   notes:
     type: string
@@ -77,5 +79,6 @@ attributes:
       multiple: false
     index_keys:
       - "primary_language_tesi"
+      - "primary_language_tesim"
       - "primary_language_si"
     predicate: http://purl.org/dc/elements/1.1/language

@@ -310,6 +310,28 @@ RSpec.describe CurateGenericWorkResourceIndexer do
     end
   end
 
+  # SolrDocumentAccessors reads the field names the AF CurateGenericWork indexer used.
+  describe 'single-valued descriptive fields' do
+    let(:attributes) do
+      {
+        title:               ['Test'],
+        contact_information: 'Rose Library',
+        institution:         'Emory University',
+        primary_language:    'English',
+        system_of_record_ID: 'alma:990012345'
+      }
+    end
+
+    it 'indexes them under the AF field names as well' do
+      expect(solr_document).to include(
+        'contact_information_tesim' => 'Rose Library',
+        'institution_tesim' => 'Emory University',
+        'primary_language_tesim' => 'English',
+        'system_of_record_ID_tesim' => 'alma:990012345'
+      )
+    end
+  end
+
   describe 'human-readable fields' do
     let(:attributes) do
       {
