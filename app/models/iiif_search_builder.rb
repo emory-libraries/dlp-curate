@@ -8,6 +8,17 @@ class IiifSearchBuilder < Blacklight::SearchBuilder
 
   # set params for ocr field searching
   def ocr_search_params(solr_parameters = {})
+    # 1. Manually check for both symbol and string keys to bypass the BL7 parsing bug
+    f_params = search_state.params['f']
+
+    if f_params
+      parent_id = f_params['is_page_of_ssi']
+      if parent_id.present?
+        solr_parameters[:fq] ||= []
+        solr_parameters[:fq] << "is_page_of_ssi:#{parent_id}"
+      end
+    end
+
     solr_parameters[:facet] = false
     solr_parameters[:hl] = true
     solr_parameters[:'hl.fl'] = blacklight_config.iiif_search[:full_text_field]

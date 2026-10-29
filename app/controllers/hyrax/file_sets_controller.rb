@@ -22,7 +22,6 @@ module Hyrax
       blacklight_config.track_search_session = false
     end
     before_action :presenter
-    before_action :set_file_set, only: [:show]
 
     # provides the help_text view method
     helper PermissionsHelper
@@ -85,7 +84,7 @@ module Hyrax
     def destroy
       guard_for_workflow_restriction_on!(parent:)
 
-      actor.destroy
+      delete(file_set: curation_concern)
       redirect_to [main_app, parent],
                   notice: view_context.t('hyrax.file_sets.asset_deleted_flash.message')
     end
@@ -114,6 +113,21 @@ module Hyrax
     def citation; end
 
     private
+
+      ##
+      # @api public
+      def delete(file_set:)
+        case file_set
+        when Hyrax::Resource
+          transactions['file_set.destroy']
+            .with_step_args('file_set.remove_from_work' => { user: current_user },
+                            'file_set.delete' => { user: current_user })
+            .call(curation_concern)
+            .value!
+        else
+          actor.destroy
+        end
+      end
 
       ##
       # @api public
@@ -202,7 +216,7 @@ module Hyrax
         return revert_valkyrie if wants_to_revert_valkyrie?
         if params.key?(:file_set)
           if params[:file_set].key?(:files)
-            ValkyrieIngestJob.perform_later(uploaded_file_from_path)
+            CurateValkyrieIngestJob.perform_later(uploaded_file_from_path)
           else
             update_metadata
           end
@@ -210,7 +224,7 @@ module Hyrax
           uploaded_files = Array(Hyrax::UploadedFile.find(params[:files_files]))
           uploaded_files.first.file_set_uri = file_set.id.to_s
           uploaded_files.first.save
-          ValkyrieIngestJob.perform_later(uploaded_files.first)
+          CurateValkyrieIngestJob.perform_later(uploaded_files.first)
           update_metadata
         end
       end
@@ -395,19 +409,57 @@ module Hyrax
         @presenter ||= show_presenter.new(::SolrDocument.find(params[:id]), current_ability, request)
       end
 
-      def set_file_set
-        @file_set = ::FileSet.find(params[:id])
-        @file_set.update_index
+      # Returns a hash keyed by dlp-curate file type name, with a value that
+      # responds to #file_name (Array) and #create_date for the view partial.
+      # Supports AF files (native interface) and Valkyrie FileMetadata
+      # (wrapped to provide the same interface).
+      def set_files
+        active_fedora_file_set = lookup_active_fedora_file_set
+
+        ['preservation_master_file', 'service_file', 'intermediate_file', 'extracted', 'transcript_file'].map do |file_lookup|
+          file_metadata = lookup_file_metadata(file_lookup)
+          [file_lookup.to_s,
+           if file_metadata.present?
+             FileMetadataPresenter.new(file_metadata)
+           elsif active_fedora_file_set.present?
+             active_fedora_file_set.public_send("pulled_#{file_lookup}#{file_lookup == 'extracted' ? '_file' : ''}")
+           end]
+        end.to_h
       end
 
-      def set_files
-        {
-          'preservation_master_file': @file_set.pulled_preservation_master_file,
-          'service_file':             @file_set.service_file,
-          'intermediate_file':        @file_set.pulled_intermediate_file,
-          'extracted':                @file_set.pulled_extracted_file,
-          'transcript_file':          @file_set.pulled_transcript_file
-        }
+      def lookup_file_metadata(file_lookup)
+        return Hyrax.custom_queries.find_original_file(file_set:) if file_lookup == 'preservation_master_file'
+        return Hyrax.custom_queries.find_extracted_text(file_set:) if file_lookup == 'extracted'
+        Hyrax.custom_queries.public_send("find_#{file_lookup}".to_sym, file_set:)
+      rescue Valkyrie::Persistence::ObjectNotFoundError, NoMethodError
+        nil
+      end
+
+      def lookup_active_fedora_file_set
+        ::FileSet.find(file_set.id.to_s)
+      rescue ActiveFedora::ObjectNotFoundError
+        nil
+      end
+
+      # Adapts a Hyrax::FileMetadata resource to the interface expected by
+      # the hyrax/file_sets/_file_details.html.erb partial (file.file_name.first
+      # and file.create_date).
+      class FileMetadataPresenter
+        attr_reader :file_metadata
+
+        delegate :id, :mime_type, to: :file_metadata
+
+        def initialize(file_metadata)
+          @file_metadata = file_metadata
+        end
+
+        def file_name
+          Array(file_metadata.original_filename)
+        end
+
+        def create_date
+          file_metadata.date_created&.first || file_metadata.created_at
+        end
       end
   end
 end

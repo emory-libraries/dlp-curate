@@ -59,14 +59,14 @@ RSpec.describe AssociateFilesetsWithWorkJob, :clean, perform_enqueued: [Associat
   context '#pull_fileset_entries_for_parent' do
     it 'pulls the entry' do
       expect(
-        described_class.new.send(:pull_fileset_entries_for_parent, file_set_entries, parent)
+        described_class.new.send(:pull_fileset_entries_for_parent, parent)
       ).to match_array [entry]
     end
   end
 
   context '#pull_file_sets' do
     it 'pulls the file_set' do
-      expect(described_class.new.send(:pull_file_sets, file_set_entries, parent)).to match_array [file_set]
+      expect(described_class.new.send(:pull_file_sets, parent)).to match_array [file_set]
     end
   end
 
