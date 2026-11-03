@@ -6,6 +6,12 @@ class CurateGenericWorkResourceForm < Hyrax::Forms::PcdmObjectForm(CurateGeneric
   include Hyrax::FormFields(:emory_basic_metadata)
   include Hyrax::FormFields(:curate_generic_work_resource)
 
+  # The Rendering multi-select always posts a blank value, and a blank ID keeps
+  # rendering_ids from being persisted at all. (The AF actor stack strips blanks.)
+  def rendering_ids=(ids)
+    super(Array(ids).compact_blank)
+  end
+
   def primary_descriptive_metadata_fields
     [:title, :holding_repository, :date_created, :content_type, :content_genres,
      :administrative_unit, :creator, :contributors, :abstract, :primary_language,
