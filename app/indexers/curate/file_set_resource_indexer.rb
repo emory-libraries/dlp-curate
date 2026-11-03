@@ -9,6 +9,7 @@ module Curate
     def to_solr
       super.tap do |solr_doc|
         solr_doc['pcdm_use_tesim'] = resource.pcdm_use if resource.pcdm_use.present?
+        index_label(solr_doc)
         # Temporary: index alternate_ids for remediation query discovery.
         # Remove after running migrate_alternate_ids_to_emory_persistent_id.
         solr_doc['alternate_ids_ssim'] = resource.alternate_ids.map(&:id) if resource.respond_to?(:alternate_ids) && resource.alternate_ids.present?
@@ -20,6 +21,15 @@ module Curate
     end
 
     private
+
+      # As the AF Hyrax::FileSetIndexer does; SolrDocument#label (and so the
+      # manifest's download labels) read label_tesim.
+      def index_label(solr_doc)
+        return if resource.label.blank?
+
+        solr_doc['label_tesim'] = resource.label
+        solr_doc['label_ssi'] = resource.label
+      end
 
       def index_file_metadata(solr_doc)
         fm = primary_file_metadata

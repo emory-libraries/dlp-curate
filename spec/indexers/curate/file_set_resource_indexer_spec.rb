@@ -53,4 +53,29 @@ RSpec.describe Curate::FileSetResourceIndexer do
       end
     end
   end
+
+  describe 'label' do
+    let(:file_set) { FileSetResource.new(id: Valkyrie::ID.new('fs-123'), title: ['PDF for volume'], label: 'PDF for volume') }
+
+    it 'indexes the label as the AF indexer does' do
+      expect(solr_document).to include('label_tesim' => 'PDF for volume', 'label_ssi' => 'PDF for volume')
+    end
+
+    it 'names the file in its manifest download entry' do
+      # Solr returns the multivalued label_tesim field as an array.
+      allow(SolrDocument).to receive(:find).with('fs-123')
+                                           .and_return(SolrDocument.new(solr_document.merge('label_tesim' => [solr_document['label_tesim']])))
+
+      expect(Hyrax::ManifestHelper.new('http://localhost:3000').build_rendering('fs-123')['label'])
+        .to eq 'Download whole resource: PDF for volume'
+    end
+
+    context 'without a label' do
+      let(:file_set) { FileSetResource.new(id: Valkyrie::ID.new('fs-123'), title: ['0008.tif']) }
+
+      it 'does not index one' do
+        expect(solr_document.keys).not_to include('label_tesim', 'label_ssi')
+      end
+    end
+  end
 end
