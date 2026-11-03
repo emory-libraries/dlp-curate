@@ -6,6 +6,8 @@ require 'ruby-progressbar'
 # Utility service and methods that merge metadata from a CSV Pull List and MARCXml records
 # into a format suitable for ingest by the curate CSV importer
 class LangmuirPreprocessor
+  include PreprocessorModelNames
+
   attr_accessor :processed_csv
 
   ##
@@ -15,8 +17,8 @@ class LangmuirPreprocessor
   # For more information, read the SOURCE_DEPOSIT_CHANGES_README.md in dlp-curate's root folder.
   def initialize(csv)
     @source_csv = CSV.read(csv, headers: true)
-    @fileset_model_or_type = 'FileSet'
-    @work_model_or_type = 'CurateGenericWork'
+    @fileset_model_or_type = file_set_model_name
+    @work_model_or_type = work_model_name
     directory = File.dirname(csv)
     extension = File.extname(csv)
     filename = File.basename(csv, extension)
