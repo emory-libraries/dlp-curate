@@ -223,9 +223,10 @@ module Bulkrax
             )
           end
           # Emory Addition
-          reloaded_child = Bulkrax.object_factory.find(child_record.id)
-          unless reloaded_child.member_of_collection_ids.map(&:to_s).include?(parent_record.id.to_s)
-            raise "The child work (ID=#{reloaded_child.id}) doesn't contain the collection ID (#{parent_record.id}) in #member_of_collection_ids: #{reloaded_child.member_of_collection_ids}"
+          pulled_child_record = SolrDocument.find(child_record.id)
+          pulled_child_member_of_collections = pulled_child_record['member_of_collection_ids_ssim']
+          unless pulled_child_member_of_collections&.include?(parent_record.id.to_s)
+            raise "The child work (ID=#{pulled_child_record.id}) doesn't contain the collection ID (#{parent_record.id}) in #member_of_collection_ids: #{pulled_child_member_of_collections}"
           end
           # End of Emory Addition
 
