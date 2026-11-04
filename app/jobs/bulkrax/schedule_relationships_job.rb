@@ -3,11 +3,11 @@
 
 module Bulkrax
   class ScheduleRelationshipsJob < ApplicationJob
-    def perform(importer_id:)
+    def perform(importer_id:, retries: 0)
       importer = ::Bulkrax::Importer.find(importer_id)
       pending_num = importer.entries.left_outer_joins(:latest_status)
                             .where('bulkrax_statuses.status_message IS NULL ').count
-      return reschedule(importer_id) unless pending_num.zero?
+      return reschedule(importer_id, retries) unless pending_num.zero?
 
       ::ScheduleAssociateFilesetsWithWorkJob.perform_later(importer_id:) # Emory Addition
       importer.last_run.parents.each do |parent_id|
@@ -16,8 +16,8 @@ module Bulkrax
       end
     end
 
-    def reschedule(importer_id)
-      ScheduleRelationshipsJob.set(wait: 5.minutes).perform_later(importer_id:)
+    def reschedule(importer_id, retries)
+      ScheduleRelationshipsJob.set(wait: (5 + retries).minutes).perform_later(importer_id:, retries: (retries + 1))
       false
     end
   end
