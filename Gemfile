@@ -13,7 +13,7 @@ gem 'archivesspace-client'
 gem 'blacklight_iiif_search'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap', '~> 4.0'
-gem 'bulkrax', '~> 8.2.0'
+gem 'bulkrax', '~> 9.3.5'
 gem 'clamby', '~> 1.6', require: ENV['HYRAX_CLAMAV'] == 'true'
 gem 'coffee-rails', '~> 4.2'
 gem 'dartsass-sprockets'

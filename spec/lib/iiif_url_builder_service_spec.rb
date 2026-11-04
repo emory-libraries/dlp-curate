@@ -45,6 +45,38 @@ RSpec.describe IiifUrlBuilderService, :clean do
         expect(iiif_builder_service.sha1).to eq('unknown')
       end
     end
+
+    # ManifestBuilderService passes the preferred file's FileMetadata id for
+    # Valkyrie works, so the lookup returns a Hyrax::FileMetadata.
+    context 'when given a Valkyrie FileMetadata id' do
+      let(:valkyrie_service) { described_class.new(file_set_id: 'fm-123', size: '260,') }
+      let(:checksums) { ['urn:md5:5b8fdd56bd296b2758c9e993175a7db7', 'urn:sha1:7b16f8f03531aea38080f6c9b69792f3dae65e64'] }
+      let(:file_metadata) do
+        Hyrax::FileMetadata.new(id: Valkyrie::ID.new('fm-123'), file_set_id: Valkyrie::ID.new('fs-123'),
+                                original_checksum: checksums)
+      end
+
+      before do
+        allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
+        allow(Hyrax.query_service).to receive(:find_by).with(id: 'fm-123').and_return(file_metadata)
+      end
+
+      it 'builds the urls from the FileMetadata sha1' do
+        expect(valkyrie_service.sha1).to eq('7b16f8f03531aea38080f6c9b69792f3dae65e64')
+        expect(valkyrie_service.sha1_url)
+          .to eq('http://localhost:3000/cantaloupe/iiif/2/7b16f8f03531aea38080f6c9b69792f3dae65e64/full/260,/0/default.jpg')
+        expect(valkyrie_service.sha1_info_url)
+          .to eq('http://localhost:3000/cantaloupe/iiif/2/7b16f8f03531aea38080f6c9b69792f3dae65e64')
+      end
+
+      context 'without a sha1 checksum' do
+        let(:checksums) { ['urn:md5:5b8fdd56bd296b2758c9e993175a7db7'] }
+
+        it 'returns unknown' do
+          expect(valkyrie_service.sha1).to eq('unknown')
+        end
+      end
+    end
   end
 
   context 'when not using the Fedora s3 adapter' do

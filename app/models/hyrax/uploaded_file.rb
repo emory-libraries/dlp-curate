@@ -41,5 +41,14 @@ module Hyrax
       files = [service_file, preservation_master_file, intermediate_file, extracted_text, transcript, collection_banner]
       files.find(&:present?)
     end
+
+    def filenames_for_preservation_event
+      (self.class.uploaders.keys - [:collection_banner]).filter_map do |upl|
+        if public_send(:"#{upl}?")
+          path = public_send(upl)&.file&.file
+          File.basename(path) if path
+        end
+      end
+    end
   end
 end

@@ -251,7 +251,14 @@ module Hyrax
     end
 
     def deposit_collections
-      deposit_collection_ids&.map { |id| { id:, title: Collection.find(id).title.first } }
+      deposit_collection_ids&.map do |id|
+        col = if Hyrax.config.valkyrie_transition?
+                Hyrax.query_service.find_by(id:)
+              else
+                Collection.find(id)
+              end
+        { id:, title: Array(col.title).first }
+      end
     end
   end
 end

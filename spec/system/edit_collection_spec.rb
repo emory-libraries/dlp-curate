@@ -84,7 +84,7 @@ RSpec.describe 'Edit an existing collection', clean: true, type: :system, js: tr
       select 'Robert Langmuir African American Photograph Collection', from: 'collection_source_collection_id'
       select 'Testing Collection', from: 'collection_deposit_collection_ids'
       click_button 'Save changes'
-      sleep 5
+      expect(page).to have_content 'Collection was successfully updated'
       reloaded_collection = Collection.find(collection.id)
 
       expect(reloaded_collection.source_collection_id).to eq reloaded_collection.id

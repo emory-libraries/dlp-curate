@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: #import_file
+# Bulkrax v9.3.5 override: #import_file
 require 'bulkrax/override_assistive_methods'
 
 module Bulkrax

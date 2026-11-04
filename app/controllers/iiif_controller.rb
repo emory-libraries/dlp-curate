@@ -277,7 +277,23 @@ class IiifController < ApplicationController
   def manifest
     headers['Access-Control-Allow-Origin'] = '*'
     solr_doc = SolrDocument.find(identifier)
-    render json: ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: CurateGenericWork.find(identifier))
+    render json: ManifestBuilderService.build_manifest(presenter: presenter(solr_doc), curation_concern: load_curation_concern_for_manifest(identifier))
+  end
+
+  # Loads the curation concern for IIIF manifest rendering. Supports both
+  # AF and Valkyrie works during lazy migration. Falls back to a direct
+  # AF lookup if the Valkyrie composite query service fails.
+  def load_curation_concern_for_manifest(id)
+    if Hyrax.config.valkyrie_transition?
+      begin
+        Hyrax.query_service.find_by(id:)
+      rescue Valkyrie::Persistence::ObjectNotFoundError, Ldp::HttpError, Faraday::Error => e
+        Rails.logger.warn("[IiifController] Valkyrie query failed for #{id}, falling back to AF: #{e.class}")
+        CurateGenericWork.find(id)
+      end
+    else
+      CurateGenericWork.find(id)
+    end
   end
 
   ##

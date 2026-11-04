@@ -2,24 +2,26 @@ services:
   fcrepo:
     image: ghcr.io/samvera/fcrepo4:4.7.5
     volumes:
-      - fcrepo:/data:cached
+      - fcrepo4:/var/lib/fedora4-home
     ports:
       - 8984:8080
+    environment:
+      - JAVA_OPTS=-Dfcrepo.home=/var/lib/fedora4-home
     networks:
       - curate
 
-  fcrepo6:
-    image: fcrepo/fcrepo:6.5.1-tomcat9
+  fcrepo7:
+    image: fcrepo/fcrepo:7.0.0-RC1-tomcat10
     environment:
       - >-
-        CATALINA_OPTS=-Dfcrepo.home=/fcrepo-home -Djava.awt.headless=true -Dfile.encoding=UTF-8
-        -server -Xms1G -Xmx2G -XX:NewSize=256m -XX:MaxNewSize=1G
-        -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/mem
-        -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
+        CATALINA_OPTS=-Dfcrepo.home=/var/lib/fcrepo-home -Djava.awt.headless=true -Dfile.encoding=UTF-8
+        -server -Xms1G -Xmx2G -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/mem
         -Dfcrepo.jms.enabled=false -Dfcrepo.metrics.enable=true
-      - JAVA_OPTS=-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
+      - ENCODED_SOLIDUS_HANDLING=passthrough
+      - FEDORA_ADMIN_USERNAME=fedoraAdmin
+      - FEDORA_ADMIN_PASSWORD=fedoraAdmin
     volumes:
-      - fcrepo6:/fcrepo-home
+      - fcrepo6:/var/lib/fcrepo-home
     ports:
       - 8985:8080
     networks:
@@ -55,7 +57,7 @@ services:
       - curate
 
 volumes:
-  fcrepo:
+  fcrepo4:
   fcrepo6:
   redis:
   solr_home:
