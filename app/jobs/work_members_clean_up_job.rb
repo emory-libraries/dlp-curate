@@ -15,7 +15,7 @@ class WorkMembersCleanUpJob < Hyrax::ApplicationJob
 
     def pull_works_by_ids(work_ids)
       work_ids.map do |id|
-        ret_arr << pull_object_based_on_id(id:)
+        pull_object_based_on_id(id:)
       rescue IneligibleIdError
         Rails.logger.error "The id #{id} did not match a work in the system."
         nil
