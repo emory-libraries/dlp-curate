@@ -26,6 +26,20 @@
     "universalviewer": "4.0.0",
     "webpack-sources": "^3.5.0"
   },
+  "resolutions": {
+    "ajv/fast-uri": "^3.0.1",
+    "esbuild-plugin-svg/svgo": "^2.2.2",
+    "eslint/@humanfs/node": "^0.16.6",
+    "http-proxy/follow-redirects": "^1.0.0",
+    "launch-editor/shell-quote": "^1.10.0",
+    "postcss/nanoid": "^3.3.12",
+    "sass/immutable": "^5.1.5",
+    "webpack-dev-server/launch-editor": "^2.6.0",
+    "**/baseline-browser-mapping": "^2.10.42",
+    "**/browserslist": "^4.28.2",
+    "**/postcss-selector-parser": "^7.1.1",
+    "**/source-map-js": "^1.2.1"
+  },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",
     "postinstall": "yarn run uv-install && yarn run uv-config",
@@ -48,7 +62,7 @@
     "webpack": "^5.0.0",
     "webpack-assets-manifest": "^5.0.6",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.9.0",
+    "webpack-dev-server": "^4.15.2",
     "webpack-merge": "^5.8.0"
   }
 }
