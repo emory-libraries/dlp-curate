@@ -54,6 +54,7 @@ module AssociateFilesetsWithWorks
 
       associate_filesets_to_work(work, file_sets)
       announce_filesets_attachement(file_sets)
+      check_work_for_errant_member_ids(work)
     end
   end
 
@@ -87,5 +88,11 @@ module AssociateFilesetsWithWorks
 
   def file_set_entry_parents_present?(fileset_entries:)
     fileset_entries&.all? { |fse| fse&.parsed_metadata&.[]('parent')&.present? }
+  end
+
+  def check_work_for_errant_member_ids(work)
+    reloaded_work = pull_work(work.id.to_s)
+
+    ReplaceWorkMembersJob.perform_later(reloaded_work, reloaded_work.cleaned_member_ids) if reloaded_work.duplicated_or_nil_member_ids?
   end
 end

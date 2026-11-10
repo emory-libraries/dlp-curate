@@ -9,4 +9,12 @@ class CurateGenericWorkResource < Hyrax::Work
   Hyrax::ValkyrieLazyMigration.migrating(self, from: CurateGenericWork) if Hyrax.config.valkyrie_transition?
 
   attribute :preservation_event, SafePreservationEventType::TYPE
+
+  def cleaned_member_ids
+    member_ids&.compact&.map(&:to_s)&.uniq || []
+  end
+
+  def duplicated_or_nil_member_ids?
+    member_ids.size != cleaned_member_ids.size
+  end
 end

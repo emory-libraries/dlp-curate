@@ -23,11 +23,8 @@ class WorkMembersCleanUpJob < Hyrax::ApplicationJob
     end
 
     def clean_up_work_member(work)
-      member_ids = work.member_ids
-      cleaned_member_ids = member_ids.compact.map(&:to_s).uniq
-
-      if member_ids.size != cleaned_member_ids.size
-        ReplaceWorkMembersJob.perform_later(work, cleaned_member_ids)
+      if work.duplicated_or_nil_member_ids?
+        ReplaceWorkMembersJob.perform_later(work, work.cleaned_member_ids)
       else
         Rails.logger.error 'No nil or duplicate work members were found.'
       end
