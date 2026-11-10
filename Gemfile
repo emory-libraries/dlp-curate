@@ -10,6 +10,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'archivesspace-client'
+gem 'blacklight', '~> 7.41.0'
 gem 'blacklight_iiif_search'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap', '~> 4.0'
@@ -20,6 +21,7 @@ gem 'dartsass-sprockets'
 gem 'devise'
 gem 'devise-guests', '~> 0.8'
 gem 'dotenv-rails'
+gem 'edtf', '~> 3.0.8'
 gem 'edtf-humanize', '~> 1.0.0'
 
 if RUBY_PLATFORM.match?(/musl/)
@@ -44,7 +46,7 @@ gem 'pg', require: false
 gem 'puma'
 gem 'rails', '6.1.7.10'
 gem 'riiif', '~> 2.8'
-gem 'shakapacker', '6.6.0'
+gem 'shakapacker', '~> 6.6.0'
 gem 'sidekiq', '~> 7.0'
 gem 'sidekiq-limit_fetch'
 gem 'stackprof', require: false
