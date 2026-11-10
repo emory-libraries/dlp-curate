@@ -20,11 +20,10 @@ RSpec.describe WorkMembersCleanUpJob, :clean do
     before do
       work.ordered_members = [file_set]
       work.save
-      allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(false)
     end
 
     it 'finds work and does not process ReplaceWorkMembersJob' do
-      expect(CurateGenericWork).to receive(:find).with(work.id).and_return(work)
+      expect(ActiveFedora::Base).to receive(:find).with(work.id).and_return(work)
       expect(Rails.logger).to receive(:error).with('No nil or duplicate work members were found.')
       expect(ReplaceWorkMembersJob).not_to receive(:perform_later).with(work, [file_set.id])
       described_class.perform_now(work.id)
@@ -35,12 +34,11 @@ RSpec.describe WorkMembersCleanUpJob, :clean do
     before do
       work.ordered_members = [file_set, file_set]
       work.save
-      allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(false)
     end
 
     it 'finds work and processes ReplaceWorkMembersJob' do
       allow(work).to receive(:member_ids).and_return([file_set.id, file_set.id])
-      expect(CurateGenericWork).to receive(:find).with(work.id).and_return(work)
+      expect(ActiveFedora::Base).to receive(:find).with(work.id).and_return(work)
       expect(Rails.logger).not_to receive(:error).with('No nil or duplicate work members were found.')
       expect(ReplaceWorkMembersJob).to receive(:perform_later).with(work, [file_set.id])
       described_class.perform_now(work.id)

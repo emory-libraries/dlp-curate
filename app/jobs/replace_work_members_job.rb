@@ -20,9 +20,12 @@ class ReplaceWorkMembersJob < Hyrax::ApplicationJob
     end
 
     def replace_valkyrie_members(work, cleaned_member_ids)
-      work.member_ids = cleaned_member_ids.map { |id| Valkyrie::ID.new(id) }
-      Hyrax.persister.save(resource: work)
-      Hyrax.index_adapter.save(resource: work)
+      file_sets = pull_actual_file_set_objs(cleaned_member_ids)
+      file_sets.each { |fs| Hyrax.index_adapter.save(resource: fs) }
+
+      work.member_ids = file_sets.map { |fs| fs.id.to_s }
+      persisted_work = Hyrax.persister.save(resource: work)
+      Hyrax.index_adapter.save(resource: persisted_work)
     end
 
     def regen_manifest(work)
@@ -30,5 +33,13 @@ class ReplaceWorkMembersJob < Hyrax::ApplicationJob
       ability = ManifestAbility.new
       presenter = Hyrax::CurateGenericWorkPresenter.new(solr_doc, ability)
       ManifestBuilderService.regenerate_manifest(presenter:, curation_concern: work)
+    end
+
+    def pull_actual_file_set_objs(file_set_ids)
+      file_set_ids.map do |fsid|
+        Hyrax.query_service.find_by(id: fsid)
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        nil
+      end.compact
     end
 end
