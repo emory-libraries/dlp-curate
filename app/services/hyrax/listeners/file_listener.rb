@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # [Hyrax-override-v5.2.0] L#34 Since we sometimes user `intermediate_file` for derivatives
-#   and characterization, we remove the not `original_file` examption.
+#   and characterization, we remove the not `original_file` examption. Files saved to the
+#   derivatives storage adapter are still skipped.
 
 module Hyrax
   module Listeners
@@ -32,7 +33,10 @@ module Hyrax
       # @param [Dry::Events::Event] event
       # @return [void]
       def on_file_uploaded(event)
-        # Run characterization for original file only and allow optional skip paramater
+        # Derivatives (e.g. thumbnails) are uploaded through the same service, but they
+        # are neither characterized nor used as the source of further derivatives.
+        return if derivative_file?(event[:metadata])
+
         ValkyrieCharacterizationJob.perform_later(event[:metadata].id.to_s)
         return unless curate_preferred_derivative_files.include?(event[:metadata].pcdm_use.first)
 
@@ -53,6 +57,10 @@ module Hyrax
 
         def curate_preferred_derivative_files
           [Hyrax::FileMetadata::Use::INTERMEDIATE_FILE, Hyrax::FileMetadata::Use::SERVICE_FILE]
+        end
+
+        def derivative_file?(metadata)
+          Hyrax.config.derivatives_storage_adapter.handles?(id: metadata.file_identifier)
         end
     end
   end

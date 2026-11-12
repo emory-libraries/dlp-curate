@@ -21,7 +21,7 @@ class CurateValkyrieIngestJob < Hyrax::ApplicationJob
   }.freeze
 
   def perform(uploaded_file)
-    file_set = Hyrax.query_service.find_by(id: Valkyrie::ID.new(uploaded_file.file_set_uri))
+    file_set_id = Valkyrie::ID.new(uploaded_file.file_set_uri)
     preferred = determine_preferred(uploaded_file)
 
     FILE_TYPE_TO_USE.each do |file_type, pcdm_use|
@@ -29,6 +29,9 @@ class CurateValkyrieIngestJob < Hyrax::ApplicationJob
       next if uploader.blank?
 
       skip_derivs = file_type != preferred
+      # Reload for every file: characterization of the earlier files saves this FileSet
+      # meanwhile, and saving a stale copy would drop those changes.
+      file_set = Hyrax.query_service.find_by(id: file_set_id)
       upload_single_file(uploaded_file:, file_set:, uploader:, pcdm_use:, skip_derivatives: skip_derivs)
     end
   end

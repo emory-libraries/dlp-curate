@@ -167,6 +167,23 @@ RSpec.describe CurateValkyrieIngestJob do
 
         job.perform(uploaded_file)
       end
+
+      # Characterization of the preservation master saves the FileSet while the
+      # intermediate file uploads; a stale copy would drop those changes.
+      it 'attaches each file to a freshly loaded FileSet' do
+        refreshed_file_set = instance_double('FileSetResource', id: Valkyrie::ID.new('fs-123'))
+        allow(Hyrax.query_service).to receive(:find_by)
+          .with(id: Valkyrie::ID.new('fs-123'))
+          .and_return(file_set, refreshed_file_set)
+        allow(Hyrax::ValkyrieUpload).to receive(:file)
+
+        job.perform(uploaded_file)
+
+        expect(Hyrax::ValkyrieUpload).to have_received(:file)
+          .with(hash_including(use: Hyrax::FileMetadata::Use::ORIGINAL_FILE, file_set:))
+        expect(Hyrax::ValkyrieUpload).to have_received(:file)
+          .with(hash_including(use: Hyrax::FileMetadata::Use::INTERMEDIATE_FILE, file_set: refreshed_file_set))
+      end
     end
 
     context 'with all file types present' do
