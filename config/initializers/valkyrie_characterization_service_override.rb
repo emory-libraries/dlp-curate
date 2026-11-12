@@ -68,7 +68,7 @@ Rails.application.config.to_prepare do
         'software_version' => fits_version_string,
         'user' => user&.uid&.presence || file_set.depositor
       }
-      create_preservation_event(file_set, event)
+      append_preservation_event_to_current(file_set.id, event)
     end
 
     def process_digest_event(file_set_id, user, event_start, checksum_values)
@@ -81,7 +81,7 @@ Rails.application.config.to_prepare do
         'user' => user&.uid&.presence || file_set.depositor
       }
       event['outcome'] = Array(checksum_values).size >= 3 ? 'Success' : 'Failure'
-      create_preservation_event(file_set, event)
+      append_preservation_event_to_current(file_set.id, event)
     end
 
     private

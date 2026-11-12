@@ -13,6 +13,18 @@ module PreservationEvents
     end
   end
 
+  # Adds the event to a freshly loaded copy of the Valkyrie resource, for jobs that run
+  # alongside other writers (e.g. ingest attaching files), so their changes are kept.
+  # @param id - the resource id
+  # @param event - hash with all event requirements (details, start, type, user, outcome, software_version)
+  def append_preservation_event_to_current(id, event)
+    preservation_event = persist_valkyrie_preservation_event(event)
+    resource = Hyrax.query_service.find_by(id:)
+    resource.preservation_event += [preservation_event]
+
+    Hyrax.persister.save(resource:)
+  end
+
   def check_for_preexisting_preservation_events(file_set, sha1, event_start)
     matching_preservation_events = file_set.preservation_event.select do |e|
       e.event_type == ['Fixity Check'] && e.event_start == [DateTime.parse(event_start)]

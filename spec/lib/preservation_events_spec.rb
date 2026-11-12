@@ -14,6 +14,26 @@ RSpec.describe PreservationEvents, :clean do
 
   before { create_preservation_event(file_set, event) }
 
+  context '#append_preservation_event_to_current' do
+    let(:intermediate_id) { Valkyrie::ID.new('fm-intermediate') }
+    let(:current_file_set) { FileSetResource.new(id: Valkyrie::ID.new('fs-1'), file_ids: [intermediate_id]) }
+    let(:preservation_event) { PreservationEventResource.new(id: Valkyrie::ID.new('pe-1')) }
+
+    before do
+      allow(Hyrax.query_service).to receive(:find_by).with(id: current_file_set.id).and_return(current_file_set)
+      allow(Hyrax.persister).to receive(:save).and_call_original
+      allow(Hyrax.persister).to receive(:save).with(resource: kind_of(PreservationEventResource)).and_return(preservation_event)
+      allow(Hyrax.persister).to receive(:save).with(resource: current_file_set) { |resource:| resource }
+    end
+
+    it 'adds the event to the currently persisted FileSet, keeping files attached meanwhile' do
+      saved = append_preservation_event_to_current(current_file_set.id, event)
+
+      expect(saved.preservation_event).to eq [preservation_event]
+      expect(saved.file_ids).to eq [intermediate_id]
+    end
+  end
+
   context '#check_for_preexisting_preservation_events' do
     it 'finds a matching event' do
       expect(
