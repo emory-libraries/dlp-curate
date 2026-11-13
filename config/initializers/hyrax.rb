@@ -176,12 +176,7 @@ Hyrax.config do |config|
   config.iiif_info_url_builder = lambda do |file_id, base_url|
     builder_service = IiifUrlBuilderService.new(file_set_id: file_id, size: '')
     if ENV['IIIF_SERVER_URL'].present?
-      iiif_info_url = if ENV.fetch('FEDORA_ADAPTER', 'default') == 's3' ||
-                         ENV.fetch('FEDORA_ADAPTER', 'default') == 'S3'
-                        builder_service.sha1_info_url
-                      else
-                        builder_service.file_id_info_url
-                      end
+      iiif_info_url = builder_service.info_url
       Rails.logger.debug "event: iiif_info_request: #{iiif_info_url}"
       iiif_info_url
     else
