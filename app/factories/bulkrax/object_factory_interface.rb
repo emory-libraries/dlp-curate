@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: adds parser to initialize
+# Bulkrax v9.3.5 override: adds parser to initialize
 
 module Bulkrax
   ##
@@ -208,6 +208,32 @@ module Bulkrax
     end
 
     ##
+    # @return [String] the name of the model class for the given resource/object.
+    def self.model_name(resource:)
+      raise NotImplementedError, "#{self}.#{__method__}"
+    end
+
+    ##
+    # @return [File or FileMetadata] the thumbnail file for the given resource
+    def self.thumbnail_for(resource:)
+      raise NotImplementedError, "#{self}.#{__method__}"
+    end
+
+    ##
+    # @input [Fileset or FileMetadata]
+    # @return [File or FileMetadata] the original file
+    def self.original_file(fileset:)
+      raise NotImplementedError, "#{self}.#{__method__}"
+    end
+
+    ##
+    # #input [Fileset or FileMetadata]
+    # @return [String] the file name for the given fileset
+    def self.filename_for(fileset:)
+      raise NotImplementedError, "#{self}.#{__method__}"
+    end
+
+    ##
     # @api private
     #
     # These are the attributes that we assume all "work type" classes (e.g. the
@@ -329,9 +355,9 @@ module Bulkrax
     #
     # @return [Object] when we've found the object by the entry's :id or by it's
     #         source_identifier
-    # @return [FalseClass] when we cannot find the object.
+    # @return [NilClass] when we cannot find the object.
     def find
-      find_by_id || search_by_identifier || false
+      find_by_id || search_by_identifier || nil
     end
 
     ##

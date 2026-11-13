@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.19.2"
+lock "~> 3.20.1"
 
 # Load environment variables
 require 'dotenv'
@@ -94,8 +94,13 @@ namespace :deploy do
   end
 end
 
+# Opt-in (CREATE_MIGRATION_COLLECTIONS=true): migration_setup is first-time setup, and
+# re-running it creates a duplicate collection whenever its title-based dedup check
+# misses the existing one.
 namespace :deploy do
   after :finishing, :create_migration_collections do
+    next unless ENV['CREATE_MIGRATION_COLLECTIONS'] == 'true'
+
     on roles(:collection) do
       execute "cd #{current_path} && RAILS_ENV=production bundle exec rake curate:collections:migration_setup"
     end

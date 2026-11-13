@@ -8,7 +8,7 @@ class ScheduleAssociateFilesetsWithWorkJob < Hyrax::ApplicationJob
     importer = Bulkrax::Importer.find(importer_id)
     file_set_entries = pull_file_set_entries(importer:)
 
-    return reschedule(importer_id:) unless file_set_entries.present? && file_set_entry_parents_present?(file_set_entries:)
+    return reschedule(importer_id:) unless file_set_entries.present? && file_set_entry_parents_present?(fileset_entries: file_set_entries)
 
     AssociateFilesetsWithWorkJob.perform_later(importer:)
   end

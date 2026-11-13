@@ -52,12 +52,15 @@ module CurateDownloadsControllerBehavior
 
     def dereference_file(file_reference)
       return false if file_reference.nil?
+      return false unless asset.respond_to?(:association)
       association = asset.association(file_reference.to_sym)
       association if association&.is_a?(ActiveFedora::Associations::SingularAssociation)
     end
 
     # Added by Emory.
     def alternate_file_lookup(file_reference, file_set)
+      return nil if file_set.is_a?(Hyrax::Resource)
+
       file_reference_hash = {
         'preservation': :pulled_preservation_master_file,
         'intermediate': :pulled_intermediate_file,

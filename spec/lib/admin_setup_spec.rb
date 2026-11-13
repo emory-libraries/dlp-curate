@@ -27,4 +27,20 @@ RSpec.describe AdminSetup, :clean do
     expect { s.each { |t| w.make_admin(t) } }.to change { w.admins.count }.by(3)
     expect(w.admins.pluck(:uid).include?(s.first)).to be true
   end
+
+  describe '#everyone_can_deposit_everywhere' do
+    context 'when no admin sets exist' do
+      it 'completes without error' do
+        expect { w.everyone_can_deposit_everywhere }.not_to raise_error
+      end
+    end
+
+    context 'with Valkyrie transition', if: Hyrax.config.valkyrie_transition? do
+      it 'queries for AdminSetResource models' do
+        expect(Hyrax.query_service).to receive(:find_all_of_model)
+          .with(model: AdminSetResource).and_return([])
+        w.everyone_can_deposit_everywhere
+      end
+    end
+  end
 end

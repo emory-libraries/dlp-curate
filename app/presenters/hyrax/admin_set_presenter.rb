@@ -38,7 +38,13 @@ module Hyrax
     end
 
     def show_path
-      Hyrax::Engine.routes.url_helpers.admin_admin_set_path(id, locale: I18n.locale)
+      # Keep the slash in legacy ids like "admin_set/default" so the
+      # admin_sets route constraint (id: /.+/ ) can match.
+      "/admin/admin_sets/#{id}?locale=#{I18n.locale}"
+    end
+
+    def edit_path
+      "/admin/admin_sets/#{id}/edit?locale=#{I18n.locale}"
     end
 
     def available_parent_collections(*)

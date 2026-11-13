@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: #factory
+# Bulkrax v9.3.5 override: #factory
 
 module Bulkrax
   # Import Behavior for Entry classes
@@ -79,6 +79,7 @@ module Bulkrax
     end
 
     def add_rights_statement
+      return nil if parser.parser_fields['rights_statement'].blank?
       parsed_metadata['rights_statement'] = [parser.parser_fields['rights_statement']] if override_rights_statement || parsed_metadata['rights_statement'].blank?
     end
 
