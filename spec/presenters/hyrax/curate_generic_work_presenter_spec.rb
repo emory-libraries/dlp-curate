@@ -39,18 +39,18 @@ RSpec.describe Hyrax::CurateGenericWorkPresenter do
       it { is_expected.to eq 'http://example.org/iiif/888888/manifest' }
     end
 
-    context 'when request is nil and HOSTNAME is nil' do
+    context 'when request is nil and CURATE_HOSTNAME is nil' do
       subject { presenter.manifest_url }
       let(:presenter) { described_class.new(solr_document, ability) }
-      before { ENV['HOSTNAME'] = nil }
+      before { ENV['CURATE_HOSTNAME'] = nil }
 
       it { is_expected.to eq "http://localhost:3000/iiif/888888/manifest" }
     end
 
-    context 'when request is nil and HOSTNAME is assigned' do
+    context 'when request is nil and CURATE_HOSTNAME is assigned' do
       subject { presenter.manifest_url }
       let(:presenter) { described_class.new(solr_document, ability) }
-      before { ENV['HOSTNAME'] = 'example-curate' }
+      before { ENV['CURATE_HOSTNAME'] = 'example-curate' }
 
       it { is_expected.to eq "http://example-curate/iiif/888888/manifest" }
     end
