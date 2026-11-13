@@ -57,7 +57,7 @@ class ManifestBuilderService
 
   def iiif_url
     Hyrax.config.iiif_image_url_builder.call(
-      preferred_file_id,
+      @curation_concern.id.to_s,
       request_base_url,
       Hyrax.config.iiif_image_size_default
     )
@@ -65,7 +65,7 @@ class ManifestBuilderService
 
   def info_url
     Hyrax.config.iiif_info_url_builder.call(
-      preferred_file_id,
+      @curation_concern.id.to_s,
       request_base_url
     )
   end
@@ -111,45 +111,6 @@ class ManifestBuilderService
 
     def request_base_url
       "http://#{ENV['HOSTNAME'] || 'localhost:3000'}"
-    end
-
-    def preferred_file
-      case @curation_concern
-      when Hyrax::Resource
-        preferred_valkyrie_file_metadata
-      else
-        @curation_concern.send(@curation_concern&.preferred_file)
-      end
-    end
-
-    def preferred_file_id
-      return @curation_concern.id.to_s unless preferred_file
-
-      case preferred_file
-      when Hyrax::FileMetadata
-        preferred_file.id.to_s
-      else
-        preferred_file.id
-      end
-    end
-
-    PREFERRED_USE_ORDER = [
-      Hyrax::FileMetadata::Use::SERVICE_FILE,
-      Hyrax::FileMetadata::Use::INTERMEDIATE_FILE,
-      Hyrax::FileMetadata::Use::ORIGINAL_FILE
-    ].freeze
-
-    def preferred_valkyrie_file_metadata
-      PREFERRED_USE_ORDER.each do |use|
-        fm = Hyrax.custom_queries
-                  .find_many_file_metadata_by_use(resource: @curation_concern, use:)
-                  .first
-        return fm if fm
-      rescue StandardError => e
-        Rails.logger.debug { "[ManifestBuilderService] Error finding file metadata for use #{use}: #{e.class}" }
-        next
-      end
-      nil
     end
 
     #

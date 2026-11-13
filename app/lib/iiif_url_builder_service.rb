@@ -3,6 +3,7 @@
 # Builds IIIF image/info URLs for file sets.
 # Supports both AF FileSet and Valkyrie FileSetResource during lazy migration.
 class IiifUrlBuilderService
+  include PullResourceOrAfObj
   attr_accessor :file_set_id, :file_set, :size
 
   def initialize(file_set_id:, size:)
@@ -11,13 +12,30 @@ class IiifUrlBuilderService
     @size = size
   end
 
-  def sha1
-    sha1_with_urn = extract_sha1_checksum || 'urn:sha1:unknown'
-    sha1_with_urn.gsub('urn:sha1:', '')
+  def iiif_url
+    case file_set
+    when FileSetResource
+      file_set_id_url
+    else
+      sha1_url
+    end
+  end
+
+  def info_url
+    case file_set
+    when FileSetResource
+      file_id_info_url
+    else
+      sha1_info_url
+    end
   end
 
   def sha1_url
     ENV['IIIF_SERVER_URL'] + sha1 + '/full/' + size + '/0/default.jpg'
+  end
+
+  def file_set_id_url
+    ENV['IIIF_SERVER_URL'] + "fedora7--#{resolved_identifier_endpath}--#{file_set.id}" + '/full/' + size + '/0/default.jpg'
   end
 
   def sha1_info_url
@@ -25,27 +43,26 @@ class IiifUrlBuilderService
   end
 
   def file_id_info_url
-    ENV['IIIF_SERVER_URL'] + file_set_id.gsub('/', '%2F')
+    ENV['IIIF_SERVER_URL'] + file_set.id.to_s.gsub('/', '%2F')
   end
 
-  def file_set_id_url
-    ENV['IIIF_SERVER_URL'] + file_set.id.to_s + '/full/' + size + '/0/default.jpg'
+  def sha1
+    sha1_with_urn = extract_sha1_checksum || 'urn:sha1:unknown'
+    sha1_with_urn.gsub('urn:sha1:', '')
   end
 
   def file_set_id_base
-    file_set_id.gsub('/', '%2F').split('%2F').fetch(0, file_set_id)
+    file_set_id.to_s.gsub('/', '%2F').split('%2F').fetch(0, file_set_id)
   end
 
   private
 
     def find_file_set
-      if Hyrax.config.valkyrie_transition?
-        Hyrax.query_service.find_by(id: file_set_id_base)
-      else
-        FileSet.find(file_set_id_base)
-      end
-    rescue Hyrax::ObjectNotFoundError, Valkyrie::Persistence::ObjectNotFoundError,
-           Ldp::HttpError, Ldp::BadRequest, Faraday::Error
+      obj = pull_object_based_on_id(id: file_set_id_base)
+
+      return Hyrax.query_service.find_by(id: obj.file_set_id) if obj.is_a?(Hyrax::FileMetadata)
+      obj
+    rescue IneligibleIdError
       nil
     end
 
@@ -54,56 +71,15 @@ class IiifUrlBuilderService
     # Hyrax::FileMetadata (which is not a Hyrax::Resource).
     def extract_sha1_checksum
       return nil unless file_set
+      file_set.send(file_set.preferred_file)&.checksum&.value
+    end
 
-      case file_set
-      when Hyrax::FileMetadata
-        sha1_from_file_metadata(file_set)
-      when Hyrax::Resource
-        extract_valkyrie_sha1
+    def resolved_identifier_endpath
+      case file_set.preferred_file
+      when :preservation_master_file
+        'original'
       else
-        file_set.send(file_set.preferred_file)&.checksum&.value
+        file_set.preferred_file.to_s.sub('_file', '')
       end
-    end
-
-    PREFERRED_USE_ORDER = [
-      Hyrax::FileMetadata::Use::SERVICE_FILE,
-      Hyrax::FileMetadata::Use::INTERMEDIATE_FILE,
-      Hyrax::FileMetadata::Use::ORIGINAL_FILE
-    ].freeze
-
-    def extract_valkyrie_sha1
-      file_metadata = preferred_file_metadata
-      result = sha1_from_file_metadata(file_metadata) if file_metadata
-      return result if result
-
-      extract_sha1_from_solr
-    end
-
-    def sha1_from_file_metadata(file_metadata)
-      Array(file_metadata.original_checksum).map(&:to_s).find { |c| c.start_with?('urn:sha1:') }
-    end
-
-    # AF-origin file sets lack Valkyrie FileMetadata; fall back to the
-    # sha1_tesim field indexed by the AF FileSetIndexer.
-    # Order mirrors PREFERRED_USE_ORDER: service(2), intermediate(1), original(0).
-    def extract_sha1_from_solr
-      solr_doc = SolrDocument.find(file_set.id.to_s)
-      sha1_values = Array(solr_doc['sha1_tesim']).compact.reject(&:blank?)
-      [2, 1, 0].each { |i| return sha1_values[i] if sha1_values.length > i && sha1_values[i].present? }
-      sha1_values.first
-    rescue Blacklight::Exceptions::RecordNotFound
-      nil
-    end
-
-    def preferred_file_metadata
-      PREFERRED_USE_ORDER.each do |use|
-        fm = Hyrax.custom_queries
-                  .find_many_file_metadata_by_use(resource: file_set, use:)
-                  .first
-        return fm if fm
-      rescue StandardError
-        next
-      end
-      nil
     end
 end

@@ -104,32 +104,24 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
   end
 
   describe "#iiif_url and #info_url for a Valkyrie FileSet on an external iiif_server" do
-    let(:file_set_resource) { FileSetResource.new(id: Valkyrie::ID.new('fs-123')) }
-    let(:service_file) do
-      Hyrax::FileMetadata.new(id: Valkyrie::ID.new('fm-service'), file_set_id: file_set_resource.id,
-                              original_checksum: ['urn:md5:5b8fdd56bd296b2758c9e993175a7db7', 'urn:sha1:7b16f8f03531aea38080f6c9b69792f3dae65e64'])
-    end
+    let(:file_set_id) { '662b52af-c0c3-447d-8f44-4cc45b3cb018' }
+    let(:file_set_resource) { FileSetResource.new(id: Valkyrie::ID.new(file_set_id)) }
     let(:service) { described_class.new(curation_concern: file_set_resource) }
 
     around do |example|
       ENV['IIIF_SERVER_URL'] = 'example.com/iiif/2/'
-      ENV['FEDORA_ADAPTER'] = 's3'
       example.run
       ENV['IIIF_SERVER_URL'] = nil
-      ENV['FEDORA_ADAPTER'] = nil
     end
 
     before do
-      allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
-      allow(Hyrax.custom_queries).to receive(:find_many_file_metadata_by_use) do |use:, **|
-        use == Hyrax::FileMetadata::Use::SERVICE_FILE ? [service_file] : []
-      end
-      allow(Hyrax.query_service).to receive(:find_by).with(id: 'fm-service').and_return(service_file)
+      allow(file_set_resource).to receive(:preferred_file).and_return(:service_file)
+      allow(Hyrax.query_service).to receive(:find_by).with(id: file_set_id).and_return(file_set_resource)
     end
 
     it "builds the urls from the preferred FileMetadata's sha1" do
-      expect(service.iiif_url).to start_with 'example.com/iiif/2/7b16f8f03531aea38080f6c9b69792f3dae65e64/full/'
-      expect(service.info_url).to eq 'example.com/iiif/2/7b16f8f03531aea38080f6c9b69792f3dae65e64'
+      expect(service.iiif_url).to start_with "example.com/iiif/2/fedora7--service--#{file_set_id}/full/"
+      expect(service.info_url).to eq "example.com/iiif/2/#{file_set_id}"
     end
   end
 
