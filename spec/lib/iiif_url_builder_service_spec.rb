@@ -50,7 +50,7 @@ RSpec.describe IiifUrlBuilderService, :clean do
         expect(valkyrie_service.iiif_url)
           .to eq('http://localhost:3000/cantaloupe/iiif/2/fedora7--original--f2760d05-bb8f-4da9-bdb9-8a749500de79/full/260,/0/default.jpg')
         expect(valkyrie_service.info_url)
-          .to eq('http://localhost:3000/cantaloupe/iiif/2/f2760d05-bb8f-4da9-bdb9-8a749500de79')
+          .to eq('http://localhost:3000/cantaloupe/iiif/2/fedora7--original--f2760d05-bb8f-4da9-bdb9-8a749500de79')
       end
     end
 
@@ -65,7 +65,7 @@ RSpec.describe IiifUrlBuilderService, :clean do
         expect(valkyrie_service.iiif_url)
           .to eq('http://localhost:3000/cantaloupe/iiif/2/fedora7--intermediate--f2760d05-bb8f-4da9-bdb9-8a749500de79/full/260,/0/default.jpg')
         expect(valkyrie_service.info_url)
-          .to eq('http://localhost:3000/cantaloupe/iiif/2/f2760d05-bb8f-4da9-bdb9-8a749500de79')
+          .to eq('http://localhost:3000/cantaloupe/iiif/2/fedora7--intermediate--f2760d05-bb8f-4da9-bdb9-8a749500de79')
       end
     end
   end
