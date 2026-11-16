@@ -121,7 +121,7 @@ RSpec.describe ManifestBuilderService, :clean, perform_enqueued: [ManifestPersis
 
     it "builds the urls from the preferred FileMetadata's sha1" do
       expect(service.iiif_url).to start_with "example.com/iiif/2/fedora7--service--#{file_set_id}/full/"
-      expect(service.info_url).to eq "example.com/iiif/2/#{file_set_id}"
+      expect(service.info_url).to eq "example.com/iiif/2/fedora7--service--#{file_set_id}"
     end
   end
 

@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe CreateManifestJob, :clean do
   let(:generic_work)  { FactoryBot.create(:public_work, id: '888888', title: ['foo']) }
   let(:solr_document) { SolrDocument.new(attributes) }
-  let(:request) { ENV['HOSTNAME'] = 'example.org' }
+  let(:request) { ENV['CURATE_HOSTNAME'] = 'example.org' }
   let(:ability) { instance_double(Ability) }
   let(:user_key) { 'a_user_key' }
   let(:attributes) do

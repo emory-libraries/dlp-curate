@@ -43,7 +43,7 @@ class IiifUrlBuilderService
   end
 
   def file_id_info_url
-    ENV['IIIF_SERVER_URL'] + file_set.id.to_s.gsub('/', '%2F')
+    ENV['IIIF_SERVER_URL'] + "fedora7--#{resolved_identifier_endpath}--#{file_set.id}"
   end
 
   def sha1

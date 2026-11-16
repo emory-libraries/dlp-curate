@@ -110,7 +110,7 @@ class ManifestBuilderService
     end
 
     def request_base_url
-      "http://#{ENV['HOSTNAME'] || 'localhost:3000'}"
+      "http://#{ENV['CURATE_HOSTNAME'] || 'localhost:3000'}"
     end
 
     #
