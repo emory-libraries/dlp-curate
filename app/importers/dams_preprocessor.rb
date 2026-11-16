@@ -6,6 +6,8 @@ require 'ruby-progressbar'
 # Utility service and methods that merge metadata from a CSV Pull List and MARCXml records
 # into a format suitable for ingest by the curate CSV importer
 class DamsPreprocessor
+  include PreprocessorModelNames
+
   attr_accessor :processed_csv
 
   ##
@@ -18,8 +20,8 @@ class DamsPreprocessor
     header_lambda = ->(name) { (convert[name] || name) }
     mapped_csv = CSV.open(csv, headers: true, header_converters: header_lambda, converters: :all)
     @source_csv = mapped_csv.read
-    @fileset_model_or_type = 'FileSet'
-    @work_model_or_type = 'CurateGenericWork'
+    @fileset_model_or_type = file_set_model_name
+    @work_model_or_type = work_model_name
     @headers_to_merge = additional_headers
     directory = File.dirname(csv)
     extension = File.extname(csv)

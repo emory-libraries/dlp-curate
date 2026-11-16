@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: #create_entry_and_job
+# Bulkrax v9.3.5 override: #create_entry_and_job
 
 module Bulkrax
   # An abstract class that establishes the API for Bulkrax's import and export parsing.
@@ -212,8 +212,11 @@ module Bulkrax
     def rebuild_entries(types_array = nil)
       index = 0
       (types_array || %w[collection work file_set relationship]).each do |type|
-        # works are not gurneteed to have Work in the type
-
+        # works are not guaranteed to have Work in the type
+        if type.eql?('relationship')
+          ScheduleRelationshipsJob.set(wait: 5.minutes).perform_later(importer_id: importerexporter.id)
+          next
+        end
         importer.entries.where(rebuild_entry_query(type, parser_fields['entry_statuses'])).find_each do |e|
           seen[e.identifier] = true
           e.status_info('Pending', importer.current_run)
@@ -433,7 +436,7 @@ module Bulkrax
 
       Zip::File.open(file_to_unzip) do |zip_file|
         zip_file.each do |entry|
-          entry_path = File.join(importer_unzip_path, entry.name)
+          entry_path = File.join(importer_unzip_path(mkdir: true), entry.name)
           FileUtils.mkdir_p(File.dirname(entry_path))
           zip_file.extract(entry, entry_path) unless File.exist?(entry_path)
         end
@@ -441,10 +444,25 @@ module Bulkrax
     end
 
     def untar(file_to_untar)
-      Dir.mkdir(importer_unzip_path) unless File.directory?(importer_unzip_path)
+      Dir.mkdir(importer_unzip_path(mkdir: true)) unless File.directory?(importer_unzip_path(mkdir: true))
       command = "tar -xzf #{Shellwords.escape(file_to_untar)} -C #{Shellwords.escape(importer_unzip_path)}"
       result = system(command)
       raise "Failed to extract #{file_to_untar}" unless result
+    end
+
+    # File names referenced in CSVs have spaces replaced with underscores
+    # @see Bulkrax::CsvParser#file_paths
+    def remove_spaces_from_filenames
+      files = Dir.glob(File.join(importer_unzip_path, 'files', '*'))
+      files_with_spaces = files.select { |f| f.split('/').last.match?(' ') }
+      return if files_with_spaces.blank?
+
+      files_with_spaces.map! { |path| Pathname.new(path) }
+      files_with_spaces.each do |path|
+        filename = path.basename
+        filename_without_spaces = filename.to_s.tr(' ', '_')
+        path.rename(File.join(path.dirname, filename_without_spaces))
+      end
     end
 
     def zip

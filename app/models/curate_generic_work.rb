@@ -341,6 +341,14 @@ class CurateGenericWork < ActiveFedora::Base
     file_set.present? ? file_set.pulled_preservation_master_file&.content : nil
   end
 
+  def cleaned_member_ids
+    member_ids&.compact&.uniq || []
+  end
+
+  def duplicated_or_nil_member_ids?
+    member_ids.size != cleaned_member_ids.size
+  end
+
   # accepts_nested_attributes_for can not be called until all
   # the properties are declared because it calls resource_class,
   # which finalizes the propery declarations.

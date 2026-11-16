@@ -117,7 +117,9 @@ RSpec.describe Hyrax::Actors::FileActor, :clean do
     let(:hexdigest_value) { "urn:sha256:9f08fe67e102fc94950070cf5de88ba760846516daf2c76a1167c809ec37b37a" }
 
     it 'characterizes preservation_master_file', perform_enqueued: [CharacterizeJob] do
-      allow(Digest::SHA256).to receive_message_chain(:file, :hexdigest, :prepend).and_return(hexdigest_value)
+      raw_hex = hexdigest_value.sub('urn:sha256:', '')
+      sha256_fake = double('Digest::SHA256', hexdigest: raw_hex, digest: raw_hex, to_s: raw_hex)
+      allow(Digest::SHA256).to receive(:file).and_return(sha256_fake)
       allow(Hydra::FileCharacterization).to receive(:characterize).and_return(fits_response)
       actor.ingest_file(io)
       allow(Hydra::FileCharacterization).to receive(:characterize).and_return(fits_response2)

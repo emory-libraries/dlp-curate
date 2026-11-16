@@ -26,6 +26,9 @@ module DlpCurate
     config.to_prepare do
       Hyrax::Dashboard::CollectionsController.prepend Hyrax::Dashboard::CollectionsControllerOverride
       Hyrax::Admin::CollectionTypesController.prepend Hyrax::Admin::CollectionTypesControllerOverride
+      Hyrax::Admin::AdminSetsController.prepend Hyrax::Admin::AdminSetsControllerOverride
+      require Rails.root.join('lib', 'hyrax', 'admin_set_create_service_override')
+      Hyrax::AdminSetCreateService.singleton_class.prepend Hyrax::AdminSetCreateServiceOverride
     end
   end
 end

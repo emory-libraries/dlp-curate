@@ -72,6 +72,18 @@ RSpec.describe Hyrax::AdminSetPresenter, :clean do
     end
 
     it { is_expected.to eq "/admin/admin_sets/#{admin_set.id}?locale=en" }
+
+    context 'with the legacy default admin set id' do
+      let(:admin_set) { FactoryBot.build(:admin_set, id: 'admin_set/default') }
+
+      it 'does not URL-encode the slash so the route can match' do
+        expect(presenter.show_path).to eq '/admin/admin_sets/admin_set/default?locale=en'
+      end
+
+      it 'builds an edit path that keeps the slash' do
+        expect(presenter.edit_path).to eq '/admin/admin_sets/admin_set/default/edit?locale=en'
+      end
+    end
   end
 
   describe '#managed_access' do

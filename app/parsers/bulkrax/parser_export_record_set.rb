@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Bulkrax v8.2.3 override: adds ObjectId class
+# Bulkrax v9.3.5 override: adds ObjectId class
 
 module Bulkrax
   # This module is responsible for providing the means of querying Solr for the appropriate works,
@@ -174,7 +174,7 @@ module Bulkrax
         # @see https://github.com/samvera/hyrax/blob/64c0bbf0dc0d3e1b49f040b50ea70d177cc9d8f6/app/indexers/hyrax/work_indexer.rb#L15-L18
         def file_sets
           @file_sets ||= ParserExportRecordSet.in_batches(candidate_file_set_ids) do |batch_of_ids|
-            fsq = "has_model_ssim:#{Bulkrax.file_model_internal_resource} AND id:(\"" + batch_of_ids.join('" OR "') + "\")"
+            fsq = "has_model_ssim:\"#{Bulkrax.file_model_internal_resource.demodulize}\" AND id:(\"" + batch_of_ids.join('" OR "') + "\")"
             fsq += extra_filters if extra_filters.present?
             Bulkrax.object_factory.query(
               fsq,

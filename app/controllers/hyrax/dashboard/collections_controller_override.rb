@@ -18,13 +18,24 @@ module Hyrax
         banner_info.save f.collection_banner_url
       end
 
-      # [Hyrax-override-hyrax-v5.2.0] Restrict deletion to admins only
+      # [Hyrax-override-hyrax-v5.2.0] Restrict deletion to admins only.
+      # Supports both AF and Valkyrie collections during lazy migration.
       def destroy
-        if current_user.admin? && @collection.destroy
-          after_destroy(params[:id])
+        return after_destroy_error(params[:id]) unless current_user.admin?
+
+        case @collection
+        when Valkyrie::Resource
+          valkyrie_destroy
         else
-          after_destroy_error(params[:id])
+          if @collection.destroy
+            after_destroy(params[:id])
+          else
+            after_destroy_error(params[:id])
+          end
         end
+      rescue StandardError => e
+        Hyrax.logger.error(e)
+        after_destroy_error(params[:id])
       end
     end
   end

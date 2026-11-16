@@ -1,3 +1,5 @@
+@import 'colors.scss';
+
 div.as-button-div {
     display: flex;
     flex-direction: row;
@@ -15,7 +17,7 @@ div.modal-content {
 
 span.aspace-result-label {
     font-weight: 700;
-    color: #082B73;
+    color: $base-blue;
 }
 
 .aspace-result-heading {

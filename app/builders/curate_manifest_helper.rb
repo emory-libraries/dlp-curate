@@ -11,7 +11,7 @@ class CurateManifestHelper
     label = file_set_document.label.present? ? ": #{file_set_document.label}" : ''
     mime = file_set_document.mime_type.presence || I18n.t("hyrax.manifest.unknown_mime_text")
     {
-      '@id' => Hyrax::Engine.routes.url_helpers.download_url(file_set_document.id, host: "http://#{ENV['HOSTNAME'] || 'localhost:3000'}"),
+      '@id' => Hyrax::Engine.routes.url_helpers.download_url(file_set_document.id, host: "http://#{ENV['CURATE_HOSTNAME'] || 'localhost:3000'}"),
       'format' => mime,
       'label' => I18n.t("hyrax.manifest.download_text") + label
     }

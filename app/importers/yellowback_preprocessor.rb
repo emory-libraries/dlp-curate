@@ -6,6 +6,8 @@ require 'ruby-progressbar'
 # Utility service and methods that merge metadata from a CSV Pull List and MARCXml records
 #   into a format suitable for ingest by the curate CSV importer.
 class YellowbackPreprocessor
+  include PreprocessorModelNames
+
   attr_accessor :processed_csv
 
   ##
@@ -24,8 +26,8 @@ class YellowbackPreprocessor
     @marc_records = Nokogiri::XML(File.open(marcxml))
     @workflow = workflow
     @replacement_path = 'Yellowbacks'
-    @proper_model_or_type_work = 'CurateGenericWork'
-    @proper_model_or_type_fileset = 'FileSet'
+    @proper_model_or_type_work = work_model_name
+    @proper_model_or_type_fileset = file_set_model_name
     @default_pcdm_use = 'Primary Content'
     @pdf_fileset_title = 'PDF for volume'
     @ocr_fileset_title = 'OCR Output for Volume'

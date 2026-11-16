@@ -22,7 +22,7 @@ RSpec.describe 'iiif access controls', type: :system, iiif: true do
         headers: {
           'Connection' => 'close',
           'Host' => 'iiif-cor-arch.library.emory.edu',
-          'User-Agent' => 'http.rb/5.3.1'
+          'User-Agent' => 'http.rb/6.0.4'
         }
       )
       .to_return(status: 200, body: "I am returning an image, but for now I'm words", headers: {})

@@ -1,3 +1,4 @@
+<% title_value = f.object.title.is_a?(Array) ? f.object.title.first.to_s : f.object.title.to_s %>
 <div>
-  <%= f.input :title, as: :text, input_html: { rows: '2' } %>
+  <%= f.input :title, as: :text, input_html: { rows: '2', value: title_value } %>
 </div>

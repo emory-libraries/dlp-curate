@@ -90,7 +90,7 @@ class FileSet < ActiveFedora::Base
 
   # The two methods below err when storing text in Solr, so forcing UTF-8 encoding removes errant text (most likely ASCII).
   def alto_xml
-    return extracted&.content&.force_encoding('UTF-8')&.encode("UTF-8", invalid: :replace, replace: "") if extracted&.file_name&.first&.include?('.xml')
+    return pulled_extracted_file&.content&.force_encoding('UTF-8')&.encode("UTF-8", invalid: :replace, replace: "") if pulled_extracted_file&.file_name&.first&.include?('.xml')
     nil
   end
 

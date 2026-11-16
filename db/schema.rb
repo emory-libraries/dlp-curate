@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_04_15_140407) do
+ActiveRecord::Schema.define(version: 2026_09_15_120000) do
 
   create_table "bookmarks", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -284,6 +284,12 @@ ActiveRecord::Schema.define(version: 2026_04_15_140407) do
     t.index ["resource_type"], name: "index_hyrax_counter_metrics_on_resource_type"
     t.index ["work_id"], name: "index_hyrax_counter_metrics_on_work_id"
     t.index ["worktype"], name: "index_hyrax_counter_metrics_on_worktype"
+  end
+
+  create_table "hyrax_default_administrative_set", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "default_admin_set_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "hyrax_features", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
