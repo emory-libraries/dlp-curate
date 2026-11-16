@@ -30,6 +30,7 @@
     "ajv/fast-uri": "^3.0.1",
     "esbuild-plugin-svg/svgo": "^2.2.2",
     "eslint/@humanfs/node": "^0.16.6",
+    "glob/minimatch": "^3.1.1",
     "http-proxy/follow-redirects": "^1.0.0",
     "launch-editor/shell-quote": "^1.10.0",
     "postcss/nanoid": "^3.3.12",
@@ -37,8 +38,11 @@
     "webpack-dev-server/launch-editor": "^2.6.0",
     "**/baseline-browser-mapping": "^2.10.42",
     "**/browserslist": "^4.28.2",
+    "**/node-forge": "^1",
     "**/postcss-selector-parser": "^7.1.1",
-    "**/source-map-js": "^1.2.1"
+    "**/source-map-js": "^1.2.1",
+    "@eslint/config-array/minimatch": "^3.1.1",
+    "@eslint/eslintrc/minimatch": "^3.1.2"
   },
   "scripts": {
     "preinstall": "rm -rf ./public/uv",
