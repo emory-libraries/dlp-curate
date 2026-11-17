@@ -22,6 +22,8 @@ if Hyrax.config.valkyrie_transition?
     Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
     Wings::ModelRegistry.register(PreservationEventResource, PreservationEvent)
     Wings::ModelRegistry.register(PreservationEvent, PreservationEvent)
+    Wings::ModelRegistry.register(PreservationWorkflowResource, PreservationWorkflow)
+    Wings::ModelRegistry.register(PreservationWorkflow, PreservationWorkflow)
 
     Valkyrie::MetadataAdapter.register(
       Frigg::MetadataAdapter.new(
@@ -100,6 +102,8 @@ if Hyrax.config.valkyrie_transition?
         Hyrax::FileMetadata
       elsif 'PreservationEvent' == klass_name
         PreservationEventResource
+      elsif 'PreservationWorkflow' == klass_name
+        PreservationWorkflowResource
       else
         klass_name.constantize
       end

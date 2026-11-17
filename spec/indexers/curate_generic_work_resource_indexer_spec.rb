@@ -28,6 +28,15 @@ RSpec.describe CurateGenericWorkResourceIndexer do
       expect(solr_document).to be_a(Hash)
     end
 
+    context 'with preservation workflows' do
+      let(:workflow) { PreservationWorkflowResource.new(workflow_type: 'Ingest', workflow_rights_basis: 'Administrative Signoff') }
+      let(:attributes) { { title: ['Test title'], preservation_workflow: [workflow] } }
+
+      it 'indexes the workflow terms the work page reads' do
+        expect(solr_document['preservation_workflow_terms_tesim']).to eq [workflow.preservation_terms]
+      end
+    end
+
     it 'indexes has_model_ssim as the AF model name for search compatibility', if: Hyrax.config.valkyrie_transition? do
       expect(solr_document['has_model_ssim']).to eq 'CurateGenericWork'
     end
