@@ -130,11 +130,12 @@ module ExportAssistiveMethods
     return if work_pres_workflows.blank?
 
     work_pres_workflows.each do |workflow|
-      type = workflow.workflow_type.first
+      # AF workflow properties are relations; Valkyrie ones are plain strings.
+      type = Array(workflow.workflow_type).first
       workflow_attrs = %w[workflow_notes workflow_rights_basis workflow_rights_basis_note workflow_rights_basis_date workflow_rights_basis_reviewer workflow_rights_basis_uri]
 
       workflow_attrs.each do |attrib|
-        handle_join_on_export("#{type}.#{attrib}", workflow.send(attrib.to_sym).to_a, '|')
+        handle_join_on_export("#{type}.#{attrib}", Array(workflow.send(attrib.to_sym)), '|')
       end
     end
   end

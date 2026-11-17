@@ -1,0 +1,32 @@
+# Custom metadata properties for the Valkyrie preservation workflow nested resource.
+# These attributes match the ActiveFedora PreservationWorkflow model's properties.
+
+attributes:
+  workflow_type:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#workflowType
+  workflow_notes:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#workflowNote
+  workflow_rights_basis:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#workflowRightsBasis
+  workflow_rights_basis_note:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#workflowRightsBasisNote
+  workflow_rights_basis_date:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#workflowRightsBasisDate
+  workflow_rights_basis_reviewer:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#workflowRightsBasisReviewer
+  workflow_rights_basis_uri:
+    type: string
+    multiple: false
+    predicate: http://metadata.emory.edu/vocab/cor-terms#workflowRightsBasisURI

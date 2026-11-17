@@ -57,6 +57,53 @@ RSpec.describe Frigg::Persister do
     end
   end
 
+  describe '#migrate_preservation_workflows' do
+    let(:work) { CurateGenericWorkResource.new(id: 'work-1') }
+    let(:legacy_workflows) { [PreservationWorkflowResource.new(workflow_type: 'Ingest')] }
+
+    before { allow(persister).to receive(:save) { |resource:| resource } }
+
+    it 'copies the AF workflows onto the migrated work' do
+      migrated = persister.send(:migrate_preservation_workflows, work, legacy_workflows)
+
+      expect(migrated.preservation_workflow.map(&:workflow_type)).to eq ['Ingest']
+      expect(persister).to have_received(:save).with(resource: work)
+    end
+
+    it 'leaves a work that already has workflows alone' do
+      work.preservation_workflow = [PreservationWorkflowResource.new(workflow_type: 'Accession')]
+
+      expect(persister.send(:migrate_preservation_workflows, work, legacy_workflows)).to eq work
+      expect(persister).not_to have_received(:save)
+    end
+
+    it 'does nothing for resources without workflows' do
+      collection = CollectionResource.new(id: 'coll-1')
+
+      expect(persister.send(:migrate_preservation_workflows, collection, legacy_workflows)).to eq collection
+      expect(persister).not_to have_received(:save)
+    end
+  end
+
+  describe '#legacy_preservation_workflows' do
+    let(:legacy) { CurateGenericWorkResource.new(id: 'work-1') }
+    let(:af_work) { CurateGenericWork.new.tap { |w| w.preservation_workflow_attributes = [{ workflow_type: 'Ingest', workflow_notes: 'note' }] } }
+
+    it 'reads the AF workflows as Valkyrie workflows' do
+      allow(ActiveFedora::Base).to receive(:find).with('work-1').and_return(af_work)
+
+      workflows = persister.send(:legacy_preservation_workflows, legacy)
+
+      expect(workflows.map { |w| [w.workflow_type, w.workflow_notes] }).to eq [['Ingest', 'note']]
+    end
+
+    it 'returns nil when the AF work cannot be read' do
+      allow(ActiveFedora::Base).to receive(:find).with('work-1').and_raise(StandardError, 'Fedora unavailable')
+
+      expect(persister.send(:legacy_preservation_workflows, legacy)).to be_nil
+    end
+  end
+
   describe '#legacy_access_permissions' do
     let(:legacy) { CollectionResource.new(id: 'coll-1') }
 

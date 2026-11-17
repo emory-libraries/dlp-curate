@@ -16,6 +16,7 @@ module Frigg
     def save(resource:, external_resource: false, perform_af_validation: false)
       was_wings = resource.respond_to?(:wings?) && resource.wings?
       legacy_permissions = legacy_access_permissions(resource) if was_wings
+      legacy_workflows = legacy_preservation_workflows(resource) if was_wings
       initialize_repository
       internal_resource = resource.dup
       internal_resource.created_at ||= Time.current
@@ -35,7 +36,7 @@ module Frigg
       persisted_resource = resource_factory.to_resource(object: orm)
 
       alternate_resources ? save_reference_to_resource(persisted_resource, alternate_resources) : persisted_resource
-      convert_and_migrate_resource(orm, was_wings, legacy_permissions)
+      convert_and_migrate_resource(orm, was_wings, legacy_permissions, legacy_workflows)
 
     rescue Ldp::PreconditionFailed
       raise Valkyrie::Persistence::StaleObjectError, "The object #{internal_resource.id} has been updated by another process."
@@ -44,11 +45,12 @@ module Frigg
     end
     # rubocop:enable Lint/UnusedMethodArgument
 
-    def convert_and_migrate_resource(orm_object, was_wings, legacy_permissions = nil)
+    def convert_and_migrate_resource(orm_object, was_wings, legacy_permissions = nil, legacy_workflows = nil)
       new_resource = resource_factory.to_resource(object: orm_object)
       # if the resource was wings and is now a Valkyrie resource, we need to migrate its ACL, sipity, files, and members
       if Hyrax.config.valkyrie_transition? && was_wings && !new_resource.wings?
         migrate_access_control(new_resource, legacy_permissions)
+        new_resource = migrate_preservation_workflows(new_resource, legacy_workflows)
         MigrateFilesToValkyrieJob.perform_later(new_resource) if new_resource.is_a?(Hyrax::FileSet) && new_resource.file_ids.size == 1 && new_resource.file_ids.first.id.to_s.match('/files/')
         # migrate any members if the resource is a Hyrax work
         if new_resource.is_a?(Hyrax::Work)
@@ -83,6 +85,27 @@ module Frigg
           Hyrax::Permission.new(access_to: new_resource.id, agent: permission.agent, mode: permission.mode)
         end
         save(resource: Hyrax::AccessControl.new(access_to: new_resource.id, permissions:))
+      end
+
+      # The AF (Fedora 4) preservation workflows. Wings hands nested AF objects over as
+      # URIs, so they would otherwise be dropped when the work is migrated.
+      def legacy_preservation_workflows(resource)
+        return unless resource.respond_to?(:preservation_workflow)
+
+        ActiveFedora::Base.find(resource.id.to_s).preservation_workflow.map do |workflow|
+          PreservationWorkflowResource.from_active_fedora(workflow)
+        end
+      rescue StandardError => e
+        Hyrax.logger.warn("[Frigg] Could not read legacy preservation workflows for #{resource.id}: #{e.class} #{e.message}")
+        nil
+      end
+
+      def migrate_preservation_workflows(new_resource, legacy_workflows)
+        return new_resource if legacy_workflows.blank? || !new_resource.respond_to?(:preservation_workflow=)
+        return new_resource if new_resource.preservation_workflow.present?
+
+        new_resource.preservation_workflow = legacy_workflows
+        save(resource: new_resource)
       end
   end
 end

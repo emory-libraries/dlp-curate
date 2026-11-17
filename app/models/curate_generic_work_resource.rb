@@ -2,6 +2,7 @@
 
 # Valkyrie resource for CurateGenericWork.
 # Coexists alongside the AF CurateGenericWork during lazy migration.
+# Preservation events and workflows are nested resources stored on the work.
 class CurateGenericWorkResource < Hyrax::Work
   include Hyrax::Schema(:emory_basic_metadata)
   include Hyrax::Schema(:curate_generic_work_resource)
@@ -9,6 +10,7 @@ class CurateGenericWorkResource < Hyrax::Work
   Hyrax::ValkyrieLazyMigration.migrating(self, from: CurateGenericWork) if Hyrax.config.valkyrie_transition?
 
   attribute :preservation_event, SafePreservationEventType::TYPE
+  attribute :preservation_workflow, SafePreservationWorkflowType::TYPE
 
   def cleaned_member_ids
     member_ids&.compact&.map(&:to_s)&.uniq || []

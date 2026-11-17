@@ -7,8 +7,8 @@
 #   institution, internal_rights_note, staff_notes, system_of_record_ID
 #
 # Preservation-related nested resources (preservation_event,
-# preservation_workflow, preservation_workflow_terms) are handled
-# separately and are NOT defined in this schema.
+# preservation_workflow) are attributes on CurateGenericWorkResource
+# and are NOT defined in this schema.
 ---
 attributes:
   access_restriction_notes:
