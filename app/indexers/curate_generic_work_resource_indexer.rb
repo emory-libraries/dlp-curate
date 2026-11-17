@@ -166,8 +166,14 @@ class CurateGenericWorkResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer(Cura
         Array(resource.rights_statement).first.to_s,
         resource.visibility.to_s,
         file_set_visibilities(file_sets),
-        rendering_ids_string
+        rendering_ids_string,
+        member_order
       ]
+    end
+
+    # Reordering the members (e.g. in the File Manager) must produce a new manifest.
+    def member_order
+      resource.member_ids.map(&:to_s).join(',')
     end
 
     def file_set_visibilities(file_sets)

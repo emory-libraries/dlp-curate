@@ -3,7 +3,8 @@
 # This module will be used to define methods that will associate filesets with works
 module AssociateFilesetsWithWorks
   def pull_file_set_entries(importer:)
-    entries_to_return = importer.entries.select { |e| e.factory_class == FileSet || e.factory_class == FileSetResource }
+    # Sorted by id, the order Bulkrax created them in: the order of the CSV rows.
+    entries_to_return = importer.entries.select { |e| e.factory_class == FileSet || e.factory_class == FileSetResource }.sort_by(&:id)
     raise 'The are no FileSet entries to iterate over' if entries_to_return.blank?
     entries_to_return
   end
@@ -75,16 +76,28 @@ module AssociateFilesetsWithWorks
   end
 
   def associate_valkyrie(work, file_sets)
-    raise "All FileSetResources haven't been persisted yet" unless pull_fileset_entries_for_parent(work.deduplication_key).size == file_sets.size
+    expected_entries = pull_fileset_entries_for_parent(work.deduplication_key).reject { |entry| import_given_up?(entry) }
+    raise "All FileSetResources haven't been persisted yet" if file_sets.size < expected_entries.size
 
-    # The Valkyrie importer has usually attached the FileSets to the work already;
-    # appending them again duplicates the members and breaks the work's show page.
-    new_member_ids = file_sets.map(&:id) - work.member_ids
-    return if new_member_ids.empty?
+    # The Valkyrie importer attaches each FileSet to the work as soon as its job finishes,
+    # so the members are in completion order (and may be duplicated) rather than CSV order.
+    ordered_ids = ordered_member_ids(work, file_sets)
+    return if ordered_ids == work.member_ids.map(&:to_s)
 
-    work.member_ids += new_member_ids
-    Hyrax.persister.save(resource: work)
-    Hyrax.index_adapter.save(resource: work)
+    # Reindexes the members and regenerates the manifest in the new order.
+    ReplaceWorkMembersJob.perform_now(work, ordered_ids)
+  end
+
+  # The imported FileSets follow the order of their CSV rows; members that did not come from
+  # this import keep their place ahead of them. Duplicate and nil members are dropped.
+  def ordered_member_ids(work, file_sets)
+    imported_ids = file_sets.map { |fs| fs.id.to_s }
+    (work.member_ids.compact.map(&:to_s).uniq - imported_ids) + imported_ids
+  end
+
+  # ImportFileSetJob stopped retrying these entries, so their FileSets will never be created.
+  def import_given_up?(entry)
+    entry.failed? && entry.import_attempts.to_i >= ENV.fetch("IMPORT_FILE_SET_RETRIES", 8).to_i
   end
 
   def announce_filesets_attachement(file_sets)

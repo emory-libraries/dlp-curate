@@ -327,7 +327,7 @@ RSpec.describe CurateGenericWorkIndexer do
         file_set.visibility = 'low_res'
         file_set.save!
 
-        expect(Digest::MD5).to receive(:hexdigest).with("Test title1openlow_res[]")
+        expect(Digest::MD5).to receive(:hexdigest).with("Test title1openlow_res[]#{file_set.id}")
         indexer.generate_solr_document
       end
     end
