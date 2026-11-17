@@ -176,8 +176,9 @@ class CurateGenericWorkIndexer < Hyrax::WorkIndexer
     holding_repository = object.holding_repository.class == 'Array' ? object.holding_repository.first : object.holding_repository # checking if holding repo is returned
     # from solr. If yes, this might be an array and we will need to get the first value; if it is from fedora, this will be a string always.
     file_sets_visibility = object.file_sets.map(&:visibility).join
+    member_order = object.ordered_member_ids.join(',') # reordering the members (e.g. in the File Manager) must produce a new manifest
     Digest::MD5.hexdigest(object.title.first.to_s + object.file_sets.count.to_s + holding_repository.to_s + object.rights_statement.first.to_s + object.visibility.to_s +
-                          file_sets_visibility + rendering_ids)
+                          file_sets_visibility + rendering_ids + member_order)
   end
 
   def representative_file_type
