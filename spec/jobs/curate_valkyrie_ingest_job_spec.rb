@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe CurateValkyrieIngestJob do
   let(:job) { described_class.new }
   let(:user) { instance_double('User') }
-  let(:file_set) { instance_double('FileSetResource', id: Valkyrie::ID.new('fs-123')) }
+  let(:file_set) { instance_double('FileSetResource', id: Valkyrie::ID.new('fs-123'), label: 'test.tif') }
 
   let(:preservation_uploader) { instance_double('CarrierWave::Uploader::Base') }
   let(:intermediate_uploader) { instance_double('CarrierWave::Uploader::Base') }
@@ -171,7 +171,7 @@ RSpec.describe CurateValkyrieIngestJob do
       # Characterization of the preservation master saves the FileSet while the
       # intermediate file uploads; a stale copy would drop those changes.
       it 'attaches each file to a freshly loaded FileSet' do
-        refreshed_file_set = instance_double('FileSetResource', id: Valkyrie::ID.new('fs-123'))
+        refreshed_file_set = instance_double('FileSetResource', id: Valkyrie::ID.new('fs-123'), label: 'test.tif')
         allow(Hyrax.query_service).to receive(:find_by)
           .with(id: Valkyrie::ID.new('fs-123'))
           .and_return(file_set, refreshed_file_set)
@@ -248,6 +248,36 @@ RSpec.describe CurateValkyrieIngestJob do
       it 'does not upload any files' do
         expect(Hyrax::ValkyrieUpload).not_to receive(:file)
         job.perform(uploaded_file)
+      end
+    end
+  end
+
+  describe 'reindexing the work after its full text data is ingested' do
+    let(:work) { instance_double('CurateGenericWorkResource') }
+
+    before do
+      allow(preservation_uploader).to receive(:blank?).and_return(false)
+      allow(preservation_uploader).to receive(:file).and_return(carrier_wave_file)
+      allow(Hyrax::ValkyrieUpload).to receive(:file)
+      allow(Hyrax.custom_queries).to receive(:find_parent_work).with(resource: file_set).and_return(work)
+      allow(Hyrax.index_adapter).to receive(:save)
+    end
+
+    context 'with the "Full Text Data" FileSet CompileFullTextJob creates' do
+      let(:file_set) { instance_double('FileSetResource', id: Valkyrie::ID.new('fs-123'), label: 'Full Text Data - work-1') }
+
+      it 'reindexes the work so its full text is indexed' do
+        job.perform(uploaded_file)
+
+        expect(Hyrax.index_adapter).to have_received(:save).with(resource: work)
+      end
+    end
+
+    context 'with any other FileSet' do
+      it 'does not reindex the work' do
+        job.perform(uploaded_file)
+
+        expect(Hyrax.index_adapter).not_to have_received(:save)
       end
     end
   end

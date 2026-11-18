@@ -20,6 +20,9 @@ class CurateValkyrieIngestJob < Hyrax::ApplicationJob
     transcript:               Hyrax::FileMetadata::Use::TRANSCRIPT
   }.freeze
 
+  # The label CompileFullTextJob gives the FileSet holding a work's compiled full text.
+  FULL_TEXT_DATA_LABEL_PREFIX = 'Full Text Data - '
+
   def perform(uploaded_file)
     file_set_id = Valkyrie::ID.new(uploaded_file.file_set_uri)
     preferred = determine_preferred(uploaded_file)
@@ -34,9 +37,21 @@ class CurateValkyrieIngestJob < Hyrax::ApplicationJob
       file_set = Hyrax.query_service.find_by(id: file_set_id)
       upload_single_file(uploaded_file:, file_set:, uploader:, pcdm_use:, skip_derivatives: skip_derivs)
     end
+
+    reindex_work_for_full_text_data(file_set_id)
   end
 
   private
+
+    # The work is indexed when this FileSet is attached, before its file is ingested, so the
+    # work's full text (read from its "Full Text Data" FileSet) is only indexed by reindexing it now.
+    def reindex_work_for_full_text_data(file_set_id)
+      file_set = Hyrax.query_service.find_by(id: file_set_id)
+      return unless Array(file_set.label).first.to_s.start_with?(FULL_TEXT_DATA_LABEL_PREFIX)
+
+      work = Hyrax.custom_queries.find_parent_work(resource: file_set)
+      Hyrax.index_adapter.save(resource: work) if work
+    end
 
     def determine_preferred(uploaded_file)
       if uploaded_file.service_file.present?

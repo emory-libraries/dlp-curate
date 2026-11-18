@@ -60,14 +60,34 @@ module Curate
         solr_doc[solr_key] = val if val.present?
       end
 
+      # All fields assigned here are utilized by BlacklightIiifSearch, as in the AF Curate::FileSetIndexer.
       def index_full_text(solr_doc)
-        text_content = resource.extracted_text_content if resource.respond_to?(:extracted_text_content)
-        return if text_content.blank?
+        transcript = text_file_content(:find_transcript_file, '.txt')
+        solr_doc['transcript_text_tesi'] = transcript if transcript.present?
 
-        solr_doc['alto_xml_tesi'] = text_content if text_content.include?('<alto')
-        solr_doc['transcript_text_tesi'] = text_content unless text_content.include?('<alto')
+        alto_xml = text_file_content(:find_extracted_text, '.xml')
+        solr_doc['alto_xml_tesi'] = alto_json(alto_xml) if alto_xml.present?
+
+        parent = Hyrax.custom_queries.find_parent_work(resource:)
+        solr_doc['is_page_of_ssi'] = parent.id.to_s if parent
       rescue StandardError => e
         Rails.logger.warn("FileSetResourceIndexer: could not index full text: #{e.message}")
+      end
+
+      # @return [String, nil] the content of the FileSet's file found by the custom query,
+      #   when its file name has the expected extension.
+      def text_file_content(query, extension)
+        file_metadata = Hyrax.custom_queries.public_send(query, file_set: resource)
+        return unless Array(file_metadata.original_filename).first.to_s.include?(extension)
+
+        file_metadata.content&.force_encoding('UTF-8')&.encode('UTF-8', invalid: :replace, replace: '')
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        nil
+      end
+
+      def alto_json(alto_xml)
+        fm = primary_file_metadata
+        Curate::TextExtraction::AltoReader.new(alto_xml, Array(fm&.width).first, Array(fm&.height).first).json
       end
 
       def primary_file_metadata
