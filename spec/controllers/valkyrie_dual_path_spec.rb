@@ -81,23 +81,45 @@ RSpec.describe 'Valkyrie dual-path controller logic', type: :controller do
     end
   end
 
+  # The code below was debugged with Google Gemini assistance.
   describe 'Hyrax::CurateGenericWorksController' do
     describe '.curation_concern_type' do
+      let(:controller_file) { Rails.root.join('app', 'controllers', 'hyrax', 'curate_generic_works_controller.rb').to_s }
+
+      around do |example|
+        original_type = Hyrax::CurateGenericWorksController.curation_concern_type
+        original_form_service = Hyrax::CurateGenericWorksController.work_form_service
+
+        example.run
+      ensure
+        Hyrax::CurateGenericWorksController.curation_concern_type = original_type
+        Hyrax::CurateGenericWorksController.work_form_service = original_form_service
+      end
+
       context 'when valkyrie_transition? is true' do
         before do
           allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
-          @original_type = Hyrax::CurateGenericWorksController.curation_concern_type
-          Hyrax::CurateGenericWorksController.curation_concern_type = CurateGenericWorkResource
-        end
-
-        after do
-          Hyrax::CurateGenericWorksController.curation_concern_type = @original_type
+          load controller_file
         end
 
         it 'is set to CurateGenericWorkResource' do
           expect(Hyrax::CurateGenericWorksController.curation_concern_type).to eq CurateGenericWorkResource
+          expect(Hyrax::CurateGenericWorksController.work_form_service).to be_a(Hyrax::FormFactory)
+        end
+      end
+
+      context 'when valkyrie_transition? is false' do
+        before do
+          allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(false)
+          load controller_file
+        end
+
+        it 'is set to CurateGenericWork' do
+          expect(Hyrax::CurateGenericWorksController.curation_concern_type).to eq CurateGenericWork
+          expect(Hyrax::CurateGenericWorksController.work_form_service).to eq Hyrax::WorkFormService
         end
       end
     end
   end
+  # The end of code with Google Gemini assistance.
 end
