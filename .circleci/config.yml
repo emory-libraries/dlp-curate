@@ -35,26 +35,32 @@ jobs:
             - image: cimg/<< parameters.ruby_type >>:<< parameters.ruby_version >>-browsers
             - image: samvera/fcrepo4:<< parameters.fcrepo_version >>
               environment:
-                    CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
+                    CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms256m -Xmx512m -XX:+DisableExplicitGC"
             - image: fcrepo/fcrepo:6.5.1-tomcat9
               name: << parameters.fcrepo6_domain >>
               environment:
                     - >-
                         CATALINA_OPTS=-Dfcrepo.home=/fcrepo-home -Djava.awt.headless=true -Dfile.encoding=UTF-8
-                        -server -Xms1G -Xmx2G -XX:NewSize=256m -XX:MaxNewSize=1G
-                        -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/mem
+                        -server -Xms512m -Xmx1024m
                         -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
-                        -Dfcrepo.jms.enabled=false -Dfcrepo.metrics.enable=true
+                        -Dfcrepo.jms.enabled=false -Dfcrepo.metrics.enable=false
                     - JAVA_OPTS=-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
             - image: solr:<< parameters.solr_version >>
               command: bin/solr -cloud -noprompt -f -p << parameters.solr_port >>
+              environment:
+                    SOLR_JAVA_MEM: "-Xms256m -Xmx512m"
             - image: redis:<< parameters.redis_version >>
             - image: cimg/mariadb:10.11.4
+              environment:
+                    MARIADB_DATABASE: curate_test
+                    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+              command: --performance-schema=OFF --innodb-buffer-pool-size=256M
         resource_class: medium+
         environment:
             BUNDLE_PATH: vendor/bundle
             BUNDLE_JOBS: 4
             BUNDLE_RETRY: 3
+            MALLOC_ARENA_MAX: "2"
             RAILS_ENV: test
             RACK_ENV: test
             CIRCLECI_DOMAIN: localhost
@@ -76,39 +82,21 @@ jobs:
 
             - samvera/rubocop
 
-            - run:
-                name: Get yarn version
-                command: echo $(yarn --version) >> "YARN_VERSION"
-
             - restore_cache:
                 keys:
-                    - v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}
+                    - v1-yarn-v20.20.0-{{ checksum "yarn.lock" }}
 
-            - run: yarn
+            - run:
+                name: Install JS dependencies
+                command: yarn install --frozen-lockfile --prefer-offline
 
             - save_cache:
-                key: v1-yarn-{{ checksum "yarn.lock" }}-{{ checksum "YARN_VERSION" }}
+                key: v1-yarn-v20.20.0-{{ checksum "yarn.lock" }}
                 paths:
                     - ~/project/node_modules
 
             - samvera/install_solr_core:
                 solr_port: << parameters.solr_port >>
-
-            - run:
-                name: Install MySQL client (if not present in primary image)
-                command: |
-                    sudo apt-get update
-                    sudo apt-get install -y mysql-client
-
-            - run:
-                name: Create specific test database
-                command: mysql -h 127.0.0.1 -u root -e "CREATE DATABASE IF NOT EXISTS curate_test;"
-
-            - run:
-                name: Install MySQL client (if not present in primary image)
-                command: |
-                    sudo apt-get update
-                    sudo apt-get install -y mysql-client
 
             - run:
                 name: Create specific test database
