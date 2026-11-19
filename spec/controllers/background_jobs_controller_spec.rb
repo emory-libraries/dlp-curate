@@ -45,6 +45,9 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
       let(:work_members_cleanup) do
         post :create, params: { jobs: 'work_members_cleanup', work_members_cleanup_text: '576rxwdbs7-cor' }
       end
+      let(:delete_af_works) do
+        post :create, params: { jobs: 'delete_af_works', af_works_csv: csv_file, format: 'json' }
+      end
 
       it "successfully starts a file_set cleanup background job" do
         expect(cleanup).to redirect_to(new_background_job_path)
@@ -69,6 +72,11 @@ RSpec.describe BackgroundJobsController, type: :controller, clean: true do
       it "successfully starts a work members cleanup background job" do
         expect(work_members_cleanup).to redirect_to(new_background_job_path)
         expect(WorkMembersCleanUpJob).to have_been_enqueued
+      end
+
+      it "successfully starts a delete af works background job" do
+        expect(delete_af_works).to redirect_to(new_background_job_path)
+        expect(DeleteActiveFedoraWorksJob).to have_been_enqueued
       end
 
       context 'books preprocessor' do

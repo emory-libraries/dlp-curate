@@ -30,7 +30,6 @@
       <td>
         <%= file_field_tag 'reindex_csv', class: 'files', :accept => 'text/csv' %>
       </td>
-      
     </tr>
     <tr>
       <td>
@@ -48,6 +47,15 @@
       </td>
       <td>
         <%= file_field_tag 'aws_fixity_csv', class: 'files', :accept => 'text/csv' %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= radio_button_tag :jobs, 'delete_af_works', false, id: 'delete_af_works' %>
+        <%= label :job_cleanup, 'Delete ActiveFedora Works' %>
+      </td>
+      <td>
+        <%= file_field_tag 'af_works_csv', class: 'files', :accept => 'text/csv' %>
       </td>
     </tr>
   </table>
