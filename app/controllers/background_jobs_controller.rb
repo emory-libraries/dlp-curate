@@ -25,6 +25,9 @@ class BackgroundJobsController < ApplicationController
       elsif params[:jobs] == 'aws_fixity'
         generic_csv_action(params[:aws_fixity_csv], ProcessAwsFixityPreservationEventsJob)
         redirect_to new_background_job_path, notice: "AWS Fixity Preservation Events Importer Job has been added to the queue."
+      elsif params[:jobs] == 'delete_af_works'
+        process_delete_af_works(params[:af_works_csv])
+        redirect_to new_background_job_path, notice: "Delete Active Fedora Works Job has been added to the queue."
       else
         reindex_objects_action
         redirect_to new_background_job_path, notice: "Reindex Files Job has started successfully."
@@ -66,6 +69,12 @@ class BackgroundJobsController < ApplicationController
           params[:add_ocr_output]
         )
       )
+    end
+
+    def process_delete_af_works(csv_param)
+      path = Rails.root.join('tmp', csv_param.original_filename)
+      File.open(path, "w+") { |f| f.write(csv_param.read) }
+      DeleteActiveFedoraWorksJob.perform_later(af_works_csv: path.to_s, user_id: current_user.id)
     end
 
     def preprocessor_action(guard_test, preprocessor)
