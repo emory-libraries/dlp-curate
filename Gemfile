@@ -45,6 +45,7 @@ gem 'omniauth-shibboleth', '~> 1.3'
 gem 'pg', require: false
 gem 'puma'
 gem 'rails', '6.1.7.10'
+gem 'railsfooter', '~> 1.1.0', github: 'emory-libraries/rails-footer'
 gem 'riiif', '~> 2.8'
 gem 'shakapacker', '~> 6.6.0'
 gem 'sidekiq', '~> 7.0'

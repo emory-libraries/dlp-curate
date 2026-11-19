@@ -14,6 +14,13 @@ GIT
     ec2_ipv4_retriever (0.1.0)
       aws-sdk-ec2
 
+GIT
+  remote: https://github.com/emory-libraries/rails-footer.git
+  revision: f4c34bf9ee49d05f45adeb1ec047a7ba9a7ea9f0
+  specs:
+    railsfooter (1.1.0)
+      rails (>= 6.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -1285,6 +1292,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-23
+  arm64-darwin-25
   x86_64-linux
 
 DEPENDENCIES
@@ -1331,6 +1339,7 @@ DEPENDENCIES
   puma
   rails (= 6.1.7.10)
   rails-controller-testing
+  railsfooter (~> 1.1.0)!
   riiif (~> 2.8)
   rspec-its
   rspec-rails

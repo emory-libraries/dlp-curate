@@ -63,6 +63,18 @@ a {
   font-family: $eul-sans;
 }
 
+footer.site-footer {
+  height: fit-content;
+  padding: 0 0 1rem;
+  position: relative;
+  bottom: auto;
+  margin-top: -1rem;
+  span {
+    font-family: $eul-sans;
+    color: $light-blue;
+    font-size: 0.8125rem;
+  }
+}
 // Homepage
 
 // Search Results
@@ -256,4 +268,13 @@ dl.file-show-details {
 
 .missing {
   color: grey;
+}
+
+//  responsive
+@media (max-width: 767px) {  /* phone/tablet screen */
+  .site-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }

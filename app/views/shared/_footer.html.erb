@@ -1,17 +1,8 @@
 <%# [Hyrax-override-hyrax-v5.2.0] We add deployment information L#7 and hardcode the `Hyrax` name into the version L#8 %>
+<%# [Railsfooter trial] swapping out this footer for the gem, but trying to refactor to preserve the info but have it work with our footer. %>
 
-<footer class="navbar navbar-dark bg-dark site-footer">
-  <div class="container-fluid">
-    <div class="navbar-text text-left">
-        <p><%= t('hyrax.footer.service_html') %></p>
-        <p><%= t('hyrax.product_name') %> <%= BRANCH %>@<%= GIT_SHA %> updated on <%= LAST_DEPLOYED %></p>
-        <p>Hyrax v<%= Hyrax::VERSION %></p>
-    </div>
-    <div class="navbar-right">
-      <div class="navbar-text text-right">
-        <p><%= t('hyrax.footer.copyright_html', current_year: Time.current.year) %></p>
-        <p><%= t('hyrax.background_attribution_html') %></p>
-      </div>
-    </div>
-  </div>
+<footer class="navbar-dark bg-dark text-center site-footer copyright-signature">
+  <span>Hyrax v<%= Hyrax::VERSION %>, <%= t('hyrax.footer.service_html') %></span>
+  <span> <%= t('hyrax.footer.copyright_html', current_year: Time.current.year) %></span>
+  <span> <%= t('hyrax.background_attribution_html') %></span>
 </footer>
