@@ -23,7 +23,7 @@ jobs:
                 default: 'ruby'
             ruby_version:
                 type: string
-                default: 3.2.9
+                default: 3.3.14
             solr_port:
                 type: string
                 default: '8983'
@@ -126,7 +126,7 @@ jobs:
 
     coverage:
         docker:
-            - image: cimg/ruby:3.2.9
+            - image: cimg/ruby:3.3.14
         working_directory: ~/project
         parallelism: 1
         steps:
