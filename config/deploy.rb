@@ -8,9 +8,15 @@ require 'dotenv'
 
 Dotenv.load('.env.development')
 
+# Clear out the removed CLI flags
+set :bundle_flags, "--quiet"
+set :bundle_path, nil
+set :bundle_without, nil
+
 set :application, "dlp-curate"
 set :repo_url, "https://github.com/emory-libraries/dlp-curate.git"
 set :deploy_to, '/opt/dlp-curate'
+set :rbenv_type, :system
 set :rbenv_ruby, '3.3.14'
 set :rbenv_custom_path, '/usr/local/rbenv'
 set :rails_env, 'production'
@@ -19,23 +25,20 @@ set :migration_role, :app
 set :service_unit_name, "sidekiq.service"
 set :passenger_restart_with_touch, true
 
-SSHKit.config.command_map[:rake] = 'bundle exec rake'
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || ENV['BRANCH_NAME'] || 'main'
 
 append :linked_dirs, "log", "public/assets", "tmp/pids", "tmp/cache", "tmp/sockets",
   "tmp/imports", "config/emory/groups", "tmp/csv_uploads", "tmp/csv_uploads_cache"
 append :linked_files, ".env.production", "config/secrets.yml", "config/reading_room_ips.yml"
+append :rbenv_map_bins, "passenger", "passenger-config", "passenger-status"
 
 set :default_env,
-    PATH:                            '$PATH:/usr/local/rbenv/shims/ruby',
+    PATH:                            '/usr/local/rbenv/shims:/usr/local/rbenv/bin:$PATH',
     LD_LIBRARY_PATH:                 '$LD_LIBRARY_PATH:/usr/lib64',
     PASSENGER_INSTANCE_REGISTRY_DIR: '/var/run'
 
 # Default value for local_user is ENV['USER']
 set :local_user, -> { `git config user.name`.chomp }
-
-# Restart passenger after deploy is finished
-after :'deploy:finished', :'passenger:restart'
 
 # Restart apache on RedHat
 namespace :deploy do
@@ -78,33 +81,48 @@ end
 
 # Setup DCE accounts on Ubuntu
 namespace :deploy do
-  after :finishing, :dce_accounts do
+  task :dce_accounts do
     on roles(:ubuntuapp) do
-      execute "cd #{current_path} && RAILS_ENV=production bundle exec rake dce:account_setup"
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, "dce:account_setup"
+        end
+      end
     end
   end
+  after :finishing, :dce_accounts
 end
 
 # On deploy, ensure library collection type exists
 namespace :deploy do
-  after :finishing, :create_library_collection_type do
+  task :create_library_collection_type do
     on roles(:collection) do
-      execute "cd #{current_path} && RAILS_ENV=production bundle exec rake curate:create_library_collection_type"
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, "curate:create_library_collection_type"
+        end
+      end
     end
   end
+  after :finishing, :create_library_collection_type
 end
 
 # Opt-in (CREATE_MIGRATION_COLLECTIONS=true): migration_setup is first-time setup, and
 # re-running it creates a duplicate collection whenever its title-based dedup check
 # misses the existing one.
 namespace :deploy do
-  after :finishing, :create_migration_collections do
+  task :create_migration_collections do
     next unless ENV['CREATE_MIGRATION_COLLECTIONS'] == 'true'
 
     on roles(:collection) do
-      execute "cd #{current_path} && RAILS_ENV=production bundle exec rake curate:collections:migration_setup"
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, "curate:collections:migration_setup"
+        end
+      end
     end
   end
+  after :finishing, :create_migration_collections
 end
 
 namespace :deploy do
@@ -135,3 +153,20 @@ namespace :deploy do
 end
 
 before 'deploy:starting', 'deploy:confirm_cab_approval'
+
+# Set the configuration via bundle config before bundler:install runs
+before "bundler:install", "bundler:configure_bundler4"
+
+namespace :bundler do
+  task :configure_bundler4 do
+    on roles fetch(:bundle_roles, :all) do
+      within release_path do
+        with fetch(:bundle_env_variables, {}) do
+          execute :bundle, "config set --local deployment 'true'"
+          execute :bundle, "config set --local path '#{shared_path.join('bundle')}'"
+          execute :bundle, "config set --local without 'development test'"
+        end
+      end
+    end
+  end
+end
