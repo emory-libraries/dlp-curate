@@ -82,21 +82,15 @@ RSpec.describe 'Valkyrie dual-path controller logic', type: :controller do
   end
 
   describe 'Hyrax::CurateGenericWorksController' do
+    # The type is chosen once, when the class body loads, so check the real configuration
+    # instead of stubbing it. (Assigning curation_concern_type also adds before_actions.)
     describe '.curation_concern_type' do
-      context 'when valkyrie_transition? is true' do
-        before do
-          allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
-          @original_type = Hyrax::CurateGenericWorksController.curation_concern_type
-          Hyrax::CurateGenericWorksController.curation_concern_type = CurateGenericWorkResource
-        end
+      it 'is CurateGenericWorkResource during the Valkyrie transition', if: Hyrax.config.valkyrie_transition? do
+        expect(Hyrax::CurateGenericWorksController.curation_concern_type).to eq CurateGenericWorkResource
+      end
 
-        after do
-          Hyrax::CurateGenericWorksController.curation_concern_type = @original_type
-        end
-
-        it 'is set to CurateGenericWorkResource' do
-          expect(Hyrax::CurateGenericWorksController.curation_concern_type).to eq CurateGenericWorkResource
-        end
+      it 'is CurateGenericWork without the Valkyrie transition', unless: Hyrax.config.valkyrie_transition? do
+        expect(Hyrax::CurateGenericWorksController.curation_concern_type).to eq CurateGenericWork
       end
     end
   end
