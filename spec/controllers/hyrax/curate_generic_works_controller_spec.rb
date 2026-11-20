@@ -71,6 +71,29 @@ RSpec.describe Hyrax::CurateGenericWorksController, :clean do
     end
   end
 
+  describe "#update_valkyrie_work" do
+    let(:resource) { CurateGenericWorkResource.new(id: 'valkyrie-work') }
+    let(:form) { double('form', validate: true, input_params: { 'permissions' => [] }) }
+    let(:transaction) { double('update_work transaction') }
+
+    before do
+      sign_in user
+      controller.params = ActionController::Parameters.new(curate_generic_work: { title: ['Edited'] })
+      allow(controller).to receive_messages(build_form: form, uploaded_files: [], work_members_attributes: nil,
+                                            transactions: { 'change_set.update_work' => transaction }, after_update_response: nil)
+      allow(transaction).to receive(:with_step_args).and_return(transaction)
+      allow(transaction).to receive(:call).with(form).and_return(Dry::Monads::Success(resource))
+    end
+
+    it "passes the editing user to the Modification preservation event step" do
+      controller.send(:update_valkyrie_work)
+
+      expect(transaction).to have_received(:with_step_args)
+        .with(hash_including('change_set.add_work_modification_event' => { initiating_user: user.uid }))
+      expect(controller.curation_concern).to eq resource
+    end
+  end
+
   describe "#delete" do
     context "when logged in as an admin" do
       it "redirects to My Works" do
