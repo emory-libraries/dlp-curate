@@ -81,17 +81,45 @@ RSpec.describe 'Valkyrie dual-path controller logic', type: :controller do
     end
   end
 
+  # The code below was debugged with Google Gemini assistance.
   describe 'Hyrax::CurateGenericWorksController' do
-    # The type is chosen once, when the class body loads, so check the real configuration
-    # instead of stubbing it. (Assigning curation_concern_type also adds before_actions.)
     describe '.curation_concern_type' do
-      it 'is CurateGenericWorkResource during the Valkyrie transition', if: Hyrax.config.valkyrie_transition? do
-        expect(Hyrax::CurateGenericWorksController.curation_concern_type).to eq CurateGenericWorkResource
+      let(:controller_file) { Rails.root.join('app', 'controllers', 'hyrax', 'curate_generic_works_controller.rb').to_s }
+
+      around do |example|
+        original_type = Hyrax::CurateGenericWorksController.curation_concern_type
+        original_form_service = Hyrax::CurateGenericWorksController.work_form_service
+
+        example.run
+      ensure
+        Hyrax::CurateGenericWorksController.curation_concern_type = original_type
+        Hyrax::CurateGenericWorksController.work_form_service = original_form_service
       end
 
-      it 'is CurateGenericWork without the Valkyrie transition', unless: Hyrax.config.valkyrie_transition? do
-        expect(Hyrax::CurateGenericWorksController.curation_concern_type).to eq CurateGenericWork
+      context 'when valkyrie_transition? is true' do
+        before do
+          allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(true)
+          load controller_file
+        end
+
+        it 'is set to CurateGenericWorkResource' do
+          expect(Hyrax::CurateGenericWorksController.curation_concern_type).to eq CurateGenericWorkResource
+          expect(Hyrax::CurateGenericWorksController.work_form_service).to be_a(Hyrax::FormFactory)
+        end
+      end
+
+      context 'when valkyrie_transition? is false' do
+        before do
+          allow(Hyrax.config).to receive(:valkyrie_transition?).and_return(false)
+          load controller_file
+        end
+
+        it 'is set to CurateGenericWork' do
+          expect(Hyrax::CurateGenericWorksController.curation_concern_type).to eq CurateGenericWork
+          expect(Hyrax::CurateGenericWorksController.work_form_service).to eq Hyrax::WorkFormService
+        end
       end
     end
   end
+  # The end of code with Google Gemini assistance.
 end

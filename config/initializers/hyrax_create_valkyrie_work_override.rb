@@ -1,10 +1,12 @@
 # frozen_string_literal: true
-# [Hyrax-override-v5.2.0] Adds set_noid_id, add_work_creation_events and
-# add_work_modification_event steps to Valkyrie transaction pipelines.
+# [Hyrax-override-v5.2.0] Adds set_noid_id, add_work_creation_events,
+# apply_collection_permission_template and add_work_modification_event steps to
+# Valkyrie transaction pipelines.
 
 if Hyrax.config.valkyrie_transition?
   require Rails.root.join('lib', 'hyrax', 'transactions', 'steps', 'set_noid_id')
   require Rails.root.join('lib', 'hyrax', 'transactions', 'steps', 'add_work_creation_events')
+  require Rails.root.join('lib', 'hyrax', 'transactions', 'steps', 'apply_collection_permission_template')
   require Rails.root.join('lib', 'hyrax', 'transactions', 'steps', 'add_work_modification_event')
 
   Hyrax::Transactions::Container.register(
@@ -15,6 +17,11 @@ if Hyrax.config.valkyrie_transition?
   Hyrax::Transactions::Container.register(
     'change_set.add_work_creation_events',
     Hyrax::Transactions::Steps::AddWorkCreationEvents.new
+  )
+
+  Hyrax::Transactions::Container.register(
+    'work_resource.apply_collection_permission_template',
+    Hyrax::Transactions::Steps::ApplyCollectionPermissionTemplate.new
   )
 
   Hyrax::Transactions::Container.register(
@@ -30,6 +37,7 @@ if Hyrax.config.valkyrie_transition?
     'change_set.apply',
     'change_set.set_noid_id',
     'work_resource.apply_permission_template',
+    'work_resource.apply_collection_permission_template',
     'work_resource.save_acl',
     'work_resource.add_file_sets',
     'work_resource.change_depositor',

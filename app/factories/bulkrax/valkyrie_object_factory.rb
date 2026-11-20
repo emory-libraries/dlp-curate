@@ -117,10 +117,13 @@ module Bulkrax
 
     ##
     # The resource added to a collection can be either a work or another collection.
+    # Emory override: a work deposited into a collection by the import gets the collection's sharing.
     def self.add_resource_to_collection(collection:, resource:, user:)
       resource = find(resource.id)
       resource.member_of_collection_ids += [collection.id]
-      save!(resource:, user:)
+      saved = save!(resource:, user:)
+      Curate::CollectionSharingService.share_with_saved(saved) if saved.work?
+      saved
     end
 
     def self.field_multi_value?(field:, model:)

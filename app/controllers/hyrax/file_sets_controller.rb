@@ -458,7 +458,7 @@ module Hyrax
         end
 
         def create_date
-          file_metadata.date_created&.first || file_metadata.created_at
+          file_metadata.created_at
         end
       end
   end
