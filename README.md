@@ -23,7 +23,7 @@ In a production environment, we will use Shibboleth for authentication. However,
 
 ## Local Development Setup
 
-Our new local development environment now utilizes a docker compose container system to run Fedora 4.7.5, Solr 8.11.1, and Redis 6.2 servers. However, the following applications must still be installed on the local machine: Mysql2 (or MariaDB), FITS 1.6.0, ImageMagick, VIPS, and LibreOffice (ffmpeg is still optional, but will most likely be incorporated in later versions). Also note that this version of Curate uses Ruby 3.2.9.
+Our new local development environment now utilizes a docker compose container system to run Fedora 4.7.5, Solr 8.11.1, and Redis 6.2 servers. However, the following applications must still be installed on the local machine: Mysql2 (or MariaDB), FITS 1.6.0, ImageMagick, VIPS, and LibreOffice (ffmpeg is still optional, but will most likely be incorporated in later versions). Also note that this version of Curate uses Ruby 3.3.14.
 
 Do the following within the `dlp-curate` directory:
 

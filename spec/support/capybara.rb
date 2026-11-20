@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
-Webdrivers.cache_time = 3
+module Chrome158CdpOriginFix
+  def execute_cdp(cmd, **params)
+    if cmd == 'Storage.clearDataForOrigin' && params[:origin] == '*'
+      url = current_url
+      return unless url&.start_with?('http')
+
+      uri = URI.parse(url)
+      params = params.merge(origin: "#{uri.scheme}://#{uri.host}:#{uri.port}")
+    end
+    super(cmd, **params)
+  end
+end
 
 # Setup chrome headless driver
 Capybara.server = :puma, { Silent: true }
@@ -15,7 +26,9 @@ Capybara.register_driver :chrome_headless do |app|
   options.add_argument('--disable-dev-shm-usage')
   options.add_argument('--window-size=1400,1400')
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options:, http_client: client)
+  driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options:, http_client: client)
+  driver.browser.singleton_class.prepend(Chrome158CdpOriginFix)
+  driver
 end
 
 Capybara.javascript_driver = :chrome_headless

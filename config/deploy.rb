@@ -11,7 +11,7 @@ Dotenv.load('.env.development')
 set :application, "dlp-curate"
 set :repo_url, "https://github.com/emory-libraries/dlp-curate.git"
 set :deploy_to, '/opt/dlp-curate'
-set :rbenv_ruby, '2.7.4'
+set :rbenv_ruby, '3.3.14'
 set :rbenv_custom_path, '/usr/local/rbenv'
 set :rails_env, 'production'
 set :assets_prefix, "#{shared_path}/public/assets"
