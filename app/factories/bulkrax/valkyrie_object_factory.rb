@@ -502,21 +502,19 @@ module Bulkrax
         ).uniq
       end
 
-      # Emory override: adds preservation event creation after work update
+      # Emory override: records the importing user on the Modification preservation event,
+      # which the update_work transaction attaches before the work is saved.
       def update_work(attrs)
-        event_start = DateTime.current
         attrs = HashWithIndifferentAccess.new(attrs)
         perform_transaction_for(object:, attrs:) do
           uploaded_files, file_set_params = prep_fileset_content(attrs)
           transactions["change_set.update_work"]
             .with_step_args(
+              'change_set.add_work_modification_event' => { initiating_user: @user.email },
               'work_resource.add_file_sets' => { uploaded_files:, file_set_params: },
               'work_resource.save_acl' => { permissions_params: [attrs.try('visibility') || 'open'].compact }
             )
         end
-
-        pulled_work = search_by_identifier
-        create_preservation_event(pulled_work, work_update(event_start:, user_email: @user.email))
       end
 
       def update_collection(attrs)

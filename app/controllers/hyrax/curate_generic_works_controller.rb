@@ -72,6 +72,23 @@ module Hyrax
         @saved_permissions.to_set != Hyrax::AccessControl.for(resource: curation_concern).permissions.to_set
       end
 
+      # [Hyrax-override-hyrax-v5.2.0] Passes the editing user to the
+      # change_set.add_work_modification_event step, so an edit records a
+      # Modification preservation event as the AF CurateGenericWorkActor#update does.
+      def update_valkyrie_work
+        form = build_form
+        return after_update_error(form_err_msg(form)) unless form.validate(params[hash_key_for_curation_concern])
+        result =
+          transactions['change_set.update_work']
+          .with_step_args('change_set.add_work_modification_event' => { initiating_user: current_user.uid },
+                          'work_resource.add_file_sets' => { uploaded_files:, file_set_params: params[hash_key_for_curation_concern][:file_set] },
+                          'work_resource.update_work_members' => { work_members_attributes: },
+                          'work_resource.save_acl' => { permissions_params: form.input_params["permissions"] })
+          .call(form)
+        @curation_concern = result.value_or { return after_update_error(transaction_err_msg(result)) }
+        after_update_response
+      end
+
       # @return [String, nil] the title to display in the flash, or nil if destroy
       #   failed (in which case `actor.destroy` has already rendered a response).
       def destroy_af_work
