@@ -16,5 +16,13 @@ namespace :curate do
       result = service.backfill
       puts "Done#{' (dry run)' if dry_run}. backfilled=#{result[:backfilled]}, skipped=#{result[:skipped]}, errored=#{result[:errored]}"
     end
+
+    desc "Give works the sharing of their collection when its type shares with new works (DRY_RUN=true to preview, COLLECTION_ID to limit)"
+    task share_collection_permissions_with_works: :environment do
+      dry_run = ENV['DRY_RUN'] == 'true'
+      service = Curate::CollectionSharingBackfillService.new(logger: Logger.new($stdout), dry_run:, collection_id: ENV['COLLECTION_ID'].presence)
+      result = service.backfill
+      puts "Done#{' (dry run)' if dry_run}. shared=#{result[:shared]}, unchanged=#{result[:unchanged]}, errored=#{result[:errored]}"
+    end
   end
 end
