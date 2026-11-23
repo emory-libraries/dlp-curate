@@ -64,6 +64,7 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-rails', "~> 1.6", require: false
   gem 'capistrano-rails-collection'
+  gem 'capistrano-rbenv'
   gem 'ec2_ipv4_retriever', git: 'https://github.com/emory-libraries/ec2_ipv4_retriever', branch: 'main'
   gem 'ed25519', '>= 1.2', '< 2.0'
   gem 'web-console', '>= 3.3.0'
