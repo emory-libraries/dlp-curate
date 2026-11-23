@@ -6,8 +6,8 @@ test:
   admin:
     - test-admin
 
-production:
-  archivist:
-    - archivist1@example.com
+# Curate's groups are the roles managed at /roles; the role mapper needs a section
+# for each environment, even an empty one.
+production: {}
 
 # Add roles for users here.
